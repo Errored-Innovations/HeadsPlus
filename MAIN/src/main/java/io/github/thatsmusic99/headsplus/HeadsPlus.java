@@ -23,6 +23,7 @@ import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
+import io.github.thatsmusic99.headsplus.util.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.MySQLAPI;
 import io.github.thatsmusic99.og.OreGenerator;
@@ -482,6 +483,24 @@ public class HeadsPlus extends JavaPlugin {
 
     private void setupNMS() {
         String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        NMSManager nmsMan = null;
+        try {
+            nmsMan = (NMSManager) Class.forName("io.github.thatsmusic99.headsplus.nms.NMSUtil").newInstance();
+            if (!nmsMan.getNMSVersion().equals(bukkitVersion)) {
+                throw new IncorrectVersionException("Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion + ", this is meant for " + nmsMan.getNMSVersion());
+            }
+        } catch (ClassNotFoundException | IncorrectVersionException e) {
+            getLogger().severe("ERROR: Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion);
+            getLogger().severe("If this is not known of, let the developer know in one of these places:");
+            getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
+            getLogger().severe("https://discord.gg/nbT7wC2");
+            getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-13-x.237088/");
+            getLogger().severe("To prevent any further damage, the plugin is being disabled...");
+            setEnabled(false);
+            return;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         switch (bukkitVersion) {
             case "v1_14_R1":
                 nmsversion = NMSIndex.v1_14_R1;
@@ -513,7 +532,7 @@ public class HeadsPlus extends JavaPlugin {
             case "v1_8_R2":
                 nmsversion = NMSIndex.v1_8_R2;
                 break;
-            case "v1_8_R1":
+            case "nms":
                 nmsversion = NMSIndex.v1_8_R1;
                 break;
             default:
@@ -526,8 +545,8 @@ public class HeadsPlus extends JavaPlugin {
                 setEnabled(false);
                 return;
         }
-        nms = nmsversion.getNms();
-        if (nms instanceof v1_14_R1_NMS) {
+        nms = nmsMan;
+        if (nmsversion.getOrder() > 10) {
             String supportedHash = "48be70f51ffe914d865f175ed3bf992d";
             getLogger().info("1.14 detected! NMS mapping version: " + ((org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers) getServer().getUnsafe()).getMappingsVersion());
             if (supportedHash.equalsIgnoreCase(((org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers) getServer().getUnsafe()).getMappingsVersion())) {

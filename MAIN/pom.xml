@@ -5,8 +5,9 @@
     <parent>
         <artifactId>headsplus</artifactId>
         <groupId>io.github.thatsmusic99</groupId>
-        <version>1.0.0</version>
+        <version>7.0.0</version>
     </parent>
+    <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MAIN</artifactId>
@@ -16,6 +17,12 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.14.2-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.14.2-R0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

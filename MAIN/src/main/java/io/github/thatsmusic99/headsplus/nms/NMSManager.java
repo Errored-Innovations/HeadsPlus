@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.nms;
 
 import com.mojang.authlib.GameProfile;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.Material;
@@ -15,7 +16,9 @@ import java.util.HashMap;
 
 public interface NMSManager {
 
-    SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a);
+    default SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        return (SearchGUI) Class.forName("io.github.thatsmusic99.headsplus." + HeadsPlus.getInstance().getNMSVersion().name() + ".SearchGUIUtil").newInstance();
+    }
 
     default SkullMeta setSkullOwner(String s, SkullMeta m) {
         m.setOwner(s);

@@ -5,8 +5,24 @@
     <parent>
         <artifactId>headsplus</artifactId>
         <groupId>io.github.thatsmusic99</groupId>
-        <version>LATEST</version>
+        <version>7.0.0</version>
     </parent>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.thatsmusic99</groupId>
+            <artifactId>MAIN</artifactId>
+            <version>7.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/craftbukkit-1.8.3-R0.1-SNAPSHOT-latest.jar</systemPath>
+        </dependency>
+    </dependencies>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>v1_8_R2</artifactId>

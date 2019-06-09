@@ -1,8 +1,6 @@
-package io.github.thatsmusic99.headsplus.nms.v1_8_R2_NMS;
+package io.github.thatsmusic99.headsplus.nms;
 
 import com.mojang.authlib.GameProfile;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import net.minecraft.server.v1_8_R2.EntityPlayer;
 import net.minecraft.server.v1_8_R2.NBTTagCompound;
@@ -19,12 +17,11 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.HashMap;
 import java.util.Objects;
 
-@SuppressWarnings("deprecation")
-public class v1_8_R2_NMS implements NMSManager {
+public class NMSUtil implements NMSManager {
 
     @Override
     public SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) {
-        return new SearchGUI1_8_R2(p, a);
+        return new SearchGUIUtil(p, a);
     }
 
     @Override

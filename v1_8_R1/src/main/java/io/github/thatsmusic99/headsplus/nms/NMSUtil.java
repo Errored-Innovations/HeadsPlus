@@ -1,8 +1,6 @@
-package io.github.thatsmusic99.headsplus.nms.v1_8_R1_NMS;
+package io.github.thatsmusic99.headsplus.nms;
 
 import com.mojang.authlib.GameProfile;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import net.minecraft.server.v1_8_R1.EntityPlayer;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
@@ -20,12 +18,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
-@SuppressWarnings("deprecation")
-public class v1_8_R1_NMS implements NMSManager {
-
+public class NMSUtil implements NMSManager {
     @Override
     public SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) {
-        return new SearchGUI1_8_R1(p, a);
+        return new SearchGUI(p, a);
     }
 
     @Override
@@ -50,7 +46,7 @@ public class v1_8_R1_NMS implements NMSManager {
 
     @Override
     public GameProfile getGameProfile(ItemStack s) {
-        EntityPlayer e = ((CraftPlayer) ((SkullMeta) s.getItemMeta()).getOwningPlayer().getPlayer()).getHandle();
+        EntityPlayer e = ((CraftPlayer) Bukkit.getPlayer(((SkullMeta) s.getItemMeta()).getOwner())).getHandle();
         return e.getProfile();
     }
 
@@ -117,7 +113,7 @@ public class v1_8_R1_NMS implements NMSManager {
 
     @Override
     public String getNMSVersion() {
-        return "v1_8_R1";
+        return "nms";
     }
 
     @Override

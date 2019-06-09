@@ -1,13 +1,13 @@
-package io.github.thatsmusic99.headsplus.nms.v1_8_R2_NMS;
+package io.github.thatsmusic99.headsplus.nms;
 
-import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.util.AnvilSlot;
 import net.minecraft.server.v1_8_R2.*;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class SearchGUI1_8_R2 extends SearchGUI {
-    public SearchGUI1_8_R2(Player player, AnvilClickEventHandler handler) {
+public class SearchGUIUtil extends SearchGUI {
+
+    public SearchGUIUtil(Player player, AnvilClickEventHandler handler) {
         super(player, handler);
     }
 
