@@ -50,6 +50,12 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/../libs/MythicMobs-4.4.1.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>minecraft-server</artifactId>
+            <version>1.14.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <repositories>

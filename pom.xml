@@ -55,12 +55,6 @@
             <version>2.10.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.14.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
 
@@ -97,6 +91,10 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>craftbukkit</id>
+            <url>http://maven.elmakers.com/repository/</url>
         </repository>
     </repositories>
 </project>
