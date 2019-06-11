@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.nms.v1_14_R1;
 
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class NMSUtil implements NMSManager {
+public class NMSUtil implements NewNMSManager {
     @Override
     public SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) {
         return new SearchGUIUtil(p, a);
