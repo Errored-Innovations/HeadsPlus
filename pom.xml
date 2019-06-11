@@ -11,7 +11,7 @@
 
     <properties>
         <module.info>-${artifactId}</module.info>
-        <project.version>v6.3.2</project.version>
+        <hp-project.version>v6.3.2</hp-project.version>
     </properties>
 
     <modules>
