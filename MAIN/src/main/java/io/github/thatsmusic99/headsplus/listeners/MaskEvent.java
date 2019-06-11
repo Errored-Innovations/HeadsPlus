@@ -3,9 +3,8 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.nms.v1_13_NMS.v1_13_NMS;
-import io.github.thatsmusic99.headsplus.nms.v1_13_R2_NMS.v1_13_R2_NMS;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -71,8 +70,8 @@ public class MaskEvent implements Listener {
     }
 
     private int getSlot() {
-        NMSManager nms = HeadsPlus.getInstance().getNMS();
-        if (nms instanceof v1_13_R2_NMS || nms instanceof v1_13_NMS) {
+        NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
+        if (nms.getOrder() > 8) {
             return 39;
         } else {
             return 5;

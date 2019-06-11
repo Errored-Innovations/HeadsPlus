@@ -18,7 +18,6 @@ import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.nms.v1_14_R1_NMS.v1_14_R1_NMS;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
@@ -485,7 +484,7 @@ public class HeadsPlus extends JavaPlugin {
         String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
         NMSManager nmsMan = null;
         try {
-            nmsMan = (NMSManager) Class.forName("io.github.thatsmusic99.headsplus.nms.NMSUtil").newInstance();
+            nmsMan = (NMSManager) Class.forName("io.github.thatsmusic99.headsplus.nms." + bukkitVersion + ".NMSUtil").newInstance();
             if (!nmsMan.getNMSVersion().equals(bukkitVersion)) {
                 throw new IncorrectVersionException("Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion + ", this is meant for " + nmsMan.getNMSVersion());
             }
@@ -546,15 +545,6 @@ public class HeadsPlus extends JavaPlugin {
                 return;
         }
         nms = nmsMan;
-        if (nmsversion.getOrder() > 10) {
-            String supportedHash = "48be70f51ffe914d865f175ed3bf992d";
-            getLogger().info("1.14 detected! NMS mapping version: " + ((org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers) getServer().getUnsafe()).getMappingsVersion());
-            if (supportedHash.equalsIgnoreCase(((org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers) getServer().getUnsafe()).getMappingsVersion())) {
-                getLogger().info("Current hash is supported.");
-            } else {
-                getLogger().info("Current hash is not supported. If any issues arise, let the developer know!");
-            }
-        }
     }
 
     private void registerSubCommands() {

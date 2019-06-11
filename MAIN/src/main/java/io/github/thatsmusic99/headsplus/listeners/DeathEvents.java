@@ -91,8 +91,9 @@ public class DeathEvents implements Listener {
     }
 
     @EventHandler
-	public void onPlayerDeath(PlayerDeathEvent ep) {
+	public void onPlayerDeath(org.bukkit.event.entity.PlayerDeathEvent ep) {
 	    try {
+
             HeadsPlus hp = HeadsPlus.getInstance();
             if (!hp.isDropsEnabled()) return;
             HeadsPlusMainConfig c = hp.getConfiguration();
