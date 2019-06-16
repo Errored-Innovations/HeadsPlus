@@ -365,6 +365,8 @@ public class HeadsPlus extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         debug("- Registering PlaceEvent...", 3);
         getServer().getPluginManager().registerEvents(new PlaceEvent(), this);
+        debug("- Registering Creative Pick Event...", 3);
+        getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
         debug("- Registering LeaderboardEvents...", 3);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
         debug("- Registering PlayerDeathEvent...", 3);
