@@ -26,13 +26,13 @@ Steps to reproduce the behavior:
 ### Expected behavior
 A clear and concise description of what you expected to happen.
 
-###Screenshots
+### Screenshots
 If applicable, add screenshots to help explain your problem.
 
-###Has a debug report been generated? 
+### Has a debug report been generated? 
 If you have a debug report, go to plugin/HeadsPlus/debug, copy your report onto pastebin or hastebin, and paste it here, but also skip to the bottom question (additional information). If you don't, fill in the information below.
 
-###Required information
+### Required information
 - Server version:
 - HeadsPlus version:
 - Whether or not the plugin uses MySQL
