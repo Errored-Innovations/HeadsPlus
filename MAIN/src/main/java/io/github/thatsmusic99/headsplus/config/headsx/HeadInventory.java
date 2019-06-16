@@ -293,7 +293,7 @@ public abstract class HeadInventory {
                     if (c.getRewardString() != null) {
                         sb.append(c.getRewardString());
                     } else if (re == HPChallengeRewardTypes.ECO) {
-                        sb.append("\\$").append(c.getRewardValue().toString());
+                        sb.append("$").append(c.getRewardValue().toString());
                     } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
                         try {
                             Material.valueOf(c.getRewardValue().toString());

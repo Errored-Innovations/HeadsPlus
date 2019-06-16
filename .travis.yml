@@ -3,11 +3,11 @@ rvm:
 - 1.8
 
 # TODO
-deploy:
-  provider: releases
-  api: "GITHUB OAUTH TOKEN"
-  file: "FILE TO UPLOAD"
-  skip_cleanup: true
+#deploy:
+#  provider: releases
+#  api: "GITHUB OAUTH TOKEN"
+#  file: "FILE TO UPLOAD"
+#  skip_cleanup: true
 
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
