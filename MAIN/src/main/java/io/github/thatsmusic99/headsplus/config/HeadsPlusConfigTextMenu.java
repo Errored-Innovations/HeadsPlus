@@ -135,13 +135,13 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
             for (String str : h.getConfig().getStringList("profile.layout")) {
                 try {
-                    String stri = translateColors(str.replaceAll("\\{player}", p.getPlayer().getName())
+                    String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
                             .replaceAll("\\{xp}", String.valueOf(p.getXp()))
                             .replaceAll("\\{completed-challenges}", String.valueOf(p.getCompleteChallenges().size()))
                             .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
                             .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
                             .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
-                            .replaceAll("\\{header}", h.getConfig().getString("profile.header")));
+                            .replace("{header}", h.getConfig().getString("profile.header")));
                     if (!(stri.contains("{level}") || (stri.contains("{next-level}")))) {
                         sb.append(stri).append("\n");
                     } else {

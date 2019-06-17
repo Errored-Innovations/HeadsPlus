@@ -21,6 +21,9 @@ commands:
   myhead:
     description: Gets your own head.
     permission: headsplus.myhead
+  addhead:
+    description: Add a player head to the heads menu.
+    permission: headsplus.addhead
   hplb:
     description: Displays the HeadsPlus leaderboards.
     permission: headsplus.leaderboards
@@ -44,6 +47,9 @@ permissions:
   headsplus.notify:
     default: op
     description: Notifies players if a new HeadsPlus version is available.
+  headsplus.addhead:
+    default: op
+    description: Allows players to use /addhead.
   headsplus.heads:
     default: true
     description: Allows players to use /heads.

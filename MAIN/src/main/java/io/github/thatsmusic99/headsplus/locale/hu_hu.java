@@ -515,6 +515,11 @@ public class hu_hu implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "Adjunk hozzá egy játékos fejét a fej menübe.";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "%h &b%p &3elérte a %lvl &3szintet!";
     }

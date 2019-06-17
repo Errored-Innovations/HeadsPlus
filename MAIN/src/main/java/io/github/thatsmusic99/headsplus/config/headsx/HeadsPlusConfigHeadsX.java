@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
+import org.bukkit.command.CommandSender;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -235,10 +236,28 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
     }
 
     public void grabProfile(UUID id) {
-        grabProfile(id, 3);
+        grabProfile(id, null, false);
     }
 
-    protected void grabProfile(UUID id, int tries) {
+    // texture lookups need to be protected from spam
+    HashMap<UUID, Long> lookups = new HashMap();
+
+    public boolean grabProfile(UUID id, CommandSender callback, boolean forceAdd) {
+        Long last = lookups.get(id);
+        long now = System.currentTimeMillis();
+        if(last != null && last > now - 180000) {
+            if(callback != null) {
+                callback.sendMessage(ChatColor.RED + "/addhead spam protection - try again in a few minutes");
+            }
+            return false;
+        } else {
+            lookups.put(id, now);
+        }
+        grabProfile(id, 3, callback, forceAdd);
+        return true;
+    }
+
+    protected void grabProfile(UUID id, int tries, CommandSender callback, boolean forceAdd) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
                     BufferedReader reader = null;
             try {
@@ -258,11 +277,16 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                 JSONObject resp = (JSONObject) JSONValue.parse(json);
                 if(resp.isEmpty()) {
                     HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
+                    if(callback != null) {
+                        callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
+                    }
                     return;
                 } else if(resp.containsKey("error")) {
                     // retry
                     if(tries > 0) {
-                        grabProfile(id, tries - 1);
+                        grabProfile(id, tries - 1, callback, forceAdd);
+                    } else if(callback != null) {
+                        callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
                     }
                     return;
                 }
@@ -288,7 +312,22 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", resp.get("name").toString()),
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.section"), 
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
-                                                   HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
+                                                   forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
+                                            if(callback != null) {
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                        .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                            }
+                                       } else if (forceAdd && enableHead(texUrl)){
+                                           if(callback != null) {
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                        .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                            }
+                                       } else if(callback != null) {
+                                           callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-already-added")
+                                                    .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                    .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                        }
                                    }
                                }
@@ -307,6 +346,25 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                 }
             }
         }, 20 * 20);
+    }
+
+    /**
+     * Enable player head texture, if not enabled already
+     * @param texture
+     * @return true if the texture exists and was not previously enabled.
+     */
+    public boolean enableHead(String texture) {
+        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        for(String k : heads.getKeys(false)) {
+            if(texture.equals(heads.getString(k + ".texture"))) {
+                if(!heads.getBoolean(k + ".database", true)) {
+                    heads.set(k + ".database", true);
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     public void addHead(String texture, boolean encode, String displayname, String section, String price, boolean enable) {

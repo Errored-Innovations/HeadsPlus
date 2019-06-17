@@ -400,6 +400,8 @@ public class HeadsPlus extends JavaPlugin {
         getCommand("sellhead").setTabCompleter(new TabCompleteSellhead());
         debug("- Registering /hpc...", 3);
         getCommand("hpc").setExecutor(new ChallengeCommand());
+        debug("- Registering /addhead...", 3);
+        getCommand("addhead").setExecutor(new AddHead());
         debug("- Finished registering commands!", 2);
     }
 
@@ -571,6 +573,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.add(new WhitelistwList());
         commands.add(new WhitelistwToggle());
         commands.add(new ChallengeCommand());
+        commands.add(new AddHead());
         commands.add(new Head());
         commands.add(new Heads());
         commands.add(new LeaderboardsCommand());

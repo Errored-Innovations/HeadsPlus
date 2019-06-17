@@ -513,6 +513,11 @@ public class fr_fr implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "Ajouter une tête de joueur au menu principal";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "{header} &3{name} a atteint le niveau {level}!";
     }
