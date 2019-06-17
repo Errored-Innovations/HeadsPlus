@@ -11,17 +11,32 @@ import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
-import org.bukkit.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Llama;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.*;
 
 public class DeathEvents implements Listener {
 
@@ -123,7 +138,7 @@ public class DeathEvents implements Listener {
                     ItemStack head = nms.getSkullMaterial(a);
                     SkullMeta headM = (SkullMeta) head.getItemMeta();
                     headM = nms.setSkullOwner(ep.getEntity().getName(), headM);
-                    headM.setDisplayName(hpch.getDisplayName("player").replaceAll("\\{player}", ep.getEntity().getName()));
+                    headM.setDisplayName(hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
 
 
                     Location entityLoc = ep.getEntity().getLocation();
@@ -142,7 +157,9 @@ public class DeathEvents implements Listener {
 
                     List<String> strs = new ArrayList<>();
                     for (String str : hpch.getLore("player")) {
-                        strs.add(ChatColor.translateAlternateColorCodes('&', str.replaceAll("\\{player}", ep.getEntity().getName()).replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
+                        strs.add(ChatColor.translateAlternateColorCodes('&', str
+								.replace("{player}", ep.getEntity().getName())
+								.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
                     }
                     headM.setLore(strs);
                     head.setItemMeta(headM);
@@ -155,7 +172,9 @@ public class DeathEvents implements Listener {
                     if (!event.isCancelled()) {
                         if (b && ep.getEntity().getKiller() != null) {
                             hp.getEconomy().withdrawPlayer(ep.getEntity(), lostprice);
-                            ep.getEntity().sendMessage(hp.getMessagesConfig().getString("lost-money").replaceAll("\\{player}", ep.getEntity().getKiller().getName()).replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
+                            ep.getEntity().sendMessage(hp.getMessagesConfig().getString("lost-money")
+									.replace("{player}", ep.getEntity().getKiller().getName())
+									.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
                         }
                         world.dropItem(event.getLocation(), event.getSkull());
                     }
@@ -251,7 +270,9 @@ public class DeathEvents implements Listener {
                     List<String> strs = new ArrayList<>();
                     List<String> lore = hpch.getLore(fancyName);
                     for (String str2 : lore) {
-                        strs.add(ChatColor.translateAlternateColorCodes('&', str2.replaceAll("\\{type}", fancyName).replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
+                        strs.add(ChatColor.translateAlternateColorCodes('&', str2
+								.replace("{type}", fancyName)
+								.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
                     }
                     sm.setLore(strs);
                     is.setItemMeta(sm);
@@ -299,7 +320,9 @@ public class DeathEvents implements Listener {
                 List<String> strs = new ArrayList<>();
                 List<String> lore = hpch.getLore(en);
                 for (String str2 : lore) {
-                    strs.add(ChatColor.translateAlternateColorCodes('&', str2.replaceAll("\\{type}", en).replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
+                    strs.add(ChatColor.translateAlternateColorCodes('&', str2
+							.replace("{type}", en)
+							.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
                 }
                 sm.setLore(strs);
                 is.setItemMeta(sm);
