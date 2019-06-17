@@ -359,6 +359,11 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
             if(texture.equals(heads.getString(k + ".texture"))) {
                 if(!heads.getBoolean(k + ".database", true)) {
                     heads.set(k + ".database", true);
+                    List<String> list = sections.get(heads.getString(k + ".section"));
+                    if (list != null) {
+                        list.add(k);
+                        headsCache.put(k, getSkull(k));
+                    }
                     return true;
                 }
                 return false;
