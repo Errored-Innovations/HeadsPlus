@@ -22,7 +22,12 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 1) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-            if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(p.getUniqueId(), sender, true)) {
+            String uuid = p.getUniqueId().toString();
+            if (!hp.getServer().getOnlineMode()) {
+                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
+            }
+            if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
                 sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-adding")
                         .replace("{player}", p.getName())
                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
