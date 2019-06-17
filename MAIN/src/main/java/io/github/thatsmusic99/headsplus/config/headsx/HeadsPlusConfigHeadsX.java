@@ -314,7 +314,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                 String json = sb.toString();
 
                 JSONObject resp = (JSONObject) JSONValue.parse(json);
-                if(resp.isEmpty()) {
+                if(resp == null || resp.isEmpty()) {
                     HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
                     if(callback != null) {
                         callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
@@ -375,7 +375,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                     }
                 }
             } catch (Exception ex) {
-                HeadsPlus.getInstance().getLogger().log(Level.SEVERE, "Profile Error", ex);
+                new DebugPrint(ex, "Retreiving profile (addhead)", true, callback);
             } finally {
                 if(reader != null) {
                     try {
