@@ -45,6 +45,9 @@ public class HeadsPlusMessagesConfig extends ConfigSettings {
 		getConfig().addDefault("invalid-pg-no", "{header} &cInvalid page number!");
 		getConfig().addDefault("invalid-input-int", "{header} &cYou can only use integers in this command!");
 		getConfig().addDefault("no-perm", "&cYou do not have permission to use this command.");
+		getConfig().addDefault("head-adding", "{header} &3Looking up texture to add for {player}.");
+		getConfig().addDefault("head-added", "{header} &3Head for {player} added!");
+		getConfig().addDefault("head-already-added", "{header} &3Head for {player} already in database!");
 		getConfig().addDefault("head-a-add", "%h &3This head is already added!");
 		getConfig().addDefault("head-added-bl", "{header} &3{player} has been added to the blacklist!");
 		getConfig().addDefault("head-a-removed-bl", "{header} &3This head is not on the blacklist!");

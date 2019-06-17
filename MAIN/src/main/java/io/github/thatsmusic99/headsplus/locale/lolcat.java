@@ -512,6 +512,11 @@ public class lolcat implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "U can add sum nu hedz to deh menoo.";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "%h &3OMG &b%p &3haz reeched lvl %lvl&3!";
     }

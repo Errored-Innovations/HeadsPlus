@@ -513,6 +513,11 @@ public class en_uk implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "Adds a player head to the heads menu";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "{header} &3%p has reached level %lvl&3!";
     }

@@ -512,6 +512,11 @@ public class de_de implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "Voeg een spelerskop toe aan het hoofdmenu.";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "{header} &3%p hat Level %lvl&3 erreicht!";
     }

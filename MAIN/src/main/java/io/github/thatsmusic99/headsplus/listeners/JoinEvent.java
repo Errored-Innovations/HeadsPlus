@@ -23,12 +23,13 @@ public class JoinEvent implements Listener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
+	    HeadsPlus hp = HeadsPlus.getInstance();
 		if (e.getPlayer().hasPermission("headsplus.notify")) {
-		    if (HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("update.notify")) {
+		    if (hp.getConfiguration().getMechanics().getBoolean("update.notify")) {
                 if (HeadsPlus.getUpdate() != null) {
                     Locale l = LocaleManager.getLocale();
                     new FancyMessage().text(hpc.getString("update-found"))
-                    .tooltip(ChatColor.translateAlternateColorCodes('&', l.getCurrentVersion() + HeadsPlus.getInstance().getDescription().getVersion())
+                    .tooltip(ChatColor.translateAlternateColorCodes('&', l.getCurrentVersion() + hp.getDescription().getVersion())
 							+ "\n" + ChatColor.translateAlternateColorCodes('&', l.getNewVersion() + HeadsPlus.getUpdate()[2])
 							+ "\n" + ChatColor.translateAlternateColorCodes('&', l.getDescription() + HeadsPlus.getUpdate()[1])).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
                 }
@@ -38,11 +39,11 @@ public class JoinEvent implements Listener {
             @Override
             public void run() {
                 if (e.getPlayer().getInventory().getArmorContents()[3] != null) {
-                    NMSManager nms = HeadsPlus.getInstance().getNMS();
-                    NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
+                    NMSManager nms = hp.getNMS();
+                    NBTManager nbt = hp.getNBTManager();
                     if (e.getPlayer().getInventory().getArmorContents()[3].getType().equals(nms.getSkullMaterial(1).getType())) {
 
-                        HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+                        HeadsPlusConfigHeads hpch = hp.getHeadsConfig();
                         String s = nbt.getType(e.getPlayer().getInventory().getArmorContents()[3]).toLowerCase();
                         if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
                             HPPlayer pl = HPPlayer.getHPPlayer(e.getPlayer());
@@ -51,14 +52,24 @@ public class JoinEvent implements Listener {
                     }
                 }
             }
-        }.runTaskLater(HeadsPlus.getInstance(), 20);
+        }.runTaskLater(hp, 20);
+
+        if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {
+            String uuid = e.getPlayer().getUniqueId().toString();
+            if (!hp.getServer().getOnlineMode()) {
+                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                uuid = hp.getHeadsXConfig().grabUUID(e.getPlayer().getName(), 3, null);
+            }
+            hp.getHeadsXConfig().grabProfile(uuid);
+        }
+
         if (!reloaded) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     new RecipeEnumUser();
                 }
-            }.runTaskLater(HeadsPlus.getInstance(), 20);
+            }.runTaskLater(hp, 20);
             reloaded = true;
         }
 

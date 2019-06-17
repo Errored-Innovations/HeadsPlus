@@ -228,6 +228,8 @@ public interface Locale {
 
     String descChallenges();
 
+    String descAddHead();
+
     String getAchievedNextLevel();
 
     String getPluginUpToDate();

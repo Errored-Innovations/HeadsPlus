@@ -516,6 +516,11 @@ public class ro_ro implements Locale {
     }
 
     @Override
+    public String descAddHead() {
+        return "Adăugați un cap de jucător în meniul principal";
+    }
+
+    @Override
     public String getAchievedNextLevel() {
         return "%h &3%p a atins nivelul %lvl!";
     }

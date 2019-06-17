@@ -6,23 +6,32 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
+import org.bukkit.command.CommandSender;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 public class HeadsPlusConfigHeadsX extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 2.4;
+    private final double cVersion = 2.5;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
+    public final Set<String> allHeadsCache = new HashSet<>();
 
     public HeadsPlusConfigHeadsX() {
         this.conName = "headsx";
@@ -128,6 +137,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         ConfigurationSection heads = getConfig().getConfigurationSection("heads");
         try {
             for (String head : heads.getKeys(false)) {
+                allHeadsCache.add(heads.getString(head + ".texture"));
                 if (heads.getBoolean(head + ".database", true)) {
                     final String sec = heads.getString(head + ".section");
                     List<String> list = sections.get(sec);
@@ -223,5 +233,227 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         ++hype;
         getConfig().set("options.christmas-hype", hype);
         save();
+    }
+
+    public void grabProfile(String id) {
+        grabProfile(id, null, false);
+    }
+
+    // texture lookups need to be protected from spam
+    HashMap<String, Long> lookups = new HashMap<>();
+
+    public boolean grabProfile(String id, CommandSender callback, boolean forceAdd) {
+        Long last = lookups.get(id);
+        long now = System.currentTimeMillis();
+        if(last != null && last > now - 180000) {
+            if(callback != null) {
+                callback.sendMessage(ChatColor.RED + "/addhead spam protection - try again in a few minutes");
+            }
+            return false;
+        } else {
+            lookups.put(id, now);
+        }
+        grabProfile(id, 3, callback, forceAdd, forceAdd ? 5 : 20 * 20);
+        return true;
+    }
+
+    public String grabUUID(String username, int tries, CommandSender callback) {
+        String uuid = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), "UTF8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if(sb.length() == 0) {
+                    sb.append("\n");
+                }
+                sb.append(line);
+            }
+            String json = sb.toString();
+            JSONObject resp = (JSONObject) JSONValue.parse(json);
+            if(resp == null || resp.isEmpty()) {
+                HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
+                if(callback != null) {
+                    callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
+                }
+                return null;
+            } else if(resp.containsKey("error")) {
+                // Retry
+                if(tries > 0) {
+                    grabUUID(username, tries - 1, callback);
+                } else if(callback != null) {
+                    callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
+                }
+                return null;
+            } else {
+                uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an IllegalArgumentException
+            }
+        } catch (IOException e) {
+            new DebugPrint(e, "Retreiving UUID (addhead)", true, callback);
+        }
+        return uuid;
+    }
+
+    protected void grabProfile(String id, int tries, CommandSender callback, boolean forceAdd, int delay) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
+                    BufferedReader reader = null;
+            try {
+                URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", ""));
+
+                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), "UTF8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if(sb.length() == 0) {
+                        sb.append("\n");
+                    }
+                    sb.append(line);
+                }
+                String json = sb.toString();
+
+                JSONObject resp = (JSONObject) JSONValue.parse(json);
+                if(resp == null || resp.isEmpty()) {
+                    HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
+                    if(callback != null) {
+                        callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
+                    }
+                    return;
+                } else if(resp.containsKey("error")) {
+                    // retry
+                    if(tries > 0) {
+                        grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
+                    } else if(callback != null) {
+                        callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
+                    }
+                    return;
+                }
+
+                Object o = resp.get("properties");
+                if(o instanceof List) {
+                    for(Object o2 : (List) o) {
+                        if(o2 instanceof Map) {
+                           Map m = (Map) o2;
+                           if("textures".equals(m.get("name")) && m.containsKey("value")) {
+                               String encoded = m.get("value").toString();
+                               String decoded = new String(Base64.getDecoder().decode(encoded));
+                               JSONObject resp2 = (JSONObject) JSONValue.parse(decoded);
+                               if((o2 = resp2.get("textures")) instanceof Map
+                                       && (o2 = ((Map) o2).get("SKIN")) instanceof Map
+                                       && ((Map) o2).containsKey("url")) {
+                                   String texUrl = ((Map) o2).get("url").toString();
+                                   int last = texUrl.lastIndexOf('/');
+                                   if(last != -1) {
+                                       texUrl = texUrl.substring(last + 1);
+                                       String name = resp.get("name").toString();
+                                       if(!allHeadsCache.contains(texUrl)) {
+                                           addHead(texUrl, true,
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", name),
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.section"), 
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
+                                                   forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
+                                            if(callback != null) {
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                        .replace("{player}", name)
+                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                            }
+                                       } else if (forceAdd && enableHead(texUrl)){
+                                           if(callback != null) {
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                        .replace("{player}", name)
+                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                            }
+                                       } else if(callback != null) {
+                                           callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-already-added")
+                                                    .replace("{player}", name)
+                                                    .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                       }
+                                   }
+                               }
+                           }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                new DebugPrint(ex, "Retreiving profile (addhead)", true, callback);
+            } finally {
+                if(reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException ex) {
+                    }
+                }
+            }
+        }, delay);
+    }
+
+    /**
+     * Enable player head texture, if not enabled already
+     * @param texture
+     * @return true if the texture exists and was not previously enabled.
+     */
+    public boolean enableHead(String texture) {
+        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        for(String k : heads.getKeys(false)) {
+            if(texture.equals(heads.getString(k + ".texture"))) {
+                if(!heads.getBoolean(k + ".database", true)) {
+                    heads.set(k + ".database", true);
+                    List<String> list = sections.get(heads.getString(k + ".section"));
+                    if (list != null) {
+                        list.add(k);
+                        headsCache.put(k, getSkull(k));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public void addHead(String texture, boolean encode, String displayname, String section, String price, boolean enable) {
+        // find a name that's open
+        List l = sections.get(section);
+        int i = l == null ? 0 : l.size() + 1;
+        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        String key;
+        while(heads.contains(key = section + "_" + i)) ++i;
+        ConfigurationSection head = heads.createSection(key);
+        if(!enable) {
+            head.set("database", enable);
+        }
+        head.set("encode", encode);
+        head.set("price", price);
+        head.set("section", section);
+        head.set("texture", texture);
+        head.set("displayname", displayname);
+        if(enable) {
+            List<String> list = sections.get(section);
+            if (list != null) {
+                list.add(key);
+                headsCache.put(key, getSkull(key));
+            }
+        }
+        delaySave();
+    }
+
+    int autosaveTask = -1;
+
+    void delaySave() {
+        if (autosaveTask == -1 && HeadsPlus.getInstance().isEnabled()) {
+            autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), ()->{
+                save();
+                autosaveTask = -1;
+            }, 5 * 60).getTaskId();
+        }
+    }
+
+    public void flushSave() {
+        if (autosaveTask != -1) {
+            Bukkit.getScheduler().cancelTask(autosaveTask);
+            save();
+            autosaveTask = -1;
+        }
     }
 }
