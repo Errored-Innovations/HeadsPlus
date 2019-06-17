@@ -300,7 +300,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
                     BufferedReader reader = null;
             try {
-                URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.toString().replace("-", ""));
+                URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", ""));
 
                 reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), "UTF8"));
                 StringBuilder sb = new StringBuilder();
@@ -346,26 +346,27 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                                    int last = texUrl.lastIndexOf('/');
                                    if(last != -1) {
                                        texUrl = texUrl.substring(last + 1);
+                                       String name = resp.get("name").toString();
                                        if(!allHeadsCache.contains(texUrl)) {
                                            addHead(texUrl, true,
-                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", resp.get("name").toString()),
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", name),
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.section"), 
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
                                                    forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
                                             if(callback != null) {
                                                 callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
-                                                        .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                        .replace("{player}", name)
                                                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                             }
                                        } else if (forceAdd && enableHead(texUrl)){
                                            if(callback != null) {
                                                 callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
-                                                        .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                        .replace("{player}", name)
                                                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                             }
                                        } else if(callback != null) {
                                            callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-already-added")
-                                                    .replace("{player}", Bukkit.getOfflinePlayer(id).getName())
+                                                    .replace("{player}", name)
                                                     .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                        }
                                    }
