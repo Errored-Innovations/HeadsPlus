@@ -1,6 +1,6 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: 6.3.5-SNAPSHOT-2
+version: 6.3.5.1
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
@@ -65,3 +65,6 @@ permissions:
   headsplus.maincommand.profile:
     default: true
     description: Allows players to use /hp profile (only to view their own profile).
+  headsplus.bypass.cost:
+    default: false
+    description: Bypass the cost for purchasing all heads

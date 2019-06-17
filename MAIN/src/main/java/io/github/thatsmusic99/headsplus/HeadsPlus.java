@@ -54,7 +54,7 @@ public class HeadsPlus extends JavaPlugin {
     private final PluginDescriptionFile pluginYml = getDescription();
     private final String author = pluginYml.getAuthors().toString();
     private final String version = pluginYml.getVersion();
-    private Economy econ;
+    private Economy econ = null;
     private Permission perms;
     private static Object[] update = null;
     private Connection connection;
