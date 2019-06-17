@@ -74,14 +74,13 @@ public class Head extends ItemStack implements Icon {
 
             } */
      //   }
+        e.setCancelled(true);
         NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
         if (im.getType() == InventoryManager.Type.SELL) {
             if (!nbt.getType(e.getCurrentItem()).isEmpty()) {
                 if (e.isRightClick()) {
-                    e.setCancelled(true);
                     p.performCommand("sellhead " + nbt.getType(e.getCurrentItem()) + " 1");
                 } else {
-                    e.setCancelled(true);
                     p.performCommand("sellhead " + nbt.getType(e.getCurrentItem()));
                 }
 
@@ -110,7 +109,6 @@ public class Head extends ItemStack implements Icon {
                 im2.setLore(s);
                 e.getCurrentItem().setItemMeta(im2);
                 e.getInventory().setItem(e.getSlot(), e.getCurrentItem());
-                e.setCancelled(true);
             } else {
                 giveHead(p, e);
             }
@@ -122,38 +120,31 @@ public class Head extends ItemStack implements Icon {
         NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
         if (p.getInventory().firstEmpty() == -1) {
             p.sendMessage(hpc.getString("full-inv"));
-            e.setCancelled(true);
+            return;
+        }
+        Double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
+        Economy ef = HeadsPlus.getInstance().getEconomy();
+		if (price > 0.0 && ef != null && price > ef.getBalance(p)) {
+            p.sendMessage(hpc.getString("not-enough-money"));
             return;
         }
         HeadPurchaseEvent event = new HeadPurchaseEvent(p, e.getCurrentItem());
-		if(p.hasPermission("headsplus.bypass.cost")) {
-		} else if (nbt.getPrice(e.getCurrentItem()) != 0.0 && HeadsPlus.getInstance().econ()) {
-
-            Economy ef = HeadsPlus.getInstance().getEconomy();
-            Double price = nbt.getPrice(e.getCurrentItem());
-            if (price > ef.getBalance(p)) {
-                p.sendMessage(hpc.getString("not-enough-money"));
-                event.setCancelled(true);
-                e.setCancelled(true);
-                return;
-            }
-            EconomyResponse er = ef.withdrawPlayer(p, price);
-            String success = hpc.getString("buy-success")
-					.replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(er.amount))
-					.replaceAll("\\{balance}", Double.toString(ef.getBalance(p)));
-            String fail = hpc.getString("cmd-fail");
-            if (er.transactionSuccess()) {
-                p.sendMessage(success);
-            } else {
-                p.sendMessage(fail + ": " + er.errorMessage);
-                event.setCancelled(true);
-                e.setCancelled(true);
-            }
-        }
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            p.getInventory().addItem(HeadsPlus.getInstance().getNBTManager().removeIcon(e.getCurrentItem()));
-            e.setCancelled(true);
+            boolean ok = true;
+            if(price > 0.0 && ef != null) {
+                EconomyResponse er = ef.withdrawPlayer(p, price);
+                if((ok = er.transactionSuccess())) {
+                    p.sendMessage(hpc.getString("buy-success")
+                        .replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))
+                        .replaceAll("\\{balance}", Double.toString(ef.getBalance(p))));
+                } else {
+                    p.sendMessage(hpc.getString("cmd-fail") + ": " + er.errorMessage);
+                }
+            }
+            if (ok) {
+                p.getInventory().addItem(HeadsPlus.getInstance().getNBTManager().removeIcon(e.getCurrentItem()));
+            }
         }
     }
 
