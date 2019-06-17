@@ -125,33 +125,34 @@ public class Head extends ItemStack implements Icon {
             e.setCancelled(true);
             return;
         }
-        HeadPurchaseEvent event = new HeadPurchaseEvent(p, e.getCurrentItem());
-		if(p.hasPermission("headsplus.bypass.cost")) {
-		} else if (nbt.getPrice(e.getCurrentItem()) != 0.0 && HeadsPlus.getInstance().econ()) {
 
-            Economy ef = HeadsPlus.getInstance().getEconomy();
-            Double price = nbt.getPrice(e.getCurrentItem());
-            if (price > ef.getBalance(p)) {
-                p.sendMessage(hpc.getString("not-enough-money"));
-                event.setCancelled(true);
-                e.setCancelled(true);
-                return;
-            }
-            EconomyResponse er = ef.withdrawPlayer(p, price);
-            String success = hpc.getString("buy-success")
-					.replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(er.amount))
-					.replaceAll("\\{balance}", Double.toString(ef.getBalance(p)));
-            String fail = hpc.getString("cmd-fail");
-            if (er.transactionSuccess()) {
-                p.sendMessage(success);
-            } else {
-                p.sendMessage(fail + ": " + er.errorMessage);
-                event.setCancelled(true);
-                e.setCancelled(true);
-            }
-        }
+        HeadPurchaseEvent event = new HeadPurchaseEvent(p, e.getCurrentItem());
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
+            if (nbt.getPrice(e.getCurrentItem()) != 0.0
+                    && HeadsPlus.getInstance().econ()
+                    && !p.hasPermission("headsplus.bypass.cost")) {
+
+                Economy ef = HeadsPlus.getInstance().getEconomy();
+                Double price = nbt.getPrice(e.getCurrentItem());
+                if (price > ef.getBalance(p)) {
+                    p.sendMessage(hpc.getString("not-enough-money"));
+                    e.setCancelled(true);
+                    return;
+                }
+                EconomyResponse er = ef.withdrawPlayer(p, price);
+                String success = hpc.getString("buy-success")
+                        .replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(er.amount))
+                        .replaceAll("\\{balance}", Double.toString(ef.getBalance(p)));
+                String fail = hpc.getString("cmd-fail");
+                if (er.transactionSuccess()) {
+                    p.sendMessage(success);
+                } else {
+                    p.sendMessage(fail + ": " + er.errorMessage);
+                    e.setCancelled(true);
+                    return;
+                }
+            }
             p.getInventory().addItem(HeadsPlus.getInstance().getNBTManager().removeIcon(e.getCurrentItem()));
             e.setCancelled(true);
         }
