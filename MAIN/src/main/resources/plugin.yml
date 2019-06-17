@@ -65,3 +65,6 @@ permissions:
   headsplus.maincommand.profile:
     default: true
     description: Allows players to use /hp profile (only to view their own profile).
+  headsplus.bypass.cost:
+    default: false
+    description: Bypass the cost for purchasing all heads

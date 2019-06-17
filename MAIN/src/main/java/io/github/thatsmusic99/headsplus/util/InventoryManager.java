@@ -506,7 +506,7 @@ public class InventoryManager {
                     }
                 }
             } else {
-                if (!(((Double) hpchx.getConfig().get("heads." + str + ".price")) == 0.0)) {
+                if (!((hpchx.getConfig().getDouble("heads." + str + ".price")) == 0.0)) {
                     pr = hpchx.getConfig().getDouble("heads." + str + ".price");
                 }
             }
