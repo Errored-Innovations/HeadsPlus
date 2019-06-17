@@ -257,7 +257,46 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         return true;
     }
 
-    protected void grabProfile(UUID id, int tries, CommandSender callback, boolean forceAdd, int delay) {
+    public String grabUUID(String username, int tries, CommandSender callback) {
+        String uuid = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), "UTF8"));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if(sb.length() == 0) {
+                    sb.append("\n");
+                }
+                sb.append(line);
+            }
+            String json = sb.toString();
+            JSONObject resp = (JSONObject) JSONValue.parse(json);
+            if(resp == null || resp.isEmpty()) {
+                HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
+                if(callback != null) {
+                    callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
+                }
+                return null;
+            } else if(resp.containsKey("error")) {
+                // Retry
+                if(tries > 0) {
+                    grabUUID(username, tries - 1, callback);
+                } else if(callback != null) {
+                    callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
+                }
+                return null;
+            } else {
+                uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an IllegalArgumentException
+            }
+        } catch (IOException e) {
+            new DebugPrint(e, "Retreiving UUID (addhead)", true, callback);
+        }
+        return uuid;
+    }
+
+    protected void grabProfile(String id, int tries, CommandSender callback, boolean forceAdd, int delay) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
                     BufferedReader reader = null;
             try {
