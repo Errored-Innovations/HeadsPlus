@@ -149,7 +149,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                         h.put(false, hpc.getString("too-short-head"));
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("head-too-long"));
+                    h.put(false, hpc.getString("head-too-long"));
                 }
             } else {
                 h.put(false, hpc.getString("alpha-names"));
