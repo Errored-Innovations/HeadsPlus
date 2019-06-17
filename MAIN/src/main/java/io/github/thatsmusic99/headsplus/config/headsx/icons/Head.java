@@ -123,8 +123,11 @@ public class Head extends ItemStack implements Icon {
             return;
         }
         Double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
-        Economy ef = HeadsPlus.getInstance().getEconomy();
-		if (price > 0.0 && ef != null && price > ef.getBalance(p)) {
+        Economy ef = null;
+		if (price > 0.0
+                && HeadsPlus.getInstance().econ()
+                && (ef = HeadsPlus.getInstance().getEconomy()) != null
+                && price > ef.getBalance(p)) {
             p.sendMessage(hpc.getString("not-enough-money"));
             return;
         }
