@@ -28,7 +28,7 @@ import org.json.simple.JSONValue;
 public class HeadsPlusConfigHeadsX extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 2.4;
+    private final double cVersion = 2.5;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();

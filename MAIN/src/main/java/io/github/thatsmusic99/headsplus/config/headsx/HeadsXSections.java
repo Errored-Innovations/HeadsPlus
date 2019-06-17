@@ -10,7 +10,8 @@ public enum HeadsXSections {
     PLANTS("plants", "&8[&aPlants&8]", "HP#white_flower_bush", 1.0),
     COLOURS("colors", "&8[&4C&6o&el&ao&br&ds&8]", "HP#rainbow", 1.2),
     EMOTES("emotes", "&8[&eEmotes&8]", "HP#e_wink", 1.3),
-    BLOCKS("blocks", "&8[&9Blocks&8]", "HP#oak_log", 1.6);
+    BLOCKS("blocks", "&8[&9Blocks&8]", "HP#oak_log", 1.6),
+    PLAYERS("players", "&8[&6Players&8]", "HP#players_0", 2.5);
 
     public final String let;
     public final String dn;
