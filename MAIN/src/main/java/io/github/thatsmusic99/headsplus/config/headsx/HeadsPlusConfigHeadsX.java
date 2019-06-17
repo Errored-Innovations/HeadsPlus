@@ -424,7 +424,11 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
             head.set("database", enable);
         }
         head.set("encode", encode);
-        head.set("price", price.matches("^[0-9]+$") ? Integer.parseInt(price) : price);
+        if(price.matches("^([0-9]*\\.)?[0-9]+$")) {
+            head.set("price", Double.parseDouble(price));
+        } else {
+            head.set("price", price);
+        }
         head.set("section", section);
         head.set("texture", texture);
         head.set("displayname", displayname);
