@@ -152,7 +152,7 @@ public abstract class HeadInventory {
                 is.setItemMeta(im);
                 is = nbt.setIcon(is, icons[o]);
             } else if (icons[o] instanceof Nav) {
-                Icon oof;
+                Icon icon;
 
                 // is this navigation button applicable?
                 Nav.Page dir = ((Nav) icons[o]).getNavigationPage();
@@ -196,19 +196,23 @@ public abstract class HeadInventory {
                         ok = page > 2;
                         break;
                 }
-                oof = ok ? icons[o] : icons[o].getReplacementIcon();
+                icon = ok ? icons[o] : icons[o].getReplacementIcon();
 
                 if (HeadsPlus.getInstance().getNMS() instanceof NewNMSManager) {
-                    is = new ItemStack(oof.getMaterial(), 1);
+                    is = new ItemStack(icon.getMaterial(), 1);
                 } else {
-                    is = new ItemStack(oof.getMaterial(), 1,
-                            (byte) hp.getItems().getConfig().getInt("icons." + oof.getIconName() + ".data-value"));
+                    is = new ItemStack(icon.getMaterial(), 1,
+                            (byte) hp.getItems().getConfig().getInt("icons." + icon.getIconName() + ".data-value"));
 
                 }
                 ItemMeta im = is.getItemMeta();
-                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', targetPage != -1 ? "Page " + (targetPage + 1) : oof.getDisplayName()));
+                if (ok) {
+                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', targetPage != -1 ? "Page " + (targetPage + 1) : icon.getDisplayName()));
+                } else {
+                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getConfig().getString("icons." + icon.getIconName() + ".display-name")));
+                }
                 List<String> ls = new ArrayList<>();
-                for (String s : oof.getLore()) {
+                for (String s : icon.getLore()) {
                     ls.add(ChatColor.translateAlternateColorCodes('&', s
                             .replaceAll("\\{heads}", String.valueOf(items))
                             .replaceAll("\\{pages}", String.valueOf(pages))
@@ -218,7 +222,7 @@ public abstract class HeadInventory {
                 }
                 im.setLore(ls);
                 is.setItemMeta(im);
-                is = nbt.setIcon(is, oof);
+                is = nbt.setIcon(is, icon);
             } else if(icons[o] != null) {
                 is = new ItemStack(icons[o].getMaterial(), 1, (byte) hp.getItems().getConfig().getInt("icons." + icons[o].getIconName() + ".data-value"));
                 ItemMeta im = is.getItemMeta();
