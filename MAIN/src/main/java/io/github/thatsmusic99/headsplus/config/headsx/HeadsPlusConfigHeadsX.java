@@ -253,11 +253,11 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         } else {
             lookups.put(id, now);
         }
-        grabProfile(id, 3, callback, forceAdd);
+        grabProfile(id, 3, callback, forceAdd, forceAdd ? 5 : 20 * 20);
         return true;
     }
 
-    protected void grabProfile(UUID id, int tries, CommandSender callback, boolean forceAdd) {
+    protected void grabProfile(UUID id, int tries, CommandSender callback, boolean forceAdd, int delay) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
                     BufferedReader reader = null;
             try {
@@ -284,7 +284,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                 } else if(resp.containsKey("error")) {
                     // retry
                     if(tries > 0) {
-                        grabProfile(id, tries - 1, callback, forceAdd);
+                        grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
                     } else if(callback != null) {
                         callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
                     }
@@ -345,7 +345,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                     }
                 }
             }
-        }, 20 * 20);
+        }, delay);
     }
 
     /**
