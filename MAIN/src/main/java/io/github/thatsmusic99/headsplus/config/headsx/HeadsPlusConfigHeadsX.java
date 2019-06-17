@@ -235,14 +235,14 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         save();
     }
 
-    public void grabProfile(UUID id) {
+    public void grabProfile(String id) {
         grabProfile(id, null, false);
     }
 
     // texture lookups need to be protected from spam
-    HashMap<UUID, Long> lookups = new HashMap();
+    HashMap<String, Long> lookups = new HashMap<>();
 
-    public boolean grabProfile(UUID id, CommandSender callback, boolean forceAdd) {
+    public boolean grabProfile(String id, CommandSender callback, boolean forceAdd) {
         Long last = lookups.get(id);
         long now = System.currentTimeMillis();
         if(last != null && last > now - 180000) {
