@@ -209,7 +209,7 @@ public abstract class HeadInventory {
                 if (ok) {
                     im.setDisplayName(ChatColor.translateAlternateColorCodes('&', targetPage != -1 ? "Page " + (targetPage + 1) : icon.getDisplayName()));
                 } else {
-                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getConfig().getString("icons." + icon.getIconName() + ".display-name")));
+                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getItems().getConfig().getString("icons." + icon.getIconName() + ".display-name")));
                 }
                 List<String> ls = new ArrayList<>();
                 for (String s : icon.getLore()) {
