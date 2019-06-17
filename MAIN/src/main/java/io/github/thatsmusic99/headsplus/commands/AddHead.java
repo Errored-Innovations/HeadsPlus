@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import java.util.HashMap;
 import java.util.UUID;
@@ -19,6 +20,8 @@ import org.bukkit.command.CommandSender;
         usage = "/addhead <player>"
 )
 public class AddHead implements CommandExecutor, IHeadsPlusCommand {
+
+    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -47,12 +50,20 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
         if (args.length > 0) {
             // todo? allow adding actual textures (and category, encoding) via this command
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
-                h.put(true, "");
+                if (args[0].length() > 2) {
+                    if (args[0].length() < 17) {
+                        h.put(true, "");
+                    } else {
+                        h.put(false,  hpc.getString("head-too-long"));
+                    }
+                } else {
+                    h.put(false, hpc.getString("too-short-head"));
+                }
             } else {
-                h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("alpha-names"));
+                h.put(false, hpc.getString("alpha-names"));
             }
         } else {
-            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+            h.put(false, hpc.getString("invalid-args"));
         }
         return h;
     }

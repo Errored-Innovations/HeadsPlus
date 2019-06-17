@@ -353,14 +353,12 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 }
                 return sb.toString();
             } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
                 if (ph.getHs().size() > 0) {
                     return hpc.getString("invalid-pg-no");
                 } else {
                     return hpc.getString("no-data-lb");
                 }
             } catch (NullPointerException ex) {
-                ex.printStackTrace();
                 return hpc.getString("no-data-lb");
             }
         }
