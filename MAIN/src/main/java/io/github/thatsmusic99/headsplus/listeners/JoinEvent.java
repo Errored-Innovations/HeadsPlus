@@ -52,6 +52,11 @@ public class JoinEvent implements Listener {
                 }
             }
         }.runTaskLater(HeadsPlus.getInstance(), 20);
+
+        if(HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.enabled")) {
+            HeadsPlus.getInstance().getHeadsXConfig().grabProfile(e.getPlayer().getUniqueId());
+        }
+
         if (!reloaded) {
             new BukkitRunnable() {
                 @Override

@@ -6,16 +6,23 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 public class HeadsPlusConfigHeadsX extends ConfigSettings {
 
@@ -23,6 +30,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
     private final double cVersion = 2.4;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
+    public final Set<String> allHeadsCache = new HashSet<>();
 
     public HeadsPlusConfigHeadsX() {
         this.conName = "headsx";
@@ -128,6 +136,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         ConfigurationSection heads = getConfig().getConfigurationSection("heads");
         try {
             for (String head : heads.getKeys(false)) {
+                allHeadsCache.add(heads.getString(head + ".texture"));
                 if (heads.getBoolean(head + ".database", true)) {
                     final String sec = heads.getString(head + ".section");
                     List<String> list = sections.get(sec);
@@ -223,5 +232,125 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         ++hype;
         getConfig().set("options.christmas-hype", hype);
         save();
+    }
+
+    public void grabProfile(UUID id) {
+        grabProfile(id, 3);
+    }
+
+    protected void grabProfile(UUID id, int tries) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
+                    BufferedReader reader = null;
+            try {
+                URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.toString().replace("-", ""));
+
+                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), "UTF8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if(sb.length() == 0) {
+                        sb.append("\n");
+                    }
+                    sb.append(line);
+                }
+                String json = sb.toString();
+
+                JSONObject resp = (JSONObject) JSONValue.parse(json);
+                if(resp.isEmpty()) {
+                    HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
+                    return;
+                } else if(resp.containsKey("error")) {
+                    // retry
+                    if(tries > 0) {
+                        grabProfile(id, tries - 1);
+                    }
+                    return;
+                }
+
+                Object o = resp.get("properties");
+                if(o instanceof List) {
+                    for(Object o2 : (List) o) {
+                        if(o2 instanceof Map) {
+                           Map m = (Map) o2;
+                           if("textures".equals(m.get("name")) && m.containsKey("value")) {
+                               String encoded = m.get("value").toString();
+                               String decoded = new String(Base64.getDecoder().decode(encoded));
+                               JSONObject resp2 = (JSONObject) JSONValue.parse(decoded);
+                               if((o2 = resp2.get("textures")) instanceof Map
+                                       && (o2 = ((Map) o2).get("SKIN")) instanceof Map
+                                       && ((Map) o2).containsKey("url")) {
+                                   String texUrl = ((Map) o2).get("url").toString();
+                                   int last = texUrl.lastIndexOf('/');
+                                   if(last != -1) {
+                                       texUrl = texUrl.substring(last + 1);
+                                       if(!allHeadsCache.contains(texUrl)) {
+                                           addHead(texUrl, true,
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", resp.get("name").toString()),
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.section"), 
+                                                   HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
+                                                   HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
+                                       }
+                                   }
+                               }
+                           }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                HeadsPlus.getInstance().getLogger().log(Level.SEVERE, "Profile Error", ex);
+            } finally {
+                if(reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException ex) {
+                    }
+                }
+            }
+        }, 20 * 20);
+    }
+
+    public void addHead(String texture, boolean encode, String displayname, String section, String price, boolean enable) {
+        // find a name that's open
+        List l = sections.get(section);
+        int i = l == null ? 0 : l.size() + 1;
+        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        String key;
+        while(heads.contains(key = section + "_" + i)) ++i;
+        ConfigurationSection head = heads.createSection(key);
+        if(!enable) {
+            head.set("database", enable);
+        }
+        head.set("encode", encode);
+        head.set("price", price);
+        head.set("section", section);
+        head.set("texture", texture);
+        head.set("displayname", displayname);
+        if(enable) {
+            List<String> list = sections.get(section);
+            if (list != null) {
+                list.add(key);
+                headsCache.put(key, getSkull(key));
+            }
+        }
+        delaySave();
+    }
+
+    int autosaveTask = -1;
+
+    void delaySave() {
+        if (autosaveTask == -1 && HeadsPlus.getInstance().isEnabled()) {
+            autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), ()->{
+                save();
+                autosaveTask = -1;
+            }, 5 * 60).getTaskId();
+        }
+    }
+
+    public void flushSave() {
+        if (autosaveTask != -1) {
+            Bukkit.getScheduler().cancelTask(autosaveTask);
+            save();
+            autosaveTask = -1;
+        }
     }
 }
