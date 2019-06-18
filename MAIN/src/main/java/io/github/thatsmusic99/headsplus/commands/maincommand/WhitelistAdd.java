@@ -58,7 +58,7 @@ public class WhitelistAdd implements IHeadsPlusCommand {
                 sender.sendMessage(hpc.getString("head-added-wl").replaceAll("\\{name}", args[1]));
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistadd)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistadd)", true, sender);
         }
         return false;
     }

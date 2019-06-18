@@ -60,7 +60,7 @@ public class WhitelistwList implements IHeadsPlusCommand {
             sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate("whitelist", "world", bl, page));
 
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistwl)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistwl)", true, sender);
         }
 
         return true;

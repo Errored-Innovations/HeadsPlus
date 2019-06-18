@@ -57,7 +57,7 @@ public class Search extends ItemStack implements Icon {
             }
 
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (InventoryEvent)", false, null);
+            DebugPrint.createReport(ex, "Event (InventoryEvent)", false, null);
         }
     }
 

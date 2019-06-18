@@ -63,7 +63,7 @@ public class BlacklistwAdd implements IHeadsPlusCommand {
                         sender.sendMessage(hpc.getString("world-added-bl").replaceAll("\\{name}", args[1]));
                     }
                 } catch (Exception e) {
-                    new DebugPrint(e, "Subcommand (blacklistwadd)", true, sender);
+                    DebugPrint.createReport(e, "Subcommand (blacklistwadd)", true, sender);
                 }
             } else {
                 sender.sendMessage(hpc.getString("alpha-names"));

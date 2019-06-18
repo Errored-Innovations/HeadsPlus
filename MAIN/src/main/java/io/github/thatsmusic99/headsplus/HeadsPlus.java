@@ -195,7 +195,7 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().info(hpc.getString("plugin-enabled"));
         } catch (Exception e) {
             try {
-                new DebugPrint(e, "Startup", false, null);
+                DebugPrint.createReport(e, "Startup", false, null);
             } catch (Exception ex) {
                 getLogger().severe("HeadsPlus has failed to start up correctly and can not read the config. An error report has been made in /plugins/HeadsPlus/debug");
                 try {
@@ -228,12 +228,12 @@ public class HeadsPlus extends JavaPlugin {
         try {
             favourites.save();
         } catch (IOException e) {
-            new DebugPrint(e, "Disabling (saving favourites)", false, null);
+            DebugPrint.createReport(e, "Disabling (saving favourites)", false, null);
         }
         try {
             scores.save();
         } catch (IOException e) {
-            new DebugPrint(e, "Disabling (saving scores)", false, null);
+            DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
         }
         getLogger().info(hpc.getString("plugin-disabled"));
     }

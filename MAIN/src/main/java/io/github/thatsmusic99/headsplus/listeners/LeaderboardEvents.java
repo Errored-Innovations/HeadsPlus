@@ -30,7 +30,7 @@ public class LeaderboardEvents implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (LeaderboardEvents)", false, null);
+            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
         }
 
     }
@@ -51,7 +51,7 @@ public class LeaderboardEvents implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (LeaderboardEvents)", false, null);
+            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
         }
 
     }
@@ -74,7 +74,7 @@ public class LeaderboardEvents implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (LeaderboardEvents)", false, null);
+            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
         }
     }
 
@@ -92,7 +92,7 @@ public class LeaderboardEvents implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (LeaderboardEvents)", false, null);
+            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
         }
     }
 }

@@ -75,7 +75,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
                 }
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (profile)", true, cs);
+            DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
         }
 
 

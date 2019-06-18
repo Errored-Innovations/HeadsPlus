@@ -67,7 +67,7 @@ public class WhitelistwAdd implements IHeadsPlusCommand {
                 sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistwadd)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistwadd)", true, sender);
         }
         return false;
     }

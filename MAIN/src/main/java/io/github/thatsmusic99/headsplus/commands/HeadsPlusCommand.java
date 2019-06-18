@@ -65,7 +65,7 @@ public class HeadsPlusCommand implements CommandExecutor {
 
             return false;
         } catch (Exception e) {
-            new DebugPrint(e, "Command (headsplus)", true, sender);
+            DebugPrint.createReport(e, "Command (headsplus)", true, sender);
         }
 		return false;
 	}

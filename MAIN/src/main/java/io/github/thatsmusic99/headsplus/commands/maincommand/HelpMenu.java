@@ -81,7 +81,7 @@ public class HelpMenu implements IHeadsPlusCommand {
                 }
             }
         } catch (Exception e) {
-	        new DebugPrint(e, "Subcommand (help)", true, sender);
+	        DebugPrint.createReport(e, "Subcommand (help)", true, sender);
         }
 
         return true;

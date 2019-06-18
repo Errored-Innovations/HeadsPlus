@@ -77,7 +77,7 @@ public class WhitelistwToggle implements IHeadsPlusCommand{
                 }
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistw)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistw)", true, sender);
         }
 
         return false;

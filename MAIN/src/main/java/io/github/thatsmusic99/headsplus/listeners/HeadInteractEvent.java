@@ -70,7 +70,7 @@ public final class HeadInteractEvent implements Listener {
 		} catch (NullPointerException ex) {
 		//
 	    } catch (Exception e) {
-			new DebugPrint(e, "Event (HeadInteractEvent)", false, null);
+			DebugPrint.createReport(e, "Event (HeadInteractEvent)", false, null);
 		}
 	}
 	@SuppressWarnings("deprecation")

@@ -61,7 +61,7 @@ public class WhitelistList implements IHeadsPlusCommand {
 
 
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistl)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistl)", true, sender);
         }
         return true;
     }
