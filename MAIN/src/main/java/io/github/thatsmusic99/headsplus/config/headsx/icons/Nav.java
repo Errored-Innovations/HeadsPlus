@@ -50,7 +50,7 @@ public class Nav extends ItemStack implements Icon {
         try {
             im.showPage(direction);
         } catch (Exception e1) {
-            new DebugPrint(e1, "Changing page (next)", false, p);
+            DebugPrint.createReport(e1, "Changing page (next)", false, p);
         }
     }
 

@@ -63,7 +63,7 @@ public class BlacklistwDelete implements IHeadsPlusCommand {
 
                     }
                 } catch (Exception e) {
-                	new DebugPrint(e, "Subcommand (blacklistwdel)", true, sender);
+                    DebugPrint.createReport(e, "Subcommand (blacklistwdel)", true, sender);
                 }
 			} else {
 				sender.sendMessage(hpc.getString("alpha-names"));

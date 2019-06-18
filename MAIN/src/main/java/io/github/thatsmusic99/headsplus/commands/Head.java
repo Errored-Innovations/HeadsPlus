@@ -221,7 +221,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	            sender.sendMessage(hpc.getString("no-perms"));
 	        }
         } catch (Exception e) {
-	        new DebugPrint(e, "Command (head)", true, sender);
+	        DebugPrint.createReport(e, "Command (head)", true, sender);
         }
         printDebugResults(tests, false);
         return false;

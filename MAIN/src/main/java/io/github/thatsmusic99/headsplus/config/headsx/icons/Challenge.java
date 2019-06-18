@@ -42,7 +42,7 @@ io.github.thatsmusic99.headsplus.api.Challenge challenge = HeadsPlus.getInstance
             e.setCancelled(true);
         }catch (NullPointerException ignored) {
         } catch (SQLException ex) {
-            new DebugPrint(ex, "Completing challenge", false, p);
+            DebugPrint.createReport(ex, "Completing challenge", false, p);
         }
     }
 

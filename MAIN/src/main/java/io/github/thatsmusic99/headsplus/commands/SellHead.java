@@ -186,7 +186,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                 sender.sendMessage("[HeadsPlus] You must be a player to run this command!");
             }
         } catch (Exception e) {
-		    new DebugPrint(e, "Command (sellhead)", true, sender);
+		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
 		}
 		printDebugResults(tests, false);
         return false;

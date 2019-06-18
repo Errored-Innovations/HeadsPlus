@@ -34,7 +34,7 @@ public class PlaceEvent implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (PlaceEvent)", false, null);
+            DebugPrint.createReport(ex, "Event (PlaceEvent)", false, null);
         }
     }
 }

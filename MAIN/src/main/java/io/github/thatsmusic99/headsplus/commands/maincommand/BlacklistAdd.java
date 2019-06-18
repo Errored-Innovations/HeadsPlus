@@ -59,7 +59,7 @@ public class BlacklistAdd implements IHeadsPlusCommand {
 				sender.sendMessage(hpc.getString("head-added-bl").replaceAll("\\{name}", args[1]));
 			}
 		} catch (Exception e) {
-		    new DebugPrint(e, "Subcommand (blacklistadd)", true, sender);
+		    DebugPrint.createReport(e, "Subcommand (blacklistadd)", true, sender);
         }
 
         return true;

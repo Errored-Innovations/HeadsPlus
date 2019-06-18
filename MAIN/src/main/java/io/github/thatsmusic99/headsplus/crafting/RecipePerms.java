@@ -64,7 +64,7 @@ public class RecipePerms implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (RecipeCheckers)", false, null);
+            DebugPrint.createReport(ex, "Event (RecipeCheckers)", false, null);
         }
 
 	}

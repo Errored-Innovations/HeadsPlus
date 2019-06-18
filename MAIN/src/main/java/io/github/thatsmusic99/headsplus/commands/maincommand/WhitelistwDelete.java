@@ -66,7 +66,7 @@ public class WhitelistwDelete implements IHeadsPlusCommand {
                 sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistwdel)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistwdel)", true, sender);
         }
 
         return false;

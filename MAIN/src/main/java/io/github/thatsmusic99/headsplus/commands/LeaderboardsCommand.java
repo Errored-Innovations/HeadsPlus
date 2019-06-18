@@ -158,7 +158,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                 }
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Command (leaderboard)", true, cs);
+            DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
         }
         printDebugResults(tests, false);
         return false;

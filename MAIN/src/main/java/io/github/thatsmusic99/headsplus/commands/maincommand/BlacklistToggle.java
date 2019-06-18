@@ -66,7 +66,7 @@ public class BlacklistToggle implements IHeadsPlusCommand {
 				}
 			}
 		} catch (Exception e) {
-            new DebugPrint(e, "Subcommand (blacklist)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (blacklist)", true, sender);
 		}
         return true;
 	}

@@ -58,7 +58,7 @@ public class WhitelistDel implements IHeadsPlusCommand {
                 sender.sendMessage(hpc.getString("head-a-removed-wl"));
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Subcommand (whitelistdel)", true, sender);
+            DebugPrint.createReport(e, "Subcommand (whitelistdel)", true, sender);
 
         }
 
