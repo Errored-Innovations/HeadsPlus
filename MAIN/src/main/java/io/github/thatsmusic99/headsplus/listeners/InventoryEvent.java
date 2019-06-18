@@ -36,7 +36,7 @@ public class InventoryEvent implements Listener {
                 i.onClick(p, im, e);
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (InventoryInteractEvent)", false, null);
+            DebugPrint.createReport(ex, "Event (InventoryInteractEvent)", false, null);
         }
     }
 	
@@ -46,7 +46,7 @@ public class InventoryEvent implements Listener {
 			if(!(e.getPlayer() instanceof Player)) return;
 			InventoryManager.inventoryClosed((Player) e.getPlayer());
 		} catch (Exception ex) {
-            new DebugPrint(ex, "Event (InventoryCloseEvent)", false, null);
+            DebugPrint.createReport(ex, "Event (InventoryCloseEvent)", false, null);
         }
 	}
 }

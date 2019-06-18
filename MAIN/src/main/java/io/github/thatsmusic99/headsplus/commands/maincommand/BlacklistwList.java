@@ -61,7 +61,7 @@ public class BlacklistwList implements IHeadsPlusCommand {
             sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate("blacklist", "world", bl, page));
 
         } catch (Exception e) {
-		    new DebugPrint(e, "Subcommand (blacklistwl)", true, sender);
+		    DebugPrint.createReport(e, "Subcommand (blacklistwl)", true, sender);
         }
 
 		return false;

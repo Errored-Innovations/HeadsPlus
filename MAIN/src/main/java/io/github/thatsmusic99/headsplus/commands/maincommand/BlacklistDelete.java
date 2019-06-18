@@ -58,7 +58,7 @@ public class BlacklistDelete implements IHeadsPlusCommand {
 	            sender.sendMessage(hpc.getString("head-a-removed-bl"));
 	        }
 	    } catch (Exception e) {
-	        new DebugPrint(e, "Subcommand (blacklistdel)", true, sender);
+	        DebugPrint.createReport(e, "Subcommand (blacklistdel)", true, sender);
 	    }
         return true;
 	}

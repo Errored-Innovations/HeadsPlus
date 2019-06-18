@@ -34,13 +34,13 @@ import java.util.logging.Logger;
 public class DebugPrint implements IHeadsPlusCommand {
 
     // R
-    public DebugPrint(Exception e, String name, boolean command, CommandSender sender) {
+    public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
         Logger log = HeadsPlus.getInstance().getLogger();
         ConfigurationSection cs = HeadsPlus.getInstance().getConfiguration().getMechanics();
         if (cs.getBoolean("debug.print-stacktraces-in-console")) {
             e.printStackTrace();
         }
-        if (command) {
+        if (command && sender != null) {
             sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("cmd-fail"));
         }
 
@@ -61,6 +61,7 @@ public class DebugPrint implements IHeadsPlusCommand {
         }
 
     }
+
     public DebugPrint() {
 
     }
@@ -182,12 +183,12 @@ public class DebugPrint implements IHeadsPlusCommand {
                 try {
                     HeadsPlus.getInstance().getFavourites().save();
                 } catch (IOException e) {
-                    new DebugPrint(e, "Debug (saving favourites)", false, sender);
+                    DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
                 }
                 try {
                     HeadsPlus.getInstance().getScores().save();
                 } catch (IOException e) {
-                    new DebugPrint(e, "Debug (saving scores)", false, sender);
+                    DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
                 }
                 sender.sendMessage(ChatColor.GREEN + "Data has been saved.");
             } else if (args[1].equalsIgnoreCase("transfer")) {

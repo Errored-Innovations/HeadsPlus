@@ -209,7 +209,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         try {
             return getConfig().getString("heads." + st[1] + ".texture");
         } catch (Exception ex) {
-            new DebugPrint(ex, "Startup (headsx.yml)", false, null);
+            DebugPrint.createReport(ex, "Startup (headsx.yml)", false, null);
             return "";
         }
     }
@@ -291,7 +291,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                 uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an IllegalArgumentException
             }
         } catch (IOException e) {
-            new DebugPrint(e, "Retreiving UUID (addhead)", true, callback);
+            DebugPrint.createReport(e, "Retreiving UUID (addhead)", true, callback);
         }
         return uuid;
     }
@@ -376,7 +376,11 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
                     }
                 }
             } catch (Exception ex) {
-                new DebugPrint(ex, "Retreiving profile (addhead)", true, callback);
+                if(ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
+                    grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
+                } else {
+                    DebugPrint.createReport(ex, "Retreiving profile (addhead)", true, callback);
+                }
             } finally {
                 if(reader != null) {
                     try {

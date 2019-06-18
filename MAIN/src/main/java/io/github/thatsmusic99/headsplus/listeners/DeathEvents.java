@@ -100,7 +100,7 @@ public class DeathEvents implements Listener {
                     }
                 }
             } catch (Exception ex) {
-                new DebugPrint(ex, "Event (DeathEvents)", false, null);
+                DebugPrint.createReport(ex, "Event (DeathEvents)", false, null);
             }
         }
     }
@@ -181,7 +181,7 @@ public class DeathEvents implements Listener {
                 }
             }
         } catch (Exception e) {
-	        new DebugPrint(e, "Event (DeathEvents)", false, null);
+	        DebugPrint.createReport(e, "Event (DeathEvents)", false, null);
         }
 	}
 

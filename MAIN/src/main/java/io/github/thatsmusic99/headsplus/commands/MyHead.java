@@ -141,7 +141,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                 }
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Command (myhead)", true, sender);
+            DebugPrint.createReport(e, "Command (myhead)", true, sender);
         }
         printDebugResults(tests, true);
 

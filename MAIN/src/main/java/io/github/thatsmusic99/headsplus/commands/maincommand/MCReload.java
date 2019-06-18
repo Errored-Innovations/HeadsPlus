@@ -54,7 +54,7 @@ public class MCReload implements IHeadsPlusCommand{
                 }
             }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
 		} catch (Exception e) {
-		    new DebugPrint(e, "Subcommand (reload)", true, sender);
+		    DebugPrint.createReport(e, "Subcommand (reload)", true, sender);
 		}
 		return true;
 	}

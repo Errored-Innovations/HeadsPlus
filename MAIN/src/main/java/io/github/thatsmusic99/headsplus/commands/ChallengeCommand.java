@@ -49,7 +49,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                 cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("disabled"));
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Command (Challenges/HPC)", true, cs);
+            DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
         }
         printDebugResults(tests, false);
         return true;

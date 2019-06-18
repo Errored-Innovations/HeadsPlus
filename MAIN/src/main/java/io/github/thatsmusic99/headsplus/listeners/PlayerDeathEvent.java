@@ -32,7 +32,7 @@ public class PlayerDeathEvent implements Listener {
                 }
             }
         } catch (Exception ex) {
-            new DebugPrint(ex, "Event (PlayerDeathEvent, PlayerHeadDropEvent)", false, null);
+            DebugPrint.createReport(ex, "Event (PlayerDeathEvent, PlayerHeadDropEvent)", false, null);
         }
     }
 }

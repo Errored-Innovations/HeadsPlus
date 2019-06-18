@@ -65,7 +65,7 @@ public class BlacklistList implements IHeadsPlusCommand {
             sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate("blacklist", "default", bl, page));
 
         } catch (Exception e) {
-	        new DebugPrint(e, "Subcommand (blacklistl)", true, sender);
+	        DebugPrint.createReport(e, "Subcommand (blacklistl)", true, sender);
         }
         return true;
 	}

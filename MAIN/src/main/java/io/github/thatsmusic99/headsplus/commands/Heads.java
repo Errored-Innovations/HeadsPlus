@@ -47,7 +47,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                 cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("disabled"));
             }
         } catch (Exception e) {
-            new DebugPrint(e, "Command (heads)", true, cs);
+            DebugPrint.createReport(e, "Command (heads)", true, cs);
         }
         printDebugResults(tests, false);
         return false;

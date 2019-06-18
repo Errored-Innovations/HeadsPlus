@@ -35,7 +35,7 @@ public class Info implements IHeadsPlusCommand {
 		try {
 			sender.sendMessage(HeadsPlusConfigTextMenu.InfoTranslator.translate());
         } catch (Exception e) {
-		    new DebugPrint(e, "Subcommand (info)", true, sender);
+		    DebugPrint.createReport(e, "Subcommand (info)", true, sender);
         }
 		return true;
 	}
