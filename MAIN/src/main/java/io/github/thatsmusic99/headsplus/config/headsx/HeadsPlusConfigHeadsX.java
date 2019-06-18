@@ -300,6 +300,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
                     BufferedReader reader = null;
             try {
+                if (id == null) return;
                 URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", ""));
 
                 reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), "UTF8"));

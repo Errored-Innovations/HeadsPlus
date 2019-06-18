@@ -17,9 +17,6 @@ import java.util.HashMap;
 public class HPUtils {
 
     private static HashMap<Player, BossBar> bossBars = new HashMap<>();
-    public static boolean switchBoolean(boolean b) {
-        return !b;
-    }
 
     public static void addBossBar(OfflinePlayer pl) {
         HPPlayer p = HPPlayer.getHPPlayer(pl);
@@ -49,7 +46,7 @@ public class HPUtils {
                         d = 1 - d;
                         bossBars.get(pl.getPlayer()).setProgress(d);
                     }
-                } catch (NoClassDefFoundError ignored) {
+                } catch (NoClassDefFoundError | IllegalArgumentException ignored) {
 
                 }
 
