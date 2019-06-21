@@ -3,14 +3,15 @@ package io.github.thatsmusic99.headsplus.util;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.headsx.HeadInventory;
 import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
 import io.github.thatsmusic99.headsplus.config.headsx.icons.Nav;
 import io.github.thatsmusic99.headsplus.config.headsx.inventories.*;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -265,57 +266,18 @@ public class InventoryManager {
             max = (plugin.getItems().getConfig().getInt("inventories.sellheadmenu.size") - 9);
             wide = true;
         }
-
-        HashMap<String, String> s = new HashMap<>();
-        for (String o : hpch.mHeads) {
-            if (!hpch.getConfig().getStringList(o + ".name").isEmpty()) {
-                s.put(o, o + ".name");
-            } else {
-                try {
-                    for (String str : hpch.getConfig().getConfigurationSection(o + ".name").getKeys(false)) {
-                        if (!hpch.getConfig().getStringList(o + ".name." + str).isEmpty()) {
-                            s.put(o, o + ".name." + str);
-                            break;
-                        }
-                    }
-                } catch (NullPointerException ignored) {
-                }
-
-            }
-        }
-        for (String o : hpch.uHeads) {
-            if (!hpch.getConfig().getStringList(o + ".name").isEmpty()) {
-                s.put(o, o + ".name");
-            } else {
-                try {
-                    for (String str : hpch.getConfig().getConfigurationSection(o + ".name").getKeys(false)) {
-                        if (!hpch.getConfig().getStringList(o + ".name." + str).isEmpty()) {
-                            s.put(o, o + ".name." + str);
-                            break;
-                        }
-                    }
-                } catch (NullPointerException ignored) {
-                }
-            }
-        }
-
         List<ItemStack> items = new ArrayList<>();
-        NMSManager nms = plugin.getNMS();
-        NBTManager nbt = plugin.getNBTManager();
-        for (String o : s.keySet()) {
+        for (EntityType entity : DeathEvents.heads.keySet()) {
+            try {
+                HashMap<String, List<ItemStack>> heads = DeathEvents.heads.get(entity);
+                if (!heads.get("default").isEmpty()) {
+                    ItemStack i = heads.get("default").get(0);
+                    items.add(i);
+                }
 
-            ItemStack it = nms.getSkullMaterial(1);
-            SkullMeta sm = (SkullMeta) it.getItemMeta();
-            sm = nms.setSkullOwner(hpch.getConfig().getStringList(s.get(o)).get(0), sm);
-            sm.setDisplayName(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString(o + ".display-name")));
-            List<String> d = new ArrayList<>();
-            for (String a : hpch.getConfig().getStringList(o + ".lore")) {
-                d.add(ChatColor.translateAlternateColorCodes('&', a).replaceAll("\\{price}", String.valueOf(hpch.getConfig().getDouble(o + ".price"))).replaceAll("\\{type}", o));
+            } catch (Exception e) {
+                DebugPrint.createReport(e, "Opening the sellhead menu", true, player);
             }
-            sm.setLore(d);
-            it.setItemMeta(sm);
-            it = nbt.setType(it, o);
-            items.add(it);
         }
         headsInSection = items.size();
         PagedLists<ItemStack> ps = new PagedLists<>(items, max);
