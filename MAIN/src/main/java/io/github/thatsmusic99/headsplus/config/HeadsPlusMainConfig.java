@@ -49,7 +49,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("theme-colours.3", "GRAY");
         config.addDefault("theme-colours.4", "DARK_AQUA");
         config.addDefault("plugin.larger-menus", false);
-        config.addDefault("plugin.autograb.enabled", true);
+        config.addDefault("plugin.autograb.enabled", false);
         config.addDefault("plugin.autograb.add-as-enabled", true);
         config.addDefault("plugin.autograb.section", "players");
         config.addDefault("plugin.autograb.title", "&8[&6{player}&8]");
