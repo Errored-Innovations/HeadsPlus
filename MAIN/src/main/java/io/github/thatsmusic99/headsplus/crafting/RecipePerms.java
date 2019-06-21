@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,26 +26,30 @@ public class RecipePerms implements Listener {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 HeadsPlusAPI hapi = hp.getAPI();
                 HeadsPlusMainConfig c = hp.getConfiguration();
+                if (!isValid1_14(e)) return;
                 if (c.getPerks().craft_heads) {
                     if (player.hasPermission("headsplus.craft")) {
-                        if ((!c.getBlacklist().enabled || !c.getBlacklist().list.contains(player.getWorld().getName())) || player.hasPermission("headsplus.bypass.blacklistw")) {
-                            if (e.getCurrentItem() != null) {
-                                if (e.getCurrentItem().getItemMeta() instanceof SkullMeta) {
-                                    if (!hapi.getSkullType(e.getCurrentItem()).isEmpty()) {
-                                        if (c.getWhitelist().list.contains(player.getWorld().getName())) {
-                                            fireEvent(e);
-                                            return;
-
-                                        } else if (player.hasPermission("headsplus.bypass.whitelistw")){
-                                            try {
+                        if (c.getBlacklist().enabled) {
+                            if (!c.getBlacklist().list.contains(player.getWorld().getName())
+                                    || player.hasPermission("headsplus.bypass.blacklistw")) {
+                                if (e.getCurrentItem() != null) {
+                                    if (e.getCurrentItem().getItemMeta() instanceof SkullMeta) {
+                                        if (!hapi.getSkullType(e.getCurrentItem()).isEmpty()) {
+                                            if (c.getWhitelist().list.contains(player.getWorld().getName())) {
                                                 fireEvent(e);
-                                            } catch (NullPointerException | ClassCastException ignored) {
+                                                return;
+
+                                            } else if (player.hasPermission("headsplus.bypass.whitelistw")){
+                                                try {
+                                                    fireEvent(e);
+                                                } catch (NullPointerException | ClassCastException ignored) {
+                                                }
+                                            } else if (!c.getWhitelist().enabled) {
+                                                fireEvent(e);
+                                                return;
                                             }
-                                        } else if (!c.getWhitelist().enabled) {
-                                            fireEvent(e);
                                             return;
                                         }
-                                        return;
                                     }
                                 }
                             }
@@ -125,5 +130,16 @@ public class RecipePerms implements Listener {
                 e.setCancelled(true);
             }
         }
+    }
+
+    private boolean isValid1_14(InventoryClickEvent e) {
+	    if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 11) return true;
+	    if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) return true;
+	    if (e.getInventory().getType().equals(InventoryType.CRAFTING)) {
+	        if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                return e.getRawSlot() == 0;
+            }
+        }
+        return false;
     }
 }
