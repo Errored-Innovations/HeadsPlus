@@ -11,7 +11,8 @@ public enum HeadsXSections {
     COLOURS("colors", "&8[&4C&6o&el&ao&br&ds&8]", "HP#rainbow", 1.2),
     EMOTES("emotes", "&8[&eEmotes&8]", "HP#e_wink", 1.3),
     BLOCKS("blocks", "&8[&9Blocks&8]", "HP#oak_log", 1.6),
-    PLAYERS("players", "&8[&6Players&8]", "HP#players_0", 2.5);
+    PLAYERS("players", "&8[&6Players&8]", "HP#players_0", 2.5),
+    MOBS("mobs", "&8[&cMobs&8]", "HP#evoker", 2.6);
 
     public final String let;
     public final String dn;
