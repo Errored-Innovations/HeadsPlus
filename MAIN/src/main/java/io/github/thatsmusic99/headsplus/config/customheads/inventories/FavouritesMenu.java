@@ -1,6 +1,6 @@
-package io.github.thatsmusic99.headsplus.config.headsx.inventories;
+package io.github.thatsmusic99.headsplus.config.customheads.inventories;
 
-import io.github.thatsmusic99.headsplus.config.headsx.HeadInventory;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
 
 public class FavouritesMenu extends HeadInventory {
 

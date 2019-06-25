@@ -1,4 +1,4 @@
-package io.github.thatsmusic99.headsplus.config.headsx;
+package io.github.thatsmusic99.headsplus.config.customheads;
 
 public enum HeadsXEnums {
 

@@ -10,7 +10,7 @@ import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.levels.*;
 import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
 import io.github.thatsmusic99.headsplus.listeners.*;
@@ -62,7 +62,7 @@ public class HeadsPlus extends JavaPlugin {
     // Config variables
     private HeadsPlusMessagesConfig hpc;
     private HeadsPlusConfigHeads hpch;
-    private HeadsPlusConfigHeadsX hpchx;
+    private HeadsPlusConfigCustomHeads hpchx;
     private DeathEvents de;
     private HeadsPlusLeaderboards hplb;
     private HeadsPlusCrafting hpcr;
@@ -420,9 +420,9 @@ public class HeadsPlus extends JavaPlugin {
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
         debug("- Instance for HeadsPlusConfigHeads created!", 3);
-        hpchx = new HeadsPlusConfigHeadsX();
+        hpchx = new HeadsPlusConfigCustomHeads();
         cs.add(hpchx);
-        debug("- Instance for HeadsPlusConfigHeadsX created!", 3);
+        debug("- Instance for HeadsPlusConfigCustomHeads created!", 3);
         hpcr = new HeadsPlusCrafting();
         cs.add(hpcr);
         debug("- Instance for HeadsPlusCrafting created!", 3);
@@ -691,7 +691,7 @@ public class HeadsPlus extends JavaPlugin {
         return hpc;
     }
 
-    public HeadsPlusConfigHeadsX getHeadsXConfig() {
+    public HeadsPlusConfigCustomHeads getHeadsXConfig() {
         return hpchx;
     }
 

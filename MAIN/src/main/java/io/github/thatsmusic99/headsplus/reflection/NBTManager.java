@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.reflection;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

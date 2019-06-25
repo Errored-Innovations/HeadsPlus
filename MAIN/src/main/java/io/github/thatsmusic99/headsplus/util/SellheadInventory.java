@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.util;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Bukkit;
@@ -133,7 +133,7 @@ public class SellheadInventory {
 
             ItemStack it;
             SkullMeta sm;
-            HeadsPlusConfigHeadsX hpchx = hp.getHeadsXConfig();
+            HeadsPlusConfigCustomHeads hpchx = hp.getHeadsXConfig();
             try {
                 if (hpchx.isHPXSkull(hpch.getConfig().getStringList(o + ".name").get(0))) {
                     it = hp.getHeadsXConfig().getSkull(hpch.getConfig().getStringList(o + ".name").get(0));

@@ -1,5 +1,6 @@
-package io.github.thatsmusic99.headsplus.config.headsx;
+package io.github.thatsmusic99.headsplus.config.customheads;
 
+import com.google.common.io.Files;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
@@ -25,23 +26,23 @@ import org.bukkit.command.CommandSender;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-public class HeadsPlusConfigHeadsX extends ConfigSettings {
+public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 2.5;
+    private final double cVersion = 2.6;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
 
-    public HeadsPlusConfigHeadsX() {
-        this.conName = "headsx";
+    public HeadsPlusConfigCustomHeads() {
+        this.conName = "customheads";
         headsxEnable();
     }
 
     private void loadHeadsX() {
         getConfig().options().header("HeadsPlus by Thatsmusic99 "
                 + "\n WARNING: This is an advanced section of the plugin. If you do not know what you a doing with it, please do not use it due to risk of crashing your own and other's games. "
-                + "\n For more information visit the GitHub wiki for HeadsX.yml: https://github.com/Thatsmusic99/HeadsPlus/wiki/headsx.yml");
+                + "\n For more information visit the GitHub wiki for HeadsX.yml: https://github.com/Thatsmusic99/HeadsPlus/wiki/customheads.yml");
 
         for (HeadsXSections h : HeadsXSections.values()) {
             getConfig().addDefault("sections." + h.let + ".display-name", h.dn);
@@ -64,7 +65,19 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
     @Override
     public void reloadC(boolean a) {
         if (configF == null) {
-            configF = new File(HeadsPlus.getInstance().getDataFolder(), "headsx.yml");
+            File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "headsx.yml");
+            File newFile = new File(HeadsPlus.getInstance().getDataFolder(), "customheads.yml");
+            if (oldFile.exists()) {
+                try {
+                    Files.copy(oldFile, newFile);
+                    oldFile.delete();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                configF = newFile;
+            } else {
+                configF = newFile;
+            }
         }
         config = YamlConfiguration.loadConfiguration(configF);
         getConfig().addDefault("options.update-heads", true);
@@ -209,7 +222,7 @@ public class HeadsPlusConfigHeadsX extends ConfigSettings {
         try {
             return getConfig().getString("heads." + st[1] + ".texture");
         } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Startup (headsx.yml)", false, null);
+            DebugPrint.createReport(ex, "Startup (customheads.yml)", false, null);
             return "";
         }
     }

@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +23,7 @@ public class HeadsPlusAPI {
 
     // S
     private HeadsPlus hp = HeadsPlus.getInstance();
-    private final HeadsPlusConfigHeadsX hpcHeadsX = hp.getHeadsXConfig();
+    private final HeadsPlusConfigCustomHeads hpcHeadsX = hp.getHeadsXConfig();
     private final HeadsPlusConfigHeads hpcHeads = hp.getHeadsConfig();
 
     public ItemStack getHead(String option) {
