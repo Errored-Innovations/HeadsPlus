@@ -147,6 +147,12 @@ public class Head extends ItemStack implements Icon {
                 }
             }
             if (ok) {
+                if (p.getInventory().firstEmpty() == 8) {
+                    InventoryManager im = InventoryManager.get(p);
+                    if (im != null) {
+                        im.setGlitchSlotFilled(true);
+                    }
+                }
                 p.getInventory().addItem(HeadsPlus.getInstance().getNBTManager().removeIcon(e.getCurrentItem()));
             }
         }

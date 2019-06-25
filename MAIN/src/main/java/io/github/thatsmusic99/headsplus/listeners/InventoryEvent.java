@@ -12,24 +12,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class InventoryEvent implements Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent e) {
         try {
-
             if (!(e.getWhoClicked() instanceof Player)) return; // If the user who clicked is a player
 
             Player p = (Player) e.getWhoClicked(); // Get the player
+            if (InventoryManager.get(p) == null) return; // See if the player has any kind of inventory open
+            final InventoryManager im = InventoryManager.get(p); // If so, get that inventory
+            if (im.getInventory() == null) return; // Not having this line caused another bug
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    im.setGlitchSlotFilled(p.getInventory().getItem(8) != null);
+                }
+            }.runTask(HeadsPlus.getInstance());
 
             if (e.getRawSlot() > 53) return; // If the raw slot is above 53 (i.e. the player's inventory)
-
-            if (InventoryManager.get(p) == null) return; // See if the player has any kind of inventory open
-
-            final InventoryManager im = InventoryManager.get(p); // If so, get that inventory
-
-            if (im.getInventory() == null) return; // Not having this line caused another bug
 
             NBTManager nbt = HeadsPlus.getInstance().getNBTManager(); // NBT/Reflection
             // <Old Christmas code>
