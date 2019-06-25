@@ -134,7 +134,11 @@ public class RecipePerms implements Listener {
 
     private boolean isValid1_14(InventoryClickEvent e) {
 	    if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 11) return true;
-	    if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) return true;
+	    if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
+            if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                return e.getRawSlot() == 0;
+            }
+        }
 	    if (e.getInventory().getType().equals(InventoryType.CRAFTING)) {
 	        if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                 return e.getRawSlot() == 0;
