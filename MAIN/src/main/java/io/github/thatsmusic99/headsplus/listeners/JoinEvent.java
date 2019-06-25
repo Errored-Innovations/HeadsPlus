@@ -67,9 +67,15 @@ public class JoinEvent implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    new RecipeEnumUser();
+                    if (DeathEvents.ready) {
+                        new RecipeEnumUser();
+                        cancel();
+                    } else {
+                        hp.getLogger().warning("Heads not set up yet! Trying to craft again in 15 seconds...");
+                    }
+
                 }
-            }.runTaskLater(hp, 20);
+            }.runTaskTimer(hp, 20, 300);
             reloaded = true;
         }
 
