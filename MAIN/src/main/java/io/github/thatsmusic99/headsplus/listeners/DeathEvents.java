@@ -53,6 +53,7 @@ public class DeathEvents implements Listener {
     private final HeadsPlusConfigCustomHeads hpchx = HeadsPlus.getInstance().getHeadsXConfig();
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
     public static HashMap<EntityType, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
+    public static boolean ready = false;
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
@@ -242,13 +243,11 @@ public class DeathEvents implements Listener {
                         try {
                             if (e == EntityType.SKELETON) {
                                 is = nms.getSkull(0);
-                            } else if (e == EntityType.WITHER_SKELETON) {
-                                is = nms.getSkull(1);
                             } else if (e == EntityType.ZOMBIE) {
                                 is = nms.getSkull(2);
                             } else if (e == EntityType.CREEPER) {
                                 is = nms.getSkull(4);
-                            } else if (e == EntityType.ENDER_DRAGON) {
+                            } else if (e == EntityType.ENDER_DRAGON || e == EntityType.WITHER_SKELETON) {
                                 is = new ItemStack(Material.BLAZE_ROD);
                                 double price = hpch.getPrice(fancyName);
                                 ItemMeta sm = is.getItemMeta();
@@ -266,7 +265,12 @@ public class DeathEvents implements Listener {
                                 is = nbt.makeSellable(is);
                                 is = nbt.setType(is, fancyName);
                                 is = nbt.setPrice(is, price);
-                                is.setType(nms.getSkull(5).getType());
+                                if (e == EntityType.ENDER_DRAGON) {
+                                    is.setType(nms.getSkull(5).getType());
+                                } else {
+                                    is.setType(nms.getSkull(1).getType());
+                                }
+
                                 b = false;
                             } else {
                                 is = nms.getSkull(3);
@@ -309,6 +313,7 @@ public class DeathEvents implements Listener {
             }
 
         }
+        ready = true;
     }
 
     private HashMap<String, List<ItemStack>> a(String en,  HashMap<String, List<ItemStack>> keys) {
