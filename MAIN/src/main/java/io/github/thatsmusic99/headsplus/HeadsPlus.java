@@ -535,7 +535,7 @@ public class HeadsPlus extends JavaPlugin {
             case "v1_8_R2":
                 nmsversion = NMSIndex.v1_8_R2;
                 break;
-            case "nms":
+            case "v1_8_R1":
                 nmsversion = NMSIndex.v1_8_R1;
                 break;
             default:
