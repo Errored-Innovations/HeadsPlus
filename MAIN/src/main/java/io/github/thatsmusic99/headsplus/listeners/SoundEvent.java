@@ -36,7 +36,9 @@ public class SoundEvent implements Listener {
     @EventHandler
     public void onEntityHeadDrop(EntityHeadDropEvent event) {
         if (sounds.getConfig().getBoolean("sounds.on-entity-head-drop.enabled")) {
-            playSound(event.getPlayer().getLocation(), "on-entity-head-drop");
+            if (event.getPlayer() != null) {
+                playSound(event.getPlayer().getLocation(), "on-entity-head-drop");
+            }
         }
     }
 
