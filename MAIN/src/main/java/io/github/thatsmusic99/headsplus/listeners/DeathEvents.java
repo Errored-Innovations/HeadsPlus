@@ -137,7 +137,7 @@ public class DeathEvents implements Listener {
                     ItemStack head = nms.getSkullMaterial(a);
                     SkullMeta headM = (SkullMeta) head.getItemMeta();
                     headM = nms.setSkullOwner(ep.getEntity().getName(), headM);
-                    headM.setDisplayName(hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
+                    headM.setDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
 
 
                     Location entityLoc = ep.getEntity().getLocation();
@@ -251,7 +251,7 @@ public class DeathEvents implements Listener {
                                 is = new ItemStack(Material.BLAZE_ROD);
                                 double price = hpch.getPrice(fancyName);
                                 ItemMeta sm = is.getItemMeta();
-                                sm.setDisplayName(hpch.getDisplayName(fancyName));
+                                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
                                 List<String> strs = new ArrayList<>();
                                 List<String> lore = hpch.getLore(fancyName);
                                 for (String str2 : lore) {
@@ -288,7 +288,7 @@ public class DeathEvents implements Listener {
                     if (b) {
                         double price = hpch.getPrice(fancyName);
                         SkullMeta sm = (SkullMeta) is.getItemMeta();
-                        sm.setDisplayName(hpch.getDisplayName(fancyName));
+                        sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
                         List<String> strs = new ArrayList<>();
                         List<String> lore = hpch.getLore(fancyName);
                         for (String str2 : lore) {
@@ -339,7 +339,7 @@ public class DeathEvents implements Listener {
 
                 double price = hpch.getPrice(en);
                 SkullMeta sm = (SkullMeta) is.getItemMeta();
-                sm.setDisplayName(hpch.getDisplayName(en));
+                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(en));
                 List<String> strs = new ArrayList<>();
                 List<String> lore = hpch.getLore(en);
                 for (String str2 : lore) {
