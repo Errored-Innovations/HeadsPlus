@@ -46,7 +46,7 @@ public class HPUtils {
                         d = 1 - d;
                         bossBars.get(pl.getPlayer()).setProgress(d);
                     }
-                } catch (NoClassDefFoundError | IllegalArgumentException ignored) {
+                } catch (NoClassDefFoundError | IllegalArgumentException | NullPointerException ignored) {
 
                 }
 
