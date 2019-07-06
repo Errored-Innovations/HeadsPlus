@@ -31,6 +31,8 @@ public class PlayerDeathEvent implements Listener {
                     }
                 }
             }
+        } catch (IllegalArgumentException ignored) {
+
         } catch (Exception ex) {
             DebugPrint.createReport(ex, "Event (PlayerDeathEvent, PlayerHeadDropEvent)", false, null);
         }
