@@ -628,4 +628,9 @@ public class es_es implements Locale {
     public String descConjure() {
         return "Recupera una cabeza de un tipo específico.";
     }
+
+    @Override
+    public String descComplete() {
+        return "Completa un reto.";
+    }
 }

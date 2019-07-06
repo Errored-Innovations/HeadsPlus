@@ -582,6 +582,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.add(new DebugPrint());
         commands.add(new HeadInfoCommand());
         commands.add(new Conjure());
+        commands.add(new Complete());
     }
 
     // GETTERS

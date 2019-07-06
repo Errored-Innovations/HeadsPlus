@@ -127,13 +127,16 @@ public class Challenge {
         return HeadsPlus.getInstance().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
     }
 
+    public void complete(Player p) {
+        complete(p, null, 0);
+    }
+
     public void complete(Player p, Inventory i, int slot) {
         HeadsPlus hp = HeadsPlus.getInstance();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
-        ItemStack is = hp.getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', getChallengeHeader()));
+
+
         List<String> lore = new ArrayList<>();
         for (String st : getDescription()) {
             lore.add(ChatColor.translateAlternateColorCodes('&', st));
@@ -169,13 +172,17 @@ public class Challenge {
             lore.add(sb.toString());
         }
 
-
-        lore.add(ChatColor.GOLD + "XP: " + ChatColor.GREEN + getGainedXP());
-        lore.add(ChatColor.GREEN + "Completed!");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        is = hp.getNBTManager().setIcon(is, new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge());
-        i.setItem(slot, is);
+        if (i != null) {
+            ItemStack is = hp.getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13);
+            ItemMeta im = is.getItemMeta();
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', getChallengeHeader()));
+            lore.add(ChatColor.GOLD + "XP: " + ChatColor.GREEN + getGainedXP());
+            lore.add(ChatColor.GREEN + "Completed!");
+            im.setLore(lore);
+            is.setItemMeta(im);
+            is = hp.getNBTManager().setIcon(is, new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge());
+            i.setItem(slot, is);
+        }
         player.addXp(getGainedXP());
         reward(p);
         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
