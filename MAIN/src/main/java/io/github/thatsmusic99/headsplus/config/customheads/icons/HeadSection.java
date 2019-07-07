@@ -1,8 +1,8 @@
-package io.github.thatsmusic99.headsplus.config.headsx.icons;
+package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

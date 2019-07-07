@@ -2,6 +2,8 @@ package io.github.thatsmusic99.headsplus.locale;
 
 public class fr_fr implements Locale {
 
+    // Translated by Alexisparis007
+
     @Override
     public boolean active() {
         return true;
@@ -625,5 +627,10 @@ public class fr_fr implements Locale {
     @Override
     public String descConjure() {
         return "Obtenit une tête d'un type spécifique.";
+    }
+
+    @Override
+    public String descComplete() {
+        return "Complète un challenge.";
     }
 }

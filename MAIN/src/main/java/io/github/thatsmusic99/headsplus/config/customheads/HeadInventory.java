@@ -1,12 +1,12 @@
-package io.github.thatsmusic99.headsplus.config.headsx;
+package io.github.thatsmusic99.headsplus.config.customheads;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.Challenge;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.Head;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.Nav;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.Stats;
-import io.github.thatsmusic99.headsplus.config.headsx.inventories.*;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.Head;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.Nav;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.Stats;
+import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
@@ -126,7 +126,7 @@ public abstract class HeadInventory {
         int itemIndex = 0;
         for (int o = 0; o < getSize(); ++o) {
             ItemStack is = null;
-            if (icons[o] instanceof Head || icons[o] instanceof io.github.thatsmusic99.headsplus.config.headsx.icons.HeadSection) {
+            if (icons[o] instanceof Head || icons[o] instanceof io.github.thatsmusic99.headsplus.config.customheads.icons.HeadSection) {
                 is = getHeadItem(icons[o], list, itemIndex++);
             } else if (icons[o] instanceof Challenge) {
                 is = getChallengeItem(icons[o], sender, list, itemIndex++);

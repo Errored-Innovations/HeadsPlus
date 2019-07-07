@@ -625,4 +625,9 @@ public class lolcat implements Locale {
     public String descConjure() {
         return "Get a kewl hed or smth";
     }
+
+    @Override
+    public String descComplete() {
+        return "dis compleetz a kewl chaleng";
+    }
 }

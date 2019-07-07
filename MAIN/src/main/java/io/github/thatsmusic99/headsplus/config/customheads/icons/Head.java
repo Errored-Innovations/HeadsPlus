@@ -1,10 +1,10 @@
-package io.github.thatsmusic99.headsplus.config.headsx.icons;
+package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import net.milkbowl.vault.economy.Economy;
@@ -31,6 +31,7 @@ public class Head extends ItemStack implements Icon {
 
     @Override
     public void onClick(Player p, InventoryManager im, InventoryClickEvent e) {
+
        // if (im.getSection().equalsIgnoreCase("advent-calendar")) {
         //    if (nms.isOpen(e.getCurrentItem())) {
             //    giveHead(p, e);
@@ -47,7 +48,7 @@ public class Head extends ItemStack implements Icon {
                 }
                 AdventCManager a = nms.getCalendarValue(e.getCurrentItem());
                 if (day >= a.date) {
-                    HeadsPlusConfigHeadsX config = HeadsPlus.getInstance().getHeadsXConfig();
+                    HeadsPlusConfigCustomHeads config = HeadsPlus.getInstance().getHeadsXConfig();
                     ItemStack open = nms.setOpen(e.getCurrentItem(), true);
                     ItemMeta meta = open.getItemMeta();
                     meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', a.name));
@@ -146,6 +147,12 @@ public class Head extends ItemStack implements Icon {
                 }
             }
             if (ok) {
+                if (p.getInventory().firstEmpty() == 8) {
+                    InventoryManager im = InventoryManager.get(p);
+                    if (im != null) {
+                        im.setGlitchSlotFilled(true);
+                    }
+                }
                 p.getInventory().addItem(HeadsPlus.getInstance().getNBTManager().removeIcon(e.getCurrentItem()));
             }
         }

@@ -626,4 +626,9 @@ public class en_uk implements Locale {
     public String descConjure() {
         return "Retreives a head of a specific type.";
     }
+
+    @Override
+    public String descComplete() {
+        return "Completes a challenge.";
+    }
 }

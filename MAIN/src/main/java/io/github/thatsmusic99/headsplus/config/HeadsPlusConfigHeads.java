@@ -4,9 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.Parrot;
+import org.bukkit.entity.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,47 +48,69 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 	}
     private void addUndefinedHeads() {
     	for (String key : uHeads) {
-    	    if (key.equals("llama")) {
-                if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                    if (getConfig().get("llama.name") instanceof List) {
-                        List<String> h = getConfig().getStringList("llama.name");
-                        getConfig().set("llama.name", null);
-                        getConfig().addDefault("llama.name.default", h);
+            switch (key) {
+                case "llama":
+                case "trader_llama":
+                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
+                        if (getConfig().get(key + ".name") instanceof List) {
+                            List<String> h = getConfig().getStringList(key + ".name");
+                            getConfig().set(key + ".name", null);
+                            getConfig().addDefault(key + ".name.default", h);
+                        }
+                        getConfig().addDefault(key + ".name.default", new ArrayList<>());
+                        for (Llama.Color color : Llama.Color.values()) {
+                            getConfig().addDefault(key + ".name." + color.name(), new ArrayList<>(Collections.singleton("HP#" + color.name().toLowerCase() + "_" + key)));
+                        }
                     }
-                    getConfig().addDefault("llama.name.default", new ArrayList<>());
-                    for  (Llama.Color color : Llama.Color.values()) {
-                        getConfig().addDefault("llama.name." + color.name(), new ArrayList<>());
+                    break;
+                case "parrot":
+                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
+                        if (getConfig().get("parrot.name") instanceof List) {
+                            List<String> h = getConfig().getStringList("parrot.name");
+                            getConfig().set("parrot.name", null);
+                            getConfig().addDefault("parrot.name.default", h);
+                        }
+                        getConfig().addDefault("parrot.name.default", new ArrayList<>());
+                        for (Parrot.Variant variant : Parrot.Variant.values()) {
+                            getConfig().addDefault("parrot.name." + variant.name(), new ArrayList<>(Collections.singleton("HP#" + variant.name().toLowerCase() + "_parrot")));
+                        }
                     }
-                }
 
-    	    } else if (key.equals("parrot")) {
-                if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                    if (getConfig().get("parrot.name") instanceof List) {
-                        List<String> h = getConfig().getStringList("parrot.name");
-                        getConfig().set("parrot.name", null);
-                        getConfig().addDefault("parrot.name.default", h);
+                    break;
+                case "horse":
+                    if (getConfig().get("horse.name") instanceof List) {
+                        List<String> h = getConfig().getStringList("horse.name");
+                        getConfig().set("horse.name", null);
+                        getConfig().addDefault("horse.name.default", h);
                     }
-                    getConfig().addDefault("parrot.name.default", new ArrayList<>());
-                    for (Parrot.Variant variant : Parrot.Variant.values()) {
-                        getConfig().addDefault("parrot.name." + variant.name(), new ArrayList<>());
+                    getConfig().addDefault("horse.name.default", new ArrayList<>());
+                    for (Horse.Color variant : Horse.Color.values()) {
+                        getConfig().addDefault("horse.name." + variant.name(), new ArrayList<>(Collections.singleton("HP#" + variant.name().toLowerCase() + "_horse")));
                     }
-                }
+                    break;
+                case "cat":
+                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 10) {
+                        if (getConfig().get("cat.name") instanceof List) {
+                            List<String> h = getConfig().getStringList("cat.name");
+                            getConfig().set("cat.name", null);
+                            getConfig().addDefault("cat.name.default", h);
+                        }
+                        getConfig().addDefault("cat.name.default", new ArrayList<>());
+                        for (Cat.Type type : Cat.Type.values()) {
+                            getConfig().addDefault("cat.name." + type.name(), new ArrayList<>(Collections.singletonList("HP#" + type.name().toLowerCase() + "_cat")));
+                        }
+                    }
+                    break;
+                case "witherskeleton":
+                case "enderdragon":
+                    getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("{mob-default}")));
+                    break;
+                default:
+                    getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("HP#" + key)));
+                    break;
+            }
 
-    	    } else if (key.equals("horse")){
-                if (getConfig().get("horse.name") instanceof List) {
-                    List<String> h = getConfig().getStringList("horse.name");
-                    getConfig().set("horse.name", null);
-                    getConfig().addDefault("horse.name.default", h);
-                }
-                getConfig().addDefault("horse.name.default", new ArrayList<>());
-                for (Horse.Color variant : Horse.Color.values()) {
-                    getConfig().addDefault("horse.name." + variant.name(), new ArrayList<>());
-                }
-            } else {
-    	        getConfig().addDefault(key + ".name", new ArrayList<>());
-    	    }
-
-    		getConfig().addDefault(key + ".chance", 0);
+    		getConfig().addDefault(key + ".chance", 10);
     	    getConfig().addDefault(key + ".display-name", "{default}");
     	    getConfig().addDefault(key + ".price", "{default}");
 

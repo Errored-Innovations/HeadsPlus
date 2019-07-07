@@ -1,7 +1,7 @@
-package io.github.thatsmusic99.headsplus.config.headsx.icons;
+package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,21 +11,21 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Favourites extends ItemStack implements Icon {
+public class Close extends ItemStack implements Icon {
     @Override
     public String getIconName() {
-        return "favourites";
+        return "close";
     }
 
     @Override
     public void onClick(Player p, InventoryManager im, InventoryClickEvent e) {
         e.setCancelled(true);
-        im.showScreen(InventoryManager.Type.LIST_FAVORITES);
+        p.closeInventory();
     }
 
     @Override
     public Material getDefaultMaterial() {
-        return Material.DIAMOND;
+        return Material.BARRIER;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Favourites extends ItemStack implements Icon {
 
     @Override
     public String getDefaultDisplayName() {
-        return "&b&lFavourites";
+        return "&c&lClose Menu";
     }
 
     @Override
@@ -45,6 +45,6 @@ public class Favourites extends ItemStack implements Icon {
 
     @Override
     public String getSingleLetter() {
-        return "F";
+        return "X";
     }
 }

@@ -25,7 +25,7 @@ public class HPPlayer {
     private List<Challenge> completeChallenges;
     private RLevel nextLevel = null;
     private List<PotionEffect> activeMasks;
-    public static List<HPPlayer> players = new ArrayList<>();
+    public static HashMap<Player, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
     private boolean ignoreFallDamage;
 
@@ -109,7 +109,7 @@ public class HPPlayer {
                 p.apply((Player) this.getPlayer());
                 po.add(p);
             } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in headsa.yml!");
+                HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
             }
         }
         activeMasks.addAll(po);
@@ -136,14 +136,7 @@ public class HPPlayer {
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        for (HPPlayer hp : players) {
-            if (hp.player.equals(p)) {
-                return hp;
-            }
-        }
-        HPPlayer pl = new HPPlayer(p);
-        players.add(pl);
-        return pl;
+        return players.get(p.getPlayer()) != null ? players.get(p.getPlayer()) : new HPPlayer(p);
     }
 
     public List<PotionEffect> getActiveMasks() {

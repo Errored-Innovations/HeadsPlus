@@ -5,18 +5,22 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadInventory;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.Nav;
-import io.github.thatsmusic99.headsplus.config.headsx.inventories.*;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.Nav;
+import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +47,8 @@ public class InventoryManager {
     private Type type;
     private final HeadsPlus plugin;
     private final boolean largerMenu;
-    private final HeadsPlusConfigHeadsX hpchx;
+    private boolean glitchSlotFilled;
+    private final HeadsPlusConfigCustomHeads hpchx;
 
     public int getPages() {
         return pages;
@@ -63,6 +68,14 @@ public class InventoryManager {
 
     public Type getType() {
         return type;
+    }
+
+    public boolean isGlitchSlotFilled() {
+        return glitchSlotFilled;
+    }
+
+    public void setGlitchSlotFilled(boolean glitchSlotFilled) {
+        this.glitchSlotFilled = glitchSlotFilled;
     }
 
     public HeadInventory getInventory() {
@@ -91,8 +104,12 @@ public class InventoryManager {
     public static void inventoryClosed(Player p) {
         InventoryManager im = pls.get(p);
         if (im != null) {
+            if (!im.isGlitchSlotFilled() && im.inventory != null) {
+                p.getInventory().setItem(8, new ItemStack(Material.AIR));
+            }
             im.inventory = null;
             im.searchAnvilOpen = false;
+
         }
     }
 
@@ -103,7 +120,13 @@ public class InventoryManager {
         if (type == Type.LIST_FAVORITES) {
             searchResults = loadFavoriteHeads();
         }
-        player.openInventory(getPageInventory());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.openInventory(getPageInventory());
+            }
+        }.runTaskLater(HeadsPlus.getInstance(), 1);
+
     }
 
     public void showSearch(String search) {
@@ -253,7 +276,6 @@ public class InventoryManager {
                 plugin.getLogger().log(Level.WARNING, "Unexpected Error processing section options.advent-texture", ex);
             }
         }
-
         inventory = new HeadMenu();
         return inventory.build(player, heads, "Main Menu", currentPage, pages, headsInSection, wide);
     }
@@ -430,9 +452,9 @@ public class InventoryManager {
             Challenge ch = challenges.get(i);
             ItemStack is;
             if (ch.isComplete(player)) {
-                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.headsx.icons.Challenge().getCompleteMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.complete-data-value"));
+                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge().getCompleteMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.complete-data-value"));
             } else {
-                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.headsx.icons.Challenge().getMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.data-value"));
+                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge().getMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.data-value"));
             }
             is = plugin.getNBTManager().setChallenge(is, ch);
             heads.add(is);

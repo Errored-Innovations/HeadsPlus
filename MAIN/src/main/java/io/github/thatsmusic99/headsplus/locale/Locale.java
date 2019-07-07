@@ -274,4 +274,6 @@ public interface Locale {
 
     String descConjure();
 
+    String descComplete();
+
 }

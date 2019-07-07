@@ -1,9 +1,9 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadInventory;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
-import io.github.thatsmusic99.headsplus.config.headsx.icons.*;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.*;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 
 import java.util.List;

@@ -7,7 +7,7 @@ import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
-import io.github.thatsmusic99.headsplus.config.headsx.HeadsPlusConfigHeadsX;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -50,9 +50,10 @@ public class DeathEvents implements Listener {
     }
 	
 	public final List<EntityType> ableEntities = new ArrayList<>(Arrays.asList(EntityType.BAT, EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CHICKEN, EntityType.COW, EntityType.CREEPER, EntityType.ENDER_DRAGON, EntityType.ENDERMAN, EntityType.ENDERMITE, EntityType.GHAST, EntityType.GUARDIAN, EntityType.HORSE, EntityType.IRON_GOLEM, EntityType.MAGMA_CUBE, EntityType.MUSHROOM_COW, EntityType.OCELOT, EntityType.PIG, EntityType.PIG_ZOMBIE, EntityType.RABBIT, EntityType.SHEEP, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SNOWMAN, EntityType.SPIDER, EntityType.SQUID, EntityType.VILLAGER, EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.WOLF));
-    private final HeadsPlusConfigHeadsX hpchx = HeadsPlus.getInstance().getHeadsXConfig();
+    private final HeadsPlusConfigCustomHeads hpchx = HeadsPlus.getInstance().getHeadsXConfig();
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
     public static HashMap<EntityType, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
+    public static boolean ready = false;
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
@@ -136,7 +137,7 @@ public class DeathEvents implements Listener {
                     ItemStack head = nms.getSkullMaterial(a);
                     SkullMeta headM = (SkullMeta) head.getItemMeta();
                     headM = nms.setSkullOwner(ep.getEntity().getName(), headM);
-                    headM.setDisplayName(hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
+                    headM.setDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
 
 
                     Location entityLoc = ep.getEntity().getLocation();
@@ -242,17 +243,15 @@ public class DeathEvents implements Listener {
                         try {
                             if (e == EntityType.SKELETON) {
                                 is = nms.getSkull(0);
-                            } else if (e == EntityType.WITHER_SKELETON) {
-                                is = nms.getSkull(1);
                             } else if (e == EntityType.ZOMBIE) {
                                 is = nms.getSkull(2);
                             } else if (e == EntityType.CREEPER) {
                                 is = nms.getSkull(4);
-                            } else if (e == EntityType.ENDER_DRAGON) {
+                            } else if (e == EntityType.ENDER_DRAGON || e == EntityType.WITHER_SKELETON) {
                                 is = new ItemStack(Material.BLAZE_ROD);
                                 double price = hpch.getPrice(fancyName);
                                 ItemMeta sm = is.getItemMeta();
-                                sm.setDisplayName(hpch.getDisplayName(fancyName));
+                                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
                                 List<String> strs = new ArrayList<>();
                                 List<String> lore = hpch.getLore(fancyName);
                                 for (String str2 : lore) {
@@ -266,7 +265,12 @@ public class DeathEvents implements Listener {
                                 is = nbt.makeSellable(is);
                                 is = nbt.setType(is, fancyName);
                                 is = nbt.setPrice(is, price);
-                                is.setType(nms.getSkull(5).getType());
+                                if (e == EntityType.ENDER_DRAGON) {
+                                    is.setType(nms.getSkull(5).getType());
+                                } else {
+                                    is.setType(nms.getSkull(1).getType());
+                                }
+
                                 b = false;
                             } else {
                                 is = nms.getSkull(3);
@@ -284,7 +288,7 @@ public class DeathEvents implements Listener {
                     if (b) {
                         double price = hpch.getPrice(fancyName);
                         SkullMeta sm = (SkullMeta) is.getItemMeta();
-                        sm.setDisplayName(hpch.getDisplayName(fancyName));
+                        sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
                         List<String> strs = new ArrayList<>();
                         List<String> lore = hpch.getLore(fancyName);
                         for (String str2 : lore) {
@@ -309,6 +313,7 @@ public class DeathEvents implements Listener {
             }
 
         }
+        ready = true;
     }
 
     private HashMap<String, List<ItemStack>> a(String en,  HashMap<String, List<ItemStack>> keys) {
@@ -334,7 +339,7 @@ public class DeathEvents implements Listener {
 
                 double price = hpch.getPrice(en);
                 SkullMeta sm = (SkullMeta) is.getItemMeta();
-                sm.setDisplayName(hpch.getDisplayName(en));
+                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(en));
                 List<String> strs = new ArrayList<>();
                 List<String> lore = hpch.getLore(en);
                 for (String str2 : lore) {

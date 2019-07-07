@@ -628,4 +628,9 @@ public class hu_hu implements Locale {
     public String descConjure() {
         return "Visszatér egy adott típusú fejet.";
     }
+
+    @Override
+    public String descComplete() {
+        return "Kihívást jelent.";
+    }
 }

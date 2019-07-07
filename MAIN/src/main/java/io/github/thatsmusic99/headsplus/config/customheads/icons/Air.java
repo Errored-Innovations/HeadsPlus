@@ -1,7 +1,7 @@
-package io.github.thatsmusic99.headsplus.config.headsx.icons;
+package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.headsx.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

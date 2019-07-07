@@ -629,4 +629,9 @@ public class ro_ro implements Locale {
     public String descConjure() {
         return "Retreife un cap de un anumit tip.";
     }
+
+    @Override
+    public String descComplete() {
+        return "Finalizeaza o provocare.";
+    }
 }
