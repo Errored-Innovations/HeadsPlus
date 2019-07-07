@@ -457,6 +457,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 headsCache.put(key, getSkull(key));
             }
         }
+		allHeadsCache.add(texture);
         delaySave();
     }
 
