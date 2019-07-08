@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.locale;
 public class pl_pl implements Locale {
     @Override
     public boolean active() {
-        return false;
+        return true;
     }
 
     @Override
@@ -483,7 +483,7 @@ public class pl_pl implements Locale {
 
     @Override
     public String noData() {
-        return "&cBrak danych dla tego gracza!;
+        return "&cBrak danych dla tego gracza!";
     }
 
     @Override
