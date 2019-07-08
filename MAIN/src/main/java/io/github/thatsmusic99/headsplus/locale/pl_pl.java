@@ -8,7 +8,7 @@ public class pl_pl implements Locale {
 
     @Override
     public String getLanguage() {
-        return null;
+        return "Poliski, PL";
     }
 
     @Override
