@@ -1,6 +1,9 @@
 package io.github.thatsmusic99.headsplus.locale;
 
 public class pl_pl implements Locale {
+
+    // Translated by Górbiel (Gurbiel)
+    // Corrected by Mistermychciak
     @Override
     public boolean active() {
         return true;
@@ -8,7 +11,7 @@ public class pl_pl implements Locale {
 
     @Override
     public String getLanguage() {
-        return "Polish";
+        return "Poliski, PL";
     }
 
     @Override
