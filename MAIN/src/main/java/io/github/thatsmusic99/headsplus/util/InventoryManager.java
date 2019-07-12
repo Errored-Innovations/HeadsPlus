@@ -87,6 +87,7 @@ public class InventoryManager {
         plugin = HeadsPlus.getInstance();
         hpchx = plugin.getHeadsXConfig();
         largerMenu = plugin.getConfig().getBoolean("plugin.larger-menus", false);
+        glitchSlotFilled = p.getInventory().getItem(8) != null;
     }
 
     public static InventoryManager get(Player p) {
