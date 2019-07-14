@@ -139,6 +139,7 @@ public class NBTManager {
     private Object getObject(ItemStack i, String methodName, String nbtKey) {
         try {
             Object nmsItem = getNMSCopy(i);
+            if (nmsItem == null) return new ItemStack(Material.AIR);
             Object nbtTag = getNBTTag(nmsItem);
             if (nbtTag == null) {
                 nbtTag = newNBTTag();
