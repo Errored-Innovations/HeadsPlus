@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,8 +41,7 @@ public class MaskEvent implements Listener {
                             maskMonitors.put((Player) e.getWhoClicked(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (e.getWhoClicked().getInventory().getHelmet() == null) {
-                                        HPPlayer pl = HPPlayer.getHPPlayer((OfflinePlayer) e.getWhoClicked());
+                                    if (e.getWhoClicked().getInventory().getHelmet() == null || e.getWhoClicked().getInventory().getHelmet().getType() == Material.AIR) {
                                         pl.clearMask();
                                         maskMonitors.remove(e.getWhoClicked());
                                         cancel();
@@ -71,7 +71,7 @@ public class MaskEvent implements Listener {
 
     private int getSlot() {
         NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
-        if (nms.getOrder() > 8) {
+        if (nms.getOrder() == 9 || nms.getOrder() == 10) {
             return 39;
         } else {
             return 5;
