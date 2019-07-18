@@ -53,7 +53,7 @@ public class NBTManager {
     }
 
     public boolean isSellable(ItemStack i) {
-        return (boolean) getObject(i, "getBoolean", "headsplus-sell");
+        return getObject(i, "getBoolean", "headsplus-sell") instanceof Boolean && (boolean) getObject(i, "getBoolean", "headsplus-sell");
     }
 
     public ItemStack setType(ItemStack i, String type) {
