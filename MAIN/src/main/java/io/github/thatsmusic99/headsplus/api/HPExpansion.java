@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HPExpansion extends PlaceholderExpansion {
 
@@ -70,7 +72,7 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("hunting")) {
             try {
-                return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier), "hunting"));
+                return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
@@ -79,7 +81,7 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("crafting")) {
             try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier), "crafting"));
+                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
@@ -88,20 +90,46 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("selling")) {
             try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier), "selling"));
+                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
             }
         }
 
+        if (identifier.startsWith("top")) {
+            // Format:
+            // %headsplus_top_CATEGORY_ENTITY_NUMBER_player%
+            // %headsplus_top_CATEGORY_ENTITY_NUMBER_score%
+            String[] args = identifier.split("_");
+            String category = args[1];
+            String entity = getFixedString(args[2], false);
+            int position = Integer.valueOf(args[3]);
+            String option = args[4];
+            try {
+                List<OfflinePlayer> players = new ArrayList<>(HeadsPlus.getInstance().getAPI().getScores(entity, category).keySet());
+                if (option.equalsIgnoreCase("score")) {
+                    return String.valueOf(HeadsPlus.getInstance().getAPI().getScores(entity, category).get(players.get(position)));
+                } else {
+                    return players.get(position).getName();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+        }
         // We return null if an invalid placeholder (f.e. %example_placeholder3%)
         // was provided
         return null;
     }
 
-    private String getFixedString(String identifier) {
-        String section = identifier.split("_")[1];
+    private String getFixedString(String identifier, boolean split) {
+        String section = identifier;
+        if (split) {
+            section = identifier.split("_")[1];
+        }
+
         switch (section) {
             case "cavespider":
                 section = "CAVE_SPIDER";

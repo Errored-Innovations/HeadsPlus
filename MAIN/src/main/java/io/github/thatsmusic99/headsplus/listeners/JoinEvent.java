@@ -9,6 +9,7 @@ import io.github.thatsmusic99.headsplus.locale.Locale;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
