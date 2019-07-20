@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class HPExpansion extends PlaceholderExpansion {
@@ -107,15 +108,26 @@ public class HPExpansion extends PlaceholderExpansion {
             int position = Integer.valueOf(args[3]);
             String option = args[4];
             try {
-                List<OfflinePlayer> players = new ArrayList<>(HeadsPlus.getInstance().getAPI().getScores(entity, category).keySet());
+                List<OfflinePlayer> players = new ArrayList<>(HeadsPlus.getInstance().getMySQLAPI().getScores(entity, category).keySet());
+                Iterator<OfflinePlayer> playerIterator = players.iterator();
+                List<Integer> scores = new ArrayList<>(HeadsPlus.getInstance().getMySQLAPI().getScores(entity, category).values());
+                while (playerIterator.hasNext()) {
+                    OfflinePlayer p = playerIterator.next();
+                    if (p.getName() == null || p.getName().equalsIgnoreCase("null")) {
+                        scores.remove(players.indexOf(p));
+                        playerIterator.remove();
+                    }
+                }
+
                 if (option.equalsIgnoreCase("score")) {
-                    return String.valueOf(HeadsPlus.getInstance().getAPI().getScores(entity, category).get(players.get(position)));
+                    return String.valueOf(scores.get(position));
                 } else {
                     return players.get(position).getName();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return "0";
 
 
         }
@@ -175,6 +187,9 @@ public class HPExpansion extends PlaceholderExpansion {
                 break;
             case "zombievillager":
                 section = "ZOMBIE_VILLAGER";
+                break;
+            case "total":
+                section = "total";
                 break;
             default:
                 section = section.toUpperCase();

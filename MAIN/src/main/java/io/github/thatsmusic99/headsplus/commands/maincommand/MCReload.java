@@ -13,36 +13,36 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 
 @CommandInfo(
-		commandname = "reload",
-		permission = "headsplus.maincommand.reload",
-		subcommand = "Reload",
-		maincommand = true,
-		usage = "/hp reload"
+        commandname = "reload",
+        permission = "headsplus.maincommand.reload",
+        subcommand = "Reload",
+        maincommand = true,
+        usage = "/hp reload"
 )
 public class MCReload implements IHeadsPlusCommand{
 
-	// O
+    // O
 
-	@Override
-	public String getCmdDescription() {
-		return LocaleManager.getLocale().descMCReload();
-	}
+    @Override
+    public String getCmdDescription() {
+        return LocaleManager.getLocale().descMCReload();
+    }
 
-	@Override
-	public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-		HashMap<Boolean, String> h = new HashMap<>();
-		h.put(true, "");
-		return h;
-	}
+    @Override
+    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
+        HashMap<Boolean, String> h = new HashMap<>();
+        h.put(true, "");
+        return h;
+    }
 
-	@Override
-	public boolean fire(String[] args, CommandSender sender) {
-		HeadsPlusMessagesConfig m = HeadsPlus.getInstance().getMessagesConfig();
-		String reloadM = m.getString("reload-message");
-		String reloadingM = m.getString("reloading-message");
-		sender.sendMessage(reloadingM);
-		try {
-			new BukkitRunnable() {
+    @Override
+    public boolean fire(String[] args, CommandSender sender) {
+        HeadsPlusMessagesConfig m = HeadsPlus.getInstance().getMessagesConfig();
+        String reloadM = m.getString("reload-message");
+        String reloadingM = m.getString("reloading-message");
+        sender.sendMessage(reloadingM);
+        try {
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (ConfigSettings cs : HeadsPlus.getInstance().getConfigs()) {
@@ -53,11 +53,11 @@ public class MCReload implements IHeadsPlusCommand{
                     sender.sendMessage(reloadM);
                 }
             }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
-		} catch (Exception e) {
-		    DebugPrint.createReport(e, "Subcommand (reload)", true, sender);
-		}
-		return true;
-	}
+        } catch (Exception e) {
+            DebugPrint.createReport(e, "Subcommand (reload)", true, sender);
+        }
+        return true;
+    }
 }
 
 
