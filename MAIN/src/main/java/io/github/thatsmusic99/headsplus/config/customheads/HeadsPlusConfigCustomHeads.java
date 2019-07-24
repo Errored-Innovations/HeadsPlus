@@ -198,7 +198,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
-            gm = new GameProfile(UUID.randomUUID(), "HPXHead");
+            gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
             gm.getProperties().put("textures", new Property("texture", texture.replaceAll("=", "")));
         }
 
@@ -229,7 +229,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public ItemStack setTexture(String tex, ItemStack is) throws IllegalAccessException, NoSuchFieldException {
         SkullMeta sm = (SkullMeta) is.getItemMeta();
-        GameProfile gm = new GameProfile(UUID.randomUUID(), "HPXHead");
+        GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(tex.getBytes()), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", tex.replaceAll("=", "")));
 
         Field profileField;

@@ -82,21 +82,6 @@ public class Conjure implements IHeadsPlusCommand {
                     DeathEvents de = HeadsPlus.getInstance().getDeathEvents();
                     try {
                         ItemStack i = DeathEvents.heads.get(de.prettyStringToEntity(args[1])).get(type).get(index);
-                        double price = heads.getPrice(args[1]);
-                        SkullMeta sm = (SkullMeta) i.getItemMeta();
-                        String displayname = heads.getDisplayName(args[1]);
-                        sm.setDisplayName(displayname);
-                        List<String> strs = new ArrayList<>();
-                        List<String> lore = heads.getLore(args[1]);
-                        for (String str : lore) {
-                            strs.add(ChatColor.translateAlternateColorCodes('&', str.replaceAll("\\{type}", args[1]).replaceAll("\\{price}", String.valueOf(price))));
-                        }
-                        sm.setLore(strs);
-                        i.setItemMeta(sm);
-                        NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
-                        i = nbt.makeSellable(i);
-                        i = nbt.setType(i, args[1]);
-                        i = nbt.setPrice(i, price);
                         i.setAmount(amount);
                         this.head = i;
 
