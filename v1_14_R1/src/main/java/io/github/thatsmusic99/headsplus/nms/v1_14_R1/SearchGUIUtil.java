@@ -7,11 +7,25 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SearchGUIUtil extends SearchGUI {
 
     public SearchGUIUtil(Player player, AnvilClickEventHandler handler) {
         super(player, handler);
+    }
+
+    static boolean compat_mode = true;
+    static {
+        for(Method m : ContainerProperty.class.getMethods()) {
+            if(m.getName().equals("set")) {
+                compat_mode = false;
+                break;
+            }
+        }
     }
 
     private class AnvilContainer extends ContainerAnvil {
@@ -28,7 +42,15 @@ public class SearchGUIUtil extends SearchGUI {
         @Override
         public void e() {
             super.e();
-            this.levelCost.a(0);
+            if(compat_mode) {
+                try {
+                    ContainerProperty.class.getDeclaredMethod("a", int.class).invoke(this.levelCost, 0);
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(SearchGUIUtil.class.getName()).log(Level.SEVERE, "Anvil Error", ex);
+                }
+            } else {
+                this.levelCost.set(0);
+            }
         }
     }
 
