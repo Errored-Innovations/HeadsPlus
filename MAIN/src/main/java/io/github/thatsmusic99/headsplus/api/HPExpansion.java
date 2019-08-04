@@ -126,6 +126,8 @@ public class HPExpansion extends PlaceholderExpansion {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+            } catch (IndexOutOfBoundsException e) {
+                return "0";
             }
             return "0";
 
@@ -166,6 +168,7 @@ public class HPExpansion extends PlaceholderExpansion {
                 break;
             case "polarbear":
                 section = "POLAR_BEAR";
+
                 break;
             case "skeletonhorse":
                 section = "SKELETON_HORSE";
