@@ -11,23 +11,9 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -35,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.*;
 
 public class DeathEvents implements Listener {
 
@@ -66,7 +54,7 @@ public class DeathEvents implements Listener {
                 String entity = e.getEntityType().toString().toLowerCase().replaceAll("_", "");
                 Random rand = new Random();
                 double chance1 = hpch.getConfig().getDouble(entity + ".chance");
-                double chance2 = (double) rand.nextInt(100);
+                double chance2 = rand.nextDouble() * 100;
                 int amount = 1;
                 if (e.getEntity().getKiller() != null) {
                     if (hp.getNMS().getItemInHand(e.getEntity().getKiller()).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
@@ -114,7 +102,7 @@ public class DeathEvents implements Listener {
             if (runAcceptTests(ep.getEntity())) {
                 Random rand = new Random();
                 double chance1 = hpch.getConfig().getDouble("player.chance");
-                double chance2 = (double) rand.nextInt(100);
+                double chance2 = rand.nextDouble() * 100;
                 NMSManager nms = hp.getNMS();
                 int a = 1;
                 if (ep.getEntity().getKiller() != null) {
