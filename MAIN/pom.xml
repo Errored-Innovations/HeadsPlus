@@ -37,6 +37,13 @@
             <systemPath>${project.basedir}/../libs/SpectateProtection-1.1.2.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>io.github.at</groupId>
+            <artifactId>AdvancedTeleport</artifactId>
+            <version>5.0.1-SNAPSHOT-1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/AdvancedTeleport-5.0.1-SNAPSHOT-1.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>io.github.thatsmusic99</groupId>
             <artifactId>ProjectPG</artifactId>
             <version>1.0-SNAPSHOT</version>

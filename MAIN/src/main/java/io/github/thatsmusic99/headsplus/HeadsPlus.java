@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
+import io.github.at.main.Main;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPExpansion;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
@@ -783,6 +784,11 @@ public class HeadsPlus extends JavaPlugin {
             if (Bukkit.getPluginManager().getPlugin("SpectateProtection") instanceof CoreClass) {
                 getLogger().info("'Ello SpectateProtection! What's up??");
                 Bukkit.getPluginManager().callEvent(new CommunicateEvent("SpectateProtection"));
+            }
+            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") instanceof Main) {
+                getLogger().info("HEY! ADVANCEDTELEPORT! THINK FAST!");
+                Main.getInstance().getLogger().info("Huh?");
+                getLogger().info("Actually... don't worry about it, it's all good.");
             }
         } catch (NoClassDefFoundError ignored) {
 
