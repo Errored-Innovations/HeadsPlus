@@ -55,7 +55,7 @@ public class WhitelistwDelete implements IHeadsPlusCommand {
                         whitelist.remove(rHead);
                         config.getConfig().set("whitelist.world.list", whitelist);
                         config.save();
-                        sender.sendMessage(hpc.getString("world-removed-wl").replaceAll("\\{name}", args[1]));
+                        sender.sendMessage(hpc.getString("world-removed-wl").replaceAll("\\{name}", args[1]).replaceAll("\\{world}", args[1]));
                     } else {
                         sender.sendMessage(hpc.getString("world-a-removed-wl"));
                     }
