@@ -27,6 +27,7 @@ public class RecipePerms implements Listener {
                 HeadsPlusAPI hapi = hp.getAPI();
                 HeadsPlusMainConfig c = hp.getConfiguration();
                 if (!isValid1_14(e)) return;
+
                 if (c.getPerks().craft_heads) {
                     if (player.hasPermission("headsplus.craft")) {
                         if (c.getBlacklist().enabled) {
@@ -135,9 +136,7 @@ public class RecipePerms implements Listener {
     private boolean isValid1_14(InventoryClickEvent e) {
 	    if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 11) return true;
 	    if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
-            if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                return e.getRawSlot() == 0;
-            }
+	        return e.getRawSlot() == 0;
         }
 	    if (e.getInventory().getType().equals(InventoryType.CRAFTING)) {
 	        if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
