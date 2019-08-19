@@ -78,7 +78,8 @@ public interface Icon {
     }
 
     default Material getMaterial() {
-        return Material.getMaterial(HeadsPlus.getInstance().getItems().getConfig().getString("icons." + getIconName() + ".material"));
+        Material material = Material.getMaterial(HeadsPlus.getInstance().getItems().getConfig().getString("icons." + getIconName() + ".material"));
+        return material != null ? material : Material.STONE;
     }
 
     default List<String> getLore() {
