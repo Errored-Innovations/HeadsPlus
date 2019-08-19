@@ -249,7 +249,8 @@ public abstract class HeadInventory {
         if (itemIndex < list.size()) {
             is = list.get(itemIndex);
             ItemMeta im = is.getItemMeta();
-            im.setDisplayName(icon.getDisplayName().replace("{head-name}", is.getItemMeta().getDisplayName()));
+            if(is.getItemMeta().hasDisplayName())
+                im.setDisplayName(icon.getDisplayName().replace("{head-name}", is.getItemMeta().getDisplayName()));
             if (this instanceof SellheadMenu) {
                 im.setDisplayName(im.getDisplayName().replace("{default}",
                         HeadsPlus.getInstance().getHeadsConfig().getDisplayName(nbt.getType(is))));
