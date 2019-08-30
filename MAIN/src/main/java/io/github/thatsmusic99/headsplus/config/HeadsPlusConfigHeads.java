@@ -25,7 +25,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 	@Override
 	public void load(boolean ehhLolIDontNeedThisButJavaIsMakingMeAnywaysSoHiHowAreYou) {
 		try {
-			getConfig().options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuration");
+			getConfig().options().header("HeadsPlus by Thatsmusic99");
 			getConfig().addDefault("defaults.price", 10.0);
 			getConfig().addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Type: &a{type}")));
 			getConfig().addDefault("defaults.display-name", "{type} Head");

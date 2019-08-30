@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.reflection;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
+import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -113,6 +114,14 @@ public class NBTManager {
 
     public Challenge getChallenge(ItemStack i) {
         return  HeadsPlus.getInstance().getChallengeByName(String.valueOf(getObject(i, "getString", "head-challenge")));
+    }
+
+    public ItemStack setChallengeSection(ItemStack i, ChallengeSection section) {
+        return setObject(i, "setString", "head-challenge-section", section.getName(), String.class, String.class);
+    }
+
+    public String getChallengeSection(ItemStack i) {
+        return  String.valueOf(getObject(i, "getString", "head-challenge-section"));
     }
 
     public ItemStack removeIcon(ItemStack i) {

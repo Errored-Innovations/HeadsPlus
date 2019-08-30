@@ -2,12 +2,10 @@ package io.github.thatsmusic99.headsplus;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.at.main.Main;
-import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.HPExpansion;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
-import io.github.thatsmusic99.headsplus.api.RLevel;
+import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
+import io.github.thatsmusic99.headsplus.commands.Head;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
@@ -77,6 +75,7 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigTextMenu menus;
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
+    private final List<ChallengeSection> challengeSections = new ArrayList<>();
     private NMSManager nms;
     private NMSIndex nmsversion;
     private final List<IHeadsPlusCommand> commands = new ArrayList<>();
@@ -584,6 +583,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.add(new HeadInfoCommand());
         commands.add(new Conjure());
         commands.add(new Complete());
+        commands.add(new TestsCommand());
     }
 
     // GETTERS
@@ -673,6 +673,10 @@ public class HeadsPlus extends JavaPlugin {
         return challenges;
     }
 
+    public List<ChallengeSection> getChallengeSections() {
+        return challengeSections;
+    }
+
     public MySQLAPI getMySQLAPI() {
         return mySQLAPI;
     }
@@ -759,6 +763,15 @@ public class HeadsPlus extends JavaPlugin {
         for (Challenge c : getChallenges()) {
             if (c.getConfigName().equalsIgnoreCase(name)) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    public ChallengeSection getSectionByName(String name) {
+        for (ChallengeSection s : getChallengeSections()) {
+            if (s.getName().equalsIgnoreCase(name)) {
+                return s;
             }
         }
         return null;

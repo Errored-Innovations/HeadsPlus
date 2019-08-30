@@ -108,7 +108,7 @@ public abstract class HeadInventory {
             }
         }
         for (int i = 0; i < getSize(); ++i) {
-            icons[i] = Icon.getIconFromSingleLetter(String.valueOf(l.charAt(i)));
+            icons[i] = Icon.getIconFromSingleLetter(String.valueOf(l.charAt(i)), this instanceof ChallengesMenu);
         }
         return icons;
     }
@@ -129,6 +129,8 @@ public abstract class HeadInventory {
             if (icons[o] instanceof Head || icons[o] instanceof io.github.thatsmusic99.headsplus.config.customheads.icons.HeadSection) {
                 is = getHeadItem(icons[o], list, itemIndex++);
             } else if (icons[o] instanceof Challenge) {
+                is = getChallengeItem(icons[o], sender, list, itemIndex++);
+            } else if (icons[o] instanceof io.github.thatsmusic99.headsplus.config.customheads.icons.ChallengeSection) {
                 is = getChallengeItem(icons[o], sender, list, itemIndex++);
             } else if (icons[o] instanceof Stats) {
                 if (nms instanceof NewNMSManager) {
@@ -282,46 +284,61 @@ public abstract class HeadInventory {
         if (itemIndex < list.size()) {
             is = list.get(itemIndex);
             ItemMeta im = is.getItemMeta();
-
             List<String> lore = new ArrayList<>();
-            io.github.thatsmusic99.headsplus.api.Challenge c = nbt.getChallenge(is);
-            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', icon.getDisplayName().replace("{challenge-name}", c.getChallengeHeader())));
-            for (int z = 0; z < icon.getLore().size(); ++z) {
-                if (icon.getLore().get(z).contains("{challenge-lore}")) {
-                    for (String s : c.getDescription()) {
-                        lore.add(ChatColor.translateAlternateColorCodes('&', s));
-                    }
-                }
-                if (icon.getLore().get(z).contains("{challenge-reward}")) {
-                    StringBuilder sb = new StringBuilder();
-                    HPChallengeRewardTypes re = c.getRewardType();
-                    if (c.getRewardString() != null) {
-                        sb.append(c.getRewardString());
-                    } else if (re == HPChallengeRewardTypes.ECO) {
-                        sb.append("$").append(c.getRewardValue().toString());
-                    } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
-                        try {
-                            Material.valueOf(c.getRewardValue().toString());
-                            sb.append(c.getRewardItemAmount()).append(" ").append(WordUtils.capitalize(c.getRewardValue().toString().toLowerCase().replaceAll("_", " ")));//.append("(s)");
-                        } catch (IllegalArgumentException ignored) {
+            if (this instanceof ChallengesMenu) {
+                io.github.thatsmusic99.headsplus.api.ChallengeSection section = HeadsPlus.getInstance().getSectionByName(nbt.getChallengeSection(is));
+                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', icon.getDisplayName().replace("{section-name}", section.getDisplayName())));
+                for (int z = 0; z < icon.getLore().size(); ++z) {
+                    if (icon.getLore().get(z).contains("{section-lore}")) {
+                        for (String s : section.getLore()) {
+                            lore.add(ChatColor.translateAlternateColorCodes('&', s));
                         }
-                    } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
-                        sb.append("Group ").append(c.getRewardValue().toString()).append(" addition");
-                    } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
-                        sb.append("Group ").append(c.getRewardValue().toString()).append(" removal");
-                    }
-                    lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z).replace("{challenge-reward}", sb.toString())));
-                }
-                if (icon.getLore().get(z).contains("{completed}")) {
-                    if (c.isComplete(p)) {
-                        lore.add(HeadsPlus.getInstance().getMessagesConfig().getString("challenge-completed"));
+                    } else {
+                        lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z)).replaceAll("\\{challenges}", String.valueOf(section.getChallenges().size())));
                     }
                 }
-                if (icon.getLore().get(z).contains("{challenge-xp}")) {
-                    lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z).replaceAll("\\{challenge-xp}", String.valueOf(c.getGainedXP()))));
+                im.setLore(lore);
+            } else {
+                io.github.thatsmusic99.headsplus.api.Challenge c = nbt.getChallenge(is);
+                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', icon.getDisplayName().replace("{challenge-name}", c.getChallengeHeader())));
+                for (int z = 0; z < icon.getLore().size(); ++z) {
+                    if (icon.getLore().get(z).contains("{challenge-lore}")) {
+                        for (String s : c.getDescription()) {
+                            lore.add(ChatColor.translateAlternateColorCodes('&', s));
+                        }
+                    }
+                    if (icon.getLore().get(z).contains("{challenge-reward}")) {
+                        StringBuilder sb = new StringBuilder();
+                        HPChallengeRewardTypes re = c.getRewardType();
+                        if (c.getReward().getRewardString() != null) {
+                            sb.append(c.getReward().getRewardString());
+                        } else if (re == HPChallengeRewardTypes.ECO) {
+                            sb.append("$").append(c.getRewardValue().toString());
+                        } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
+                            try {
+                                Material.valueOf(c.getRewardValue().toString());
+                                sb.append(c.getRewardItemAmount()).append(" ").append(WordUtils.capitalize(c.getRewardValue().toString().toLowerCase().replaceAll("_", " ")));//.append("(s)");
+                            } catch (IllegalArgumentException ignored) {
+                            }
+                        } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
+                            sb.append("Group ").append(c.getRewardValue().toString()).append(" addition");
+                        } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
+                            sb.append("Group ").append(c.getRewardValue().toString()).append(" removal");
+                        }
+                        lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z).replace("{challenge-reward}", sb.toString())));
+                    }
+                    if (icon.getLore().get(z).contains("{completed}")) {
+                        if (c.isComplete(p)) {
+                            lore.add(HeadsPlus.getInstance().getMessagesConfig().getString("challenge-completed"));
+                        }
+                    }
+                    if (icon.getLore().get(z).contains("{challenge-xp}")) {
+                        lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z).replaceAll("\\{challenge-xp}", String.valueOf(c.getGainedXP()))));
+                    }
                 }
+                im.setLore(lore);
             }
-            im.setLore(lore);
+
             is.setItemMeta(im);
             is = nbt.setIcon(is, icon);
         } else {

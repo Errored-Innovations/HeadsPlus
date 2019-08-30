@@ -6,5 +6,6 @@ public enum HPChallengeRewardTypes {
     ADD_GROUP(),
     REMOVE_GROUP(),
     GIVE_ITEM(),
-    RUN_COMMAND()
+    RUN_COMMAND(),
+    NONE()
 }

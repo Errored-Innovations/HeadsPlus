@@ -18,7 +18,7 @@ public class HeadsPlusLevels extends ConfigSettings {
         return levels;
     }
 
-    private double version;
+    private double version = 0.1;
 
     public HeadsPlusLevels() {
         this.conName = "levels";
@@ -71,21 +71,27 @@ public class HeadsPlusLevels extends ConfigSettings {
 
     @Override
     public void load(boolean n) {
-        for (int i = 1; i <= getDefLevels().size(); i++) {
-            Level l = getDefLevels().get(i);
-            getConfig().addDefault("version", 0.0);
-           // if (getConfig().getDouble("version") < version) {
-            getConfig().addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-            getConfig().addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-            getConfig().addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-            getConfig().addDefault("levels." + l.getConfigName() + ".hierachy", i);
-            getConfig().addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
-            getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
-            getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
-            getConfig().addDefault("levels." + l.getConfigName() + ".rewards.item-amount", 0);
-            getConfig().addDefault("levels." + l.getConfigName() + ".rewards.command-sender", "player");
-          //  }
+        getConfig().addDefault("version", 0.1);
+        if (getConfig().getDouble("version") < version) {
+
+            getConfig().set("version", 0.1);
+            for (int i = 1; i <= getDefLevels().size(); i++) {
+                Level l = getDefLevels().get(i);
+                if (l.getAddedVersion() == version) {
+                    getConfig().addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".hierachy", i);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.item-amount", 0);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.command-sender", "player");
+                }
+
+            }
         }
+
         save();
     }
 

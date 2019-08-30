@@ -23,9 +23,11 @@ public class MySQLAPI {
         hp = HeadsPlus.getInstance();
         hpl = hp.getLeaderboardsConfig();
         hpc = hp.getChallengeConfig();
-        if (hpc.getConfig().get("player-data") instanceof ConfigurationSection) {
-            hp.getLogger().info("Old storage detected! Transfering data (this will be saved when the server stops)...");
-            transferScoresToJSON();
+        if (hpc != null) {
+            if (hpc.getConfig().get("player-data") instanceof ConfigurationSection) {
+                hp.getLogger().info("Old storage detected! Transfering data (this will be saved when the server stops)...");
+                transferScoresToJSON();
+            }
         }
     }
 

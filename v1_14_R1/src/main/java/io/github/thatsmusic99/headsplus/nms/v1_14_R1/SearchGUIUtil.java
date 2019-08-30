@@ -65,7 +65,6 @@ public class SearchGUIUtil extends SearchGUI {
         }
         p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(id, Containers.ANVIL, new ChatMessage("Repairing")));
         p.activeContainer = container;
-
         try {
             Field profileField;
             profileField = Container.class.getDeclaredField("windowId");

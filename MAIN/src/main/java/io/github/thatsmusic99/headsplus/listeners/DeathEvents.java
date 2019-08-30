@@ -229,13 +229,11 @@ public class DeathEvents implements Listener {
                         is = hpchx.getSkull(name);
                     } else if (name.equalsIgnoreCase("{mob-default}")) {
                         try {
-                            if (e == EntityType.SKELETON) {
-                                is = nms.getSkull(0);
-                            } else if (e == EntityType.ZOMBIE) {
-                                is = nms.getSkull(2);
-                            } else if (e == EntityType.CREEPER) {
-                                is = nms.getSkull(4);
-                            } else if (e == EntityType.ENDER_DRAGON || e == EntityType.WITHER_SKELETON) {
+                            if (e == EntityType.ENDER_DRAGON
+                                    || e == EntityType.WITHER_SKELETON
+                                    || e == EntityType.CREEPER
+                                    || e == EntityType.ZOMBIE
+                                    || e == EntityType.SKELETON) {
                                 is = new ItemStack(Material.BLAZE_ROD);
                                 double price = hpch.getPrice(fancyName);
                                 ItemMeta sm = is.getItemMeta();
@@ -255,6 +253,12 @@ public class DeathEvents implements Listener {
                                 is = nbt.setPrice(is, price);
                                 if (e == EntityType.ENDER_DRAGON) {
                                     is.setType(nms.getSkull(5).getType());
+                                } else if (e == EntityType.ZOMBIE) {
+                                    is.setType(nms.getSkull(2).getType());
+                                } else if (e == EntityType.CREEPER) {
+                                    is.setType(nms.getSkull(4).getType());
+                                } else if (e == EntityType.SKELETON) {
+                                    is.setType(nms.getSkull(0).getType());
                                 } else {
                                     is.setType(nms.getSkull(1).getType());
                                 }

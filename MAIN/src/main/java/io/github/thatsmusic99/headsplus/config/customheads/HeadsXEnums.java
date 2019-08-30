@@ -334,7 +334,9 @@ public enum HeadsXEnums {
     WITHER("wither", "&8[&7Wither&8]", HPStrings.wood + "Y2RmNzRlMzIzZWQ0MTQzNjk2NWY1YzU3ZGRmMjgxNWQ1MzMyZmU5OTllNjhmYmI5ZDZjZjVjOGJkNDEzOWYifX19", "mobs", 2.6),
     WOLF("wolf", "&8[&7Wolf&8]", HPStrings.wood + "NjlkMWQzMTEzZWM0M2FjMjk2MWRkNTlmMjgxNzVmYjQ3MTg4NzNjNmM0NDhkZmNhODcyMjMxN2Q2NyJ9fX0", "mobs", 2.6),
     ZOMBIEHORSE("zombiehorse", "&8[&aZombie Horse&8]", HPStrings.wood + "ZDIyOTUwZjJkM2VmZGRiMThkZTg2ZjhmNTVhYzUxOGRjZTczZjEyYTZlMGY4NjM2ZDU1MWQ4ZWI0ODBjZWVjIn19fQ", "mobs", 2.6),
-    ZOMBIEVILLAGER("zombievillager", "&8[&aZombie Villager&8]", HPStrings.wood + "ZTVlMDhhODc3NmMxNzY0YzNmZTZhNmRkZDQxMmRmY2I4N2Y0MTMzMWRhZDQ3OWFjOTZjMjFkZjRiZjNhYzg5YyJ9fX0", "mobs", 2.6);
+    ZOMBIEVILLAGER("zombievillager", "&8[&aZombie Villager&8]", HPStrings.wood + "ZTVlMDhhODc3NmMxNzY0YzNmZTZhNmRkZDQxMmRmY2I4N2Y0MTMzMWRhZDQ3OWFjOTZjMjFkZjRiZjNhYzg5YyJ9fX0", "mobs", 2.6),
+    GOLDEN_CHECK("golden_check", "&8[&eGolden Check&8]", HPStrings.wood + "NjFmZTc0ZjY0YWJkMWE4MTQ3YzEzNzBmY2YzMTIyOTI4MDFiZjRjMzcxZjE1NjRkODkwNGRjMWI3YmU2NGRjOCJ9fX0", "alphabet", 2.7),
+    RED_EXCLAMATION_MARK("red_exclamation_mark", "&8[&cRed Exclamation Mark&8]", "ZTdmOWM2ZmVmMmFkOTZiM2E1NDY1NjQyYmE5NTQ2NzFiZTFjNDU0M2UyZTI1ZTU2YWVmMGE0N2Q1ZjFmIn19fQ", "alphabet", 2.7);
     final String name;
     final String dn;
     final String tex;

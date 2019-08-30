@@ -29,7 +29,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
             configF.delete();
             reloadC(false);
         }
-        config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuration");
+        config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
         config.addDefault("blacklist.default.enabled", true);
         config.addDefault("blacklist.world.enabled", true);
         config.addDefault("whitelist.default.enabled", false);

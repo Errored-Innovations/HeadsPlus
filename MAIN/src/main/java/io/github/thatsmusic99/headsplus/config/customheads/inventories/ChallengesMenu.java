@@ -12,14 +12,8 @@ public class ChallengesMenu extends HeadInventory {
     public String getDefaultItems() {
         return  "GGGGGGGGG" +
                 "GAAAAAAAG" +
-                "GAEARAZAG" +
-                "GAAVAJAAG" +
-                "GAAAAAAAG" +
-                "GGGGXNGGG:" +
-                "GGGGGGGGG" +
-                "GAAAAAAAG" +
-                "GATAIAPAG" +
-                "GAAOADAAG" +
+                "GASASASAG" +
+                "GAASASAAG" +
                 "GAAAAAAAG" +
                 "GGGBXNGGG";
     }

@@ -1,13 +1,9 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeDifficulty;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
-import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,7 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Challenge {
 
@@ -30,32 +25,28 @@ public class Challenge {
     private List<String> description;
     private int requiredHeadAmount;
     private HeadsPlusChallengeTypes challengeType;
-    private HPChallengeRewardTypes rewardType;
-    private Object rewardValue;
-    private int rewardItemAmount;
+    private Reward reward;
+    private int difficulty;
+    private ItemStack icon;
+    private ItemStack completeIcon;
     private String headType;
-    private int gainedXP;
-    private String sender;
-    private HeadsPlusChallengeDifficulty difficulty;
-    private String rewardString = null;
 
-    public Challenge(String configName, String mainName, String header, List<String> description, int requiredHeadAmount, HeadsPlusChallengeTypes challengeType, HPChallengeRewardTypes rewardType, Object rewardValue, int rewardItemAmount, String headType, int gainedXP, HeadsPlusChallengeDifficulty difficulty, String send, String... rewardString) {
+    public Challenge(String configName, String mainName, String header, List<String> description, int requiredHeadAmount, HeadsPlusChallengeTypes challengeType, String headType, Reward reward, int difficulty, ItemStack icon, ItemStack completeIcon) {
         this.configName = configName;
         this.mainName = mainName;
         this.header = header;
         this.description = description;
         this.requiredHeadAmount = requiredHeadAmount;
         this.challengeType = challengeType;
-        this.rewardType = rewardType;
-        this.rewardValue = rewardValue;
-        this.rewardItemAmount = rewardItemAmount;
         this.headType = headType;
-        this.gainedXP = gainedXP;
-        this.difficulty = difficulty;
-        this.sender = send;
-        if (rewardString.length > 0) {
-            this.rewardString = rewardString[0];
+        this.reward = reward;
+        if (reward.isMultiply() && reward.getType() == HPChallengeRewardTypes.ECO) {
+            reward.setMoney(reward.getMoney() * difficulty);
+            reward.setXp(reward.getXp() * difficulty);
         }
+        this.difficulty = difficulty;
+        this.icon = icon;
+        this.completeIcon = completeIcon;
     }
 
     public String getConfigName() {
@@ -71,19 +62,42 @@ public class Challenge {
     }
 
     public HPChallengeRewardTypes getRewardType() {
-        return rewardType;
+        return reward.getType();
     }
 
     public int getRewardItemAmount() {
-        return rewardItemAmount;
+        return reward.getItem().getAmount();
     }
 
     public List<String> getDescription() {
         return description;
     }
 
+    public ItemStack getIcon() {
+        return icon;
+    }
+
+    public ItemStack getCompleteIcon() {
+        return completeIcon;
+    }
+
     public Object getRewardValue() {
-        return rewardValue;
+        switch (reward.getType()) {
+            case GIVE_ITEM:
+                return reward.getItem();
+            case RUN_COMMAND:
+                return reward.getCommands();
+            case ADD_GROUP:
+            case REMOVE_GROUP:
+                return reward.getGroup();
+            case ECO:
+                return reward.getMoney();
+        }
+        return null;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
     }
 
     public String getChallengeHeader() {
@@ -94,20 +108,16 @@ public class Challenge {
         return mainName;
     }
 
+    public Reward getReward() {
+        return reward;
+    }
+
     public String getHeadType() {
         return headType;
     }
 
     public int getGainedXP() {
-        return gainedXP;
-    }
-
-    public HeadsPlusChallengeDifficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public String getRewardString() {
-        return rewardString;
+        return reward.getXp();
     }
 
     public boolean canComplete(Player p) throws SQLException {
@@ -142,11 +152,11 @@ public class Challenge {
             lore.add(ChatColor.translateAlternateColorCodes('&', st));
         }
         StringBuilder sb2 = new StringBuilder();
-        HPChallengeRewardTypes re = rewardType;
+        HPChallengeRewardTypes re = reward.getType();
         if (re != HPChallengeRewardTypes.RUN_COMMAND) {
             StringBuilder sb = new StringBuilder();
             sb.append(ChatColor.GOLD).append("Reward: ");
-
+            String rewardString = reward.getRewardString();
             if (rewardString != null) {
                 sb.append(ChatColor.GREEN).append(rewardString);
                 sb2.append(rewardString);
@@ -173,7 +183,7 @@ public class Challenge {
         }
 
         if (i != null) {
-            ItemStack is = hp.getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13);
+            ItemStack is = getCompleteIcon();
             ItemMeta im = is.getItemMeta();
             im.setDisplayName(ChatColor.translateAlternateColorCodes('&', getChallengeHeader()));
             lore.add(ChatColor.GOLD + "XP: " + ChatColor.GREEN + getGainedXP());
@@ -184,7 +194,7 @@ public class Challenge {
             i.setItem(slot, is);
         }
         player.addXp(getGainedXP());
-        reward(p);
+        reward.reward(p);
         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 pl.sendMessage(hp.getMessagesConfig().getString("challenge-complete")
@@ -196,72 +206,4 @@ public class Challenge {
         p.sendMessage(hp.getThemeColour(4) + LocaleManager.getLocale().getReward() + hp.getThemeColour(2) + sb2.toString());
         p.sendMessage(hp.getThemeColour(4) + "XP: " + hp.getThemeColour(2) + getGainedXP());
     }
-
-    private void reward(Player p) {
-        HPChallengeRewardTypes re = getRewardType();
-        HeadsPlus hp = HeadsPlus.getInstance();
-        HeadsPlusMessagesConfig hpc = hp.getMessagesConfig();
-        Permission perms = hp.getPermissions();
-
-        if (re == HPChallengeRewardTypes.ECO) {
-            if (hp.econ()) {
-                hp.getEconomy().depositPlayer(p, Double.valueOf(String.valueOf(getRewardValue())));
-            } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
-            }
-
-        } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
-            if (hp.econ()) {
-                if (!perms.playerInGroup(p, (String) getRewardValue())) {
-                    perms.playerAddGroup(p, (String) getRewardValue());
-                }
-            } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
-            }
-
-        } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
-            if (hp.econ()) {
-                if (perms.playerInGroup(p, (String) getRewardValue())) {
-                    perms.playerRemoveGroup(p, (String) getRewardValue());
-                }
-            } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
-            }
-        } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
-            try {
-                ItemStack is = new ItemStack(Material.valueOf(((String) getRewardValue()).toUpperCase()), getRewardItemAmount());
-                if (p.getInventory().firstEmpty() != -1) {
-                    p.getInventory().addItem(is);
-                }
-            } catch (IllegalArgumentException ex) {
-                Logger log = hp.getLogger();
-                log.severe("Couldn't give reward to " + p.getName() + "! Details:");
-                log.warning("Challenge name: " + getConfigName());
-                log.warning("Difficulty: " + getChallengeType().name());
-                log.warning("Item name: " + getRewardValue());
-                log.warning("Item amount: " + getRewardItemAmount());
-            }
-        } else if (re == HPChallengeRewardTypes.RUN_COMMAND) {
-            if (sender == null
-                    || sender.isEmpty()
-                    || sender.equalsIgnoreCase("player")) {
-                if (rewardValue instanceof List) {
-                    for (String str : (List<String>) rewardValue) {
-                        p.performCommand(String.valueOf(str).replaceAll("\\{player}", p.getName()));
-                    }
-                } else {
-                    p.performCommand(String.valueOf(getRewardValue()).replaceAll("\\{player}", p.getName()));
-                }
-            } else if (sender.equalsIgnoreCase("console")) {
-                if (rewardValue instanceof List) {
-                    for (String str : (List<String>) rewardValue) {
-                        Bukkit.dispatchCommand(hp.getServer().getConsoleSender(), String.valueOf(str).replaceAll("\\{player}", p.getName()));
-                    }
-                } else {
-                    Bukkit.dispatchCommand(hp.getServer().getConsoleSender(), String.valueOf(getRewardValue()).replaceAll("\\{player}", p.getName()));
-                }
-            }
-        }
-    }
-
 }

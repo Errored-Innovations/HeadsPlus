@@ -56,22 +56,26 @@ public interface Icon {
         new Stats(),
         new Air(),
         new HeadSection(),
-        new ChallengeSection.Easy(),
-        new ChallengeSection.EasyMedium(),
-        new ChallengeSection.Medium(),
-        new ChallengeSection.MediumHard(),
-        new ChallengeSection.Hard(),
-        new ChallengeSection.Tedious(),
-        new ChallengeSection.TediousPainful(),
-        new ChallengeSection.Painful(),
-        new ChallengeSection.PainfulDeadly(),
-        new ChallengeSection.Deadly()
+        new ChallengeSection()
     );
 
     static Icon getIconFromSingleLetter(String s) {
         for (Icon i : icons) {
-            if (i.getSingleLetter().equalsIgnoreCase(s) && !(i instanceof Air)) {
+            if (i.getSingleLetter().equalsIgnoreCase(s) || Arrays.asList(i.getExtraLetters()).contains(s) && !(i instanceof Air)) {
                 return i;
+            }
+        }
+        return null;
+    }
+
+    static Icon getIconFromSingleLetter(String s, boolean chal) {
+        for (Icon i : icons) {
+            if ((i.getSingleLetter().equalsIgnoreCase(s)
+                    || Arrays.asList(i.getExtraLetters()).contains(s))
+                    && !(i instanceof Air)) {
+                if (!(chal && i instanceof Stats)) {
+                    return i;
+                }
             }
         }
         return null;
@@ -91,4 +95,8 @@ public interface Icon {
     }
 
     String getSingleLetter();
+
+    default String[] getExtraLetters() {
+        return new String[0];
+    }
 }

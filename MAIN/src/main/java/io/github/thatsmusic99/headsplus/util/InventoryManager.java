@@ -432,19 +432,37 @@ public class InventoryManager {
     }
 
     public Inventory getChallengeMain() {
-        pages = plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":").length;
+        List<io.github.thatsmusic99.headsplus.api.ChallengeSection> challenges = plugin.getChallengeSections();
+        List<ItemStack> heads = new ArrayList<>();
+        int max = charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "S");
+        max += charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "E");
+        max += charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "R");
+        max += charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "Z");
+        max += charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "V");
+        max += charOccurance(plugin.getItems().getConfig().getString("inventories.challenges-menu.icons").split(":")[0], "J");
+        headsInSection = challenges.size();
+        pages = (int) Math.max(1, Math.ceil((double) headsInSection / max));
+        for (int i = currentPage * max, c = 0; i < headsInSection && c < max; ++i, ++c) {
+            io.github.thatsmusic99.headsplus.api.ChallengeSection ch = challenges.get(i);
+            ItemStack is = new ItemStack(ch.getMaterial(), 1, ch.getMaterialData());
+            is = plugin.getNBTManager().setChallengeSection(is, ch);
+            heads.add(is);
+        }
         inventory = new ChallengesMenu();
-        return inventory.build(player, null, "Challenges", currentPage, pages, headsInSection, false);
+        return inventory.build(player, heads, "Challenges", currentPage, pages, headsInSection, false);
     }
 
     public Inventory getChallenge() {
         // menuSection
-        List<Challenge> challenges = new ArrayList<>();
-        for (Challenge c : plugin.getChallenges()) {
-            if (c.getDifficulty().name().equalsIgnoreCase(menuSection)) {
-                challenges.add(c);
+        io.github.thatsmusic99.headsplus.api.ChallengeSection section = null;
+        for (io.github.thatsmusic99.headsplus.api.ChallengeSection section2 : plugin.getChallengeSections()) {
+            if (section2.getName().equalsIgnoreCase(menuSection)) {
+                section = section2;
+                break;
             }
         }
+        List<Challenge> challenges = section.getChallenges();
+
         List<ItemStack> heads = new ArrayList<>();
         int max = charOccurance(plugin.getItems().getConfig().getString("inventories.challenge-section.icons"), "C");
         headsInSection = challenges.size();
@@ -453,14 +471,13 @@ public class InventoryManager {
             Challenge ch = challenges.get(i);
             ItemStack is;
             if (ch.isComplete(player)) {
-                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge().getCompleteMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.complete-data-value"));
+                is = ch.getCompleteIcon();
             } else {
-                is = new ItemStack(new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge().getMaterial(), 1, (byte) plugin.getItems().getConfig().getInt("icons.challenge.data-value"));
+                is = ch.getIcon();
             }
             is = plugin.getNBTManager().setChallenge(is, ch);
             heads.add(is);
         }
-
         inventory = new ChallengeSection();
         return inventory.build(player, heads, menuSection, currentPage, pages, headsInSection, false);
     }

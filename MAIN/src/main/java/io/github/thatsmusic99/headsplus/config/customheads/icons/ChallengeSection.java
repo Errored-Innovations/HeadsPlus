@@ -1,17 +1,73 @@
 package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-public class ChallengeSection {
+public class ChallengeSection implements Icon {
+
+    @Override
+    public String getIconName() {
+        return "challenges-section";
+    }
+
+    @Override
+    public void onClick(Player p, InventoryManager im, InventoryClickEvent e) {
+        e.setCancelled(true);
+        String section = HeadsPlus.getInstance().getNBTManager().getChallengeSection(e.getCurrentItem());
+        SectionChangeEvent event = new SectionChangeEvent(p, im.getSection(), section);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            im.showChallengeSection(section);
+        }
+    }
+
+    @Override
+    public Material getDefaultMaterial() {
+        return HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 5).getType();
+    }
+
+    @Override
+    public List<String> getDefaultLore() {
+        return new ArrayList<>(Arrays.asList("{section-lore}", "&7{challenges} challenges"));
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{section-name}";
+    }
+
+    @Override
+    public String getSingleLetter() {
+        return "S";
+    }
+
+    @Override
+    public String[] getExtraLetters() {
+        String[] s = new String[10];
+        s[0] = "E";
+        s[1] = "R";
+        s[2] = "Z";
+        s[3] = "V";
+        s[4] = "J";
+        s[5] = "T";
+        s[6] = "I";
+        s[7] = "P";
+        s[8] = "O";
+        s[9] = "D";
+        return s;
+    }
 
     public static class Easy implements Icon {
 
