@@ -290,24 +290,21 @@ public class DebugFileCreator {
     private String getErrorHeader() {
         List<String> msgs = new ArrayList<>();
         msgs.add("Oh sorry, did I hurt you?");
-        msgs.add("Oopsies! I'm vewwy sowwy for dis.");
+        msgs.add("Oopsies! I'm vewwy sowwy for dis. ówò uwu");
         msgs.add("The plugin works well with a few exceptions, amirite?");
         msgs.add("Who put the milk in before the cereal?");
         msgs.add("Please don't put me on Santa's naughty list.");
-        msgs.add("Off with yo- no, the plugin's - head!");
+        msgs.add("Off with your head!");
         msgs.add("Ohhh, what does this button do???");
         msgs.add("Please, I'm only getting started.");
         msgs.add("Our highly trained cat is working on this.");
         msgs.add("Uh oh.");
         msgs.add("help ive fallen over and i can't get up i need @someone");
         msgs.add(":sobbing:");
-        msgs.add("SOMEBODY TOUCHA MY SPAGHEAD.");
-        msgs.add("Yeeeaaaah... Chris, what's happening? I'm gonna need you to fix this...");
         msgs.add("Keyboard not found. Press F1 to continue.");
-        msgs.add("Correct way of not doing this found. Good luck, soldier.");
+        msgs.add("Correct way of not doing this found. It's also the only way.");
         msgs.add("Sorry lad but your mouse was disconnected. Press \"OK\" to continue.");
         msgs.add("MEMORY ERROR - I forgot what I was meant to say.");
-        msgs.add("DEJA VU!!! I'VE JUST BEEN TO THIS PLACE BEFOOOOOOREEE HIGHER ON THE STREET and that's not a good thing.");
         msgs.add("Your plugin has ran into a problem and has to dump an error file. Error code: AGGHHHHHH.");
         msgs.add("System Error: Windows XP isn't an OS.");
         msgs.add("[INFO]: Task failed successfully.");
@@ -319,6 +316,20 @@ public class DebugFileCreator {
         msgs.add("I have a dream that I'LL ACTUALLY WORK.");
         msgs.add("I need a hug.");
         msgs.add("Y tho?");
+        msgs.add("Trans rights!");
+        msgs.add("9 out of 10 server owners recommend this plugin- oh wait...");
+        msgs.add("VIDEO GAMES CAUSE VIOLENCE");
+        msgs.add("Ah, okay.");
+        msgs.add("yikes");
+        msgs.add("Error, the plugin dev: \"You're weak.\" Plugin error: \"I'm you.\"");
+        msgs.add("Now this is an Avengers threat level...");
+        msgs.add("Creeper? Aww man...");
+        msgs.add("My server runs on win 10");
+        msgs.add("Rumour has it you'll find a human version of this plugin where the cat girls are in area 51");
+        msgs.add("I'm sorry, I tried :(");
+        msgs.add("YOU'RE breathtaking!");
+        msgs.add("Ilysm Nie <3");
+        msgs.add("VILLAGER CHEST. VILLAGER CHEST. VILLAGER CHEST.");
         int random = new Random().nextInt(msgs.size());
         return msgs.get(random);
     }
