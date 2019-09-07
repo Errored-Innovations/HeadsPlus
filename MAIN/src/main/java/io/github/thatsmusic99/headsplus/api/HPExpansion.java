@@ -103,7 +103,7 @@ public class HPExpansion extends PlaceholderExpansion {
             // %headsplus_top_CATEGORY_ENTITY_NUMBER_player%
             // %headsplus_top_CATEGORY_ENTITY_NUMBER_score%
             String[] args = identifier.split("_");
-            String category = args[1];
+            String category = args[1].toLowerCase();
             String entity = getFixedString(args[2], false);
             int position = Integer.valueOf(args[3]);
             String option = args[4];
