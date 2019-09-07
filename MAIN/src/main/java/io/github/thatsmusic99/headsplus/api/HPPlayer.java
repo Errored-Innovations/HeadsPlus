@@ -51,8 +51,8 @@ public class HPPlayer {
         }
         if (hp.usingLevels()) {
             if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
-                for (int i = levels.size() - 1; i > 0; i--) {
-                    if (levels.get(i).getRequiredXP() <= getXp()) {
+                for (int i = levels.size(); i > 0; i--) {
+                    if (levels.get(i).getRequiredXP() <= xp) {
                         level = levels.get(i);
                         scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
                         try {
@@ -64,7 +64,7 @@ public class HPPlayer {
                     }
                 }
             } else {
-                for (int i = levels.size() - 1; i > 0; i--) {
+                for (int i = levels.size(); i > 0; i--) {
                     if (levels.get(i).getConfigName().equals(scores.getLevel(p.getUniqueId().toString()))) {
                         level = levels.get(i);
                         try {
