@@ -10,7 +10,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.config.customheads.icons.Nav;
 import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -20,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.Collections;

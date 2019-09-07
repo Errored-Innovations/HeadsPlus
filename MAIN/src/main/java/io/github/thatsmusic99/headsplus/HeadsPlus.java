@@ -7,6 +7,8 @@ import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.Head;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
+import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
+import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
@@ -63,7 +65,6 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigHeads hpch;
     private HeadsPlusConfigCustomHeads hpchx;
     private DeathEvents de;
-    private HeadsPlusLeaderboards hplb;
     private HeadsPlusCrafting hpcr;
     private MySQLAPI mySQLAPI;
     private HeadsPlusChallenges hpchl;
@@ -428,9 +429,6 @@ public class HeadsPlus extends JavaPlugin {
         debug("- Instance for HeadsPlusCrafting created!", 3);
         de = new DeathEvents();
         debug("- Instance for DeathEvents created!", 3);
-        hplb = new HeadsPlusLeaderboards();
-        cs.add(hplb);
-        debug("- Instance for HeadsPlusLeaderboards created!", 3);
         hpchl = new HeadsPlusChallenges();
         cs.add(hpchl);
         debug("- Instance for HeadsPlusChallenges created!", 3);
@@ -681,10 +679,6 @@ public class HeadsPlus extends JavaPlugin {
         return mySQLAPI;
     }
 
-    public HeadsPlusLeaderboards getLeaderboardsConfig() {
-        return hplb;
-    }
-
     public NMSManager getNMS() {
         return nms;
     }
@@ -823,7 +817,7 @@ public class HeadsPlus extends JavaPlugin {
         int delimLen = delimiters == null ? -1 : delimiters.length;
         if (str != null && str.length() != 0 && delimLen != 0) {
             int strLen = str.length();
-            StringBuffer buffer = new StringBuffer(strLen);
+            StringBuilder buffer = new StringBuilder(strLen);
             boolean capitalizeNext = true;
 
             for(int i = 0; i < strLen; ++i) {

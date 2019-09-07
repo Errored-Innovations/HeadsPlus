@@ -492,8 +492,8 @@ public class DeathEvents implements Listener {
             } 
         }
         // Whitelist checks
-        if (c.getWhitelist().enabled) {
-	        if (!c.getWhitelist().list.contains(e.getWorld().getName())) {
+        if (c.getWorldWhitelist().enabled) {
+	        if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
 	            if (e.getKiller() != null) {
 	                return false;
                 } else if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
@@ -502,8 +502,8 @@ public class DeathEvents implements Listener {
             }
         }
         // Blacklist checks
-        if (c.getBlacklist().enabled) {
-            if (c.getBlacklist().list.contains(e.getWorld().getName())) {
+        if (c.getWorldBlacklist().enabled) {
+            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
                 if (e.getKiller() != null) {
                     if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
                         return false;

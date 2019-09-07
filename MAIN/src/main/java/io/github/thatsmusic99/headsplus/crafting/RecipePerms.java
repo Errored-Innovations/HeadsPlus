@@ -30,13 +30,13 @@ public class RecipePerms implements Listener {
 
                 if (c.getPerks().craft_heads) {
                     if (player.hasPermission("headsplus.craft")) {
-                        if (c.getBlacklist().enabled) {
-                            if (!c.getBlacklist().list.contains(player.getWorld().getName())
+                        if (c.getWorldBlacklist().enabled) {
+                            if (!c.getWorldBlacklist().list.contains(player.getWorld().getName())
                                     || player.hasPermission("headsplus.bypass.blacklistw")) {
                                 if (e.getCurrentItem() != null) {
                                     if (e.getCurrentItem().getItemMeta() instanceof SkullMeta) {
                                         if (!hapi.getSkullType(e.getCurrentItem()).isEmpty()) {
-                                            if (c.getWhitelist().list.contains(player.getWorld().getName())) {
+                                            if (c.getWorldWhitelist().list.contains(player.getWorld().getName())) {
                                                 fireEvent(e);
                                                 return;
 
@@ -45,7 +45,7 @@ public class RecipePerms implements Listener {
                                                     fireEvent(e);
                                                 } catch (NullPointerException | ClassCastException ignored) {
                                                 }
-                                            } else if (!c.getWhitelist().enabled) {
+                                            } else if (!c.getWorldWhitelist().enabled) {
                                                 fireEvent(e);
                                                 return;
                                             }

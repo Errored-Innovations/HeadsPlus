@@ -161,11 +161,11 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         return perks;
     }
 
-    public SelectorList getBlacklist() {
+    public SelectorList getWorldBlacklist() {
         return blacklist_worlds;
     }
 
-    public SelectorList getWhitelist() {
+    public SelectorList getWorldWhitelist() {
         return whitelist_worlds;
     }
 

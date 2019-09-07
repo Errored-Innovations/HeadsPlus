@@ -287,7 +287,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
     private String numberToRomanNumeral(int in) {
         String no = String.valueOf(in);
         int length = no.length();
-        String numeral = "";
+        StringBuilder numeral = new StringBuilder();
         int pos = 0;
         for (int i = length - 1; i > -1; i--) {
             int amount;
@@ -300,25 +300,25 @@ public class HeadsPlusChallenges extends ConfigSettings {
                     amount = Integer.parseInt(String.valueOf(no.charAt(i)));
                     if (pos == 0) {
                         for (int j = 0; j < amount; j++) {
-                            numeral = "I" + numeral;
+                            numeral.insert(0, "I");
                         }
                     } else if (pos == 1) {
                         for (int j = 0; j < amount; j++) {
-                            numeral = "X" + numeral;
+                            numeral.insert(0, "X");
                         }
                     } else {
                         for (int j = 0; j < amount; j++) {
-                            numeral = "C" + numeral;
+                            numeral.insert(0, "C");
                         }
                     }
                     break;
                 case '4':
                     if (pos == 0) {
-                        numeral = "IV" + numeral;
+                        numeral.insert(0, "IV");
                     } else if (pos == 1) {
-                        numeral = "XL" + numeral;
+                        numeral.insert(0, "XL");
                     } else {
-                        numeral = "CD" + numeral;
+                        numeral.insert(0, "CD");
                     }
                     break;
                 case '5':
@@ -326,38 +326,38 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 case '7':
                 case '8':
                     amount = Integer.parseInt(String.valueOf(no.charAt(i))) % 5;
-                    String fullNumber;
+                    StringBuilder fullNumber;
                     if (pos == 0) {
-                        fullNumber = "V";
+                        fullNumber = new StringBuilder("V");
                         for (int j = 0; j < amount; j++) {
-                            fullNumber += "I";
+                            fullNumber.append("I");
                         }
                     } else if (pos == 1) {
-                        fullNumber = "L";
+                        fullNumber = new StringBuilder("L");
                         for (int j = 0; j < amount; j++) {
-                            fullNumber += "X";
+                            fullNumber.append("X");
                         }
                     } else {
-                        fullNumber = "D";
+                        fullNumber = new StringBuilder("D");
                         for (int j = 0; j < amount; j++) {
-                            fullNumber += "C";
+                            fullNumber.append("C");
                         }
                     }
-                    numeral = fullNumber + numeral;
+                    numeral.insert(0, fullNumber.toString());
                     break;
                 case '9':
                     if (pos == 0) {
-                        numeral = "IX" + numeral;
+                        numeral.insert(0, "IX");
                     } else if (pos == 1) {
-                        numeral = "XC" + numeral;
+                        numeral.insert(0, "XC");
                     } else {
-                        numeral = "CI" + numeral;
+                        numeral.insert(0, "CI");
                     }
                     break;
 
             }
             pos++;
         }
-        return numeral;
+        return numeral.toString();
     }
 }
