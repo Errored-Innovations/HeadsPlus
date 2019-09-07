@@ -2,12 +2,9 @@ package io.github.thatsmusic99.headsplus.util;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusLeaderboards;
-import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.*;
 import java.util.*;
@@ -15,20 +12,10 @@ import java.util.*;
 
 public class MySQLAPI {
 
-    private final HeadsPlusLeaderboards hpl;
-    private final HeadsPlusChallenges hpc;
     private final HeadsPlus hp;
 
     public MySQLAPI() {
         hp = HeadsPlus.getInstance();
-        hpl = hp.getLeaderboardsConfig();
-        hpc = hp.getChallengeConfig();
-        if (hpc != null) {
-            if (hpc.getConfig().get("player-data") instanceof ConfigurationSection) {
-                hp.getLogger().info("Old storage detected! Transfering data (this will be saved when the server stops)...");
-                transferScoresToJSON();
-            }
-        }
     }
 
     private void addNewPlayerValue(OfflinePlayer p, String section, String database, int shAmount) throws SQLException {
@@ -256,62 +243,4 @@ public class MySQLAPI {
         return sortedMap;
     }
 
-    private void transferScoresToJSON() {
-        PlayerScores scores = hp.getScores();
-        for (String uuid : hpc.getConfig().getConfigurationSection("player-data").getKeys(false)) {
-            if (!hp.isConnectedToMySQLDatabase()) {
-                for (String database : hpc.getConfig().getConfigurationSection("player-data." + uuid).getKeys(false)) {
-                    if (database.equalsIgnoreCase("sellhead") || database.equalsIgnoreCase("crafting")) {
-                        for (String section : hpc.getConfig().getConfigurationSection("player-data." + uuid + "." + database).getKeys(false)) {
-
-                            scores.setPlayerTotal(uuid, section, database,
-                                    hpc.getConfig().getInt("player-data." + uuid + "." + database + "." + section));
-
-
-                        }
-                    }
-                }
-
-            }
-            scores.setCompletedChallenges(uuid, hpc.getConfig().getStringList("player-data." + uuid + ".completed-challenges"));
-            scores.setXp(uuid, hpc.getConfig().getInt("player-data." + uuid + ".profile.xp"));
-            scores.setLevel(uuid, hpc.getConfig().getString("player-data." + uuid + ".profile.level"));
-        }
-        if (!hp.isConnectedToMySQLDatabase()) {
-            try {
-                for (String uuid : hpl.getConfig().getConfigurationSection("player-data").getKeys(false)) {
-                    for (String section : hpl.getConfig().getConfigurationSection("player-data." + uuid).getKeys(false)) {
-                        scores.setPlayerTotal(uuid, section, "headspluslb",
-                                hpl.getConfig().getInt("player-data." + uuid + "." + section));
-                    }
-                }
-                for (String section : hpl.getConfig().getConfigurationSection("server-total").getKeys(false)) {
-                    scores.setPlayerTotal("server-total", section, "headspluslb",
-                            hpl.getConfig().getInt("server-total." + section));
-                }
-                for (String database : hpc.getConfig().getConfigurationSection("server-total").getKeys(false)) {
-                    for (String section : hpc.getConfig().getConfigurationSection("server-total." +  database).getKeys(false)) {
-                        scores.setPlayerTotal("server-total", section, database,
-                                hpc.getConfig().getInt("server-total." + database + section));
-                    }
-                }
-            } catch (NullPointerException ex) {
-                hp.getLogger().warning("leaderboards.yml wasn't found - has it already been deleted..?");
-            }
-
-        }
-
-        try {
-            hpl.getConfig().set("player-data", null);
-            hpl.getConfig().set("server-total", null);
-            hpl.selfDestruct();
-        } catch (NullPointerException ignored) {
-
-        }
-
-        hpc.getConfig().set("player-data", null);
-        hpc.getConfig().set("server-total", null);
-        hpc.getConfig().options().copyDefaults(true);
-        hpc.save();
-    }
 }

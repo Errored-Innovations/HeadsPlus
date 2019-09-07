@@ -98,16 +98,6 @@ public class HeadsPlusAPI {
         return hp.getNBTManager().getType(is);
     }
 
-    @Deprecated
-    public int getPlayerInLeaderboards(OfflinePlayer p, String section) throws SQLException {
-        return hp.getLeaderboardsConfig().getScores(section).get(p);
-    }
-
-    @Deprecated
-    public LinkedHashMap<OfflinePlayer, Integer> getScores(String section) throws SQLException {
-        return hp.getLeaderboardsConfig().getScores(section);
-    }
-
     public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) throws SQLException {
         try {
             return hp.getMySQLAPI().getScores(section, database).get(p);
