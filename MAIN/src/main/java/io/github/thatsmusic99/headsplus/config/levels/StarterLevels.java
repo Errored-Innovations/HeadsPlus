@@ -23,7 +23,7 @@ public class StarterLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -46,7 +46,7 @@ public class StarterLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -69,7 +69,7 @@ public class StarterLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 }

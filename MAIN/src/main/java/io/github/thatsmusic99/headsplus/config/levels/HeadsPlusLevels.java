@@ -29,15 +29,12 @@ public class HeadsPlusLevels extends ConfigSettings {
     @Override
     public void reloadC(boolean a) {
         addDefLevels();
-        boolean n = false;
+
         if (configF == null || !configF.exists()) {
-            n = true;
             configF = new File(HeadsPlus.getInstance().getDataFolder(), "levels.yml");
         }
         config = YamlConfiguration.loadConfiguration(configF);
-        if (n) {
-            load(false);
-        }
+        load(false);
         getConfig().options().copyDefaults(true);
         save();
         loadLevels();
@@ -71,7 +68,6 @@ public class HeadsPlusLevels extends ConfigSettings {
 
     @Override
     public void load(boolean n) {
-        getConfig().addDefault("version", 0.1);
         if (getConfig().getDouble("version") < version) {
 
             getConfig().set("version", 0.1);

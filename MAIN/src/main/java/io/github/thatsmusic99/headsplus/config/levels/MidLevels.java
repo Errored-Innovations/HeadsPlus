@@ -23,7 +23,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -46,7 +46,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -69,7 +69,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -92,7 +92,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -115,7 +115,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -138,7 +138,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -161,7 +161,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -184,7 +184,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 
@@ -207,7 +207,7 @@ public class MidLevels {
 
         @Override
         public double getAddedVersion() {
-            return 0.0;
+            return 0.1;
         }
     }
 }
