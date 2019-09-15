@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -100,14 +101,14 @@ public class HeadsPlusAPI {
 
     public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) throws SQLException {
         try {
-            return hp.getMySQLAPI().getScores(section, database).get(p);
+            return LeaderboardsCache.getType(section, database).get(p);
         } catch (NullPointerException ex) {
             return -1;
         }
     }
 
     public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) throws SQLException {
-        return hp.getMySQLAPI().getScores(section, database);
+        return LeaderboardsCache.getType(section, database);
     }
 
     public List<Challenge> getChallenges() {

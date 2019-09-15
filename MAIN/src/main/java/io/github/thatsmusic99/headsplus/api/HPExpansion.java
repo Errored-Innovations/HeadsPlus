@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
@@ -108,9 +109,9 @@ public class HPExpansion extends PlaceholderExpansion {
             int position = Integer.valueOf(args[3]);
             String option = args[4];
             try {
-                List<OfflinePlayer> players = new ArrayList<>(HeadsPlus.getInstance().getMySQLAPI().getScores(entity, category).keySet());
+                List<OfflinePlayer> players = new ArrayList<>(LeaderboardsCache.getType(entity, category).keySet());
                 Iterator<OfflinePlayer> playerIterator = players.iterator();
-                List<Integer> scores = new ArrayList<>(HeadsPlus.getInstance().getMySQLAPI().getScores(entity, category).values());
+                List<Integer> scores = new ArrayList<>(LeaderboardsCache.getType(entity, category).values());
                 while (playerIterator.hasNext()) {
                     OfflinePlayer p = playerIterator.next();
                     if (p.getName() == null || p.getName().equalsIgnoreCase("null")) {

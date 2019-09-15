@@ -200,6 +200,7 @@ public class MySQLAPI {
                 }
             }
             hs = sortHashMapByValues(hs);
+            new LeaderboardsCache(database + "_" + section, hs);
             return hs;
         } else {
             PlayerScores scores = hp.getScores();
@@ -211,6 +212,7 @@ public class MySQLAPI {
                 hs.put(p, i);
             }
             hs = sortHashMapByValues(hs);
+            new LeaderboardsCache(database + "_" + section, hs);
             return hs;
 
         }

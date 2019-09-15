@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import mkremins.fanciful.FancyMessage;
@@ -333,7 +334,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
                 HeadsPlusConfigTextMenu ht = hp.getMenus();
-                ph = new PagedHashmaps<>(hp.getMySQLAPI().getScores(section, database), ht.getConfig().getInt("leaderboard.lines-per-page"));
+                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database), ht.getConfig().getInt("leaderboard.lines-per-page"));
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
