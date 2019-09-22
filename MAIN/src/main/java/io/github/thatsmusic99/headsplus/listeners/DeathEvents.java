@@ -453,11 +453,16 @@ public class DeathEvents implements Listener {
     }
 
     private boolean checkForMythicMob(HeadsPlus hp, Entity e) {
-	    if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
-            if (hp.getServer().getPluginManager().getPlugin("MythicMobs") != null) {
-                return MythicMobs.inst().getMobManager().isActiveMob(e.getUniqueId());
+        try {
+            if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
+                if (hp.getServer().getPluginManager().getPlugin("MythicMobs") != null) {
+                    return MythicMobs.inst().getMobManager().isActiveMob(e.getUniqueId());
+                }
             }
+        } catch (NoClassDefFoundError ignored) {
+
         }
+
 
         return false;
     }
