@@ -100,10 +100,11 @@ public class MySQLAPI {
             try {
 
                 Connection c = hp.getConnection();
-                Statement s = c.createStatement();
+                PreparedStatement s = c.prepareStatement("SELECT " + section + ", total FROM `" + database + "` WHERE uuid=?");
+                s.setString(1, uuid);
                 // Update player
                 ResultSet rs;
-                rs = s.executeQuery("SELECT " + section + ", total FROM `" + database + "` WHERE uuid='" + uuid + "'");
+                rs = s.executeQuery();
                 int val;
                 int val2;
                 if (rs.next()) {
@@ -115,10 +116,12 @@ public class MySQLAPI {
                 }
                 val += shAmount;
                 val2 += shAmount;
-                s.executeUpdate("UPDATE `" + database + "` SET `" + section + "`='" + val + "', `total`='" + val2 + "' WHERE `uuid`='" + uuid + "'");
+                s = c.prepareStatement("UPDATE `" + database + "` SET `" + section + "`='" + val + "', `total`='" + val2 + "' WHERE `uuid`='" + uuid + "'");
+                s.executeUpdate();
                 // Update server total
                 ResultSet rs2;
-                rs2 = s.executeQuery("SELECT " + section + ", total FROM `" + database + "` WHERE `uuid`='server-total'");
+                s = c.prepareStatement("SELECT " + section + ", total FROM `" + database + "` WHERE `uuid`='server-total'");
+                rs2 = s.executeQuery();
                 int val3 = 0;
                 int val4 = 0;
                 if (rs2.next()) {
@@ -170,7 +173,6 @@ public class MySQLAPI {
         if (hp.isConnectedToMySQLDatabase() && !transfer) {
             LinkedHashMap<OfflinePlayer, Integer> hs = new LinkedHashMap<>();
             Connection c = hp.getConnection();
-            Statement s = c.createStatement();
             switch (database) {
                 case "hunting":
                     database = "headspluslb";
@@ -182,7 +184,8 @@ public class MySQLAPI {
                     database = "headspluscraft";
                     break;
             }
-            ResultSet rs = s.executeQuery("SELECT uuid, " + section + " FROM `" + database + "` ORDER BY id");
+            PreparedStatement s = c.prepareStatement("SELECT uuid, " + section + " FROM `" + database + "` ORDER BY id");
+            ResultSet rs = s.executeQuery();
             while (rs.next()) {
 
                 boolean player = false;
@@ -200,6 +203,17 @@ public class MySQLAPI {
                 }
             }
             hs = sortHashMapByValues(hs);
+            switch (database) {
+                case "headspluslb":
+                    database = "hunting";
+                    break;
+                case "headsplussh":
+                    database = "selling";
+                    break;
+                case "headspluscraft":
+                    database = "crafting";
+                    break;
+            }
             new LeaderboardsCache(database + "_" + section, hs);
             return hs;
         } else {

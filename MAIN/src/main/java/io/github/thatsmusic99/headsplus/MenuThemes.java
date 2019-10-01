@@ -12,7 +12,8 @@ public enum MenuThemes {
     OCEAN("GREEN", "AQUA", "WHITE", "GREEN"),
     BEEHIVE("GRAY", "GOLD", "GOLD", "GRAY"),
     NETHER("DARK_RED", "GOLD", "RED", "DARK_RED"),
-    SAPPHIRE("DARK_BLUE", "BLUE", "DARK_AQUA", "DARK_BLUE");
+    SAPPHIRE("DARK_BLUE", "BLUE", "DARK_AQUA", "DARK_BLUE"),
+    THE_CORRUPT("BLACK", "PURPLE", "GRAY", "LIGHT_PURPLE");
 
     public final String c1;
     public final String c2;

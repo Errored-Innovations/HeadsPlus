@@ -16,7 +16,6 @@ public class LeaderboardsCache {
     public LeaderboardsCache(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
         if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
             cache.put(type, contents);
-
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -28,11 +27,26 @@ public class LeaderboardsCache {
 
     }
 
-    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database) throws SQLException {
+    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async) throws SQLException {
         if (cache.containsKey(database + "_" + section)) {
             return cache.get(database + "_" + section);
         } else {
-            return hp.getMySQLAPI().getScores(section, database);
+            if (!async) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            hp.getMySQLAPI().getScores(section, database);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.runTaskAsynchronously(HeadsPlus.getInstance());
+                return null;
+            } else {
+                return hp.getMySQLAPI().getScores(section, database);
+            }
+
         }
     }
 

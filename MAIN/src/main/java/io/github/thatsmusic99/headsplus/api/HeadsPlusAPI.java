@@ -101,14 +101,14 @@ public class HeadsPlusAPI {
 
     public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) throws SQLException {
         try {
-            return LeaderboardsCache.getType(section, database).get(p);
+            return LeaderboardsCache.getType(section, database, false).get(p);
         } catch (NullPointerException ex) {
             return -1;
         }
     }
 
     public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) throws SQLException {
-        return LeaderboardsCache.getType(section, database);
+        return LeaderboardsCache.getType(section, database, false);
     }
 
     public List<Challenge> getChallenges() {

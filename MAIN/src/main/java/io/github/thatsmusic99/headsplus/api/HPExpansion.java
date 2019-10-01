@@ -6,11 +6,14 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class HPExpansion extends PlaceholderExpansion {
 
@@ -99,6 +102,8 @@ public class HPExpansion extends PlaceholderExpansion {
             }
         }
 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
         if (identifier.startsWith("top")) {
             // Format:
             // %headsplus_top_CATEGORY_ENTITY_NUMBER_player%
@@ -109,9 +114,13 @@ public class HPExpansion extends PlaceholderExpansion {
             int position = Integer.valueOf(args[3]);
             String option = args[4];
             try {
-                List<OfflinePlayer> players = new ArrayList<>(LeaderboardsCache.getType(entity, category).keySet());
+                LinkedHashMap<OfflinePlayer, Integer> list = LeaderboardsCache.getType(entity, category, false);
+                if (list == null) {
+                    return "0";
+                }
+                List<OfflinePlayer> players = new ArrayList<>(list.keySet());
                 Iterator<OfflinePlayer> playerIterator = players.iterator();
-                List<Integer> scores = new ArrayList<>(LeaderboardsCache.getType(entity, category).values());
+                List<Integer> scores = new ArrayList<>(list.values());
                 while (playerIterator.hasNext()) {
                     OfflinePlayer p = playerIterator.next();
                     if (p.getName() == null || p.getName().equalsIgnoreCase("null")) {
@@ -119,7 +128,6 @@ public class HPExpansion extends PlaceholderExpansion {
                         playerIterator.remove();
                     }
                 }
-
                 if (option.equalsIgnoreCase("score")) {
                     return String.valueOf(scores.get(position));
                 } else {

@@ -334,7 +334,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
                 HeadsPlusConfigTextMenu ht = hp.getMenus();
-                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database), ht.getConfig().getInt("leaderboard.lines-per-page"));
+                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database, true), ht.getConfig().getInt("leaderboard.lines-per-page"));
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
