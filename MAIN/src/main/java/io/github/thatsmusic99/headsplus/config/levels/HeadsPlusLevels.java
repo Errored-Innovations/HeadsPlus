@@ -44,24 +44,28 @@ public class HeadsPlusLevels extends ConfigSettings {
         HeadsPlus hp = HeadsPlus.getInstance();
         hp.getLevels().clear();
         if (hp.usingLevels()) {
-            for (String s : getConfig().getConfigurationSection("levels").getKeys(false)) {
-                String dn = getConfig().getString("levels." + s + ".display-name");
-                double av = getConfig().getDouble("levels." + s + ".added-version");
-                int rxp = getConfig().getInt("levels." + s + ".required-xp");
-                int h = getConfig().getInt("levels." + s + ".hierachy");
-                boolean e = getConfig().getBoolean("levels." + s + ".rewards.enabled", false);
-                HPChallengeRewardTypes reward;
-                try {
+            try {
+                for (String s : getConfig().getConfigurationSection("levels").getKeys(false)) {
+                    String dn = getConfig().getString("levels." + s + ".display-name");
+                    double av = getConfig().getDouble("levels." + s + ".added-version");
+                    int rxp = getConfig().getInt("levels." + s + ".required-xp");
+                    int h = getConfig().getInt("levels." + s + ".hierachy");
+                    boolean e = getConfig().getBoolean("levels." + s + ".rewards.enabled", false);
+                    HPChallengeRewardTypes reward;
+                    try {
 
-                    reward = HPChallengeRewardTypes.valueOf(getConfig().getString("levels." + s + ".rewards.reward-type").toUpperCase());
-                } catch (Exception ex) {
-                    continue;
+                        reward = HPChallengeRewardTypes.valueOf(getConfig().getString("levels." + s + ".rewards.reward-type").toUpperCase());
+                    } catch (Exception ex) {
+                        continue;
+                    }
+                    Object rewardVal = getConfig().get("levels." + s + ".rewards.reward-value");
+                    int items = getConfig().getInt("levels." + s + ".rewards.item-amount");
+                    String sender = getConfig().getString("levels." + s + ".rewards.command-sender");
+                    CLevel c = new CLevel(s, dn, rxp, av, e, reward, rewardVal, items, sender);
+                    hp.getLevels().put(h, c);
                 }
-                Object rewardVal = getConfig().get("levels." + s + ".rewards.reward-value");
-                int items = getConfig().getInt("levels." + s + ".rewards.item-amount");
-                String sender = getConfig().getString("levels." + s + ".rewards.command-sender");
-                CLevel c = new CLevel(s, dn, rxp, av, e, reward, rewardVal, items, sender);
-                hp.getLevels().put(h, c);
+            } catch (NullPointerException ex) {
+                HeadsPlus.getInstance().getLogger().warning("Levels didn't start up correctly! There is a sample file at https://github.com/Thatsmusic99/HeadsPlus/blob/sample-configs/levels.yml you can upload into the data folder to stop this message.");
             }
         }
     }
