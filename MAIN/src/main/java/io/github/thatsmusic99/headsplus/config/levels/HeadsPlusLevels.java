@@ -65,7 +65,7 @@ public class HeadsPlusLevels extends ConfigSettings {
                     hp.getLevels().put(h, c);
                 }
             } catch (NullPointerException ex) {
-                HeadsPlus.getInstance().getLogger().warning("Levels didn't start up correctly! There is a sample file at https://github.com/Thatsmusic99/HeadsPlus/blob/sample-configs/levels.yml you can upload into the data folder to stop this message.");
+                HeadsPlus.getInstance().getLogger().warning("Levels didn't start up correctly! There is a sample file at https://github.com/Thatsmusic99/HeadsPlus/blob/master/sample-configs/levels.yml you can upload into the data folder to stop this message.");
             }
         }
     }
