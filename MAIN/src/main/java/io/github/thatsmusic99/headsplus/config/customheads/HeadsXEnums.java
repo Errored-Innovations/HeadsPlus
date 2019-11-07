@@ -336,23 +336,7 @@ public enum HeadsXEnums {
     ZOMBIEHORSE("zombiehorse", "&8[&aZombie Horse&8]", HPStrings.wood + "ZDIyOTUwZjJkM2VmZGRiMThkZTg2ZjhmNTVhYzUxOGRjZTczZjEyYTZlMGY4NjM2ZDU1MWQ4ZWI0ODBjZWVjIn19fQ", "mobs", 2.6),
     ZOMBIEVILLAGER("zombievillager", "&8[&aZombie Villager&8]", HPStrings.wood + "ZTVlMDhhODc3NmMxNzY0YzNmZTZhNmRkZDQxMmRmY2I4N2Y0MTMzMWRhZDQ3OWFjOTZjMjFkZjRiZjNhYzg5YyJ9fX0", "mobs", 2.6),
     GOLDEN_CHECK("golden_check", "&8[&eGolden Check&8]", HPStrings.wood + "NjFmZTc0ZjY0YWJkMWE4MTQ3YzEzNzBmY2YzMTIyOTI4MDFiZjRjMzcxZjE1NjRkODkwNGRjMWI3YmU2NGRjOCJ9fX0", "alphabet", 2.7),
-    RED_EXCLAMATION_MARK("red_exclamation_mark", "&8[&cRed Exclamation Mark&8]", HPStrings.wood + "ZTdmOWM2ZmVmMmFkOTZiM2E1NDY1NjQyYmE5NTQ2NzFiZTFjNDU0M2UyZTI1ZTU2YWVmMGE0N2Q1ZjFmIn19fQ", "alphabet", 2.7),
-    RAVEN("raven", "&8[&7Raven&8]", HPStrings.wood + "ZGVjNTE3MTdhMTEyNTBiMGIxOTQ2ZmE1YTc2MWY4ZTk3YzJmNjdkMjg3MWM0YTg5YTgyYjliZWE1N2VjNyJ9fX0", "halloween", 2.8),
-    URN("urn", "&8[&7Urn&8]", HPStrings.wood + "M2I2ZDVmYWVlZmQxYjI5OTJjNmVmNGQ1OGRkYTRiZTkyMzc2MTFiZjk4MzFjNGU0OTg3ZmVlYmQ4Njg3ZWJkNSJ9fX0", "halloween", 2.8),
-    JAR_OF_BLOOD("jar_of_blood", "&8[&4Jar of Blood&8]", HPStrings.wood + "ZWJmMzQ3NTI0N2VkMTNkN2VlNjQwODFhMmMwNzFkNjJkMzc4ZTY3ZjljNTM5NjQyNDRkYTVjZDNlOGNhY2FmIn19fQ", "halloween", 2.8),
-    S_BOOKS("satanic_books", "&8[&7Books&8]", HPStrings.wood + "ZGM2ODU5MWI5MTE5OGU2ZTEzODQ4NjBjZjczMTZmMjllMDM4YjY5ZGVhOTg0YzczZjZjMWNiOTUwYTE0ZCJ9fX0", "halloween", 2.8),
-    TOMBSTONE("tombstone", "&8[&7Tombstone&8]", HPStrings.wood + "N2YzYmU2NDAxNjczNmJlNDRiMWQ1YTVmM2FkYWI2ZDRjMDQzNzgyYzE3ZGQyOWMzYjhjNGNiNmU3M2Y5ODk4In19fQ", "halloween", 2.8),
-    DEMON("demon", "&8[&cDemon&8]", HPStrings.wood + "MWMyOTc4NDRhNzIyY2M4MGM3NDcxNTJiMjk2Y2Q3NTEzMzhkMzYzMjcxOTQxZmI3ZmIzZWJiOTNjOWFjZjI3In19fQ", "halloween", 2.8),
-    CLOWN("clown", "&8[&eClown&8]", HPStrings.wood + "ODZkYmMxZGViYzU3NDM4YTVkZTRiYTkxNTE1MTM4MmFiYzNkOGYxMzE4ZTJhMzVlNzhkZmIzMGYwNGJjNDY3In19fQ", "halloween", 2.8),
-    INSECT("insect", "&8[&aInsect&8]", HPStrings.wood + "NWE0MzI1NTMxNzFiMTE1OGRiNDViZTNhNzcyZDk5MTRkZjg1YmNlZWUxNThhZDFlNTZlOTg5ODdiYTJjMTUzOCJ9fX0", "halloween", 2.8),
-    SWAMP_MONSTER("swamp_monster", "&8[&aSwamp monster&8]", HPStrings.wood + "ZGY3ZWRlOWM4OGYxYzMzYzk1NGJiYzgxYzhkYTg3MWNhYmZjYzIzZDU1ZjhiNDkzYTU4OWY4MjM5ZDZjMzkifX19", "halloween", 2.8),
-    GHOST("ghost", "&8[&fGhost&8]", HPStrings.wood + "YWJlZGI4ZDRiMDZlZWI5NzllZTUxNWY3NzhmMzFiM2RlZWY5MmZiNTgxN2YzNDUyZjUxZmM1OGQ0ODEzNCJ9fX0", "halloween", 2.8),
-    MUMMY("mummy", "&8[&fMummy&8]", HPStrings.wood + "M2U5MWU5NTgyMmZlOThjYzVhNTY1OGU4MjRiMWI4Y2YxNGQ0ZGU5MmYwZTFhZjI0ODE1MzcyNDM1YzllYWI2In19fQ", "halloween", 2.8),
-    VAMPIRE("vampire", "&8[&7Vampire&8]", HPStrings.wood + "OGQ0NDc1NmUwYjRlY2U4ZDc0NjI5NmEzZDVlMjk3ZTE0MTVmNGJhMTc2NDdmZmUyMjgzODUzODNkMTYxYTkifX19", "halloween", 2.8),
-    ORGAN("organ_in_bottle", "&8{&cOrgan in a bottle&8]", HPStrings.wood + "NmZjOWQ0NzFmMzczNTU3NTgzMzkyZWFlZmFmNjU5YmJmZWMyMzg1YzYwZmJhYjY4NjBmMjM2YjVmYjI0MSJ9fX0", "halloween", 2.8),
-    TRICK_OR_TREAT_BASKEST("trick_or_treat_basket", "&8[&6Trick or Treat Basket&8]", HPStrings.wood + "ZjZjNjViZjI3YjgzZmMyZDJkMTdjMDY2OTg5OTE4M2NkZWRiNTU1NjQyYWVlYjgyYjU3ZWRkNmVkMWFkYTRmMCJ9fX0", "halloween", 2.8),
-    JACK_O_MELON("jack_o_melon", "&8[&aJack O' Melon&8]", HPStrings.wood + "Mzc2NTNjZjQ2MjIyYjBkOGUxMTQ1ZWRjNmY5YTY3NjE2ZDllMWQ5YmM5MDA1NDhmMTkxMDI2ZjdkZTFmYzkifX19", "halloween", 2.8),
-    JACK_O_LANTERN("jack_o_lantern", "&8[&6Jack O' Lantern&8]", HPStrings.wood + "NzYxM2U2NWVkZWZlNTY2MzgwOTE0M2RmZThhMmRlNjNiNzUwYTQ1NDc5OTRiNzllN2I5MmJhOTdiZWFlYWU0YyJ9fX0", "halloween", 2.8);
+    RED_EXCLAMATION_MARK("red_exclamation_mark", "&8[&cRed Exclamation Mark&8]", HPStrings.wood + "ZTdmOWM2ZmVmMmFkOTZiM2E1NDY1NjQyYmE5NTQ2NzFiZTFjNDU0M2UyZTI1ZTU2YWVmMGE0N2Q1ZjFmIn19fQ", "alphabet", 2.7);
     final String name;
     final String dn;
     final String tex;
