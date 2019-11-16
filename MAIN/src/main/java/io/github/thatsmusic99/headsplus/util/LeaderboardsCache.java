@@ -12,9 +12,10 @@ public class LeaderboardsCache {
 
     private static HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
     private static HeadsPlus hp = HeadsPlus.getInstance();
+    private static boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
 
     public LeaderboardsCache(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
-        if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
+        if (enabled) {
             cache.put(type, contents);
             new BukkitRunnable() {
                 @Override
@@ -27,11 +28,11 @@ public class LeaderboardsCache {
 
     }
 
-    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async) throws SQLException {
-        if (cache.containsKey(database + "_" + section)) {
+    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async, boolean realtime) throws SQLException {
+        if (cache.containsKey(database + "_" + section) && !realtime) {
             return cache.get(database + "_" + section);
         } else {
-            if (!async) {
+            if (!async && !realtime) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {

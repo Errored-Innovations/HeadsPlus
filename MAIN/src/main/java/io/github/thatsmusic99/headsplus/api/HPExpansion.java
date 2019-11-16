@@ -77,7 +77,7 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("hunting")) {
             try {
-                return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
+                return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting", false));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
@@ -86,7 +86,7 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("crafting")) {
             try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
+                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting", false));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
@@ -95,14 +95,12 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.startsWith("selling")) {
             try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
+                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling", false));
             } catch (SQLException e) {
                 e.printStackTrace();
                 return "0";
             }
         }
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
 
         if (identifier.startsWith("top")) {
             // Format:
@@ -114,7 +112,12 @@ public class HPExpansion extends PlaceholderExpansion {
             int position = Integer.valueOf(args[3]);
             String option = args[4];
             try {
-                LinkedHashMap<OfflinePlayer, Integer> list = LeaderboardsCache.getType(entity, category, false);
+                LinkedHashMap<OfflinePlayer, Integer> list;
+                if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
+                    list = LeaderboardsCache.getType(entity, category, false, false);
+                } else {
+                    list = LeaderboardsCache.getType(entity, category, true, true);
+                }
                 if (list == null) {
                     return "0";
                 }

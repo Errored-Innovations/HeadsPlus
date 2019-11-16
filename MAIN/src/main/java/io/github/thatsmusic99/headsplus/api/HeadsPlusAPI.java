@@ -99,16 +99,16 @@ public class HeadsPlusAPI {
         return hp.getNBTManager().getType(is);
     }
 
-    public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) throws SQLException {
+    public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database, boolean realtime) throws SQLException {
         try {
-            return LeaderboardsCache.getType(section, database, false).get(p);
+            return LeaderboardsCache.getType(section, database, false, realtime).get(p);
         } catch (NullPointerException ex) {
             return -1;
         }
     }
 
     public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) throws SQLException {
-        return LeaderboardsCache.getType(section, database, false);
+        return LeaderboardsCache.getType(section, database, false, true);
     }
 
     public List<Challenge> getChallenges() {

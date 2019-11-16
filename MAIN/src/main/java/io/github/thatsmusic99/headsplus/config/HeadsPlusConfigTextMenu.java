@@ -139,9 +139,9 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                     String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
                             .replaceAll("\\{xp}", String.valueOf(p.getXp()))
                             .replaceAll("\\{completed-challenges}", String.valueOf(p.getCompleteChallenges().size()))
-                            .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
-                            .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
-                            .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
+                            .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb", true)))
+                            .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh", true)))
+                            .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft", true)))
                             .replace("{header}", h.getConfig().getString("profile.header")));
                     if (!(stri.contains("{level}") || (stri.contains("{next-level}")))) {
                         sb.append(stri).append("\n");
@@ -334,7 +334,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
                 HeadsPlusConfigTextMenu ht = hp.getMenus();
-                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database, true), ht.getConfig().getInt("leaderboard.lines-per-page"));
+                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database, true, true), ht.getConfig().getInt("leaderboard.lines-per-page"));
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
