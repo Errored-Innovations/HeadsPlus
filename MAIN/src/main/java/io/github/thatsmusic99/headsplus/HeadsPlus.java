@@ -12,7 +12,6 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.config.levels.*;
 import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
@@ -80,7 +79,7 @@ public class HeadsPlus extends JavaPlugin {
     private NMSManager nms;
     private NMSIndex nmsversion;
     private final List<IHeadsPlusCommand> commands = new ArrayList<>();
-    private HashMap<Integer, RLevel> levels = new HashMap<>();
+    private HashMap<Integer, Level> levels = new HashMap<>();
     private List<ConfigSettings> cs = new ArrayList<>();
     private Favourites favourites;
     private PlayerScores scores;
@@ -631,7 +630,7 @@ public class HeadsPlus extends JavaPlugin {
         return getConfiguration().getMechanics().getBoolean("stop-placement-of-sellable-heads");
     }
 
-    public HashMap<Integer, RLevel> getLevels() {
+    public HashMap<Integer, Level> getLevels() {
         return levels;
     }
 

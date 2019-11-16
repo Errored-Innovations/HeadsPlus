@@ -21,9 +21,9 @@ public class HPPlayer {
     // M
     private OfflinePlayer player;
     private int xp;
-    private RLevel level = null;
+    private Level level = null;
     private List<Challenge> completeChallenges;
-    private RLevel nextLevel = null;
+    private Level nextLevel = null;
     private List<PotionEffect> activeMasks;
     public static HashMap<Player, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
@@ -43,7 +43,7 @@ public class HPPlayer {
         HeadsPlus hp = HeadsPlus.getInstance();
         PlayerScores scores = hp.getScores();
         HeadsPlusAPI hapi = hp.getAPI();
-        HashMap<Integer, RLevel> levels = hp.getLevels();
+        HashMap<Integer, Level> levels = hp.getLevels();
         this.xp = scores.getXp(p.getUniqueId().toString());
         List<Challenge> sc = new ArrayList<>();
         for (String str : scores.getCompletedChallenges(p.getUniqueId().toString())) {
@@ -119,11 +119,11 @@ public class HPPlayer {
         return xp;
     }
 
-    public RLevel getLevel() {
+    public Level getLevel() {
         return level;
     }
 
-    public RLevel getNextLevel() {
+    public Level getNextLevel() {
         return nextLevel;
     }
 
@@ -169,7 +169,7 @@ public class HPPlayer {
                                         .replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName())));
                             }
                         }
-                        HashMap<Integer, RLevel> levels = HeadsPlus.getInstance().getLevels();
+                        HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
                         scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
                         if (level.isrEnabled()) {
                             level.reward(player.getPlayer());
