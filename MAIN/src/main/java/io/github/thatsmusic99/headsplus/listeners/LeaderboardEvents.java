@@ -9,6 +9,9 @@ import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.sql.SQLException;
 
 public class LeaderboardEvents implements Listener {
 
@@ -25,7 +28,17 @@ public class LeaderboardEvents implements Listener {
                                 e.getLocation().getWorld().strikeLightning(e.getPlayer().getLocation());
                             }
                         }
-                        hp.getMySQLAPI().addOntoValue(e.getPlayer(), e.getEntityType().name(), "headspluslb", 1);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    hp.getMySQLAPI().addOntoValue(e.getPlayer(), e.getEntityType().name(), "headspluslb", 1);
+                                } catch (SQLException ex) {
+                                    DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
+                                }
+                            }
+                        }.runTaskAsynchronously(HeadsPlus.getInstance());
+
                     }
                 }
             }
@@ -46,7 +59,17 @@ public class LeaderboardEvents implements Listener {
                                 e.getLocation().getWorld().strikeLightning(e.getKiller().getLocation());
                             }
                         }
-                        hp.getMySQLAPI().addOntoValue(e.getKiller(), "player", "headspluslb", 1);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    hp.getMySQLAPI().addOntoValue(e.getKiller(), "player", "headspluslb", 1);
+                                } catch (SQLException ex) {
+                                    DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
+                                }
+                            }
+                        }.runTaskAsynchronously(HeadsPlus.getInstance());
+
                     }
                 }
             }
@@ -67,7 +90,16 @@ public class LeaderboardEvents implements Listener {
                     for (String s : e.getEntityAmounts().keySet()) {
                         for (int i : e.getEntityAmounts().values()) {
                             if (e.getEntityAmounts().get(s) == i) {
-                                hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(s).name(), "headsplussh", i);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(s).name(), "headsplussh", i);
+                                        } catch (SQLException ex) {
+                                            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
+                                        }
+                                    }
+                                }.runTaskAsynchronously(HeadsPlus.getInstance());
                             }
                         }
                     }
@@ -85,8 +117,17 @@ public class LeaderboardEvents implements Listener {
                 if (hp.hasChallengesEnabled()) {
                     if (e.getEntityType() != null) {
                         if (!(e.getEntityType().equalsIgnoreCase("invalid") || e.getEntityType().isEmpty())) {
-                            HPPlayer.getHPPlayer(e.getPlayer()).addXp(30 * e.getHeadsCrafted());
-                            hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(e.getEntityType()).name(), "headspluscraft", e.getHeadsCrafted());
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    HPPlayer.getHPPlayer(e.getPlayer()).addXp(30 * e.getHeadsCrafted());
+                                    try {
+                                        hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(e.getEntityType()).name(), "headspluscraft", e.getHeadsCrafted());
+                                    } catch (SQLException ex) {
+                                        DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
+                                    }
+                                }
+                            }.runTaskAsynchronously(HeadsPlus.getInstance());
                         }
                     }
                 }
