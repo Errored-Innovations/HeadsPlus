@@ -6,9 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.InventoryManager;
-import io.github.thatsmusic99.headsplus.util.MySQLAPI;
+import io.github.thatsmusic99.headsplus.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -195,37 +193,36 @@ public class DebugPrint implements IHeadsPlusCommand {
                 if (HeadsPlus.getInstance().isConnectedToMySQLDatabase()) {
                     if (args[2].equalsIgnoreCase("database")) {
                         sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
-                        MySQLAPI mysql = HeadsPlus.getInstance().getMySQLAPI();
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 try {
-                                    for (EntityType section : HeadsPlus.getInstance().getDeathEvents().ableEntities) {
+                                    for (String section : HeadsPlus.getInstance().getDeathEvents().ableEntities) {
 
-                                        LinkedHashMap<OfflinePlayer, Integer> hashmap = mysql.getScores(section.name(), "headspluslb", true);
+                                        LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
                                         for (OfflinePlayer player : hashmap.keySet()) {
-                                            mysql.addOntoValue(player, section.name(), "headspluslb", hashmap.get(player));
+                                            DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
                                         }
-                                        hashmap = mysql.getScores(section.name(), "headsplussh", true);
+                                        hashmap = DataManager.getScores(section, "headsplussh", true);
                                         for (OfflinePlayer player : hashmap.keySet()) {
-                                            mysql.addOntoValue(player, section.name(), "headsplussh", hashmap.get(player));
+                                            DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
                                         }
-                                        hashmap = mysql.getScores(section.name(), "headspluscraft", true);
+                                        hashmap = DataManager.getScores(section, "headspluscraft", true);
                                         for (OfflinePlayer player : hashmap.keySet()) {
-                                            mysql.addOntoValue(player, section.name(), "headspluscraft", hashmap.get(player));
+                                            DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
                                         }
                                     }
-                                    LinkedHashMap<OfflinePlayer, Integer> hashmap = mysql.getScores("PLAYER", "headspluslb", true);
+                                    LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
                                     for (OfflinePlayer player : hashmap.keySet()) {
-                                        mysql.addOntoValue(player, "PLAYER", "headspluslb", hashmap.get(player));
+                                        DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
                                     }
-                                    hashmap = mysql.getScores("PLAYER", "headsplussh", true);
+                                    hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
                                     for (OfflinePlayer player : hashmap.keySet()) {
-                                        mysql.addOntoValue(player, "PLAYER", "headsplussh", hashmap.get(player));
+                                        DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
                                     }
-                                    hashmap = mysql.getScores("PLAYER", "headspluscraft", true);
+                                    hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
                                     for (OfflinePlayer player : hashmap.keySet()) {
-                                        mysql.addOntoValue(player, "PLAYER", "headspluscraft", hashmap.get(player));
+                                        DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
                                     }
                                     sender.sendMessage(ChatColor.GREEN + "Transition successful.");
                                 } catch (Exception e) {

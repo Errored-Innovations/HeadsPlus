@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.at.main.Main;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
@@ -21,10 +20,7 @@ import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
-import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.IncorrectVersionException;
-import io.github.thatsmusic99.headsplus.util.InventoryManager;
-import io.github.thatsmusic99.headsplus.util.MySQLAPI;
+import io.github.thatsmusic99.headsplus.util.*;
 import io.github.thatsmusic99.og.OreGenerator;
 import io.github.thatsmusic99.pg.Core;
 import io.github.thatsmusic99.specprotect.CoreClass;
@@ -33,7 +29,6 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -43,7 +38,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,7 +59,7 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigCustomHeads hpchx;
     private DeathEvents de;
     private HeadsPlusCrafting hpcr;
-    private MySQLAPI mySQLAPI;
+    private NewMySQLAPI mySQLAPI;
     private HeadsPlusChallenges hpchl;
     private HeadsPlusAPI hapi;
     private HeadsPlusLevels hpl;
@@ -268,68 +262,7 @@ public class HeadsPlus extends JavaPlugin {
             Class.forName("com.mysql.jdbc.Driver");
             ConfigurationSection mysql = getConfiguration().getMySQL();
             connection = DriverManager.getConnection("jdbc:mysql://" + mysql.getString("host") + ":" + mysql.getString("port") + "/" + mysql.getString("database") + "?useSSL=false&autoReconnect=true", mysql.getString("username"), mysql.getString("password"));
-            Statement st = connection.createStatement();
-            for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {
-                debug("- Creating database for " + str + "...", 2);
-                StringBuilder sb = new StringBuilder();
-                sb.append("CREATE TABLE IF NOT EXISTS `").append(str).append("` (").append("`id` INT NOT NULL AUTO_INCREMENT,").append("`uuid` VARCHAR(45),").append("`total` VARCHAR(45)");
-                for (EntityType e : de.ableEntities) {
-                    sb.append(", `").append(e.name()).append("` VARCHAR(45)");
-                }
-                sb.append(", `PLAYER` VARCHAR(45)");
-                sb.append(", PRIMARY KEY (`id`))");
-                st.executeUpdate(sb.toString());
-
-                ResultSet rs2 = st.executeQuery("SELECT * FROM `" + str + "` WHERE `uuid`='server-total'");
-                if (!rs2.next()) {
-                    StringBuilder sb2 = new StringBuilder();
-                    sb2.append("INSERT INTO `").append(str).append("` (uuid, total");
-                    for (EntityType e : de.ableEntities) {
-                        sb2.append(", ").append(e.name());
-                    }
-                    sb2.append(", PLAYER) VALUES('server-total', '0'");
-                    for (EntityType ignored : de.ableEntities) {
-                        sb2.append(", '0'");
-                    }
-                    sb2.append(", '0'");
-                    sb2.append(")");
-                    try {
-                        st.executeUpdate(sb2.toString());
-                    } catch (MySQLSyntaxErrorException ex) {
-                        debug("- MySQL error thrown. Must be old database. No worries - I'm on it.", 1);
-                        for (EntityType e : de.ableEntities) {
-                            ResultSet rs3 = st.executeQuery("SELECT " + e.name() + " FROM `" + str + "` WHERE `uuid`='server-total'");
-                            rs3.next();
-                            try {
-                                rs3.getString(e.name());
-                            } catch (SQLException owowhatsthis) {
-                                try {
-                                    st.executeUpdate("ALTER TABLE `" + str + "` ADD COLUMN `" + e.name() + "` VARCHAR(45)");
-                                    st.executeUpdate("INSERT INTO `" + str + "` (" + e.name() + ") VALUES('0')");
-                                } catch (MySQLSyntaxErrorException ignored) { // huh
-
-                                }
-
-                            }
-                        }
-                  /*  getLogger().severe("MYSQL ERROR: If you're migrating from an old HeadsPlus version, please reset all of the HeadsPlus tables. If this error persists after you've reset the tables, a report has been made for you to send.");
-                    try {
-                        String s = new DebugFileCreator().createReport(ex, "Startup");
-                        getLogger().severe("Report name: " + s);
-                        getLogger().severe("If the issue persists, please send to one of the following links (I WILL ASK IF YOU'VE RESET YOUR MYSQL TABLES):");
-                        getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                        getLogger().severe("https://discord.gg/nbT7wC2");
-                        getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
-                        break;
-                    } catch (IOException ignored) {
-
-                    } */
-                    }
-                }
-
-
-
-            }
+            NewMySQLAPI.createTable();
             con = true;
             debug("- Connected to MySQL!", 2);
         }
@@ -446,8 +379,6 @@ public class HeadsPlus extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        mySQLAPI = new MySQLAPI();
-        debug("- Instance for MySQL created!", 3);
         hpl = new HeadsPlusLevels();
         cs.add(hpl);
         debug("- Instance for HeadsPlusLevels created!", 3);
@@ -672,10 +603,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public List<ChallengeSection> getChallengeSections() {
         return challengeSections;
-    }
-
-    public MySQLAPI getMySQLAPI() {
-        return mySQLAPI;
     }
 
     public NMSManager getNMS() {

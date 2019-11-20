@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -28,7 +27,7 @@ public class LeaderboardsCache {
 
     }
 
-    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async, boolean realtime) throws SQLException {
+    public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async, boolean realtime) {
         if (cache.containsKey(database + "_" + section) && !realtime) {
             return cache.get(database + "_" + section);
         } else {
@@ -36,16 +35,12 @@ public class LeaderboardsCache {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        try {
-                            hp.getMySQLAPI().getScores(section, database);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        DataManager.getScores(database, section, false);
                     }
                 }.runTaskAsynchronously(HeadsPlus.getInstance());
                 return null;
             } else {
-                return hp.getMySQLAPI().getScores(section, database);
+                return DataManager.getScores(database, section, false);
             }
 
         }

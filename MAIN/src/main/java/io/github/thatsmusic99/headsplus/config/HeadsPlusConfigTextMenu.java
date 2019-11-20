@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
@@ -327,14 +328,14 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
     public static class LeaderBoardTranslator {
 
-        public static String translate(String section, String database, int page) throws SQLException {
+        public static String translate(String section, String database, int page) {
             PagedHashmaps<OfflinePlayer, Integer> ph = null;
             HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
             try {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
                 HeadsPlusConfigTextMenu ht = hp.getMenus();
-                ph = new PagedHashmaps<>(LeaderboardsCache.getType(section, database, true, true), ht.getConfig().getInt("leaderboard.lines-per-page"));
+                ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), ht.getConfig().getInt("leaderboard.lines-per-page"));
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
@@ -350,7 +351,6 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                                 .replaceAll("\\{score}", String.valueOf(it2.toArray()[i]))));
                     } catch (NullPointerException ignored) {
                     }
-
                 }
                 return sb.toString();
             } catch (IllegalArgumentException ex) {

@@ -6,14 +6,12 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class HPExpansion extends PlaceholderExpansion {
 
@@ -136,12 +134,9 @@ public class HPExpansion extends PlaceholderExpansion {
                 } else {
                     return players.get(position).getName();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             } catch (IndexOutOfBoundsException e) {
                 return "0";
             }
-            return "0";
 
 
         }

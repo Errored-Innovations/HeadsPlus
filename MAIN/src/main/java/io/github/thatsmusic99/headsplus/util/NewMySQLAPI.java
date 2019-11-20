@@ -1,6 +1,8 @@
 package io.github.thatsmusic99.headsplus.util;
 
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.sql.Connection;
@@ -14,60 +16,116 @@ public class NewMySQLAPI {
     private static Connection connection = HeadsPlus.getInstance().getConnection();
 
     public static void createTable() {
+        for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {
+            try {
+                StringBuilder arg = new StringBuilder();
+                arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` VARCHAR(45), `total` VARCHAR(45), ");
+                for (String entity : HeadsPlus.getInstance().getDeathEvents().ableEntities) {
+                    arg.append(entity).append(" VARCHAR(45), ");
+
+                }
+                arg.append("PLAYER VARCHAR(45), PRIMARY KEY (`id`))");
+                update(OperationType.CREATE, arg.toString());
+                if (!query(OperationType.SELECT_COUNT, str, "uuid", "server-total").next()) {
+                    update(OperationType.INSERT_INTO, str, "uuid", "server-total");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
-    public static void addToTotal(String database, int addition, String section, OfflinePlayer player) {
+    static void addToTotal(String database, int addition, String section, String uuid) {
         try {
-            if (!doesPlayerExist(database, player)) addPlayer(database, player);
-            ResultSet set = query(OperationType.SELECT, "total, " + section, database, "uuid", player.getUniqueId().toString());
+            if (!doesPlayerExist(database, uuid)) addPlayer(database, uuid);
+            ResultSet set = query(OperationType.SELECT, section, database, "uuid", uuid);
+            set.next();
             int total = set.getInt("total");
             int totalSec = set.getInt(section);
-            update(OperationType.UPDATE, database, section, String.valueOf(totalSec + addition), String.valueOf(total + addition), "uuid", player.getUniqueId().toString());
+            update(OperationType.UPDATE, database, section, String.valueOf(totalSec + addition), String.valueOf(total + addition), "uuid", uuid);
+        } catch (MySQLSyntaxErrorException e) {
+            try {
+                update(OperationType.ALTER, database, section);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean doesPlayerExist(String database, OfflinePlayer player) {
+    static LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
         try {
-            return query(OperationType.SELECT, "COUNT(1)", database, "uuid", player.getUniqueId().toString()).next();
+            String mdatabase = "";
+            switch (database) {
+                case "hunting":
+                    mdatabase = "headspluslb";
+                    break;
+                case "selling":
+                    mdatabase = "headsplussh";
+                    break;
+                case "crafting":
+                    mdatabase = "headspluscraft";
+                    break;
+            }
+            LinkedHashMap<OfflinePlayer, Integer> hs = new LinkedHashMap<>();
+            ResultSet rs = query(OperationType.SELECT_ORDER,  "uuid", section, mdatabase);
+            while (rs.next()) {
+                try {
+                    UUID uuid = UUID.fromString(rs.getString("uuid"));
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+                    hs.put(player, rs.getInt(section));
+                } catch (Exception ignored) {
+                }
+            }
+            hs = DataManager.sortHashMapByValues(hs);
+            new LeaderboardsCache(database + "_" + section, hs);
+            return hs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    private static boolean doesPlayerExist(String database, String uuid) {
+        try {
+            return query(OperationType.SELECT_COUNT, database, "uuid", uuid).next();
         } catch (SQLException e) {
             return false;
         }
     }
 
-    private static void addPlayer(String database, OfflinePlayer player) {
+    private static void addPlayer(String database, String uuid) {
         try {
-            update(OperationType.INSERT_INTO, "", database, "uuid", player.getUniqueId().toString());
+            update(OperationType.INSERT_INTO, database, "uuid", uuid);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static void update(OperationType type, String special, String... args) throws SQLException {
-        prepareStatement(type, special, args).executeUpdate();
+    private static void update(OperationType type, String... args) throws SQLException {
+        prepareStatement(type, args).executeUpdate();
     }
 
-    private static ResultSet query(OperationType type, String special, String... args) throws SQLException {
-        return prepareStatement(type, special, args).executeQuery();
+    private static ResultSet query(OperationType type, String... args) throws SQLException {
+        return prepareStatement(type, args).executeQuery();
     }
 
-    private static PreparedStatement prepareStatement(OperationType type, String special, String... args) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(String.format(type.syntax, special));
-        for (int i = 0; i < args.length; i++) {
-            statement.setString(i + 1, args[i]);
-        }
-        return statement;
+    private static PreparedStatement prepareStatement(OperationType type, String... args) throws SQLException {
+        return connection.prepareStatement(String.format(type.syntax, args));
     }
 
     private enum OperationType {
-        SELECT("SELECT %s FROM ? WHERE ?=?"),
-        INSERT_TABLE("INSERT TABLE ? ADD COLUMN ? VARCHAR(45)"),
-        INSERT_INTO("INSERT INTO ? (?) VALUE (?)"),
-        UPDATE("UPDATE ? SET ?=?, total=? WHERE ?=?"),
-        CREATE("CREATE TABLE IF NOT EXISTS "),
-        ALTER("ALTER TABLE ? ADD COLUMN ? VARCHAR(45)");
+        SELECT("SELECT %1$s, total FROM %2$s WHERE %3$s='%4$s'"),
+        INSERT_TABLE("INSERT TABLE %1$s ADD COLUMN `%2$s` VARCHAR(45)"),
+        INSERT_INTO("INSERT INTO %1$s (`%2$s`) VALUES ('%3$s')"),
+        UPDATE("UPDATE %1$s SET %2$s='%3$s', total=%4$s WHERE %5$s='%6$s'"),
+        CREATE("CREATE TABLE IF NOT EXISTS %1$s"),
+        ALTER("ALTER TABLE %1$s ADD COLUMN %2$s VARCHAR(45)"),
+        SELECT_ORDER("SELECT %1$s, %2$s FROM %3$s ORDER BY id"),
+        SELECT_COUNT("SELECT 1 FROM %1$s WHERE `%2$s`='%3$s'");
 
         String syntax;
 
@@ -76,31 +134,5 @@ public class NewMySQLAPI {
         }
 
 
-    }
-
-    private LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValues(HashMap<OfflinePlayer, Integer> passedMap) {
-        List<OfflinePlayer> mapKeys = new ArrayList<>(passedMap.keySet());
-        List<Integer> mapValues = new ArrayList<>(passedMap.values());
-        Collections.sort(mapValues);
-        Collections.reverse(mapValues);
-
-        LinkedHashMap<OfflinePlayer, Integer> sortedMap =
-                new LinkedHashMap<>();
-
-        for (int val : mapValues) {
-            Iterator<OfflinePlayer> keyIt = mapKeys.iterator();
-
-            while (keyIt.hasNext()) {
-                OfflinePlayer key = keyIt.next();
-                Integer comp1 = passedMap.get(key);
-
-                if (comp1.equals(val)) {
-                    keyIt.remove();
-                    sortedMap.put(key, val);
-                    break;
-                }
-            }
-        }
-        return sortedMap;
     }
 }

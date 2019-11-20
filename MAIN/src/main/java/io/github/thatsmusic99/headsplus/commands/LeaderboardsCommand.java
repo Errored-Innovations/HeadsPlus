@@ -171,7 +171,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
         return false;
     }
 
-    private String getLeaderboard(String sec, int page, String part) throws SQLException {
+    private String getLeaderboard(String sec, int page, String part) {
         return HeadsPlusConfigTextMenu.LeaderBoardTranslator.translate(sec, part, page);
     }
 
