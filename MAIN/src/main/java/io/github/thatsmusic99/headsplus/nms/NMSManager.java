@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.nms;
 
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -71,8 +70,6 @@ public interface NMSManager {
     }
 
     ItemStack setCalendarValue(ItemStack i, String value);
-
-    AdventCManager getCalendarValue(ItemStack i);
 
     String getNMSVersion();
 

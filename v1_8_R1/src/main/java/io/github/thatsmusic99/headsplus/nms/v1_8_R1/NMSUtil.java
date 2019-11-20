@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.nms.v1_8_R1;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import io.github.thatsmusic99.headsplus.util.AdventCManager;
 import net.minecraft.server.v1_8_R1.EntityPlayer;
 import net.minecraft.server.v1_8_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
@@ -70,16 +69,6 @@ public class NMSUtil implements NMSManager {
         }
         is.getTag().setString("advent-value", value);
         return CraftItemStack.asBukkitCopy(is);
-    }
-
-    @Override
-    public AdventCManager getCalendarValue(ItemStack is) {
-        net.minecraft.server.v1_8_R1.ItemStack i = CraftItemStack.asNMSCopy(is);
-        if (i == null) return null;
-        if (i.getTag() != null) {
-            return AdventCManager.valueOf(Objects.requireNonNull(i.getTag()).getString("advent-value"));
-        }
-        return null;
     }
 
     @Override

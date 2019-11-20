@@ -288,7 +288,7 @@ public class InventoryManager {
             wide = true;
         }
         List<ItemStack> items = new ArrayList<>();
-        for (EntityType entity : DeathEvents.heads.keySet()) {
+        for (String entity : DeathEvents.heads.keySet()) {
             try {
                 HashMap<String, List<ItemStack>> heads = DeathEvents.heads.get(entity);
                 if (!heads.get("default").isEmpty()) {
@@ -391,38 +391,6 @@ public class InventoryManager {
             for (int i = start, c = 0; i < headsInSection && c < max; ++i, ++c) {
                 heads.add(skull(allHeads.get(i)));
             }
-        } else if (menuSection.equalsIgnoreCase("advent-calendar")) {
-            try {
-                for (AdventCManager acm : AdventCManager.values()) {
-                    if (hpchx.getConfig().getStringList("advent." + acm.name()).contains(player.getUniqueId().toString())) {
-                        ItemStack is = hpchx.setTexture(acm.texture, plugin.getNMS().getSkullMaterial(1));
-                        ItemMeta im = is.getItemMeta();
-                        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', acm.name));
-                        is.setItemMeta(im);
-                        is = plugin.getNMS().setCalendarValue(is, acm.name());
-                        is = plugin.getNMS().setOpen(is, true);
-                        heads.add(is);
-                    } else {
-                        ItemStack is = hpchx.setTexture(acm.wTexture, plugin.getNMS().getSkullMaterial(1));
-                        ItemMeta im = is.getItemMeta();
-                        im.setDisplayName(ChatColor.translateAlternateColorCodes('&', acm.wName));
-                        is.setItemMeta(im);
-                        is = plugin.getNMS().setCalendarValue(is, acm.name());
-                        is = plugin.getNMS().setOpen(is, false);
-                        heads.add(is);
-                    }
-                }
-            } catch (Exception ignored) {
-            }
-            headsInSection = heads.size();
-            if (largerMenu && headsInSection > max) {
-                max = (plugin.getItems().getConfig().getInt("inventories.headsection.size") - 9);
-                wide = true;
-            }
-            pages = (int) Math.max(1, Math.ceil((double) headsInSection / max));
-
-            PagedLists<ItemStack> paged = new PagedLists<>(heads, max);
-            heads = paged.getContentsInPage(currentPage);
         }
 
         inventory = new HeadSection();

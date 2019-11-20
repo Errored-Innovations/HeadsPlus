@@ -7,11 +7,10 @@ import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.util.DataManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.sql.SQLException;
 
 public class LeaderboardEvents implements Listener {
 
@@ -31,11 +30,7 @@ public class LeaderboardEvents implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                try {
-                                    hp.getMySQLAPI().addOntoValue(e.getPlayer(), e.getEntityType().name(), "headspluslb", 1);
-                                } catch (SQLException ex) {
-                                    DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-                                }
+                                DataManager.addToTotal(e.getPlayer(), e.getEntityType().name(), "headspluslb", 1);
                             }
                         }.runTaskAsynchronously(HeadsPlus.getInstance());
 
@@ -62,11 +57,7 @@ public class LeaderboardEvents implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                try {
-                                    hp.getMySQLAPI().addOntoValue(e.getKiller(), "player", "headspluslb", 1);
-                                } catch (SQLException ex) {
-                                    DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-                                }
+                                DataManager.addToTotal(e.getKiller(), "player", "headspluslb", 1);
                             }
                         }.runTaskAsynchronously(HeadsPlus.getInstance());
 
@@ -93,11 +84,7 @@ public class LeaderboardEvents implements Listener {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        try {
-                                            hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(s).name(), "headsplussh", i);
-                                        } catch (SQLException ex) {
-                                            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-                                        }
+                                        DataManager.addToTotal(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(s).name(), "headsplussh", i);
                                     }
                                 }.runTaskAsynchronously(HeadsPlus.getInstance());
                             }
@@ -121,11 +108,7 @@ public class LeaderboardEvents implements Listener {
                                 @Override
                                 public void run() {
                                     HPPlayer.getHPPlayer(e.getPlayer()).addXp(30 * e.getHeadsCrafted());
-                                    try {
-                                        hp.getMySQLAPI().addOntoValue(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(e.getEntityType()).name(), "headspluscraft", e.getHeadsCrafted());
-                                    } catch (SQLException ex) {
-                                        DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-                                    }
+                                    DataManager.addToTotal(e.getPlayer(), HeadsPlus.getInstance().getAPI().strToEntityType(e.getEntityType()).name(), "headspluscraft", e.getHeadsCrafted());
                                 }
                             }.runTaskAsynchronously(HeadsPlus.getInstance());
                         }
