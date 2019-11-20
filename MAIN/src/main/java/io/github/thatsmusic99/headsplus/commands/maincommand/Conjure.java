@@ -78,7 +78,7 @@ public class Conjure implements IHeadsPlusCommand {
                     }
                     DeathEvents de = HeadsPlus.getInstance().getDeathEvents();
                     try {
-                        ItemStack i = DeathEvents.heads.get(de.prettyStringToEntity(args[1])).get(type).get(index);
+                        ItemStack i = DeathEvents.heads.get(de.prettyStringToUglyString(args[1])).get(type).get(index);
                         i.setAmount(amount);
                         this.head = i;
 

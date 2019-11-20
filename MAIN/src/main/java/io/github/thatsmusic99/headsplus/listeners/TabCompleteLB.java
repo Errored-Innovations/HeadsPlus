@@ -4,7 +4,6 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.EntityType;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public class TabCompleteLB implements TabCompleter {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
-            for (EntityType e : new DeathEvents().ableEntities) {
-                c.add(WordUtils.capitalize(e.name()));
+            for (String e : new DeathEvents().ableEntities) {
+                c.add(WordUtils.capitalize(e.toLowerCase()));
             }
             c.add("Total");
             c.add("Player");

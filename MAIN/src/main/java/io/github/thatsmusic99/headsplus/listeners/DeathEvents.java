@@ -27,7 +27,6 @@ import java.util.*;
 public class DeathEvents implements Listener {
 
     public DeathEvents() {
-        createList();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -37,10 +36,70 @@ public class DeathEvents implements Listener {
 
     }
 	
-	public final List<EntityType> ableEntities = new ArrayList<>(Arrays.asList(EntityType.BAT, EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CHICKEN, EntityType.COW, EntityType.CREEPER, EntityType.ENDER_DRAGON, EntityType.ENDERMAN, EntityType.ENDERMITE, EntityType.GHAST, EntityType.GUARDIAN, EntityType.HORSE, EntityType.IRON_GOLEM, EntityType.MAGMA_CUBE, EntityType.MUSHROOM_COW, EntityType.OCELOT, EntityType.PIG, EntityType.PIG_ZOMBIE, EntityType.RABBIT, EntityType.SHEEP, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SNOWMAN, EntityType.SPIDER, EntityType.SQUID, EntityType.VILLAGER, EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.WOLF));
+	public final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
+            "BLAZE",
+            "CAT",
+            "CAVE_SPIDER",
+            "CHICKEN",
+            "COD",
+            "COW",
+            "CREEPER",
+            "DOLPHIN",
+            "DONKEY",
+            "DROWNED",
+            "ELDER_GUARDIAN",
+            "ENDER_DRAGON",
+            "ENDERMAN",
+            "ENDERMITE",
+            "EVOKER",
+            "FOX",
+            "GHAST",
+            "GUARDIAN",
+            "HORSE",
+            "HUSK",
+            "IRON_GOLEM",
+            "LLAMA",
+            "MAGMA_CUBE",
+            "MULE",
+            "MUSHROOM_COW",
+            "OCELOT",
+            "PARROT",
+            "PHANTOM",
+            "PIG",
+            "PIG_ZOMBIE",
+            "PILLAGER",
+            "POLAR_BEAR",
+            "PUFFERFISH",
+            "RABBIT",
+            "RAVAGER",
+            "SALMON",
+            "SHEEP",
+            "SHULKER",
+            "SILVERFISH",
+            "SKELETON",
+            "SKELETON_HORSE",
+            "SLIME",
+            "SNOWMAN",
+            "SPIDER",
+            "SQUID",
+            "STRAY",
+            "TRADER_LLAMA",
+            "TROPICAL_FISH",
+            "TURTLE",
+            "VEX",
+            "VILLAGER",
+            "VINDICATOR",
+            "WANDERING_TRADER",
+            "WITCH",
+            "WITHER",
+            "WITHER_SKELETON",
+            "WOLF",
+            "ZOMBIE",
+            "ZOMBIE_HORSE",
+            "ZOMBIE_VILLAGER"));
     private final HeadsPlusConfigCustomHeads hpchx = HeadsPlus.getInstance().getHeadsXConfig();
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-    public static HashMap<EntityType, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
+    public static HashMap<String, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
     public static boolean ready = false;
 
     @EventHandler
@@ -172,68 +231,48 @@ public class DeathEvents implements Listener {
         }
 	}
 
-	private void createList() {
-        String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        switch (bukkitVersion) {
-            case "v1_14_R1":
-                ableEntities.addAll(Arrays.asList(EntityType.CAT, EntityType.FOX, EntityType.PANDA, EntityType.PILLAGER, EntityType.RAVAGER, EntityType.TRADER_LLAMA, EntityType.WANDERING_TRADER));
-            case "v1_13_R1":
-            case "v1_13_R2":
-                ableEntities.addAll(Arrays.asList(EntityType.COD, EntityType.SALMON, EntityType.TROPICAL_FISH, EntityType.PUFFERFISH, EntityType.PHANTOM, EntityType.TURTLE, EntityType.DOLPHIN, EntityType.DROWNED, EntityType.ZOMBIE_VILLAGER));
-            case "v1_12_R1":
-                ableEntities.addAll(Collections.singletonList(EntityType.PARROT));
-            case "v1_11_R1":
-                ableEntities.addAll(Arrays.asList(EntityType.DONKEY, EntityType.ELDER_GUARDIAN, EntityType.EVOKER, EntityType.HUSK, EntityType.LLAMA, EntityType.MULE, EntityType.POLAR_BEAR, EntityType.SKELETON_HORSE, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITHER_SKELETON, EntityType.ZOMBIE_HORSE));
-            case "v1_10_R1":
-            case "v1_9_R1":
-            case "v1_9_R2":
-                ableEntities.addAll(Collections.singletonList(EntityType.SHULKER));
-                break;
-        }
-	}
-
 	private void setupHeads() {
 	    NMSManager nms = HeadsPlus.getInstance().getNMS();
-	    for (EntityType e : ableEntities) {
+	    for (String name : ableEntities) {
 	        try {
-                HeadsPlus.getInstance().debug("Creating head for " + e.name() + "...", 3);
+                HeadsPlus.getInstance().debug("Creating head for " + name + "...", 3);
                 HashMap<String, List<ItemStack>> keys = new HashMap<>();
                 List<ItemStack> heads = new ArrayList<>();
-                if (e == EntityType.SHEEP) {
-                    keys = a("sheep", keys);
-                    DeathEvents.heads.put(e, keys);
+                if (name.equals("SHEEP")) {
+                    a("sheep", keys);
+                    DeathEvents.heads.put(name, keys);
                     continue;
                 }
                 if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                    if (e == EntityType.LLAMA) {
-                        keys = a("llama", keys);
-                        DeathEvents.heads.put(e, keys);
+                    if (name.equals("LLAMA")) {
+                        a("llama", keys);
+                        DeathEvents.heads.put(name, keys);
                         continue;
                     }
-                    if (e == EntityType.PARROT) {
-                        keys = a("parrot", keys);
-                        DeathEvents.heads.put(e, keys);
+                    if (name.equals("PARROT")) {
+                        a("parrot", keys);
+                        DeathEvents.heads.put(name, keys);
                         continue;
                     }
                 }
-                if (e == EntityType.HORSE) {
-                    keys = a("horse", keys);
-                    DeathEvents.heads.put(e, keys);
+                if (name.equals("HORSE")) {
+                    a("horse", keys);
+                    DeathEvents.heads.put(name, keys);
                     continue;
                 }
-                String fancyName = e.name().toLowerCase().replaceAll("_", "");
-                for (String name : hpch.getConfig().getStringList(fancyName + ".name")) {
+                String fancyName = name.toLowerCase().replaceAll("_", "");
+                for (String name2 : hpch.getConfig().getStringList(fancyName + ".name")) {
                     ItemStack is;
                     boolean b = true;
-                    if (hpchx.isHPXSkull(name)) {
-                        is = hpchx.getSkull(name);
-                    } else if (name.equalsIgnoreCase("{mob-default}")) {
+                    if (hpchx.isHPXSkull(name2)) {
+                        is = hpchx.getSkull(name2);
+                    } else if (name2.equalsIgnoreCase("{mob-default}")) {
                         try {
-                            if (e == EntityType.ENDER_DRAGON
-                                    || e == EntityType.WITHER_SKELETON
-                                    || e == EntityType.CREEPER
-                                    || e == EntityType.ZOMBIE
-                                    || e == EntityType.SKELETON) {
+                            if (name.equals("ENDER_DRAGON")
+                                    || name.equals("WITHER_SKELETON")
+                                    || name.equals("CREEPER")
+                                    || name.equals("ZOMBIE")
+                                    || name.equals("SKELETON")) {
                                 is = new ItemStack(Material.BLAZE_ROD);
                                 double price = hpch.getPrice(fancyName);
                                 ItemMeta sm = is.getItemMeta();
@@ -251,16 +290,22 @@ public class DeathEvents implements Listener {
                                 is = nbt.makeSellable(is);
                                 is = nbt.setType(is, fancyName);
                                 is = nbt.setPrice(is, price);
-                                if (e == EntityType.ENDER_DRAGON) {
-                                    is.setType(nms.getSkull(5).getType());
-                                } else if (e == EntityType.ZOMBIE) {
-                                    is.setType(nms.getSkull(2).getType());
-                                } else if (e == EntityType.CREEPER) {
-                                    is.setType(nms.getSkull(4).getType());
-                                } else if (e == EntityType.SKELETON) {
-                                    is.setType(nms.getSkull(0).getType());
-                                } else {
-                                    is.setType(nms.getSkull(1).getType());
+                                switch (name) {
+                                    case "ENDER_DRAGON":
+                                        is.setType(nms.getSkull(5).getType());
+                                        break;
+                                    case "ZOMBIE":
+                                        is.setType(nms.getSkull(2).getType());
+                                        break;
+                                    case "CREEPER":
+                                        is.setType(nms.getSkull(4).getType());
+                                        break;
+                                    case "SKELETON":
+                                        is.setType(nms.getSkull(0).getType());
+                                        break;
+                                    default:
+                                        is.setType(nms.getSkull(1).getType());
+                                        break;
                                 }
 
                                 b = false;
@@ -274,7 +319,7 @@ public class DeathEvents implements Listener {
                     } else {
                         is = nms.getSkullMaterial(1);
                         SkullMeta sm = (SkullMeta) is.getItemMeta();
-                        sm = nms.setSkullOwner(name, sm);
+                        sm = nms.setSkullOwner(name2, sm);
                         is.setItemMeta(sm);
                     }
                     if (b) {
@@ -298,9 +343,9 @@ public class DeathEvents implements Listener {
                     heads.add(is);
                 }
                 keys.put("default", heads);
-                DeathEvents.heads.put(e, keys);
+                DeathEvents.heads.put(name, keys);
             } catch (Exception ex) {
-	            HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + e.name() + ". If it's a custom head, please double check the name.");
+	            HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name.");
 	            ex.printStackTrace();
             }
 
@@ -360,7 +405,7 @@ public class DeathEvents implements Listener {
             for (String str : hpch.getConfig().getConfigurationSection("sheep.name").getKeys(false)) {
                 if (!str.equalsIgnoreCase("default")) {
                     if (dc.equals(DyeColor.valueOf(str))) {
-                        return heads.get(e.getType()).get(str);
+                        return heads.get(e.getType().name()).get(str);
                     }
                 }
             }
@@ -372,7 +417,7 @@ public class DeathEvents implements Listener {
                 for (String str : hpch.getConfig().getConfigurationSection("llama.name").getKeys(false)) {
                     if (!str.equalsIgnoreCase("default")) {
                         if (color.equals(Llama.Color.valueOf(str))) {
-                            return heads.get(e.getType()).get(str);
+                            return heads.get(e.getType().name()).get(str);
                         }
                     }
                 }
@@ -382,7 +427,7 @@ public class DeathEvents implements Listener {
                 for (String str : hpch.getConfig().getConfigurationSection("parrot.name").getKeys(false)) {
                     if (!str.equalsIgnoreCase("default")) {
                         if (va.equals(Parrot.Variant.valueOf(str))) {
-                            return heads.get(e.getType()).get(str);
+                            return heads.get(e.getType().name()).get(str);
                         }
                     }
                 }
@@ -394,7 +439,7 @@ public class DeathEvents implements Listener {
             for (String str : hpch.getConfig().getConfigurationSection("horse.name").getKeys(false)) {
                 if (!str.equalsIgnoreCase("default")) {
                     if (c.equals(Horse.Color.valueOf(str))) {
-                        return heads.get(e.getType()).get(str);
+                        return heads.get(e.getType().name()).get(str);
                     }
                 }
             }
@@ -407,6 +452,7 @@ public class DeathEvents implements Listener {
 	    int thing;
 	    ItemStack i;
 	    List<ItemStack> af = hasColor(e);
+	    String name = e.getType().name();
 
 	    String mobName = e.getType().name().replaceAll("_", "").toLowerCase();
 	    try {
@@ -414,9 +460,9 @@ public class DeathEvents implements Listener {
                 thing = r.nextInt(af.size());
                 i = af.get(thing);
             } else {
-                if (heads.get(e.getType()) == null) return;
-                if (heads.get(e.getType()).get("default") == null) return;
-                if (heads.get(e.getType()).get("default").size() < 1) return;
+                if (heads.get(name) == null) return;
+                if (heads.get(name).get("default") == null) return;
+                if (heads.get(name).get("default").size() < 1) return;
                 if (e instanceof Sheep) {
                     thing = r.nextInt(hpch.getConfig().getStringList("sheep.name.default").size());
                 } else if (e instanceof Horse) {
@@ -432,7 +478,7 @@ public class DeathEvents implements Listener {
                 } else {
                     thing = r.nextInt(hpch.getConfig().getStringList(mobName + ".name").size());
                 }
-                i = heads.get(e.getType()).get("default").get(thing);
+                i = heads.get(name).get("default").get(thing);
             }
         } catch (IndexOutOfBoundsException ex) {
 	        return;
@@ -467,10 +513,10 @@ public class DeathEvents implements Listener {
         return false;
     }
 
-    public EntityType prettyStringToEntity(String s) {
-	    for (EntityType e : ableEntities) {
-	        if (e.name().replaceAll("_", "").equalsIgnoreCase(s)) {
-	            return e;
+    public String prettyStringToUglyString(String s) {
+	    for (String name : ableEntities) {
+	        if (name.replaceAll("_", "").equalsIgnoreCase(s)) {
+	            return name;
             }
         }
         return null;
@@ -478,7 +524,6 @@ public class DeathEvents implements Listener {
 
     public void reload() {
 	    heads = new HashMap<>();
-        createList();
         setupHeads();
     }
 
@@ -520,7 +565,7 @@ public class DeathEvents implements Listener {
 	        return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
                     || c.getPerks().drops_ignore_players.contains(e.getName()));
         } else {
-            return ableEntities.contains(e.getType());
+            return ableEntities.contains(e.getType().name());
         }
 
     }

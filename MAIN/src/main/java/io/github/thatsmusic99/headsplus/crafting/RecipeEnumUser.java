@@ -27,9 +27,9 @@ public class RecipeEnumUser {
 	private void addEnumToConfig() {
 
             NMSManager nms = hp.getNMS();
-            for (EntityType key : DeathEvents.heads.keySet()) {
+            for (String key : DeathEvents.heads.keySet()) {
                 try {
-                    String id = key.name().toLowerCase().replaceAll("_", "");
+                    String id = key.toLowerCase().replaceAll("_", "");
                     HashMap<String, List<ItemStack>> heads = DeathEvents.heads.get(key);
                     for (String str : heads.keySet()) {
                         if (!heads.get(str).isEmpty()) {
