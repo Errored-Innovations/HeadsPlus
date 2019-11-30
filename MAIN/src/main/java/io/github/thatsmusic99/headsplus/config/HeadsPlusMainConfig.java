@@ -100,6 +100,9 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.broadcasts.challenge-complete", true);
         config.addDefault("plugin.mechanics.leaderboards.cache-boards", true);
         config.addDefault("plugin.mechanics.leaderboards.cache-lifetime-seconds", 300);
+        config.addDefault("plugin.mechanics.xp.crafting", 10);
+        config.addDefault("plugin.mechanics.xp.head-drops", 10);
+        config.addDefault("plugin.mechanics.xp.selling", 10);
         //    config.addDefault("plugin.mechanics.ignored-players-head-drops", new ArrayList<>());
         config.set("mysql.passworld", null); // I still love this
         config.options().copyDefaults(true);
