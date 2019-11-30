@@ -99,10 +99,10 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
     private static String translateColors(String s) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        return translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
+        return ChatColor.translateAlternateColorCodes('&',translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
                 .replaceAll("\\{2}", hp.getThemeColour(2).toString())
                 .replaceAll("\\{3}", hp.getThemeColour(3).toString())
-                .replaceAll("\\{4}", hp.getThemeColour(4).toString());
+                .replaceAll("\\{4}", hp.getThemeColour(4).toString()));
     }
 
     private static String translateHeader(String s) {
