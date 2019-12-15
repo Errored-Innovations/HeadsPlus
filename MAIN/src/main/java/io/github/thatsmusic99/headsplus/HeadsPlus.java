@@ -433,6 +433,9 @@ public class HeadsPlus extends JavaPlugin {
             e.printStackTrace();
         }
         switch (bukkitVersion) {
+            case "v1_15_R1":
+                nmsversion = NMSIndex.v1_15_R1;
+                break;
             case "v1_14_R1":
                 nmsversion = NMSIndex.v1_14_R1;
                 break;
