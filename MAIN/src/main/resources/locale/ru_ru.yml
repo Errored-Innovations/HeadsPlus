@@ -27,7 +27,7 @@ invalid-input-int: '{header} В этой команде вы можете исп
   числа!'
 no-perm: '{header} У вас нет разрешения на использование этой команды.'
 head-adding: '{header} Поиск текстуры для добавления для &c{player}&7.'
-head-added: '{header} &3Head for {player} added!'
+head-added: '{header} Head for &c{player} added!'
 head-already-added: '{header} &3Head for {player} already in database!'
 head-a-add: '{header} &3Эта голова уже добавлена!'
 head-added-bl: '{header} &3{name} добавлена в черный список!'

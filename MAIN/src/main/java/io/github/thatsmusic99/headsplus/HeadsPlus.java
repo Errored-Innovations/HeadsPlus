@@ -100,7 +100,7 @@ public class HeadsPlus extends JavaPlugin {
             // Build plugin instances
             createInstances();
 
-            if(getConfiguration().getMechanics().getBoolean("anvil-menu-search", false)) {
+            if (getConfiguration().getMechanics().getBoolean("anvil-menu-search", false)) {
                 getLogger().warning("Warning: anvil-menu-search has proven to be buggy in some versions - use with caution");
             }
 
@@ -115,7 +115,7 @@ public class HeadsPlus extends JavaPlugin {
             }
             // If sellable heads are enabled and yet there isn't Vault
             if (!(econ()) && (getConfiguration().getPerks().sell_heads)) {
-                getLogger().warning(hpc.getString("no-vault"));
+                getServer().getConsoleSender().sendMessage(hpc.getString("no-vault"));
             }
 
             // If Vault exists
@@ -185,8 +185,16 @@ public class HeadsPlus extends JavaPlugin {
 
             }
 
-
-            getLogger().info(hpc.getString("plugin-enabled"));
+            getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------" +
+                    "\n  " + ChatColor.RED + "_    _                _     " + ChatColor.BLUE + "_____  _                     __  ______ \n" +
+                    " " + ChatColor.RED + "| |  | |              | |   " + ChatColor.BLUE + "|  __ \\| |                   / / |____  |          \n" +
+                    " " + ChatColor.RED + "| |__| | ___  __ _  __| |___" + ChatColor.BLUE + "| |__) | |_   _ ___  __   __/ /_     / / \n" +
+                    " " + ChatColor.RED + "|  __  |/ _ \\/ _` |/ _` / __" + ChatColor.BLUE + "|  ___/| | | | / __| \\ \\ / / '_ \\   / /  \n" +
+                    " " + ChatColor.DARK_RED + "| |  | |  __/ (_| | (_| \\__ \\" + ChatColor.DARK_BLUE + " |    | | |_| \\__ \\  \\ V /| (_) | / /   \n" +
+                    " " + ChatColor.DARK_RED + "|_|  |_|\\___|\\__,_|\\__,_|___/" + ChatColor.DARK_BLUE + "_|    |_|\\__,_|___/   \\_/  \\___(_)_/    \n" +
+                    ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
+                    ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
+                    ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
         } catch (Exception e) {
             try {
                 DebugPrint.createReport(e, "Startup", false, null);
