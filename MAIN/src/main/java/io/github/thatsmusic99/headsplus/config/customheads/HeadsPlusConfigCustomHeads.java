@@ -170,10 +170,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         }
     }
 
-    public boolean isAdvent() {
-        return getConfig().getBoolean("options.advent-calendar", false) && (new GregorianCalendar()).get(GregorianCalendar.MONTH) == GregorianCalendar.DECEMBER;
-    }
-
     public boolean isHPXSkull(String str) {
         return str.startsWith("HP#");
     }

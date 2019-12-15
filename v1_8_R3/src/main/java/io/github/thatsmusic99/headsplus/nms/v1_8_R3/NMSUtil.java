@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.ItemStack;
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -16,7 +15,6 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class NMSUtil implements NMSManager {
 
@@ -61,38 +59,8 @@ public class NMSUtil implements NMSManager {
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack setCalendarValue(org.bukkit.inventory.ItemStack i, String value) {
-        net.minecraft.server.v1_8_R3.ItemStack is = CraftItemStack.asNMSCopy(i);
-        if (is == null) return i;
-        if (is.getTag() == null) {
-            is.setTag(new NBTTagCompound());
-        }
-        is.getTag().setString("advent-value", value);
-        return CraftItemStack.asBukkitCopy(is);
-    }
-
-    @Override
     public String getNMSVersion() {
         return "v1_8_R3";
-    }
-
-    @Override
-    public org.bukkit.inventory.ItemStack setOpen(org.bukkit.inventory.ItemStack i, boolean value) {
-        ItemStack is = CraftItemStack.asNMSCopy(i);
-        if (is.getTag() == null) {
-            is.setTag(new NBTTagCompound());
-        }
-        is.getTag().setBoolean("advent-open", value);
-        return CraftItemStack.asBukkitCopy(is);
-    }
-
-    @Override
-    public boolean isOpen(org.bukkit.inventory.ItemStack is) {
-        ItemStack i = CraftItemStack.asNMSCopy(is);
-        if (i.getTag() != null) {
-            return Objects.requireNonNull(i.getTag()).getBoolean("advent-open");
-        }
-        return false;
     }
 
     @Override

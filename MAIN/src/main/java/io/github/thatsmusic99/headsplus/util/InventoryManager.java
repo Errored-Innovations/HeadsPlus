@@ -232,9 +232,6 @@ public class InventoryManager {
         int start = currentPage * max;
         String[] sections = hpchx.sections.keySet().toArray(new String[0]);
         int categories = sections.length;
-        if (hpchx.isAdvent()) {
-            ++categories;
-        }
         pages = (int) Math.max(1, Math.ceil((double) categories / max));
         headsInSection = 0;
         for (int i = start, c = 0; i < categories && c < max; ++i, ++c) {
@@ -254,25 +251,6 @@ public class InventoryManager {
                 plugin.getLogger().log(Level.WARNING, "Head texture for section " + sections[i] + " not found.");
             } catch (Exception ex) {
                 plugin.getLogger().log(Level.WARNING, "Unexpected Error processing section " + sections[i], ex);
-            }
-        }
-        if (hpchx.isAdvent()) {
-            try {
-                final String text = hpchx.getConfig().getString("options.advent-texture");
-                ItemStack is;
-
-                if (text.startsWith("HP#")) {
-                    is = hpchx.getSkull(text);
-                    SkullMeta sm = (SkullMeta) is.getItemMeta();
-                    sm.setDisplayName(ChatColor.translateAlternateColorCodes('&', hpchx.getConfig().getString("options.advent-display-name")));
-                    is.setItemMeta(sm);
-                } else {
-                    is = hpchx.getSkullFromTexture(text, false, hpchx.getConfig().getString("options.advent-display-name"));
-                }
-                is = plugin.getNBTManager().addSection(is, "advent-calendar");
-                heads.add(is);
-            } catch (Exception ex) {
-                plugin.getLogger().log(Level.WARNING, "Unexpected Error processing section options.advent-texture", ex);
             }
         }
         inventory = new HeadMenu();

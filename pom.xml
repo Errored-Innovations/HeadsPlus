@@ -11,7 +11,7 @@
 
     <properties>
         <module.info>-${artifactId}</module.info>
-        <hp-project.version>v6.7-SNAPSHOT-1</hp-project.version>
+        <hp-project.version>v6.7-SNAPSHOT-3</hp-project.version>
     </properties>
 
     <modules>
@@ -28,6 +28,7 @@
         <module>v1_13_R1</module>
         <module>v1_13_R2</module>
         <module>v1_14_R1</module>
+        <module>v1_15_R1</module>
     </modules>
     <!-- Global dependencies, downloaded from actual repositories-->
     <dependencies>

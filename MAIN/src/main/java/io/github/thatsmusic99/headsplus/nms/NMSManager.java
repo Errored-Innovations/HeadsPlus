@@ -69,13 +69,7 @@ public interface NMSManager {
         }
     }
 
-    ItemStack setCalendarValue(ItemStack i, String value);
-
     String getNMSVersion();
-
-    ItemStack setOpen(ItemStack i, boolean value);
-
-    boolean isOpen(ItemStack is);
 
     default ItemStack getSkull(int data) {
         return new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) data);
