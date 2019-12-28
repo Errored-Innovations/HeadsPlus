@@ -1,0 +1,148 @@
+# HeadsPlus by Thatsmusic99 - HAHAHAHHAKITTY (Thatsmusic99)
+# NO CHANGIN VURSHUN!!! is bad :c
+version: 1.0
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  errors:
+    cmd-fail: '{header} uh oh cmd thing faled'
+    disabled: '{header} Dis cmd is ded!'
+    invalid-args: '{header} Badz cmd stuff!'
+    invalid-input-int: '{header} Naw stoopid nums pls'
+    invalid-pg-no: '{header} Badz paige numbz!'
+    no-perm: '{header} U canz nawt do dis!'
+    player-offline: '{header} Dat playah iz ded!'
+    too-many-args: '{header} CMD STUFFZ OVRLODZ'
+  addhead:
+    head-added: '{header} ey i +1''d a hed :D'
+    head-adding: '{header} +1''n a hed...'
+    head-already-added: '{header} OI hed alredy add''d >:('
+  blacklist:
+    bl-a-off: '{header} Teh naughty list iz alredy off!'
+    bl-a-on: '{header} Teh naughty list iz alredy on!'
+    bl-off: '{header} Teh naughty list iz off!'
+    bl-on: '{header} Teh naughty list iz on!'
+    blw-a-on: '{header} Teh naughty list 4 woldz iz on!'
+    blw-a-off: '{header} Teh naughty list 4 woldz iz off!'
+    empty-bl: '{header} Teh naughty list haz nuffin!'
+    empty-blw: '{header} Teh naughty list 4 woldz has nuffin!'
+    head-a-add: '{header} Teh hed iz alredee add''d!'
+    head-a-removed-bl: '{header} Dis hed iz nawt on teh naughty list!'
+    head-added-bl: '{header} &c{player}&7 haz been add''d 2 teh naughty list!'
+    head-removed-bl: '{header} &c{player}&7 iz nawt on teh naughty list animoar!'
+    world-a-add: '{header} Dis wold iz alredy add''d!'
+    world-added-bl: '{header} &c{world}&7 haz been add''d 2 teh naughty list!'
+    world-a-removed-bl: '{header} Dis wold iz nawt on teh naughty list! :D'
+    world-removed-bl: '{header} &c{world}&7 iz naw longer on teh naughty list!'
+  challenges:
+    already-complete-challenge: '{header} LOL u alredi compleet''d deh chaleng!'
+    cant-complete-challenge: '{header} NU u canz nawt compleet deh chaleng!'
+    challenge-complete: '{header} OMG GUYZ &c{player}&7 DIDZ DA &c{challenge} &7THING!!!'
+    challenge-completed: '&6dun'
+  head:
+    alpha-names: '{header} Y U speekz gibberish?'
+    blacklist-head: '{header} Dis hed is banne sah two bad!!'
+    full-inv: '{header} Ur nawt faht enuf 2 get anofa hed!'
+    head-too-long: '{header} Name 2 smol'
+    head-too-short: '{header} NAME 2 BIGZ'
+    whitelist-head: '{header} Dis hed iz nawt aloud!'
+  head-info:
+    add-value: '{header} &c{value} &7haz bin +1''d 2 &c{entity}&7''z &c{setting}&7!'
+    no-lore-data: '{header} AAAAAAA deres nu lore data D:'
+    no-mask-data: '{header} soz but dere iz nu mAHsk data ;-;'
+    no-name-data: '{header} UMG deres nu naim data D:'
+    remove-value: '{header} &c{value} &7haz bin -1''d 2 &c{entity}&7''z &c{setting}&7!'
+    set-value: '{header} &c{entity}&7''z &c{setting} &7haz bin chainge''d 2 &c{value}&7!!!'
+  heads:
+    buy-success: '{header} U smh gawt ah hed 4 &c{price}&7 &and nao haz &c{balance}&7!'
+    chat-input: '{header} Teyepe sumthin 2 look 4'
+    not-enough-money: '{header} lol ur broke'
+  leaderboards:
+    no-data-lb: '{header} Naw gud stuffz heer yet...'
+  levels:
+    level-up: '{header} OMG &c{player}&7 haz reeched lvl &c{level}&7!'
+  profile:
+    cant-view-data: '{header} U r console. I am cat. U shall nawt veww ur data.'
+    no-data: '{header} Dat purrrrzon haz nu day-ta!'
+  reload:
+    reload-message: '{header} Dun!'
+    reloading-message: '{header} Relodin teh confeeg...'
+  sellhead:
+    false-head: '{header} LOL u canz nawt sell dis head!'
+    false-item: '{header} LOL dis iznt a hed'
+    no-heads: '{header} LOL u haz naw gud heds'
+    not-enough-heads: '{header} LOL u haz naw heds'
+    sell-success: '{header} Smh u sold teh hed(s) four &c{price}&7 end nao haz &c{balance}&7!'
+  tests:
+    running-tests: 'RUNRUNRUNRABBITRUUUUUUUUUUN (mai taik a weyel :3)'
+    results: ''
+  whitelist:
+    empty-wl: '{header} Teh nice list haz nuffin!'
+    empty-wlw: '{header} Teh nice list 4 woldz haz nuffin!'
+    head-a-removed-wl: '{header} Dis hed nawt on teh nice list :('
+    head-added-wl: '{header} &c{player}&7 haz been add''d 2 teh nice list!'
+    head-removed-wl: '{header} &c{player}&7 iz naw longer on teh nice list :('
+    wl-a-off: '{header} Teh nice list iz alredy off!'
+    wl-a-on: '{header} Teh naughty list iz alredy on!'
+    wl-off: '{header} Teh nice list iz off!'
+    wl-on: '{header} Teh nice list iz on!'
+    wlw-a-off: '{header} Teh nice list 4 woldz iz alredy off!'
+    wlw-a-on: '{header} Teh nice list 4 woldz iz alredy on!'
+    wlw-off: '{header} Teh nice list 4 woldz iz off!'
+    wlw-on: '{header} Teh nice list 4 woldz iz on!'
+    world-a-removed-wl: '{header} w is naw longer on teh nice list!'
+    world-added-wl: '{header} &c{world}&7 iz nao on teh nice list!'
+    world-removed-wl: '{header} &c{world} &7is naw longer on teh nice list!'
+descriptions:
+  hp:
+    blacklist: Turnz teh naughty list on 'n' off
+    blacklistadd: Addz a hed 2 teh naughty list
+    blacklistdel: Remuvz a hed from teh naughty list
+    blacklistl: Listz all 'o' deh heds on teh naughty list
+    blacklistw: Turnz teh naughty list 4 woldz on 'n' off
+    blacklistwadd: Addz a hed 2 teh naughty list 4 woldz
+    blacklistwdel: Remuvz a hed from teh naughty list 4 woldz
+    blacklistwl: Listz all 'o' deh heds on teh naughty list 4 woldz
+    complete: dis compleetz a kewl chaleng
+    conjure: Get a kewl hed or smth
+    debug: Poopz sparkly dee-bug flies!
+    headinfo: Shoez ore chaingez sum hed stuffz
+    help: Shoes deh halp menoo.
+    info: Shoes info 'bowt teh plug-in
+    profile: Shoes u ur prof ;3
+    reload: Relodz teh confeeg
+    tests: RUNRUNRUNRUNRUN
+    whitelist: Turnz teh nice list on 'n' off
+    whitelistadd: Addz a hed 2 teh nice list
+    whitelistdel: Remuvz a hed from teh nice list
+    whitelistl: Listz all 'o' deh heds on teh nice list
+    whitelistw: Turnz teh nice list 4 woldz on 'n' off
+    whitelistwadd: Addz a hed 2 teh nice list 4 woldz
+    whitelistwdel: Remuvz a hed from teh nice list 4 woldz
+    whitelistwl: Listz all 'o' deh heds on teh nice list 4 woldz
+    xp: chainj sum xp .3.
+  addhead: U can add sum nu hedz to deh menoo.
+  head: Givz u a hed
+  heads: MOAR HEDS!!
+  hpc: Shoes ur chalengz.
+  hplb: Shoes u teh LEADRZ!!
+  myhead: Givs u ur hed
+  sellhead: Sells a hed in ur hands or wif teh givn cmd stuff
+event:
+  block-place-denied: '{header} Nu dun do dat'
+  head-interact-message: '{header} Dat iz &c{player}&7''s hed!'
+  head-mhf-interact-message: '{header} Dat iz a wild &c{player}&7''s hed!'
+  head-mhf-interact-message-2: '{header} Dat iz a wild &c{player}&7''s hed!'
+  lost-money: '{header} ok so u lost &c{price} &7cos &c{player} &7kicked ur butt B)'
+startup:
+  faulty-theme: '{header} bad theem alert, uglee won iz on'
+  no-vault: '{header} eh cudnt oh-pen deh vault!!'
+  no-vault-2: '{header} Deh vault wazn''t oh-penned, cud nawt giv/taik rank D:'
+  plugin-disabled: '{header} Kittenz sleepin nao'
+  plugin-enabled: '{header} Angery mode on!!'
+  plugin-fail: '{header} Omg I faled D:'
+update:
+  current-version: '{header} Vershun rn: &c{version}'
+  description: '{header} Stuffz: &c{description}'
+  new-version: '{header} c00l vershun: &c{version}'
+  plugin-up-to-date: '{header} oboi da plugeen iz up-2-d8!'
+  update-found: '{header} umg guyz an updaitz 4 HeadsPlus waz fownd! Click meh!!'

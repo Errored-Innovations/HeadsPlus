@@ -1,0 +1,157 @@
+# HeadsPlus by Thatsmusic99 - Romana (DariusTK)
+# Nu schimbati versiunea! Acesta este folosit intern în plugin pentru a adauga mesaje noi.
+version: 1.0
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  errors:
+    cmd-fail: '{header} Eroare la rularea acestei comenzi!'
+    disabled: '{header} Aceasta comanda este dezactivata.'
+    invalid-args: '{header} Argumente invalide!'
+    invalid-input-int: '{header} Poti folosi doar numere intregi in aceasta comanda!'
+    invalid-pg-no: '{header} Numarul paginii este invalid!'
+    no-perm: '{header} Nu ai permisiunea de a executa aceasta comanda!'
+    player-offline: '{header} Acest jucator este offline!'
+    too-many-args: '{header} Prea multe argumente!'
+  addhead:
+    head-added: '{header} S-a adăugat către &c{player}&7!'
+    head-adding: '{header} Căutați textură pentru a adăuga &c{player}&7...'
+    head-already-added: '{header} Îndreptați-vă spre &c{player} &7deja în baza de date!'
+  blacklist:
+    bl-a-off: '{header} Interzicerea este deja dezactivata!'
+    bl-a-on: '{header} Interzicerea este deja activata!'
+    bl-off: '{header} Interzicerea a fost dezactivata!'
+    bl-on: '{header} Interzicerea a fost activata!'
+    blw-a-on: '{header} Interzicerea lumilor a fost activata!'
+    blw-a-off: '{header} Interzicerea lumilor a fost dezactivata!'
+    empty-bl: '{header} Lista cu capete interzise este goala!'
+    empty-blw: '{header} Lista cu lumi interzise este goala!'
+    head-a-add: '{header} Acest cap este deja adaugat!'
+    head-a-removed-bl: '{header} Acest cap nu este inca interzis!'
+    head-added-bl: '{header} &c{player}&7 a fost interzis!'
+    head-removed-bl: '{header} &c{player}&7 nu mai este interzis!'
+    world-a-add: '{header} Aceasta lume este deja adaugata!'
+    world-added-bl: '{header} &c{world}&7 a fost adaugata lumilor interzise!'
+    world-a-removed-bl: '{header} Aceasta lume nu este inca interzisa!'
+    world-removed-bl: '{header} &c{world}&7 nu mai este o lume interzisa!'
+  challenges:
+    already-complete-challenge: '{header} Ati terminat deja aceasta provocare!'
+    cant-complete-challenge: '{header} Nu puteti face aceasta provocare!'
+    challenge-complete: '{header} &c{player}&7 a finalizat Challenge &c{challenge}&7!'
+    challenge-completed: '&6Terminat!'
+  head:
+    alpha-names: '{header} Aceasta comanda suporta doar nume alfanumerice!'
+    blacklist-head: '{header} Acest cap este interzis si nu poate fi folosit!'
+    full-inv: '{header} Inventarul tau este plin!'
+    head-too-long: '{header} IGN-ul este prea lung pentru a fi utilizat. Foloseste
+      un IGN intre 3 si 16 caractere!'
+    head-too-short: '{header} IGN-ul este prea scurt pentru a fi utilizat. Foloseste
+      un IGN intre 3 si 16 caractere!'
+    whitelist-head: '{header} Acest cap nu este inca permis si nu poate fi folosit!'
+  head-info:
+    add-value: '{header} &c{value} &7a fost adăugat la setarea &c{setting} &7a &c{entity}&7!'
+    no-lore-data: '{header} Nu exista date de lore pentru aceasta entitate!'
+    no-mask-data: '{header} Nu exista date de masca pentru aceasta entitate!'
+    no-name-data: '{header} Nu exista date de nume pentru aceasta entitate!'
+    remove-value: '{header} &c{value} &7a fost eliminat din setarea &c{setting} &7a &c{entity}&7!'
+    set-value: '{header} &c{entity} {setting} &7a fost modificată la &c{value}&7!'
+  heads:
+    buy-success: '{header} Ai cumparat cu succes acest cap pentru &c{price}&7 iar
+      acum ai &c{balance}&7!'
+    chat-input: '{header} Introduceti un termen pe care doriti sa il cautați.'
+    not-enough-money: '{header} Nu aveti destui bani!'
+  leaderboards:
+    no-data-lb: '{header} Nu au fost inregistrate inca date despre clasament!'
+  levels:
+    level-up: '{header} &c{player}&7 a atins nivelul &c{level}&7!'
+  profile:
+    cant-view-data: '{header} Nu puteti vedea propriile date in consola!'
+    no-data: '{header} Nincsenek adatok ehhez a jatekoshoz!'
+  reload:
+    reload-message: '{header} Config reincarcat cu succes!'
+    reloading-message: '{header} Reincarcare config...'
+  sellhead:
+    false-head: '{header} Acest cap nu poate fi vandut!'
+    false-item: '{header} Acesta nu este un cap!'
+    no-heads: '{header} Nu ai niciun cap valid in inventarul tau!'
+    not-enough-heads: '{header} Nu ai destule capete!'
+    sell-success: '{header} Ai vandut cu succes acest(e) cap(ete) pentru &c{price}&7
+      iar acum ai &c{balance}&7!'
+  tests:
+    running-tests: '{header} Derularea testelor ... (poate dura ceva timp)'
+    results: '{header} Rezultate: &c{results}'
+  whitelist:
+    empty-wl: '{header} Lista cu capete permise este goala!'
+    empty-wlw: '{header} Lista cu lumi permise este goala!'
+    head-a-removed-wl: '{header} Acest cap nu este inca permis!'
+    head-added-wl: '{header} &c{player}&7 a fost permis!'
+    head-removed-wl: '{header} &c{player}&7 nu mai este permis!'
+    wl-a-off: '{header} Permiterea este deja dezactivata!'
+    wl-a-on: '{header} Interzicerea este deja activata!'
+    wl-off: '{header} Permiterea a fost dezactivata!'
+    wl-on: '{header} Permiterea a fost activata!'
+    wlw-a-off: '{header} Permiterea lumilor este deja dezactivata!'
+    wlw-a-on: '{header} Permiterea lumilor este deja activata!'
+    wlw-off: '{header} Permiterea lumilor a fost dezactivata!'
+    wlw-on: '{header} Permiterea lumilor a fost activata!'
+    world-a-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
+    world-added-wl: '{header} &c{world}&7 a fost adaugata lumilor permise!'
+    world-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
+descriptions:
+  hp:
+    blacklist: Porneste sau opreste interzicerea.
+    blacklistadd: Adauga un cap pe lista celor interzise.
+    blacklistdel: Sterge un cap de pe lista celor interzise.
+    blacklistl: Arata toate capetele interzise.
+    blacklistw: Porneste sau opreste interzicerea craftarii capetelor.
+    blacklistwadd: Adauga o lume pe lista celor interzise pentru craftat.
+    blacklistwdel: Sterge o lume de pe lista celor interzise pentru craftat.
+    blacklistwl: Arata toate lumile interzise.
+    complete: Finalizeaza o provocare.
+    conjure: Retreife un cap de un anumit tip.
+    debug: Inchide un fisier de depanare.
+    headinfo: Afiseaza/modifica informatii despre capul entitatii specifice.
+    help: Afiseaza meniul de ajutor.
+    info: Arata informatii despre plugin.
+    profile: Afiseaza profilul pentru plugin-ul.
+    reload: Reincarca configuratia.
+    tests: Executa testele pentru ratele de scădere a mafiei.
+    whitelist: Porneste sau opreste permiterea.
+    whitelistadd: Adauga un cap pe lista celor permise.
+    whitelistdel: Sterge un cap de pe lista celor permise.
+    whitelistl: Arata toate capetele permise.
+    whitelistw: Porneste sau opreste permiterea craftarii capetelor.
+    whitelistwadd: Adauga o lume pe lista celor permise pentru craftat.
+    whitelistwdel: Sterge o lume de pe lista celor permise pentru craftat.
+    whitelistwl: Arata toate lumile permise.
+    xp: Vizualizați sau schimbați XP-ul unui jucător.
+  addhead: Adăugați un cap de jucător în meniul principal
+  head: Spawneaza un cap.
+  heads: Arata o selectie a capetelor.
+  hpc: Afiseaza provocarile pe care le puteti finaliza.
+  hplb: Afiseaza tabela de clasa a capului.
+  myhead: Spawneaza capul tau.
+  sellhead: Vinde cap(etele) pe care le ai in mana, foloseste cifre pentru a vinde
+    un anumit numar de capete, numele entitatii pentru a vinde capul unui anumit animal,
+    si valoarea ''all'' pentru a vinde fiecare cap.
+event:
+  block-place-denied: '{header} Nu poti sa-ti asezi capete!'
+  head-interact-message: '{header} Acesta este capul lui &c{player}&7!'
+  head-mhf-interact-message: '{header} Acesta este un cap de &c{player}&7!'
+  head-mhf-interact-message-2: '{header} Acesta este un cap de &c{player}&7!'
+  lost-money: '{header} Pentru ca ai fost ucis de &c{player}&7, ai pierdut &c{price}&7!'
+startup:
+  faulty-theme: '{header} Tema gresita a fost pusa! Nu se vor face modificari tematice.'
+  no-vault: '{header} Vault nu a fost gasit! Șefii nu pot fi vanduti si recompensele
+    provocatoare nu pot adauga/elimina grupuri.'
+  no-vault-2: '{header} Vault nu a fost gasit la pornire! Grupul nu poate fi adaugat.'
+  plugin-disabled: '{header} HeadsPlus a fost dezactivat!'
+  plugin-enabled: '{header} HeadsPlus a fost activat!'
+  plugin-fail: '{header} HeadsPlus nu a reușit sa porneasca corect. Un raport de eroare
+    a fost facut in /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Versiune curenta: &c{version}'
+  description: '{header} Descriere: &c{description}'
+  new-version: '{header} Versiune noua: &c{version}'
+  plugin-up-to-date: '{header} Plugin-ul este actualizat!'
+  update-found: '{header} Un update a fost gasit pentru HeadsPlus! Plasati cursorul
+    pentru mai multe informatii.'

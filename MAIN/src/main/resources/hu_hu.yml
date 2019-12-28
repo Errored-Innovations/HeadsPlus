@@ -1,0 +1,157 @@
+# HeadsPlus by Thatsmusic99 - Magyar (Toldi/Montlikadani)
+# Ne változtassa meg a verziót! Ezt a bővítményben belsőleg használják új üzenetek hozzáadására.
+version: 1.0
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  errors:
+    cmd-fail: '{header} Nem sikerült futtatni ezt a parancsot!'
+    disabled: '{header} Ez a parancs le van tiltva.'
+    invalid-args: '{header} Érvénytelen argumentumok!'
+    invalid-input-int: '{header} Ebben a parancsban csak egész számokat használhatsz!'
+    invalid-pg-no: '{header} Érvénytelen oldal szám!'
+    no-perm: '{header} Nincs jogod a parancs használatára.'
+    player-offline: '{header} Ez a játékos offline állapotban van!'
+    too-many-args: '{header} Túl sok argumentum!'
+  addhead:
+    head-added: '{header} A (z) &c{player} &7hozzáadandó textúra felkutatása ...'
+    head-adding: '{header} A (z) &c{player} &7fej hozzáadva!'
+    head-already-added: '{header} A (z) &c{player} &7fejléce már az adatbázisban található!'
+  blacklist:
+    bl-a-off: '{header} A feketelista már le van tiltva!'
+    bl-a-on: '{header} A feketelista már engedélyezve van!'
+    bl-off: '{header} A feketelista letiltva!'
+    bl-on: '{header} A feketelista engedélyezve van!'
+    blw-a-on: '{header} A világ feketelistája engedélyezve!'
+    blw-a-off: '{header} A világ feketelista le van tiltva!'
+    empty-bl: '{header} A feketelista üres!'
+    empty-blw: '{header} A világ feketelista üres!'
+    head-a-add: '{header} Ez a fej már hozzá van adva!'
+    head-a-removed-bl: '{header} Ez a fej nem szerepel a feketelistán!'
+    head-added-bl: '{header} &c{player}&7 hozzáadva a feketelistához!'
+    head-removed-bl: '{header} &c{player}&7 eltávolítva a feketelistáról!'
+    world-a-add: '{header} Ez a világ már hozzáadva!'
+    world-added-bl: '{header} &c{world}&7 hozzá lett adva a világ a feketelistájához!'
+    world-a-removed-bl: '{header} Ez a világ nem szerepel a feketelistán!'
+    world-removed-bl: '{header} &c{world}&7 eltávolítva a feketelistáról!'
+  challenges:
+    already-complete-challenge: '{header} Már befejezted a kihívást!'
+    cant-complete-challenge: '{header} Nem tudod befejezni ezt a kihívást!'
+    challenge-complete: '{header} &c{player}&7 befejezte a %c küldetést!'
+    challenge-completed: '&6Befejezték!'
+  head:
+    alpha-names: '{header} Ez a parancs csak az alfanumerikus neveket kezeli!'
+    blacklist-head: '{header} Ez a fej feketelistán szerepel, és nem használható!'
+    full-inv: '{header} Az eszköztárad tele van!'
+    head-too-long: '{header} Az IGN túl hosszú ahhoz, hogy érvényes legyen! Kérjük,
+      használj IGN-t 3 és 16 karakter között.'
+    head-too-short: '{header} Az IGN túl rövid ahhoz, hogy érvényes legyen! Kérjük,
+      használj IGN-t 3 és 16 karakter között.'
+    whitelist-head: '{header} Ez a fej nem engedélyezett, ezért nem használható!'
+  head-info:
+    add-value: '{header} &c{value} &7hozzáadva &c{entity} {setting} &7beállításához!'
+    no-lore-data: '{header} Ehhez az entitáshoz nincsenek adatok!'
+    no-mask-data: '{header} Nincsenek maszk adatok ehhez az entitáshoz!'
+    no-name-data: '{header} Nincs ilyen névadat ehhez az entitáshoz!'
+    remove-value: '{header} &c{value} &7eltávolítva &c{entity} {setting} &7beállításából!'
+    set-value: '{header} &c{entity}&7''s &c{setting} {value} &7értékre változott!'
+  heads:
+    buy-success: '{header} Vettél egy fejre &c{price}&7 és most már &c{balance}&7!'
+    chat-input: '{header} Írja be azt a kifejezést, amelyet keresni szeretne.'
+    not-enough-money: '{header} Nincs elég pénzed!'
+  leaderboards:
+    no-data-lb: '{header} Még nincs értékelő adat!'
+  levels:
+    level-up: '{header} &c{player}&7 elérte a &c{level}&7 szintet!'
+  profile:
+    cant-view-data: '{header} A saját adataid nem tekintheted meg a konzolban!'
+    no-data: '{header} Nincsenek adatok ehhez a játékoshoz!'
+  reload:
+    reload-message: '{header} A konfiguráció újratöltve!'
+    reloading-message: '{header} A konfiguráció újratöltése...'
+  sellhead:
+    false-head: '{header} Ez a fej nem értékesíthető!'
+    false-item: '{header} Ez nem egy fej!'
+    no-heads: '{header} Nincsenek érvényes fejek az eszköztáradban!'
+    not-enough-heads: '{header} Nincs elég fejed!'
+    sell-success: '{header} Sikeresen eladtad a fej(ek)et &c{price}&7 és most már
+      &c{balance}&7!'
+  tests:
+    running-tests: '{header} Tesztek futtatása ... (ez eltarthat egy ideig)'
+    results: '{header} Eredmények: &c{results}'
+  whitelist:
+    empty-wl: '{header} A fehérlista üres!'
+    empty-wlw: '{header} A világ fehérlista üres!'
+    head-a-removed-wl: '{header} Ez a fej nincs a fehérlistán!'
+    head-added-wl: '{header} &c{player}&7 hozzáadva a fehérlistához!'
+    head-removed-wl: '{header} &c{player}&7 eltávolítva a listából!'
+    wl-a-off: '{header} A fehérlista már le van tiltva!'
+    wl-a-on: '{header} A feketelista már engedélyezve van!'
+    wl-off: '{header} A fehérlista letiltva!'
+    wl-on: '{header} A fehérlista engedélyezve!'
+    wlw-a-off: '{header} A világ fehérlista már le van tiltva!'
+    wlw-a-on: '{header} A világ fehérlista már engedélyezve!'
+    wlw-off: '{header} A világ fehérlista letiltva!'
+    wlw-on: '{header} A világ fehérlista engedélyezve!'
+    world-a-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
+    world-added-wl: '{header} &c{world}&7 hozzá lett adva a világ a fehérlistájához!'
+    world-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
+descriptions:
+  hp:
+    blacklist: Váltja a feketelistát.
+    blacklistadd: Hozzáad egy fejet a feketelistához.
+    blacklistdel: Eltávolítja a fejet a feketelistáról.
+    blacklistl: Minden feketelistában lévő fejet felsorol.
+    blacklistw: Váltja a készletkészítő feketelista be/ki kapcsolását.
+    blacklistwadd: Hozzáad egy világot a barkács receptek fekete listájához.
+    blacklistwdel: Eltávolítja a világot a barkács receptek feketelistajához.
+    blacklistwl: Kilistázza a feketelistában levő világokat.
+    complete: Kihívást jelent.
+    conjure: Visszatér egy adott típusú fejet.
+    debug: Egy hibakereső fájlt bocsát ki.
+    headinfo: Megjeleníti/módosítja az adott entitás fejével kapcsolatos információkat.
+    help: Megjeleníti a segítség menüt.
+    info: Megjeleníti a plugin információit.
+    profile: A bővítmény profilját jeleníti meg.
+    reload: Frissíti a konfigurációs fájlt.
+    tests: Futtatja a mob-esési sebességet.
+    whitelist: Váltja a fehérlistát.
+    whitelistadd: Hozzáad egy fejet a fehérlistához.
+    whitelistdel: Eltávolítja a fejet a fehérlistából.
+    whitelistl: Az összes fejet felsorolja, ami a fehérlistában van.
+    whitelistw: A fehérlista engedélyezése/kikapcsolása.
+    whitelistwadd: Hozzáad egy világot a barkácsoló recept fehérlistájához.
+    whitelistwdel: Eltávolítja a világot a barkácsoló recept fehérlistájából.
+    whitelistwl: Kilistázza a fehérlistában lévő világokat.
+    xp: Megtekintheti vagy módosíthatja a játékos XP-jét.
+  addhead: Adjunk hozzá egy játékos fejét a fej menübe.
+  head: Leidéz egy fejet.
+  heads: Megjeleníti a fejek kiválasztását.
+  hpc: Megjeleníti azokat a kihívásokat, amelyekkel befejezheted.
+  hplb: Megjeleníti a fejlécet.
+  myhead: Leidézi a fejed.
+  sellhead: Eladja a feje(ke)t a kezedben, használd a számparamétert, hogy adjon el
+    egy adott számot, egy entitás nevét, hogy eladja egy adott mob fejét, és mindent
+    eladni minden fejét.
+event:
+  block-place-denied: '{header} Nem teheted le a fejeket!'
+  head-interact-message: '{header} Azaz &c{player}&7 feje!'
+  head-mhf-interact-message: '{header} Az egy &c{player}&7 feje!'
+  head-mhf-interact-message-2: '{header} Ez egy &c{player}&7 feje!'
+  lost-money: '{header} Mert &c{player} &7megölte, elvesztette &c{price}&7!'
+startup:
+  faulty-theme: '{header} Hibás téma került be! A téma módosítása nem történik.'
+  no-vault: '{header} A Vault nem található! A fejeket nem lehet eladni, és a kihívás
+    jutalmak nem tudnak hozzáadni/eltávolítani a csoportokat.'
+  no-vault-2: '{header} A Vault nem indult elindításkor! A csoport hozzáadása nem
+    lehetséges.'
+  plugin-disabled: '{header} A HeadsPlus letiltva!'
+  plugin-enabled: '{header} A HeadsPlus engedélyezve!'
+  plugin-fail: '{header} A HeadsPlus nem indult megfelelően. Hibaüzenet készült a
+    /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Jelenlegi verzió: &c{version}'
+  description: '{header} Leírás: &c{description}'
+  new-version: '{header} Új verzió: &c{version}'
+  plugin-up-to-date: '{header} A bővítmény naprakész!'
+  update-found: '{header} Frissítés található a HeadsPlus pluginban! További információért
+    vidd az egérmutatót az üzenet fölé.'

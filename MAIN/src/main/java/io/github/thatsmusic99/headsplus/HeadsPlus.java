@@ -26,6 +26,7 @@ import io.github.thatsmusic99.pg.Core;
 import io.github.thatsmusic99.specprotect.CoreClass;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,9 +36,12 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -355,6 +359,7 @@ public class HeadsPlus extends JavaPlugin {
         debug("- Instance for HeadsPlus's API created!", 3);
         nbt = new NBTManager();
         debug("- Instance for NBTManager created!", 3);
+
         hpc = new HeadsPlusMessagesConfig(false);
         cs.add(hpc);
         debug("- Instance for HeadsPlusMessagesConfig created!", 3);
@@ -417,6 +422,25 @@ public class HeadsPlus extends JavaPlugin {
         scores = new PlayerScores();
         scores.create();
         scores.read();
+    }
+
+    private void createLocales() {
+        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lolcat", "pl_pl", "ro_ro", "ru_ru"));
+        File dir = new File(getDataFolder() + File.separator + "locale");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        for (String locale : locales) {
+            File conf = new File(dir + File.separator + locale + ".yml");
+            if (!conf.exists()) {
+                InputStream is = getResource(locale + ".yml");
+                try {
+                    FileUtils.copyInputStreamToFile(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 

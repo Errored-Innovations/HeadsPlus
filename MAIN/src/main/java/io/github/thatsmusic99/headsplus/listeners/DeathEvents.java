@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -30,14 +31,44 @@ public class DeathEvents implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
+                Class[] horseData;
+                if (index.getOrder() < 6) {
+                    horseData = new Class[]{Horse.Color.class, Horse.Variant.class};
+                } else {
+                    horseData = new Class[]{Horse.Color.class};
+                }
+                coloredData.put("HORSE", horseData);
+                coloredData.put("SHEEP", new Class[]{DyeColor.class});
+                coloredData.put("WOLF", new Class[]{DyeColor.class});
+                coloredData.put("RABBIT", new Class[]{Rabbit.Type.class});
+                if (index.getOrder() > 7) {
+                    coloredData.put("LLAMA", new Class[]{Llama.Color.class});
+                    coloredData.put("PARROT", new Class[]{Parrot.Variant.class});
+                }
+                if (index.getOrder() > 8) {
+                    coloredData.put("TROPICAL_FISH", new Class[]{TropicalFish.Pattern.class});
+                }
+                if (index.getOrder() > 10) {
+                    coloredData.put("FOX", new Class[]{Fox.Type.class});
+                    coloredData.put("CAT", new Class[]{Cat.Type.class});
+                    coloredData.put("TRADER_LLAMA", new Class[]{TraderLlama.Color.class});
+                    coloredData.put("VILLAGER", new Class[]{Villager.Profession.class, Villager.Type.class});
+                    coloredData.put("MUSHROOM_COW", new Class[]{MushroomCow.Variant.class});
+                } else {
+                    coloredData.put("OCELOT", new Class[]{Ocelot.Type.class});
+                    coloredData.put("VILLAGER", new Class[]{Villager.Profession.class});
+                }
+                coloredData.put("ZOMBIE_VILLAGER", new Class[]{Villager.Profession.class});
                 setupHeads();
             }
         }.runTaskAsynchronously(HeadsPlus.getInstance());
 
     }
 	
-	public final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
+	public static final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
             "BLAZE",
+            "BEE",
             "CAT",
             "CAVE_SPIDER",
             "CHICKEN",
@@ -100,6 +131,7 @@ public class DeathEvents implements Listener {
     private final HeadsPlusConfigCustomHeads hpchx = HeadsPlus.getInstance().getHeadsXConfig();
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
     public static HashMap<String, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
+    private static HashMap<String, Class[]> coloredData = new HashMap<>();
     public static boolean ready = false;
 
     @EventHandler
@@ -545,9 +577,9 @@ public class DeathEvents implements Listener {
         if (c.getWorldWhitelist().enabled) {
 	        if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
 	            if (e.getKiller() != null) {
-	                return false;
-                } else if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
-                    return false;
+                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
+                        return false;
+                    }
                 }
             }
         }
