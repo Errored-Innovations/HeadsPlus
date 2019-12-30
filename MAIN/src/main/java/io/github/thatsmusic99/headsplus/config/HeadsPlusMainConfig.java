@@ -30,6 +30,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
             reloadC(false);
         }
         config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
+        config.addDefault("locale", "en_us");
         config.addDefault("blacklist.default.enabled", true);
         config.addDefault("blacklist.world.enabled", true);
         config.addDefault("whitelist.default.enabled", false);
@@ -54,6 +55,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.autograb.section", "players");
         config.addDefault("plugin.autograb.title", "&8[&6{player}&8]");
         config.addDefault("plugin.autograb.price", "default");
+        config.addDefault("plugin.perks.ascii-art", true);
         config.addDefault("plugin.perks.sell-heads", true);
         config.addDefault("plugin.perks.drop-heads", true);
         config.addDefault("plugin.perks.drops.ignore-players", new ArrayList<>());
@@ -156,6 +158,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         perks.pvp_player_balance_competition = p.getBoolean("pvp.player-balance-competition");
         perks.pvp_percentabe_lost = p.getDouble("pvp.percentage-lost");
         perks.pvp_balance_for_head = p.getDouble("pvp.percentage-balance-for-head");
+        perks.ascii = p.getBoolean("ascii-art");
     }
 
     public ConfigurationSection getMechanics() {
@@ -206,6 +209,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         public final List<String> death_messages = new ArrayList<>();
         public boolean pvp_player_balance_competition;
         public double pvp_percentabe_lost, pvp_balance_for_head;
+        public boolean ascii;
     }
 
     public static class SelectorList {
