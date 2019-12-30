@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.commands.maincommand.HelpMenu;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,8 +15,8 @@ public class HeadsPlusCommand implements CommandExecutor {
 
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
-	private final String noPerms = hpc.getString("no-perm");
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+	private final String noPerms = hpc.getString("commands.errors.no-perm");
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 	    tests.clear();

@@ -5,8 +5,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.DyeColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.potion.PotionEffectType;
@@ -24,11 +23,11 @@ import java.util.List;
 public class HeadInfoCommand implements IHeadsPlusCommand {
 
     // A
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descHeadView();
+        return hpc.getString("descriptions.hp.headinfo");
     }
 
     @Override
@@ -56,19 +55,19 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                 if (args[4].matches("^[0-9]+$")) {
                                     g.put(true, "");
                                 } else {
-                                    g.put(false, hpc.getString("invalid-input-int"));
+                                    g.put(false, hpc.getString("commands.errors.invalid-input-int"));
                                 }
                             } else {
                                 g.put(true, "");
                             }
                         } else {
-                            g.put(false, hpc.getString("invalid-args"));
+                            g.put(false, hpc.getString("commands.errors.invalid-args"));
                         }
                     } else {
                         g.put(true, "");
                     }
                 } else {
-                    g.put(false, hpc.getString("invalid-args"));
+                    g.put(false, hpc.getString("commands.errors.invalid-args"));
                 }
             } else if (args[1].equalsIgnoreCase("set")) {
                 if (args.length > 4) {
@@ -86,7 +85,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         }
                     }
                 }
-                g.put(false, hpc.getString("invalid-args"));
+                g.put(false, hpc.getString("commands.errors.invalid-args"));
                 return g;
             } else if (args[1].equalsIgnoreCase("add")) {
                 if (args.length > 4) {
@@ -102,13 +101,13 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         if (args[5].matches("^[0-9]+$")) {
                                             g.put(true, "");
                                         } else {
-                                            g.put(false, hpc.getString("invalid-args"));
+                                            g.put(false, hpc.getString("commands.errors.invalid-args"));
                                         }
                                     } else {
                                         g.put(true, "");
                                     }
                                 } else {
-                                    g.put(false, hpc.getString("invalid-args"));
+                                    g.put(false, hpc.getString("commands.errors.invalid-args"));
                                 }
                             } else if (args[2].equalsIgnoreCase("sheep") && args[3].equalsIgnoreCase("name")) {
                                 if (args.length > 5) {
@@ -116,7 +115,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         DyeColor.valueOf(args[5].toUpperCase());
                                         g.put(true, "");
                                     } catch (Exception e) {
-                                        g.put(false, hpc.getString("invalid-args"));
+                                        g.put(false, hpc.getString("commands.errors.invalid-args"));
                                     }
                                 } else {
                                     g.put(true, "");
@@ -125,13 +124,13 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                 g.put(true, "");
                             }
                         } else {
-                            g.put(false, hpc.getString("invalid-args"));
+                            g.put(false, hpc.getString("commands.errors.invalid-args"));
                         }
                     } else {
-                        g.put(false, hpc.getString("invalid-args"));
+                        g.put(false, hpc.getString("commands.errors.invalid-args"));
                     }
                 } else {
-                    g.put(false, hpc.getString("invalid-args"));
+                    g.put(false, hpc.getString("commands.errors.invalid-args"));
                 }
             } else if (args[1].equalsIgnoreCase("remove")) {
                 if (args.length > 4) {
@@ -148,7 +147,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                             DyeColor.valueOf(args[6]);
                                             g.put(true, "");
                                         } catch (Exception e) {
-                                            g.put(false, hpc.getString("invalid-args"));
+                                            g.put(false, hpc.getString("commands.errors.invalid-args"));
                                         }
                                     } else {
                                         g.put(true, "");
@@ -157,22 +156,22 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                     g.put(true, "");
                                 }
                             } else {
-                                g.put(false, hpc.getString("invalid-args"));
+                                g.put(false, hpc.getString("commands.errors.invalid-args"));
                             }
                         } else {
-                            g.put(false, hpc.getString("invalid-args"));
+                            g.put(false, hpc.getString("commands.errors.invalid-args"));
                         }
                     } else {
-                        g.put(false, hpc.getString("invalid-args"));
+                        g.put(false, hpc.getString("commands.errors.invalid-args"));
                     }
                 } else {
-                    g.put(false, hpc.getString("invalid-args"));
+                    g.put(false, hpc.getString("commands.errors.invalid-args"));
                 }
             } else {
-                g.put(false, hpc.getString("invalid-args"));
+                g.put(false, hpc.getString("commands.errors.invalid-args"));
             }
         } else {
-            g.put(false, hpc.getString("invalid-args"));
+            g.put(false, hpc.getString("commands.errors.invalid-args"));
         }
         return g;
     }
@@ -216,7 +215,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         hpch.getConfig().set(type + "." + args[3], args[4]);
                     }
 
-                    sender.sendMessage(hpc.getString("set-value")
+                    sender.sendMessage(hpc.getString("commands.headinfo.set-value")
                             .replaceAll("\\{value}", args[4])
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));
@@ -252,7 +251,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         }
                     }
 
-                    sender.sendMessage(hpc.getString("add-value")
+                    sender.sendMessage(hpc.getString("commands.headinfo.add-value")
                             .replaceAll("\\{value}", args[4])
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));
@@ -292,7 +291,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
 
                     }
 
-                    sender.sendMessage(hpc.getString("remove-value")
+                    sender.sendMessage(hpc.getString("commands.headinfo.remove-value")
                             .replaceAll("\\{value}", value)
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));
@@ -304,7 +303,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type));
             }
         } catch (IndexOutOfBoundsException ex) {
-            sender.sendMessage(hpc.getString("invalid-args"));
+            sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
         } catch (Exception e) {
             DebugPrint.createReport(e, "Head Information command", true, sender);
         }
@@ -336,7 +335,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type);
             }
         } catch (IllegalArgumentException ex) {
-            return hpc.getString("invalid-pg-no");
+            return hpc.getString("commands.errors.invalid-pg-no");
         }
 
     }

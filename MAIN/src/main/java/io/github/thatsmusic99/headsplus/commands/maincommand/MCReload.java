@@ -5,8 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,7 +24,7 @@ public class MCReload implements IHeadsPlusCommand{
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descMCReload();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.reload");
     }
 
     @Override
@@ -37,9 +36,9 @@ public class MCReload implements IHeadsPlusCommand{
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        HeadsPlusMessagesConfig m = HeadsPlus.getInstance().getMessagesConfig();
-        String reloadM = m.getString("reload-message");
-        String reloadingM = m.getString("reloading-message");
+        HeadsPlusMessagesManager m = HeadsPlus.getInstance().getMessagesConfig();
+        String reloadM = m.getString("commands.reload.reload-message");
+        String reloadingM = m.getString("commands.reload.reloading-message");
         sender.sendMessage(reloadingM);
         try {
             new BukkitRunnable() {
@@ -50,6 +49,7 @@ public class MCReload implements IHeadsPlusCommand{
                     }
                     HPPlayer.players.clear();
                     HeadsPlus.getInstance().reloadDE();
+                    HeadsPlus.getInstance().restartMessagesManager();
                     sender.sendMessage(reloadM);
                 }
             }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);

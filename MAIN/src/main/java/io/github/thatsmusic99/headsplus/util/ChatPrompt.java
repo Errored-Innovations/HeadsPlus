@@ -10,7 +10,7 @@ public class ChatPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("chat-input");
+        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.heads.chat-input");
     }
 
     @Override

@@ -38,6 +38,7 @@ commands:
     cant-complete-challenge: '{header} Nem tudod befejezni ezt a kihívást!'
     challenge-complete: '{header} &c{player}&7 befejezte a %c küldetést!'
     challenge-completed: '&6Befejezték!'
+    reward-string: '{header} Jutalom: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Ez a parancs csak az alfanumerikus neveket kezeli!'
     blacklist-head: '{header} Ez a fej feketelistán szerepel, és nem használható!'

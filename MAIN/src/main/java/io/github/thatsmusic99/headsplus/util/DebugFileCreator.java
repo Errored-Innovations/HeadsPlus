@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -35,7 +34,7 @@ public class DebugFileCreator {
             o1.put("NMS version", hp.getNMS().getNMSVersion());
             o1.put("Has Vault hooked", hp.econ());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", LocaleManager.getLocale().getLanguage());
+            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
         } catch (NullPointerException ignored) {
 
         }
@@ -112,7 +111,7 @@ public class DebugFileCreator {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
             o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
             o1.put("Has Vault hooked", hp.econ());
-            o1.put("Locale", LocaleManager.getLocale().getLanguage());
+            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
         } catch (NullPointerException ignored) {
 
         }
@@ -184,7 +183,7 @@ public class DebugFileCreator {
             o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
             o1.put("Has Vault hooked", hp.econ());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", LocaleManager.getLocale().getLanguage());
+            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
         } catch (NullPointerException ignored) {
 
         }
@@ -246,7 +245,7 @@ public class DebugFileCreator {
             o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
             o1.put("Has Vault hooked", hp.econ());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", LocaleManager.getLocale().getLanguage());
+            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
         } catch (NullPointerException ignored) {
 
         }

@@ -12,7 +12,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.config.customheads.icons;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Challenge implements Icon {
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getIconName() {
@@ -33,10 +33,10 @@ io.github.thatsmusic99.headsplus.api.Challenge challenge = HeadsPlus.getInstance
                     if (challenge.canComplete(p)) {
                         challenge.complete(p, e.getInventory(), e.getSlot());
                     } else {
-                        p.sendMessage(hpc.getString("cant-complete-challenge"));
+                        p.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge"));
                     }
                 } else {
-                    p.sendMessage(hpc.getString("already-complete-challenge"));
+                    p.sendMessage(hpc.getString("commands.challenges.already-complete-challenge"));
                 }
             }
             e.setCancelled(true);

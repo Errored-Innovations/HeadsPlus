@@ -15,10 +15,10 @@ public abstract class AbstractListDelete extends AbstractListCommand {
             if (args[1].matches("^[A-Za-z0-9_]+$")) {
                 h.put(true, "");
             } else {
-                h.put(false, hpc.getString("alpha-names"));
+                h.put(false, hpc.getString("commands.head.alpha-names"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.errors.invalid-args"));
         }
         return h;
     }
@@ -31,9 +31,9 @@ public abstract class AbstractListDelete extends AbstractListCommand {
                 getList().remove(rHead);
                 config.getConfig().set(getPath(), getList());
                 config.save();
-                sender.sendMessage(hpc.getString(getType() + "-removed-" + getListType()).replaceAll("\\{player}", args[1]).replaceAll("\\{name}", args[1]));
+                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getType() + "-removed-" + getListType()).replaceAll("\\{player}", args[1]).replaceAll("\\{name}", args[1]));
             } else {
-                sender.sendMessage(hpc.getString(getType() + "-a-removed-" + getListType()));
+                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getType() + "-a-removed-" + getListType()));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);

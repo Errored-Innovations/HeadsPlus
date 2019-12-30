@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.api;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -197,13 +196,13 @@ public class Challenge {
         reward.reward(p);
         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                pl.sendMessage(hp.getMessagesConfig().getString("challenge-complete")
+                pl.sendMessage(hp.getMessagesConfig().getString("commands.challenges.challenge-complete")
                         .replaceAll("\\{challenge}", getMainName())
                         .replaceAll("\\{name}", p.getName()));
             }
         }
 
-        p.sendMessage(hp.getThemeColour(4) + LocaleManager.getLocale().getReward() + hp.getThemeColour(2) + sb2.toString());
-        p.sendMessage(hp.getThemeColour(4) + "XP: " + hp.getThemeColour(2) + getGainedXP());
+        p.sendMessage(hp.getMessagesConfig().getString("commands.challenges.reward-string")
+                .replaceAll("\\{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())));
     }
 }

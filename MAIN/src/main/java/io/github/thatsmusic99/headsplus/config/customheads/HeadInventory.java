@@ -329,7 +329,7 @@ public abstract class HeadInventory {
                     }
                     if (icon.getLore().get(z).contains("{completed}")) {
                         if (c.isComplete(p)) {
-                            lore.add(HeadsPlus.getInstance().getMessagesConfig().getString("challenge-completed"));
+                            lore.add(HeadsPlus.getInstance().getMessagesConfig().getString("commands.challenges.challenge-completed"));
                         }
                     }
                     if (icon.getLore().get(z).contains("{challenge-xp}")) {

@@ -4,9 +4,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -28,11 +27,11 @@ public class Conjure implements IHeadsPlusCommand {
     // F
     private ItemStack head = null;
     private Player p = null;
-    private HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descConjure();
+        return hpc.getString("descriptions.hp.conjure");
     }
 
     @Override
@@ -49,7 +48,7 @@ public class Conjure implements IHeadsPlusCommand {
                         if (args[2].matches("^[0-9]+$")) {
                             amount = Integer.parseInt(args[2]);
                         } else {
-                            h.put(false, hpc.getString("invalid-input-int"));
+                            h.put(false, hpc.getString("commands.errors.invalid-input-int"));
                         }
                     }
                     int index = 0;
@@ -70,7 +69,7 @@ public class Conjure implements IHeadsPlusCommand {
                         if (args[4].matches("^[0-9]+$")) {
                             index = Integer.parseInt(args[4]);
                         } else {
-                            h.put(false, hpc.getString("invalid-input-int"));
+                            h.put(false, hpc.getString("commands.errors.invalid-input-int"));
                         }
                     }
                     if (args.length > 5) {
@@ -84,15 +83,15 @@ public class Conjure implements IHeadsPlusCommand {
 
                         h.put(true, "");
                     } catch (NullPointerException ex) {
-                        h.put(false,  hpc.getString("invalid-args"));
+                        h.put(false,  hpc.getString("commands.errors.invalid-args"));
                     } catch (IndexOutOfBoundsException e) {
-                        h.put(false, hpc.getString("invalid-pg-no"));
+                        h.put(false, hpc.getString("commands.errors.invalid-pg-no"));
                     }
                 } else {
-                    h.put(false, hpc.getString("invalid-args"));
+                    h.put(false, hpc.getString("commands.errors.invalid-args"));
                 }
             } else {
-                h.put(false, hpc.getString("invalid-args"));
+                h.put(false, hpc.getString("commands.errors.invalid-args"));
             }
 
         return h;

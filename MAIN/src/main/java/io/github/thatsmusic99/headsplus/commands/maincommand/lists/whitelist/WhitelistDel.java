@@ -1,8 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListDelete;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class WhitelistDel extends AbstractListDelete {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descWhitelistDelete();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelistdel");
     }
 
     @Override
@@ -39,4 +39,10 @@ public class WhitelistDel extends AbstractListDelete {
     public String getType() {
         return "head";
     }
+
+    @Override
+    public String getFullName() {
+        return "whitelist";
+    }
+
 }

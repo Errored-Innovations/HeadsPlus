@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListToggle;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
 import java.util.List;
 
@@ -19,11 +18,11 @@ import java.util.List;
 public class WhitelistwToggle extends AbstractListToggle {
 
     private final HeadsPlusMainConfig config = HeadsPlus.getInstance().getConfiguration();
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descWhitelistwToggle();
+        return hpc.getString("descriptions.hp.whitelistw");
     }
 
     @Override
@@ -49,5 +48,10 @@ public class WhitelistwToggle extends AbstractListToggle {
     @Override
     public String getType() {
         return null;
+    }
+
+    @Override
+    public String getFullName() {
+        return "whitelist";
     }
 }

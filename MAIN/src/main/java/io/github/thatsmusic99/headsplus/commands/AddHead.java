@@ -1,8 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 )
 public class AddHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -33,12 +33,12 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
                 uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
             }
             if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-adding")
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding")
                         .replace("{player}", p.getName())
                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
             }
         } else {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
         }
         return true;
     }
@@ -53,23 +53,23 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
                     if (args[0].length() < 17) {
                         h.put(true, "");
                     } else {
-                        h.put(false,  hpc.getString("head-too-long"));
+                        h.put(false,  hpc.getString("commands.head.head-too-long"));
                     }
                 } else {
-                    h.put(false, hpc.getString("too-short-head"));
+                    h.put(false, hpc.getString("commands.head.head-too-short"));
                 }
             } else {
-                h.put(false, hpc.getString("alpha-names"));
+                h.put(false, hpc.getString("commands.head.alpha-names"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.errors.invalid-args"));
         }
         return h;
     }
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descAddHead();
+        return hpc.getString("descriptions.addhead");
     }
 
     @Override

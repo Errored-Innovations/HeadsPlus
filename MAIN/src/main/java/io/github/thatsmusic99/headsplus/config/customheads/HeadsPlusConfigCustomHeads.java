@@ -364,18 +364,18 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
                                                    forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
                                             if(callback != null) {
-                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added")
                                                         .replace("{player}", name)
                                                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                             }
                                        } else if (forceAdd && enableHead(texUrl)){
                                            if(callback != null) {
-                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-added")
+                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added")
                                                         .replace("{player}", name)
                                                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                             }
                                        } else if(callback != null) {
-                                           callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("head-already-added")
+                                           callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-already-added")
                                                     .replace("{player}", name)
                                                     .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                                        }

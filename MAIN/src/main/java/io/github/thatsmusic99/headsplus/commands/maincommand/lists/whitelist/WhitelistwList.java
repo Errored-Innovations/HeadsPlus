@@ -1,8 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListList;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class WhitelistwList extends AbstractListList {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descWhitelistwList();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelistwl");
     }
 
 
@@ -45,4 +45,10 @@ public class WhitelistwList extends AbstractListList {
     public String getType() {
         return "head";
     }
+
+    @Override
+    public String getFullName() {
+        return "whitelist";
+    }
+
 }

@@ -3,14 +3,12 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 
 @CommandInfo(
@@ -177,7 +175,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descHPLeaderboards();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hplb");
     }
 
     @Override

@@ -38,6 +38,7 @@ commands:
     cant-complete-challenge: '{header} NU u canz nawt compleet deh chaleng!'
     challenge-complete: '{header} OMG GUYZ &c{player}&7 DIDZ DA &c{challenge} &7THING!!!'
     challenge-completed: '&6dun'
+    reward-string: '{header} Kitty treetz: &c{reward}\n{header} ex-pee: &c{xp}'
   head:
     alpha-names: '{header} Y U speekz gibberish?'
     blacklist-head: '{header} Dis hed is banne sah two bad!!'

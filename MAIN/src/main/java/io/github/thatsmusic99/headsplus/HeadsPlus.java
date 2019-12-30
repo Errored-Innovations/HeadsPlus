@@ -4,7 +4,6 @@ import io.github.at.main.Main;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
-import io.github.thatsmusic99.headsplus.commands.Head;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
@@ -14,7 +13,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
@@ -58,7 +56,7 @@ public class HeadsPlus extends JavaPlugin {
     private Connection connection;
     private boolean con = false;
     // Config variables
-    private HeadsPlusMessagesConfig hpc;
+    private HeadsPlusMessagesManager hpc;
     private HeadsPlusConfigHeads hpch;
     private HeadsPlusConfigCustomHeads hpchx;
     private DeathEvents de;
@@ -92,14 +90,8 @@ public class HeadsPlus extends JavaPlugin {
             // Set up the NMS
             setupNMS();
 
-            // See if Messages config has to be set up before the locale (if NPE is thrown)
-            try {
-                hpc.getString("locale");
-                LocaleManager.class.newInstance().setupLocale();
-            } catch (NullPointerException ex) {
-                hpc = new HeadsPlusMessagesConfig(true);
-                LocaleManager.class.newInstance().setupLocale();
-            }
+            // Create locale files
+            createLocales();
 
             // Build plugin instances
             createInstances();
@@ -119,7 +111,7 @@ public class HeadsPlus extends JavaPlugin {
             }
             // If sellable heads are enabled and yet there isn't Vault
             if (!(econ()) && (getConfiguration().getPerks().sell_heads)) {
-                getServer().getConsoleSender().sendMessage(hpc.getString("no-vault"));
+                getServer().getConsoleSender().sendMessage(hpc.getString("startup.no-vault"));
             }
 
             // If Vault exists
@@ -148,7 +140,7 @@ public class HeadsPlus extends JavaPlugin {
             // Sets up Metrics
             debug("- Creating Metrics!", 1);
             Metrics metrics = new Metrics(this);
-            metrics.addCustomChart(new Metrics.SimplePie("languages", () -> LocaleManager.getLocale().getLanguage()));
+            metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
             metrics.addCustomChart(new Metrics.SimplePie("theme", () -> capitalize(getConfiguration().getMechanics().getString("plugin-theme-dont-change").toLowerCase())));
             debug("- Metrics complete, can be found at https://bstats.org/plugin/bukkit/HeadsPlus", 2);
             if (getConfiguration().getMechanics().getBoolean("update.check")) {
@@ -162,20 +154,14 @@ public class HeadsPlus extends JavaPlugin {
                             e.printStackTrace();
                         }
                         if (update != null) {
-                            if (!((String) update[2]).equalsIgnoreCase("5.1.10")) {
-                                getLogger().info(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', LocaleManager.getLocale().getUpdateFound())));
-                                getLogger().info(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', LocaleManager.getLocale().getCurrentVersion()))
-                                        + getDescription().getVersion());
-                                getLogger().info(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', LocaleManager.getLocale().getNewVersion() + update[2])));
-                                if (update[1].toString().length() > 50) {
-                                    update[1] = update[1].toString().subSequence(0, 50) + "... (Check Spigot for more information)";
-                                }
-                                getLogger().info(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', LocaleManager.getLocale().getDescription())) + update[1]);
-                                getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
+                            getServer().getConsoleSender().sendMessage(hpc.getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                                    + "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[2]))
+                                    + "\n" + hpc.getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                            getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
 
-                            }
+
                         } else {
-                            getLogger().info(hpc.getString("plugin-up-to-date"));
+                            getLogger().info(hpc.getString("update.plugin-up-to-date"));
                         }
 
                     }
@@ -188,17 +174,20 @@ public class HeadsPlus extends JavaPlugin {
                 }.runTaskLater(this, 20);
 
             }
+            getServer().getConsoleSender().sendMessage(hpc.getString("startup.plugin-enabled"));
+            if (getConfiguration().getPerks().ascii) {
+                getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------" +
+                        "\n  " + ChatColor.RED + "_    _                _     " + ChatColor.BLUE + "_____  _                     __  ______ \n" +
+                        " " + ChatColor.RED + "| |  | |              | |   " + ChatColor.BLUE + "|  __ \\| |                   / / |____  |          \n" +
+                        " " + ChatColor.RED + "| |__| | ___  __ _  __| |___" + ChatColor.BLUE + "| |__) | |_   _ ___  __   __/ /_     / / \n" +
+                        " " + ChatColor.RED + "|  __  |/ _ \\/ _` |/ _` / __" + ChatColor.BLUE + "|  ___/| | | | / __| \\ \\ / / '_ \\   / /  \n" +
+                        " " + ChatColor.DARK_RED + "| |  | |  __/ (_| | (_| \\__ \\" + ChatColor.DARK_BLUE + " |    | | |_| \\__ \\  \\ V /| (_) | / /   \n" +
+                        " " + ChatColor.DARK_RED + "|_|  |_|\\___|\\__,_|\\__,_|___/" + ChatColor.DARK_BLUE + "_|    |_|\\__,_|___/   \\_/  \\___(_)_/    \n" +
+                        ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
+                        ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
+                        ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
+            }
 
-            getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------" +
-                    "\n  " + ChatColor.RED + "_    _                _     " + ChatColor.BLUE + "_____  _                     __  ______ \n" +
-                    " " + ChatColor.RED + "| |  | |              | |   " + ChatColor.BLUE + "|  __ \\| |                   / / |____  |          \n" +
-                    " " + ChatColor.RED + "| |__| | ___  __ _  __| |___" + ChatColor.BLUE + "| |__) | |_   _ ___  __   __/ /_     / / \n" +
-                    " " + ChatColor.RED + "|  __  |/ _ \\/ _` |/ _` / __" + ChatColor.BLUE + "|  ___/| | | | / __| \\ \\ / / '_ \\   / /  \n" +
-                    " " + ChatColor.DARK_RED + "| |  | |  __/ (_| | (_| \\__ \\" + ChatColor.DARK_BLUE + " |    | | |_| \\__ \\  \\ V /| (_) | / /   \n" +
-                    " " + ChatColor.DARK_RED + "|_|  |_|\\___|\\__,_|\\__,_|___/" + ChatColor.DARK_BLUE + "_|    |_|\\__,_|___/   \\_/  \\___(_)_/    \n" +
-                    ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
-                    ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
-                    ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
         } catch (Exception e) {
             try {
                 DebugPrint.createReport(e, "Startup", false, null);
@@ -241,7 +230,7 @@ public class HeadsPlus extends JavaPlugin {
         } catch (IOException e) {
             DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
         }
-        getLogger().info(hpc.getString("plugin-disabled"));
+        getLogger().info(hpc.getString("startup.plugin-disabled"));
     }
 
     public static HeadsPlus getInstance() {
@@ -359,10 +348,8 @@ public class HeadsPlus extends JavaPlugin {
         debug("- Instance for HeadsPlus's API created!", 3);
         nbt = new NBTManager();
         debug("- Instance for NBTManager created!", 3);
-
-        hpc = new HeadsPlusMessagesConfig(false);
-        cs.add(hpc);
-        debug("- Instance for HeadsPlusMessagesConfig created!", 3);
+        hpc = new HeadsPlusMessagesManager();
+        debug("- Instance for HeadsPlusMessagesManager created!", 3);
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
         debug("- Instance for HeadsPlusConfigHeads created!", 3);
@@ -407,6 +394,10 @@ public class HeadsPlus extends JavaPlugin {
         debug("- Instance for HeadsPlusConfigTextMenu created!", 3);
 
         debug("Instances created.", 1);
+    }
+
+    public void restartMessagesManager() {
+        hpc = new HeadsPlusMessagesManager();
     }
 
     private boolean setupPermissions() {
@@ -648,7 +639,7 @@ public class HeadsPlus extends JavaPlugin {
         return hpch;
     }
 
-    public HeadsPlusMessagesConfig getMessagesConfig() {
+    public HeadsPlusMessagesManager getMessagesConfig() {
         return hpc;
     }
 

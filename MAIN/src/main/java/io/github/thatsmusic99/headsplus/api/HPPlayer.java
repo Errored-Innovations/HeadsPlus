@@ -164,7 +164,7 @@ public class HPPlayer {
                         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
 							final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                             for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("level-up")
+                                p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.levels.level-up")
                                         .replaceAll("\\{name}", name)
                                         .replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName())));
                             }

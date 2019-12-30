@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -102,7 +102,7 @@ public class Reward {
 
     public void reward(Player player) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        HeadsPlusMessagesConfig hpc = hp.getMessagesConfig();
+        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
         if (hp.econ()) {
             if (type == HPChallengeRewardTypes.ECO) {
                     hp.getEconomy().depositPlayer(player, getMoney());
@@ -116,7 +116,7 @@ public class Reward {
                 }
             }
         } else {
-            hp.getLogger().warning(hpc.getString("no-vault-2"));
+            hp.getLogger().warning(hpc.getString("startup.no-vault-2"));
         }
         if (type == HPChallengeRewardTypes.GIVE_ITEM) {
             if (player.getInventory().firstEmpty() != -1) {

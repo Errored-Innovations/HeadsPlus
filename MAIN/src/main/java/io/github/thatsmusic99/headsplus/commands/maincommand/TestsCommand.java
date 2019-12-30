@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import org.bukkit.ChatColor;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,7 +15,7 @@ import java.util.Random;
 @CommandInfo(commandname = "tests", permission = "headsplus.maincommand.tests", subcommand = "Tests", usage = "/hp tests <Entity type> <Amount>", maincommand = true)
 public class TestsCommand implements IHeadsPlusCommand {
 
-    private HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
@@ -30,16 +29,16 @@ public class TestsCommand implements IHeadsPlusCommand {
                     if (args[2].matches("^[0-9]+$")) {
                         h.put(true, "");
                     } else {
-                        h.put(false, hpc.getString("invalid-input-int"));
+                        h.put(false, hpc.getString("commands.errors.invalid-input-int"));
                     }
                 } else {
-                    h.put(false, hpc.getString("invalid-args"));
+                    h.put(false, hpc.getString("commands.errors.invalid-args"));
                 }
             } else {
-                h.put(false, hpc.getString("invalid-args"));
+                h.put(false, hpc.getString("commands.errors.invalid-args"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.errors.invalid-args"));
         }
         return h;
     }
@@ -52,7 +51,7 @@ public class TestsCommand implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         int amount = Integer.parseInt(args[2]);
-        sender.sendMessage(ChatColor.GREEN + "Running tests... (this could take a while)");
+        sender.sendMessage(hpc.getString("commands.tests.running-tests"));
         double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(args[1] + ".chance");
         Random rand = new Random();
         new BukkitRunnable() {
@@ -65,7 +64,7 @@ public class TestsCommand implements IHeadsPlusCommand {
                         successes++;
                     }
                 }
-                sender.sendMessage(ChatColor.GREEN + "Results: " + ChatColor.WHITE + successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+                sender.sendMessage(hpc.getString("commands.tests.results").replaceAll("\\{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)"));
             }
         }.runTaskAsynchronously(HeadsPlus.getInstance());
         return false;

@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
@@ -98,7 +97,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
     private static String translateColors(String s) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        return ChatColor.translateAlternateColorCodes('&',translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
+        return translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
                 .replaceAll("\\{2}", hp.getThemeColour(2).toString())
                 .replaceAll("\\{3}", hp.getThemeColour(3).toString())
                 .replaceAll("\\{4}", hp.getThemeColour(4).toString()));
@@ -117,7 +116,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
             PagedLists<String> list = new PagedLists<>(l, h.getConfig().getInt(type + "." + type2 + ".lines-per-page"));
             if ((page > list.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("invalid-pg-no");
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no");
             }
             sb.append(translateColors(h.getConfig().getString(type + "." + type2 + ".header")
                     .replaceAll("\\{page}", String.valueOf(page))
@@ -210,7 +209,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
             PagedLists<Head> hs = new PagedLists<>(h, ht.getConfig().getInt("head-info.name-info.colored.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("invalid-pg-no");
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no");
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.header"))).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.first-line"))
@@ -240,7 +239,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
             PagedLists<Mask> hs = new PagedLists<>(m, ht.getConfig().getInt("head-info.mask-info.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("invalid-pg-no");
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no");
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.header"))).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.first-line"))
@@ -259,7 +258,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
             PagedLists<String> lore = new PagedLists<>(hpch.getConfig().getStringList(type + ".lore"), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("invalid-pg-no");
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no");
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.header"))).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.first-line"))
@@ -287,7 +286,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, ht.getConfig().getInt("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
-                sender.sendMessage(hp.getMessagesConfig().getString("invalid-pg-no"));
+                sender.sendMessage(hp.getMessagesConfig().getString("commands.errors.invalid-pg-no"));
             } else {
                 sender.sendMessage(translateColors(ht.getConfig().getString("help.header")).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
@@ -329,7 +328,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translate(String section, String database, int page) {
             PagedHashmaps<OfflinePlayer, Integer> ph = null;
-            HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
             try {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
@@ -354,12 +353,12 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 return sb.toString();
             } catch (IllegalArgumentException ex) {
                 if (ph.getHs().size() > 0) {
-                    return hpc.getString("invalid-pg-no");
+                    return hpc.getString("commands.errors.invalid-pg-no");
                 } else {
-                    return hpc.getString("no-data-lb");
+                    return hpc.getString("commands.errors.no-data-lb");
                 }
             } catch (NullPointerException ex) {
-                return hpc.getString("no-data-lb");
+                return hpc.getString("commands.errors.no-data-lb");
             }
         }
     }
@@ -375,7 +374,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                         .replaceAll("\\{version}", String.valueOf(hp.getVersion()))
                         .replace("{header}", h.getConfig().getString("info.header"))
                         .replace("{author}", String.valueOf(hp.getAuthor()))
-                        .replace("{locale}", LocaleManager.getLocale().getLanguage())
+                        .replace("{locale}", hp.getConfiguration().getConfig().getString("locale"))
                         .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas")));
             }
             return sb.toString();

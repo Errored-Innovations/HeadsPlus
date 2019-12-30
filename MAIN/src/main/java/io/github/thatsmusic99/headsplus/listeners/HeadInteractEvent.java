@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public final class HeadInteractEvent implements Listener {
 
-	private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+	private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 	private int TimesSent = 0;
 
 	@EventHandler
@@ -47,9 +47,9 @@ public final class HeadInteractEvent implements Listener {
 			    		    	String iMessage1;
 			    		    	String dn = hpch.getInteractName(n).toLowerCase();
 				    	    	if (dn.startsWith("a") || dn.startsWith("e") || dn.startsWith("i") || dn.startsWith("o") || dn.startsWith("u")) {
-				    	    		iMessage1 = hpc.getString("head-mhf-interact-message-2");
+				    	    		iMessage1 = hpc.getString("event.head-mhf-interact-message-2");
 				    	    	} else {
-				    		    	iMessage1 = hpc.getString("head-mhf-interact-message");
+				    		    	iMessage1 = hpc.getString("event.head-mhf-interact-message");
 				    	    	}
 				    	    	iMessage1 = iMessage1.replaceAll("\\{name}", dn).replaceAll("\\{player}", playerName);
 				    	    	player.sendMessage(iMessage1);
@@ -57,7 +57,7 @@ public final class HeadInteractEvent implements Listener {
 				    	    	return;
 			    		    }
 			    	    }
-			    	    String iMessage1 = hpc.getString("head-interact-message");
+			    	    String iMessage1 = hpc.getString("event.head-interact-message");
 		                iMessage1 = iMessage1.replaceAll("\\{name}", owner);
 		    		    iMessage1 = iMessage1.replaceAll("\\{player}", playerName);
 		                player.sendMessage(iMessage1);

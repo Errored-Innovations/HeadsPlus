@@ -1,9 +1,9 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListToggle;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class BlacklistwToggle extends AbstractListToggle {
 
 	@Override
 	public String getCmdDescription() {
-		return LocaleManager.getLocale().descBlacklistwToggle();
+		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistw");
 	}
 
     @Override
@@ -47,4 +47,10 @@ public class BlacklistwToggle extends AbstractListToggle {
     public String getType() {
         return null;
     }
+
+    @Override
+    public String getFullName() {
+        return "blacklist";
+    }
+
 }

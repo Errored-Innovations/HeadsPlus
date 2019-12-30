@@ -39,6 +39,7 @@ commands:
     cant-complete-challenge: '{header} Вы не можете выполнить это задание!'
     challenge-complete: '{header} &c{player}&7 выполнил &c{challenge} &7задание!'
     challenge-completed: '&6Завершено!'
+    reward-string: '{header} Награда: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Эта команда обрабатывает только буквенно-цифровые имена!'
     blacklist-head: '{header} Эта голова занесена в черный список и не может быть

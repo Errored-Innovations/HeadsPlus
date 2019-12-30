@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,7 +31,7 @@ import java.util.List;
 public class Head implements CommandExecutor, IHeadsPlusCommand {
 
     private final HeadsPlus hp = HeadsPlus.getInstance();
-    private final HeadsPlusMessagesConfig hpc = hp.getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
     private List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
@@ -78,7 +77,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
         boolean wlOn = whitelist.enabled;
         String head = args[0].toLowerCase();
         if (p.getInventory().firstEmpty() == -1) {
-            sender.sendMessage(hpc.getString("full-inv"));
+            sender.sendMessage(hpc.getString("commands.head.full-inv"));
             return;
         }
         tests.put("Whitelist enabled", wlOn);
@@ -95,7 +94,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("blacklist-head"));
+                        sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                     }
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
                     if (!bl.contains(head)) {
@@ -103,10 +102,10 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("blacklist-head"));
+                        sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("whitelist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
                 }
             } else {
                 if (wl.contains(head)) {
@@ -114,7 +113,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("whitelist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
                 }
             }
         } else {
@@ -124,7 +123,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                 } else if (sender.hasPermission("headsplus.bypass.blacklist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("blacklist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                 }
             } else {
                 giveHead(p, args[0]);
@@ -134,7 +133,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descHead();
+        return hpc.getString("descriptions.head");
     }
 
     @Override
@@ -146,16 +145,16 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                     if (args[0].length() > 2) {
                        h.put(true, "");
                     } else {
-                        h.put(false, hpc.getString("too-short-head"));
+                        h.put(false, hpc.getString("commands.head.head-too-short"));
                     }
                 } else {
-                    h.put(false, hpc.getString("head-too-long"));
+                    h.put(false, hpc.getString("commands.head.head-too-long"));
                 }
             } else {
-                h.put(false, hpc.getString("alpha-names"));
+                h.put(false, hpc.getString("commands.head.alpha-names"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.head.invalid-args"));
         }
         return h;
     }
@@ -185,21 +184,21 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                                     printDebugResults(tests, true);
                                     return true;
                                 } else if (!args[0].matches("^[A-Za-z0-9_]+$")) {
-                                    sender.sendMessage(hpc.getString("alpha-names"));
+                                    sender.sendMessage(hpc.getString("commands.head.alpha-names"));
                                 } else if (args[0].length() < 3) {
-                                    sender.sendMessage(hpc.getString("too-short-head"));
+                                    sender.sendMessage(hpc.getString("commands.head.head-too-short"));
                                 } else {
-                                    sender.sendMessage(hpc.getString("head-too-long"));
+                                    sender.sendMessage(hpc.getString("commands.head.head-too-long"));
                                 }
                             } else {
-                                sender.sendMessage(hpc.getString("player-offline"));
+                                sender.sendMessage(hpc.getString("commands.errors.player-offline"));
                             }
 
 
 	                    printDebugResults(tests, false);
 	                    return true;
 	                } else {
-	                    sender.sendMessage(hpc.getString("no-perms"));
+	                    sender.sendMessage(hpc.getString("commands.errors.no-perm"));
 	                }
 	            } else if (args.length > 0) {
 	                tests.put("Instance of Player", sender instanceof Player);
@@ -215,10 +214,10 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	                    sender.sendMessage(ChatColor.RED + "You must be a player to give yourself a head!");
 	                }
 	            } else {
-	                sender.sendMessage(hpc.getString("invalid-args"));
+	                sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
 	            }
 	        } else {
-	            sender.sendMessage(hpc.getString("no-perms"));
+	            sender.sendMessage(hpc.getString("commands.errors.no-perm"));
 	        }
         } catch (Exception e) {
 	        DebugPrint.createReport(e, "Command (head)", true, sender);

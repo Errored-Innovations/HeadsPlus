@@ -41,6 +41,7 @@ commands:
     cant-complete-challenge: '{header} Tu ne peux pas compléter ce challenge!'
     challenge-complete: '{header} &c{name} &7a complété le challenge &c{challenge}&7!'
     challenge-completed: '&6Terminé!'
+    reward-string: '{header} Récompense: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Cette commande ne gère que les noms alphanumériques!'
     blacklist-head: '{header} Cette tête est sur la blacklist et ne peut pas être utilisée!'

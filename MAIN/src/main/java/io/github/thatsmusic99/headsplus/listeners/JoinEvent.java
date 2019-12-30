@@ -3,14 +3,11 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
-import io.github.thatsmusic99.headsplus.locale.Locale;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import mkremins.fanciful.FancyMessage;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -19,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class JoinEvent implements Listener { 
 	
 	public static boolean reloaded = false;
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
@@ -27,11 +24,10 @@ public class JoinEvent implements Listener {
 		if (e.getPlayer().hasPermission("headsplus.notify")) {
 		    if (hp.getConfiguration().getMechanics().getBoolean("update.notify")) {
                 if (HeadsPlus.getUpdate() != null) {
-                    Locale l = LocaleManager.getLocale();
-                    new FancyMessage().text(hpc.getString("update-found"))
-                    .tooltip(ChatColor.translateAlternateColorCodes('&', l.getCurrentVersion() + hp.getDescription().getVersion())
-							+ "\n" + ChatColor.translateAlternateColorCodes('&', l.getNewVersion() + HeadsPlus.getUpdate()[2])
-							+ "\n" + ChatColor.translateAlternateColorCodes('&', l.getDescription() + HeadsPlus.getUpdate()[1])).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
+                    new FancyMessage().text(hpc.getString("update.update-found"))
+                    .tooltip(hpc.getString("update.current-version").replaceAll("\\{version}", hp.getDescription().getVersion())
+							+ "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[2]))
+							+ "\n" + hpc.getString("update.description").replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
                 }
             }
         }

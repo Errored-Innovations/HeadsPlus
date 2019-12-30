@@ -15,10 +15,10 @@ public abstract class AbstractListAdd extends AbstractListCommand {
             if (args[1].matches("^[A-Za-z0-9_]+$")) {
                 h.put(true, "");
             } else {
-                h.put(false, hpc.getString("alpha-names"));
+                h.put(false, hpc.getString("commands.head.alpha-names"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.errors.invalid-args"));
         }
 
         return h;
@@ -29,12 +29,12 @@ public abstract class AbstractListAdd extends AbstractListCommand {
         try {
             String aHead = args[1].toLowerCase();
             if (getList().contains(aHead)) {
-                sender.sendMessage(hpc.getString(getType() + "-a-add"));
+                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-a-add"));
             } else {
                 getList().add(aHead);
                 config.getConfig().set(getPath(), getList());
                 config.save();
-                sender.sendMessage(hpc.getString(getType() + "-added-" + getListType()).replaceAll("\\{name}", args[1]).replaceAll("\\{player}", args[1]));
+                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-added-" + getListType()).replaceAll("\\{name}", args[1]).replaceAll("\\{player}", args[1]));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);

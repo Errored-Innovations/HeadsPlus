@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.util.*;
 import org.bukkit.Bukkit;
@@ -13,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -39,7 +37,7 @@ public class DebugPrint implements IHeadsPlusCommand {
             e.printStackTrace();
         }
         if (command && sender != null) {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("cmd-fail"));
+            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.cmd-fail"));
         }
 
         if (cs.getBoolean("debug.create-debug-files")) {
@@ -66,7 +64,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descDebug();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.debug");
     }
 
     @Override
@@ -88,10 +86,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                         if (skulls.contains(nms.getItemInHand((Player) sender).getType())) {
                             h.put(true, "");
                         } else {
-                            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("false-item"));
+                            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item"));
                         }
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("false-item"));
+                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item"));
                     }
                 } else {
                     h.put(false, "[HeadsPlus] You have to be a player to run this command!");
@@ -102,10 +100,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                     if (pl != null) {
                         h.put(true, "");
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("no-data"));
+                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data"));
                     }
                 } else {
-                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
                 }
             } else if (args[1].equalsIgnoreCase("item")) {
                 if (sender instanceof Player) {
@@ -113,7 +111,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                     if (nms.getItemInHand((Player) sender) != null) {
                         h.put(true, "");
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("false-head"));
+                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-head"));
                     }
                 } else {
                     h.put(false, "[HeadsPlus] You have to be a player to run this command!");
@@ -124,7 +122,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                     if (pl != null) {
                         h.put(true, "");
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("no-data"));
+                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data"));
                     }
                 }
             } else if (args[1].equalsIgnoreCase("transfer")) {
@@ -134,16 +132,16 @@ public class DebugPrint implements IHeadsPlusCommand {
                 //    } else if (args[2].equalsIgnoreCase("files")) {
                 //        h.put(true, "");
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
                     }
                 } else {
-                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
                 }
             } else {
-                h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+                h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
             }
         } else {
-            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("invalid-args"));
+            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
         }
         return h;
     }

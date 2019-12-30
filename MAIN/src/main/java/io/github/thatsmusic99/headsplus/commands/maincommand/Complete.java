@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -23,7 +22,7 @@ import java.util.HashMap;
         maincommand = true)
 public class Complete implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
@@ -40,17 +39,17 @@ public class Complete implements IHeadsPlusCommand {
                                     if (c.canComplete(player.getPlayer())) {
                                         h.put(true, "");
                                     } else {
-                                        h.put(false, hpc.getString("cant-complete-challenge"));
+                                        h.put(false, hpc.getString("commands.challenges.cant-complete-challenge"));
                                     }
                                 } else {
-                                    h.put(false, hpc.getString("already-complete-challenge"));
+                                    h.put(false, hpc.getString("commands.challenges.already-complete-challenge"));
                                 }
 
                             } else {
-                                h.put(false, hpc.getString("player-offline"));
+                                h.put(false, hpc.getString("commands.errors.player-offline"));
                             }
                         } else {
-                            h.put(false, hpc.getString("no-perm"));
+                            h.put(false, hpc.getString("commands.errors.no-perm"));
                         }
 
                     } else if (sender instanceof Player) {
@@ -58,10 +57,10 @@ public class Complete implements IHeadsPlusCommand {
                             if (c.canComplete((Player) sender)) {
                                 h.put(true, "");
                             } else {
-                                h.put(false, hpc.getString("cant-complete-challenge"));
+                                h.put(false, hpc.getString("commands.challenges.cant-complete-challenge"));
                             }
                         } else {
-                            h.put(false, hpc.getString("already-complete-challenge"));
+                            h.put(false, hpc.getString("commands.challenges.already-complete-challenge"));
                         }
 
                     } else {
@@ -78,7 +77,7 @@ public class Complete implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descComplete();
+        return hpc.getString("descriptions.hp.complete");
     }
 
     @Override

@@ -1,8 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListDelete;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class BlacklistwDelete extends AbstractListDelete {
 
 	@Override
 	public String getCmdDescription() {
-		return LocaleManager.getLocale().descBlacklistwDelete();
+		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistwdel");
 	}
 
 	@Override
@@ -41,4 +41,10 @@ public class BlacklistwDelete extends AbstractListDelete {
 	public String getType() {
 		return "world";
 	}
+
+	@Override
+	public String getFullName() {
+		return "blacklist";
+	}
+
 }

@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.config.customheads.icons;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Head extends ItemStack implements Icon {
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
     @Override
     public String getIconName() {
         return "head";
@@ -120,7 +120,7 @@ public class Head extends ItemStack implements Icon {
     private void giveHead(Player p, InventoryClickEvent e) {
         NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
         if (p.getInventory().firstEmpty() == -1) {
-            p.sendMessage(hpc.getString("full-inv"));
+            p.sendMessage(hpc.getString("commands.head.full-inv"));
             return;
         }
         Double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
@@ -129,7 +129,7 @@ public class Head extends ItemStack implements Icon {
                 && HeadsPlus.getInstance().econ()
                 && (ef = HeadsPlus.getInstance().getEconomy()) != null
                 && price > ef.getBalance(p)) {
-            p.sendMessage(hpc.getString("not-enough-money"));
+            p.sendMessage(hpc.getString("commands.heads.not-enough-money"));
             return;
         }
         HeadPurchaseEvent event = new HeadPurchaseEvent(p, e.getCurrentItem());
@@ -139,11 +139,11 @@ public class Head extends ItemStack implements Icon {
             if(price > 0.0 && ef != null) {
                 EconomyResponse er = ef.withdrawPlayer(p, price);
                 if((ok = er.transactionSuccess())) {
-                    p.sendMessage(hpc.getString("buy-success")
+                    p.sendMessage(hpc.getString("commands.heads.buy-success")
                         .replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))
                         .replaceAll("\\{balance}", Double.toString(ef.getBalance(p))));
                 } else {
-                    p.sendMessage(hpc.getString("cmd-fail") + ": " + er.errorMessage);
+                    p.sendMessage(hpc.getString("commands.errors.cmd-fail") + ": " + er.errorMessage);
                 }
             }
             if (ok) {

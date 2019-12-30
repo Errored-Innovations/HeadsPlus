@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +37,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                         return true;
                     } else {
                         tests.put("Has permission", false);
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("no-perms"));
+                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm"));
                     }
                 } else {
                     tests.put("Instance of Player", false);
@@ -46,7 +45,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                 }
             } else {
                 tests.put("Challenges enabled", false);
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("disabled"));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled"));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
@@ -57,7 +56,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descChallenges();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hpc");
     }
 
     @Override

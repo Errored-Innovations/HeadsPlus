@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +30,7 @@ import java.util.List;
 )
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
     @Override
@@ -47,7 +46,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             Bukkit.dispatchCommand(target, "minecraft:execute as " + args[1] + "run myhead");
                             return false;
                         } else {
-                            sender.sendMessage(hpc.getString("player-offline"));
+                            sender.sendMessage(hpc.getString("commands.errors.player-offline"));
                             return false;
                         }
                     } else {
@@ -73,7 +72,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                 boolean wlOn = whitelist.enabled;
                 String head = sender.getName().toLowerCase();
                 if (((Player) sender).getInventory().firstEmpty() == -1) {
-                    sender.sendMessage(hpc.getString("full-inv"));
+                    sender.sendMessage(hpc.getString("commands.head.full-inv"));
                     return true;
                 }
                 tests.put("Whitelist enabled", wlOn);
@@ -92,7 +91,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                                 giveHead((Player) sender, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("blacklist-head"));
+                                sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                                 return true;
                             }
                         } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
@@ -103,11 +102,11 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                                 giveHead((Player) sender, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("blacklist-head"));
+                                sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                                 return true;
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("whitelist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
                             return true;
                         }
                     } else {
@@ -118,7 +117,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             giveHead((Player) sender, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("whitelist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
                             return true;
                         }
                     }
@@ -131,7 +130,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             giveHead((Player) sender, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("blacklist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
                             return true;
                         }
                     } else {
@@ -163,7 +162,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descMyHead();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead");
     }
 
     @Override

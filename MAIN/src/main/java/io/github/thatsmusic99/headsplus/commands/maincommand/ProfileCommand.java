@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -30,13 +29,13 @@ public class ProfileCommand implements IHeadsPlusCommand {
             return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            return HeadsPlus.getInstance().getMessagesConfig().getString("no-data");
+            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data");
         }
     }
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descProfile();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.profile");
     }
 
     @Override
@@ -64,12 +63,12 @@ public class ProfileCommand implements IHeadsPlusCommand {
                     if (cs.hasPermission("headsplus.maincommand.profile.others")) {
                         cs.sendMessage(prof(p));
                     } else {
-                        cs.sendMessage(hp.getMessagesConfig().getString("no-perm"));
+                        cs.sendMessage(hp.getMessagesConfig().getString("commands.errors.no-perm"));
                     }
                 }
             } else {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    cs.sendMessage(hp.getMessagesConfig().getString("cant-view-data"));
+                    cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
                 } else {
                     cs.sendMessage(prof(p));
                 }

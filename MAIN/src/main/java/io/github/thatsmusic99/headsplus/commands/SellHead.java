@@ -5,8 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
@@ -34,10 +33,10 @@ import java.util.List;
 public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
 	private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-	private final HeadsPlusMessagesConfig hpc = HeadsPlus.getInstance().getMessagesConfig();
+	private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 	private final List<String> soldHeads = new ArrayList<>();
 	private final HashMap<String, Integer> hm = new HashMap<>();
-    private final String disabled = hpc.getString("disabled");
+    private final String disabled = hpc.getString("commands.errors.disabled");
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -74,7 +73,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                                             Bukkit.getServer().getPluginManager().callEvent(she);
                                             if (!she.isCancelled()) {
                                                 EconomyResponse zr = HeadsPlus.getInstance().getEconomy().depositPlayer((Player) sender, price);
-                                                String success = hpc.getString("sell-success").replaceAll("\\{price}", Double.toString(price)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
+                                                String success = hpc.getString("commands.sellhead.sell-success").replaceAll("\\{price}", Double.toString(price)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
                                                 if (zr.transactionSuccess()) {
 
                                                     if (price > 0) {
@@ -85,17 +84,17 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
                                                     }
                                                 } else {
-                                                    sender.sendMessage(hpc.getString("cmd-fail"));
+                                                    sender.sendMessage(hpc.getString("commands.errors.cmd-fail"));
                                                 }
                                             }
                                         }
                                     }
                                 } else {
-                                    sender.sendMessage(hpc.getString("false-head"));
+                                    sender.sendMessage(hpc.getString("commands.sellhead.false-head"));
                                     return true;
                                 }
                             } else {
-                                sender.sendMessage(hpc.getString("false-head"));
+                                sender.sendMessage(hpc.getString("commands.sellhead.false-head"));
                                 return true;
                             }
                         }
@@ -103,7 +102,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
                         if (!sender.hasPermission("headsplus.sellhead")) {
                             tests.put("No permission", true);
-                            sender.sendMessage(hpc.getString("no-perm"));
+                            sender.sendMessage(hpc.getString("commands.errors.no-perm"));
                         } else if (args.length > 0) {
                             tests.put("No permission", false);
                             tests.put("No arguments", false);
@@ -163,7 +162,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                                 }
                                 if (price == 0.0) {
                                     tests.put("Any heads", false);
-                                    sender.sendMessage(hpc.getString("no-heads"));
+                                    sender.sendMessage(hpc.getString("commands.sellhead.no-heads"));
                                     printDebugResults(tests, false);
                                     return true;
                                 }
@@ -174,7 +173,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                         } else {
                             tests.put("No permission", false);
                             tests.put("No arguments", true);
-                            String falseItem = hpc.getString("false-item");
+                            String falseItem = hpc.getString("commands.sellhead.false-item");
                             sender.sendMessage(falseItem);
                         }
                     }
@@ -302,7 +301,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                         }
                     }
 				} else {
-					pl.sendMessage(hpc.getString("not-enough-heads"));
+					pl.sendMessage(hpc.getString("commands.sellhead.not-enough-heads"));
 				}
 			}
 		}
@@ -334,7 +333,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         }
 
         if (price == 0) {
-            p.sendMessage(hpc.getString("no-heads"));
+            p.sendMessage(hpc.getString("commands.sellhead.no-heads"));
             return;
         }
 
@@ -348,7 +347,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		if (!she.isCancelled()) {
 
             EconomyResponse zr = econ.depositPlayer(p, pr);
-            String success = hpc.getString("sell-success").replaceAll("\\{price}", Double.toString(pr)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
+            String success = hpc.getString("commands.sellhead.sell-success").replaceAll("\\{price}", Double.toString(pr)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
 
             if (zr.transactionSuccess()) {
                 tests.put("Transaction success", true);
@@ -356,7 +355,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                 p.sendMessage(success);
             } else {
                 tests.put("Transaction success", false);
-                p.sendMessage(hpc.getString("cmd-fail"));
+                p.sendMessage(hpc.getString("commands.errors.cmd-fail"));
                 printDebugResults(tests, false);
             }
         }
@@ -409,7 +408,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descSellhead();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.sellhead");
     }
 
     @Override
@@ -419,10 +418,10 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             if (args[1].matches("^[A-Za-z0-9_]+$")) {
                 h.put(true, "");
             } else {
-                h.put(false, hpc.getString("alpha-names"));
+                h.put(false, hpc.getString("commands.head.alpha-names"));
             }
         } else {
-            h.put(false, hpc.getString("invalid-args"));
+            h.put(false, hpc.getString("commands.errors.invalid-args"));
         }
 
         return h;

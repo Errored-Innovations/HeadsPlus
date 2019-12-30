@@ -38,6 +38,7 @@ commands:
     cant-complete-challenge: '{header} Nu puteti face aceasta provocare!'
     challenge-complete: '{header} &c{player}&7 a finalizat Challenge &c{challenge}&7!'
     challenge-completed: '&6Terminat!'
+    reward-string: '{header} Recompensa: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Aceasta comanda suporta doar nume alfanumerice!'
     blacklist-head: '{header} Acest cap este interzis si nu poate fi folosit!'

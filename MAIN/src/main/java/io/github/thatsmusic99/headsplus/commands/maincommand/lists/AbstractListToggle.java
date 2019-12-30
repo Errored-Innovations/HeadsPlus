@@ -25,24 +25,24 @@ public abstract class AbstractListToggle extends AbstractListCommand {
             if (args.length == 1) {
                 config.getConfig().set(getPath(), getSelList().enabled = !getSelList().enabled);
                 config.save();
-                sender.sendMessage(hpc.getString(getSelList().enabled ? getListType() + "-on" : getListType() + "-off"));
+                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + (getSelList().enabled ? getListType() + "-on" : getListType() + "-off")));
             } else {
                 if (args[1].equalsIgnoreCase("on")) {
                     if (!getSelList().enabled) {
                         config.getConfig().set(getPath(), getSelList().enabled = true);
                         config.save();
-                        sender.sendMessage(hpc.getString(getListType() + "-on"));
+                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-on"));
                     } else {
-                        sender.sendMessage(hpc.getString(getListType() + "-a-on"));
+                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-a-on"));
                     }
 
                 } else if (args[1].equalsIgnoreCase("off")) {
                     if (getSelList().enabled) {
                         config.getConfig().set(getPath(), getSelList().enabled = false);
                         config.save();
-                        sender.sendMessage(hpc.getString(getListType() + "-off"));
+                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-off"));
                     } else {
-                        sender.sendMessage(hpc.getString(getListType() + "-a-off"));
+                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-a-off"));
                     }
                 } else {
                     sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());

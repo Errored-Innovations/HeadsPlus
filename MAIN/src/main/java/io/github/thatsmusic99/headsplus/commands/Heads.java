@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,13 +37,13 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                         printDebugResults(tests, true);
                         return true;
                     } else {
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("no-perms"));
+                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm"));
                     }
                 } else {
                     cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("disabled"));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled"));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (heads)", true, cs);
@@ -55,7 +54,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription() {
-        return LocaleManager.getLocale().descHeads();
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.heads");
     }
 
     @Override

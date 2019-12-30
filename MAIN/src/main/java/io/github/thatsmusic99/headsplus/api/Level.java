@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -80,14 +80,14 @@ public class Level extends BaseLevel {
     public void reward(Player p) {
         HPChallengeRewardTypes re = getRewardType();
         HeadsPlus hp = HeadsPlus.getInstance();
-        HeadsPlusMessagesConfig hpc = hp.getMessagesConfig();
+        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
         Permission perms = hp.getPermissions();
 
         if (re == HPChallengeRewardTypes.ECO) {
             if (hp.econ()) {
                 hp.getEconomy().depositPlayer(p, Double.valueOf(String.valueOf(getRewardValue())));
             } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
+                hp.getLogger().warning(hpc.getString("startup.no-vault-2"));
             }
 
         } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
@@ -96,7 +96,7 @@ public class Level extends BaseLevel {
                     perms.playerAddGroup(p, (String) getRewardValue());
                 }
             } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
+                hp.getLogger().warning(hpc.getString("startup.no-vault-2"));
             }
 
         } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
@@ -105,7 +105,7 @@ public class Level extends BaseLevel {
                     perms.playerRemoveGroup(p, (String) getRewardValue());
                 }
             } else {
-                hp.getLogger().warning(hpc.getString("no-vault-2"));
+                hp.getLogger().warning(hpc.getString("startup.no-vault-2"));
             }
         } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
             try {

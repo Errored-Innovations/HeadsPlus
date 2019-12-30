@@ -19,7 +19,7 @@ public abstract class AbstractListList extends AbstractListCommand {
             if (args[1].matches("^[0-9]+$")) {
                 h.put(true, "");
             } else {
-                h.put(false, hpc.getString("invalid-input-int"));
+                h.put(false, hpc.getString("commands.errors.invalid-input-int"));
             }
         } else {
             h.put(true, "");
@@ -38,7 +38,7 @@ public abstract class AbstractListList extends AbstractListCommand {
                 page = Integer.parseInt(args[1]);
             }
             if (wl.isEmpty()) {
-                sender.sendMessage(hpc.getString("empty-" + getListType()));
+                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + "empty-" + getListType()));
                 return true;
             }
             sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate(getExtendedType(), getType(), wl, page));

@@ -41,6 +41,7 @@ commands:
     cant-complete-challenge: '{header} Nie możesz ukończyć tego wyzwania!'
     challenge-complete: '{header} Gracz &c{player}&7 Ukończył wyzwanie &c{challenge}&7!'
     challenge-completed: '&6Ukończone!'
+    reward-string: '{header} Nagroda: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Ta komenda używa tylko znaków alfanumerycznych!'
     blacklist-head: '{header} Ta głowa znajduje się na czarnej liście i nie można

@@ -1,9 +1,9 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.locale.LocaleManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class Info implements IHeadsPlusCommand {
 	// D
 	@Override
 	public String getCmdDescription() {
-		return LocaleManager.getLocale().descInfo();
+		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.info");
 	}
 
 	@Override

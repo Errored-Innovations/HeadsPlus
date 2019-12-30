@@ -19,7 +19,7 @@ public class PlaceEvent implements Listener {
                         if (!e.getPlayer().hasPermission("headsplus.bypass.preventplacement")) {
                             if (hp.getNBTManager().isSellable(e.getItemInHand())) {
                                 e.setCancelled(true);
-                                e.getPlayer().sendMessage(hp.getMessagesConfig().getString("block-place-denied"));
+                                e.getPlayer().sendMessage(hp.getMessagesConfig().getString("event.block-place-denied"));
                             }
                         }
                     }
@@ -28,7 +28,7 @@ public class PlaceEvent implements Listener {
                     if (!e.getPlayer().hasPermission("headsplus.bypass.preventplacement")) {
                         if (hp.getNBTManager().isSellable(e.getItemInHand())) {
                             e.setCancelled(true);
-                            e.getPlayer().sendMessage(hp.getMessagesConfig().getString("block-place-denied"));
+                            e.getPlayer().sendMessage(hp.getMessagesConfig().getString("event.block-place-denied"));
                         }
                     }
                 }
