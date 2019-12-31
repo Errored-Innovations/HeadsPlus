@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Niepoprawne argumenty!'
     invalid-input-int: '{header} Ta komenda używa tylko liczb!'
     invalid-pg-no: '{header} Zły numer strony!'
+    no-data: '{header} Brak danych dla tego gracza!'
     no-perm: '{header} Nie masz pozwolenia na używanie tej komendy.'
     player-offline: '{header} Ten gracz jest offline!'
     too-many-args: '{header} Za dużo argumentów!'
@@ -69,7 +70,6 @@ commands:
     level-up: '{header} Gracz &c{player}&7 osiągnął poziom &c{level}&7!'
   profile:
     cant-view-data: '{header} Nie możesz sprawdzić swoich danych z poziomu konsoli!'
-    no-data: '{header} Brak danych dla tego gracza!'
   reload:
     reload-message: '{header} Konfiguracja zrestartowana!'
     reloading-message: '{header} Restartowanie konfiguracji...'
@@ -103,6 +103,12 @@ commands:
     world-a-removed-wl: '{header} Świat &c{world}&7 został usunięty z białej listy!'
     world-added-wl: '{header} Świat &c{world}&7 został dodany do białej listy!'
     world-removed-wl: '{header} Świat &c{world}&7 został usunięty z białej listy!'
+  xp:
+    added-xp: '{header} Dodano &c{amount} &7XP do &c{player}&7, teraz mają &c{xp}&7!'
+    current-xp: '{header} Obecne doświadczenie &c{player}&7: &c{xp}'
+    negative-xp: '{header} Nie sądzę, że chcesz to zrobić ... (aby zezwolić na ujemne XP, przejdź do config.yml > plugin > perks > xp > allow-negative, jednak ma to nieprzewidywalne wyniki!)'
+    removed-xp: '{header} Usunięto &c{amount} &7XP z &c{player}&7, teraz mają &c{xp}&7!'
+    reset-xp: '{header} Zresetuj XP &c{player}&7!'
 descriptions:
   hp:
     blacklist: Włącza lub wyłącza czarną listę.

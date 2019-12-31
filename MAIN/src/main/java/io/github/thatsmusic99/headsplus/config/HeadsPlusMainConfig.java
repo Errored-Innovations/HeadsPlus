@@ -55,6 +55,9 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.autograb.section", "players");
         config.addDefault("plugin.autograb.title", "&8[&6{player}&8]");
         config.addDefault("plugin.autograb.price", "default");
+        config.addDefault("plugin.perks.interact.middle-click-head", true);
+        config.addDefault("plugin.perks.interact.click-head", true);
+        config.addDefault("plugin.perks.xp.allow-negative", false);
         config.addDefault("plugin.perks.ascii-art", true);
         config.addDefault("plugin.perks.sell-heads", true);
         config.addDefault("plugin.perks.drop-heads", true);
@@ -159,6 +162,9 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         perks.pvp_percentabe_lost = p.getDouble("pvp.percentage-lost");
         perks.pvp_balance_for_head = p.getDouble("pvp.percentage-balance-for-head");
         perks.ascii = p.getBoolean("ascii-art");
+        perks.middle_click_in = p.getBoolean("interact.middle-click-head");
+        perks.click_in = p.getBoolean("interact.click-head");
+        perks.negative_xp = p.getBoolean("xp.allow-negative");
     }
 
     public ConfigurationSection getMechanics() {
@@ -204,12 +210,11 @@ public class HeadsPlusMainConfig extends ConfigSettings {
 
         public final List<String> drops_entities_requiring_killer = new ArrayList<>();
         public final List<String> drops_ignore_players = new ArrayList<>();
-        public boolean drops_needs_killer;
+        public boolean drops_needs_killer, ascii, middle_click_in, click_in;
         public boolean sell_heads, drop_heads, craft_heads, disable_crafting, heads_selector, challenges, leaderboards, levels, player_death_messages, smite_on_head, mask_powerups;
         public final List<String> death_messages = new ArrayList<>();
-        public boolean pvp_player_balance_competition;
         public double pvp_percentabe_lost, pvp_balance_for_head;
-        public boolean ascii;
+        public boolean pvp_player_balance_competition, negative_xp;
     }
 
     public static class SelectorList {

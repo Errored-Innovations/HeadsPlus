@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Invalid arguments!'
     invalid-input-int: '{header} You can only use integers in this command!'
     invalid-pg-no: '{header} Invalid page number!'
+    no-data: '{header} There is no data for this player!'
     no-perm: '{header} You do not have permission to use this command.'
     player-offline: '{header} That player is offline!'
     too-many-args: '{header} Too many arguments!'
@@ -60,8 +61,22 @@ commands:
     buy-success: '{header} You have bought a head for &c{price} &7and now have &c{balance}&7!'
     chat-input: '{header} Type in a term you want to search.'
     not-enough-money: '{header} You don''t have enough money!'
+  leaderboards:
+    no-data-lb: 'No leaderboard data has been recorded yet!'
+  levels:
+    level-up: '{header} &c{player} &7has reached level &c{level}&7!'
+  profile:
+    cant-view-data: '{header} You can''t view your own data in console!'
+  reload:
+    reload-message: '{header} Configuration reloaded!'
+    reloading-message: '{header} Configuration reloading...'
+  sellhead:
+    false-head: '{header} This head cannot be sold!'
+    false-item: '{header} This is not a head!'
+    no-heads: '{header} You don''t have any valid heads in your inventory to sell!'
+    not-enough-heads: '{header} You don''t have enough heads!'
     sell-success: '{header} You successfully sold the head(s) for &c{price} &7and now have
-      &c{balance}&7!'
+          &c{balance}&7!'
   tests:
     running-tests: '{header} Running tests... (this may take a while)'
     results: '{header} Results: &c{results}'
@@ -82,6 +97,12 @@ commands:
     world-a-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
     world-added-wl: '{header} &c{world} &7has been added to the world whitelist!'
     world-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
+  xp:
+    added-xp: '{header} Added &c{amount} &7XP to &c{player}&7, they now have &c{xp}&7!'
+    current-xp: '{header} &c{player}&7''s current XP: &c{xp}'
+    negative-xp: '{header} I don''t think you want to do that... (to allow negative XP, go into config.yml > plugin > perks > xp > allow-negative, however this has unpredictable results!)'
+    removed-xp: '{header} Removed &c{amount} &7XP from &c{player}&7, they now have &c{xp}&7!'
+    reset-xp: '{header} Reset &c{player}&7''s XP!'
 descriptions:
   hp:
     blacklist: 'Toggles the blacklist.'

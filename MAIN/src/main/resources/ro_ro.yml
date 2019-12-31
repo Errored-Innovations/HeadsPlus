@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Argumente invalide!'
     invalid-input-int: '{header} Poti folosi doar numere intregi in aceasta comanda!'
     invalid-pg-no: '{header} Numarul paginii este invalid!'
+    no-data: '{header} Nincsenek adatok ehhez a jatekoshoz!'
     no-perm: '{header} Nu ai permisiunea de a executa aceasta comanda!'
     player-offline: '{header} Acest jucator este offline!'
     too-many-args: '{header} Prea multe argumente!'
@@ -66,7 +67,6 @@ commands:
     level-up: '{header} &c{player}&7 a atins nivelul &c{level}&7!'
   profile:
     cant-view-data: '{header} Nu puteti vedea propriile date in consola!'
-    no-data: '{header} Nincsenek adatok ehhez a jatekoshoz!'
   reload:
     reload-message: '{header} Config reincarcat cu succes!'
     reloading-message: '{header} Reincarcare config...'
@@ -97,6 +97,12 @@ commands:
     world-a-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
     world-added-wl: '{header} &c{world}&7 a fost adaugata lumilor permise!'
     world-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
+  xp:
+    added-xp: '{header} Adăugate &c{amount} &7XP la &c{player}&7, acum au &c{xp}&7!'
+    current-xp: '{header} XP-ul actual al &c{player}&7: &c{xp}'
+    negative-xp: '{header} I don''t think you want to do that... (to allow negative XP, go into config.yml > plugin > perks > xp > allow-negative, however this has unpredictable results!)'
+    removed-xp: '{header} Sters {amount} XP de la {player}, acum au {xp}!'
+    reset-xp: '{header} Resetati XP-ul &c{player}&7!'
 descriptions:
   hp:
     blacklist: Porneste sau opreste interzicerea.

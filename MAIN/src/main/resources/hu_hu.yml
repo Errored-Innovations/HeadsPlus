@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Érvénytelen argumentumok!'
     invalid-input-int: '{header} Ebben a parancsban csak egész számokat használhatsz!'
     invalid-pg-no: '{header} Érvénytelen oldal szám!'
+    no-data: '{header} Nincsenek adatok ehhez a játékoshoz!'
     no-perm: '{header} Nincs jogod a parancs használatára.'
     player-offline: '{header} Ez a játékos offline állapotban van!'
     too-many-args: '{header} Túl sok argumentum!'
@@ -65,7 +66,6 @@ commands:
     level-up: '{header} &c{player}&7 elérte a &c{level}&7 szintet!'
   profile:
     cant-view-data: '{header} A saját adataid nem tekintheted meg a konzolban!'
-    no-data: '{header} Nincsenek adatok ehhez a játékoshoz!'
   reload:
     reload-message: '{header} A konfiguráció újratöltve!'
     reloading-message: '{header} A konfiguráció újratöltése...'
@@ -96,6 +96,12 @@ commands:
     world-a-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
     world-added-wl: '{header} &c{world}&7 hozzá lett adva a világ a fehérlistájához!'
     world-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
+  xp:
+    added-xp: '{header} A (z) &c{amount} &7XP-t hozzáadta a (z) &c{player}&7, most már van &c{xp}&7!'
+    current-xp: '{header} &c{player} &7jelenlegi XP: &c{xp}'
+    negative-xp: '{header} Nem hiszem, hogy ezt akarsz tenni ... (A negatív XP engedélyezéséhez menj a config.yml > plugin > perks > xp > allow-negative elemre, ennek azonban kiszámíthatatlan eredményei vannak!)'
+    removed-xp: '{header} Eltávolítottuk a (z) &c{amount} &7XP-t a (z) &c{player}&7, mostantól rendelkeznek &c{xp}&7 -nel!'
+    reset-xp: '{header} Állítsa vissza a (z) &c{player} &7XP operációs rendszerét!'
 descriptions:
   hp:
     blacklist: Váltja a feketelistát.

@@ -150,10 +150,18 @@ public class HPPlayer {
     }
 
     public void addXp(int xp) {
+        setXp(this.xp + xp);
+    }
+
+    public void removeXp(int xp) {
+        setXp(this.xp - xp);
+    }
+
+    public void setXp(int xp) {
         HeadsPlus hp = HeadsPlus.getInstance();
         PlayerScores scores = HeadsPlus.getInstance().getScores();
-        scores.addXp(player.getUniqueId().toString(), xp);
-        this.xp += xp;
+        scores.setXp(player.getUniqueId().toString(), xp);
+        this.xp = xp;
         if (hp.usingLevels()) {
             if (nextLevel != null) {
                 if (nextLevel.getRequiredXP() <= getXp()) {
@@ -162,7 +170,7 @@ public class HPPlayer {
                     if (!event.isCancelled()) {
                         level = nextLevel;
                         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
-							final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
+                            final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                             for (Player p : Bukkit.getOnlinePlayers()) {
                                 p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.levels.level-up")
                                         .replaceAll("\\{name}", name)
@@ -184,6 +192,21 @@ public class HPPlayer {
                             }
                         }
                     }
+                } else if (level.getRequiredXP() > getXp()) {
+                    HashMap<Integer, Level> levels = hp.getLevels();
+                    for (int i = 1; i < levels.size(); i++) {
+                        if (levels.get(i).getRequiredXP() < getXp()) {
+                            try {
+                                level = levels.get(i);
+                                nextLevel = levels.get(i + 1);
+                                return;
+                            } catch (IndexOutOfBoundsException e) { // End of levels
+                                nextLevel = null;
+                            }
+                        }
+                    }
+                    level = null;
+                    nextLevel = levels.get(1);
                 }
             }
         }

@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Argumentos inválidos.'
     invalid-input-int: '{header} ¡Sólo puede usar enteros en este comando!'
     invalid-pg-no: '{header} Numero de página inválido.'
+    no-data: '{header} No hay datos de ese jugador.'
     no-perm: '{header} No tienes permisos para usar ese comando.'
     player-offline: '{header} Ese jugador está desconectado.'
     too-many-args: '{header} ¡Demasiados argumentos!'
@@ -66,7 +67,6 @@ commands:
     level-up: '{header} &c{name} &7ha alcanzado el nivel &c{level}&7!'
   profile:
     cant-view-data: '{header} No puedes ver tus datos si eres la consola...'
-    no-data: '{header} No hay datos de ese jugador.'
   reload:
     reload-message: '{header} ¡Configuración recargada!'
     reloading-message: '{header} Recargando la configuración...'
@@ -97,6 +97,12 @@ commands:
     world-a-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos permitidos.'
     world-added-wl: '{header} &c{name} &7ha sido añadido a la lista de mundos permitidos.'
     world-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos permitidos.'
+  xp:
+    added-xp: '{header} ¡Se agregó &c{amount} &7XP a &c{player}&7, ahora tienen &c{xp}&7!'
+    current-xp: '{header} XP actual de &c{player}&7: &c{xp}'
+    negative-xp: '{header} No creo que quieras hacer eso... (para permitir XP negativo, ve a config.yml > plugin > perks > xp > allow-negative, ¡sin embargo, esto tiene resultados impredecibles!)'
+    removed-xp: '{header} ¡Se eliminaron &c{amount} 77XP de &c{player}&7, ahora tienen &c{xp}&7!'
+    reset-xp: '{header} ¡Restablece la XP de &c{player}&7!'
 descriptions:
   hp:
     blacklist: Activa o desactiva la lista negra.
@@ -115,7 +121,7 @@ descriptions:
     info: Muestra información sobre el plugin.
     profile: Muestra su perfil en el plugin.
     reload: Recarga los archivos de configuración.
-    tests: TODO
+    tests: Ejecuta pruebas para las tasas de caída de mob.
     whitelist: Activa o desactiva la lsta blanca.
     whitelistadd: Añade cabezas a la lista blanca.
     whitelistdel: Elimina una cabeza de la lista blanca.
@@ -124,7 +130,7 @@ descriptions:
     whitelistwadd: Añade un mundo a la lista blanca de crafteos.
     whitelistwdel: Elimina un mundo de la lista blanca de crafteos.
     whitelistwl: Muestra los mundos en la lista blanca.
-    xp: TODO
+    xp: Ver o cambiar el XP de un jugador.
   addhead: Añadir una cabeza de jugador al menú principal.
   head: Obtiene una cabeza.
   heads: Muestra una seleccion de cabezas.

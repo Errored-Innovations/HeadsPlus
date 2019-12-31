@@ -9,6 +9,7 @@ commands:
     invalid-args: '{header} Badz cmd stuff!'
     invalid-input-int: '{header} Naw stoopid nums pls'
     invalid-pg-no: '{header} Badz paige numbz!'
+    no-data: '{header} Dat purrrrzon haz nu day-ta!'
     no-perm: '{header} U canz nawt do dis!'
     player-offline: '{header} Dat playah iz ded!'
     too-many-args: '{header} CMD STUFFZ OVRLODZ'
@@ -63,7 +64,6 @@ commands:
     level-up: '{header} OMG &c{player}&7 haz reeched lvl &c{level}&7!'
   profile:
     cant-view-data: '{header} U r console. I am cat. U shall nawt veww ur data.'
-    no-data: '{header} Dat purrrrzon haz nu day-ta!'
   reload:
     reload-message: '{header} Dun!'
     reloading-message: '{header} Relodin teh confeeg...'
@@ -74,8 +74,8 @@ commands:
     not-enough-heads: '{header} LOL u haz naw heds'
     sell-success: '{header} Smh u sold teh hed(s) four &c{price}&7 end nao haz &c{balance}&7!'
   tests:
-    running-tests: 'RUNRUNRUNRABBITRUUUUUUUUUUN (mai taik a weyel :3)'
-    results: ''
+    running-tests: '{header} RUNRUNRUNRABBITRUUUUUUUUUUN (mai taik a weyel :3)'
+    results: '{header} dere: &c{results}'
   whitelist:
     empty-wl: '{header} Teh nice list haz nuffin!'
     empty-wlw: '{header} Teh nice list 4 woldz haz nuffin!'
@@ -93,6 +93,12 @@ commands:
     world-a-removed-wl: '{header} w is naw longer on teh nice list!'
     world-added-wl: '{header} &c{world}&7 iz nao on teh nice list!'
     world-removed-wl: '{header} &c{world} &7is naw longer on teh nice list!'
+  xp:
+    added-xp: '{header} Add''d &c{amount} &7XP-stuffz 2 &c{player}&7, they nao haz &c{xp}&7!'
+    current-xp: '{header} &c{player}&7''s XP-stuffz rn: &c{xp}'
+    negative-xp: '{header} uhhhhhhhhhhh nu (2 alow - XP, go 2 config.yml > plugin > perks > xp > allow-negative, BUT DANGURRRR!!!)'
+    removed-xp: '{header} Stol''d &c{amount} &7XP-stuffz frm &c{player}&7, they nao haz &c{xp}&7!'
+    reset-xp: '{header} Alt+F4''d &c{player}&7''s XP!'
 descriptions:
   hp:
     blacklist: Turnz teh naughty list on 'n' off
