@@ -230,7 +230,7 @@ public class DeathEvents implements Listener {
                     if (b && HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity()) > 0.0) {
                         double playerprice = HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity());
                         price = playerprice * hp.getConfiguration().getPerks().pvp_balance_for_head;
-                        lostprice = HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity()) * hp.getConfiguration().getPerks().pvp_percentabe_lost;
+                        lostprice = HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity()) * hp.getConfiguration().getPerks().pvp_percentage_lost;
                     }
 
                     List<String> strs = new ArrayList<>();

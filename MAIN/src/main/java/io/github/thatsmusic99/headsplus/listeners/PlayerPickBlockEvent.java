@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerPickBlockEvent implements Listener {
 
-    HashSet<HumanEntity> openInventories = new HashSet();
+    HashSet<HumanEntity> openInventories = new HashSet<>();
 
     @EventHandler
     public void onInventoryCreativeEvent(InventoryCreativeEvent event) {

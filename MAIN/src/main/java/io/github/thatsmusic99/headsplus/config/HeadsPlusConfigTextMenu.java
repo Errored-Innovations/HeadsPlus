@@ -76,13 +76,13 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         getConfig().addDefault("blacklist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Blacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("blacklist.world.for-each-line", "&8» &7{name}");
         getConfig().addDefault("blacklist.world.lines-per-page", 8);
-        getConfig().addDefault("whitelist.default.header", "{1}============ {2}Whitelist: {3}{page}/{pages} {1}============");
+        getConfig().addDefault("whitelist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWhitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("whitelist.default.for-each-line", "&8» &7{name}");
         getConfig().addDefault("whitelist.default.lines-per-page", 8);
-        getConfig().addDefault("whitelist.world.header", "{1}============ {2}World Whitelist: {3}{page}/{pages} {1}============");
+        getConfig().addDefault("whitelist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Whitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("whitelist.world.for-each-line", "&8» &7{name}");
         getConfig().addDefault("whitelist.world.lines-per-page", 8);
-        getConfig().addDefault("leaderboard.header", "{1}======= {2}HeadsPlus Leaderboards: {section} {3}{page}/{pages} {1}=======");
+        getConfig().addDefault("leaderboard.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
         getConfig().addDefault("leaderboard.lines-per-page", 8);
         getConfig().addDefault("info.header", "{default}");
@@ -97,10 +97,10 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
     private static String translateColors(String s) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        return translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
+        return ChatColor.translateAlternateColorCodes('&', translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
                 .replaceAll("\\{2}", hp.getThemeColour(2).toString())
                 .replaceAll("\\{3}", hp.getThemeColour(3).toString())
-                .replaceAll("\\{4}", hp.getThemeColour(4).toString());
+                .replaceAll("\\{4}", hp.getThemeColour(4).toString()));
     }
 
     private static String translateHeader(String s) {
