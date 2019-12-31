@@ -315,7 +315,6 @@ public class HeadsPlus extends JavaPlugin {
     private void registerCommands() {
         debug("- Registering /headsplus...", 3);
         getCommand("headsplus").setExecutor(new HeadsPlusCommand());
-     //   getCommand("hp").setExecutor(new HeadsPlusCommand());
         debug("- Registering /hp's tab completer..", 3);
         getCommand("hp").setTabCompleter(new TabComplete());
         debug("- Registering /head...", 3);
@@ -397,6 +396,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public void restartMessagesManager() {
+        createLocales();
         hpc = new HeadsPlusMessagesManager();
     }
 

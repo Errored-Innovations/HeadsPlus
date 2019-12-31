@@ -82,7 +82,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         getConfig().addDefault("whitelist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Whitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("whitelist.world.for-each-line", "&8» &7{name}");
         getConfig().addDefault("whitelist.world.lines-per-page", 8);
-        getConfig().addDefault("leaderboard.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        getConfig().addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━&c．・");
         getConfig().addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
         getConfig().addDefault("leaderboard.lines-per-page", 8);
         getConfig().addDefault("info.header", "{default}");
