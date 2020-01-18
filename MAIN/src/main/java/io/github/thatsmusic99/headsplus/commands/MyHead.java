@@ -46,7 +46,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             Bukkit.dispatchCommand(target, "minecraft:execute as " + args[1] + "run myhead");
                             return false;
                         } else {
-                            sender.sendMessage(hpc.getString("commands.errors.player-offline"));
+                            sender.sendMessage(hpc.getString("commands.errors.player-offline", null));
                             return false;
                         }
                     } else {
@@ -56,6 +56,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
                     return false;
                 }
+                Player p = (Player) sender;
                 SelectorList blacklist = HeadsPlus.getInstance().getConfiguration().getHeadsBlacklist();
                 SelectorList whitelist = HeadsPlus.getInstance().getConfiguration().getHeadsWhitelist();
                 HeadsPlus.getInstance().saveConfig();
@@ -71,8 +72,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                 boolean blacklistOn = blacklist.enabled;
                 boolean wlOn = whitelist.enabled;
                 String head = sender.getName().toLowerCase();
-                if (((Player) sender).getInventory().firstEmpty() == -1) {
-                    sender.sendMessage(hpc.getString("commands.head.full-inv"));
+                if (p.getInventory().firstEmpty() == -1) {
+                    sender.sendMessage(hpc.getString("commands.head.full-inv", p));
                     return true;
                 }
                 tests.put("Whitelist enabled", wlOn);
@@ -85,56 +86,56 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     if (blacklistOn) {
                         if (wl.contains(head)) {
                             if (!bl.contains(head)) {
-                                giveHead((Player) sender, sender.getName());
+                                giveHead(p, sender.getName());
                                 return true;
                             } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
-                                giveHead((Player) sender, sender.getName());
+                                giveHead(p, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                                sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
                                 return true;
                             }
                         } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
                             if (!bl.contains(head)) {
-                                giveHead((Player) sender, sender.getName());
+                                giveHead(p, sender.getName());
                                 return true;
                             } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
-                                giveHead((Player) sender, sender.getName());
+                                giveHead(p, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                                sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
                                 return true;
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.whitelist-head", p));
                             return true;
                         }
                     } else {
                         if (wl.contains(head)) {
-                            giveHead((Player) sender, sender.getName());
+                            giveHead(p, sender.getName());
                             return true;
                         } else if (sender.hasPermission("headsplus.bypass.whitelist")){
-                            giveHead((Player) sender, sender.getName());
+                            giveHead(p, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.whitelist-head", p));
                             return true;
                         }
                     }
                 } else {
                     if (blacklistOn) {
                         if (!bl.contains(head)) {
-                            giveHead((Player) sender, sender.getName());
+                            giveHead(p, sender.getName());
                             return true;
                         } else if (sender.hasPermission("headsplus.bypass.blacklist")){
-                            giveHead((Player) sender, sender.getName());
+                            giveHead(p, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                            sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
                             return true;
                         }
                     } else {
-                        giveHead((Player) sender, sender.getName());
+                        giveHead(p, sender.getName());
                         return true;
                     }
                 }
@@ -161,15 +162,13 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
     @Override

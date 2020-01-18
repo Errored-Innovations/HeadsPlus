@@ -2,14 +2,15 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public interface IHeadsPlusCommand {
 
-    HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender);
+    String isCorrectUsage(String[] args, CommandSender sender);
 
-    String getCmdDescription();
+    String getCmdDescription(CommandSender sender);
 
     boolean fire(String[] args, CommandSender sender);
 

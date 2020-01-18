@@ -44,30 +44,30 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
                                                             || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(sec, Integer.parseInt(args[1]), args[2]));
+                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), args[2]));
                                                     } else {
-                                                        cs.sendMessage(getLeaderboard(sec, Integer.parseInt(args[1]), "hunting"));
+                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), "hunting"));
                                                     }
                                                 } else {
-                                                    cs.sendMessage(getLeaderboard(sec, Integer.parseInt(args[1]), "hunting"));
+                                                    cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), "hunting"));
                                                 }
                                             } else if (args[1].equalsIgnoreCase("crafting")
                                                     || args[1].equalsIgnoreCase("selling")
                                                     || args[1].equalsIgnoreCase("hunting")) {
                                                 if (args.length > 2) {
                                                     if (args[2].matches("^[0-9]+$")) {
-                                                        cs.sendMessage(getLeaderboard(sec, Integer.parseInt(args[2]), args[1]));
+                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[2]), args[1]));
                                                     } else {
-                                                        cs.sendMessage(getLeaderboard(sec, 1, args[1]));
+                                                        cs.sendMessage(getLeaderboard(cs, sec, 1, args[1]));
                                                     }
                                                 } else {
-                                                    cs.sendMessage(getLeaderboard(sec, 1, args[1]));
+                                                    cs.sendMessage(getLeaderboard(cs, sec, 1, args[1]));
                                                 }
                                             } else {
-                                                cs.sendMessage(getLeaderboard(sec, 1, "hunting"));
+                                                cs.sendMessage(getLeaderboard(cs, sec, 1, "hunting"));
                                             }
                                         } else {
-                                            cs.sendMessage(getLeaderboard(sec, 1, "hunting"));
+                                            cs.sendMessage(getLeaderboard(cs, sec, 1, "hunting"));
                                         }
                                         printDebugResults(tests, true);
                                     }
@@ -80,26 +80,26 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
                                                             || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), args[2]));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), args[2]));
                                                     } else {
-                                                        cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), "hunting"));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
                                                     }
                                                 } else {
-                                                    cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), "hunting"));
+                                                    cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
                                                 }
                                             } else if (args[1].equalsIgnoreCase("crafting")
                                                     || args[1].equalsIgnoreCase("selling")
                                                     || args[1].equalsIgnoreCase("hunting")) {
-                                                cs.sendMessage(getLeaderboard(args[0], 1, args[1]));
+                                                cs.sendMessage(getLeaderboard(cs, args[0], 1, args[1]));
                                             } else {
-                                                cs.sendMessage(getLeaderboard(args[0], 1, "hunting"));
+                                                cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                             }
                                         } else {
-                                            cs.sendMessage(getLeaderboard(args[0], 1, "hunting"));
+                                            cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                         }
                                         printDebugResults(tests, true);
                                     } else if (args[0].matches("^[0-9]+$")) {
-                                        cs.sendMessage(getLeaderboard("total", Integer.parseInt(args[0]), "hunting"));
+                                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
                                         printDebugResults(tests, true);
                                     } else if (args[0].equalsIgnoreCase("player")) {
                                         if (args.length > 1) {
@@ -108,29 +108,29 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
                                                             || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), args[2]));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), args[2]));
                                                     } else {
-                                                        cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), "hunting"));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
                                                     }
                                                 } else {
-                                                    cs.sendMessage(getLeaderboard(args[0], Integer.parseInt(args[1]), "hunting"));
+                                                    cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
                                                 }
                                             } else {
                                                 if (args.length > 2) {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
                                                             || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(args[0], 1, args[2]));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], 1, args[2]));
                                                     } else {
-                                                        cs.sendMessage(getLeaderboard(args[0], 1, "hunting"));
+                                                        cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                                     }
                                                 } else {
-                                                    cs.sendMessage(getLeaderboard(args[0], 1, "hunting"));
+                                                    cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                                 }
                                             }
 
                                         } else {
-                                            cs.sendMessage(getLeaderboard(args[0], 1, "hunting"));
+                                            cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                         }
                                         printDebugResults(tests, true);
                                     }  else if (args[0].equalsIgnoreCase("crafting")
@@ -138,20 +138,20 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                             || args[0].equalsIgnoreCase("hunting")) {
                                         if (args.length > 1) {
                                             if (args[1].matches("^[0-9]+$")) {
-                                                cs.sendMessage(getLeaderboard("total", Integer.parseInt(args[1]), args[0]));
+                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0]));
                                             } else {
-                                                cs.sendMessage(getLeaderboard("total", 1, args[0]));
+                                                cs.sendMessage(getLeaderboard(cs, "total", 1, args[0]));
                                             }
                                         }
 
 
                                     } else {
-                                        cs.sendMessage(getLeaderboard("total", 1, "hunting"));
+                                        cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                                     }
                                 }
 
                             } else {
-                                cs.sendMessage(getLeaderboard("total", 1, "hunting"));
+                                cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                                 printDebugResults(tests, true);
                             }
                         } catch (Exception e) {
@@ -169,20 +169,18 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
         return false;
     }
 
-    private String getLeaderboard(String sec, int page, String part) {
-        return HeadsPlusConfigTextMenu.LeaderBoardTranslator.translate(sec, part, page);
+    private String getLeaderboard(CommandSender sender, String sec, int page, String part) {
+        return HeadsPlusConfigTextMenu.LeaderBoardTranslator.translate(sender, sec, part, page);
     }
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hplb");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hplb", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
     @Override

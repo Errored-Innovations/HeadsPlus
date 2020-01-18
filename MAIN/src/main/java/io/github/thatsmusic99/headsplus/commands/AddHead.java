@@ -3,13 +3,12 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandInfo(
         commandname = "addhead",
@@ -33,43 +32,42 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
                 uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
             }
             if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding")
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding", sender instanceof Player ? (Player) sender : null)
                         .replace("{player}", p.getName())
                         .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
             }
         } else {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender instanceof Player ? (Player) sender : null));
         }
         return true;
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        Player p = sender instanceof Player ? (Player) sender : null;
         if (args.length > 0) {
             // todo? allow adding actual textures (and category, encoding) via this command
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
                 if (args[0].length() > 2) {
                     if (args[0].length() < 17) {
-                        h.put(true, "");
+                        return "";
                     } else {
-                        h.put(false,  hpc.getString("commands.head.head-too-long"));
+                        return hpc.getString("commands.head.head-too-long", p);
                     }
                 } else {
-                    h.put(false, hpc.getString("commands.head.head-too-short"));
+                    return hpc.getString("commands.head.head-too-short", p);
                 }
             } else {
-                h.put(false, hpc.getString("commands.head.alpha-names"));
+                return hpc.getString("commands.head.alpha-names", p);
             }
         } else {
-            h.put(false, hpc.getString("commands.errors.invalid-args"));
+            return hpc.getString("commands.errors.invalid-args", p);
         }
-        return h;
     }
 
     @Override
-    public String getCmdDescription() {
-        return hpc.getString("descriptions.addhead");
+    public String getCmdDescription(CommandSender sender) {
+        return hpc.getString("descriptions.addhead", sender);
     }
 
     @Override

@@ -34,9 +34,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -176,13 +175,15 @@ public class HeadsPlus extends JavaPlugin {
             }
             getServer().getConsoleSender().sendMessage(hpc.getString("startup.plugin-enabled"));
             if (getConfiguration().getPerks().ascii) {
-                getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------" +
-                        "\n  " + ChatColor.RED + "_    _                _     " + ChatColor.BLUE + "_____  _                     __  ______ \n" +
-                        " " + ChatColor.RED + "| |  | |              | |   " + ChatColor.BLUE + "|  __ \\| |                   / / |____  |          \n" +
-                        " " + ChatColor.RED + "| |__| | ___  __ _  __| |___" + ChatColor.BLUE + "| |__) | |_   _ ___  __   __/ /_     / / \n" +
-                        " " + ChatColor.RED + "|  __  |/ _ \\/ _` |/ _` / __" + ChatColor.BLUE + "|  ___/| | | | / __| \\ \\ / / '_ \\   / /  \n" +
-                        " " + ChatColor.DARK_RED + "| |  | |  __/ (_| | (_| \\__ \\" + ChatColor.DARK_BLUE + " |    | | |_| \\__ \\  \\ V /| (_) | / /   \n" +
-                        " " + ChatColor.DARK_RED + "|_|  |_|\\___|\\__,_|\\__,_|___/" + ChatColor.DARK_BLUE + "_|    |_|\\__,_|___/   \\_/  \\___(_)_/    \n" +
+                getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
+                        "§c$$\\   $$\\                           $$\\           §9$$$$$$$\\  $$\\\n" +
+                        "§c$$ |  $$ |                          $$ |          §9$$  __$$\\ $$ |\n" +
+                        "§c$$ |  $$ | $$$$$$\\   $$$$$$\\   $$$$$$$ | $$$$$$$\\ §9$$ |  $$ |$$ |$$\\   $$\\  $$$$$$$\\\n" +
+                        "§4$$$$$$$$ |$$  __$$\\  \\____$$\\ $$  __$$ |$$  _____|§1$$$$$$$  |$$ |$$ |  $$ |$$  _____|\n" +
+                        "§4$$  __$$ |$$$$$$$$ | $$$$$$$ |$$ /  $$ |\\$$$$$$\\  §1$$  ____/ $$ |$$ |  $$ |\\$$$$$$\\\n" +
+                        "§4$$ |  $$ |$$   ____|$$  __$$ |$$ |  $$ | \\____$$\\ §1$$ |      $$ |$$ |  $$ | \\____$$\\\n" +
+                        "§4$$ |  $$ |\\$$$$$$$\\ \\$$$$$$$ |\\$$$$$$$ |$$$$$$$  |§1$$ |      $$ |\\$$$$$$  |$$$$$$$  |\n" +
+                        "§4\\__|  \\__| \\_______| \\_______| \\_______|\\_______/ §1\\__|      \\__| \\______/ \\_______/\n" +
                         ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
                         ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
                         ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
@@ -416,7 +417,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createLocales() {
-        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lolcat", "pl_pl", "ro_ro", "ru_ru"));
+        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "pl_pl", "ro_ro", "ru_ru"));
         File dir = new File(getDataFolder() + File.separator + "locale");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -426,7 +427,7 @@ public class HeadsPlus extends JavaPlugin {
             if (!conf.exists()) {
                 InputStream is = getResource(locale + ".yml");
                 try {
-                    FileUtils.copyInputStreamToFile(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml"));
+                    Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

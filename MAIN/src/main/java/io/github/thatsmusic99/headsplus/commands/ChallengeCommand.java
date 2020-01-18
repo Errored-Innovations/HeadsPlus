@@ -37,7 +37,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                         return true;
                     } else {
                         tests.put("Has permission", false);
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm"));
+                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
                     }
                 } else {
                     tests.put("Instance of Player", false);
@@ -45,7 +45,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                 }
             } else {
                 tests.put("Challenges enabled", false);
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled"));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs instanceof Player ? (Player) cs : null));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
@@ -55,15 +55,13 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hpc");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hpc", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
     @Override

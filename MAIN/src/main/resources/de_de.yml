@@ -1,6 +1,6 @@
 # HeadsPlus by Thatsmusic99 - Deutsch (Niestrat99)
 # Ändern Sie nicht die Version! Dies wird intern im Plugin verwendet, um neue Nachrichten hinzuzufügen.
-version: 1.0
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
   errors:
@@ -66,6 +66,9 @@ commands:
     no-data-lb: '{header} Es wurde noch keine Daten für die Rangliste aufgenommen!'
   levels:
     level-up: '{header} &c{name} &7hat Level &c{level} &7erreicht!'
+  locale:
+    invalid-lang: ''
+
   profile:
     cant-view-data: '{header}Du kannst nicht deine eigenen Daten in der Konsole sehen!'
   reload:

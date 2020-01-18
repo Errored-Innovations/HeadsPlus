@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractListList extends AbstractListCommand {
@@ -13,18 +12,16 @@ public abstract class AbstractListList extends AbstractListCommand {
     public abstract String getExtendedType();
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
         if (args.length > 1) {
             if (args[1].matches("^[0-9]+$")) {
-                h.put(true, "");
+                return "";
             } else {
-                h.put(false, hpc.getString("commands.errors.invalid-input-int"));
+                return hpc.getString("commands.errors.invalid-input-int", sender);
             }
         } else {
-            h.put(true, "");
+            return "";
         }
-        return h;
     }
 
     @Override
@@ -38,10 +35,10 @@ public abstract class AbstractListList extends AbstractListCommand {
                 page = Integer.parseInt(args[1]);
             }
             if (wl.isEmpty()) {
-                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + "empty-" + getListType()));
+                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + "empty-" + getListType(), sender));
                 return true;
             }
-            sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate(getExtendedType(), getType(), wl, page));
+            sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate(sender, getExtendedType(), getType(), wl, page));
 
 
         } catch (Exception e) {

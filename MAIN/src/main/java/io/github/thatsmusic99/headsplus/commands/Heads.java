@@ -37,13 +37,13 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                         printDebugResults(tests, true);
                         return true;
                     } else {
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm"));
+                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
                     }
                 } else {
                     cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled"));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs instanceof Player ? (Player) cs : null));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (heads)", true, cs);
@@ -53,15 +53,13 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.heads");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.heads", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
     @Override

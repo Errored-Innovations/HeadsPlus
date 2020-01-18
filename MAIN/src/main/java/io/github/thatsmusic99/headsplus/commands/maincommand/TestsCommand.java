@@ -18,7 +18,7 @@ public class TestsCommand implements IHeadsPlusCommand {
     private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
+    public String isCorrectUsage(String[] args, CommandSender sender) {
         HashMap<Boolean, String> h = new HashMap<>();
         if (args.length > 1) {
             HeadsPlusConfigHeads heads = HeadsPlus.getInstance().getHeadsConfig();
@@ -27,25 +27,24 @@ public class TestsCommand implements IHeadsPlusCommand {
             if (mHeads.contains(args[1]) || uHeads.contains(args[1])) {
                 if (args.length > 2) {
                     if (args[2].matches("^[0-9]+$")) {
-                        h.put(true, "");
+                        return "";
                     } else {
-                        h.put(false, hpc.getString("commands.errors.invalid-input-int"));
+                        return hpc.getString("commands.errors.invalid-input-int");
                     }
                 } else {
-                    h.put(false, hpc.getString("commands.errors.invalid-args"));
+                    return hpc.getString("commands.errors.invalid-args");
                 }
             } else {
-                h.put(false, hpc.getString("commands.errors.invalid-args"));
+                return hpc.getString("commands.errors.invalid-args");
             }
         } else {
-            h.put(false, hpc.getString("commands.errors.invalid-args"));
+            return hpc.getString("commands.errors.invalid-args");
         }
-        return h;
     }
 
     @Override
-    public String getCmdDescription() {
-        return "Run tests for mob drop rates.";
+    public String getCmdDescription(CommandSender sender) {
+        return hpc.getString("descriptions.tests", sender);
     }
 
     @Override

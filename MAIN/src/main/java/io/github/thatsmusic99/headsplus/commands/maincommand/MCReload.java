@@ -23,15 +23,13 @@ public class MCReload implements IHeadsPlusCommand{
     // O
 
     @Override
-    public String getCmdDescription() {
+    public String getCmdDescription(CommandSender sender) {
         return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.reload");
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
     @Override

@@ -289,20 +289,17 @@ public class DebugFileCreator {
     private String getErrorHeader() {
         List<String> msgs = new ArrayList<>();
         msgs.add("Oh sorry, did I hurt you?");
-        msgs.add("Oopsies! I'm vewwy sowwy for dis. ówò uwu");
+        msgs.add("Oopsie Whoopsie! UwU We made a ****y wucky! A wittle ****o boingo! The code monkeys at our headquarters are working VEWY HARD to fix this!");
         msgs.add("The plugin works well with a few exceptions, amirite?");
-        msgs.add("Who put the milk in before the cereal?");
         msgs.add("Please don't put me on Santa's naughty list.");
         msgs.add("Off with your head!");
         msgs.add("Ohhh, what does this button do???");
-        msgs.add("Please, I'm only getting started.");
-        msgs.add("Our highly trained cat is working on this.");
         msgs.add("Uh oh.");
         msgs.add("help ive fallen over and i can't get up i need @someone");
         msgs.add(":sobbing:");
         msgs.add("Keyboard not found. Press F1 to continue.");
         msgs.add("Correct way of not doing this found. It's also the only way.");
-        msgs.add("Sorry lad but your mouse was disconnected. Press \"OK\" to continue.");
+        msgs.add("Sorry lad but your mouse was disconnected. Click \"OK\" to continue.");
         msgs.add("MEMORY ERROR - I forgot what I was meant to say.");
         msgs.add("Your plugin has ran into a problem and has to dump an error file. Error code: AGGHHHHHH.");
         msgs.add("System Error: Windows XP isn't an OS.");
@@ -329,6 +326,22 @@ public class DebugFileCreator {
         msgs.add("YOU'RE breathtaking!");
         msgs.add("Ilysm Nie <3");
         msgs.add("VILLAGER CHEST. VILLAGER CHEST. VILLAGER CHEST.");
+        msgs.add("This plugin is going to start WW3 with that attitude");
+        msgs.add("Also try AdvancedTeleport! You don't get errors like this there. I hope.");
+        msgs.add("HeadDatabase is a good plugin too, you know!");
+        msgs.add("KEVIIIIIIIIIIIIIIIIIN!!! FOR GOODNESS SAKE, NO I'M NOT!");
+        msgs.add("what the hell, chris");
+        msgs.add("nope, nope, nope, out. no. get out. get out of here.");
+        msgs.add("what's the time quarter to 9 time to take a bath what do you mean we're already clean scrub scrub scrub til the waters brown");
+        msgs.add("B L E H");
+        msgs.add("At least you didn't come up to me saying I'd be a dad...");
+        msgs.add("THEY BROUGHT BRITISH MILK");
+        msgs.add("I don’t want my plugin on a website called sooch");
+        msgs.add("wind plugin?");
+        msgs.add("https://cdn.discordapp.com/emojis/666611994148864000.gif?v=1");
+        msgs.add("HE FRICKIN' STOLE TOT");
+        msgs.add("the child is here");
+        msgs.add("HAHAHAHHAHAHAHHAH! FOOOOOOOOOOOOOOOOOOOOOOoooooo... oh wait, it's you again?");
         int random = new Random().nextInt(msgs.size());
         return msgs.get(random);
     }

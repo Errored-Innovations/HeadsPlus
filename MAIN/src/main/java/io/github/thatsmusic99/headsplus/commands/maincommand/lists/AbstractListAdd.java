@@ -4,24 +4,19 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
-
 public abstract class AbstractListAdd extends AbstractListCommand {
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
         if (args.length > 1) {
             if (args[1].matches("^[A-Za-z0-9_]+$")) {
-                h.put(true, "");
+                return "";
             } else {
-                h.put(false, hpc.getString("commands.head.alpha-names"));
+                return hpc.getString("commands.head.alpha-names", sender);
             }
         } else {
-            h.put(false, hpc.getString("commands.errors.invalid-args"));
+            return hpc.getString("commands.errors.invalid-args", sender);
         }
-
-        return h;
     }
 
     @Override
@@ -29,12 +24,12 @@ public abstract class AbstractListAdd extends AbstractListCommand {
         try {
             String aHead = args[1].toLowerCase();
             if (getList().contains(aHead)) {
-                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-a-add"));
+                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-a-add", sender));
             } else {
                 getList().add(aHead);
                 config.getConfig().set(getPath(), getList());
                 config.save();
-                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-added-" + getListType()).replaceAll("\\{name}", args[1]).replaceAll("\\{player}", args[1]));
+                sender.sendMessage("commands." + getFullName() + "." + hpc.getString(getType() + "-added-" + getListType(), sender).replaceAll("\\{name}", args[1]).replaceAll("\\{player}", args[1]));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);

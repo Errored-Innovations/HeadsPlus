@@ -31,6 +31,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         }
         config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
         config.addDefault("locale", "en_us");
+        config.addDefault("smart-locale", false);
         config.addDefault("blacklist.default.enabled", true);
         config.addDefault("blacklist.world.enabled", true);
         config.addDefault("whitelist.default.enabled", false);

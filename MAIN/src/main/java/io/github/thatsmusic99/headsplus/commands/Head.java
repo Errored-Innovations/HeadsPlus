@@ -62,6 +62,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	}
 
 	private void giveH(String[] args, CommandSender sender, Player p) {
+        Player p2 = sender instanceof Player ? (Player) sender : null;
 	    SelectorList blacklist = hp.getConfiguration().getHeadsBlacklist();
         SelectorList whitelist = hp.getConfiguration().getHeadsWhitelist();
         List<String> bl = new ArrayList<>();
@@ -77,7 +78,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
         boolean wlOn = whitelist.enabled;
         String head = args[0].toLowerCase();
         if (p.getInventory().firstEmpty() == -1) {
-            sender.sendMessage(hpc.getString("commands.head.full-inv"));
+            sender.sendMessage(hpc.getString("commands.head.full-inv", p2));
             return;
         }
         tests.put("Whitelist enabled", wlOn);
@@ -94,7 +95,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                        sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
                     }
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
                     if (!bl.contains(head)) {
@@ -102,10 +103,10 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                        sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.whitelist-head", p2));
                 }
             } else {
                 if (wl.contains(head)) {
@@ -113,7 +114,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.whitelist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.whitelist-head", p2));
                 }
             }
         } else {
@@ -123,7 +124,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                 } else if (sender.hasPermission("headsplus.bypass.blacklist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.blacklist-head"));
+                    sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
                 }
             } else {
                 giveHead(p, args[0]);
@@ -132,37 +133,37 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription() {
-        return hpc.getString("descriptions.head");
+    public String getCmdDescription(CommandSender sender) {
+        return hpc.getString("descriptions.head", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-	    HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        Player p = sender instanceof Player ? (Player) sender : null;
         if (args.length > 0) {
             if ((args[0].matches("^[A-Za-z0-9_]+$"))) {
                 if (args[0].length() < 17) {
                     if (args[0].length() > 2) {
-                       h.put(true, "");
+                       return "";
                     } else {
-                        h.put(false, hpc.getString("commands.head.head-too-short"));
+                        return hpc.getString("commands.head.head-too-short", p);
                     }
                 } else {
-                    h.put(false, hpc.getString("commands.head.head-too-long"));
+                    return hpc.getString("commands.head.head-too-long", p);
                 }
             } else {
-                h.put(false, hpc.getString("commands.head.alpha-names"));
+                return hpc.getString("commands.head.alpha-names", p);
             }
         } else {
-            h.put(false, hpc.getString("commands.head.invalid-args"));
+            return hpc.getString("commands.head.invalid-args", p);
         }
-        return h;
     }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
 	    tests.clear();
 	    try {
+	        Player p = sender instanceof Player ? (Player) sender : null;
 	        tests.put("No permission", !sender.hasPermission("headsplus.head"));
 	        if (sender.hasPermission("headsplus.head")) {
 	            tests.put("More than 1 arg", args.length >= 2);
@@ -170,35 +171,34 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	                tests.put("No Other permission", !sender.hasPermission("headsplus.head.others"));
 	                if (sender.hasPermission("headsplus.head.others")) {
 
-                            tests.put("Player Found", hp.getNMS().getPlayer(args[1]) != null);
-                            if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
-                            } else if (hp.getNMS().getPlayer(args[1]) != null) {
-                                boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
-                                tests.put("Valid name", b);
-                                if (b) {
-                                    String[] s = new String[2];
-                                    s[0] = args[0];
-                                    s[1] = args[1];
-                                    giveH(s, sender, hp.getNMS().getPlayer(args[1]));
-                                    printDebugResults(tests, true);
-                                    return true;
-                                } else if (!args[0].matches("^[A-Za-z0-9_]+$")) {
-                                    sender.sendMessage(hpc.getString("commands.head.alpha-names"));
-                                } else if (args[0].length() < 3) {
-                                    sender.sendMessage(hpc.getString("commands.head.head-too-short"));
-                                } else {
-                                    sender.sendMessage(hpc.getString("commands.head.head-too-long"));
-                                }
+                        tests.put("Player Found", hp.getNMS().getPlayer(args[1]) != null);
+                        if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
+                        } else if (hp.getNMS().getPlayer(args[1]) != null) {
+
+                            boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
+                            tests.put("Valid name", b);
+                            if (b) {
+                                String[] s = new String[2];
+                                s[0] = args[0];
+                                s[1] = args[1];
+                                giveH(s, sender, hp.getNMS().getPlayer(args[1]));
+                                printDebugResults(tests, true);
+                                return true;
+                            } else if (!args[0].matches("^[A-Za-z0-9_]+$")) {
+                                sender.sendMessage(hpc.getString("commands.head.alpha-names", p));
+                            } else if (args[0].length() < 3) {
+                                sender.sendMessage(hpc.getString("commands.head.head-too-short", p));
                             } else {
-                                sender.sendMessage(hpc.getString("commands.errors.player-offline"));
+                                sender.sendMessage(hpc.getString("commands.head.head-too-long", p));
                             }
-
-
+                        } else {
+                            sender.sendMessage(hpc.getString("commands.errors.player-offline", p));
+                        }
 	                    printDebugResults(tests, false);
 	                    return true;
 	                } else {
-	                    sender.sendMessage(hpc.getString("commands.errors.no-perm"));
+	                    sender.sendMessage(hpc.getString("commands.errors.no-perm", p));
 	                }
 	            } else if (args.length > 0) {
 	                tests.put("Instance of Player", sender instanceof Player);
@@ -206,7 +206,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	                    boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
 	                    tests.put("Valid name", b);
 	                    if (b) {
-	                        giveH(args, sender, (Player) sender);
+	                        giveH(args, sender, p);
 	                        printDebugResults(tests, true);
 	                        return true;
 	                    }
@@ -214,10 +214,10 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
 	                    sender.sendMessage(ChatColor.RED + "You must be a player to give yourself a head!");
 	                }
 	            } else {
-	                sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
+	                sender.sendMessage(hpc.getString("commands.errors.invalid-args", p));
 	            }
 	        } else {
-	            sender.sendMessage(hpc.getString("commands.errors.no-perm"));
+	            sender.sendMessage(hpc.getString("commands.errors.no-perm", p));
 	        }
         } catch (Exception e) {
 	        DebugPrint.createReport(e, "Command (head)", true, sender);

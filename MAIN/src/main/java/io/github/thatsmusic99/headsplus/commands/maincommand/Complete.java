@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 
 @CommandInfo(
         commandname = "complete",
@@ -25,8 +24,8 @@ public class Complete implements IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        Player p = sender instanceof Player ? (Player) sender : null;
         try {
             if (args.length > 1) {
                 Challenge c = HeadsPlus.getInstance().getChallengeByName(args[1]);
@@ -37,47 +36,51 @@ public class Complete implements IHeadsPlusCommand {
                             if (player.isOnline()) {
                                 if (!c.isComplete(player.getPlayer())) {
                                     if (c.canComplete(player.getPlayer())) {
-                                        h.put(true, "");
+                                        return "";
                                     } else {
-                                        h.put(false, hpc.getString("commands.challenges.cant-complete-challenge"));
+                                        return hpc.getString("commands.challenges.cant-complete-challenge", p);
                                     }
                                 } else {
-                                    h.put(false, hpc.getString("commands.challenges.already-complete-challenge"));
+                                    return hpc.getString("commands.challenges.already-complete-challenge", p);
                                 }
 
                             } else {
-                                h.put(false, hpc.getString("commands.errors.player-offline"));
+                                return hpc.getString("commands.errors.player-offline", p);
                             }
                         } else {
-                            h.put(false, hpc.getString("commands.errors.no-perm"));
+                            return hpc.getString("commands.errors.no-perm", p);
                         }
 
                     } else if (sender instanceof Player) {
-                        if (!c.isComplete((Player) sender)) {
-                            if (c.canComplete((Player) sender)) {
-                                h.put(true, "");
+                        if (!c.isComplete(p)) {
+                            if (c.canComplete(p)) {
+                                return "";
                             } else {
-                                h.put(false, hpc.getString("commands.challenges.cant-complete-challenge"));
+                                return hpc.getString("commands.challenges.cant-complete-challenge", p);
                             }
                         } else {
-                            h.put(false, hpc.getString("commands.challenges.already-complete-challenge"));
+                            return hpc.getString("commands.challenges.already-complete-challenge", p);
                         }
 
                     } else {
-                        h.put(false, ChatColor.RED + "You must be a player to use this command!");
+                        return ChatColor.RED + "You must be a player to use this command!";
                     }
+                } else {
+                    return hpc.getString("commands.challenges.no-such-challenge", p);
                 }
+            } else {
+                return hpc.getString("commands.errors.invalid-args", p);
             }
         } catch (SQLException e) {
             DebugPrint.createReport(e, "Complete command (checks)", true, sender);
+            return hpc.getString("commands.errors.cmd-fail", p);
         }
 
-        return h;
     }
 
     @Override
-    public String getCmdDescription() {
-        return hpc.getString("descriptions.hp.complete");
+    public String getCmdDescription(CommandSender sender) {
+        return hpc.getString("descriptions.hp.complete", sender);
     }
 
     @Override

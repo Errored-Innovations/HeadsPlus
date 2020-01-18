@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListList;
+import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class BlacklistwList extends AbstractListList {
     // M
 
 	@Override
-	public String getCmdDescription() {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistwl");
+	public String getCmdDescription(CommandSender sender) {
+		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistwl", sender);
 	}
 
     @Override

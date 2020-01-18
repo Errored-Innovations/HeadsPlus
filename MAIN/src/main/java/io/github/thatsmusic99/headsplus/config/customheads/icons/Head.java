@@ -120,7 +120,7 @@ public class Head extends ItemStack implements Icon {
     private void giveHead(Player p, InventoryClickEvent e) {
         NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
         if (p.getInventory().firstEmpty() == -1) {
-            p.sendMessage(hpc.getString("commands.head.full-inv"));
+            p.sendMessage(hpc.getString("commands.head.full-inv", p));
             return;
         }
         Double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
@@ -129,7 +129,7 @@ public class Head extends ItemStack implements Icon {
                 && HeadsPlus.getInstance().econ()
                 && (ef = HeadsPlus.getInstance().getEconomy()) != null
                 && price > ef.getBalance(p)) {
-            p.sendMessage(hpc.getString("commands.heads.not-enough-money"));
+            p.sendMessage(hpc.getString("commands.heads.not-enough-money", p));
             return;
         }
         HeadPurchaseEvent event = new HeadPurchaseEvent(p, e.getCurrentItem());
@@ -139,11 +139,11 @@ public class Head extends ItemStack implements Icon {
             if(price > 0.0 && ef != null) {
                 EconomyResponse er = ef.withdrawPlayer(p, price);
                 if((ok = er.transactionSuccess())) {
-                    p.sendMessage(hpc.getString("commands.heads.buy-success")
+                    p.sendMessage(hpc.getString("commands.heads.buy-success", p)
                         .replaceAll("\\{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))
                         .replaceAll("\\{balance}", Double.toString(ef.getBalance(p))));
                 } else {
-                    p.sendMessage(hpc.getString("commands.errors.cmd-fail") + ": " + er.errorMessage);
+                    p.sendMessage(hpc.getString("commands.errors.cmd-fail", p) + ": " + er.errorMessage);
                 }
             }
             if (ok) {

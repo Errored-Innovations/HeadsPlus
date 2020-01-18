@@ -37,7 +37,7 @@ public class DebugPrint implements IHeadsPlusCommand {
             e.printStackTrace();
         }
         if (command && sender != null) {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.cmd-fail"));
+            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.cmd-fail", sender));
         }
 
         if (cs.getBoolean("debug.create-debug-files")) {
@@ -63,87 +63,88 @@ public class DebugPrint implements IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.debug");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.debug", sender);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        Player p = sender instanceof Player ? (Player) sender : null;
         if (args.length > 1) {
             if(args[1].equalsIgnoreCase("dump") || args[1].equalsIgnoreCase("clearim") || args[1].equalsIgnoreCase("save")) {
-                h.put(true, "");
+                return "";
             } else if (args[1].equalsIgnoreCase("head")) {
                 if (sender instanceof Player) {
                     NMSManager nms = HeadsPlus.getInstance().getNMS();
-                    if (nms.getItemInHand((Player) sender) != null) {
+                    if (nms.getItemInHand(p) != null) {
                         List<Material> skulls = new ArrayList<>(Arrays.asList(nms.getSkull(0).getType(),
                                 nms.getSkull(1).getType(),
                                 nms.getSkull(2).getType(),
                                 nms.getSkull(3).getType(),
                                 nms.getSkull(4).getType(),
                                 nms.getSkull(5).getType()));
-                        if (skulls.contains(nms.getItemInHand((Player) sender).getType())) {
-                            h.put(true, "");
+                        if (skulls.contains(nms.getItemInHand(p).getType())) {
+                            return "";
                         } else {
-                            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item"));
+                            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item", p);
                         }
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item"));
+                        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item", p);
                     }
                 } else {
-                    h.put(false, "[HeadsPlus] You have to be a player to run this command!");
+                    return "[HeadsPlus] You have to be a player to run this command!";
                 }
             } else if (args[1].equalsIgnoreCase("player")) {
                 if (args.length > 2) {
                     HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
                     if (pl != null) {
-                        h.put(true, "");
+                        return "";
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data"));
+                        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data", p);
                     }
                 } else {
-                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+                    return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
                 }
             } else if (args[1].equalsIgnoreCase("item")) {
                 if (sender instanceof Player) {
                     NMSManager nms = HeadsPlus.getInstance().getNMS();
                     if (nms.getItemInHand((Player) sender) != null) {
-                        h.put(true, "");
+                        return "";
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-head"));
+                        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-head", p);
                     }
                 } else {
-                    h.put(false, "[HeadsPlus] You have to be a player to run this command!");
+                    return "[HeadsPlus] You have to be a player to run this command!";
                 }
             } else if (args[1].equalsIgnoreCase("delete")) {
                 if (args.length > 2) {
                     HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
                     if (pl != null) {
-                        h.put(true, "");
+                        return "";
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data"));
+                        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data", p);
                     }
+                } else {
+                    return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
                 }
             } else if (args[1].equalsIgnoreCase("transfer")) {
                 if (args.length > 2) {
                     if (args[2].equalsIgnoreCase("database")) {
-                        h.put(true, "");
+                        return "";
                 //    } else if (args[2].equalsIgnoreCase("files")) {
                 //        h.put(true, "");
                     } else {
-                        h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+                        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
                     }
                 } else {
-                    h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+                    return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
                 }
             } else {
-                h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
             }
         } else {
-            h.put(false, HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args"));
+            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", p);
         }
-        return h;
     }
 
     @Override
@@ -158,7 +159,6 @@ public class DebugPrint implements IHeadsPlusCommand {
                     String s = new DebugFileCreator().createHeadReport(is);
                     sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                 }
-
             } else if (args[1].equalsIgnoreCase("player")) {
                 OfflinePlayer pl = Bukkit.getOfflinePlayer(args[2]);
                 String s = new DebugFileCreator().createPlayerReport(HPPlayer.getHPPlayer(pl));
@@ -171,7 +171,6 @@ public class DebugPrint implements IHeadsPlusCommand {
                     String s = new DebugFileCreator().createItemReport(HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender));
                     sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                 }
-
             } else if (args[1].equalsIgnoreCase("delete")) {
                 HeadsPlus.getInstance().getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
                 sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");

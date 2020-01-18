@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
@@ -16,7 +17,6 @@ public class HeadsPlusCommand implements CommandExecutor {
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-	private final String noPerms = hpc.getString("commands.errors.no-perm");
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 	    tests.clear();
@@ -30,16 +30,17 @@ public class HeadsPlusCommand implements CommandExecutor {
                         IHeadsPlusCommand command = getCommandByName(args[0]);
                         assert command != null;
                         CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
+                        String correctUsage = command.isCorrectUsage(args, sender);
                         tests.put("No Permission", !sender.hasPermission(c.permission()));
                         tests.put("Main command", c.maincommand());
-                        tests.put("Correct Usage", command.isCorrectUsage(args, sender).get(true) != null);
+                        tests.put("Correct Usage", correctUsage.isEmpty());
                         if (sender.hasPermission(c.permission())) {
                             if (c.maincommand()) {
-                                if (command.isCorrectUsage(args, sender).get(true) != null) {
+                                if (correctUsage.isEmpty()) {
                                     command.printDebugResults(tests, true);
                                     return command.fire(args, sender);
                                 } else {
-                                    sender.sendMessage(command.isCorrectUsage(args, sender).get(false));
+                                    sender.sendMessage(correctUsage);
                                     sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + c.usage());
                                     if (command.advancedUsages().length != 0) {
                                         sender.sendMessage(ChatColor.DARK_RED + "Further usages:");
@@ -52,7 +53,7 @@ public class HeadsPlusCommand implements CommandExecutor {
                                 new HelpMenu().fire(args, sender);
                             }
                         } else {
-                            sender.sendMessage(noPerms);
+                            sender.sendMessage(hpc.getString("commands.errors.no-perm", sender instanceof Player ? (Player) sender : null));
                         }
                     } else {
                         new HelpMenu().fire(args, sender);

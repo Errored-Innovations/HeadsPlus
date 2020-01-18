@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListToggle;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
+import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
@@ -17,8 +18,8 @@ import java.util.List;
 public class WhitelistToggle extends AbstractListToggle {
 
     @Override
-    public String getCmdDescription() {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelist");
+    public String getCmdDescription(CommandSender sender) {
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelist", sender);
     }
 
     @Override

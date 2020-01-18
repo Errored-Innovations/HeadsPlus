@@ -24,10 +24,10 @@ public class JoinEvent implements Listener {
 		if (e.getPlayer().hasPermission("headsplus.notify")) {
 		    if (hp.getConfiguration().getMechanics().getBoolean("update.notify")) {
                 if (HeadsPlus.getUpdate() != null) {
-                    new FancyMessage().text(hpc.getString("update.update-found"))
-                    .tooltip(hpc.getString("update.current-version").replaceAll("\\{version}", hp.getDescription().getVersion())
-							+ "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[2]))
-							+ "\n" + hpc.getString("update.description").replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
+                    new FancyMessage().text(hpc.getString("update.update-found", e.getPlayer()))
+                    .tooltip(hpc.getString("update.current-version", e.getPlayer()).replaceAll("\\{version}", hp.getDescription().getVersion())
+							+ "\n" + hpc.getString("update.new-version", e.getPlayer()).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[2]))
+							+ "\n" + hpc.getString("update.description", e.getPlayer()).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
                 }
             }
         }
@@ -58,7 +58,14 @@ public class JoinEvent implements Listener {
             }
             hp.getHeadsXConfig().grabProfile(uuid);
         }
-
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (hp.getConfig().getBoolean("smart-locale")) {
+                    hp.getMessagesConfig().setPlayerLocale(e.getPlayer());
+                }
+            }
+        }.runTaskLaterAsynchronously(hp, 100);
         if (!reloaded) {
             new BukkitRunnable() {
                 @Override

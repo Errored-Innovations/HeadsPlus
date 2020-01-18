@@ -39,6 +39,7 @@ commands:
     cant-complete-challenge: '{header} You can''t complete this challenge!'
     challenge-complete: '{header} &c{player} &7has completed the &c{challenge} &7challenge!'
     challenge-completed: '&6Completed!'
+    no-such-challenge: 'This challenge doesn''t exist!'
     reward-string: '{header} Reward: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} This command only handles alphanumeric names!'

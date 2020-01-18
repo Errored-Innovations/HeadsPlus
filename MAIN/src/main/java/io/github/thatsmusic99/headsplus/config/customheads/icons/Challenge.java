@@ -33,10 +33,10 @@ io.github.thatsmusic99.headsplus.api.Challenge challenge = HeadsPlus.getInstance
                     if (challenge.canComplete(p)) {
                         challenge.complete(p, e.getInventory(), e.getSlot());
                     } else {
-                        p.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge"));
+                        p.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", p));
                     }
                 } else {
-                    p.sendMessage(hpc.getString("commands.challenges.already-complete-challenge"));
+                    p.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", p));
                 }
             }
             e.setCancelled(true);

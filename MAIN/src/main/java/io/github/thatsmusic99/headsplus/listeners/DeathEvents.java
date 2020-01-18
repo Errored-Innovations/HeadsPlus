@@ -250,7 +250,7 @@ public class DeathEvents implements Listener {
                     if (!event.isCancelled()) {
                         if (b && ep.getEntity().getKiller() != null) {
                             hp.getEconomy().withdrawPlayer(ep.getEntity(), lostprice);
-                            ep.getEntity().sendMessage(hp.getMessagesConfig().getString("event.lost-money")
+                            ep.getEntity().sendMessage(hp.getMessagesConfig().getString("event.lost-money", ep.getEntity())
 									.replace("{player}", ep.getEntity().getKiller().getName())
 									.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
                         }

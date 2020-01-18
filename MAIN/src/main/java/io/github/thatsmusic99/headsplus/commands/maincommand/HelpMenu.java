@@ -6,8 +6,6 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
-
 @CommandInfo(
         commandname = "help",
         permission = "headsplus.maincommand",
@@ -44,15 +42,13 @@ public class HelpMenu implements IHeadsPlusCommand {
     }
 
 	@Override
-	public String getCmdDescription() {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.help");
+	public String getCmdDescription(CommandSender cs) {
+		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.help", cs);
 	}
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        h.put(true, "");
-        return h;
+    public String isCorrectUsage(String[] args, CommandSender sender) {
+        return "";
     }
 
 	@Override

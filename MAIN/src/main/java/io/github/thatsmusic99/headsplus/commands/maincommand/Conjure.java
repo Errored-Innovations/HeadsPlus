@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
 
 @CommandInfo(
@@ -30,14 +29,12 @@ public class Conjure implements IHeadsPlusCommand {
     private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
-    public String getCmdDescription() {
-        return hpc.getString("descriptions.hp.conjure");
+    public String getCmdDescription(CommandSender cs) {
+        return hpc.getString("descriptions.hp.conjure", cs);
     }
 
     @Override
-    public HashMap<Boolean, String> isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-
+    public String isCorrectUsage(String[] args, CommandSender sender) {
             if (args.length > 1) {
                 HeadsPlusConfigHeads heads = HeadsPlus.getInstance().getHeadsConfig();
                 List<String> mHeads = heads.mHeads;
@@ -48,7 +45,7 @@ public class Conjure implements IHeadsPlusCommand {
                         if (args[2].matches("^[0-9]+$")) {
                             amount = Integer.parseInt(args[2]);
                         } else {
-                            h.put(false, hpc.getString("commands.errors.invalid-input-int"));
+                            return hpc.getString("commands.errors.invalid-input-int", sender);
                         }
                     }
                     int index = 0;
@@ -62,14 +59,14 @@ public class Conjure implements IHeadsPlusCommand {
                         if (sender instanceof Player) {
                             p = (Player) sender;
                         } else {
-                            h.put(false, ChatColor.RED + "You must be a player to run this command!");
+                            return ChatColor.RED + "You must be a player to run this command!";
                         }
                     }
                     if (args.length > 4) {
                         if (args[4].matches("^[0-9]+$")) {
                             index = Integer.parseInt(args[4]);
                         } else {
-                            h.put(false, hpc.getString("commands.errors.invalid-input-int"));
+                            return hpc.getString("commands.errors.invalid-input-int", sender);
                         }
                     }
                     if (args.length > 5) {
@@ -81,20 +78,19 @@ public class Conjure implements IHeadsPlusCommand {
                         i.setAmount(amount);
                         this.head = i;
 
-                        h.put(true, "");
+                        return "";
                     } catch (NullPointerException ex) {
-                        h.put(false,  hpc.getString("commands.errors.invalid-args"));
+                        return hpc.getString("commands.errors.invalid-args", sender);
                     } catch (IndexOutOfBoundsException e) {
-                        h.put(false, hpc.getString("commands.errors.invalid-pg-no"));
+                        return hpc.getString("commands.errors.invalid-pg-no", sender);
                     }
                 } else {
-                    h.put(false, hpc.getString("commands.errors.invalid-args"));
+                    return hpc.getString("commands.errors.invalid-args", sender);
                 }
             } else {
-                h.put(false, hpc.getString("commands.errors.invalid-args"));
+                return hpc.getString("commands.errors.invalid-args", sender);
             }
 
-        return h;
     }
 
     @Override
