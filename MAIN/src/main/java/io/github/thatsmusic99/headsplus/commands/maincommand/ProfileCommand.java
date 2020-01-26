@@ -22,10 +22,10 @@ import java.sql.SQLException;
 public class ProfileCommand implements IHeadsPlusCommand {
 
     // F
-    private String prof(OfflinePlayer p) throws SQLException {
+    private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
         try {
             HPPlayer pl = HPPlayer.getHPPlayer(p);
-            return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl);
+            return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl, sender);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data");
@@ -55,10 +55,10 @@ public class ProfileCommand implements IHeadsPlusCommand {
             }
             if (cs instanceof Player) {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    cs.sendMessage(prof(p));
+                    cs.sendMessage(prof(p, cs));
                 } else {
                     if (cs.hasPermission("headsplus.maincommand.profile.others")) {
-                        cs.sendMessage(prof(p));
+                        cs.sendMessage(prof(p, cs));
                     } else {
                         cs.sendMessage(hp.getMessagesConfig().getString("commands.errors.no-perm"));
                     }
@@ -67,7 +67,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
                     cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
                 } else {
-                    cs.sendMessage(prof(p));
+                    cs.sendMessage(prof(p, cs));
                 }
             }
         } catch (Exception e) {

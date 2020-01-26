@@ -104,13 +104,14 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         save();
     }
 
-    private static String translateColors(String s) {
+    private static String translateColors(String s, CommandSender sender) {
         HeadsPlus hp = HeadsPlus.getInstance();
         return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
                 .replaceAll("\\{2}", hp.getThemeColour(2).toString())
                 .replaceAll("\\{3}", hp.getThemeColour(3).toString())
-                .replaceAll("\\{4}", hp.getThemeColour(4).toString())));
+                .replaceAll("\\{4}", hp.getThemeColour(4).toString()), sender));
     }
+
 
     private static String translateHeader(String s) {
         return s.replaceAll("\\{default}", HeadsPlus.getInstance().getMenus().getConfig().getString("default-header"))
@@ -129,16 +130,16 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
             sb.append(translateColors(h.getConfig().getString(type + "." + type2 + ".header")
                     .replaceAll("\\{page}", String.valueOf(page))
-            .replaceAll("\\{pages}", String.valueOf(list.getTotalPages())))).append("\n");
+            .replaceAll("\\{pages}", String.valueOf(list.getTotalPages())), sender)).append("\n");
             for (String str : list.getContentsInPage(page)) {
-                sb.append(translateColors(str.replaceAll("\\{name}", str))).append("\n");
+                sb.append(translateColors(str.replaceAll("\\{name}", str), sender)).append("\n");
             }
             return sb.toString();
         }
     }
 
     public static class ProfileTranslator {
-        public static String translate(HPPlayer p) throws SQLException {
+        public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
             HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
@@ -150,7 +151,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                             .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb", true)))
                             .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh", true)))
                             .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft", true)))
-                            .replace("{header}", h.getConfig().getString("profile.header")));
+                            .replace("{header}", h.getConfig().getString("profile.header")), sender);
                     if (!(stri.contains("{level}") || (stri.contains("{next-level}")))) {
                         sb.append(stri).append("\n");
                     } else {
@@ -191,7 +192,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
         }
 
-        public static String translateNormal(String type) {
+        public static String translateNormal(String type, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
             HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
@@ -201,7 +202,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 .replace("{display-name}", hpch.getDisplayName(type))
                 .replaceAll("\\{price}", String.valueOf(hpch.getPrice(type)))
                 .replaceAll("\\{interact-name}", hpch.getInteractName(type))
-                .replaceAll("\\{chance}", String.valueOf(hpch.getConfig().getDouble(type + ".chance"))))).append("\n");
+                .replaceAll("\\{chance}", String.valueOf(hpch.getConfig().getDouble(type + ".chance"))), sender)).append("\n");
             }
             return sb.toString();
         }
@@ -220,11 +221,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             if ((page > hs.getTotalPages()) || (0 >= page)) {
                 return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.header"))).append("\n");
-            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.first-line"))
+            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.header"), sender)).append("\n");
+            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.first-line"), sender)
             .replace("{type}", type));
             for (Head head : hs.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(ht.getConfig().getString("head-info.name-info.colored.for-each-line"))
+                sb.append("\n").append(translateColors(ht.getConfig().getString("head-info.name-info.colored.for-each-line"), sender)
                 .replace("{name}", head.type)
                 .replaceAll("\\{color}", head.colour));
             }
@@ -250,11 +251,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             if ((page > hs.getTotalPages()) || (0 >= page)) {
                 return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.header"))).append("\n");
-            sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.first-line"))
+            sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.header"), sender)).append("\n");
+            sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.first-line"), sender)
                     .replaceAll("\\{type}", type));
             for (Mask mask : hs.getContentsInPage(page)) {
-                sb.append("\n").append(sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.for-each-line"))
+                sb.append("\n").append(sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.for-each-line"), sender)
                         .replaceAll("\\{effect}", mask.effect)
                         .replaceAll("\\{amplifier}", String.valueOf(mask.amplifier))));
             }
@@ -269,12 +270,12 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.header"))).append("\n");
-            sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.first-line"))
+            sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.header"), sender)).append("\n");
+            sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.first-line"), sender)
                     .replaceAll("\\{type}", type));
             for (String s : lore.getContentsInPage(page)) {
                 sb.append("\n").append(translateColors(ht.getConfig().getString("head-info.lore-info.for-each-line")
-                .replace("{lore}", s)));
+                .replace("{lore}", s), sender));
             }
             return sb.toString();
         }
@@ -297,13 +298,13 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             if ((page > pl.getTotalPages()) || (0 >= page)) {
                 sender.sendMessage(hp.getMessagesConfig().getString("commands.errors.invalid-pg-no", sender));
             } else {
-                sender.sendMessage(translateColors(ht.getConfig().getString("help.header")).replaceAll("\\{page}", String.valueOf(page))
+                sender.sendMessage(translateColors(ht.getConfig().getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
                 for (IHeadsPlusCommand key : pl.getContentsInPage(page)) {
                     CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
                     String help = translateColors(ht.getConfig().getString("help.for-each-line")
                             .replace("{usage}", c.usage())
-                            .replace("{description}", key.getCmdDescription(sender)));
+                            .replace("{description}", key.getCmdDescription(sender)), sender);
                     TextComponent component = new TextComponent(help);
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/hp " + c.commandname()));
                     component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateCommandHelp(key, sender)).create()));
@@ -322,14 +323,14 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             for (String s : ht.getConfig().getStringList("help.command-help.layout")) {
                 if (!s.contains("{permission}") || sender.hasPermission("headsplus.help.viewperms")) {
                     if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
-                        sb.append(translateColors(s.replaceAll("\\{further-usage}", "")));
+                        sb.append(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
                         for (String s2 : key.advancedUsages()) {
-                            sb.append("\n").append(HeadsPlus.getInstance().getThemeColour(4)).append(translateColors(s2));
+                            sb.append("\n").append(HeadsPlus.getInstance().getThemeColour(4)).append(translateColors(s2, sender));
                         }
                     } else if (!s.contains("{further-usage}")){
                         CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
                         sb.append("\n").append(translateColors(s.replaceAll("\\{header}", ht.getConfig().getString("help.command-help.header"))
-                                .replace("{description}", key.getCmdDescription(sender)).replaceAll("\\{usage}", c.usage()))
+                                .replace("{description}", key.getCmdDescription(sender)).replaceAll("\\{usage}", c.usage()), sender)
                                 .replaceAll("\\{permission}", c.permission()));
                     }
                 }
@@ -351,7 +352,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
-                        .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages()))));
+                        .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages())), sender));
                 Set<OfflinePlayer> it = ph.getContentsInPage(page).keySet();
                 Collection<Integer> it2 = ph.getContentsInPage(page).values();
                 for (int i = 0; i < it.size(); i++) {
@@ -360,7 +361,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                         sb.append("\n").append(translateColors(ht.getConfig().getString("leaderboard.for-each-line")
                                 .replaceAll("\\{pos}", String.valueOf(in + 1))
                                 .replace("{name}", ((OfflinePlayer)it.toArray()[i]).getName())
-                                .replaceAll("\\{score}", String.valueOf(it2.toArray()[i]))));
+                                .replaceAll("\\{score}", String.valueOf(it2.toArray()[i])), sender));
                     } catch (NullPointerException ignored) {
                     }
                 }
@@ -379,7 +380,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
     public static class InfoTranslator {
 
-        public static String translate() {
+        public static String translate(CommandSender sender) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
             HeadsPlus hp = HeadsPlus.getInstance();
@@ -389,7 +390,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                         .replace("{header}", h.getConfig().getString("info.header"))
                         .replace("{author}", String.valueOf(hp.getAuthor()))
                         .replace("{locale}", hp.getConfiguration().getConfig().getString("locale"))
-                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas")));
+                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas"), sender));
             }
             return sb.toString();
         }

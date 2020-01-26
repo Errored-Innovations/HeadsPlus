@@ -57,7 +57,7 @@ io.github.thatsmusic99.headsplus.api.Challenge challenge = HeadsPlus.getInstance
 
     @Override
     public List<String> getDefaultLore() {
-        return new ArrayList<>(Arrays.asList("{challenge-lore}", "&6Reward: &a{challenge-reward}", "&6XP: &a{challenge-xp}", "{completed}"));
+        return new ArrayList<>(Arrays.asList("{challenge-lore}", "&6{msg_inventory.icon.challenge.reward}: &a{challenge-reward}", "&6{msg_inventory.icon.challenge.xp}: &a{challenge-xp}", "{completed}"));
     }
 
     @Override

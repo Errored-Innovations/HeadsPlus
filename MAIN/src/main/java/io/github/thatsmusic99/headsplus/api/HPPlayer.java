@@ -178,10 +178,13 @@ public class HPPlayer {
     }
 
     public void setLocale(String locale) {
+        setLocale(locale, true);
+    }
+
+    public void setLocale(String locale, boolean forced) {
         cachedLocale = locale;
-        localeForced = true;
-        System.out.println(locale);
-        HeadsPlus.getInstance().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, true);
+        localeForced = forced;
+        HeadsPlus.getInstance().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
     }
 
     public void addCompleteChallenge(Challenge c) {

@@ -31,50 +31,6 @@ public class Head extends ItemStack implements Icon {
 
     @Override
     public void onClick(Player p, InventoryManager im, InventoryClickEvent e) {
-
-       // if (im.getSection().equalsIgnoreCase("advent-calendar")) {
-        //    if (nms.isOpen(e.getCurrentItem())) {
-            //    giveHead(p, e);
-            //    return;
-       /*     } else {
-                Date date = new Date();
-                LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                int month = localDate.getMonthValue();
-                int day   = localDate.getDayOfMonth();
-                if (!(month == 12)) { // TODO Change for testing
-                    e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('&', LocaleManager.getLocale().getChristmasDeniedMessage()));
-                    e.setCancelled(true);
-                    return;
-                }
-                AdventCManager a = nms.getCalendarValue(e.getCurrentItem());
-                if (day >= a.date) {
-                    HeadsPlusConfigCustomHeads config = HeadsPlus.getInstance().getHeadsXConfig();
-                    ItemStack open = nms.setOpen(e.getCurrentItem(), true);
-                    ItemMeta meta = open.getItemMeta();
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', a.name));
-                    open.setItemMeta(meta);
-                    try {
-                        open = HeadsPlus.getInstance().getHeadsXConfig().setTexture(a.texture, open);
-                    } catch (IllegalAccessException | NoSuchFieldException e1) {
-                        e1.printStackTrace();
-                    }
-                    e.setCurrentItem(open);
-                    e.setCancelled(true);
-                    HeadsPlus.getInstance().getHeadsXConfig().addChristmasHype();
-                    List<String> list = config.getConfig().getStringList("advent-18." + a.name());
-                    list.add(e.getWhoClicked().getUniqueId().toString());
-                    config.getConfig().set("advent-18." + a.name(), list);
-                    config.save();
-                    return;
-                } else {
-                    e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getMessagesConfig().getString("xmas-denied")));
-                    e.setCancelled(true);
-                    return;
-                }
-
-
-            } */
-     //   }
         e.setCancelled(true);
         NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
         if (im.getType() == InventoryManager.Type.SELL) {
@@ -165,7 +121,7 @@ public class Head extends ItemStack implements Icon {
 
     @Override
     public List<String> getDefaultLore() {
-        return new ArrayList<>(Arrays.asList("&6[&ePrice&6] &a{price}", "{favourite}"));
+        return new ArrayList<>(Arrays.asList("{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"));
     }
 
     @Override

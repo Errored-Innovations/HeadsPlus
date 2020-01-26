@@ -73,7 +73,7 @@ public class Search extends ItemStack implements Icon {
 
     @Override
     public String getDefaultDisplayName() {
-        return "&6[&e&lSearch Heads&6]";
+        return "{msg_inventory.icon.search}";
     }
 
     @Override

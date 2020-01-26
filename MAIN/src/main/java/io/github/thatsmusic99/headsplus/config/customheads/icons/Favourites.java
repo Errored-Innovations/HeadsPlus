@@ -35,7 +35,7 @@ public class Favourites extends ItemStack implements Icon {
 
     @Override
     public String getDefaultDisplayName() {
-        return "&b&lFavourites";
+        return "{msg_inventory.icon.head.favourite}";
     }
 
     @Override

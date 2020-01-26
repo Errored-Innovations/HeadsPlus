@@ -17,6 +17,7 @@ public class Nav extends ItemStack implements Icon {
     final Page direction;
     final String title;
     final Material mat;
+    final String configName;
 
     public static enum Page {
 
@@ -28,10 +29,11 @@ public class Nav extends ItemStack implements Icon {
         }
     }
 
-    public Nav(Page direction, String title, Material material) {
+    public Nav(Page direction, String title, Material material, String configName) {
         this.direction = direction;
         this.title = title;
         this.mat = material;
+        this.configName = configName;
     }
 
     public Page getNavigationPage() {
@@ -66,7 +68,7 @@ public class Nav extends ItemStack implements Icon {
 
     @Override
     public String getDefaultDisplayName() {
-        return "&a&l" + title;
+        return "{msg_inventory.icon." + configName + "}";
     }
 
     @Override

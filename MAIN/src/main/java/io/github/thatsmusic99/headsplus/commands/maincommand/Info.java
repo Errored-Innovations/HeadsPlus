@@ -29,7 +29,7 @@ public class Info implements IHeadsPlusCommand {
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {
 		try {
-			sender.sendMessage(HeadsPlusConfigTextMenu.InfoTranslator.translate());
+			sender.sendMessage(HeadsPlusConfigTextMenu.InfoTranslator.translate(sender));
         } catch (Exception e) {
 		    DebugPrint.createReport(e, "Subcommand (info)", true, sender);
         }

@@ -200,7 +200,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                             sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
                         }
                     } else {
-                        sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type));
+                        sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
                     }
                     return true;
                 } else if (args[1].equalsIgnoreCase("set")) {
@@ -297,7 +297,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 hpch.save();
                 return true;
             } else {
-                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type));
+                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
             }
         } catch (IndexOutOfBoundsException ex) {
             sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
@@ -329,7 +329,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                     || type.equalsIgnoreCase("horse")) {
                 return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateColored(p, type, page);
             } else {
-                return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type);
+                return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, p);
             }
         } catch (IllegalArgumentException ex) {
             return hpc.getString("commands.errors.invalid-pg-no", p);

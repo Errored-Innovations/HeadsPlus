@@ -31,17 +31,17 @@ public class Stats extends ItemStack implements Icon {
     @Override
     public List<String> getDefaultLore() {
         List<String> h = new ArrayList<>();
-        h.add(ChatColor.GREEN + "Total heads: {heads}");
-        h.add(ChatColor.GREEN + "Total pages: {pages}");
-        h.add(ChatColor.GREEN + "Total sections: {sections}");
-        h.add(ChatColor.GREEN + "Current balance: {balance}");
-        h.add(ChatColor.GREEN + "Current section: {section}");
+        h.add(ChatColor.GREEN + "{msg_inventory.icon.stats.total-heads} {heads}");
+        h.add(ChatColor.GREEN + "{msg_inventory.icon.stats.total-pages} {pages}");
+        h.add(ChatColor.GREEN + "{msg_inventory.icon.stats.total-sections} {sections}");
+        h.add(ChatColor.GREEN + "{msg_inventory.icon.stats.current-balance} {balance}");
+        h.add(ChatColor.GREEN + "{msg_inventory.icon.stats.current-section} {section}");
         return h;
     }
 
     @Override
     public String getDefaultDisplayName() {
-        return "&6&l[&e&lStats&6&l]";
+        return "{msg_inventory.icon.stats.icon}";
     }
     @Override
     public List<String> getLore() {

@@ -39,7 +39,7 @@ public class ChallengeSection implements Icon {
 
     @Override
     public List<String> getDefaultLore() {
-        return new ArrayList<>(Arrays.asList("{section-lore}", "&7{challenges} challenges"));
+        return new ArrayList<>(Arrays.asList("{section-lore}", "{msg_inventory.icon.challenge.count}"));
     }
 
     @Override

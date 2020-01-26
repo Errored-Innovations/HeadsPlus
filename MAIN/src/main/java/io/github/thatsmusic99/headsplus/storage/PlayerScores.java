@@ -65,7 +65,6 @@ public class PlayerScores implements JSONFile {
         if (o1 == null) {
             o1 = new JSONObject();
         }
-        System.out.println(locale + ":" + auto);
         o1.put("locale", locale + ":" + auto);
         json.put(uuid, o1);
     }

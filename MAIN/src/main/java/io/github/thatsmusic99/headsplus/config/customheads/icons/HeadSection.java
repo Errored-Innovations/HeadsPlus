@@ -38,7 +38,7 @@ public class HeadSection extends ItemStack implements Icon {
 
     @Override
     public List<String> getDefaultLore() {
-        return new ArrayList<>(Collections.singleton("&7{head-count} heads"));
+        return new ArrayList<>(Collections.singleton("{msg_inventory.icon.head.count}"));
     }
 
     @Override

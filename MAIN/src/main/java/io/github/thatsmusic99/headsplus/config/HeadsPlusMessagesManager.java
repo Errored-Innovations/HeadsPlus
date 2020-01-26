@@ -516,7 +516,7 @@ public class HeadsPlusMessagesManager {
                         en_us.set("version", 1.1);
                         en_us.options().copyDefaults(true);
                         try {
-                            en_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
+                            pl_pl.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "pl_pl.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -665,18 +665,18 @@ public class HeadsPlusMessagesManager {
         str = str.replaceAll("''", "'");
         str = str.replaceAll("^'", "");
         str = str.replaceAll("'$", "");
-        formatMsg(str);
+        formatMsg(str, null);
 
         str = ChatColor.translateAlternateColorCodes('&', str);
         return str;
     }
 
-    public String formatMsg(String string) {
+    public String formatMsg(String string, CommandSender sender) {
         Pattern pat = Pattern.compile("\\{msg_(.*?)}");
         Matcher m = pat.matcher(string);
         while (m.find()) {
             String s = m.group(1);
-            string = string.replace("{msg_" + s + "}", getString(s));
+            string = string.replace("{msg_" + s + "}", getString(s, sender));
         }
         return string;
     }
@@ -699,7 +699,7 @@ public class HeadsPlusMessagesManager {
         str = str.replaceAll("''", "'");
         str = str.replaceAll("^'", "");
         str = str.replaceAll("'$", "");
-        formatMsg(str);
+        formatMsg(str, player);
         if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             str = PlaceholderAPI.setPlaceholders(player, str);
         }
@@ -713,6 +713,7 @@ public class HeadsPlusMessagesManager {
         if (locales.containsKey(first)) {
             players.put(player, locales.get(first));
         }
+        HPPlayer.getHPPlayer(player).setLocale(locale, false);
     }
 
     public void setPlayerLocale(Player player, String locale, boolean b) {

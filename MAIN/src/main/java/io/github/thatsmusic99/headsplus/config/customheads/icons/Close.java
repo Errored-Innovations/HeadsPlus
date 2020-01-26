@@ -35,7 +35,7 @@ public class Close extends ItemStack implements Icon {
 
     @Override
     public String getDefaultDisplayName() {
-        return "&c&lClose Menu";
+        return "{msg_inventory.icon.close}";
     }
 
     @Override
