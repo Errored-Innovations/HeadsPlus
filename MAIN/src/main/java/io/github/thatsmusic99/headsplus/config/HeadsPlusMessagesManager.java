@@ -463,12 +463,12 @@ public class HeadsPlusMessagesManager {
                         pl_pl.addDefault("commands.locale.changed-locale", "{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski (PL)");
                         pl_pl.addDefault("commands.locale.changed-locale-other", "{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!");
                         pl_pl.addDefault("inventory.icon.challenge.reward", "&6Nagroda: &a{reward}");
-                        pl_pl.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
+                        pl_pl.addDefault("inventory.icon.challenge.xp", "&6Dośw.: &a{xp}");
                         pl_pl.addDefault("inventory.icon.challenge.count", "&7{challenge-count} wyzwania");
                         pl_pl.addDefault("inventory.icon.close", "&8❰ &c&lZamknij menu &8❱");
                         pl_pl.addDefault("inventory.icon.favourites", "&8❰ &b&lUlubione &8❱");
                         pl_pl.addDefault("inventory.icon.head.price", "&cCena &8❱ &7{price}");
-                        pl_pl.addDefault("inventory.icon.head.favourite", "&cFaworyt!");
+                        pl_pl.addDefault("inventory.icon.head.favourite", "&cUlubiona!");
                         pl_pl.addDefault("inventory.icon.head.count", "&7{head-count} głowy");
                         pl_pl.addDefault("inventory.icon.menu", "&8❰ &a&lMenu główne &8❱");
                         pl_pl.addDefault("inventory.icon.start", "&8❰ &a&lPierwsza strona &8❱");
@@ -476,23 +476,23 @@ public class HeadsPlusMessagesManager {
                         pl_pl.addDefault("inventory.icon.back", "&8❰ &a&lWróć &8❱");
                         pl_pl.addDefault("inventory.icon.back-2", "&8❰ &a&lWróć (2) &8❱");
                         pl_pl.addDefault("inventory.icon.back-3", "&8❰ &a&lWróć (3) &8❱");
-                        pl_pl.addDefault("inventory.icon.next", "&8❰ &a&lKolejny &8❱");
-                        pl_pl.addDefault("inventory.icon.next-2", "&8❰ &a&lKolejny (2) &8❱");
-                        pl_pl.addDefault("inventory.icon.next-3", "&8❰ &a&lKolejny (3) &8❱");
+                        pl_pl.addDefault("inventory.icon.next", "&8❰ &a&lNastępna &8❱");
+                        pl_pl.addDefault("inventory.icon.next-2", "&8❰ &a&lNastępna (2) &8❱");
+                        pl_pl.addDefault("inventory.icon.next-3", "&8❰ &a&lNastępna (3) &8❱");
                         pl_pl.addDefault("inventory.icon.search", "&8❰ &e&lSzukaj głów &8❱");
                         pl_pl.addDefault("inventory.icon.stats.icon", "&8❰ &a&lStatystyka &8❱");
                         pl_pl.addDefault("inventory.icon.stats.total-heads", "&aŁączna liczba głów &8❱ &e");
                         pl_pl.addDefault("inventory.icon.stats.total-pages", "&aWszystkie strony &8❱ &e");
-                        pl_pl.addDefault("inventory.icon.stats.total-sections", "&aSekcje ogółem &8❱ &e");
-                        pl_pl.addDefault("inventory.icon.stats.current-balance", "&aCurrent Balance &8❱ &e");
-                        pl_pl.addDefault("inventory.icon.stats.current-section", "&aAktualne saldo &8❱ &e");
+                        pl_pl.addDefault("inventory.icon.stats.total-sections", "&aWszystkie sekcje &8❱ &e");
+                        pl_pl.addDefault("inventory.icon.stats.current-balance", "&aAktualne saldo &8❱ &e");
+                        pl_pl.addDefault("inventory.icon.stats.current-section", "&aAktualna sekcja &8❱ &e");
                         pl_pl.addDefault("textmenus.profile.player", "Gracz");
                         pl_pl.addDefault("textmenus.profile.completed-challenges", "Ukończone wyzwania");
                         pl_pl.addDefault("textmenus.profile.total-heads-dropped", "Łączna liczba upuszczonych głów");
                         pl_pl.addDefault("textmenus.profile.total-heads-sold", "Całkowita liczba sprzedanych głów");
                         pl_pl.addDefault("textmenus.profile.total-heads-crafted", "Łączna liczba wytworzonych głów");
                         pl_pl.addDefault("textmenus.profile.current-level", "Aktualny poziom");
-                        pl_pl.addDefault("textmenus.profile.xp-until-next-level", "XP do następnego poziomu");
+                        pl_pl.addDefault("textmenus.profile.xp-until-next-level", "Dośw. do następnego poziomu");
                         pl_pl.addDefault("textmenus.blacklist", "Czarna lista");
                         pl_pl.addDefault("textmenus.whitelist", "Biała lista");
                         pl_pl.addDefault("textmenus.blacklistw", "Czarna lista światów");
@@ -511,7 +511,7 @@ public class HeadsPlusMessagesManager {
                         pl_pl.addDefault("textmenus.head-info.chance", "Szansa");
                         pl_pl.addDefault("textmenus.help.usage", "Stosowanie");
                         pl_pl.addDefault("textmenus.help.description", "Opis");
-                        pl_pl.addDefault("textmenus.help.permission", "Dozwolenie");
+                        pl_pl.addDefault("textmenus.help.permission", "Uprawnienie");
                         pl_pl.addDefault("textmenus.help.further-usages", "Dalsze zastosowania");
                         pl_pl.set("version", 1.1);
                         pl_pl.options().copyDefaults(true);
@@ -691,6 +691,10 @@ public class HeadsPlusMessagesManager {
         if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
             if (players.containsKey(player)) {
                 config = players.get(player);
+                if (config == null) {
+                    setPlayerLocale(player);
+                    config = players.get(player);
+                }
             }
         }
         String str = config.getString(path);

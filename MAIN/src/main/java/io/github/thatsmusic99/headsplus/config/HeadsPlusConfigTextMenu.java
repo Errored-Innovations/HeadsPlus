@@ -390,7 +390,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                         .replace("{header}", h.getConfig().getString("info.header"))
                         .replace("{author}", String.valueOf(hp.getAuthor()))
                         .replace("{locale}", hp.getConfiguration().getConfig().getString("locale"))
-                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas"), sender));
+                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble"), sender));
             }
             return sb.toString();
         }

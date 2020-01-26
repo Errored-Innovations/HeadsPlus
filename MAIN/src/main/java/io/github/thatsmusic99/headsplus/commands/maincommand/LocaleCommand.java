@@ -39,30 +39,36 @@ public class LocaleCommand implements IHeadsPlusCommand {
                         if (languages.contains(str)) {
                             if (args.length > 2) {
                                 Player player = Bukkit.getPlayer(args[2]);
-                                if (player != null && player.isOnline()) {
-                                    return "";
+                                if (sender.hasPermission("headsplus.maincommand.locale.others")) {
+                                    if (player != null && player.isOnline()) {
+                                        return "";
+                                    } else {
+                                        return messages.getString("commands.errors.player-offline", sender);
+                                    }
                                 } else {
-                                    return messages.getString("commands.errors.player-offline", sender);
+                                    return messages.getString("commands.errors.no-perm", sender);
                                 }
+
                             } else {
                                 if (sender instanceof Player) {
                                     return "";
                                 } else {
-                                    return messages.getString("commands.errors.not-a-player");
+                                    return messages.getString("commands.errors.not-a-player", sender);
                                 }
                             }
                         } else {
-                            return messages.getString("commands.locale.invalid-lang").replaceAll("\\{languages}", Arrays.toString(languages.toArray()));
+                            return messages.getString("commands.locale.invalid-lang", sender).replaceAll("\\{languages}", Arrays.toString(languages.toArray()));
                         }
+                    } else {
+                        return messages.getString("commands.errors.no-perm", sender);
                     }
                 }
             } else {
-                return messages.getString("commands.errors.invalid-args");
+                return messages.getString("commands.errors.invalid-args", sender);
             }
         } else {
-            return messages.getString("commands.errors.disabled");
+            return messages.getString("commands.errors.disabled", sender);
         }
-        return null;
     }
 
     @Override
@@ -81,8 +87,8 @@ public class LocaleCommand implements IHeadsPlusCommand {
             if (args.length > 2) {
                 Player player = Bukkit.getPlayer(args[2]);
                 messages.setPlayerLocale(player, str);
-                sender.sendMessage(messages.getString("commands.locale.changed-locale-other")
-                        .replaceAll("\\{player}", player.getName()).replaceAll("\\{locale}", str));
+                sender.sendMessage(messages.getString("commands.locale.changed-locale-other", sender)
+                        .replaceAll("\\{player}", player.getName()).replaceAll("\\{language}", str));
             } else {
                 messages.setPlayerLocale((Player) sender, str);
                 sender.sendMessage(messages.getString("commands.locale.changed-locale", sender));
