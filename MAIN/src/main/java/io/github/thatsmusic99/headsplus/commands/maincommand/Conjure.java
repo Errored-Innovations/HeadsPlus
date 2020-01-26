@@ -59,7 +59,7 @@ public class Conjure implements IHeadsPlusCommand {
                         if (sender instanceof Player) {
                             p = (Player) sender;
                         } else {
-                            return ChatColor.RED + "You must be a player to run this command!";
+                            return hpc.getString("commands.errors.not-a-player", sender);
                         }
                     }
                     if (args.length > 4) {

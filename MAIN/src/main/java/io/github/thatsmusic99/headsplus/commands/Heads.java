@@ -40,10 +40,10 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                         cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
                     }
                 } else {
-                    cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
+                    cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", cs));
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs instanceof Player ? (Player) cs : null));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (heads)", true, cs);

@@ -6,7 +6,6 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +24,6 @@ public class Complete implements IHeadsPlusCommand {
 
     @Override
     public String isCorrectUsage(String[] args, CommandSender sender) {
-        Player p = sender instanceof Player ? (Player) sender : null;
         try {
             if (args.length > 1) {
                 Challenge c = HeadsPlus.getInstance().getChallengeByName(args[1]);
@@ -38,42 +36,43 @@ public class Complete implements IHeadsPlusCommand {
                                     if (c.canComplete(player.getPlayer())) {
                                         return "";
                                     } else {
-                                        return hpc.getString("commands.challenges.cant-complete-challenge", p);
+                                        return hpc.getString("commands.challenges.cant-complete-challenge", sender);
                                     }
                                 } else {
-                                    return hpc.getString("commands.challenges.already-complete-challenge", p);
+                                    return hpc.getString("commands.challenges.already-complete-challenge", sender);
                                 }
 
                             } else {
-                                return hpc.getString("commands.errors.player-offline", p);
+                                return hpc.getString("commands.errors.player-offline", sender);
                             }
                         } else {
-                            return hpc.getString("commands.errors.no-perm", p);
+                            return hpc.getString("commands.errors.no-perm", sender);
                         }
 
                     } else if (sender instanceof Player) {
+                        Player p = (Player) sender;
                         if (!c.isComplete(p)) {
                             if (c.canComplete(p)) {
                                 return "";
                             } else {
-                                return hpc.getString("commands.challenges.cant-complete-challenge", p);
+                                return hpc.getString("commands.challenges.cant-complete-challenge", sender);
                             }
                         } else {
-                            return hpc.getString("commands.challenges.already-complete-challenge", p);
+                            return hpc.getString("commands.challenges.already-complete-challenge", sender);
                         }
 
                     } else {
-                        return ChatColor.RED + "You must be a player to use this command!";
+                        return hpc.getString("commands.errors.not-a-player", sender);
                     }
                 } else {
-                    return hpc.getString("commands.challenges.no-such-challenge", p);
+                    return hpc.getString("commands.challenges.no-such-challenge", sender);
                 }
             } else {
-                return hpc.getString("commands.errors.invalid-args", p);
+                return hpc.getString("commands.errors.invalid-args", sender);
             }
         } catch (SQLException e) {
             DebugPrint.createReport(e, "Complete command (checks)", true, sender);
-            return hpc.getString("commands.errors.cmd-fail", p);
+            return hpc.getString("commands.errors.cmd-fail", sender);
         }
 
     }
