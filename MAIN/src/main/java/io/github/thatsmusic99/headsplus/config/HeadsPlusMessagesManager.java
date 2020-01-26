@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
@@ -35,6 +34,8 @@ public class HeadsPlusMessagesManager {
                 locales.put(f.getName().split("_")[0].toLowerCase(), YamlConfiguration.loadConfiguration(f));
             }
             players = new HashMap<>();
+        } else {
+            locales = new HashMap<>();
         }
         // Main config for non-player entities such as console
         try {
@@ -179,7 +180,7 @@ public class HeadsPlusMessagesManager {
                         de_de.addDefault("textmenus.head-info.chance", "Möglichkeit");
                         de_de.addDefault("textmenus.help.usage", "Verwendung");
                         de_de.addDefault("textmenus.help.description", "Beschreibung");
-                        de_de.addDefault("textmenus.help.permission", "Permission");
+                        de_de.addDefault("textmenus.help.permission", "Genehmigung");
                         de_de.addDefault("textmenus.help.further-usages", "Weitere Verwendung");
                         de_de.set("version", 1.1);
                         de_de.options().copyDefaults(true);
@@ -245,7 +246,7 @@ public class HeadsPlusMessagesManager {
                         es_es.addDefault("textmenus.head-info.chance", "Posibilidad");
                         es_es.addDefault("textmenus.help.usage", "Uso");
                         es_es.addDefault("textmenus.help.description", "Descripción");
-                        es_es.addDefault("textmenus.help.permission", "Permission");
+                        es_es.addDefault("textmenus.help.permission", "Permiso");
                         es_es.addDefault("textmenus.help.further-usages", "Usos adicionales");
                         es_es.set("version", 1.1);
                         es_es.options().copyDefaults(true);
@@ -311,7 +312,7 @@ public class HeadsPlusMessagesManager {
                         fr_fr.addDefault("textmenus.head-info.chance", "Possibilité");
                         fr_fr.addDefault("textmenus.help.usage", "Usage");
                         fr_fr.addDefault("textmenus.help.description", "Description");
-                        fr_fr.addDefault("textmenus.help.permission", "Permission");
+                        fr_fr.addDefault("textmenus.help.permission", "Autorisation");
                         fr_fr.addDefault("textmenus.help.further-usages", "Autres Usages");
                         fr_fr.set("version", 1.1);
                         fr_fr.options().copyDefaults(true);
@@ -322,13 +323,336 @@ public class HeadsPlusMessagesManager {
                         }
                     }
 
+                    {
+                        hu_hu.addDefault("language", "Magyar (MA)");
+                        hu_hu.addDefault("commands.errors.not-a-player", "{header} A parancs/alparancs futtatásához játékosnak kell lennie!");
+                        hu_hu.addDefault("commands.locale.invalid-lang", "{header} Ez nem érvényes nyelv! Elérhető nyelvek: &c{languages}");
+                        hu_hu.addDefault("commands.locale.changed-locale", "{header} Helló! Az Ön nyelve most &cmagyarra &7van állítva &c(MA)");
+                        hu_hu.addDefault("commands.locale.changed-locale-other", "{header} A (z) &c{player} &7nyelve most &c{language} &7lett!");
+                        hu_hu.addDefault("inventory.icon.challenge.reward", "&6Jutalom: &a{reward}");
+                        hu_hu.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
+                        hu_hu.addDefault("inventory.icon.challenge.count", "&7{challenge-count} kihívások");
+                        hu_hu.addDefault("inventory.icon.close", "&8❰ &c&lBezárás menü &8❱");
+                        hu_hu.addDefault("inventory.icon.favourites", "&8❰ &b&lÉrdekes &8❱");
+                        hu_hu.addDefault("inventory.icon.head.price", "&cÁr &8❱ &7{price}");
+                        hu_hu.addDefault("inventory.icon.head.favourite", "&cKedvenc!");
+                        hu_hu.addDefault("inventory.icon.head.count", "&7{head-count} fejek");
+                        hu_hu.addDefault("inventory.icon.menu", "&8❰ &a&lFőmenü &8❱");
+                        hu_hu.addDefault("inventory.icon.start", "&8❰ &a&lElső oldal &8❱");
+                        hu_hu.addDefault("inventory.icon.last", "&8❰ &a&lUtolsó oldal &8❱");
+                        hu_hu.addDefault("inventory.icon.back", "&8❰ &a&lMenjen vissza &8❱");
+                        hu_hu.addDefault("inventory.icon.back-2", "&8❰ &a&lMenjen vissza (2) &8❱");
+                        hu_hu.addDefault("inventory.icon.back-3", "&8❰ &a&lMenjen vissza (3) &8❱");
+                        hu_hu.addDefault("inventory.icon.next", "&8❰ &a&lKövetkező &8❱");
+                        hu_hu.addDefault("inventory.icon.next-2", "&8❰ &a&lKövetkező (2) &8❱");
+                        hu_hu.addDefault("inventory.icon.next-3", "&8❰ &a&lKövetkező (3) &8❱");
+                        hu_hu.addDefault("inventory.icon.search", "&8❰ &e&lKeresési fejek &8❱");
+                        hu_hu.addDefault("inventory.icon.stats.icon", "&8❰ &a&lStatisztikák &8❱");
+                        hu_hu.addDefault("inventory.icon.stats.total-heads", "&aÖsszes fej &8❱ &e");
+                        hu_hu.addDefault("inventory.icon.stats.total-pages", "&aÖsszes oldal &8❱ &e");
+                        hu_hu.addDefault("inventory.icon.stats.total-sections", "&aÖsszes szakasz &8❱ &e");
+                        hu_hu.addDefault("inventory.icon.stats.current-balance", "&aAktuális egyenleg &8❱ &e");
+                        hu_hu.addDefault("inventory.icon.stats.current-section", "&aAktuális szakasz &8❱ &e");
+                        hu_hu.addDefault("textmenus.profile.player", "Lejátszó");
+                        hu_hu.addDefault("textmenus.profile.completed-challenges", "Befejezett kihívások");
+                        hu_hu.addDefault("textmenus.profile.total-heads-dropped", "Az összes fej csökkent");
+                        hu_hu.addDefault("textmenus.profile.total-heads-sold", "Eladott összes fej");
+                        hu_hu.addDefault("textmenus.profile.total-heads-crafted", "Összes készített fej");
+                        hu_hu.addDefault("textmenus.profile.current-level", "Jelenlegi szint");
+                        hu_hu.addDefault("textmenus.profile.xp-until-next-level", "XP a következő szintre");
+                        hu_hu.addDefault("textmenus.blacklist", "Feketelista");
+                        hu_hu.addDefault("textmenus.whitelist", "Fehérlista");
+                        hu_hu.addDefault("textmenus.blacklistw", "Világ Feketelista");
+                        hu_hu.addDefault("textmenus.whitelistw", "Világ Fehérlista");
+                        hu_hu.addDefault("textmenus.info.version", "Változat");
+                        hu_hu.addDefault("textmenus.info.author", "Szerző");
+                        hu_hu.addDefault("textmenus.info.language", "Nyelv");
+                        hu_hu.addDefault("textmenus.info.contributors", "Közreműködők");
+                        hu_hu.addDefault("textmenus.info.spigot", "SpigotMC link");
+                        hu_hu.addDefault("textmenus.info.discord", "Discord Server");
+                        hu_hu.addDefault("textmenus.info.github", "Github");
+                        hu_hu.addDefault("textmenus.head-info.type", "Típus");
+                        hu_hu.addDefault("textmenus.head-info.display-name", "Megjelenítendő név");
+                        hu_hu.addDefault("textmenus.head-info.price", "Ár");
+                        hu_hu.addDefault("textmenus.head-info.interact-name", "Interact név");
+                        hu_hu.addDefault("textmenus.head-info.chance", "Véletlen");
+                        hu_hu.addDefault("textmenus.help.usage", "Használat");
+                        hu_hu.addDefault("textmenus.help.description", "Leírás");
+                        hu_hu.addDefault("textmenus.help.permission", "Permission");
+                        hu_hu.addDefault("textmenus.help.further-usages", "További felhasználások");
+                        hu_hu.set("version", 1.1);
+                        hu_hu.options().copyDefaults(true);
+                        try {
+                            hu_hu.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "hu_hu.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                    hu_hu.addDefault("language", "Magyar (MA)");
-                    hu_hu.addDefault("commands.locale.invalid-lang", "");
-                    hu_hu.addDefault("commands.locale.changed-locale", "");
+                    {
+                        lol_us.addDefault("language", "LOLCAT (Kingdom of Cats)");
+                        lol_us.addDefault("commands.errors.not-a-player", "{header} u nu playah!");
+                        lol_us.addDefault("commands.locale.invalid-lang", "{header} nU such langwaaj :( kewl langs: &c{languages}");
+                        lol_us.addDefault("commands.locale.changed-locale", "{header} AAHHAHAHAHAHHA, ur langwaaj iz nao de bestz! &c(LOLCAT)");
+                        lol_us.addDefault("commands.locale.changed-locale-other", "{header} &c{player}&7'z langwaaj iz nao de kewl &c{language}&7!");
+                        lol_us.addDefault("inventory.icon.challenge.reward", "&6Treetz: &a{reward}");
+                        lol_us.addDefault("inventory.icon.challenge.xp", "&6ex-pee: &a{xp}");
+                        lol_us.addDefault("inventory.icon.challenge.count", "&7{challenge-count} chaleng's");
+                        lol_us.addDefault("inventory.icon.close", "&8❰ &c&lS H U T &8❱");
+                        lol_us.addDefault("inventory.icon.favourites", "&8❰ &b&lkewl hedz :3 &8❱");
+                        lol_us.addDefault("inventory.icon.head.price", "&cMONEYS &8❱ &7{price}");
+                        lol_us.addDefault("inventory.icon.head.favourite", "&cfav tbh");
+                        lol_us.addDefault("inventory.icon.head.count", "&7{head-count} hedz");
+                        lol_us.addDefault("inventory.icon.menu", "&8❰ &a&lmane thingie &8❱");
+                        lol_us.addDefault("inventory.icon.start", "&8❰ &a&l1st &8❱");
+                        lol_us.addDefault("inventory.icon.last", "&8❰ &a&lhaha lozr page &8❱");
+                        lol_us.addDefault("inventory.icon.back", "&8❰ &a&lrevrs!! &8❱");
+                        lol_us.addDefault("inventory.icon.back-2", "&8❰ &a&lrevrs!!! (2) &8❱");
+                        lol_us.addDefault("inventory.icon.back-3", "&8❰ &a&lrevrs!!!! (3) &8❱");
+                        lol_us.addDefault("inventory.icon.next", "&8❰ &a&lNYOOOM &8❱");
+                        lol_us.addDefault("inventory.icon.next-2", "&8❰ &a&lNYOOOOM (2) &8❱");
+                        lol_us.addDefault("inventory.icon.next-3", "&8❰ &a&lNYOOOOOM (3) &8❱");
+                        lol_us.addDefault("inventory.icon.search", "&8❰ &e&lfind dis &8❱");
+                        lol_us.addDefault("inventory.icon.stats.icon", "&8❰ &a&lnumbrz &8❱");
+                        lol_us.addDefault("inventory.icon.stats.total-heads", "&alotsa heds &8❱ &e");
+                        lol_us.addDefault("inventory.icon.stats.total-pages", "&apagez &8❱ &e");
+                        lol_us.addDefault("inventory.icon.stats.total-sections", "&asecshunz &8❱ &e");
+                        lol_us.addDefault("inventory.icon.stats.current-balance", "&abalance rn &8❱ &e");
+                        lol_us.addDefault("inventory.icon.stats.current-section", "&asection rn &8❱ &e");
+                        lol_us.addDefault("textmenus.profile.player", "Playrr");
+                        lol_us.addDefault("textmenus.profile.completed-challenges", "Complet'd Chalengs");
+                        lol_us.addDefault("textmenus.profile.total-heads-dropped", "heds droppd");
+                        lol_us.addDefault("textmenus.profile.total-heads-sold", "heds selld");
+                        lol_us.addDefault("textmenus.profile.total-heads-crafted", "heds maid");
+                        lol_us.addDefault("textmenus.profile.current-level", "level rn");
+                        lol_us.addDefault("textmenus.profile.xp-until-next-level", "XP til de big one");
+                        lol_us.addDefault("textmenus.blacklist", "Naughty list");
+                        lol_us.addDefault("textmenus.whitelist", "Nice list");
+                        lol_us.addDefault("textmenus.blacklistw", "Woldz naughty list");
+                        lol_us.addDefault("textmenus.whitelistw", "Woldz nice list");
+                        lol_us.addDefault("textmenus.info.version", "Vershun");
+                        lol_us.addDefault("textmenus.info.author", "kool kat");
+                        lol_us.addDefault("textmenus.info.language", "langwaaj");
+                        lol_us.addDefault("textmenus.info.contributors", "kool kats");
+                        lol_us.addDefault("textmenus.info.spigot", "SpigotMC linkz");
+                        lol_us.addDefault("textmenus.info.discord", "Discord serv");
+                        lol_us.addDefault("textmenus.info.github", "Gitty");
+                        lol_us.addDefault("textmenus.head-info.type", "Tip");
+                        lol_us.addDefault("textmenus.head-info.display-name", "publicz nam");
+                        lol_us.addDefault("textmenus.head-info.price", "Moneyz");
+                        lol_us.addDefault("textmenus.head-info.interact-name", "clicky name");
+                        lol_us.addDefault("textmenus.head-info.chance", "maybe??");
+                        lol_us.addDefault("textmenus.help.usage", "how 2");
+                        lol_us.addDefault("textmenus.help.description", "uhh what");
+                        lol_us.addDefault("textmenus.help.permission", "permy");
+                        lol_us.addDefault("textmenus.help.further-usages", "how 2 but worse");
+                        lol_us.set("version", 1.1);
+                        lol_us.options().copyDefaults(true);
+                        try {
+                            lol_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "lol_us.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                    lol_us.addDefault("language", "LOLCAT (Kingdom of Cats)");
-                    lol_us.addDefault("commands.locale.invalid-lang", "{header} nU such langwaaj :( kewl langs: &c{languages}");
+
+                    {
+                        pl_pl.addDefault("language", "Polski (PL)");
+                        en_us.addDefault("commands.errors.not-a-player", "{header} Musisz być graczem, aby uruchomić to polecenie/podkomendę!");
+                        en_us.addDefault("commands.locale.invalid-lang", "{header} To nie jest poprawny język! Dostępne języki: &c{languages}");
+                        en_us.addDefault("commands.locale.changed-locale", "{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski (PL)");
+                        en_us.addDefault("commands.locale.changed-locale-other", "{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!");
+                        en_us.addDefault("inventory.icon.challenge.reward", "&6Nagroda: &a{reward}");
+                        en_us.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
+                        en_us.addDefault("inventory.icon.challenge.count", "&7{challenge-count} wyzwania");
+                        en_us.addDefault("inventory.icon.close", "&8❰ &c&lZamknij menu &8❱");
+                        en_us.addDefault("inventory.icon.favourites", "&8❰ &b&lUlubione &8❱");
+                        en_us.addDefault("inventory.icon.head.price", "&cCena &8❱ &7{price}");
+                        en_us.addDefault("inventory.icon.head.favourite", "&cFaworyt!");
+                        en_us.addDefault("inventory.icon.head.count", "&7{head-count} głowy");
+                        en_us.addDefault("inventory.icon.menu", "&8❰ &a&lMenu główne &8❱");
+                        en_us.addDefault("inventory.icon.start", "&8❰ &a&lPierwsza strona &8❱");
+                        en_us.addDefault("inventory.icon.last", "&8❰ &a&lOstatnia strona &8❱");
+                        en_us.addDefault("inventory.icon.back", "&8❰ &a&lWróć &8❱");
+                        en_us.addDefault("inventory.icon.back-2", "&8❰ &a&lWróć (2) &8❱");
+                        en_us.addDefault("inventory.icon.back-3", "&8❰ &a&lWróć (3) &8❱");
+                        en_us.addDefault("inventory.icon.next", "&8❰ &a&lKolejny &8❱");
+                        en_us.addDefault("inventory.icon.next-2", "&8❰ &a&lKolejny (2) &8❱");
+                        en_us.addDefault("inventory.icon.next-3", "&8❰ &a&lKolejny (3) &8❱");
+                        en_us.addDefault("inventory.icon.search", "&8❰ &e&lSzukaj głów &8❱");
+                        en_us.addDefault("inventory.icon.stats.icon", "&8❰ &a&lStatystyka &8❱");
+                        en_us.addDefault("inventory.icon.stats.total-heads", "&aŁączna liczba głów &8❱ &e");
+                        en_us.addDefault("inventory.icon.stats.total-pages", "&aWszystkie strony &8❱ &e");
+                        en_us.addDefault("inventory.icon.stats.total-sections", "&aSekcje ogółem &8❱ &e");
+                        en_us.addDefault("inventory.icon.stats.current-balance", "&aCurrent Balance &8❱ &e");
+                        en_us.addDefault("inventory.icon.stats.current-section", "&aAktualne saldo &8❱ &e");
+                        en_us.addDefault("textmenus.profile.player", "Gracz");
+                        en_us.addDefault("textmenus.profile.completed-challenges", "Ukończone wyzwania");
+                        en_us.addDefault("textmenus.profile.total-heads-dropped", "Łączna liczba upuszczonych głów");
+                        en_us.addDefault("textmenus.profile.total-heads-sold", "Całkowita liczba sprzedanych głów");
+                        en_us.addDefault("textmenus.profile.total-heads-crafted", "Łączna liczba wytworzonych głów");
+                        en_us.addDefault("textmenus.profile.current-level", "Aktualny poziom");
+                        en_us.addDefault("textmenus.profile.xp-until-next-level", "XP do następnego poziomu");
+                        en_us.addDefault("textmenus.blacklist", "Czarna lista");
+                        en_us.addDefault("textmenus.whitelist", "Biała lista");
+                        en_us.addDefault("textmenus.blacklistw", "Czarna lista światów");
+                        en_us.addDefault("textmenus.whitelistw", "Biała lista światów");
+                        en_us.addDefault("textmenus.info.version", "Wersja");
+                        en_us.addDefault("textmenus.info.author", "Autor");
+                        en_us.addDefault("textmenus.info.language", "Język");
+                        en_us.addDefault("textmenus.info.contributors", "Współtwórcy");
+                        en_us.addDefault("textmenus.info.spigot", "Łącze SpigotMC");
+                        en_us.addDefault("textmenus.info.discord", "Serwer Discord");
+                        en_us.addDefault("textmenus.info.github", "Github");
+                        en_us.addDefault("textmenus.head-info.type", "Rodzaj");
+                        en_us.addDefault("textmenus.head-info.display-name", "Wyświetlana nazwa");
+                        en_us.addDefault("textmenus.head-info.price", "Cena");
+                        en_us.addDefault("textmenus.head-info.interact-name", "Nazwa interakcji");
+                        en_us.addDefault("textmenus.head-info.chance", "Szansa");
+                        en_us.addDefault("textmenus.help.usage", "Stosowanie");
+                        en_us.addDefault("textmenus.help.description", "Opis");
+                        en_us.addDefault("textmenus.help.permission", "Dozwolenie");
+                        en_us.addDefault("textmenus.help.further-usages", "Dalsze zastosowania");
+                        en_us.set("version", 1.1);
+                        en_us.options().copyDefaults(true);
+                        try {
+                            en_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    {
+                        ro_ro.addDefault("language", "Romana (RO)");
+                        ro_ro.addDefault("commands.errors.not-a-player", "{header} Trebuie sa fiți un jucator pentru a rula aceasta comanda/subcomanda!");
+                        ro_ro.addDefault("commands.locale.invalid-lang", "{header} Acesta nu este un limbaj valabil! Limbi disponibile: &c{languages}");
+                        ro_ro.addDefault("commands.locale.changed-locale", "{header} Salut! Limba dvs. este acum setata pe limba &cRomana (RO)");
+                        ro_ro.addDefault("commands.locale.changed-locale-other", "{header} Limba &c{player} &7este acum setata pe &c{language}&7!");
+                        ro_ro.addDefault("inventory.icon.challenge.reward", "&6Recompensa: &a{reward}");
+                        ro_ro.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
+                        ro_ro.addDefault("inventory.icon.challenge.count", "&7{challenge-count} provocari");
+                        ro_ro.addDefault("inventory.icon.close", "&8❰ &c&lInchideti meniul &8❱");
+                        ro_ro.addDefault("inventory.icon.favourites", "&8❰ &b&lFavorite &8❱");
+                        ro_ro.addDefault("inventory.icon.head.price", "&cPret &8❱ &7{price}");
+                        ro_ro.addDefault("inventory.icon.head.favourite", "&cFavorita!");
+                        ro_ro.addDefault("inventory.icon.head.count", "&7{head-count} capete");
+                        ro_ro.addDefault("inventory.icon.menu", "&8❰ &a&lMeniu principal &8❱");
+                        ro_ro.addDefault("inventory.icon.start", "&8❰ &a&lPrima pagina &8❱");
+                        ro_ro.addDefault("inventory.icon.last", "&8❰ &a&lUltima pagina &8❱");
+                        ro_ro.addDefault("inventory.icon.back", "&8❰ &a&lReveni &8❱");
+                        ro_ro.addDefault("inventory.icon.back-2", "&8❰ &a&lReveni (2) &8❱");
+                        ro_ro.addDefault("inventory.icon.back-3", "&8❰ &a&lReveni (3) &8❱");
+                        ro_ro.addDefault("inventory.icon.next", "&8❰ &a&lUrmator &8❱");
+                        ro_ro.addDefault("inventory.icon.next-2", "&8❰ &a&lUrmator (2) &8❱");
+                        ro_ro.addDefault("inventory.icon.next-3", "&8❰ &a&lUrmator (3) &8❱");
+                        ro_ro.addDefault("inventory.icon.search", "&8❰ &e&lCapete de cautare &8❱");
+                        ro_ro.addDefault("inventory.icon.stats.icon", "&8❰ &a&lStatistici &8❱");
+                        ro_ro.addDefault("inventory.icon.stats.total-heads", "&aCapete totale &8❱ &e");
+                        ro_ro.addDefault("inventory.icon.stats.total-pages", "&aTotal pagini &8❱ &e");
+                        ro_ro.addDefault("inventory.icon.stats.total-sections", "&aSectiuni totale &8❱ &e");
+                        ro_ro.addDefault("inventory.icon.stats.current-balance", "&aSold curent &8❱ &e");
+                        ro_ro.addDefault("inventory.icon.stats.current-section", "&aSecțiunea actuală &8❱ &e");
+                        ro_ro.addDefault("textmenus.profile.player", "Jucator");
+                        ro_ro.addDefault("textmenus.profile.completed-challenges", "Provocari finalizate");
+                        ro_ro.addDefault("textmenus.profile.total-heads-dropped", "Total capete aruncate");
+                        ro_ro.addDefault("textmenus.profile.total-heads-sold", "Total capete vandute");
+                        ro_ro.addDefault("textmenus.profile.total-heads-crafted", "Total capete artizanale");
+                        ro_ro.addDefault("textmenus.profile.current-level", "Nivelul actual");
+                        ro_ro.addDefault("textmenus.profile.xp-until-next-level", "XP pana la nivelul urmator");
+                        ro_ro.addDefault("textmenus.blacklist", "Lista neagra");
+                        ro_ro.addDefault("textmenus.whitelist", "Lista alba");
+                        ro_ro.addDefault("textmenus.blacklistw", "Lista neagra lumilor");
+                        ro_ro.addDefault("textmenus.whitelistw", "Lista alba lumilor");
+                        ro_ro.addDefault("textmenus.info.version", "Versiune");
+                        ro_ro.addDefault("textmenus.info.author", "Autor");
+                        ro_ro.addDefault("textmenus.info.language", "Limba");
+                        ro_ro.addDefault("textmenus.info.contributors", "Contribuabili");
+                        ro_ro.addDefault("textmenus.info.spigot", "SpigotMC link");
+                        ro_ro.addDefault("textmenus.info.discord", "Discord Server");
+                        ro_ro.addDefault("textmenus.info.github", "Github");
+                        ro_ro.addDefault("textmenus.head-info.type", "Categorie");
+                        ro_ro.addDefault("textmenus.head-info.display-name", "Numele afisat");
+                        ro_ro.addDefault("textmenus.head-info.price", "Pret");
+                        ro_ro.addDefault("textmenus.head-info.interact-name", "Numele interactiunii");
+                        ro_ro.addDefault("textmenus.head-info.chance", "Sansa");
+                        ro_ro.addDefault("textmenus.help.usage", "Folosire");
+                        ro_ro.addDefault("textmenus.help.description", "Descriere");
+                        ro_ro.addDefault("textmenus.help.permission", "Permisiune");
+                        ro_ro.addDefault("textmenus.help.further-usages", "Utilizari ulterioare");
+                        ro_ro.set("version", 1.1);
+                        ro_ro.options().copyDefaults(true);
+                        try {
+                            ro_ro.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ro_ro.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    {
+                        ru_ru.addDefault("language", "Русский (RU)");
+                        ru_ru.addDefault("commands.errors.not-a-player", "{header} Вы должны быть игроком для запуска этой команды/подкоманды!");
+                        ru_ru.addDefault("commands.locale.invalid-lang", "{header} Это не правильный язык! Доступные языки: &c{languages}");
+                        ru_ru.addDefault("commands.locale.changed-locale", "{header} Здравствуйте! Ваш язык теперь установлен на &cрусский (RU)");
+                        ru_ru.addDefault("commands.locale.changed-locale-other", "{header} Язык &c{player} &7теперь установлен на &c{language}&7!");
+                        ru_ru.addDefault("inventory.icon.challenge.reward", "&6Награда: &a{reward}");
+                        ru_ru.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
+                        ru_ru.addDefault("inventory.icon.challenge.count", "&7{challenge-count} проблемы");
+                        ru_ru.addDefault("inventory.icon.close", "&8❰ &c&lЗакрыть меню &8❱");
+                        ru_ru.addDefault("inventory.icon.favourites", "&8❰ &b&lИзбранные &8❱");
+                        ru_ru.addDefault("inventory.icon.head.price", "&cЦена &8❱ &7{price}");
+                        ru_ru.addDefault("inventory.icon.head.favourite", "&cизлюбленный!");
+                        ru_ru.addDefault("inventory.icon.head.count", "&7{head-count} руководители");
+                        ru_ru.addDefault("inventory.icon.menu", "&8❰ &a&lГлавное меню &8❱");
+                        ru_ru.addDefault("inventory.icon.start", "&8❰ &a&lПервая страница &8❱");
+                        ru_ru.addDefault("inventory.icon.last", "&8❰ &a&lПредыдущая страница &8❱");
+                        ru_ru.addDefault("inventory.icon.back", "&8❰ &a&lназад &8❱");
+                        ru_ru.addDefault("inventory.icon.back-2", "&8❰ &a&lназад (2) &8❱");
+                        ru_ru.addDefault("inventory.icon.back-3", "&8❰ &a&lназад (3) &8❱");
+                        ru_ru.addDefault("inventory.icon.next", "&8❰ &a&lследующий &8❱");
+                        ru_ru.addDefault("inventory.icon.next-2", "&8❰ &a&lследующий (2) &8❱");
+                        ru_ru.addDefault("inventory.icon.next-3", "&8❰ &a&lследующий (3) &8❱");
+                        ru_ru.addDefault("inventory.icon.search", "&8❰ &e&lПоиск головы &8❱");
+                        ru_ru.addDefault("inventory.icon.stats.icon", "&8❰ &a&lСтатистика &8❱");
+                        ru_ru.addDefault("inventory.icon.stats.total-heads", "&aВсего голов &8❱ &e");
+                        ru_ru.addDefault("inventory.icon.stats.total-pages", "&aВсего страниц &8❱ &e");
+                        ru_ru.addDefault("inventory.icon.stats.total-sections", "&aВсего разделов &8❱ &e");
+                        ru_ru.addDefault("inventory.icon.stats.current-balance", "&aТекущий баланс &8❱ &e");
+                        ru_ru.addDefault("inventory.icon.stats.current-section", "&aТекущий раздел &8❱ &e");
+                        ru_ru.addDefault("textmenus.profile.player", "игрок");
+                        ru_ru.addDefault("textmenus.profile.completed-challenges", "Завершенные испытания");
+                        ru_ru.addDefault("textmenus.profile.total-heads-dropped", "Всего голов выпало");
+                        ru_ru.addDefault("textmenus.profile.total-heads-sold", "Всего голов продано");
+                        ru_ru.addDefault("textmenus.profile.total-heads-crafted", "Всего созданных голов");
+                        ru_ru.addDefault("textmenus.profile.current-level", "Текущий уровень");
+                        ru_ru.addDefault("textmenus.profile.xp-until-next-level", "XP до следующего уровня");
+                        ru_ru.addDefault("textmenus.blacklist", "Черный список");
+                        ru_ru.addDefault("textmenus.whitelist", "Белый список");
+                        ru_ru.addDefault("textmenus.blacklistw", "Черный список миров");
+                        ru_ru.addDefault("textmenus.whitelistw", "Белый список миров");
+                        ru_ru.addDefault("textmenus.info.version", "Версия");
+                        ru_ru.addDefault("textmenus.info.author", "автор");
+                        ru_ru.addDefault("textmenus.info.language", "язык");
+                        ru_ru.addDefault("textmenus.info.contributors", "Авторы");
+                        ru_ru.addDefault("textmenus.info.spigot", "SpigotMC ссылка");
+                        ru_ru.addDefault("textmenus.info.discord", "Discord Server");
+                        ru_ru.addDefault("textmenus.info.github", "Github");
+                        ru_ru.addDefault("textmenus.head-info.type", "Тип");
+                        ru_ru.addDefault("textmenus.head-info.display-name", "Показать имя");
+                        ru_ru.addDefault("textmenus.head-info.price", "Цена");
+                        ru_ru.addDefault("textmenus.head-info.interact-name", "Имя взаимодействия");
+                        ru_ru.addDefault("textmenus.head-info.chance", "возможность");
+                        ru_ru.addDefault("textmenus.help.usage", "использование");
+                        ru_ru.addDefault("textmenus.help.description", "Описание");
+                        ru_ru.addDefault("textmenus.help.permission", "разрешение");
+                        ru_ru.addDefault("textmenus.help.further-usages", "Дальнейшее использование");
+                        ru_ru.set("version", 1.1);
+                        ru_ru.options().copyDefaults(true);
+                        try {
+                            ru_ru.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ru_ru.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }.runTaskAsynchronously(hp);
         }
