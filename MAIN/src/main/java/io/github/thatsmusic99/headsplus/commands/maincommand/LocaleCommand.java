@@ -20,39 +20,47 @@ import java.util.Set;
 )
 public class LocaleCommand implements IHeadsPlusCommand {
 
-    HeadsPlusMessagesManager messages = HeadsPlus.getInstance().getMessagesConfig();
+    private HeadsPlusMessagesManager messages = HeadsPlus.getInstance().getMessagesConfig();
     private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
 
     @Override
     public String isCorrectUsage(String[] args, CommandSender sender) {
-        if (args.length > 1) {
-            if (args[1].equalsIgnoreCase("refresh")) {
-                if (sender instanceof Player) {
-                    return "";
+        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+            if (args.length > 1) {
+                if (args[1].equalsIgnoreCase("refresh")) {
+                    if (sender instanceof Player) {
+                        return "";
+                    } else {
+                        return messages.getString("commands.errors.not-a-player", sender);
+                    }
                 } else {
-                    return messages.getString("commands.errors.not-a-player", sender);
-                }
-            } else {
-                if (sender.hasPermission("headsplus.maincommand.locale.change")) {
-                    String str = args[1].split("_")[0];
-                    if (languages.contains(str)) {
-                        if (args.length > 2) {
-                            Player player = Bukkit.getPlayer(args[2]);
-                            if (player != null && player.isOnline()) {
-                                return "";
+                    if (sender.hasPermission("headsplus.maincommand.locale.change")) {
+                        String str = args[1].split("_")[0];
+                        if (languages.contains(str)) {
+                            if (args.length > 2) {
+                                Player player = Bukkit.getPlayer(args[2]);
+                                if (player != null && player.isOnline()) {
+                                    return "";
+                                } else {
+                                    return messages.getString("commands.errors.player-offline", sender);
+                                }
                             } else {
-                                return messages.getString("commands.errors.player-offline", sender);
+                                if (sender instanceof Player) {
+                                    return "";
+                                } else {
+                                    return messages.getString("commands.errors.not-a-player");
+                                }
                             }
                         } else {
-                            if (sender instanceof Player) {
-                                return "";
-                            }
+                            return messages.getString("commands.locale.invalid-lang").replaceAll("\\{languages}", Arrays.toString(languages.toArray()));
                         }
-                    } else {
-                        return messages.getString("commands.locale.invalid-lang").replaceAll("\\{languages}", Arrays.toString(languages.toArray()));
                     }
                 }
+            } else {
+                return messages.getString("commands.errors.invalid-args");
             }
+        } else {
+            return messages.getString("commands.errors.disabled");
         }
         return null;
     }
