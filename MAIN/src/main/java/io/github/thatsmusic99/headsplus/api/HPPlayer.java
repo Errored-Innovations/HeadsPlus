@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
@@ -25,9 +26,11 @@ public class HPPlayer {
     private List<Challenge> completeChallenges;
     private Level nextLevel = null;
     private List<PotionEffect> activeMasks;
-    public static HashMap<Player, HPPlayer> players = new HashMap<>();
+    public static HashMap<OfflinePlayer, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
     private boolean ignoreFallDamage;
+    private String cachedLocale;
+    private boolean localeForced;
 
     public HPPlayer(OfflinePlayer p) {
         activeMasks = new ArrayList<>();
@@ -48,6 +51,28 @@ public class HPPlayer {
         List<Challenge> sc = new ArrayList<>();
         for (String str : scores.getCompletedChallenges(p.getUniqueId().toString())) {
             sc.add(hapi.getChallengeByConfigName(str));
+        }
+        if (hp.getConfiguration().getConfig().getBoolean("smart-locale")) {
+            String loc = scores.getLocale(p.getUniqueId().toString());
+            System.out.println("1: " + loc);
+            if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
+                cachedLocale = loc.split(":")[0];
+                localeForced = Boolean.valueOf(loc.split(":")[1]);
+                hp.getMessagesConfig().setPlayerLocale(getPlayer().getPlayer(), cachedLocale,  false);
+            } else {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        hp.getMessagesConfig().setPlayerLocale(player.getPlayer());
+                        cachedLocale = hp.getMessagesConfig().getSetLocale(player.getPlayer());
+                        localeForced = false;
+                        scores.setLocale(player.getUniqueId().toString(), cachedLocale, false);
+                    }
+                }.runTaskLaterAsynchronously(hp, 100);
+            }
+        } else {
+            cachedLocale = "";
+            localeForced = false;
         }
         if (hp.usingLevels()) {
             if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
@@ -78,6 +103,7 @@ public class HPPlayer {
             }
         }
         this.completeChallenges = sc;
+        players.put(getPlayer(), this);
     }
 
     public void clearMask() {
@@ -141,6 +167,21 @@ public class HPPlayer {
 
     public List<PotionEffect> getActiveMasks() {
         return activeMasks;
+    }
+
+    public String getLocale() {
+        return cachedLocale;
+    }
+
+    public boolean isLocaleForced() {
+        return localeForced;
+    }
+
+    public void setLocale(String locale) {
+        cachedLocale = locale;
+        localeForced = true;
+        System.out.println(locale);
+        HeadsPlus.getInstance().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, true);
     }
 
     public void addCompleteChallenge(Challenge c) {

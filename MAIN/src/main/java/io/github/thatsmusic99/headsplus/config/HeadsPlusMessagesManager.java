@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -23,23 +24,23 @@ public class HeadsPlusMessagesManager {
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<Player, YamlConfiguration> players;
 
-	public HeadsPlusMessagesManager() {
-	    HeadsPlus hp = HeadsPlus.getInstance();
-	    HeadsPlusMainConfig mainConfig = hp.getConfiguration();
-	    String locale = mainConfig.getConfig().getString("locale");
-	    if (mainConfig.getConfig().getBoolean("smart-locale")) {
-	    	locales = new HashMap<>();
-	    	File langDir = new File(hp.getDataFolder() + File.separator + "locale" + File.separator);
-	    	for (File f : langDir.listFiles()) {
-	    	    locales.put(f.getName().split("_")[0].toLowerCase(), YamlConfiguration.loadConfiguration(f));
+    public HeadsPlusMessagesManager() {
+        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlusMainConfig mainConfig = hp.getConfiguration();
+        String locale = mainConfig.getConfig().getString("locale");
+        if (mainConfig.getConfig().getBoolean("smart-locale")) {
+            locales = new HashMap<>();
+            File langDir = new File(hp.getDataFolder() + File.separator + "locale" + File.separator);
+            for (File f : langDir.listFiles()) {
+                locales.put(f.getName().split("_")[0].toLowerCase(), YamlConfiguration.loadConfiguration(f));
             }
-	    	players = new HashMap<>();
-	    }
-	    // Main config for non-player entities such as console
-	    try {
-	        config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, locale + ".yml"));
+            players = new HashMap<>();
+        }
+        // Main config for non-player entities such as console
+        try {
+            config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, locale + ".yml"));
         } catch (Exception e) {
-	        hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
+            hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
             config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
         }
 	    if (config.getDouble("version") != 1.1) {
@@ -130,62 +131,74 @@ public class HeadsPlusMessagesManager {
 		}
     }
 
-	public String getString(String path) {
-	    String str = config.getString(path);
-	    if (str == null) return "";
-	    Pattern pat = Pattern.compile("\\{msg_(.+)}");
-	    Matcher m = pat.matcher(str);
-	    str = str.replaceAll("\\{header}", config.getString("prefix"));
-	    str = str.replaceAll("''", "'");
-	    str = str.replaceAll("^'", "");
-	    str = str.replaceAll("'$", "");
-	    while (m.find()) {
-	        String s = m.group();
-            str = str.replaceAll("\\{msg_" + s + "}", getString(s));
-        }
+    public String getString(String path) {
+        String str = config.getString(path);
+        if (str == null) return "";
+        str = str.replaceAll("\\{header}", config.getString("prefix"));
+        str = str.replaceAll("''", "'");
+        str = str.replaceAll("^'", "");
+        str = str.replaceAll("'$", "");
+        formatMsg(str);
 
-	    str = ChatColor.translateAlternateColorCodes('&', str);
+        str = ChatColor.translateAlternateColorCodes('&', str);
         return str;
     }
 
+    public String formatMsg(String string) {
+        Pattern pat = Pattern.compile("\\{msg_(.*?)}");
+        Matcher m = pat.matcher(string);
+        while (m.find()) {
+            String s = m.group(1);
+            string = string.replace("{msg_" + s + "}", getString(s));
+        }
+        return string;
+    }
     public String getString(String path, CommandSender cs) {
-		return cs instanceof Player ? getString(path, (Player) cs) : getString(path);
-	}
+        return cs instanceof Player ? getString(path, (Player) cs) : getString(path);
+    }
 
     public String getString(String path, Player player) {
-	    if (player == null) return getString(path);
-	    YamlConfiguration config = HeadsPlusMessagesManager.config;
-	    if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
-	    	if (players.containsKey(player)) {
-	    		config = players.get(player);
-			}
-		}
-		String str = config.getString(path);
-		if (str == null) return "";
-		Pattern pat = Pattern.compile("\\{msg_(.+)}");
-		Matcher m = pat.matcher(str);
-		str = str.replaceAll("\\{header}", config.getString("prefix"));
-		str = str.replaceAll("''", "'");
-		str = str.replaceAll("^'", "");
-		str = str.replaceAll("'$", "");
-		while (m.find()) {
-			String s = m.group();
-			str = str.replaceAll("\\{msg_" + s + "}", getString(s, player));
-		}
-		if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			str = PlaceholderAPI.setPlaceholders(player, str);
-		}
-		str = ChatColor.translateAlternateColorCodes('&', str);
-		return str;
+        if (player == null) return getString(path);
+        YamlConfiguration config = HeadsPlusMessagesManager.config;
+        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+            if (players.containsKey(player)) {
+                config = players.get(player);
+            }
+        }
+        String str = config.getString(path);
+        if (str == null) return "";
+        str = str.replaceAll("\\{header}", config.getString("prefix"));
+        str = str.replaceAll("''", "'");
+        str = str.replaceAll("^'", "");
+        str = str.replaceAll("'$", "");
+        formatMsg(str);
+        if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            str = PlaceholderAPI.setPlaceholders(player, str);
+        }
+        str = ChatColor.translateAlternateColorCodes('&', str);
+        return str;
     }
 
     public void setPlayerLocale(Player player) {
-	    String locale = getLocale(player);
-	    String first = locale.split("_")[0].toLowerCase();
-	    if (locales.containsKey(first)) {
-	        players.put(player, locales.get(first));
+        String locale = getLocale(player);
+        String first = locale.split("_")[0].toLowerCase();
+        if (locales.containsKey(first)) {
+            players.put(player, locales.get(first));
         }
+    }
 
+    public void setPlayerLocale(Player player, String locale, boolean b) {
+        players.put(player, locales.get(locale));
+        if (b) {
+            HPPlayer.getHPPlayer(player).setLocale(locale);
+        }
+    }
+
+    public void setPlayerLocale(Player player, String locale) {
+        setPlayerLocale(player, locale, true);
+    }
+    public String getSetLocale(Player player) {
+        return players.get(player).getName().split("_")[0];
     }
 
     private static String getLocale(Player player) {
