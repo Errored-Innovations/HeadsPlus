@@ -1,9 +1,77 @@
 # HeadsPlus by Thatsmusic99 - русский (Перевод The_stas/stashenko)
 # Не меняйте версию! Это используется внутри плагина для добавления новых сообщений.
-version: 1.0
+language: Русский (RU)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Награда: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} проблемы'
+    close: '&8❰ &c&lЗакрыть меню &8❱'
+    favourites: '&8❰ &b&lИзбранные &8❱'
+    head:
+      price: '&cЦена &8❱ &7{price}'
+      favourite: '&cизлюбленный!'
+      count: '&7{head-count} руководители'
+    menu: '&8❰ &a&lГлавное меню &8❱'
+    start: '&8❰ &a&lПервая страница &8❱'
+    last: '&8❰ &a&lПредыдущая страница &8❱'
+    back: '&8❰ &a&lназад &8❱'
+    back-2: '&8❰ &a&lназад (2) &8❱'
+    back-3: '&8❰ &a&lназад (3) &8❱'
+    next: '&8❰ &a&lследующий &8❱'
+    next-2: '&8❰ &a&lследующий (2) &8❱'
+    next-3: '&8❰ &a&lследующий (3) &8❱'
+    search: '&8❰ &e&lПоиск головы &8❱'
+    stats:
+      icon: '&8❰ &a&lСтатистика &8❱'
+      total-heads: '&aВсего голов &8❱ &e'
+      total-pages: '&aВсего страниц &8❱ &e'
+      total-sections: '&aВсего разделов &8❱ &e'
+      current-balance: '&aТекущий баланс &8❱ &e'
+      current-section: '&aТекущий раздел &8❱ &e'
+textmenus:
+  profile:
+    player: игрок
+    completed-challenges: Завершенные испытания
+    total-heads-dropped: Всего голов выпало
+    total-heads-sold: Всего голов продано
+    total-heads-crafted: Всего созданных голов
+    current-level: Текущий уровень
+    xp-until-next-level: XP до следующего уровня
+  blacklist: Черный список
+  whitelist: Белый список
+  blacklistw: Черный список миров
+  whitelistw: Белый список миров
+  info:
+    version: Версия
+    author: автор
+    language: язык
+    contributors: Авторы
+    spigot: SpigotMC ссылка
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: Тип
+    display-name: Показать имя
+    price: Цена
+    interact-name: Имя взаимодействия
+    chance: возможность
+  help:
+    usage: использование
+    description: Описание
+    permission: разрешение
+    further-usages: Дальнейшее использование
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} Это не правильный язык! Доступные языки: &c{languages}'
+    changed-locale: '{header} Здравствуйте! Ваш язык теперь установлен на &cрусский
+      (RU)'
+    changed-locale-other: '{header} Язык &c{player} &7теперь установлен на &c{language}&7!'
   errors:
+    not-a-player: '{header} Вы должны быть игроком для запуска этой команды/подкоманды!'
     cmd-fail: '{header} Не удалось запустить эту команду!'
     disabled: '{header} Эта команда отключена.'
     invalid-args: '{header} Неверные аргументы!'
@@ -99,10 +167,14 @@ commands:
     world-added-wl: '{header} &c{world}&7 добавлен в белый список миров!'
     world-removed-wl: '{header} &c{world}&7 удален из белого списка миров!'
   xp:
-    added-xp: '{header} Добавлено &c{amount} &7XP в &c{player}&7, теперь у них есть {xp}!'
+    added-xp: '{header} Добавлено &c{amount} &7XP в &c{player}&7, теперь у них есть
+      {xp}!'
     current-xp: '{header} Текущая версия &c{player} &7XP: &c{xp}'
-    negative-xp: '{header} Я не думаю, что вы хотите сделать это ... (чтобы разрешить отрицательную XP, перейдите в config.yml > plugin > perks > xp > allow-negative, однако это имеет непредсказуемые результаты!)'
-    removed-xp: '{header} Удалено &c{amount} &7XP у &c{player}&7, теперь у них есть &c{xp}&7!'
+    negative-xp: '{header} Я не думаю, что вы хотите сделать это ... (чтобы разрешить
+      отрицательную XP, перейдите в config.yml > plugin > perks > xp > allow-negative,
+      однако это имеет непредсказуемые результаты!)'
+    removed-xp: '{header} Удалено &c{amount} &7XP у &c{player}&7, теперь у них есть
+      &c{xp}&7!'
     reset-xp: '{header} Сбросить &c{player} &7ХР!'
 descriptions:
   hp:

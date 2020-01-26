@@ -1,9 +1,77 @@
 # HeadsPlus by Thatsmusic99 - Polski (Gurbiel, Mistermychciak)
 # Nie zmieniaj wersji! Jest to używane wewnętrznie we wtyczce do dodawania nowych wiadomości.
-version: 1.0
+language: Polski (PL)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Nagroda: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} wyzwania'
+    close: '&8❰ &c&lZamknij menu &8❱'
+    favourites: '&8❰ &b&lUlubione &8❱'
+    head:
+      price: '&cCena &8❱ &7{price}'
+      favourite: '&cFaworyt!'
+      count: '&7{head-count} głowy'
+    menu: '&8❰ &a&lMenu główne &8❱'
+    start: '&8❰ &a&lPierwsza strona &8❱'
+    last: '&8❰ &a&lOstatnia strona &8❱'
+    back: '&8❰ &a&lWróć &8❱'
+    back-2: '&8❰ &a&lWróć (2) &8❱'
+    back-3: '&8❰ &a&lWróć (3) &8❱'
+    next: '&8❰ &a&lKolejny &8❱'
+    next-2: '&8❰ &a&lKolejny (2) &8❱'
+    next-3: '&8❰ &a&lKolejny (3) &8❱'
+    search: '&8❰ &e&lSzukaj głów &8❱'
+    stats:
+      icon: '&8❰ &a&lStatystyka &8❱'
+      total-heads: '&aŁączna liczba głów &8❱ &e'
+      total-pages: '&aWszystkie strony &8❱ &e'
+      total-sections: '&aSekcje ogółem &8❱ &e'
+      current-balance: '&aCurrent Balance &8❱ &e'
+      current-section: '&aAktualne saldo &8❱ &e'
+textmenus:
+  profile:
+    player: Gracz
+    completed-challenges: Ukończone wyzwania
+    total-heads-dropped: Łączna liczba upuszczonych głów
+    total-heads-sold: Całkowita liczba sprzedanych głów
+    total-heads-crafted: Łączna liczba wytworzonych głów
+    current-level: Aktualny poziom
+    xp-until-next-level: XP do następnego poziomu
+  blacklist: Czarna lista
+  whitelist: Biała lista
+  blacklistw: Czarna lista światów
+  whitelistw: Biała lista światów
+  info:
+    version: Wersja
+    author: Autor
+    language: Język
+    contributors: Współtwórcy
+    spigot: Łącze SpigotMC
+    discord: Serwer Discord
+    github: Github
+  head-info:
+    type: Rodzaj
+    display-name: Wyświetlana nazwa
+    price: Cena
+    interact-name: Nazwa interakcji
+    chance: Szansa
+  help:
+    usage: Stosowanie
+    description: Opis
+    permission: Dozwolenie
+    further-usages: Dalsze zastosowania
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} To nie jest poprawny język! Dostępne języki: &c{languages}'
+    changed-locale: '{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski
+      (PL)'
+    changed-locale-other: '{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!'
   errors:
+    not-a-player: '{header} Musisz być graczem, aby uruchomić to polecenie/podkomendę!'
     cmd-fail: '{header} Wystąpił błąd podczas wykonywania tej komendy!'
     disabled: '{header} Ta komenda jest wyłączona.'
     invalid-args: '{header} Niepoprawne argumenty!'
@@ -53,13 +121,15 @@ commands:
     whitelist-head: '{header} Ta głowa nie znajduje się na białej liście i nie można
       jej używać!'
   head-info:
-    add-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zwiększona o &c{value}&7!'
+    add-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zwiększona
+      o &c{value}&7!'
     no-lore-data: '{header} Nie znaleziono dodatkowych informacji dla tego obiektu!'
     no-mask-data: '{header} Nie znaleziono informacji o masce dla tego obiektu!'
     no-name-data: '{header} Nie znaleziono informacji o nazwie dla tego obiektu!'
     remove-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zminiejszona
       o {value}'
-    set-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zmieniona na &c{value}'
+    set-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zmieniona
+      na &c{value}'
   heads:
     buy-success: '{header} Kupiłeś głowę za &c{price}&7 , zostało ci &c{balance}&7!'
     chat-input: '{header} Napisz, co chcesz wyszukać.'
@@ -106,7 +176,9 @@ commands:
   xp:
     added-xp: '{header} Dodano &c{amount} &7XP do &c{player}&7, teraz mają &c{xp}&7!'
     current-xp: '{header} Obecne doświadczenie &c{player}&7: &c{xp}'
-    negative-xp: '{header} Nie sądzę, że chcesz to zrobić ... (aby zezwolić na ujemne XP, przejdź do config.yml > plugin > perks > xp > allow-negative, jednak ma to nieprzewidywalne wyniki!)'
+    negative-xp: '{header} Nie sądzę, że chcesz to zrobić ... (aby zezwolić na ujemne
+      XP, przejdź do config.yml > plugin > perks > xp > allow-negative, jednak ma
+      to nieprzewidywalne wyniki!)'
     removed-xp: '{header} Usunięto &c{amount} &7XP z &c{player}&7, teraz mają &c{xp}&7!'
     reset-xp: '{header} Zresetuj XP &c{player}&7!'
 descriptions:

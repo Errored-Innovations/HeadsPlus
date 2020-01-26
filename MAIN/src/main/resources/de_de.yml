@@ -1,9 +1,70 @@
 # HeadsPlus by Thatsmusic99 - Deutsch (Niestrat99)
 # Ändern Sie nicht die Version! Dies wird intern im Plugin verwendet, um neue Nachrichten hinzuzufügen.
+language: Deutsch (DE)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Belohnung: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7Herausforderungen: {challenge-count}'
+    close: '&8❰ &c&lMenü schließen &8❱'
+    favourites: '&8❰ &b&lFavoriten &8❱'
+    head:
+      price: '&cPreis &8❱ &7{price}'
+      favourite: '&cFavorit!'
+      count: '&7{head-count} Köpfe'
+    menu: '&8❰ &a&lHauptmenü &8❱'
+    start: '&8❰ &a&lErste Seite &8❱'
+    last: '&8❰ &a&lLetzte Seite &8❱'
+    back: '&8❰ &a&lZurückkehren &8❱'
+    back-2: '&8❰ &a&lZurückkehren (2) &8❱'
+    back-3: '&8❰ &a&lZurückkehren (3) &8❱'
+    search: '&8❰ &e&lKöpfe suchen &8❱'
+    stats:
+      icon: '&8❰ &a&lStatistiken &8❱'
+      total-heads: '&aKöpfe gesamt &8❱ &e'
+      total-pages: '&aAlle Seiten &8❱ &e'
+      total-sections: '&aAbschnitte insgesamt &8❱ &e'
+      current-balance: '&aAktueller Kontostand &8❱ &e'
+      current-section: '&aAktueller Bereich &8❱ &e'
+textmenus:
+  profile:
+    player: Spieler
+    completed-challenges: Herausforderungen abgeschlossen
+    total-heads-dropped: Insgesamt fielen die Köpfe
+    total-heads-sold: Total verkaufte Köpfe
+    total-heads-crafted: Totale Köpfe gefertigt
+    current-level: Aktuelles Level
+    xp-until-next-level: XP bis zum nächsten Level
+  blacklist: Blacklist
+  whitelist: Whitelist
+  blacklistw: Welten-Blacklist
+  whitelistw: Welten-Whitelist
+  info:
+    version: Ausführung
+    author: Autorin
+    language: Sprache
+    contributors: Mitwirkende
+    spigot: SpigotMC Link
+    discord: Discord-Server
+    github: Github
+  head-info:
+    type: Sorte
+    display-name: Anzeigename
+    price: Pries
+    interact-name: Interaktionsname
+    chance: Möglichkeit
+  help:
+    usage: Verwendung
+    description: Beschreibung
+    permission: Genehmigung
+    further-usages: Weitere Verwendung
 version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
   errors:
+    not-a-player: '{header} Sie müssen ein Spieler sein, um diesen Befehl / Unterbefehl
+      auszuführen!'
     cmd-fail: '{header} Nutzung des Kommandos fehlgeschlagen!'
     disabled: '{header} Das Kommando wurde deaktiviert.'
     invalid-args: '{header} Ungültige Argumente!'
@@ -16,7 +77,8 @@ commands:
   addhead:
     head-added: '{header} Kopf für &c{player} &7hinzugefügt!'
     head-adding: '{header} Textur für &c{player} &7nachschlagen...'
-    head-already-added: '{header} Gehen Sie zu &c{player}&7, das bereits in der Datenbank vorhanden ist!'
+    head-already-added: '{header} Gehen Sie zu &c{player}&7, das bereits in der Datenbank
+      vorhanden ist!'
   blacklist:
     bl-a-off: '{header} Die Blacklist ist schon inaktiv!'
     bl-a-on: '{header} Die Blacklist ist schon aktiv!'
@@ -39,18 +101,21 @@ commands:
   challenges:
     already-complete-challenge: '{header} Du hast schon diese Herausforderung abgeschlossen!'
     cant-complete-challenge: '{header} Du kannst diese Herausforderung nicht abschließen!'
-    challenge-complete: '{header} &c{name} &7hat die Herausforderung &c{challenge} &7abgeschlossen!'
+    challenge-complete: '{header} &c{name} &7hat die Herausforderung &c{challenge}
+      &7abgeschlossen!'
     challenge-completed: '&6Abgeschlossen!'
     reward-string: '{header} Belohnung: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Dieses Kommando verarbeitet nur alphanummerische Namen!'
-    blacklist-head: '{header} Dieser Kopf ist auf der Blacklist und kann daher nicht verwendet
-      werden!'
+    blacklist-head: '{header} Dieser Kopf ist auf der Blacklist und kann daher nicht
+      verwendet werden!'
     full-inv: '{header} Dein Inventar ist voll!'
-    head-too-long: '{header} Der Spielername ist zu lang! Bitte benutze einen Spielernamen zwischen 3 und 16 Zeichen.'
-    head-too-short: '{header} Der Spielername ist zu kurz! Bitte benutze einen Spielernamen zwischen 3 und 16 Zeichen.'
-    whitelist-head: '{header} Dieser Kopf ist nicht auf der Whitelist und kann daher nicht benutzt
-      werden!'
+    head-too-long: '{header} Der Spielername ist zu lang! Bitte benutze einen Spielernamen
+      zwischen 3 und 16 Zeichen.'
+    head-too-short: '{header} Der Spielername ist zu kurz! Bitte benutze einen Spielernamen
+      zwischen 3 und 16 Zeichen.'
+    whitelist-head: '{header} Dieser Kopf ist nicht auf der Whitelist und kann daher
+      nicht benutzt werden!'
   headinfo:
     add-value: '{header} &c{value} &7wurde zu &c{entity}&7''s &c{setting} &7hinzugefügt!'
     no-lore-data: '{header} Es gibt keine Wissensdaten über dieses Wesen!'
@@ -67,8 +132,11 @@ commands:
   levels:
     level-up: '{header} &c{name} &7hat Level &c{level} &7erreicht!'
   locale:
+    changed-locale: '{header} Guten Tag! Ihre Sprache ist jetzt auf &cDeutsch (DE)
+      &7eingestellt.'
+    changed-locale-other: '{header} Die Sprache von &c{player} &7ist jetzt auf &c{language}
+      &7eingestellt!'
     invalid-lang: ''
-
   profile:
     cant-view-data: '{header}Du kannst nicht deine eigenen Daten in der Konsole sehen!'
   reload:
@@ -79,8 +147,8 @@ commands:
     false-item: '{header} Das ist kein Kopf!'
     no-heads: '{header} Du hast keine gültigen Köpfe in deinem Inventar!'
     not-enough-heads: '{header} Du hast nicht genug Köpfe!'
-    sell-success: '{header} Du hast erfolgreich einen Kopf/Köpfe für &c{price} &7verkauft und
-            hast jetzt &c{balance}&7!'
+    sell-success: '{header} Du hast erfolgreich einen Kopf/Köpfe für &c{price} &7verkauft
+      und hast jetzt &c{balance}&7!'
   tests:
     running-tests: '{header} Tests ausführen... (dies kann eine Weile dauern)'
     results: '{header} Ergebnisse: {results}'
@@ -102,55 +170,60 @@ commands:
     world-added-wl: '{header} &c{name} &7wurde zur Welten-Whitelist hinzugefügt!'
     world-removed-wl: '{header} &c{name} &7wurde aus der Whitelist entfernt!'
   xp:
-    added-xp: '{header} &c{amount} &7XP zu &c{player} &7hinzugefügt, sie haben jetzt &c{xp}&7!'
+    added-xp: '{header} &c{amount} &7XP zu &c{player} &7hinzugefügt, sie haben jetzt
+      &c{xp}&7!'
     current-xp: '{header} Die aktuellen EP von &c{player}&7: &c{xp}'
-    negative-xp: '{header} Ich glaube nicht, dass du das machen willst ... (um negative XP zuzulassen, gehe in config.yml > plugin > perks > xp > allow-negative, aber das hat unvorhersehbare Ergebnisse!)'
-    removed-xp: '{header} &c{Amount} &7XP von &c{player} &7entfernt, sie haben jetzt &c{xp}&7!'
+    negative-xp: '{header} Ich glaube nicht, dass du das machen willst ... (um negative
+      XP zuzulassen, gehe in config.yml > plugin > perks > xp > allow-negative, aber
+      das hat unvorhersehbare Ergebnisse!)'
+    removed-xp: '{header} &c{Amount} &7XP von &c{player} &7entfernt, sie haben jetzt
+      &c{xp}&7!'
     reset-xp: '{header} Setze die XP von &c{player} &7zurück!'
 descriptions:
   hp:
-    blacklist: 'Aktiviert und deaktiviert die Blacklist.'
-    blacklistadd: 'Fügt einen Kopf zur Blacklist hinzu.'
-    blacklistdel: 'Entfernt einen Kopf aus der Blacklist.'
-    blacklistl: 'Zeigt eine Liste von allen Köpfen auf der Blacklist.'
-    blacklistw: 'Aktiviert und deaktiviert die Welten-Blacklist.'
-    blacklistwadd: 'Fügt ein Craftingrezept zur Welten-Blacklist hinzu.'
-    blacklistwdel: 'Entfernt ein Craftingrezept aus der Welten-Blacklist.'
-    blacklistwl: 'Zeigt eine Liste von allen Welten auf der Welten-Blacklist.'
-    complete: 'Schließt eine Herausforderung ab.'
-    conjure: 'Erhält einen Kopf eines bestimmten Typs.'
-    debug: 'Lagert eine Debug-datei.'
-    headinfo: 'Zeigt/modifiziert Informationen über einen gewissen Kopf eines Wesens'
-    help: 'Zeigt das Hilfe-menü an.'
-    info: 'Zeigt Informationen zum Plugin.'
-    profile: 'Zeigt dein Profil für das Plugin an.'
-    reload: 'Lädt Konfigurationen neu.'
-    tests: 'Führen Sie Tests für Mob Drop-Raten durch.'
-    whitelist: 'Aktiviert und deaktiviert die Whitelist.'
-    whitelistadd: 'Fügt einen Kopf zur Whitelist hinzu.'
-    whitelistdel: 'Entfernt einen Kopf aus der Whitelist.'
-    whitelistl: 'Zeigt eine Liste von allen Köpfen auf der Whitelist.'
-    whitelistw: 'Aktiviert und deaktiviert die Welten-Whitelist.'
-    whitelistwadd: 'Fügt ein Craftingrezept zur Welten-Whitelist hinzu.'
-    whitelistwdel: 'Entfernt ein Craftingrezept aus der Welten-Whitelist.'
-    whitelistwl: 'Zeigt eine Liste von allen Welten auf der Welten-Whitelist.'
-    xp: 'Zeigen Sie die XP eines Players an oder ändern Sie sie.'
-  addhead: 'Voeg een spelerskop toe aan het hoofdmenu.'
-  head: 'Erzeugt einen Kopf.'
-  heads: 'Zeigt eine Auswahl an Köpfen an.'
-  hpc: 'Zeigt schaffbare Herausforderungen an.'
-  hplb: 'Zeigt eine Rangliste von Köpfen an.'
-  myhead: 'Erzeugt einen Kopf von deinem Spieler.'
-  sellhead: 'Verkauft Köpfe, entweder von Wesen, Menge oder in deiner Hand.'
+    blacklist: Aktiviert und deaktiviert die Blacklist.
+    blacklistadd: Fügt einen Kopf zur Blacklist hinzu.
+    blacklistdel: Entfernt einen Kopf aus der Blacklist.
+    blacklistl: Zeigt eine Liste von allen Köpfen auf der Blacklist.
+    blacklistw: Aktiviert und deaktiviert die Welten-Blacklist.
+    blacklistwadd: Fügt ein Craftingrezept zur Welten-Blacklist hinzu.
+    blacklistwdel: Entfernt ein Craftingrezept aus der Welten-Blacklist.
+    blacklistwl: Zeigt eine Liste von allen Welten auf der Welten-Blacklist.
+    complete: Schließt eine Herausforderung ab.
+    conjure: Erhält einen Kopf eines bestimmten Typs.
+    debug: Lagert eine Debug-datei.
+    headinfo: Zeigt/modifiziert Informationen über einen gewissen Kopf eines Wesens
+    help: Zeigt das Hilfe-menü an.
+    info: Zeigt Informationen zum Plugin.
+    profile: Zeigt dein Profil für das Plugin an.
+    reload: Lädt Konfigurationen neu.
+    tests: Führen Sie Tests für Mob Drop-Raten durch.
+    whitelist: Aktiviert und deaktiviert die Whitelist.
+    whitelistadd: Fügt einen Kopf zur Whitelist hinzu.
+    whitelistdel: Entfernt einen Kopf aus der Whitelist.
+    whitelistl: Zeigt eine Liste von allen Köpfen auf der Whitelist.
+    whitelistw: Aktiviert und deaktiviert die Welten-Whitelist.
+    whitelistwadd: Fügt ein Craftingrezept zur Welten-Whitelist hinzu.
+    whitelistwdel: Entfernt ein Craftingrezept aus der Welten-Whitelist.
+    whitelistwl: Zeigt eine Liste von allen Welten auf der Welten-Whitelist.
+    xp: Zeigen Sie die XP eines Players an oder ändern Sie sie.
+  addhead: Voeg een spelerskop toe aan het hoofdmenu.
+  head: Erzeugt einen Kopf.
+  heads: Zeigt eine Auswahl an Köpfen an.
+  hpc: Zeigt schaffbare Herausforderungen an.
+  hplb: Zeigt eine Rangliste von Köpfen an.
+  myhead: Erzeugt einen Kopf von deinem Spieler.
+  sellhead: Verkauft Köpfe, entweder von Wesen, Menge oder in deiner Hand.
 event:
   block-place-denied: '{header} Du kannst keine verkaufbaren Köpfe platzieren!'
   head-interact-message: '{header} Das ist &c{name}&7''s Kopf!'
   head-mhf-interact-message: '{header} Das ist der &c{name} &7Kopf!'
   head-mhf-interact-message-2: '{header} Das ist der &c{name} &7Kopf!'
-  lost-money: '{header} Weil Sie von &c{player} &7getötet wurden, haben Sie &c{price} &7verloren!'
+  lost-money: '{header} Weil Sie von &c{player} &7getötet wurden, haben Sie &c{price}
+    &7verloren!'
 startup:
   faulty-theme: '{header} Ein fehlerhaftes Thema wurde eingefügt! Es werden keine
-      Themenwechsel vorgenommen.'
+    Themenwechsel vorgenommen.'
   no-vault: '{header} Vault wurde nicht gefunden! Köpfe können nicht verkauft und
     Herausforderungsbelohnungen können keine Gruppen hinzufügen/entfernen.'
   no-vault-2: '{header} Vault konnte beim Start nicht gefunden werden! Gruppen können
@@ -166,8 +239,6 @@ update:
   plugin-up-to-date: '{header} Das Plugin ist auf dem neuesten Stand!'
   update-found: '{header} Ein Update für HeadsPlus wurde gefunden! Schwebe über diese
     Nachricht für mehr Informationen.'
-
-
 
 
 

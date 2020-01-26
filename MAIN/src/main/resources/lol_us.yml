@@ -1,9 +1,76 @@
 # HeadsPlus by Thatsmusic99 - HAHAHAHHAKITTY (Thatsmusic99)
 # NO CHANGIN VURSHUN!!! is bad :c
-version: 1.0
+language: LOLCAT (Kingdom of Cats)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Treetz: &a{reward}'
+      xp: '&6ex-pee: &a{xp}'
+      count: '&7{challenge-count} chaleng''s'
+    close: '&8❰ &c&lS H U T &8❱'
+    favourites: '&8❰ &b&lkewl hedz :3 &8❱'
+    head:
+      price: '&cMONEYS &8❱ &7{price}'
+      favourite: '&cfav tbh'
+      count: '&7{head-count} hedz'
+    menu: '&8❰ &a&lmane thingie &8❱'
+    start: '&8❰ &a&l1st &8❱'
+    last: '&8❰ &a&lhaha lozr page &8❱'
+    back: '&8❰ &a&lrevrs!! &8❱'
+    back-2: '&8❰ &a&lrevrs!!! (2) &8❱'
+    back-3: '&8❰ &a&lrevrs!!!! (3) &8❱'
+    next: '&8❰ &a&lNYOOOM &8❱'
+    next-2: '&8❰ &a&lNYOOOOM (2) &8❱'
+    next-3: '&8❰ &a&lNYOOOOOM (3) &8❱'
+    search: '&8❰ &e&lfind dis &8❱'
+    stats:
+      icon: '&8❰ &a&lnumbrz &8❱'
+      total-heads: '&alotsa heds &8❱ &e'
+      total-pages: '&apagez &8❱ &e'
+      total-sections: '&asecshunz &8❱ &e'
+      current-balance: '&abalance rn &8❱ &e'
+      current-section: '&asection rn &8❱ &e'
+textmenus:
+  profile:
+    player: Playrr
+    completed-challenges: Complet'd Chalengs
+    total-heads-dropped: heds droppd
+    total-heads-sold: heds selld
+    total-heads-crafted: heds maid
+    current-level: level rn
+    xp-until-next-level: XP til de big one
+  blacklist: Naughty list
+  whitelist: Nice list
+  blacklistw: Woldz naughty list
+  whitelistw: Woldz nice list
+  info:
+    version: Vershun
+    author: kool kat
+    language: langwaaj
+    contributors: kool kats
+    spigot: SpigotMC linkz
+    discord: Discord serv
+    github: Gitty
+  head-info:
+    type: Tip
+    display-name: publicz nam
+    price: Moneyz
+    interact-name: clicky name
+    chance: maybe??
+  help:
+    usage: how 2
+    description: uhh what
+    permission: permy
+    further-usages: how 2 but worse
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} nU such langwaaj :( kewl langs: &c{languages}'
+    changed-locale: '{header} AAHHAHAHAHAHHA, ur langwaaj iz nao de bestz! &c(LOLCAT)'
+    changed-locale-other: '{header} &c{player}&7''z langwaaj iz nao de kewl &c{language}&7!'
   errors:
+    not-a-player: '{header} u nu playah!'
     cmd-fail: '{header} uh oh cmd thing faled'
     disabled: '{header} Dis cmd is ded!'
     invalid-args: '{header} Badz cmd stuff!'
@@ -94,10 +161,13 @@ commands:
     world-added-wl: '{header} &c{world}&7 iz nao on teh nice list!'
     world-removed-wl: '{header} &c{world} &7is naw longer on teh nice list!'
   xp:
-    added-xp: '{header} Add''d &c{amount} &7XP-stuffz 2 &c{player}&7, they nao haz &c{xp}&7!'
+    added-xp: '{header} Add''d &c{amount} &7XP-stuffz 2 &c{player}&7, they nao haz
+      &c{xp}&7!'
     current-xp: '{header} &c{player}&7''s XP-stuffz rn: &c{xp}'
-    negative-xp: '{header} uhhhhhhhhhhh nu (2 alow - XP, go 2 config.yml > plugin > perks > xp > allow-negative, BUT DANGURRRR!!!)'
-    removed-xp: '{header} Stol''d &c{amount} &7XP-stuffz frm &c{player}&7, they nao haz &c{xp}&7!'
+    negative-xp: '{header} uhhhhhhhhhhh nu (2 alow - XP, go 2 config.yml > plugin
+      > perks > xp > allow-negative, BUT DANGURRRR!!!)'
+    removed-xp: '{header} Stol''d &c{amount} &7XP-stuffz frm &c{player}&7, they nao
+      haz &c{xp}&7!'
     reset-xp: '{header} Alt+F4''d &c{player}&7''s XP!'
 descriptions:
   hp:

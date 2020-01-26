@@ -1,9 +1,78 @@
 # HeadsPlus by Thatsmusic99 - Español (AlansS53)
 # ¡No cambies la versión! Esto se usa internamente en el complemento para agregar nuevos mensajes.
-version: 1.0
+language: Español (ES)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Recompensa: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} desafíos'
+    close: '&8❰ &c&lCerrar menú &8❱'
+    favourites: '&8❰ &b&lFavoritas &8❱'
+    head:
+      price: '&cPrecio &8❱ &7{price}'
+      favourite: '&cFavorita!'
+      count: '&7{head-count} cabezas'
+    menu: '&8❰ &a&lMenú principal &8❱'
+    start: '&8❰ &a&lPrimera página &8❱'
+    last: '&8❰ &a&lÚltima página &8❱'
+    back: '&8❰ &a&lRetroceder &8❱'
+    back-2: '&8❰ &a&lRetroceder 2 &8❱'
+    back-3: '&8❰ &a&lRetroceder 3 &8❱'
+    next: '&8❰ &a&lSiguiente &8❱'
+    next-2: '&8❰ &a&lSiguiente (2) &8❱'
+    next-3: '&8❰ &a&lSiguiente (3) &8❱'
+    search: '&8❰ &e&lBuscar cabezas &8❱'
+    stats:
+      icon: '&8❰ &a&lEstadísticas &8❱'
+      total-heads: '&aCabezas totales &8❱ &e'
+      total-pages: '&aPaginas totales &8❱ &e'
+      total-sections: '&aSecciones totales &8❱ &e'
+      current-balance: '&aSaldo actual &8❱ &e'
+      current-section: '&aSección actual &8❱ &e'
+textmenus:
+  profile:
+    player: Jugador
+    completed-challenges: Desafíos completados
+    total-heads-dropped: Total de cabezas caídas
+    total-heads-sold: Total de cabezas vendidas
+    total-heads-crafted: Total de cabezas hechas a mano
+    current-level: Nivel actual
+    xp-until-next-level: XP hasta el siguiente nivel
+  blacklist: Lista-negra
+  whitelist: Lista-blanca
+  blacklistw: Lista-negra de mundos
+  whitelistw: Lista-blanca de mundos
+  info:
+    version: Versión
+    author: Autora
+    language: Idioma
+    contributors: Colaboradores
+    spigot: Enlace SpigotMC
+    discord: Servidor Discord
+    github: Github
+  head-info:
+    type: Tipo
+    display-name: Nombre para mostrar
+    price: Precio
+    interact-name: Nombre de Interact
+    chance: Posibilidad
+  help:
+    usage: Uso
+    description: Descripción
+    permission: Permiso
+    further-usages: Usos adicionales
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} ¡Ese no es un idioma válido! Idiomas disponibles: &c{languages}'
+    changed-locale: '{header} ¡Hola! Su idioma ahora está configurado en &cEspañol
+      (ES)'
+    changed-locale-other: '{header} El idioma de &c{player} &7ahora está configurado
+      en &c{language}&7!'
   errors:
+    not-a-player: '{header} ¡Debes ser un jugador para ejecutar este comando/subcomando!'
     cmd-fail: '{header} Error al ejecutar ese comando.'
     disabled: '{header} Ese comando está desactivado.'
     invalid-args: '{header} Argumentos inválidos.'
@@ -33,7 +102,8 @@ commands:
     world-a-add: '{header} Ese mundo ya esta añadido.'
     world-added-bl: '{header} &c{name} &7ha sido añadido a la lista de mundos bloqueados.'
     world-a-removed-bl: '{header} Ese mundo no está en la lista de bloqueados.'
-    world-removed-bl: '{header} &c{name} &7ha sido eliminado de la lista de mundos bloqueados'
+    world-removed-bl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      bloqueados'
   challenges:
     already-complete-challenge: '{header} Ya has completado ese reto.'
     cant-complete-challenge: '{header} No puedes completar ese reto.'
@@ -58,7 +128,8 @@ commands:
     remove-value: '{header} ¡&c{value} &7se ha eliminado de &c{entity} {setting}&7!'
     set-value: '{header} ¡&c{entity} {setting} &7ha sido cambiado a &c{value}&7!'
   heads:
-    buy-success: '{header} Has comprado una cabeza por &c{price} &7y ahora tienes &c{balance}'
+    buy-success: '{header} Has comprado una cabeza por &c{price} &7y ahora tienes
+      &c{balance}'
     chat-input: '{header} Escriba el término que desea buscar.'
     not-enough-money: '{header} ¡No tienes suficiente dinero!'
   leaderboards:
@@ -94,14 +165,19 @@ commands:
     wlw-a-on: '{header} La lista de mundos permitidos ya está activada.'
     wlw-off: '{header} ¡La lista de mundos permitidos ha sido desactivada!'
     wlw-on: '{header} ¡La lista de mundos permitidos ha sido activada!'
-    world-a-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos permitidos.'
+    world-a-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      permitidos.'
     world-added-wl: '{header} &c{name} &7ha sido añadido a la lista de mundos permitidos.'
-    world-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos permitidos.'
+    world-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      permitidos.'
   xp:
     added-xp: '{header} ¡Se agregó &c{amount} &7XP a &c{player}&7, ahora tienen &c{xp}&7!'
     current-xp: '{header} XP actual de &c{player}&7: &c{xp}'
-    negative-xp: '{header} No creo que quieras hacer eso... (para permitir XP negativo, ve a config.yml > plugin > perks > xp > allow-negative, ¡sin embargo, esto tiene resultados impredecibles!)'
-    removed-xp: '{header} ¡Se eliminaron &c{amount} 77XP de &c{player}&7, ahora tienen &c{xp}&7!'
+    negative-xp: '{header} No creo que quieras hacer eso... (para permitir XP negativo,
+      ve a config.yml > plugin > perks > xp > allow-negative, ¡sin embargo, esto tiene
+      resultados impredecibles!)'
+    removed-xp: '{header} ¡Se eliminaron &c{amount} 77XP de &c{player}&7, ahora tienen
+      &c{xp}&7!'
     reset-xp: '{header} ¡Restablece la XP de &c{player}&7!'
 descriptions:
   hp:

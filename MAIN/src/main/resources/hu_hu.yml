@@ -1,9 +1,76 @@
 # HeadsPlus by Thatsmusic99 - Magyar (Toldi/Montlikadani)
 # Ne változtassa meg a verziót! Ezt a bővítményben belsőleg használják új üzenetek hozzáadására.
-version: 1.0
+language: Magyar (MA)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Jutalom: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} kihívások'
+    close: '&8❰ &c&lBezárás menü &8❱'
+    favourites: '&8❰ &b&lÉrdekes &8❱'
+    head:
+      price: '&cÁr &8❱ &7{price}'
+      favourite: '&cKedvenc!'
+      count: '&7{head-count} fejek'
+    menu: '&8❰ &a&lFőmenü &8❱'
+    start: '&8❰ &a&lElső oldal &8❱'
+    last: '&8❰ &a&lUtolsó oldal &8❱'
+    back: '&8❰ &a&lMenjen vissza &8❱'
+    back-2: '&8❰ &a&lMenjen vissza (2) &8❱'
+    back-3: '&8❰ &a&lMenjen vissza (3) &8❱'
+    next: '&8❰ &a&lKövetkező &8❱'
+    next-2: '&8❰ &a&lKövetkező (2) &8❱'
+    next-3: '&8❰ &a&lKövetkező (3) &8❱'
+    search: '&8❰ &e&lKeresési fejek &8❱'
+    stats:
+      icon: '&8❰ &a&lStatisztikák &8❱'
+      total-heads: '&aÖsszes fej &8❱ &e'
+      total-pages: '&aÖsszes oldal &8❱ &e'
+      total-sections: '&aÖsszes szakasz &8❱ &e'
+      current-balance: '&aAktuális egyenleg &8❱ &e'
+      current-section: '&aAktuális szakasz &8❱ &e'
+textmenus:
+  profile:
+    player: Lejátszó
+    completed-challenges: Befejezett kihívások
+    total-heads-dropped: Az összes fej csökkent
+    total-heads-sold: Eladott összes fej
+    total-heads-crafted: Összes készített fej
+    current-level: Jelenlegi szint
+    xp-until-next-level: XP a következő szintre
+  blacklist: Feketelista
+  whitelist: Fehérlista
+  blacklistw: Világ Feketelista
+  whitelistw: Világ Fehérlista
+  info:
+    version: Változat
+    author: Szerző
+    language: Nyelv
+    contributors: Közreműködők
+    spigot: SpigotMC link
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: Típus
+    display-name: Megjelenítendő név
+    price: Ár
+    interact-name: Interact név
+    chance: Véletlen
+  help:
+    usage: Használat
+    description: Leírás
+    permission: Permission
+    further-usages: További felhasználások
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} Ez nem érvényes nyelv! Elérhető nyelvek: &c{languages}'
+    changed-locale: '{header} Helló! Az Ön nyelve most &cmagyarra &7van állítva &c(MA)'
+    changed-locale-other: '{header} A (z) &c{player} &7nyelve most &c{language} &7lett!'
   errors:
+    not-a-player: '{header} A parancs/alparancs futtatásához játékosnak kell lennie!'
     cmd-fail: '{header} Nem sikerült futtatni ezt a parancsot!'
     disabled: '{header} Ez a parancs le van tiltva.'
     invalid-args: '{header} Érvénytelen argumentumok!'
@@ -97,10 +164,14 @@ commands:
     world-added-wl: '{header} &c{world}&7 hozzá lett adva a világ a fehérlistájához!'
     world-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
   xp:
-    added-xp: '{header} A (z) &c{amount} &7XP-t hozzáadta a (z) &c{player}&7, most már van &c{xp}&7!'
+    added-xp: '{header} A (z) &c{amount} &7XP-t hozzáadta a (z) &c{player}&7, most
+      már van &c{xp}&7!'
     current-xp: '{header} &c{player} &7jelenlegi XP: &c{xp}'
-    negative-xp: '{header} Nem hiszem, hogy ezt akarsz tenni ... (A negatív XP engedélyezéséhez menj a config.yml > plugin > perks > xp > allow-negative elemre, ennek azonban kiszámíthatatlan eredményei vannak!)'
-    removed-xp: '{header} Eltávolítottuk a (z) &c{amount} &7XP-t a (z) &c{player}&7, mostantól rendelkeznek &c{xp}&7 -nel!'
+    negative-xp: '{header} Nem hiszem, hogy ezt akarsz tenni ... (A negatív XP engedélyezéséhez
+      menj a config.yml > plugin > perks > xp > allow-negative elemre, ennek azonban
+      kiszámíthatatlan eredményei vannak!)'
+    removed-xp: '{header} Eltávolítottuk a (z) &c{amount} &7XP-t a (z) &c{player}&7,
+      mostantól rendelkeznek &c{xp}&7 -nel!'
     reset-xp: '{header} Állítsa vissza a (z) &c{player} &7XP operációs rendszerét!'
 descriptions:
   hp:

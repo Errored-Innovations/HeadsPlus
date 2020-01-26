@@ -1,9 +1,77 @@
 # HeadsPlus by Thatsmusic99 - Romana (DariusTK)
 # Nu schimbati versiunea! Acesta este folosit intern în plugin pentru a adauga mesaje noi.
-version: 1.0
+language: Romana (RO)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Recompensa: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} provocari'
+    close: '&8❰ &c&lInchideti meniul &8❱'
+    favourites: '&8❰ &b&lFavorite &8❱'
+    head:
+      price: '&cPret &8❱ &7{price}'
+      favourite: '&cFavorita!'
+      count: '&7{head-count} capete'
+    menu: '&8❰ &a&lMeniu principal &8❱'
+    start: '&8❰ &a&lPrima pagina &8❱'
+    last: '&8❰ &a&lUltima pagina &8❱'
+    back: '&8❰ &a&lReveni &8❱'
+    back-2: '&8❰ &a&lReveni (2) &8❱'
+    back-3: '&8❰ &a&lReveni (3) &8❱'
+    next: '&8❰ &a&lUrmator &8❱'
+    next-2: '&8❰ &a&lUrmator (2) &8❱'
+    next-3: '&8❰ &a&lUrmator (3) &8❱'
+    search: '&8❰ &e&lCapete de cautare &8❱'
+    stats:
+      icon: '&8❰ &a&lStatistici &8❱'
+      total-heads: '&aCapete totale &8❱ &e'
+      total-pages: '&aTotal pagini &8❱ &e'
+      total-sections: '&aSectiuni totale &8❱ &e'
+      current-balance: '&aSold curent &8❱ &e'
+      current-section: '&aSecțiunea actuală &8❱ &e'
+textmenus:
+  profile:
+    player: Jucator
+    completed-challenges: Provocari finalizate
+    total-heads-dropped: Total capete aruncate
+    total-heads-sold: Total capete vandute
+    total-heads-crafted: Total capete artizanale
+    current-level: Nivelul actual
+    xp-until-next-level: XP pana la nivelul urmator
+  blacklist: Lista neagra
+  whitelist: Lista alba
+  blacklistw: Lista neagra lumilor
+  whitelistw: Lista alba lumilor
+  info:
+    version: Versiune
+    author: Autor
+    language: Limba
+    contributors: Contribuabili
+    spigot: SpigotMC link
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: Categorie
+    display-name: Numele afisat
+    price: Pret
+    interact-name: Numele interactiunii
+    chance: Sansa
+  help:
+    usage: Folosire
+    description: Descriere
+    permission: Permisiune
+    further-usages: Utilizari ulterioare
+version: 1.1
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  locale:
+    invalid-lang: '{header} Acesta nu este un limbaj valabil! Limbi disponibile: &c{languages}'
+    changed-locale: '{header} Salut! Limba dvs. este acum setata pe limba &cRomana
+      (RO)'
+    changed-locale-other: '{header} Limba &c{player} &7este acum setata pe &c{language}&7!'
   errors:
+    not-a-player: '{header} Trebuie sa fiți un jucator pentru a rula aceasta comanda/subcomanda!'
     cmd-fail: '{header} Eroare la rularea acestei comenzi!'
     disabled: '{header} Aceasta comanda este dezactivata.'
     invalid-args: '{header} Argumente invalide!'
@@ -16,7 +84,8 @@ commands:
   addhead:
     head-added: '{header} S-a adăugat către &c{player}&7!'
     head-adding: '{header} Căutați textură pentru a adăuga &c{player}&7...'
-    head-already-added: '{header} Îndreptați-vă spre &c{player} &7deja în baza de date!'
+    head-already-added: '{header} Îndreptați-vă spre &c{player} &7deja în baza de
+      date!'
   blacklist:
     bl-a-off: '{header} Lista neagra este deja dezactivata!'
     bl-a-on: '{header} Lista neagra este deja activata!'
@@ -54,7 +123,8 @@ commands:
     no-lore-data: '{header} Nu exista date de lore pentru aceasta entitate!'
     no-mask-data: '{header} Nu exista date de masca pentru aceasta entitate!'
     no-name-data: '{header} Nu exista date de nume pentru aceasta entitate!'
-    remove-value: '{header} &c{value} &7a fost eliminat din setarea &c{setting} &7a &c{entity}&7!'
+    remove-value: '{header} &c{value} &7a fost eliminat din setarea &c{setting} &7a
+      &c{entity}&7!'
     set-value: '{header} &c{entity} {setting} &7a fost modificată la &c{value}&7!'
   heads:
     buy-success: '{header} Ai cumparat cu succes acest cap pentru &c{price}&7 iar
@@ -100,7 +170,9 @@ commands:
   xp:
     added-xp: '{header} Adăugate &c{amount} &7XP la &c{player}&7, acum au &c{xp}&7!'
     current-xp: '{header} XP-ul actual al &c{player}&7: &c{xp}'
-    negative-xp: '{header} I don''t think you want to do that... (to allow negative XP, go into config.yml > plugin > perks > xp > allow-negative, however this has unpredictable results!)'
+    negative-xp: '{header} I don''t think you want to do that... (to allow negative
+      XP, go into config.yml > plugin > perks > xp > allow-negative, however this
+      has unpredictable results!)'
     removed-xp: '{header} Sters {amount} XP de la {player}, acum au {xp}!'
     reset-xp: '{header} Resetati XP-ul &c{player}&7!'
 descriptions:
