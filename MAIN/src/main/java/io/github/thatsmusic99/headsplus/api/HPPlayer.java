@@ -54,7 +54,6 @@ public class HPPlayer {
         }
         if (hp.getConfiguration().getConfig().getBoolean("smart-locale")) {
             String loc = scores.getLocale(p.getUniqueId().toString());
-            System.out.println("1: " + loc);
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
                 cachedLocale = loc.split(":")[0];
                 localeForced = Boolean.valueOf(loc.split(":")[1]);
