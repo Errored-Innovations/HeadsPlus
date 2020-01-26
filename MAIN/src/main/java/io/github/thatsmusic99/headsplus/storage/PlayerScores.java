@@ -52,6 +52,24 @@ public class PlayerScores implements JSONFile {
         json.put(uuid, o1);
     }
 
+    public String getLocale(String uuid) {
+        JSONObject o1 = (JSONObject) json.get(uuid);
+        if (o1 == null) {
+            o1 = new JSONObject();
+        }
+        return String.valueOf(o1.get("locale"));
+    }
+
+    public void setLocale(String uuid, String locale, boolean auto) {
+        JSONObject o1 = (JSONObject) json.get(uuid);
+        if (o1 == null) {
+            o1 = new JSONObject();
+        }
+        System.out.println(locale + ":" + auto);
+        o1.put("locale", locale + ":" + auto);
+        json.put(uuid, o1);
+    }
+
     public void addXp(String uuid, int xp) {
         int exp = getXp(uuid);
         exp += xp;

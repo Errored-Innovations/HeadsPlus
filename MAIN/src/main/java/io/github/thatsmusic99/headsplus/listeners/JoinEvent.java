@@ -58,14 +58,7 @@ public class JoinEvent implements Listener {
             }
             hp.getHeadsXConfig().grabProfile(uuid);
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (hp.getConfig().getBoolean("smart-locale")) {
-                    hp.getMessagesConfig().setPlayerLocale(e.getPlayer());
-                }
-            }
-        }.runTaskLaterAsynchronously(hp, 100);
+        HPPlayer.getHPPlayer(e.getPlayer());
         if (!reloaded) {
             new BukkitRunnable() {
                 @Override

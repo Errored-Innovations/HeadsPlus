@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
-import mkremins.fanciful.FancyMessage;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -17,12 +16,14 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.*;
 
 public class HeadsPlusConfigTextMenu extends ConfigSettings {
+
+    private static HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+
 
     public HeadsPlusConfigTextMenu() {
         this.conName = "textmenus";
@@ -38,31 +39,31 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         getConfig().addDefault("help.lines-per-page", 8);
         getConfig().addDefault("help.command-help.header", "{default}");
         getConfig().addDefault("help.command-help.layout", new ArrayList<>(Arrays.asList("{header}",
-                "&cUsage &8» &7{usage}",
-                "&cDescription &8» &7{description}",
-                "&cPermission &8» &7{permission}",
-                "&cFurther usages &8» &7{further-usage}")));
+                "&c{msg_textmenus.help.usage} &8» &7{usage}",
+                "&c{msg_textmenus.help.description} &8» &7{description}",
+                "&c{msg_textmenus.help.permission} &8» &7{permission}",
+                "&c{msg_textmenus.help.further-usages} &8» &7{further-usage}")));
         getConfig().addDefault("head-info.header", "{default}");
         getConfig().addDefault("head-info.normal-layout", new ArrayList<>(Arrays.asList("{header}",
-                "&cType &8» &7{type}",
-                "&cDisplay name &8» &7{display-name}",
-                "&cPrice &8» &7{price}",
-                "&cInteract name &8» &7{interact-name}",
-                "&cChance &8» &7{chance}")));
+                "&c{msg_textmenus.head-info.type} &8» &7{type}",
+                "&c{msg_textmenus.head-info.display-name} &8» &7{display-name}",
+                "&c{msg_textmenus.head-info.price} &8» &7{price}",
+                "&c{msg_textmenus.head-info.interact-name} &8» &7{interact-name}",
+                "&c{msg_textmenus.head-info.chance} &8» &7{chance}")));
         getConfig().addDefault("head-info.mask-info.header", "{default}");
-        getConfig().addDefault("head-info.mask-info.first-line", "&cType &8» &7{type}");
+        getConfig().addDefault("head-info.mask-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
         getConfig().addDefault("head-info.mask-info.for-each-line", "&c{effect} &8» &7({amplifier})");
         getConfig().addDefault("head-info.mask-info.lines-per-page", 8);
         getConfig().addDefault("head-info.lore-info.header", "{default}");
-        getConfig().addDefault("head-info.lore-info.first-line", "&cType &8» &7{type}");
+        getConfig().addDefault("head-info.lore-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
         getConfig().addDefault("head-info.lore-info.for-each-line", "&8» &7{lore}");
         getConfig().addDefault("head-info.lore-info.lines-per-page", 8);
         getConfig().addDefault("head-info.name-info.colored.header", "{default}");
-        getConfig().addDefault("head-info.name-info.colored.first-line", "&cType &8» &7{type}");
+        getConfig().addDefault("head-info.name-info.colored.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
         getConfig().addDefault("head-info.name-info.colored.for-each-line", "&c{name} &8» &7({color})");
         getConfig().addDefault("head-info.name-info.colored.lines-per-page", 8);
         getConfig().addDefault("head-info.name-info.default.header", "{default}");
-        getConfig().addDefault("head-info.name-info.default.first-line", "&cType &8» &7{type}");
+        getConfig().addDefault("head-info.name-info.default.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
         getConfig().addDefault("head-info.name-info.default.for-each-line", "&8» &7{name}");
         getConfig().addDefault("head-info.name-info.default.lines-per-page", 8);
         getConfig().addDefault("profile.header", "{default}");
@@ -70,11 +71,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 "&c{msg_textmenus.profile.player} &8» &7{player}",
                 "&cXP &8» &7{xp}",
                 "&c{msg_textmenus.profile.completed-challenges} &8» &7{completed-challenges}",
-                "&cTotal heads dropped &8» &7{hunter-counter}",
-                "&cTotal heads sold &8» &7{sellhead-counter}",
-                "&cTotal heads crafted &8» &7{crafting-counter}",
-                "&cCurrent level &8» &7{level}",
-                "&cXP until next level &8» &7{next-level}")));
+                "&c{msg_textmenus.profile.total-heads-dropped} &8» &7{hunter-counter}",
+                "&c{msg_textmenus.profile.total-heads-sold} &8» &7{sellhead-counter}",
+                "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
+                "&c{msg_textmenus.profile.current-level} &8» &7{level}",
+                "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
         getConfig().addDefault("blacklist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lBlacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("blacklist.default.for-each-line", "&8» &7{name}");
         getConfig().addDefault("blacklist.default.lines-per-page", 8);
@@ -92,20 +93,23 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         getConfig().addDefault("leaderboard.lines-per-page", 8);
         getConfig().addDefault("info.header", "{default}");
         getConfig().addDefault("info.layout", new ArrayList<>(Arrays.asList("{header}",
-                "&cVersion &8» &7{version}",
-                "&cAuthor &8» &7{author}",
-                "&cLanguage &8» &7{locale}",
-                "&cContributors &8» &7{contributors}")));
+                "&c{msg_textmenus.info.version} &8» &7{version}",
+                "&c{msg_textmenus.info.author} &8» &7{author}",
+                "&c(msg_textmenus.info.language} &8» &7{locale}",
+                "&c{msg_textmenus.info.contributors} &8» &7{contributors}",
+                "&c{msg_textmenus.info.spigot} &8» &7https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/",
+                "&c{msg_textmenus.info.discord} &8» &7https://discord.gg/nbT7wC2",
+                "&c{msg_textmenus.info.github} &8» &7https://github.com/Thatsmusic99/HeadsPlus")));
         getConfig().options().copyDefaults(true);
         save();
     }
 
     private static String translateColors(String s) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        return ChatColor.translateAlternateColorCodes('&', translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
+        return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
                 .replaceAll("\\{2}", hp.getThemeColour(2).toString())
                 .replaceAll("\\{3}", hp.getThemeColour(3).toString())
-                .replaceAll("\\{4}", hp.getThemeColour(4).toString()));
+                .replaceAll("\\{4}", hp.getThemeColour(4).toString())));
     }
 
     private static String translateHeader(String s) {
