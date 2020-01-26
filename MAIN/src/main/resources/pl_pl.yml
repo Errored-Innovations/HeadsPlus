@@ -93,7 +93,7 @@ commands:
     head-removed-wl: '{header} Głowa użytkownika &c{player}&7 została usunięta z białej
       listy!'
     wl-a-off: '{header} Biała lista jest już wyłączona!'
-    wl-a-on: '{header} Czarna lista jest już włączona!'
+    wl-a-on: '{header} Biała lista jest już włączona!'
     wl-off: '{header} Biała lista została wyłączona!'
     wl-on: '{header} Biała lista została włączona!'
     wlw-a-off: '{header} Biała lista światów jest już wyłączona!'
