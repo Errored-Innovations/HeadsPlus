@@ -299,7 +299,7 @@ public abstract class HeadInventory {
                             lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(s, p)));
                         }
                     } else {
-                        lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(icon.getLore().get(z), p)).replaceAll("\\{challenges}", String.valueOf(section.getChallenges().size())));
+                        lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(icon.getLore().get(z), p)).replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())));
                     }
                 }
                 im.setLore(lore);
@@ -307,12 +307,13 @@ public abstract class HeadInventory {
                 io.github.thatsmusic99.headsplus.api.Challenge c = nbt.getChallenge(is);
                 im.setDisplayName(ChatColor.translateAlternateColorCodes('&', icon.getDisplayName().replace("{challenge-name}", c.getChallengeHeader())));
                 for (int z = 0; z < icon.getLore().size(); ++z) {
-                    if (icon.getLore().get(z).contains("{challenge-lore}")) {
+                    String loreStr = hpc.formatMsg(icon.getLore().get(z), p);
+                    if (loreStr.contains("{challenge-lore}")) {
                         for (String s : c.getDescription()) {
                             lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(s, p)));
                         }
                     }
-                    if (icon.getLore().get(z).contains("{challenge-reward}")) {
+                    if (loreStr.contains("{challenge-reward}") || loreStr.contains("{reward}")) {
                         StringBuilder sb = new StringBuilder();
                         HPChallengeRewardTypes re = c.getRewardType();
                         if (c.getReward().getRewardString() != null) {
@@ -330,15 +331,17 @@ public abstract class HeadInventory {
                         } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
                             sb.append("Group ").append(c.getRewardValue().toString()).append(" removal");
                         }
-                        lore.add(ChatColor.translateAlternateColorCodes('&', icon.getLore().get(z).replace("{challenge-reward}", hpc.formatMsg(sb.toString(), p))));
+                        lore.add(ChatColor.translateAlternateColorCodes('&', loreStr.replace("{challenge-reward}", hpc.formatMsg(sb.toString(), p))
+                                .replace("{reward}", hpc.formatMsg(sb.toString(), p))));
                     }
-                    if (icon.getLore().get(z).contains("{completed}")) {
+                    if (loreStr.contains("{completed}")) {
                         if (c.isComplete(p)) {
                             lore.add(HeadsPlus.getInstance().getMessagesConfig().getString("commands.challenges.challenge-completed", p));
                         }
                     }
-                    if (icon.getLore().get(z).contains("{challenge-xp}")) {
-                        lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(icon.getLore().get(z), p).replaceAll("\\{challenge-xp}", String.valueOf(c.getGainedXP()))));
+                    if (loreStr.contains("{challenge-xp}") || loreStr.contains("{xp}")) {
+                        lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(icon.getLore().get(z), p).replaceAll("\\{challenge-xp}", String.valueOf(c.getGainedXP()))
+                                .replaceAll("\\{xp}", String.valueOf(c.getGainedXP()))));
                     }
                 }
                 im.setLore(lore);
