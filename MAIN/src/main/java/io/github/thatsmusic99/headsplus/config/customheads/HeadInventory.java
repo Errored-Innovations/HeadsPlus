@@ -121,7 +121,7 @@ public abstract class HeadInventory {
         Inventory inventory = Bukkit.createInventory(null, getSize(), getTitle()
                 .replaceAll("\\{page}", String.valueOf(page + 1))
                 .replaceAll("\\{pages}", list == null ? "" : String.valueOf(pages))
-                .replace("{section}", section.isEmpty() ? "" : Character.toUpperCase(section.charAt(0)) + section.substring(1)));
+                .replace("{section}", section == null || section.isEmpty() ? "" : Character.toUpperCase(section.charAt(0)) + section.substring(1)));
         HeadsPlus hp = HeadsPlus.getInstance();
         NMSManager nms = hp.getNMS();
         NBTManager nbt = hp.getNBTManager();
