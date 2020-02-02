@@ -310,7 +310,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                     component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateCommandHelp(key, sender)).create()));
                     try {
                         sender.spigot().sendMessage(component);
-                    } catch (Exception e) {
+                    } catch (Exception | NoSuchMethodError e) {
                         sender.sendMessage(help);
                     }
                 }
