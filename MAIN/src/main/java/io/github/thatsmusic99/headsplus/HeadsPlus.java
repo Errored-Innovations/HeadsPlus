@@ -4,6 +4,7 @@ import io.github.at.main.Main;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
+import io.github.thatsmusic99.headsplus.commands.Head;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
@@ -95,10 +96,7 @@ public class HeadsPlus extends JavaPlugin {
             // Build plugin instances
             createInstances();
 
-            if (getConfiguration().getMechanics().getBoolean("anvil-menu-search", false)) {
-                getLogger().warning("Warning: anvil-menu-search has proven to be buggy in some versions - use with caution");
-            }
-
+            if (!isEnabled()) return;
             // Checks theme, believe it or not!
             debug("- Checking plugin theme.", 1);
             checkTheme();
@@ -225,11 +223,15 @@ public class HeadsPlus extends JavaPlugin {
             favourites.save();
         } catch (IOException e) {
             DebugPrint.createReport(e, "Disabling (saving favourites)", false, null);
+        }  catch (NullPointerException ignored) {
+
         }
         try {
             scores.save();
         } catch (IOException e) {
             DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
+        } catch (NullPointerException ignored) {
+
         }
         getLogger().info(hpc.getString("startup.plugin-disabled"));
     }
@@ -364,6 +366,12 @@ public class HeadsPlus extends JavaPlugin {
         hpchl = new HeadsPlusChallenges();
         cs.add(hpchl);
         debug("- Instance for HeadsPlusChallenges created!", 3);
+        if (!getDescription().getAuthors().get(0).equals("Thatsmusic99")) {
+            getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
+            getLogger().severe("Only reupload the plugin on other sites with my permission, please!");
+            setEnabled(false);
+            return;
+        }
         try {
             setupJSON();
             debug("- Set up favourites.json and playerinfo.json!", 1);
@@ -444,6 +452,7 @@ public class HeadsPlus extends JavaPlugin {
             if (!nmsMan.getNMSVersion().equals(bukkitVersion)) {
                 throw new IncorrectVersionException("Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion + ", this is meant for " + nmsMan.getNMSVersion());
             }
+            nmsversion = NMSIndex.valueOf(bukkitVersion);
         } catch (ClassNotFoundException | IncorrectVersionException e) {
             getLogger().severe("ERROR: Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion);
             getLogger().severe("If this is not known of, let the developer know in one of these places:");
@@ -455,53 +464,6 @@ public class HeadsPlus extends JavaPlugin {
             return;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-        }
-        switch (bukkitVersion) {
-            case "v1_15_R1":
-                nmsversion = NMSIndex.v1_15_R1;
-                break;
-            case "v1_14_R1":
-                nmsversion = NMSIndex.v1_14_R1;
-                break;
-            case "v1_13_R2":
-                nmsversion = NMSIndex.v1_13_R2;
-                break;
-            case "v1_13_R1":
-                nmsversion = NMSIndex.v1_13_R1;
-                break;
-            case "v1_12_R1":
-                nmsversion = NMSIndex.v1_12_R1;
-                break;
-            case "v1_11_R1":
-                nmsversion = NMSIndex.v1_11_R1;
-                break;
-            case "v1_10_R1":
-                nmsversion = NMSIndex.v1_10_R1;
-                break;
-            case "v1_9_R1":
-                nmsversion = NMSIndex.v1_9_R1;
-                break;
-            case "v1_9_R2":
-                nmsversion = NMSIndex.v1_9_R2;
-                break;
-            case "v1_8_R3":
-                nmsversion = NMSIndex.v1_8_R3;
-                break;
-            case "v1_8_R2":
-                nmsversion = NMSIndex.v1_8_R2;
-                break;
-            case "v1_8_R1":
-                nmsversion = NMSIndex.v1_8_R1;
-                break;
-            default:
-                getLogger().severe("ERROR: HeadsPlus does not support this version (" + version + ")!");
-                getLogger().severe("If this is not known of, let the developer know in one of these places:");
-                getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                getLogger().severe("https://discord.gg/nbT7wC2");
-                getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-13-x.237088/");
-                getLogger().severe("To prevent any further damage, the plugin is being disabled...");
-                setEnabled(false);
-                return;
         }
         nms = nmsMan;
     }
