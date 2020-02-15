@@ -1,30 +1,26 @@
 package io.github.thatsmusic99.headsplus.api.events;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.Head;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 public class EntityHeadDropEvent extends Event implements Cancellable {
 
     // O
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private ItemStack skull;
+    private Head head;
     private Player player;
     private EntityType entityType;
-    private World world;
     private Location location;
 
-    public EntityHeadDropEvent(Player killer, ItemStack head, World world, Location location, EntityType entityType) {
+    public EntityHeadDropEvent(Player killer, Head head, Location location, EntityType entityType) {
         this.player = killer;
-        this.skull = head;
-        this.world = world;
+        this.head = head;
         this.location = location;
         this.entityType = entityType;
     }
@@ -44,23 +40,16 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public ItemStack getSkull() {
-        return skull;
+    public Head getHead() {
+        return head;
     }
 
     public EntityType getEntityType() {
         return entityType;
     }
 
-    public String getSkullKey() {
-        return HeadsPlus.getInstance().getNBTManager().getType(skull);
-    }
-
     public Location getLocation() {
         return location;
-    }
-    public World getWorld() {
-        return world;
     }
 
     public Player getPlayer() {
@@ -83,12 +72,8 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    public void setSkull(ItemStack skull) {
-        this.skull = skull;
-    }
-
-    public void setWorld(World world) {
-        this.world = world;
+    public void setHead(Head skull) {
+        this.head = skull;
     }
 
     @Override
