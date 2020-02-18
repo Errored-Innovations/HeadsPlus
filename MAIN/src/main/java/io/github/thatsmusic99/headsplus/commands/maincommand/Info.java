@@ -4,7 +4,12 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
 		commandname = "info",
@@ -22,11 +27,6 @@ public class Info implements IHeadsPlusCommand {
 	}
 
 	@Override
-	public String isCorrectUsage(String[] args, CommandSender sender) {
-		return "";
-	}
-
-	@Override
 	public boolean fire(String[] args, CommandSender sender) {
 		try {
 			sender.sendMessage(HeadsPlusConfigTextMenu.InfoTranslator.translate(sender));
@@ -34,5 +34,10 @@ public class Info implements IHeadsPlusCommand {
 		    DebugPrint.createReport(e, "Subcommand (info)", true, sender);
         }
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+		return new ArrayList<>();
 	}
 }

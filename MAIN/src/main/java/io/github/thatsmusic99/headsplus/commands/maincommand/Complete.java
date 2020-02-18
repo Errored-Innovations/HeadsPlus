@@ -7,10 +7,15 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
         commandname = "complete",
@@ -23,8 +28,14 @@ public class Complete implements IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
+    public String getCmdDescription(CommandSender sender) {
+        return hpc.getString("descriptions.hp.complete", sender);
+    }
+
+    @Override
+    public boolean fire(String[] args, CommandSender sender) {
         try {
+            getDebug().startTimings(sender, "complete");
             if (args.length > 1) {
                 Challenge c = HeadsPlus.getInstance().getChallengeByName(args[1]);
                 if (c != null) {
@@ -34,62 +45,67 @@ public class Complete implements IHeadsPlusCommand {
                             if (player.isOnline()) {
                                 if (!c.isComplete(player.getPlayer())) {
                                     if (c.canComplete(player.getPlayer())) {
-                                        return "";
+                                        HeadsPlus.getInstance().getChallengeByName(args[1]).complete(player.getPlayer());
                                     } else {
-                                        return hpc.getString("commands.challenges.cant-complete-challenge", sender);
+                                        sender.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", sender));
                                     }
                                 } else {
-                                    return hpc.getString("commands.challenges.already-complete-challenge", sender);
+                                    sender.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", sender));
                                 }
-
                             } else {
-                                return hpc.getString("commands.errors.player-offline", sender);
+                                sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
+                                getDebug().stopTimings(sender, "complete");
+                                return false;
                             }
                         } else {
-                            return hpc.getString("commands.errors.no-perm", sender);
+                            sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
                         }
+                        getDebug().stopTimings(sender, "complete");
+                        return true;
 
                     } else if (sender instanceof Player) {
                         Player p = (Player) sender;
                         if (!c.isComplete(p)) {
                             if (c.canComplete(p)) {
-                                return "";
+                                HeadsPlus.getInstance().getChallengeByName(args[1]).complete((Player) sender);
                             } else {
-                                return hpc.getString("commands.challenges.cant-complete-challenge", sender);
+                                sender.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", sender));
                             }
                         } else {
-                            return hpc.getString("commands.challenges.already-complete-challenge", sender);
+                            sender.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", sender));
                         }
 
                     } else {
-                        return hpc.getString("commands.errors.not-a-player", sender);
+                        sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
                     }
+                    getDebug().stopTimings(sender, "complete");
+                    return true;
                 } else {
-                    return hpc.getString("commands.challenges.no-such-challenge", sender);
+                    sender.sendMessage(hpc.getString("commands.challenges.no-such-challenge", sender));
                 }
             } else {
-                return hpc.getString("commands.errors.invalid-args", sender);
+                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
             }
         } catch (SQLException e) {
             DebugPrint.createReport(e, "Complete command (checks)", true, sender);
-            return hpc.getString("commands.errors.cmd-fail", sender);
+            sender.sendMessage(hpc.getString("commands.errors.cmd-fail", sender));
         }
-
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.hp.complete", sender);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        if (args.length > 2) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(args[2]);
-            HeadsPlus.getInstance().getChallengeByName(args[1]).complete(player.getPlayer());
-        } else {
-            HeadsPlus.getInstance().getChallengeByName(args[1]).complete((Player) sender);
-        }
+        getDebug().stopTimings(sender, "complete");
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            List<String> challenges = new ArrayList<>();
+            for (Challenge challenge : HeadsPlus.getInstance().getChallenges()) {
+                challenges.add(challenge.getConfigName());
+            }
+            StringUtil.copyPartialMatches(args[1], challenges, results);
+        } else if (args.length == 3 && sender.hasPermission("headsplus.maincommand.complete.others")) {
+            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+        }
+        return results;
     }
 }

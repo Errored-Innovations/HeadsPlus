@@ -7,8 +7,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @CommandInfo(
         commandname = "hpc",
@@ -19,38 +22,30 @@ import java.util.HashMap;
 )
 public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HashMap<String, Boolean> tests = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
-        tests.clear();
+        getDebug().startTimings(cs, "hpc");
         try {
             if (HeadsPlus.getInstance().hasChallengesEnabled()) {
-                tests.put("Challenges enabled", true);
                 if (cs instanceof Player) {
-                    tests.put("Instance of Player", true);
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.challenges")) {
-                        tests.put("Has permission", true);
                         InventoryManager.getOrCreate(p).showScreen(InventoryManager.Type.CHALLENGES_MENU);
-                        printDebugResults(tests, true);
                         return true;
                     } else {
-                        tests.put("Has permission", false);
                         cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
                     }
                 } else {
-                    tests.put("Instance of Player", false);
                     cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
                 }
             } else {
-                tests.put("Challenges enabled", false);
                 cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs instanceof Player ? (Player) cs : null));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
         }
-        printDebugResults(tests, false);
+        getDebug().stopTimings(cs, "hpc");
         return true;
     }
 
@@ -60,12 +55,12 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
+    public boolean fire(String[] args, CommandSender sender) {
+        return false;
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        return new ArrayList<>();
     }
 }

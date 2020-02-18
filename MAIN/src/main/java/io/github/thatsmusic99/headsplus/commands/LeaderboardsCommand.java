@@ -6,10 +6,16 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @CommandInfo(
         commandname = "hplb",
@@ -18,7 +24,7 @@ import java.util.HashMap;
         maincommand = false,
         usage = "/hplb [Total|Entity|Page No.] [Page No.] [Hunting|Selling|Crafting]"
 )
-public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
+public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HashMap<String, Boolean> tests = new HashMap<>();
 
@@ -70,7 +76,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                         } else {
                                             cs.sendMessage(getLeaderboard(cs, sec, 1, "hunting"));
                                         }
-                                        printDebugResults(tests, true);
                                     }
                                 } catch (IllegalArgumentException ex) {
                                     tests.put("Valid Entity", false);
@@ -98,10 +103,8 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                         } else {
                                             cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                         }
-                                        printDebugResults(tests, true);
                                     } else if (args[0].matches("^[0-9]+$")) {
                                         cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
-                                        printDebugResults(tests, true);
                                     } else if (args[0].equalsIgnoreCase("player")) {
                                         if (args.length > 1) {
                                             if (args[1].matches("^[0-9]+$")) {
@@ -133,7 +136,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
                                         } else {
                                             cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                         }
-                                        printDebugResults(tests, true);
                                     }  else if (args[0].equalsIgnoreCase("crafting")
                                             || args[0].equalsIgnoreCase("selling")
                                             || args[0].equalsIgnoreCase("hunting")) {
@@ -153,7 +155,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
 
                             } else {
                                 cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
-                                printDebugResults(tests, true);
                             }
                         } catch (Exception e) {
                             DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
@@ -180,12 +181,18 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
+    public boolean fire(String[] args, CommandSender sender) {
+        return false;
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
+        } else if (args.length == 4) {
+            StringUtil.copyPartialMatches(args[3], Arrays.asList("hunting", "selling", "crafting"), results);
+        }
+        return results;
     }
 }

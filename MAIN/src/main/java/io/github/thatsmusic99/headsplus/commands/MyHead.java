@@ -16,9 +16,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @CommandInfo(
@@ -31,7 +31,6 @@ import java.util.List;
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-    private final HashMap<String, Boolean> tests = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
@@ -76,12 +75,6 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     sender.sendMessage(hpc.getString("commands.head.full-inv", p));
                     return true;
                 }
-                tests.put("Whitelist enabled", wlOn);
-                tests.put("Blacklist enabled", blacklistOn);
-                tests.put("Whitelist contains head", wl.contains(head));
-                tests.put("Blacklist contains head", bl.contains(head));
-                tests.put("Can bypass blacklist", sender.hasPermission("headsplus.bypass.blacklist"));
-                tests.put("Can bypass whitelist", sender.hasPermission("headsplus.bypass.whitelist"));
                 if (wlOn) {
                     if (blacklistOn) {
                         if (wl.contains(head)) {
@@ -143,7 +136,6 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (myhead)", true, sender);
         }
-        printDebugResults(tests, true);
 
         return false;
     }
@@ -167,12 +159,12 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
+    public boolean fire(String[] args, CommandSender sender) {
+        return false;
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        return new ArrayList<>();
     }
 }

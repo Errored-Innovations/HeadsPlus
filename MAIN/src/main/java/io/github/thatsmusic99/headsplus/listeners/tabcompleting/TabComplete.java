@@ -20,15 +20,15 @@ public class TabComplete implements TabCompleter {
 
 
     @Override
-    public List<String> onTabComplete(CommandSender cs, Command command, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender cs, Command cmd, String s, String[] args) {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
             for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands()) {
-                CommandInfo cmd = key.getClass().getAnnotation(CommandInfo.class);
-                if (cs.hasPermission(cmd.permission())) {
-                    if (cmd.maincommand()) {
-                        c.add(cmd.subcommand());
+                CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
+                if (cs.hasPermission(command.permission())) {
+                    if (command.maincommand()) {
+                        c.add(command.subcommand());
                     }
                 }
             }
@@ -36,37 +36,27 @@ public class TabComplete implements TabCompleter {
             Collections.sort(f);
             return f;
         } else if (args.length >= 2) {
-            List<String> f = new ArrayList<>();
-            switch (args[0].toLowerCase()) {
-                case "blacklistadd":
-                case "blacklistdel":
-                case "whitelistadd":
-                case "whitelistdel":
-                    StringUtil.copyPartialMatches(args[1], players(), f);
-                    break;
-                case "blacklist":
-                case "blacklistw":
-                case "whitelist":
-                case "whitelistw":
-                    StringUtil.copyPartialMatches(args[1], new ArrayList<>(Arrays.asList("on", "off")), f);
-                    break;
-                case "blacklistwadd":
-                case "blacklistwdel":
-                case "whitelistwadd":
-                case "whitelistwdel":
-                    StringUtil.copyPartialMatches(args[1], worlds(), f);
-                    break;
-                case "debug":
-                    StringUtil.copyPartialMatches(args[1], new ArrayList<>(Arrays.asList("dump", "head", "player")), f);
-                    break;
-                case "head":
-                    StringUtil.copyPartialMatches(args[1], new ArrayList<>(Collections.singletonList("view")), f);
-                    break;
+            IHeadsPlusCommand command = getCommandByName(args[0]);
+            if (command != null) {
+                List<String> results = command.onTabComplete(cs, cmd, s, args);
+                Collections.sort(results);
+                return results;
             }
-            Collections.sort(f);
-            return f;
+            return players();
         }
         return players();
+    }
+
+    private IHeadsPlusCommand getCommandByName(String name) {
+        for (IHeadsPlusCommand hpc : HeadsPlus.getInstance().getCommands()) {
+            CommandInfo c = hpc.getClass().getAnnotation(CommandInfo.class);
+            if (c.commandname().equalsIgnoreCase(name)) {
+                if (c.maincommand()){
+                    return hpc;
+                }
+            }
+        }
+        return null;
     }
 
     private static List<String> players() {
@@ -75,12 +65,5 @@ public class TabComplete implements TabCompleter {
             p.add(pl.getName());
         }
         return p;
-    }
-    private static List<String> worlds() {
-        List<String> w = new ArrayList<>();
-        for (World wo : Bukkit.getWorlds()) {
-            w.add(wo.getName());
-        }
-        return w;
     }
 }

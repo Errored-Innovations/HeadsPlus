@@ -4,7 +4,13 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
         commandname = "help",
@@ -46,11 +52,6 @@ public class HelpMenu implements IHeadsPlusCommand {
 		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.help", cs);
 	}
 
-    @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
-    }
-
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {
 	    try {
@@ -81,4 +82,23 @@ public class HelpMenu implements IHeadsPlusCommand {
 
         return true;
 	}
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 2) {
+            List<String> commands = new ArrayList<>();
+            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands()) {
+                CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
+                if (sender.hasPermission(command.permission())) {
+                    if (command.maincommand()) {
+                        commands.add(command.subcommand());
+                    }
+                }
+            }
+            List<String> results = new ArrayList<>();
+            StringUtil.copyPartialMatches(args[1], commands, results);
+            return results;
+        }
+        return new ArrayList<>();
+    }
 }

@@ -1,10 +1,15 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
+import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractListList extends AbstractListCommand {
@@ -12,27 +17,19 @@ public abstract class AbstractListList extends AbstractListCommand {
     public abstract String getExtendedType();
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        if (args.length > 1) {
-            if (args[1].matches("^[0-9]+$")) {
-                return "";
-            } else {
-                return hpc.getString("commands.errors.invalid-input-int", sender);
-            }
-        } else {
-            return "";
-        }
-    }
-
-    @Override
     public boolean fire(String[] args, CommandSender sender) {
         try {
             List<String> wl = getList();
             int page;
-            if (args.length == 1) {
-                page = 1;
+            if (args.length > 1) {
+                if (args[1].matches("^[0-9]+$")) {
+                    page = Integer.parseInt(args[1]);
+                } else {
+                    sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
+                    return false;
+                }
             } else {
-                page = Integer.parseInt(args[1]);
+                page = 1;
             }
             if (wl.isEmpty()) {
                 sender.sendMessage(hpc.getString("commands." + getFullName() + "." + "empty-" + getListType(), sender));
@@ -45,5 +42,10 @@ public abstract class AbstractListList extends AbstractListCommand {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        return new ArrayList<>();
     }
 }

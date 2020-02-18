@@ -322,6 +322,7 @@ public class HeadsPlus extends JavaPlugin {
         getCommand("hp").setTabCompleter(new TabComplete());
         debug("- Registering /head...", 3);
         getCommand("head").setExecutor(new Head());
+        getCommand("head").setTabCompleter(new Head());
         debug("- Registering /heads...", 3);
         getCommand("heads").setExecutor(new Heads());
         debug("- Registering /myhead...", 3);
@@ -329,7 +330,7 @@ public class HeadsPlus extends JavaPlugin {
         debug("- Registering /hplb...", 3);
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
         debug("- Registering /hplb's tab completer..", 3);
-        getCommand("hplb").setTabCompleter(new TabCompleteLB());
+        getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
         debug("- Registering /sellhead...", 3);
         getCommand("sellhead").setExecutor(new SellHead());
         debug("- Registering /sellhead's tab completer...", 3);

@@ -5,15 +5,13 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import org.bukkit.command.CommandSender;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
 
 public class HeadsPlusDebug extends ConfigSettings {
 
-    private File logTimings = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "debug" + File.separator + "logs" + File.separator + "timings-" + new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis())) + ".txt");
+    private File logTimings = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "debug" + File.separator + "logs" + File.separator + "timings-" + new java.text.SimpleDateFormat("MM_dd_yyyy").format(new java.util.Date (System.currentTimeMillis())) + ".txt");
     private HashMap<String, Long> timings;
 
     public HeadsPlusDebug() {
@@ -47,18 +45,26 @@ public class HeadsPlusDebug extends ConfigSettings {
         }
         getConfig().addDefault("cache.death-events.entity-heads", true);
         getConfig().addDefault("cache.heads.sections", true);
+        getConfig().options().copyDefaults(true);
+        save();
     }
 
-    public void logTimings(String name, DebugType type, long ms) throws IOException {
+    public void logTimings(String name, DebugType type, long ms) {
         if (getConfig().getBoolean("timings.enabled")) {
             String time = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
             if (getConfig().getBoolean(type.name().toLowerCase() + "." + name + ".timings")) {
-                FileWriter writer = new FileWriter(logTimings);
-                writer.write("[" + time + "] " + type.name() + " " + name + ": Took a total of " + ms);
-                writer.close();
-                if (getConfig().getBoolean("timings.send-to-console")) {
-                    HeadsPlus.getInstance().getLogger().info("DEBUG: " + type.name() + " " + name + ": Took a total of " + ms);
+                try (FileWriter fw = new FileWriter(logTimings);
+                     BufferedWriter bw = new BufferedWriter(fw);
+                     PrintWriter out = new PrintWriter(bw)) {
+                    out.println("[" + time + "] " + type.name() + " " + name + ": Took a total of " + ms + "ms!\n");
+                    out.close();
+                    if (getConfig().getBoolean("timings.send-to-console")) {
+                        HeadsPlus.getInstance().getLogger().info("DEBUG: " + type.name() + " " + name + ": Took a total of " + ms + "ms!");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
             }
         }
     }
@@ -66,22 +72,18 @@ public class HeadsPlusDebug extends ConfigSettings {
     public void startTimings(CommandSender cs, String commandName) {
         if (getConfig().getBoolean("timings.enabled")) {
             if (getConfig().getBoolean("command." + commandName + ".timings")) {
-                timings.put(cs.getName() + ":" + commandName, System.currentTimeMillis());
+                timings.put(cs.getName() + ":" + commandName, System.nanoTime());
             }
         }
     }
 
     public void stopTimings(CommandSender cs, String commandName) {
-        long ms = System.currentTimeMillis();
+        long ms = System.nanoTime();
         if (getConfig().getBoolean("timings.enabled")) {
             if (getConfig().getBoolean("command." + commandName + ".timings")) {
                 if (timings.containsKey(cs.getName() + ":" + commandName)) {
                     long start = timings.get(cs.getName() + ":" + commandName);
-                    try {
-                        logTimings(commandName, DebugType.COMMAND, ms - start);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    logTimings(commandName, DebugType.COMMAND, (ms - start) / 1000000);
                 }
             }
         }

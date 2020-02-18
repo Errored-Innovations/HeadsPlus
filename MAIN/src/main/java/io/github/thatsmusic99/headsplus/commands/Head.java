@@ -8,17 +8,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 @CommandInfo(
@@ -28,11 +26,10 @@ import java.util.List;
         maincommand = false,
         usage = "/head <IGN> [Player]"
 )
-public class Head implements CommandExecutor, IHeadsPlusCommand {
+public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlus hp = HeadsPlus.getInstance();
     private final HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-    private final HashMap<String, Boolean> tests = new HashMap<>();
 
     private List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
 
@@ -81,12 +78,6 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
             sender.sendMessage(hpc.getString("commands.head.full-inv", p2));
             return;
         }
-        tests.put("Whitelist enabled", wlOn);
-        tests.put("Blacklist enabled", blacklistOn);
-        tests.put("Whitelist contains head", wl.contains(head));
-        tests.put("Blacklist contains head", bl.contains(head));
-        tests.put("Can bypass blacklist", sender.hasPermission("headsplus.bypass.blacklist"));
-        tests.put("Can bypass whitelist", sender.hasPermission("headsplus.bypass.whitelist"));
         if (wlOn) {
             if (blacklistOn) {
                 if (wl.contains(head)) {
@@ -138,50 +129,21 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        if (args.length > 0) {
-            if ((args[0].matches("^[A-Za-z0-9_]+$"))) {
-                if (args[0].length() < 17) {
-                    if (args[0].length() > 2) {
-                       return "";
-                    } else {
-                        return hpc.getString("commands.head.head-too-short", sender);
-                    }
-                } else {
-                    return hpc.getString("commands.head.head-too-long", sender);
-                }
-            } else {
-                return hpc.getString("commands.head.alpha-names", sender);
-            }
-        } else {
-            return hpc.getString("commands.head.invalid-args", sender);
-        }
-    }
-
-    @Override
     public boolean fire(String[] args, CommandSender sender) {
-	    tests.clear();
 	    try {
-	        tests.put("No permission", !sender.hasPermission("headsplus.head"));
 	        if (sender.hasPermission("headsplus.head")) {
-	            tests.put("More than 1 arg", args.length >= 2);
 	            if (args.length > 1) {
-	                tests.put("No Other permission", !sender.hasPermission("headsplus.head.others"));
 	                if (sender.hasPermission("headsplus.head.others")) {
-
-                        tests.put("Player Found", hp.getNMS().getPlayer(args[1]) != null);
                         if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
                         } else if (hp.getNMS().getPlayer(args[1]) != null) {
 
                             boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
-                            tests.put("Valid name", b);
                             if (b) {
                                 String[] s = new String[2];
                                 s[0] = args[0];
                                 s[1] = args[1];
                                 giveH(s, sender, hp.getNMS().getPlayer(args[1]));
-                                printDebugResults(tests, true);
                                 return true;
                             } else if (!args[0].matches("^[A-Za-z0-9_]+$")) {
                                 sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
@@ -193,20 +155,16 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
                         }
-	                    printDebugResults(tests, false);
 	                    return true;
 	                } else {
 	                    sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
 	                }
 	            } else if (args.length > 0) {
-	                tests.put("Instance of Player", sender instanceof Player);
 	                if (sender instanceof Player) {
 	                    Player p = (Player) sender;
 	                    boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
-	                    tests.put("Valid name", b);
 	                    if (b) {
 	                        giveH(args, sender, p);
-	                        printDebugResults(tests, true);
 	                        return true;
 	                    }
 	                } else {
@@ -221,8 +179,18 @@ public class Head implements CommandExecutor, IHeadsPlusCommand {
         } catch (Exception e) {
 	        DebugPrint.createReport(e, "Command (head)", true, sender);
         }
-        printDebugResults(tests, false);
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(), results);
+        } else if (args.length == 3 && sender.hasPermission("headsplus.head.others")) {
+            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+        }
+        return results;
     }
 }
 	

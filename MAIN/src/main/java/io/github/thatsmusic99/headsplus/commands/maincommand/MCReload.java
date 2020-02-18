@@ -6,10 +6,13 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
         commandname = "reload",
@@ -25,11 +28,6 @@ public class MCReload implements IHeadsPlusCommand{
     @Override
     public String getCmdDescription(CommandSender sender) {
         return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.reload");
-    }
-
-    @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
     }
 
     @Override
@@ -55,6 +53,11 @@ public class MCReload implements IHeadsPlusCommand{
             DebugPrint.createReport(e, "Subcommand (reload)", true, sender);
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        return new ArrayList<>();
     }
 }
 

@@ -8,7 +8,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
         commandname = "addhead",
@@ -17,52 +23,45 @@ import org.bukkit.entity.Player;
         maincommand = false,
         usage = "/addhead <player>"
 )
-public class AddHead implements CommandExecutor, IHeadsPlusCommand {
+public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        getDebug().startTimings(sender, "addhead");
         if(args.length > 0) {
-            HeadsPlus hp = HeadsPlus.getInstance();
-            OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-            String uuid = p.getUniqueId().toString();
-            if (!hp.getServer().getOnlineMode()) {
-                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
-            }
-            if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding", sender instanceof Player ? (Player) sender : null)
-                        .replace("{player}", p.getName())
-                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
-            }
-        } else {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender instanceof Player ? (Player) sender : null));
-        }
-        return true;
-    }
-
-    @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        Player p = sender instanceof Player ? (Player) sender : null;
-        if (args.length > 0) {
-            // todo? allow adding actual textures (and category, encoding) via this command
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
                 if (args[0].length() > 2) {
                     if (args[0].length() < 17) {
-                        return "";
+                        HeadsPlus hp = HeadsPlus.getInstance();
+                        OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
+                        String uuid = p.getUniqueId().toString();
+                        if (!hp.getServer().getOnlineMode()) {
+                            hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                            uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
+                        }
+                        if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
+                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding", sender instanceof Player ? (Player) sender : null)
+                                    .replace("{player}", p.getName())
+                                    .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                        }
+                        getDebug().stopTimings(sender, "addhead");
+                        return true;
                     } else {
-                        return hpc.getString("commands.head.head-too-long", p);
+                        sender.sendMessage(hpc.getString("commands.head.head-too-long", sender));
                     }
                 } else {
-                    return hpc.getString("commands.head.head-too-short", p);
+                    sender.sendMessage(hpc.getString("commands.head.head-too-short", sender));
                 }
             } else {
-                return hpc.getString("commands.head.alpha-names", p);
+                sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
             }
         } else {
-            return hpc.getString("commands.errors.invalid-args", p);
+            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
         }
+        getDebug().stopTimings(sender, "addhead");
+        return true;
     }
 
     @Override
@@ -74,5 +73,14 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand {
     public boolean fire(String[] args, CommandSender sender) {
         return false;
     }
-    
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 1) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(), results);
+        }
+        return results;
+    }
+
 }

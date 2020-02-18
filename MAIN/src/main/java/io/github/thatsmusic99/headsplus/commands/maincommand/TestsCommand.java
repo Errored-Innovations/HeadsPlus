@@ -5,9 +5,14 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -18,54 +23,58 @@ public class TestsCommand implements IHeadsPlusCommand {
     private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        HashMap<Boolean, String> h = new HashMap<>();
-        if (args.length > 1) {
-            HeadsPlusConfigHeads heads = HeadsPlus.getInstance().getHeadsConfig();
-            List<String> mHeads = heads.mHeads;
-            List<String> uHeads = heads.uHeads;
-            if (mHeads.contains(args[1]) || uHeads.contains(args[1])) {
-                if (args.length > 2) {
-                    if (args[2].matches("^[0-9]+$")) {
-                        return "";
-                    } else {
-                        return hpc.getString("commands.errors.invalid-input-int");
-                    }
-                } else {
-                    return hpc.getString("commands.errors.invalid-args");
-                }
-            } else {
-                return hpc.getString("commands.errors.invalid-args");
-            }
-        } else {
-            return hpc.getString("commands.errors.invalid-args");
-        }
-    }
-
-    @Override
     public String getCmdDescription(CommandSender sender) {
         return hpc.getString("descriptions.tests", sender);
     }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        int amount = Integer.parseInt(args[2]);
-        sender.sendMessage(hpc.getString("commands.tests.running-tests"));
-        double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(args[1] + ".chance");
-        Random rand = new Random();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                int successes = 0;
-                for (int in = 0; in < amount; in++) {
-                    double result = rand.nextDouble() * 100;
-                    if (result <= chance) {
-                        successes++;
+        if (args.length > 1) {
+            if (DeathEvents.ableEntities.contains(args[1].toUpperCase())) {
+                if (args.length > 2) {
+                    if (args[2].matches("^[0-9]+$")) {
+                        int amount = Integer.parseInt(args[2]);
+                        String type = args[1].toLowerCase().replaceAll("_", "");
+                        sender.sendMessage(hpc.getString("commands.tests.running-tests"));
+                        double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(type + ".chance");
+                        Random rand = new Random();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                int successes = 0;
+                                for (int in = 0; in < amount; in++) {
+                                    double result = rand.nextDouble() * 100;
+                                    if (result <= chance) {
+                                        successes++;
+                                    }
+                                }
+                                sender.sendMessage(hpc.getString("commands.tests.results").replaceAll("\\{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)"));
+                            }
+                        }.runTaskAsynchronously(HeadsPlus.getInstance());
+                        return true;
+                    } else {
+                        sender.sendMessage(hpc.getString("commands.errors.invalid-input-int"));
                     }
+                } else {
+                    sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
                 }
-                sender.sendMessage(hpc.getString("commands.tests.results").replaceAll("\\{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)"));
+            } else {
+                sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
             }
-        }.runTaskAsynchronously(HeadsPlus.getInstance());
+        } else {
+            sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
+        }
+
+
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
+        }
+        return results;
     }
 }

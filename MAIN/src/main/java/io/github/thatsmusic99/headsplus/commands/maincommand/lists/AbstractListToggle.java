@@ -4,16 +4,16 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractListToggle extends AbstractListCommand {
-
-    @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
-    }
 
     public abstract HeadsPlusMainConfig.SelectorList getSelList();
 
@@ -50,5 +50,14 @@ public abstract class AbstractListToggle extends AbstractListCommand {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], Arrays.asList("on", "off"), results);
+        }
+        return results;
     }
 }

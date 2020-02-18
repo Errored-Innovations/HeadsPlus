@@ -7,10 +7,15 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandInfo(
         commandname = "profile",
@@ -35,11 +40,6 @@ public class ProfileCommand implements IHeadsPlusCommand {
     @Override
     public String getCmdDescription(CommandSender sender) {
         return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.profile", sender);
-    }
-
-    @Override
-    public String isCorrectUsage(String[] args, CommandSender sender) {
-        return "";
     }
 
     @Override
@@ -76,5 +76,14 @@ public class ProfileCommand implements IHeadsPlusCommand {
 
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(), results);
+        }
+        return results;
     }
 }
