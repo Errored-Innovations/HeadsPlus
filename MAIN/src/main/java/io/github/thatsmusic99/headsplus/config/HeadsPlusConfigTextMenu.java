@@ -266,7 +266,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
             HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-            PagedLists<String> lore = new PagedLists<>(hpch.getConfig().getStringList(type + ".lore"), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
+            PagedLists<String> lore = new PagedLists<>(hpch.getLore(type), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
             }
