@@ -372,7 +372,8 @@ public enum HeadsXEnums {
     PANDA_AGGRESSIVE("panda_aggressive", "&fPanda (Aggressive)", HeadsPlusConfigCustomHeads.starter + "ODNmZTFlNzgyYWU5NmEzMDMzNmEwM2VmNzQ2ODFjZTNhNjkwNWZjYzY3M2ZhNTZjMDQ2YWFlZTZhYTI4MzA3ZCJ9fX0", "animals", 2.9),
     PANDA_WORRIED("panda_worried", "&fPanda (Worried)", HeadsPlusConfigCustomHeads.starter + "YzhlOTIxYzU3ZTU0ZGQwNzMzN2ZmYmE2MjllNzJjYWYzODUwZDgzNmI3NjU2MmIxYmMzYmM1OTQ5ZjJkNDFkIn19fQ", "animals", 2.9),
     PANDA_BROWN("panda_brown", "&fPanda (Brown)", HeadsPlusConfigCustomHeads.starter + "YzVkMGQ0NWJmOTkyYjA3MmNmNWM1MTNlMDZiZWVmZThiZGM4MDljODE1MGYzZDE0Yjg4Mzc5NmE3Yjc0ZTQwNiJ9fX0", "animals", 2.9),
-    PANDA_WEAK("panda_weak");
+    PANDA_WEAK("panda_weak", "&fPanda (Weak)", HeadsPlusConfigCustomHeads.starter + "NWMyZDI1ZTk1NjMzN2Q4Mjc5MWZhMGU2NjE3YTQwMDg2ZjAyZDZlYmZiZmQ1YTY0NTk4ODljZjIwNmZjYTc4NyJ9fX0", "animals", 2.9),
+    PANDA_LAZY("panda_lazy", "&fPanda (Lazy)", HeadsPlusConfigCustomHeads.starter + "NzgxOGI2ODFjYWNlMWM2NDE5MTlmNTNlZGFkZWNiMTQyMzMwZDA4OWE4MjZiNTYyMTkxMzhjMzNiN2E1ZTBkYiJ9fX0", "animals", 2.9);
 
     final String name;
     final String dn;

@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -17,14 +18,17 @@ public class Head {
     protected ItemStack itemStack;
     private String id;
     private double price; // Pretty much central anyways
+    private int data;
 
     public Head(String id) {
         this(id, 3);
+        data = 3;
     }
 
     public Head(String id, int data) {
-        this.itemStack = HeadsPlus.getInstance().getNMS().getSkull(data);
+        this.itemStack = new ItemStack(HeadsPlus.getInstance().getNMS().getSkull(data).getType());
         this.id = id;
+        this.data = data;
     }
 
     public Head withDisplayName(String name) {
@@ -59,7 +63,9 @@ public class Head {
 
     public Head withPrice(double price) {
         this.price = price;
-        NBTManager.setPrice(itemStack, price);
+        itemStack.setType(Material.DIAMOND);
+        itemStack = NBTManager.setPrice(itemStack, price);
+        itemStack.setType(HeadsPlus.getInstance().getNMS().getSkull(data).getType());
         return this;
     }
 
