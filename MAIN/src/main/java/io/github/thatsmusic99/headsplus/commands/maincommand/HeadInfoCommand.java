@@ -212,7 +212,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         hpch.getConfig().set(type + "." + args[3], args[4]);
                     }
 
-                    sender.sendMessage(hpc.getString("commands.headinfo.set-value", sender)
+                    sender.sendMessage(hpc.getString("commands.head-info.set-value", sender)
                             .replaceAll("\\{value}", args[4])
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));
@@ -248,7 +248,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         }
                     }
 
-                    sender.sendMessage(hpc.getString("commands.headinfo.add-value", sender)
+                    sender.sendMessage(hpc.getString("commands.head-info.add-value", sender)
                             .replaceAll("\\{value}", args[4])
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));
@@ -288,7 +288,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
 
                     }
 
-                    sender.sendMessage(hpc.getString("commands.headinfo.remove-value", sender)
+                    sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
                             .replaceAll("\\{value}", value)
                             .replaceAll("\\{entity}", type)
                             .replaceAll("\\{setting}", args[3]));

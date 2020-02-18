@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.crafting;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
@@ -26,21 +27,24 @@ public class RecipeEnumUser {
 	private void addEnumToConfig() {
 
             NMSManager nms = hp.getNMS();
-            for (String key : DeathEvents.heads.keySet()) {
+            HashMap<String, List<EntityHead>> configHeads = hp.getDeathEvents().getStoredHeads();
+            List<String> usedEntities = new ArrayList<>();
+            for (String key : configHeads.keySet()) {
                 try {
-                    String id = key.toLowerCase().replaceAll("_", "");
-                    HashMap<String, List<ItemStack>> heads = DeathEvents.heads.get(key);
-                    for (String str : heads.keySet()) {
-                        if (!heads.get(str).isEmpty()) {
-                            ItemStack i = heads.get(str).get(0);
+                    if (configHeads.get(key).isEmpty() || usedEntities.contains(configHeads.get(key).get(0).getId())) return;
+                    String id = configHeads.get(key).get(0).getId();
+                    usedEntities.add(id);
+                    List<EntityHead> heads = configHeads.get(key);
+                    for (EntityHead head : heads) {
+                        ItemStack i = head.getItemStack();
                             ShapelessRecipe recipe;
                             List<String> ingredients;
-                            if (str.equalsIgnoreCase("default")) {
+                            if (key.endsWith(";default")) {
                                 recipe = nms.getRecipe(i, "hp_" + id);
                                 ingredients = crafting.getStringList(id + ".ingredients");
                             } else {
-                                recipe = nms.getRecipe(i, "hp_" + str + id);
-                                ingredients = crafting.getStringList(id + "." + str + ".ingredients");
+                                recipe = nms.getRecipe(i, "hp_" + key.replaceAll("([:;])", "_") + id);
+                                ingredients = crafting.getStringList(id + "." + key.replaceAll("([:;])", "_") + ".ingredients");
                             }
                             List<String> ingrs = new ArrayList<>();
                             for (String key2 : ingredients) {
@@ -59,7 +63,7 @@ public class RecipeEnumUser {
                                 }
                             }
                         }
-                    }
+
                 } catch (Exception e) {
                     HeadsPlus.getInstance().getLogger().severe("Error thrown creating head for " + key + ". Please check the report for details.");
                     DebugPrint.createReport(e, "Startup (Crafting)", false, null);

@@ -3,13 +3,14 @@ package io.github.thatsmusic99.headsplus.util;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
+import io.github.thatsmusic99.headsplus.config.customheads.icons.list.Nav;
+import io.github.thatsmusic99.headsplus.config.customheads.legacy.HeadInventory;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.config.customheads.icons.Nav;
-import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.config.customheads.legacy.icons.Nav;
+import io.github.thatsmusic99.headsplus.config.customheads.legacy.inventories.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -265,12 +266,15 @@ public class InventoryManager {
             wide = true;
         }
         List<ItemStack> items = new ArrayList<>();
-        for (String entity : DeathEvents.heads.keySet()) {
+        HashMap<String, List<EntityHead>> entityHeads = HeadsPlus.getInstance().getDeathEvents().getStoredHeads();
+        List<String> usedEntities = new ArrayList<>();
+        for (String entity : entityHeads.keySet()) {
             try {
-                HashMap<String, List<ItemStack>> heads = DeathEvents.heads.get(entity);
-                if (!heads.get("default").isEmpty()) {
-                    ItemStack i = heads.get("default").get(0);
+                List<EntityHead> heads = entityHeads.get(entity);
+                if (!heads.isEmpty() && !usedEntities.contains(heads.get(0).getId())) {
+                    ItemStack i = heads.get(0).getItemStack();
                     items.add(i);
+                    usedEntities.add(heads.get(0).getId());
                 }
 
             } catch (Exception e) {

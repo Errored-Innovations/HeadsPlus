@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.Head;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class HeadsPlusConfigHeads extends ConfigSettings {
 	public final List<String> mHeads = new ArrayList<>(Arrays.asList("blaze", "cavespider", "chicken", "cow", "creeper", "enderman", "ghast", "guardian", "irongolem", "mushroomcow", "rabbit", "pig", "sheep", "skeleton", "slime", "spider", "squid", "villager", "witch", "zombie"));
-	public final List<String> uHeads = new ArrayList<>(Arrays.asList("bat", "cat", "cod", "dolphin", "donkey", "drowned", "enderdragon", "elderguardian", "endermite", "evoker", "fox", "horse", "husk", "llama", "magmacube", "mule", "ocelot", "panda", "parrot", "phantom", "pigzombie", "pillager", "polarbear", "pufferfish", "ravager", "salmon", "shulker", "silverfish", "skeletonhorse", "snowman", "stray", "trader_llama", "tropicalfish", "turtle", "vex", "vindicator", "wandering_trader", "wither", "witherskeleton", "wolf", "zombiehorse", "zombievillager"));
+	public final List<String> uHeads = new ArrayList<>(Arrays.asList("bat", "bee", "cat", "cod", "dolphin", "donkey", "drowned", "enderdragon", "elderguardian", "endermite", "evoker", "fox", "horse", "husk", "llama", "magmacube", "mule", "ocelot", "panda", "parrot", "phantom", "pigzombie", "pillager", "polarbear", "pufferfish", "ravager", "salmon", "shulker", "silverfish", "skeletonhorse", "snowman", "stray", "trader_llama", "tropicalfish", "turtle", "vex", "vindicator", "wandering_trader", "wither", "witherskeleton", "wolf", "zombiehorse", "zombievillager"));
 	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 
@@ -36,8 +37,6 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 		    addPlayerHeads();
 		    addENHeads();
 		    addieHeads();
-		    updateHeads();
-		    checkForOldFormat();
 		    getConfig().options().copyDefaults(true);
 		    save();
 		} catch (Exception e) {
@@ -50,59 +49,126 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
     private void addUndefinedHeads() {
     	for (String key : uHeads) {
             switch (key) {
+				case "bee":
+					if (getConfig().get("bee.name") instanceof List) {
+						List<String> h = getConfig().getStringList("bee.name");
+						getConfig().set("bee.name", null);
+						getConfig().addDefault("bee.name.default", h);
+					}
+					getConfig().addDefault("bee.name.default", new ArrayList<>(Collections.singletonList("HP#bee_mc")));
+					getConfig().addDefault("bee.name.ANGRY", new ArrayList<>(Collections.singletonList("HP#bee_angry")));
+					getConfig().addDefault("bee.name.ANGRY,NECTAR", new ArrayList<>(new ArrayList<>(Collections.singletonList("HP#bee_pollinated_angry"))));
+					getConfig().addDefault("bee.name.NECTAR", new ArrayList<>(new ArrayList<>(Collections.singletonList("HP#bee_pollinated"))));
+				case "cat":
+					if (getConfig().get("cat.name") instanceof List) {
+						List<String> h = getConfig().getStringList("cat.name");
+						getConfig().set("cat.name", null);
+						getConfig().addDefault("cat.name.default", h);
+					}
+					getConfig().addDefault("cat.name.default", new ArrayList<>());
+					getConfig().addDefault("cat.name.TABBY", new ArrayList<>(Collections.singletonList("HP#tabby_cat")));
+					getConfig().addDefault("cat.name.BLACK", new ArrayList<>(Collections.singletonList("HP#black_cat")));
+					getConfig().addDefault("cat.name.RED", new ArrayList<>(Collections.singletonList("HP#red_cat")));
+					getConfig().addDefault("cat.name.SIAMESE", new ArrayList<>(Collections.singletonList("HP#siamese_cat")));
+					getConfig().addDefault("cat.name.BRITISH_SHORTHAIR", new ArrayList<>(Collections.singletonList("HP#british_shorthair_cat")));
+					getConfig().addDefault("cat.name.CALICO", new ArrayList<>(Collections.singletonList("HP#calico_cat")));
+					getConfig().addDefault("cat.name.PERSIAN", new ArrayList<>(Collections.singletonList("HP#persian_cat")));
+					getConfig().addDefault("cat.name.RAGDOLL", new ArrayList<>(Collections.singletonList("HP#ragdoll_cat")));
+					getConfig().addDefault("cat.name.WHITE", new ArrayList<>(Collections.singletonList("HP#white_cat")));
+					getConfig().addDefault("cat.name.JELLIE", new ArrayList<>(Collections.singletonList("HP#jellie_cat")));
+					getConfig().addDefault("cat.name.ALL_BLACK", new ArrayList<>(Collections.singletonList("HP#all_black_cat")));
+					break;
+				case "fox":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+					getConfig().addDefault(key + ".name.RED", new ArrayList<>(Collections.singleton("HP#fox_mc")));
+					getConfig().addDefault(key + ".name.SNOW", new ArrayList<>(Collections.singleton("HP#snow_fox")));
+					break;
+				case "horse":
+					if (getConfig().get("horse.name") instanceof List) {
+						List<String> h = getConfig().getStringList("horse.name");
+						getConfig().set("horse.name", null);
+						getConfig().addDefault("horse.name.default", h);
+					}
+					getConfig().addDefault("horse.name.default", new ArrayList<>());
+					for (Horse.Color variant : Horse.Color.values()) {
+						getConfig().addDefault("horse.name." + variant.name(), new ArrayList<>(Collections.singleton("HP#" + variant.name().toLowerCase() + "_horse")));
+					}
+					break;
                 case "llama":
                 case "trader_llama":
-                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                        if (getConfig().get(key + ".name") instanceof List) {
-                            List<String> h = getConfig().getStringList(key + ".name");
-                            getConfig().set(key + ".name", null);
-                            getConfig().addDefault(key + ".name.default", h);
-                        }
-                        getConfig().addDefault(key + ".name.default", new ArrayList<>());
-                        for (Llama.Color color : Llama.Color.values()) {
-                            getConfig().addDefault(key + ".name." + color.name(), new ArrayList<>(Collections.singleton("HP#" + color.name().toLowerCase() + "_" + key)));
-                        }
-                    }
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+                	getConfig().addDefault(key + ".name.CREAMY", new ArrayList<>(Collections.singleton("HP#creamy_" + key)));
+					getConfig().addDefault(key + ".name.WHITE", new ArrayList<>(Collections.singleton("HP#white_" + key)));
+					getConfig().addDefault(key + ".name.BROWN", new ArrayList<>(Collections.singleton("HP#brown_" + key)));
+					getConfig().addDefault(key + ".name.GRAY", new ArrayList<>(Collections.singleton("HP#gray_" + key)));
                     break;
-                case "parrot":
-                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                        if (getConfig().get("parrot.name") instanceof List) {
-                            List<String> h = getConfig().getStringList("parrot.name");
-                            getConfig().set("parrot.name", null);
-                            getConfig().addDefault("parrot.name.default", h);
-                        }
-                        getConfig().addDefault("parrot.name.default", new ArrayList<>());
-                        for (Parrot.Variant variant : Parrot.Variant.values()) {
-                            getConfig().addDefault("parrot.name." + variant.name(), new ArrayList<>(Collections.singleton("HP#" + variant.name().toLowerCase() + "_parrot")));
-                        }
-                    }
 
+				case "ocelot":
+					if (getConfig().get("ocelot.name") instanceof List) {
+						List<String> h = getConfig().getStringList("ocelot.name");
+						getConfig().set("ocelot.name", null);
+						getConfig().addDefault("ocelot.name.default", h);
+					}
+					getConfig().addDefault("ocelot.name.WILD_OCELOT", new ArrayList<>(Collections.singleton("HP#ocelot")));
+					getConfig().addDefault("ocelot.name.BLACK_CAT", new ArrayList<>(Collections.singleton("HP#black_cat")));
+					getConfig().addDefault("ocelot.name.RED_CAT", new ArrayList<>(Collections.singleton("HP#red_cat")));
+					getConfig().addDefault("ocelot.name.SIAMESE_CAT", new ArrayList<>(Collections.singleton("HP#siamese_cat")));
+					break;
+				case "panda":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					for (String gene : Arrays.asList("NORMAL", "PLAYFUL", "LAZY", "WORRIED", "BROWN", "WEAK", "AGGRESSIVE")) {
+						getConfig().addDefault("panda.name." + gene, new ArrayList<>(Collections.singleton("HP#panda_" + gene.toLowerCase())));
+					}
+					break;
+                case "parrot":
+                	if (getConfig().get("parrot.name") instanceof List) {
+                		List<String> h = getConfig().getStringList("parrot.name");
+                		getConfig().set("parrot.name", null);
+                		getConfig().addDefault("parrot.name.default", h);
+                	}
+                	getConfig().addDefault("parrot.name.default", new ArrayList<>());
+					getConfig().addDefault("parrot.name.RED", new ArrayList<>(Collections.singleton("HP#red_parrot")));
+					getConfig().addDefault("parrot.name.BLUE", new ArrayList<>(Collections.singleton("HP#blue_parrot")));
+					getConfig().addDefault("parrot.name.GREEN", new ArrayList<>(Collections.singleton("HP#green_parrot")));
+					getConfig().addDefault("parrot.name.CYAN", new ArrayList<>(Collections.singleton("HP#cyan_parrot")));
+					getConfig().addDefault("parrot.name.GRAY", new ArrayList<>(Collections.singleton("HP#gray_parrot")));
                     break;
-                case "horse":
-                    if (getConfig().get("horse.name") instanceof List) {
-                        List<String> h = getConfig().getStringList("horse.name");
-                        getConfig().set("horse.name", null);
-                        getConfig().addDefault("horse.name.default", h);
-                    }
-                    getConfig().addDefault("horse.name.default", new ArrayList<>());
-                    for (Horse.Color variant : Horse.Color.values()) {
-                        getConfig().addDefault("horse.name." + variant.name(), new ArrayList<>(Collections.singleton("HP#" + variant.name().toLowerCase() + "_horse")));
-                    }
-                    break;
-                case "cat":
-                    if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 10) {
-                        if (getConfig().get("cat.name") instanceof List) {
-                            List<String> h = getConfig().getStringList("cat.name");
-                            getConfig().set("cat.name", null);
-                            getConfig().addDefault("cat.name.default", h);
-                        }
-                        getConfig().addDefault("cat.name.default", new ArrayList<>());
-                        for (Cat.Type type : Cat.Type.values()) {
-                            getConfig().addDefault("cat.name." + type.name(), new ArrayList<>(Collections.singletonList("HP#" + type.name().toLowerCase() + "_cat")));
-                        }
-                    }
-                    break;
+				case "tropicalfish":
+					if (getConfig().get("tropicalfish.name") instanceof List) {
+						List<String> h = getConfig().getStringList("tropicalfish.name");
+						getConfig().set("tropicalfish.name", null);
+						getConfig().addDefault("tropicalfish.name.default", h);
+					}
+					getConfig().addDefault("tropicalfish.name.default", new ArrayList<>());
+					break;
+				case "zombievillager":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+					for (String biome : new ArrayList<>(Arrays.asList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA", "JUNGLE"))) {
+						getConfig().addDefault(key + ".name." + biome, new ArrayList<>(Collections.singleton("HP#zombie_villager_" + biome.toLowerCase())));
+					}
+					break;
                 case "witherskeleton":
+                	getConfig().addDefault(key + ".chance", 2.5);
+                	// Don't stop there
                 case "enderdragon":
                     getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("{mob-default}")));
                     break;
@@ -124,30 +190,67 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
     private void addMHFHeads() {
     	
     	for (String key : mHeads) {
-    		if (!key.equals("irongolem")
-					&& !key.equals("sheep")
-                    && !key.equals("llama")
-                    && !key.equals("parrot")) {
-    		    getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("MHF_" + HeadsPlus.capitalize(key))));
-    		    
-    		} else if (key.equals("irongolem")) {
-    			getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("MHF_Golem")));
-
-    		} else if (key.equals("sheep")){
-    			getConfig().addDefault("sheep.name.default", new ArrayList<>(Collections.singleton("MHF_Sheep")));
-    			for (DyeColor dc : DyeColor.values()) {
-    			    try {
-                        if (dc == DyeColor.LIGHT_GRAY) {
-                            getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
-                        } else {
-                            getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#" + dc.name().toLowerCase() + "_sheep")));
-                        }
-                    } catch (NoSuchFieldError ex) {
-                        getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
-                    }
-
-    			}
-
+    		switch (key) {
+				case "creeper":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault("creeper.name.default", new ArrayList<>(Collections.singleton("MHF_Creeper")));
+					getConfig().addDefault("creeper.name.POWERED", new ArrayList<>(Collections.singleton("HP#charged_creeper")));
+					break;
+				case "irongolem":
+					getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("MHF_Golem")));
+					break;
+				case "mushroomcow":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+					getConfig().addDefault(key + ".name.RED", new ArrayList<>(Collections.singleton("HP#red_mooshroom")));
+					getConfig().addDefault(key + ".name.BROWN", new ArrayList<>(Collections.singleton("HP#brown_mooshroom")));
+					break;
+				case "rabbit":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+					for (Rabbit.Type type : Rabbit.Type.values()) {
+						getConfig().addDefault(key + ".name." + type.name(), new ArrayList<>(Collections.singleton("HP#" + type.name().toLowerCase() + "_rabbit")));
+					}
+					break;
+				case "sheep":
+					getConfig().addDefault("sheep.name.default", new ArrayList<>(Collections.singleton("MHF_Sheep")));
+					for (DyeColor dc : DyeColor.values()) {
+						try {
+							if (dc == DyeColor.LIGHT_GRAY) {
+								getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
+							} else {
+								getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#" + dc.name().toLowerCase() + "_sheep")));
+							}
+						} catch (NoSuchFieldError ex) {
+							getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
+						}
+					}
+					break;
+				case "villager":
+					if (getConfig().get(key + ".name") instanceof List) {
+						List<String> h = getConfig().getStringList(key + ".name");
+						getConfig().set(key + ".name", null);
+						getConfig().addDefault(key + ".name.default", h);
+					}
+					getConfig().addDefault(key + ".name.default", new ArrayList<>());
+					for (String biome : new ArrayList<>(Arrays.asList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA", "JUNGLE"))) {
+						getConfig().addDefault(key + ".name." + biome, new ArrayList<>(Collections.singleton("HP#villager_" + biome.toLowerCase())));
+					}
+					break;
+				default:
+					getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("MHF_" + HeadsPlus.capitalize(key))));
 
 			}
 			getConfig().addDefault(key + ".interact-name", "{default}");
@@ -230,105 +333,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
     	}
     }
 
-    private void updateHeads() {
-	    if (getConfig().get("blazeHeadN") instanceof String) {
-	        for (String key : mHeads) {
-	            if (!key.equalsIgnoreCase("sheep") && !key.equalsIgnoreCase("irongolem")) {
-	                getConfig().set(key + "HeadN", null);
-	                getConfig().addDefault(key + "HeadN", new ArrayList<>(Collections.singleton("MHF_" + WordUtils.capitalize(key))));
-                } else if (key.equalsIgnoreCase("irongolem")) {
-                    getConfig().set(key + "HeadN", null);
-	                getConfig().addDefault(key + "HeadN", new ArrayList<>(Collections.singleton("MHF_Golem")));
-                } else {
-	                getConfig().set("sheepHeadN", null);
-                    getConfig().addDefault("sheep.name.default", new ArrayList<>(Collections.singleton("MHF_Sheep")));
-                    for (DyeColor dc : DyeColor.values()) {
-                        getConfig().addDefault("sheepHeadN." + dc.name(), new ArrayList<>(Collections.singleton("HP#" + dc.name().toLowerCase() + "_sheep")));
-                    }
-                }
-            }
-            for (String key : uHeads) {
-                getConfig().set(key + "HeadN", null);
-                getConfig().set(key + "HeadN", new ArrayList<>());
-            }
-        }
-    }
-
-    private void checkForOldFormat() {
-		if (getConfig().get("blazeHeadDN") instanceof String) {
-            for (String key : mHeads) {
-                if (!key.equalsIgnoreCase("sheep")) {
-                	List<String> ls = getConfig().getStringList(key + "HeadN");
-                	int c = getConfig().getInt(key + "HeadC");
-                	String dn = getConfig().getString(key + "HeadDN");
-                	double p = getConfig().getDouble(key + "HeadP");
-                	String e = getConfig().getString(key + "HeadEN");
-                	getConfig().set(key + "HeadN", null);
-                    getConfig().set(key + "HeadC", null);
-                    getConfig().set(key + "HeadDN", null);
-                    getConfig().set(key + "HeadP", null);
-                    getConfig().set(key + "HeadEN", null);
-                    getConfig().set(key + ".name", ls);
-                    getConfig().set(key + ".chance", c);
-                    getConfig().set(key + ".display-name", dn);
-                    getConfig().set(key + ".price", p);
-                    getConfig().set(key + ".interact-name", e);
-
-                } else {
-
-                    getConfig().set("sheep.name.default", getConfig().getStringList("sheepHeadN.default"));
-                    for (DyeColor dc : DyeColor.values()) {
-                        getConfig().set("sheep.name." + dc.name(), getConfig().getStringList("sheepHeadN." + dc.name()));
-                    }
-                    int c = getConfig().getInt(key + "HeadC");
-                    String dn = getConfig().getString(key + "HeadDN");
-                    double p = getConfig().getDouble(key + "HeadP");
-                    String e = getConfig().getString(key + "HeadEN");
-                    getConfig().set("sheepHeadN", null);
-                    getConfig().set("sheepHeadC", null);
-                    getConfig().set("sheepHeadDN", null);
-                    getConfig().set("sheepHeadP", null);
-                    getConfig().set("sheepHeadEN", null);
-                    getConfig().set("sheep.chance", c);
-                    getConfig().set("sheep.display-name", dn);
-                    getConfig().set("sheep.price", p);
-                    getConfig().set("sheep.interact-name", e);
-
-                }
-
-            }
-            for (String key : uHeads) {
-                List<String> ls = getConfig().getStringList(key + "HeadN");
-                int c = getConfig().getInt(key + "HeadC");
-                String dn = getConfig().getString(key + "HeadDN");
-                double p = getConfig().getDouble(key + "HeadP");
-                String e = getConfig().getString(key + "HeadEN");
-                getConfig().set(key + "HeadN", null);
-                getConfig().set(key + "HeadC", null);
-                getConfig().set(key + "HeadDN", null);
-                getConfig().set(key + "HeadP", null);
-                getConfig().set(key + "HeadEN", null);
-                getConfig().set(key + ".name", ls);
-                getConfig().set(key + ".chance", c);
-                getConfig().set(key + ".display-name", dn);
-                getConfig().set(key + ".price", p);
-                getConfig().set(key + ".interact-name", e);
-
-            }
-            String dn = getConfig().getString("playerHeadDN");
-            int c = getConfig().getInt("playerHeadC");
-            double p = getConfig().getDouble("playerHeadP");
-            getConfig().set("playerHeadDN", null);
-            getConfig().set("playerHeadC", null);
-            getConfig().set("playerHeadP", null);
-            getConfig().set("player.chance", c);
-            getConfig().set("player.display-name", dn);
-            getConfig().set("player.price", p);
-		}
-    }
-
     public double getPrice(String type) {
-
         if (getConfig().get(type + ".price").equals("{default}")) {
 	        return getConfig().getDouble("defaults.price");
 	    } else {
@@ -353,10 +358,35 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
     }
 
     public List<String> getLore(String type) {
+		List<String> lore = new ArrayList<>();
+		List<String> configLore;
         if (getConfig().get(type + ".lore").equals("{default}")) {
-            return getConfig().getStringList("defaults.lore");
+        	configLore = getConfig().getStringList("defaults.lore");
         } else {
-            return getConfig().getStringList(type + ".lore");
+        	configLore = getConfig().getStringList(type + ".lore");
         }
+		for (String l : configLore) {
+			lore.add(ChatColor.translateAlternateColorCodes('&', l)
+					.replace("{type}", type)
+					.replace("{price}", String.valueOf(getPrice(type))));
+		}
+		return lore;
     }
+
+    public List<String> getLore(String name, double price) {
+		List<String> lore = new ArrayList<>();
+		List<String> configLore;
+		if (getConfig().get("player.lore").equals("{default}")) {
+			configLore = getConfig().getStringList("defaults.lore");
+		} else {
+			configLore = getConfig().getStringList("player.lore");
+		}
+		for (String l : configLore) {
+			lore.add(ChatColor.translateAlternateColorCodes('&', l)
+					.replace("{type}", "Player")
+					.replace("{price}", String.valueOf(price))
+					.replace("{player}", name));
+		}
+		return lore;
+	}
 }

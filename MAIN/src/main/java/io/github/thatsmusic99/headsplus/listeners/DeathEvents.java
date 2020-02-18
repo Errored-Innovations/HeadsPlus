@@ -1,72 +1,84 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
-import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
+import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class DeathEvents implements Listener {
+
+    private HashMap<String, List<String>> storedData = new HashMap<>();
+    private HashMap<String, List<EntityHead>> storedHeads = new HashMap<>();
 
     public DeathEvents() {
         new BukkitRunnable() {
             @Override
             public void run() {
-                NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
-                Class[] horseData;
-                if (index.getOrder() < 6) {
-                    horseData = new Class[]{Horse.Color.class, Horse.Variant.class};
-                } else {
-                    horseData = new Class[]{Horse.Color.class};
+                try {
+                    NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
+                    if (index.getOrder() < 6) {
+                        storedData.put("HORSE", Arrays.asList("getColor", "getVariant"));
+                    } else {
+                        storedData.put("HORSE", Collections.singletonList("getColor"));
+                    }
+                    storedData.put("SHEEP", Collections.singletonList("getColor"));
+                    storedData.put("RABBIT", Collections.singletonList("getRabbitType"));
+                    if (index.getOrder() > 7) {
+                        storedData.put("LLAMA", Collections.singletonList("getColor"));
+                        storedData.put("PARROT", Collections.singletonList("getVariant"));
+                    }
+                    if (index.getOrder() > 8) {
+                        storedData.put("TROPICAL_FISH", Arrays.asList("getPattern", "getBodyColor", "getPatternColor"));
+                    }
+                    if (index.getOrder() > 10) {
+                        storedData.put("FOX", Collections.singletonList("getFoxType"));
+                        storedData.put("CAT", Collections.singletonList("getCatType"));
+                        storedData.put("TRADER_LLAMA", Collections.singletonList("getColor"));
+                        storedData.put("VILLAGER", Arrays.asList("getVillagerType", "getProfession"));
+                        storedData.put("MUSHROOM_COW", Collections.singletonList("getVariant"));
+                    } else {
+                        storedData.put("OCELOT", Collections.singletonList("getCatType"));
+                        storedData.put("VILLAGER", Collections.singletonList("getProfession"));
+                    }
+                    if (index.getOrder() > 11) {
+                        storedData.put("BEE", Arrays.asList("getAnger", "hasNectar"));
+                    }
+                    storedData.put("ZOMBIE_VILLAGER", Collections.singletonList("getProfession"));
+                    storedData.put("CREEPER", Collections.singletonList("isPowered"));
+                    setupHeads();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                coloredData.put("HORSE", horseData);
-                coloredData.put("SHEEP", new Class[]{DyeColor.class});
-                coloredData.put("WOLF", new Class[]{DyeColor.class});
-                coloredData.put("RABBIT", new Class[]{Rabbit.Type.class});
-                if (index.getOrder() > 7) {
-                    coloredData.put("LLAMA", new Class[]{Llama.Color.class});
-                    coloredData.put("PARROT", new Class[]{Parrot.Variant.class});
-                }
-                if (index.getOrder() > 8) {
-                    coloredData.put("TROPICAL_FISH", new Class[]{TropicalFish.Pattern.class});
-                }
-                if (index.getOrder() > 10) {
-                    coloredData.put("FOX", new Class[]{Fox.Type.class});
-                    coloredData.put("CAT", new Class[]{Cat.Type.class});
-                    coloredData.put("TRADER_LLAMA", new Class[]{TraderLlama.Color.class});
-                    coloredData.put("VILLAGER", new Class[]{Villager.Profession.class, Villager.Type.class});
-                    coloredData.put("MUSHROOM_COW", new Class[]{MushroomCow.Variant.class});
-                } else {
-                    coloredData.put("OCELOT", new Class[]{Ocelot.Type.class});
-                    coloredData.put("VILLAGER", new Class[]{Villager.Profession.class});
-                }
-                coloredData.put("ZOMBIE_VILLAGER", new Class[]{Villager.Profession.class});
-                setupHeads();
             }
         }.runTaskAsynchronously(HeadsPlus.getInstance());
 
     }
-	
-	public static final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
+
+    public HashMap<String, List<EntityHead>> getStoredHeads() {
+        return storedHeads;
+    }
+
+    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
             "BLAZE",
             "BEE",
             "CAT",
@@ -94,6 +106,7 @@ public class DeathEvents implements Listener {
             "MULE",
             "MUSHROOM_COW",
             "OCELOT",
+            "PANDA",
             "PARROT",
             "PHANTOM",
             "PIG",
@@ -128,10 +141,7 @@ public class DeathEvents implements Listener {
             "ZOMBIE",
             "ZOMBIE_HORSE",
             "ZOMBIE_VILLAGER"));
-    private final HeadsPlusConfigCustomHeads hpchx = HeadsPlus.getInstance().getHeadsXConfig();
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-    public static HashMap<String, HashMap<String, List<ItemStack>>> heads = new HashMap<>();
-    private static HashMap<String, Class[]> coloredData = new HashMap<>();
     public static boolean ready = false;
 
     @EventHandler
@@ -140,46 +150,40 @@ public class DeathEvents implements Listener {
         if (!hp.isDropsEnabled() || checkForMythicMob(hp, e.getEntity())) {
             return;
         }
-        if (runAcceptTests(e.getEntity())) {
-            try {
-                String entity = e.getEntityType().toString().toLowerCase().replaceAll("_", "");
-                Random rand = new Random();
-                double chance1 = hpch.getConfig().getDouble(entity + ".chance");
-                double chance2 = rand.nextDouble() * 100;
-                int amount = 1;
-                if (e.getEntity().getKiller() != null) {
-                    if (hp.getNMS().getItemInHand(e.getEntity().getKiller()).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
-                            && hp.getConfiguration().getMechanics().getBoolean("allow-looting-enchantment")
-                            && !(hp.getConfiguration().getMechanics().getStringList("looting.ignored-entities").contains(e.getEntityType().name().replaceAll("_", "").toLowerCase()))) {
-                        if (hp.getConfiguration().getMechanics().getBoolean("looting.use-old-system")) {
-                            amount += hp.getNMS().getItemInHand(e.getEntity().getKiller()).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
+        if (!runBlacklistTests(e.getEntity())) return;
+        try {
+            String entity = e.getEntityType().toString().toLowerCase().replaceAll("_", "");
+            Random rand = new Random();
+            double fixedChance = hpch.getConfig().getDouble(entity + ".chance");
+            double randChance = rand.nextDouble() * 100;
+            int amount = 1;
+            Player killer = e.getEntity().getKiller();
+            if (killer != null) {
+                ItemStack handItem = hp.getNMS().getItemInHand(e.getEntity().getKiller());
+                ConfigurationSection mechanics = hp.getConfiguration().getMechanics();
+                if (handItem != null) {
+                    if (handItem.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
+                            && mechanics.getBoolean("allow-looting-enchantment")
+                            && !(mechanics.getStringList("looting.ignored-entities").contains(entity))) {
+                        if (mechanics.getBoolean("looting.use-old-system")) {
+                            amount += handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
                         } else {
-                            chance1 *= (hp.getNMS().getItemInHand(e.getEntity().getKiller()).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1);
-                            amount = ((int) chance1 / 100) == 0 ? 1 : (int) (chance1 / 100);
+                            fixedChance *= handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
+                            amount = ((int) fixedChance / 100) == 0 ? 1 : (int) (fixedChance / 100);
                         }
 
                     }
                 }
-                if (chance1 == 0.0) {
-                    return;
-                }
-                if (chance2 <= chance1) {
 
-                    if (entity.equalsIgnoreCase("sheep")
-                            || entity.equalsIgnoreCase("parrot")
-                            || entity.equalsIgnoreCase("horse")
-                            || entity.equalsIgnoreCase("llama")) {
-                        dropHead(e.getEntity(), e.getEntity().getKiller(), amount);
-                    } else {
-                        if (hpch.getConfig().getStringList(entity + ".name").isEmpty()) {
-                            return;
-                        }
-                        dropHead(e.getEntity(), e.getEntity().getKiller(), amount);
-                    }
-                }
-            } catch (Exception ex) {
-                DebugPrint.createReport(ex, "Event (DeathEvents)", false, null);
             }
+            if (fixedChance == 0.0) {
+                return;
+            }
+            if (randChance <= fixedChance) {
+                dropHead(e.getEntity(), e.getEntity().getKiller(), amount);
+            }
+        } catch (Exception ex) {
+            DebugPrint.createReport(ex, "Event (DeathEvents)", false, null);
         }
     }
 
@@ -189,72 +193,55 @@ public class DeathEvents implements Listener {
 
             HeadsPlus hp = HeadsPlus.getInstance();
             if (!hp.isDropsEnabled()) return;
+            Player victim = ep.getEntity();
+            Player killer = ep.getEntity().getKiller();
             HeadsPlusMainConfig c = hp.getConfiguration();
-            if (runAcceptTests(ep.getEntity())) {
+            if (runBlacklistTests(victim)) {
                 Random rand = new Random();
-                double chance1 = hpch.getConfig().getDouble("player.chance");
-                double chance2 = rand.nextDouble() * 100;
+                double fixedChance = hpch.getConfig().getDouble("player.chance");
+                double randChance = rand.nextDouble() * 100;
                 NMSManager nms = hp.getNMS();
-                int a = 1;
-                if (ep.getEntity().getKiller() != null) {
-                    if (nms.getItemInHand(ep.getEntity().getKiller()).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
+                int amount = 1;
+                if (killer != null) {
+                    if (nms.getItemInHand(killer).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
                             && c.getMechanics().getBoolean("allow-looting-enchantment")
                             && !(c.getMechanics().getStringList("looting.ignored-entities").contains("player"))) {
                         if (c.getMechanics().getBoolean("looting.use-old-system")) {
-                            a = HeadsPlus.getInstance().getNMS().getItemInHand(ep.getEntity().getKiller()).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                            amount = HeadsPlus.getInstance().getNMS().getItemInHand(killer).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
                         } else {
-                            chance1 *= HeadsPlus.getInstance().getNMS().getItemInHand(ep.getEntity().getKiller()).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-                            a = ((int) chance1 / 100) == 0 ? 1 : (int) (chance1 / 100);
+                            fixedChance *= HeadsPlus.getInstance().getNMS().getItemInHand(killer).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+                            amount = ((int) fixedChance / 100) == 0 ? 1 : (int) (fixedChance / 100);
                         }
                     }
                 }
 
-                if (chance1 == 0.0) return;
-                if (chance2 <= chance1) {
-
-
-                    ItemStack head = nms.getSkullMaterial(a);
-                    SkullMeta headM = (SkullMeta) head.getItemMeta();
-                    headM = nms.setSkullOwner(ep.getEntity().getName(), headM);
-                    headM.setDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()));
-
-
-                    Location entityLoc = ep.getEntity().getLocation();
-                    double entityLocY = entityLoc.getY() + 1;
-                    entityLoc.setY(entityLocY);
-                    World world = ep.getEntity().getWorld();
-
-                    double price = hpch.getPrice("player");
-                    boolean b = hp.getConfiguration().getPerks().pvp_player_balance_competition;
+                if (fixedChance == 0.0) return;
+                if (randChance <= fixedChance) {
                     double lostprice = 0.0;
-                    if (b && HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity()) > 0.0) {
-                        double playerprice = HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity());
+                    double price = 0.0;
+                    Economy economy = HeadsPlus.getInstance().getEconomy();
+                    if (hp.getConfiguration().getPerks().pvp_player_balance_competition
+                            && killer != null
+                            && economy.getBalance(killer) > 0.0) {
+                        double playerprice = economy.getBalance(killer);
                         price = playerprice * hp.getConfiguration().getPerks().pvp_balance_for_head;
-                        lostprice = HeadsPlus.getInstance().getEconomy().getBalance(ep.getEntity()) * hp.getConfiguration().getPerks().pvp_percentage_lost;
+                        lostprice = economy.getBalance(killer) * hp.getConfiguration().getPerks().pvp_percentage_lost;
                     }
-
-                    List<String> strs = new ArrayList<>();
-                    for (String str : hpch.getLore("player")) {
-                        strs.add(ChatColor.translateAlternateColorCodes('&', str
-								.replace("{player}", ep.getEntity().getName())
-								.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
-                    }
-                    headM.setLore(strs);
-                    head.setItemMeta(headM);
-                    NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
-                    head = nbt.makeSellable(head);
-                    head = nbt.setType(head, "player");
-                    head = nbt.setPrice(head, price);
-                    PlayerHeadDropEvent event = new PlayerHeadDropEvent(ep.getEntity(), ep.getEntity().getKiller(), head, world, entityLoc);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    Head head = new Head("player").withAmount(amount)
+                            .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()))
+                            .withPlayerName(victim.getName())
+                            .withPrice(price)
+                            .withLore(hpch.getLore(victim.getName(), price));
+                    Location location = victim.getLocation();
+                    EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.PLAYER);
                     if (!event.isCancelled()) {
-                        if (b && ep.getEntity().getKiller() != null) {
-                            hp.getEconomy().withdrawPlayer(ep.getEntity(), lostprice);
-                            ep.getEntity().sendMessage(hp.getMessagesConfig().getString("event.lost-money", ep.getEntity())
-									.replace("{player}", ep.getEntity().getKiller().getName())
-									.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
+                        location.getWorld().dropItem(location, head.getItemStack());
+                        if (lostprice > 0.0) {
+                            economy.withdrawPlayer(ep.getEntity(), lostprice);
+                            victim.sendMessage(hp.getMessagesConfig().getString("event.lost-money", ep.getEntity())
+                                    .replace("{player}", killer.getName())
+                                    .replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
                         }
-                        world.dropItem(event.getLocation(), event.getSkull());
                     }
                 }
             }
@@ -264,271 +251,148 @@ public class DeathEvents implements Listener {
 	}
 
 	private void setupHeads() {
-	    NMSManager nms = HeadsPlus.getInstance().getNMS();
 	    for (String name : ableEntities) {
 	        try {
                 HeadsPlus.getInstance().debug("Creating head for " + name + "...", 3);
-                HashMap<String, List<ItemStack>> keys = new HashMap<>();
-                List<ItemStack> heads = new ArrayList<>();
-                if (name.equals("SHEEP")) {
-                    a("sheep", keys);
-                    DeathEvents.heads.put(name, keys);
-                    continue;
-                }
-                if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                    if (name.equals("LLAMA")) {
-                        a("llama", keys);
-                        DeathEvents.heads.put(name, keys);
-                        continue;
-                    }
-                    if (name.equals("PARROT")) {
-                        a("parrot", keys);
-                        DeathEvents.heads.put(name, keys);
-                        continue;
-                    }
-                }
-                if (name.equals("HORSE")) {
-                    a("horse", keys);
-                    DeathEvents.heads.put(name, keys);
-                    continue;
-                }
                 String fancyName = name.toLowerCase().replaceAll("_", "");
-                for (String name2 : hpch.getConfig().getStringList(fancyName + ".name")) {
-                    ItemStack is;
-                    boolean b = true;
-                    if (hpchx.isHPXSkull(name2)) {
-                        is = hpchx.getSkull(name2);
-                    } else if (name2.equalsIgnoreCase("{mob-default}")) {
-                        try {
-                            if (name.equals("ENDER_DRAGON")
-                                    || name.equals("WITHER_SKELETON")
-                                    || name.equals("CREEPER")
-                                    || name.equals("ZOMBIE")
-                                    || name.equals("SKELETON")) {
-                                is = new ItemStack(Material.BLAZE_ROD);
-                                double price = hpch.getPrice(fancyName);
-                                ItemMeta sm = is.getItemMeta();
-                                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
-                                List<String> strs = new ArrayList<>();
-                                List<String> lore = hpch.getLore(fancyName);
-                                for (String str2 : lore) {
-                                    strs.add(ChatColor.translateAlternateColorCodes('&', str2
-                                            .replace("{type}", fancyName)
-                                            .replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
-                                }
-                                sm.setLore(strs);
-                                is.setItemMeta(sm);
-                                NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
-                                is = nbt.makeSellable(is);
-                                is = nbt.setType(is, fancyName);
-                                is = nbt.setPrice(is, price);
-                                switch (name) {
-                                    case "ENDER_DRAGON":
-                                        is.setType(nms.getSkull(5).getType());
-                                        break;
-                                    case "ZOMBIE":
-                                        is.setType(nms.getSkull(2).getType());
-                                        break;
-                                    case "CREEPER":
-                                        is.setType(nms.getSkull(4).getType());
-                                        break;
-                                    case "SKELETON":
-                                        is.setType(nms.getSkull(0).getType());
-                                        break;
-                                    default:
-                                        is.setType(nms.getSkull(1).getType());
-                                        break;
-                                }
-
-                                b = false;
+                HeadsPlusConfigHeads headsCon = HeadsPlus.getInstance().getHeadsConfig();
+                if (headsCon.getConfig().get(fancyName + ".name") instanceof ConfigurationSection) {
+                    for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
+                        List<EntityHead> heads = new ArrayList<>();
+                        for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
+                            EntityHead headItem;
+                            if (head.equalsIgnoreCase("{mob-default}") && fancyName.equalsIgnoreCase("creeper")) {
+                                headItem = new EntityHead(fancyName, 4);
                             } else {
-                                is = nms.getSkull(3);
+                                headItem = new EntityHead(fancyName);
                             }
-                        } catch (NoSuchFieldError ex) {
-                            HeadsPlus.getInstance().getLogger().warning("Error thrown when trying to add a mob-default head. Setting to player skull...");
-                            is = nms.getSkull(3);
+                            headItem.withDisplayName(headsCon.getDisplayName(fancyName))
+                                    .withPrice(headsCon.getPrice(fancyName))
+                                    .withLore(headsCon.getLore(fancyName));
+                            if (head.startsWith("HP#")) {
+                                headItem.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(head));
+                            } else {
+                                headItem.withPlayerName(head);
+                            }
+                            heads.add(headItem);
                         }
-                    } else {
-                        is = nms.getSkullMaterial(1);
-                        SkullMeta sm = (SkullMeta) is.getItemMeta();
-                        sm = nms.setSkullOwner(name2, sm);
-                        is.setItemMeta(sm);
+                        storedHeads.put(name + ";" + conditions, heads);
                     }
-                    if (b) {
-                        double price = hpch.getPrice(fancyName);
-                        SkullMeta sm = (SkullMeta) is.getItemMeta();
-                        sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(fancyName));
-                        List<String> strs = new ArrayList<>();
-                        List<String> lore = hpch.getLore(fancyName);
-                        for (String str2 : lore) {
-                            strs.add(ChatColor.translateAlternateColorCodes('&', str2
-                                    .replace("{type}", fancyName)
-                                    .replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
+                } else {
+                    List<EntityHead> heads = new ArrayList<>();
+                    for (String head : headsCon.getConfig().getStringList(fancyName + ".name")) {
+                        EntityHead headItem;
+                        if (head.equalsIgnoreCase("{mob-default}")) {
+                            switch (fancyName) {
+                                case "witherskeleton":
+                                    headItem = new EntityHead(fancyName, 1);
+                                    break;
+                                case "enderdragon":
+                                    headItem = new EntityHead(fancyName, 5);
+                                    break;
+                                case "zombie":
+                                    headItem = new EntityHead(fancyName, 2);
+                                    break;
+                                case "creeper":
+                                    headItem = new EntityHead(fancyName, 4);
+                                    break;
+                                case "skeleton":
+                                    headItem = new EntityHead(fancyName, 0);
+                                    break;
+                                default:
+                                    headItem = new EntityHead(fancyName);
+                                    break;
+                            }
+                        } else {
+                            headItem = new EntityHead(fancyName);
                         }
-                        sm.setLore(strs);
-                        is.setItemMeta(sm);
-                        NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
-                        is = nbt.makeSellable(is);
-                        is = nbt.setType(is, fancyName);
-                        is = nbt.setPrice(is, price);
+                        headItem.withDisplayName(headsCon.getDisplayName(fancyName))
+                                .withPrice(headsCon.getPrice(fancyName))
+                                .withLore(headsCon.getLore(fancyName));
+                        if (head.startsWith("HP#")) {
+                            headItem.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(head));
+                        } else {
+                            headItem.withPlayerName(head);
+                        }
+                        heads.add(headItem);
                     }
-                    heads.add(is);
+                    storedHeads.put(name + ";default", heads);
                 }
-                keys.put("default", heads);
-                DeathEvents.heads.put(name, keys);
-            } catch (Exception ex) {
-	            HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name.");
-	            ex.printStackTrace();
+            } catch (Exception e) {
+                HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name.");
+                e.printStackTrace();
             }
-
         }
         ready = true;
     }
 
-    private HashMap<String, List<ItemStack>> a(String en,  HashMap<String, List<ItemStack>> keys) {
-
-        for (String str : hpch.getConfig().getConfigurationSection(en + ".name").getKeys(false)) {
-            List<ItemStack> heads = new ArrayList<>();
-            for (String name : hpch.getConfig().getStringList(en + ".name." + str)) {
-                ItemStack is = null;
-                NMSManager nms = HeadsPlus.getInstance().getNMS();
-                if (HeadsPlus.getInstance().getHeadsXConfig().isHPXSkull(name)) {
-                    try {
-                        is = HeadsPlus.getInstance().getHeadsXConfig().getSkull(name);
-                    } catch (NullPointerException ex) {
-                        HeadsPlus.getInstance().getLogger().warning("WARNING: NPE thrown at " + str + ", " + name + ". If this is light_gray, please change HP#light_gray_sheep to HP#silver_sheep. If not, make sure your HP# head is valid.");
-                    }
-                }  else {
-                    is = nms.getSkullMaterial(1);
-                    SkullMeta sm = (SkullMeta) is.getItemMeta();
-                    sm = nms.setSkullOwner(name, sm);
-                    is.setItemMeta(sm);
-                }
-
-
-                double price = hpch.getPrice(en);
-                SkullMeta sm = (SkullMeta) is.getItemMeta();
-                sm.setDisplayName(ChatColor.RESET + hpch.getDisplayName(en));
-                List<String> strs = new ArrayList<>();
-                List<String> lore = hpch.getLore(en);
-                for (String str2 : lore) {
-                    strs.add(ChatColor.translateAlternateColorCodes('&', str2
-							.replace("{type}", en)
-							.replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price)))));
-                }
-                sm.setLore(strs);
-                is.setItemMeta(sm);
-                NBTManager nbt = HeadsPlus.getInstance().getNBTManager();
-                is = nbt.makeSellable(is);
-                is = nbt.setType(is, en);
-                is = nbt.setPrice(is, price);
-                heads.add(is);
-
-            }
-            keys.put(str, heads);
-        }
-        return keys;
-    }
-
-	private List<ItemStack> hasColor(Entity e) {
-        if (e instanceof Sheep) {
-            Sheep sheep = (Sheep) e;
-            DyeColor dc = sheep.getColor();
-            for (String str : hpch.getConfig().getConfigurationSection("sheep.name").getKeys(false)) {
-                if (!str.equalsIgnoreCase("default")) {
-                    if (dc.equals(DyeColor.valueOf(str))) {
-                        return heads.get(e.getType().name()).get(str);
-                    }
-                }
-            }
-        }
-        if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-            if (e instanceof Llama) {
-                Llama llama = (Llama) e;
-                Llama.Color color = llama.getColor();
-                for (String str : hpch.getConfig().getConfigurationSection("llama.name").getKeys(false)) {
-                    if (!str.equalsIgnoreCase("default")) {
-                        if (color.equals(Llama.Color.valueOf(str))) {
-                            return heads.get(e.getType().name()).get(str);
+    private void dropHead(Entity entity, Player killer, int amount) {
+        Random random = new Random();
+        String name = entity.getType().name();
+        List<EntityHead> heads = null;
+        try {
+            if (storedData.get(name) != null) {
+                List<String> possibleConditions = new ArrayList<>();
+                for (String methods : storedData.get(name)) {
+                    if (entity.getType() == EntityType.CREEPER) {
+                        boolean powered = Boolean.parseBoolean(callMethod(methods, entity));
+                        heads = storedHeads.get(name + ";" + (powered ? "POWERED" : "default"));
+                        break;
+                    } else if (entity.getType() == EntityType.valueOf("BEE")) {
+                        if (methods.equalsIgnoreCase("hasNectar")) {
+                            possibleConditions.add(callMethod(methods, entity).equalsIgnoreCase("true") ? "NECTAR" : "default");
+                        } else {
+                            possibleConditions.add(Integer.parseInt(callMethod(methods, entity)) > 0 ? "ANGRY" : "default");
                         }
-                    }
-                }
-            } else if (e instanceof Parrot) {
-                Parrot parrot = (Parrot) e;
-                Parrot.Variant va = parrot.getVariant();
-                for (String str : hpch.getConfig().getConfigurationSection("parrot.name").getKeys(false)) {
-                    if (!str.equalsIgnoreCase("default")) {
-                        if (va.equals(Parrot.Variant.valueOf(str))) {
-                            return heads.get(e.getType().name()).get(str);
-                        }
-                    }
-                }
-            }
-        }
-         if (e instanceof Horse) {
-            Horse horse = (Horse) e;
-            Horse.Color c = horse.getColor();
-            for (String str : hpch.getConfig().getConfigurationSection("horse.name").getKeys(false)) {
-                if (!str.equalsIgnoreCase("default")) {
-                    if (c.equals(Horse.Color.valueOf(str))) {
-                        return heads.get(e.getType().name()).get(str);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private void dropHead(Entity e, Player k, int a) {
-	    Random r = new Random();
-	    int thing;
-	    ItemStack i;
-	    List<ItemStack> af = hasColor(e);
-	    String name = e.getType().name();
-
-	    String mobName = e.getType().name().replaceAll("_", "").toLowerCase();
-	    try {
-            if (af != null && !af.isEmpty()) {
-                thing = r.nextInt(af.size());
-                i = af.get(thing);
-            } else {
-                if (heads.get(name) == null) return;
-                if (heads.get(name).get("default") == null) return;
-                if (heads.get(name).get("default").size() < 1) return;
-                if (e instanceof Sheep) {
-                    thing = r.nextInt(hpch.getConfig().getStringList("sheep.name.default").size());
-                } else if (e instanceof Horse) {
-                    thing = r.nextInt(hpch.getConfig().getStringList("horse.name.default").size());
-                } else if (HeadsPlus.getInstance().getNMSVersion().getOrder() > 7) {
-                    if (e instanceof Parrot) {
-                        thing = r.nextInt(hpch.getConfig().getStringList("parrot.name.default").size());
-                    } else if (e instanceof Llama) {
-                        thing = r.nextInt(hpch.getConfig().getStringList("llama.name.default").size());
                     } else {
-                        thing = r.nextInt(hpch.getConfig().getStringList(mobName + ".name").size());
+                        possibleConditions.add(callMethod(methods, entity));
                     }
-                } else {
-                    thing = r.nextInt(hpch.getConfig().getStringList(mobName + ".name").size());
                 }
-                i = heads.get(name).get("default").get(thing);
+                if (possibleConditions.contains("default") && possibleConditions.size() == 1) {
+                    heads = storedHeads.get(name + ";default");
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : possibleConditions) {
+                        if (storedHeads.containsKey(name + ";" + s)) {
+                            heads = storedHeads.get(name + ";" + s);
+                            break;
+                        }
+                        sb.append(s).append(",");
+                    }
+                    if (heads == null) {
+                        sb.replace(sb.length() - 1, sb.length(), "");
+                        if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
+                            heads = storedHeads.get(name + ";" + sb.toString());
+                        } else {
+                            heads = storedHeads.get(name + ";default");
+                        }
+                    }
+
+                }
+            } else {
+                heads = storedHeads.get(entity.getType().name() + ";default");
+                System.out.println(heads);
             }
-        } catch (IndexOutOfBoundsException ex) {
-	        return;
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+            e.printStackTrace();
+            return;
         }
-        i.setAmount(a);
-        Location entityLoc = e.getLocation();
-        double entityLocY = entityLoc.getY() + 1;
-        entityLoc.setY(entityLocY);
-        World world = e.getWorld();
-        EntityHeadDropEvent event = new EntityHeadDropEvent(k, i, world, entityLoc, e.getType());
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (heads.isEmpty()) return;
+        EntityHead head = heads.get(random.nextInt(heads.size()));
+        head.withAmount(amount);
+        Location location = entity.getLocation();
+        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, entity.getType());
         if (!event.isCancelled()) {
-            world.dropItem(event.getLocation(), event.getSkull());
-            if (k != null) {
-                HPPlayer.getHPPlayer(k).addXp(10);
-            }
+            location.getWorld().dropItem(location, head.getItemStack());
         }
+
     }
+
+    private String callMethod(String methodName, Entity entity) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        Method method = entity.getClass().getMethod(methodName);
+        return String.valueOf(method.invoke(entity));
+    }
+
 
     private boolean checkForMythicMob(HeadsPlus hp, Entity e) {
         try {
@@ -555,11 +419,11 @@ public class DeathEvents implements Listener {
     }
 
     public void reload() {
-	    heads = new HashMap<>();
+	    storedHeads = new HashMap<>();
         setupHeads();
     }
 
-    private boolean runAcceptTests(LivingEntity e) {
+    private boolean runBlacklistTests(LivingEntity e) {
         HeadsPlusMainConfig c = HeadsPlus.getInstance().getConfiguration();
         // Killer checks
 	    if (e.getKiller() == null) {

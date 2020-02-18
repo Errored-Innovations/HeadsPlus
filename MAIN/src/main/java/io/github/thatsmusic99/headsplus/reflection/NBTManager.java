@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.reflection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
-import io.github.thatsmusic99.headsplus.config.customheads.Icon;
+import io.github.thatsmusic99.headsplus.config.customheads.legacy.Icon;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -482,7 +482,7 @@ public class NBTManager {
         return i;
     }
 
-    public String getType(ItemStack i) {
+    public static String getType(ItemStack i) {
         return getString(i, "headsplus-type");
     }
 
@@ -490,7 +490,7 @@ public class NBTManager {
         return getString(i, "head-id");
     }
 
-    public double getPrice(ItemStack i) {
+    public static double getPrice(ItemStack i) {
         return getDouble(i,  "head-price");
     }
 
@@ -502,11 +502,11 @@ public class NBTManager {
         return getString(i, "head-section");
     }
 
-    public Icon getIcon(ItemStack i) {
+    public static Icon getIcon(ItemStack i) {
         return Icon.getIconFromName(getString(i,  "head-icon"));
     }
 
-    public ItemStack setIcon(ItemStack i, Icon icon) {
+    public static ItemStack setIcon(ItemStack i, Icon icon) {
         return setString(i, "head-icon", icon.getIconName());
     }
 
@@ -543,7 +543,7 @@ public class NBTManager {
         return i;
     }
 
-    public ItemStack setPrice(ItemStack i, double price) {
+    public static ItemStack setPrice(ItemStack i, double price) {
         return setDouble(i, "head-price", price);
     }
 

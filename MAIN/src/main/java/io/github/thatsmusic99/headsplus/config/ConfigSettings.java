@@ -29,7 +29,6 @@ public class ConfigSettings {
         }
         config = YamlConfiguration.loadConfiguration(configF);
         load(nullp);
-        save();
     }
 
     public void save() {

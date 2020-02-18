@@ -3,16 +3,12 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 @CommandInfo(
         commandname = "conjure",
@@ -36,10 +32,8 @@ public class Conjure implements IHeadsPlusCommand {
     @Override
     public String isCorrectUsage(String[] args, CommandSender sender) {
             if (args.length > 1) {
-                HeadsPlusConfigHeads heads = HeadsPlus.getInstance().getHeadsConfig();
-                List<String> mHeads = heads.mHeads;
-                List<String> uHeads = heads.uHeads;
-                if (mHeads.contains(args[1]) || uHeads.contains(args[1])) {
+                String entity = args[1].toUpperCase();
+                if (DeathEvents.ableEntities.contains(entity)) {
                     int amount = 1;
                     if (args.length > 2) {
                         if (args[2].matches("^[0-9]+$")) {
@@ -74,7 +68,7 @@ public class Conjure implements IHeadsPlusCommand {
                     }
                     DeathEvents de = HeadsPlus.getInstance().getDeathEvents();
                     try {
-                        ItemStack i = DeathEvents.heads.get(de.prettyStringToUglyString(args[1])).get(type).get(index);
+                        ItemStack i = de.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
                         i.setAmount(amount);
                         this.head = i;
 

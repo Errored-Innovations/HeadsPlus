@@ -29,10 +29,12 @@ import org.json.simple.JSONValue;
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 2.8;
+    private final double cVersion = 2.9;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
+    public static final String starter = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv";
+
 
     public HeadsPlusConfigCustomHeads() {
         this.conName = "customheads";
@@ -183,6 +185,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 getConfig().getBoolean("heads." + key + ".encode"),
                 getConfig().getString("heads." + key + ".displayname"));
     }
+
 
     public ItemStack getSkullFromTexture(String texture, boolean encoded, String displayName) {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
