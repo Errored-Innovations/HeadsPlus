@@ -56,6 +56,7 @@ public class DeathEvents implements Listener {
                         storedData.put("TRADER_LLAMA", Collections.singletonList("getColor"));
                         storedData.put("VILLAGER", Arrays.asList("getVillagerType", "getProfession"));
                         storedData.put("MUSHROOM_COW", Collections.singletonList("getVariant"));
+                        storedData.put("PANDA", Collections.singletonList("getMainGene"));
                     } else {
                         storedData.put("OCELOT", Collections.singletonList("getCatType"));
                         storedData.put("VILLAGER", Collections.singletonList("getProfession"));
@@ -371,7 +372,6 @@ public class DeathEvents implements Listener {
                 }
             } else {
                 heads = storedHeads.get(entity.getType().name() + ";default");
-                System.out.println(heads);
             }
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();

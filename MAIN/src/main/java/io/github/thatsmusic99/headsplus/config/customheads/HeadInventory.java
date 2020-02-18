@@ -259,7 +259,7 @@ public abstract class HeadInventory {
                 im.setDisplayName(hpc.formatMsg(icon.getDisplayName().replace("{head-name}", is.getItemMeta().getDisplayName()), sender));
             if (this instanceof SellheadMenu) {
                 im.setDisplayName(hpc.formatMsg(im.getDisplayName().replace("{default}",
-                        HeadsPlus.getInstance().getHeadsConfig().getDisplayName(nbt.getType(is))), sender));
+                        HeadsPlus.getInstance().getHeadsConfig().getDisplayName(NBTManager.getType(is))), sender));
             }
             String s = "";
             if (this instanceof SellheadMenu) {
