@@ -24,6 +24,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public boolean onCommand(CommandSender cs, Command command, String s, String[] args) {
+        getDebug().startTimings(cs, "hplb");
         try {
             tests.put("No permission", !cs.hasPermission("headsplus.leaderboards"));
             tests.put("Arguments", args.length > 0);
@@ -165,7 +166,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand {
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
         }
-        printDebugResults(tests, false);
+        getDebug().stopTimings(cs, "hplb");
         return false;
     }
 

@@ -68,6 +68,7 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigItems items;
     private HeadsPlusConfigSounds sounds;
     private HeadsPlusConfigTextMenu menus;
+    private HeadsPlusDebug debug;
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
     private final List<ChallengeSection> challengeSections = new ArrayList<>();
@@ -400,6 +401,9 @@ public class HeadsPlus extends JavaPlugin {
         cs.add(menus);
         debug("- Instance for HeadsPlusConfigTextMenu created!", 3);
 
+        debug = new HeadsPlusDebug();
+        cs.add(debug);
+
         debug("Instances created.", 1);
     }
 
@@ -653,6 +657,10 @@ public class HeadsPlus extends JavaPlugin {
 
     public NMSIndex getNMSVersion() {
         return nmsversion;
+    }
+
+    public HeadsPlusDebug getDebug() {
+        return debug;
     }
 
     public ChatColor getThemeColour(int i) {

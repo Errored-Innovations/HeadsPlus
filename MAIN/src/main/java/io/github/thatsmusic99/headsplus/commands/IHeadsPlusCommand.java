@@ -1,12 +1,17 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusDebug;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 public interface IHeadsPlusCommand {
+
+    default HeadsPlusDebug getDebug() {
+        return HeadsPlus.getInstance().getDebug();
+    }
 
     String isCorrectUsage(String[] args, CommandSender sender);
 
