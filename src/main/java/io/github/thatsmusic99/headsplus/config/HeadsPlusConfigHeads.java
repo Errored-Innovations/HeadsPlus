@@ -228,7 +228,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					getConfig().addDefault("sheep.name.default", new ArrayList<>(Collections.singleton("MHF_Sheep")));
 					for (DyeColor dc : DyeColor.values()) {
 						try {
-							if (dc == DyeColor.LIGHT_GRAY) {
+							if (dc == DyeColor.valueOf("LIGHT_GRAY")) {
 								getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
 							} else {
 								getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#" + dc.name().toLowerCase() + "_sheep")));
