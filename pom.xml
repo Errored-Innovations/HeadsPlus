@@ -16,28 +16,9 @@
 
     <modules>
         <module>MAIN</module>
-        <module>DIST</module>
-        <module>v1_8_R1</module>
-        <module>v1_8_R2</module>
-        <module>v1_8_R3</module>
-        <module>v1_9_R1</module>
-        <module>v1_9_R2</module>
-        <module>v1_10_R1</module>
-        <module>v1_11_R1</module>
-        <module>v1_12_R1</module>
-        <module>v1_13_R1</module>
-        <module>v1_13_R2</module>
-        <module>v1_14_R1</module>
-        <module>v1_15_R1</module>
     </modules>
     <!-- Global dependencies, downloaded from actual repositories-->
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>

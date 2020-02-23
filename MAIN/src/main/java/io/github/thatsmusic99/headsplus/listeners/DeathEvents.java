@@ -409,15 +409,6 @@ public class DeathEvents implements Listener {
         return false;
     }
 
-    public String prettyStringToUglyString(String s) {
-	    for (String name : ableEntities) {
-	        if (name.replaceAll("_", "").equalsIgnoreCase(s)) {
-	            return name;
-            }
-        }
-        return null;
-    }
-
     public void reload() {
 	    storedHeads = new HashMap<>();
         setupHeads();

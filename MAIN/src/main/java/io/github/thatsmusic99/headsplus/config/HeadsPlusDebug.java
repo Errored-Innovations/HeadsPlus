@@ -53,10 +53,10 @@ public class HeadsPlusDebug extends ConfigSettings {
         if (getConfig().getBoolean("timings.enabled")) {
             String time = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
             if (getConfig().getBoolean(type.name().toLowerCase() + "." + name + ".timings")) {
-                try (FileWriter fw = new FileWriter(logTimings);
+                try (FileWriter fw = new FileWriter(logTimings, true);
                      BufferedWriter bw = new BufferedWriter(fw);
                      PrintWriter out = new PrintWriter(bw)) {
-                    out.println("[" + time + "] " + type.name() + " " + name + ": Took a total of " + ms + "ms!\n");
+                    out.println("[" + time + "] " + type.name() + " " + name + ": Took a total of " + ms + "ms!");
                     out.close();
                     if (getConfig().getBoolean("timings.send-to-console")) {
                         HeadsPlus.getInstance().getLogger().info("DEBUG: " + type.name() + " " + name + ": Took a total of " + ms + "ms!");
@@ -88,7 +88,7 @@ public class HeadsPlusDebug extends ConfigSettings {
             }
         }
     }
-    public void log() {
+    public void log(String name, DebugType type, String message) {
 
     }
 
