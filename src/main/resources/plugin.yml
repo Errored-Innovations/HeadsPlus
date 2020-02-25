@@ -1,0 +1,72 @@
+main: io.github.thatsmusic99.headsplus.HeadsPlus
+name: HeadsPlus
+version: 6.9-SNAPSHOT-1
+api-version: 1.13
+description: Spawns in heads with extra features.
+author: Thatsmusic99
+# Please note this is mostly to let the weird messages from each plugin work.
+softdepend: [Vault, AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION]
+commands:
+  head:
+    description: Spawns in a head.
+    permission: headsplus.head
+  headsplus:
+    description: Displays the help menu
+    aliases: hp
+    permission: headsplus.maincommand
+  sellhead:
+    description: Sells any selected heads in a player's inventory.
+    permission: headsplus.sellhead
+  heads:
+    description: Heads GUI command.
+    permission: headsplus.heads
+  myhead:
+    description: Gets your own head.
+    permission: headsplus.myhead
+  addhead:
+    description: Add a player head to the heads menu.
+    permission: headsplus.addhead
+  hplb:
+    description: Displays the HeadsPlus leaderboards.
+    permission: headsplus.leaderboards
+  hpc:
+    description: Displays available challenges.
+    permission: headsplus.challenges
+
+permissions:
+  headsplus.craft:
+    default: true
+    description: Allows players to craft heads.
+  headsplus.challenges:
+    default: true
+    description: Allows players to use /hpc.
+  headsplus.leaderboards:
+    default: true
+    description: Allows players to use /hplb.
+  headsplus.maincommand:
+    default: true
+    description: Allows players to use /hp or /headsplus.
+  headsplus.notify:
+    default: op
+    description: Notifies players if a new HeadsPlus version is available.
+  headsplus.addhead:
+    default: op
+    description: Allows players to use /addhead.
+  headsplus.heads:
+    default: true
+    description: Allows players to use /heads.
+  headsplus.sellhead:
+    default: true
+    description: Allows players to use /sellhead.
+  headsplus.myhead:
+    default: true
+    description: Allows players to use /myhead.
+  headsplus.maincommand.info:
+    default: true
+    description: Allows players to use /hp info.
+  headsplus.maincommand.profile:
+    default: true
+    description: Allows players to use /hp profile (only to view their own profile).
+  headsplus.bypass.cost:
+    default: false
+    description: Bypass the cost for purchasing all heads

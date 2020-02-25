@@ -1,0 +1,240 @@
+# HeadsPlus by Thatsmusic99 - Español (AlansS53)
+# ¡No cambies la versión! Esto se usa internamente en el complemento para agregar nuevos mensajes.
+language: Español (ES)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Recompensa: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} desafíos'
+    close: '&8❰ &c&lCerrar menú &8❱'
+    favourites: '&8❰ &b&lFavoritas &8❱'
+    head:
+      price: '&cPrecio &8❱ &7{price}'
+      favourite: '&cFavorita!'
+      count: '&7{head-count} cabezas'
+    menu: '&8❰ &a&lMenú principal &8❱'
+    start: '&8❰ &a&lPrimera página &8❱'
+    last: '&8❰ &a&lÚltima página &8❱'
+    back: '&8❰ &a&lRetroceder &8❱'
+    back-2: '&8❰ &a&lRetroceder 2 &8❱'
+    back-3: '&8❰ &a&lRetroceder 3 &8❱'
+    next: '&8❰ &a&lSiguiente &8❱'
+    next-2: '&8❰ &a&lSiguiente (2) &8❱'
+    next-3: '&8❰ &a&lSiguiente (3) &8❱'
+    search: '&8❰ &e&lBuscar cabezas &8❱'
+    stats:
+      icon: '&8❰ &a&lEstadísticas &8❱'
+      total-heads: '&aCabezas totales &8❱ &e'
+      total-pages: '&aPaginas totales &8❱ &e'
+      total-sections: '&aSecciones totales &8❱ &e'
+      current-balance: '&aSaldo actual &8❱ &e'
+      current-section: '&aSección actual &8❱ &e'
+textmenus:
+  profile:
+    player: Jugador
+    completed-challenges: Desafíos completados
+    total-heads-dropped: Total de cabezas caídas
+    total-heads-sold: Total de cabezas vendidas
+    total-heads-crafted: Total de cabezas hechas a mano
+    current-level: Nivel actual
+    xp-until-next-level: XP hasta el siguiente nivel
+  blacklist: Lista-negra
+  whitelist: Lista-blanca
+  blacklistw: Lista-negra de mundos
+  whitelistw: Lista-blanca de mundos
+  info:
+    version: Versión
+    author: Autora
+    language: Idioma
+    contributors: Colaboradores
+    spigot: Enlace SpigotMC
+    discord: Servidor Discord
+    github: Github
+  head-info:
+    type: Tipo
+    display-name: Nombre para mostrar
+    price: Precio
+    interact-name: Nombre de Interact
+    chance: Posibilidad
+  help:
+    usage: Uso
+    description: Descripción
+    permission: Permiso
+    further-usages: Usos adicionales
+version: 1.1
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  locale:
+    invalid-lang: '{header} ¡Ese no es un idioma válido! Idiomas disponibles: &c{languages}'
+    changed-locale: '{header} ¡Hola! Su idioma ahora está configurado en &cEspañol
+      (ES)'
+    changed-locale-other: '{header} El idioma de &c{player} &7ahora está configurado
+      en &c{language}&7!'
+  errors:
+    not-a-player: '{header} ¡Debes ser un jugador para ejecutar este comando/subcomando!'
+    cmd-fail: '{header} Error al ejecutar ese comando.'
+    disabled: '{header} Ese comando está desactivado.'
+    invalid-args: '{header} Argumentos inválidos.'
+    invalid-input-int: '{header} ¡Sólo puede usar enteros en este comando!'
+    invalid-pg-no: '{header} Numero de página inválido.'
+    no-data: '{header} No hay datos de ese jugador.'
+    no-perm: '{header} No tienes permisos para usar ese comando.'
+    player-offline: '{header} Ese jugador está desconectado.'
+    too-many-args: '{header} ¡Demasiados argumentos!'
+  addhead:
+    head-adding: '{header} Buscando textura para agregar para &c{player}&7.'
+    head-added: '{header} ¡Dirígete a &c{player} &7añadido!'
+    head-already-added: '{header} ¡Dirígete a &c{player} &7ya en la base de datos!'
+  blacklist:
+    bl-a-off: '{header} La lista negra ya está desactivada.'
+    bl-a-on: '{header} La lista negra ya está activada.'
+    bl-off: '{header} La lista negra ha sido desactivada.'
+    bl-on: '{header} ¡La lista negra ha sido activada!'
+    blw-a-on: '{header} ¡La lista de mundos bloqueados ha sido activada!'
+    blw-a-off: '{header} ¡La lista de mundos bloqueados ha sido desactivada!'
+    empty-bl: '{header} La lista negra está vacia.'
+    empty-blw: '{header} La lista de mundos bloqueados está vacía.'
+    head-a-add: '{header} ¡Esa cabeza ya está añadida!'
+    head-a-removed-bl: '{header} Esa cabeza no está en la lista negra.'
+    head-added-bl: '{header} &c{name} &7ha sido añadida a la lista negra.'
+    head-removed-bl: '{header} &c{name} &7ha sido eliminada de la lista negra.'
+    world-a-add: '{header} Ese mundo ya esta añadido.'
+    world-added-bl: '{header} &c{name} &7ha sido añadido a la lista de mundos bloqueados.'
+    world-a-removed-bl: '{header} Ese mundo no está en la lista de bloqueados.'
+    world-removed-bl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      bloqueados'
+  challenges:
+    already-complete-challenge: '{header} Ya has completado ese reto.'
+    cant-complete-challenge: '{header} No puedes completar ese reto.'
+    challenge-complete: '{header} ¡&c{name} &7ha completado el reto &c{challenge}&7!'
+    challenge-completed: '&6¡Terminado!'
+    reward-string: '{header} Recompensa: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} Ese comando solo maneja nombres numéricos.'
+    blacklist-head: '{header} Esa cabeza está bloqueada y no puede ser usada.'
+    full-inv: '{header} ¡Tu inventario está lleno!'
+    head-too-long: '{header} El nombre es demasiado largo, utiliza uno entre 3 y 16
+      carácteres.'
+    head-too-short: '{header} El nombre es demasiado corto, utiliza uno entre 3 y
+      16 carácteres.'
+    whitelist-head: '{header} Esa cabeza no está permitida y por lo tanto no puede
+      ser usada.'
+  head-info:
+    add-value: '{header} ¡&c{value} &7ha sido agregado a la &c{entity} {setting}&7!'
+    no-lore-data: '{header} ¡No hay datos de lore para esta entidad!'
+    no-mask-data: '{header} ¡No hay datos de máscara para esta entidad!'
+    no-name-data: '{header} ¡No hay datos de nombre para esta entidad!'
+    remove-value: '{header} ¡&c{value} &7se ha eliminado de &c{entity} {setting}&7!'
+    set-value: '{header} ¡&c{entity} {setting} &7ha sido cambiado a &c{value}&7!'
+  heads:
+    buy-success: '{header} Has comprado una cabeza por &c{price} &7y ahora tienes
+      &c{balance}'
+    chat-input: '{header} Escriba el término que desea buscar.'
+    not-enough-money: '{header} ¡No tienes suficiente dinero!'
+  leaderboards:
+    no-data-lb: '{header} No hay datos del top aún.'
+  levels:
+    level-up: '{header} &c{name} &7ha alcanzado el nivel &c{level}&7!'
+  profile:
+    cant-view-data: '{header} No puedes ver tus datos si eres la consola...'
+  reload:
+    reload-message: '{header} ¡Configuración recargada!'
+    reloading-message: '{header} Recargando la configuración...'
+  sellhead:
+    false-head: '{header} ¡Esa cabeza no puede ser vendida!'
+    false-item: '{header} ¡Eso no es una cabeza!'
+    no-heads: '{header} No tienes cabezas válidas en tu inventario.'
+    not-enough-heads: '{header} ¡No tienes suficientes cabezas!'
+    sell-success: '{header} ¡Has vendido la(s) cabeza(s) por &c{price} &7y ahora tienes
+      &c{balance}&7!'
+  tests:
+    running-tests: '{header} Ejecutando pruebas ... (esto puede tomar un tiempo)'
+    results: '{header} Resultados: &c{results}'
+  whitelist:
+    empty-wl: '{header} La lista blanca está vacía.'
+    empty-wlw: '{header} La lista de mundos permitidos está vacía.'
+    head-a-removed-wl: '{header} Esa cabeza no está en la lista blanca.'
+    head-added-wl: '{header} &c{name} &7ha sido añadida a la lista blanca.'
+    head-removed-wl: '{header} &c{name} &7ha sido eliminada de la lista blanca.'
+    wl-a-off: '{header} La lista blanca ya está desactivada.'
+    wl-a-on: '{header} La lista negra ya está activada.'
+    wl-off: '{header} ¡La lista blanca ha sido desactivada!'
+    wl-on: '{header} ¡La lista blanca ha sido activada!'
+    wlw-a-off: '{header} La lista de mundos permitidos ya está desactivada.'
+    wlw-a-on: '{header} La lista de mundos permitidos ya está activada.'
+    wlw-off: '{header} ¡La lista de mundos permitidos ha sido desactivada!'
+    wlw-on: '{header} ¡La lista de mundos permitidos ha sido activada!'
+    world-a-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      permitidos.'
+    world-added-wl: '{header} &c{name} &7ha sido añadido a la lista de mundos permitidos.'
+    world-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
+      permitidos.'
+  xp:
+    added-xp: '{header} ¡Se agregó &c{amount} &7XP a &c{player}&7, ahora tienen &c{xp}&7!'
+    current-xp: '{header} XP actual de &c{player}&7: &c{xp}'
+    negative-xp: '{header} No creo que quieras hacer eso... (para permitir XP negativo,
+      ve a config.yml > plugin > perks > xp > allow-negative, ¡sin embargo, esto tiene
+      resultados impredecibles!)'
+    removed-xp: '{header} ¡Se eliminaron &c{amount} 77XP de &c{player}&7, ahora tienen
+      &c{xp}&7!'
+    reset-xp: '{header} ¡Restablece la XP de &c{player}&7!'
+descriptions:
+  hp:
+    blacklist: Activa o desactiva la lista negra.
+    blacklistadd: Añade cabezas a la lista negra.
+    blacklistdel: Elimina una cabeza de la lista negra.
+    blacklistl: Muestra todas las cabezas en la lista negra.
+    blacklistw: Activa o desactiva la lista negra de crafteos de encendido/apagado.
+    blacklistwadd: Añade un mundo de la lista negra de crafteos.
+    blacklistwdel: Elimina un mundo de la lista negra de crafteos.
+    blacklistwl: Muestra los mundos en la lista negra.
+    complete: Completa un reto.
+    conjure: Recupera una cabeza de un tipo específico.
+    debug: Crea un archivo de depuración.
+    headinfo: Muestra/Modifica información sobre la cabeza de una entidad específica.
+    help: Muestra el menú de ayuda.
+    info: Muestra información sobre el plugin.
+    profile: Muestra su perfil en el plugin.
+    reload: Recarga los archivos de configuración.
+    tests: Ejecuta pruebas para las tasas de caída de mob.
+    whitelist: Activa o desactiva la lsta blanca.
+    whitelistadd: Añade cabezas a la lista blanca.
+    whitelistdel: Elimina una cabeza de la lista blanca.
+    whitelistl: Muestra las cabezas de la lista blanca.
+    whitelistw: Activa o desactiva la lista blanca de crafteos
+    whitelistwadd: Añade un mundo a la lista blanca de crafteos.
+    whitelistwdel: Elimina un mundo de la lista blanca de crafteos.
+    whitelistwl: Muestra los mundos en la lista blanca.
+    xp: Ver o cambiar el XP de un jugador.
+  addhead: Añadir una cabeza de jugador al menú principal.
+  head: Obtiene una cabeza.
+  heads: Muestra una seleccion de cabezas.
+  hpc: Muestra los retos que has completado.
+  hplb: Muestra el top de cabezas.
+  myhead: Obtén tu cabeza.
+  sellhead: Vende la cabeza en tu mano, utiliza el parámetro numerico para la cantidad,
+    el nombre de la entidad para un mob específico o All para venderlas todas.
+event:
+  block-place-denied: '{header} No puedes colocar cabezas vendibles.'
+  head-interact-message: '{header} ¡Cabeza de &c{name}&7!'
+  head-mhf-interact-message: '{header} ¡Cabeza de &c{name}&7!'
+  head-mhf-interact-message-2: '{header} ¡Cabeza de &c{name}&7!'
+  lost-money: '{header} ¡Porque te mató &c{player}&7, perdiste &c{price}&7!'
+startup:
+  faulty-theme: '{header} Se ha colocado un tema defecuoso, no se realizaran cambios
+    en los temas.'
+  no-vault: '{header} ¡Vault no detectado! Las cabezas no se pueden vender y los retos
+    no pueden añadir/quitar grupos.'
+  no-vault-2: '{header} Vault no se encontró al iniciar, no se puede añadir grupos.'
+  plugin-disabled: '{header} HeadsPlus ha sido desactivado.'
+  plugin-enabled: '{header} HeadsPlus ha sido activado.'
+  plugin-fail: '{header} HeadsPlus no pudo iniciar correctamente. Se ha creado un
+    informe en /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Versión actual: &c{version}'
+  description: '{header} Descripción: &c{description}'
+  new-version: '{header} Versión nueva: &c{version}'
+  plugin-up-to-date: '{header} El plugin está actualizado.'
+  update-found: '{header} ¡Se ha encontrado una nueva actualización para HeadsPlus!
+    Desplace sobre el mensaje para mas info.'

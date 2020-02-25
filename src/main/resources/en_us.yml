@@ -1,0 +1,230 @@
+# HeadsPlus by Thatsmusic99 - English/US
+# Do not change the version! This is used internally in the plugin to add new messages.
+language: English (US)
+version: 1.1
+prefix: '&cHeadsPlus &8» &7'
+inventory:
+  icon:
+    challenge:
+      reward: '&6Reward: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} challenges'
+    close: '&8❰ &c&lClose Menu &8❱'
+    favourites: '&8❰ &b&lFavorites &8❱'
+    head:
+      price: '&cPrice &8❱ &7{price}'
+      favourite: '&cFavorite!'
+      count: '&7{head-count} heads'
+    menu: '&8❰ &a&lMain Menu &8❱'
+    start: '&8❰ &a&lFirst Page &8❱'
+    last: '&8❰ &a&lLast Page &8❱'
+    back: '&8❰ &a&lBack &8❱'
+    back-2: '&8❰ &a&lBack 2 &8❱'
+    back-3: '&8❰ &a&lBack 3 &8❱'
+    search: '&8❰ &e&lSearch Heads &8❱'
+    stats:
+      icon: '&8❰ &a&lStats &8❱'
+      total-heads: '&aTotal Heads &8❱ &e'
+      total-pages: '&aTotal Pages &8❱ &e'
+      total-sections: '&aTotal Sections &8❱ &e'
+      current-balance: '&aCurrent Balance &8❱ &e'
+      current-section: '&aCurrent Section &8❱ &e'
+textmenus:
+  profile:
+    player: Player
+    completed-challenges: Completed Challenges
+    total-heads-dropped: Total Heads Dropped
+    total-heads-sold: Total Heads Sold
+    total-heads-crafted: Total Heads Crafted
+    current-level: Current Level
+    xp-until-next-level: XP until next level
+  blacklist: Blacklist
+  whitelist: Whitelist
+  blacklistw: World Blacklist
+  whitelistw: World Whitelist
+  info:
+    version: Version
+    author: Author
+    language: Language
+    contributors: Contributors
+    spigot: Spigot link
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: Type
+    display-name: Display Name
+    price: Price
+    interact-name: Interact Name
+    chance: Chance
+  help:
+    usage: Usage
+    description: Description
+    permission: Permission
+    further-usages: Further Usages
+commands:
+  locale:
+    invalid-lang: '{header} That is not a valid language! Available languages: &c{languages}'
+    changed-locale: '{header} Good day! Your language is now set to &cEnglish (US)'
+    changed-locale-other: '{header} &c{player}&7''s language is now set to &c{language}&7!'
+  errors:
+    not-a-player: '{header} You must be a player to run this command/subcommand!'
+    cmd-fail: '{header} Failed to run this command!'
+    disabled: '{header} This command is disabled.'
+    invalid-args: '{header} Invalid arguments!'
+    invalid-input-int: '{header} You can only use integers in this command!'
+    invalid-pg-no: '{header} Invalid page number!'
+    no-data: '{header} There is no data for this player!'
+    no-perm: '{header} You do not have permission to use this command.'
+    player-offline: '{header} That player is offline!'
+    too-many-args: '{header} Too many arguments!'
+  addhead:
+    head-added: '{header} Head for &c{player} &7added!'
+    head-adding: '{header} Looking up texture to add for &c{player}&7...'
+    head-already-added: '{header} Head for &c{player} &7already in the database!'
+  blacklist:
+    bl-a-off: '{header} The blacklist is already disabled!'
+    bl-a-on: '{header} The blacklist is already enabled!'
+    bl-off: '{header} The blacklist has been disabled!'
+    bl-on: '{header} The blacklist has been enabled!'
+    blw-a-on: '{header} The world blacklist has been enabled!'
+    blw-a-off: '{header} The world blacklist has been disabled!'
+    empty-bl: '{header} The blacklist is empty!'
+    empty-blw: '{header} The world blacklist is empty!'
+    head-a-add: '{header} This head is already added!'
+    head-a-removed-bl: '{header} This head is not on the blacklist!'
+    head-added-bl: '{header} &c{player} &7has been added to the blacklist!'
+    head-removed-bl: '{header} &c{player} &7has been removed from the blacklist!'
+    world-a-add: '{header} This world is already added!'
+    world-added-bl: '{header} &c{world} &7has been added to the world blacklist!'
+    world-a-removed-bl: '{header} This world is not on the blacklist!'
+    world-removed-bl: '{header} &c{world} &7has been removed from the blacklist!'
+  challenges:
+    already-complete-challenge: '{header} You''ve already completed that challenge!'
+    cant-complete-challenge: '{header} You can''t complete this challenge!'
+    challenge-complete: '{header} &c{player} &7has completed the &c{challenge} &7challenge!'
+    challenge-completed: '&6Completed!'
+    reward-string: '{header} Reward: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} This command only handles alphanumeric names!'
+    blacklist-head: '{header} This head is blacklisted and cannot be used!'
+    full-inv: '{header} Your inventory is full!'
+    head-too-long: '{header} IGN is too long to be valid! Please use an IGN between
+      3 and 16 characters.'
+    head-too-short: '{header} IGN is too short to be valid! Please use an IGN between
+      3 and 16 characters.'
+    whitelist-head: '{header} This head isn''t whitelisted and therefore cannot be
+      used!'
+  head-info:
+    add-value: '{header} &c{value} &7has been added to &c{entity}&7''s &c{setting}&7!'
+    no-lore-data: '{header} There is no lore data for this entity!'
+    no-mask-data: '{header} There is no mask data for this entity!'
+    no-name-data: '{header} There is no name data for this entity!'
+    remove-value: '{header} &c{value} &7has been removed from &c{entity}&7''s &c{setting}&7!'
+    set-value: '{header} &c{entity}&7''s &c{setting} &7has been changed to &c{value}&7!'
+  heads:
+    buy-success: '{header} You have bought a head for &c{price} &7and now have &c{balance}&7!'
+    chat-input: '{header} Type in a term you want to search.'
+    not-enough-money: '{header} You don''t have enough money!'
+  leaderboards:
+    no-data-lb: No leaderboard data has been recorded yet!
+  levels:
+    level-up: '{header} &c{player} &7has reached level &c{level}&7!'
+  profile:
+    cant-view-data: '{header} You can''t view your own data in console!'
+  reload:
+    reload-message: '{header} Configuration reloaded!'
+    reloading-message: '{header} Configuration reloading...'
+  sellhead:
+    false-head: '{header} This head cannot be sold!'
+    false-item: '{header} This is not a head!'
+    no-heads: '{header} You don''t have any valid heads in your inventory to sell!'
+    not-enough-heads: '{header} You don''t have enough heads!'
+    sell-success: '{header} You successfully sold the head(s) for &c{price} &7and
+      now have &c{balance}&7!'
+  tests:
+    running-tests: '{header} Running tests... (this may take a while)'
+    results: '{header} Results: &c{results}'
+  whitelist:
+    empty-wl: '{header} The whitelist is empty!'
+    empty-wlw: '{header} The world whitelist is empty!'
+    head-a-removed-wl: '{header} This head is not on the whitelist!'
+    head-added-wl: '{header} &c{player} &7has been added to the whitelist!'
+    head-removed-wl: '{header} &c{player} &7has been removed from the whitelist!'
+    wl-a-off: '{header} The whitelist is already disabled!'
+    wl-a-on: '{header} The blacklist is already enabled!'
+    wl-off: '{header} The whitelist has been disabled!'
+    wl-on: '{header} The whitelist has been enabled!'
+    wlw-a-off: '{header} The world whitelist is already disabled!'
+    wlw-a-on: '{header} The world whitelist is already enabled!'
+    wlw-off: '{header} The world whitelist has been disabled!'
+    wlw-on: '{header} The world whitelist has been enabled!'
+    world-a-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
+    world-added-wl: '{header} &c{world} &7has been added to the world whitelist!'
+    world-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
+  xp:
+    added-xp: '{header} Added &c{amount} &7XP to &c{player}&7, they now have &c{xp}&7!'
+    current-xp: '{header} &c{player}&7''s current XP: &c{xp}'
+    negative-xp: '{header} I don''t think you want to do that... (to allow negative
+      XP, go into config.yml > plugin > perks > xp > allow-negative, however this
+      has unpredictable results!)'
+    removed-xp: '{header} Removed &c{amount} &7XP from &c{player}&7, they now have
+      &c{xp}&7!'
+    reset-xp: '{header} Reset &c{player}&7''s XP!'
+descriptions:
+  hp:
+    blacklist: Toggles the blacklist.
+    blacklistadd: Adds a head to the blacklist.
+    blacklistdel: Removes a head from the blacklist.
+    blacklistl: Lists all heads in the blacklist.
+    blacklistw: Toggles the crafting recipe blacklist on/off.
+    blacklistwadd: Adds a world to the crafting recipe blacklist.
+    blacklistwdel: Removes a world to the crafting recipe blacklist.
+    blacklistwl: Lists blacklisted worlds.
+    complete: Completes a challenge.
+    conjure: Retrieves a head of a specific type.
+    debug: Dumps a debug file.
+    headinfo: Displays/modifies information about a specific entity's head.
+    help: Displays the help menu.
+    info: Displays plugin information.
+    profile: Displays your profile for the plugin.
+    reload: Reloads configuration files.
+    tests: Runs tests for mob drop rates.
+    whitelist: Toggles the whitelist.
+    whitelistadd: Adds a head to the whitelist.
+    whitelistdel: Removes a head from the whitelist.
+    whitelistl: Lists all heads in the whitelist.
+    whitelistw: Toggles the crafting recipe whitelist on/off.
+    whitelistwadd: Adds a world to the crafting recipe whitelist.
+    whitelistwdel: Removes a world to the crafting recipe whitelist.
+    whitelistwl: Lists whitelisted worlds.
+    xp: View or change a player's XP.
+  addhead: Adds a player head to the heads menu
+  head: Spawns in a head.
+  heads: Displays a selection of heads.
+  hpc: Displays challenges you can complete.
+  hplb: Displays the heads leaderboard.
+  myhead: Spawns in your head.
+  sellhead: Sells the head(s) in your hand, use number parameter to sell a specific
+    number, entity name to sell a specific mob's head, and all to sell every head.
+event:
+  block-place-denied: '{header} You can not place sellable heads!'
+  head-interact-message: '{header} That is &c{player}&7''s head!'
+  head-mhf-interact-message: '{header} That is a &c{player}&7''s head!'
+  head-mhf-interact-message-2: '{header} That is an &c{player}&7''s head!'
+  lost-money: '{header} Because you got killed by &c{player}&7, you lost &c{price}&7!'
+startup:
+  faulty-theme: '{header} Faulty theme was put in! No theme changes will be made.'
+  no-vault: '{header} Vault not found! Heads cannot be sold and challenge rewards
+    can not add/remove groups.'
+  no-vault-2: '{header} Vault wasn''t found upon startup! Can not add group.'
+  plugin-disabled: '{header} HeadsPlus has been disabled!'
+  plugin-enabled: '{header} HeadsPlus has been enabled!'
+  plugin-fail: '{header} HeadsPlus has failed to start up correctly. An error report
+    has been made in /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Current version: &c{version}'
+  description: '{header} Description: &c{description}'
+  new-version: '{header} New version: &c{version}'
+  plugin-up-to-date: '{header} Plugin is up to date!'
+  update-found: '{header} An update has been found for HeadsPlus! Hover over the message
+    for more information.'

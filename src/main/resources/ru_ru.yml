@@ -1,0 +1,238 @@
+# HeadsPlus by Thatsmusic99 - русский (Перевод The_stas/stashenko)
+# Не меняйте версию! Это используется внутри плагина для добавления новых сообщений.
+language: Русский (RU)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Награда: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} проблемы'
+    close: '&8❰ &c&lЗакрыть меню &8❱'
+    favourites: '&8❰ &b&lИзбранные &8❱'
+    head:
+      price: '&cЦена &8❱ &7{price}'
+      favourite: '&cизлюбленный!'
+      count: '&7{head-count} руководители'
+    menu: '&8❰ &a&lГлавное меню &8❱'
+    start: '&8❰ &a&lПервая страница &8❱'
+    last: '&8❰ &a&lПредыдущая страница &8❱'
+    back: '&8❰ &a&lназад &8❱'
+    back-2: '&8❰ &a&lназад (2) &8❱'
+    back-3: '&8❰ &a&lназад (3) &8❱'
+    next: '&8❰ &a&lследующий &8❱'
+    next-2: '&8❰ &a&lследующий (2) &8❱'
+    next-3: '&8❰ &a&lследующий (3) &8❱'
+    search: '&8❰ &e&lПоиск головы &8❱'
+    stats:
+      icon: '&8❰ &a&lСтатистика &8❱'
+      total-heads: '&aВсего голов &8❱ &e'
+      total-pages: '&aВсего страниц &8❱ &e'
+      total-sections: '&aВсего разделов &8❱ &e'
+      current-balance: '&aТекущий баланс &8❱ &e'
+      current-section: '&aТекущий раздел &8❱ &e'
+textmenus:
+  profile:
+    player: игрок
+    completed-challenges: Завершенные испытания
+    total-heads-dropped: Всего голов выпало
+    total-heads-sold: Всего голов продано
+    total-heads-crafted: Всего созданных голов
+    current-level: Текущий уровень
+    xp-until-next-level: XP до следующего уровня
+  blacklist: Черный список
+  whitelist: Белый список
+  blacklistw: Черный список миров
+  whitelistw: Белый список миров
+  info:
+    version: Версия
+    author: автор
+    language: язык
+    contributors: Авторы
+    spigot: SpigotMC ссылка
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: Тип
+    display-name: Показать имя
+    price: Цена
+    interact-name: Имя взаимодействия
+    chance: возможность
+  help:
+    usage: использование
+    description: Описание
+    permission: разрешение
+    further-usages: Дальнейшее использование
+version: 1.1
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  locale:
+    invalid-lang: '{header} Это не правильный язык! Доступные языки: &c{languages}'
+    changed-locale: '{header} Здравствуйте! Ваш язык теперь установлен на &cрусский
+      (RU)'
+    changed-locale-other: '{header} Язык &c{player} &7теперь установлен на &c{language}&7!'
+  errors:
+    not-a-player: '{header} Вы должны быть игроком для запуска этой команды/подкоманды!'
+    cmd-fail: '{header} Не удалось запустить эту команду!'
+    disabled: '{header} Эта команда отключена.'
+    invalid-args: '{header} Неверные аргументы!'
+    invalid-input-int: '{header} В этой команде вы можете использовать только целые
+      числа!'
+    invalid-pg-no: '{header} Неверный номер страницы!'
+    no-data: '{header} Нет данных для этого игрока!'
+    no-perm: '{header} У вас нет разрешения на использование этой команды.'
+    player-offline: '{header} Этот игрок не в сети!'
+    too-many-args: '{header} Слишком много аргументов!'
+  addhead:
+    head-added: '{header} Голова для &c{player} &7добавлена!'
+    head-adding: '{header} Поиск текстуры для добавления для &c{player}&7...'
+    head-already-added: '{header} Отправляйтесь в &c{player} &7уже в базе данных!'
+  blacklist:
+    bl-a-off: '{header} Черный список уже отключен!'
+    bl-a-on: '{header} Черный список уже включен!'
+    bl-off: '{header} Черный список отключен!'
+    bl-on: '{header} Черный список включен!'
+    blw-a-on: '{header} Черный список миров включен!'
+    blw-a-off: '{header} Черный список миров отключен!'
+    empty-bl: '{header} Черный список пуст!'
+    empty-blw: '{header} Черный список миров пуст!'
+    head-a-add: '{header} Эта голова уже добавлена!'
+    head-a-removed-bl: '{header} Этой головы нет в черном списке!'
+    head-added-bl: '{header} &c{player}&7 добавлена в черный список!'
+    head-removed-bl: '{header} &c{player}&7 удалена из черного списка!'
+    world-a-add: '{header} Этот мир уже добавлен!'
+    world-added-bl: '{header} &c{world}&7 добавлен в черный список мира!'
+    world-a-removed-bl: '{header} Этот мир не в черном списке!'
+    world-removed-bl: '{header} &c{world}&7 удален из черного списка!'
+  challenges:
+    already-complete-challenge: '{header} Вы уже выполнили это задание!'
+    cant-complete-challenge: '{header} Вы не можете выполнить это задание!'
+    challenge-complete: '{header} &c{player}&7 выполнил &c{challenge} &7задание!'
+    challenge-completed: '&6Завершено!'
+    reward-string: '{header} Награда: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} Эта команда обрабатывает только буквенно-цифровые имена!'
+    blacklist-head: '{header} Эта голова занесена в черный список и не может быть
+      использована!'
+    full-inv: '{header} Ваш инвентарь полон!'
+    head-too-long: '{header} IGN слишком длинный, чтобы быть действительным! Пожалуйста,
+      используйте IGN от 3 до 16 символов.'
+    head-too-short: '{header} IGN слишком короткий, чтобы быть действительным! Пожалуйста,
+      используйте IGN от 3 до 16 символов.'
+    whitelist-head: '{header} Эта голова не занесена в белый список и не может быть
+      использована!'
+  head-info:
+    add-value: '{header} &c{value} &7добавлено для &c{entity} {setting}&7!'
+    no-lore-data: '{header} Для этой сущности нет данных об описании!'
+    no-mask-data: '{header} Для этой сущности нет данных маски!'
+    no-name-data: '{header} Для этой сущности нет данных об имени!'
+    remove-value: '{header} &c{value} &7удалено у &c{entity} {setting}&7!'
+    set-value: '{header} &c{entity} {setting} &7изменена на &c{value}&7!'
+  heads:
+    buy-success: '{header} Вы купили голову за &c{price}&7 и теперь у вас &c{balance}&7!'
+    chat-input: '{header} Введите термин, который вы хотите найти.'
+    not-enough-money: '{header} Вам не хватает денег!'
+  leaderboards:
+    no-data-lb: '{header} Данные в таблице лидеров еще не записаны!'
+  levels:
+    level-up: '{header} &c{player}&7 достиг уровня &c{level}&7!'
+  profile:
+    cant-view-data: '{header} Вы не можете просматривать свои данные в консоли!'
+  reload:
+    reload-message: '{header} Перезагрузил конфиг!'
+    reloading-message: '{header} Перезагрузка конфигурации...'
+  sellhead:
+    false-head: '{header} Эта голова не может быть продана!'
+    false-item: '{header} Это не голова!'
+    no-heads: '{header} У вас нет действительных голов в инвентаре!'
+    not-enough-heads: '{header} Вам не хватает голов!'
+    sell-success: '{header} Вы продали головы за &c{price}&7 и получили &c{balance}&7!'
+  tests:
+    running-tests: '{header} Запуск тестов ... (это может занять некоторое время)'
+    results: '{header} Результаты: &c{results}'
+  whitelist:
+    empty-wl: '{header} Белый список пуст!'
+    empty-wlw: '{header} Белый список миров пуст!'
+    head-a-removed-wl: '{header} Эта голова не в белом списке!'
+    head-added-wl: '{header} &c{player}&7 добавлена в белый список!'
+    head-removed-wl: '{header} &c{player}&7 удалена из белого списка!'
+    wl-a-off: '{header} Белый список уже отключен!'
+    wl-a-on: '{header} Черный список уже включен!'
+    wl-off: '{header} Белый список отключен!'
+    wl-on: '{header} Белый список включен!'
+    wlw-a-off: '{header} Белый список миров уже отключен!'
+    wlw-a-on: '{header} Белый список миров уже включен!'
+    wlw-off: '{header} Белый список миров отключен!'
+    wlw-on: '{header} Белый список миров включен!'
+    world-a-removed-wl: '{header} &c{world}&7 удален из белого списка миров!'
+    world-added-wl: '{header} &c{world}&7 добавлен в белый список миров!'
+    world-removed-wl: '{header} &c{world}&7 удален из белого списка миров!'
+  xp:
+    added-xp: '{header} Добавлено &c{amount} &7XP в &c{player}&7, теперь у них есть
+      {xp}!'
+    current-xp: '{header} Текущая версия &c{player} &7XP: &c{xp}'
+    negative-xp: '{header} Я не думаю, что вы хотите сделать это ... (чтобы разрешить
+      отрицательную XP, перейдите в config.yml > plugin > perks > xp > allow-negative,
+      однако это имеет непредсказуемые результаты!)'
+    removed-xp: '{header} Удалено &c{amount} &7XP у &c{player}&7, теперь у них есть
+      &c{xp}&7!'
+    reset-xp: '{header} Сбросить &c{player} &7ХР!'
+descriptions:
+  hp:
+    blacklist: Включает черный список.
+    blacklistadd: Добавляет голову в черный список.
+    blacklistdel: Удаляет голову из черного списка.
+    blacklistl: Список всех голов в черном списке.
+    blacklistw: Вкл/выкл черный список рецептов крафта.
+    blacklistwadd: Добавляет мир в черный список рецептов крафта.
+    blacklistwdel: Удаляет мир из черного списка рецептов крафта.
+    blacklistwl: Миры в в черном списке.
+    complete: Завершает задачу.
+    conjure: Получает голову определенного типа.
+    debug: Сбрасывает файл отладки.
+    headinfo: Отображает/изменяет информацию о голове конкретной сущности.
+    help: Отображает меню справки.
+    info: Отображает информацию о плагине.
+    profile: Отображает ваш профиль для плагина.
+    reload: Перезагрузка файлов конфигурации.
+    tests: Запускает тесты на скорость выпадения монстров.
+    whitelist: Включает белый список.
+    whitelistadd: Добавляет голову в белый список.
+    whitelistdel: Удаляет голову из белого списка.
+    whitelistl: Список всех голов в белом списке.
+    whitelistw: Вкл/выкл белый список рецептов крафта.
+    whitelistwadd: Добавляет мир в белый список рецептов крафта.
+    whitelistwdel: Удаляет мир из белого списка рецептов крафта.
+    whitelistwl: Миры в белом списке
+    xp: Просмотр или изменение XP игрока.
+  addhead: Добавляет голову игрока в меню голов
+  head: Создает голову
+  heads: Отображает селектор голов.
+  hpc: Отображает задания, которые вы можете выполнить.
+  hplb: Топ лидеров голов.
+  myhead: Создает вашу голову.
+  sellhead: Продает головы из вашей руки, используйте числовой параметр, чтобы продать
+    определенное число, имя сущности, чтобы продать голову конкретного моба, и ALL,
+    чтобы продать все головы.
+event:
+  block-place-denied: '{header} Нельзя ставить продаваемые головы!'
+  head-interact-message: '{header} Эта голова &c{player}&7 !'
+  head-mhf-interact-message: '{header} Эта голова &c{player}&7 !'
+  head-mhf-interact-message-2: '{header} Эта голова &c{player}&7 !'
+  lost-money: '{header} Поскольку вы были убиты игроком &c{player}&7, вы потеряли
+    &c{price}&7!'
+startup:
+  faulty-theme: '{header} Неправильная тема вставлена! Изменения темы не будут сделаны.'
+  no-vault: '{header} Vault не найден! Головы не могут быть проданы, а награды за
+    задания не могут добавлять/удалять группы.'
+  no-vault-2: '{header} Vault не был найден при запуске! Не могу добавить группу.'
+  plugin-disabled: '{header} HeadsPlus выключен!'
+  plugin-enabled: '{header} HeadsPlus включен!'
+  plugin-fail: '{header} HeadsPlus не удалось правильно запустить. Сообщение об ошибке
+    создано в /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Текущая версия: &c{version}'
+  description: '{header} Описание: &c{description}'
+  new-version: '{header} Новая версия: &c{version}'
+  plugin-up-to-date: '{header} Плагин обновлен!'
+  update-found: '{header} Обновление найдено для HeadsPlus! Наведите указатель мыши
+    на сообщение для получения дополнительной информации.'

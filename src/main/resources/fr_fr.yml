@@ -1,0 +1,247 @@
+# HeadsPlus by Thatsmusic99 - Français (Alexisparis007/Cyrex)
+# Ne changez pas la version! Ceci est utilisé en interne dans le plugin pour ajouter de nouveaux messages.
+language: Français (FR)
+inventory:
+  icon:
+    challenge:
+      reward: '&6Récompense: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} défis'
+    close: '&8❰ &c&lFermer le menu &8❱'
+    favourites: '&8❰ &b&lTêtes Préférées &8❱'
+    head:
+      price: '&cPrix &8❱ &7{price}'
+      favourite: '&cPréférée!'
+      count: '&7{head-count} têtes'
+    menu: '&8❰ &a&lMenu principal &8❱'
+    start: '&8❰ &a&lPremière page &8❱'
+    last: '&8❰ &a&lDernière page &8❱'
+    back: '&8❰ &a&lRetour &8❱'
+    back-2: '&8❰ &a&lRetour (2) &8❱'
+    back-3: '&8❰ &a&lRetour (3) &8❱'
+    next: '&8❰ &a&lProchain &8❱'
+    next-2: '&8❰ &a&lProchain (2) &8❱'
+    next-3: '&8❰ &a&lProchain (3) &8❱'
+    search: '&8❰ &e&lTêtes de recherche &8❱'
+    stats:
+      icon: '&8❰ &a&lStatistiques &8❱'
+      total-heads: '&aTêtes totales &8❱ &e'
+      total-pages: '&aPages totales &8❱ &e'
+      total-sections: '&aSections totales &8❱ &e'
+      current-balance: '&aSolde actuel &8❱ &e'
+      current-section: '&aSection actuelle &8❱ &e'
+textmenus:
+  profile:
+    player: Joueu(r/se)
+    completed-challenges: Défis terminés
+    total-heads-dropped: Total des têtes chuté
+    total-heads-sold: Total des têtes vendues
+    total-heads-crafted: Total de têtes fabriquées
+    current-level: Niveau actuel
+    xp-until-next-level: XP jusqu'au niveau suivant
+  blacklist: Blacklist
+  whitelist: Whitelist
+  blacklistw: Blacklist du monde
+  whitelistw: Whitelist du monde
+  info:
+    version: Version
+    author: Auteure
+    language: Langue
+    contributors: Contributeurs
+    spigot: SpigotMC lein
+    discord: Serveur Discord
+    github: Github
+  head-info:
+    type: Sorte
+    display-name: Afficher un nom
+    price: Prix
+    interact-name: Nom d'interaction
+    chance: Possibilité
+  help:
+    usage: Usage
+    description: Description
+    permission: Autorisation
+    further-usages: Autres Usages
+version: 1.1
+prefix: '&cHeadsPlus &8» &7'
+commands:
+  locale:
+    invalid-lang: '{header} Ce n''est pas une langue valable! Langues disponibles:
+      &c{languages}'
+    changed-locale: '{header} Bonjour! Votre langue est désormais définie sur &cFrançais
+      (FR)'
+    changed-locale-other: '{header} La langue de &c{player} &7est désormais définie
+      sur &c{language}&7!'
+  errors:
+    not-a-player: '{header} Vous devez être un joueur pour exécuter cette commande
+      / sous-commande!'
+    cmd-fail: '{header} Impossible d''exécuter cette commande!'
+    disabled: '{header} Cette commande est désactivée!'
+    invalid-args: '{header} Caractères invalides!'
+    invalid-input-int: '{header} Vous ne pouvez utiliser que des entiers dans cette
+      commande!'
+    invalid-pg-no: '{header} Numéro de page invalide!'
+    no-data: '{header} Il n''y a pas de données pour ce joueur!'
+    no-perm: '{header} Tu n''as pas la permission pour faire ça!'
+    player-offline: '{header} Ce joueur est hors-ligne!'
+    too-many-args: '{header} Trop de caractères!'
+  addhead:
+    head-added: '{header} Tête pour &c{player} &7ajoutée!'
+    head-adding: '{header} Recherche de texture à ajouter pour &c{player}&7.'
+    head-already-added: '{header} Dirigez-vous vers &c{player} &7déjà dans la base
+      de données!'
+  blacklist:
+    bl-a-off: '{header} La blacklist est déjà désactivée!'
+    bl-a-on: '{header} La blacklist est déjà activée!'
+    bl-off: '{header} La blacklist a bien été désactivée!'
+    bl-on: '{header} La blacklist a bien été activée!'
+    blw-a-on: '{header} La blacklist du monde est déjà activée!'
+    blw-on: '{header} La blacklist du monde a bien été activée!'
+    blw-a-off: '{header} La blacklist du monde est déjà désactivée!'
+    blw-off: '{header} La blacklist du monde a bien été désactivée!'
+    empty-bl: '{header} La blacklist est vide!'
+    empty-blw: '{header} La blacklist du monde est vide!'
+    head-a-add: '{header} Cette tête est déjà ajoutée!'
+    head-a-removed-bl: '{header} Cette tête n''est pas dans la blacklist!'
+    head-added-bl: '{header} &c{name} &7a bien été ajouté à la blacklist!'
+    head-removed-bl: '{header} &c{name} &7a bien été retiré de la blacklist!'
+    world-a-add: '{header} &3Ce monde a déjà été ajouté!'
+    world-a-removed-bl: '{header} Ce monde n''est pas dans la blacklist!'
+    world-added-bl: '{header} &c{name} &7a bien été ajouté à la blacklist!'
+    world-removed-bl: '{header} &c{name} &7a bien été retiré de la blacklist!'
+  challenges:
+    already-complete-challenge: '{header} Tu as déjà complété ce challenge!'
+    cant-complete-challenge: '{header} Tu ne peux pas compléter ce challenge!'
+    challenge-complete: '{header} &c{name} &7a complété le challenge &c{challenge}&7!'
+    challenge-completed: '&6Terminé!'
+    reward-string: '{header} Récompense: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} Cette commande ne gère que les noms alphanumériques!'
+    blacklist-head: '{header} Cette tête est sur la blacklist et ne peut pas être
+      utilisée!'
+    full-inv: '{header} Ton iventaire est plein!'
+    head-too-long: '{header} IGN est trop long pour être validé! Merci d''utiliser
+      une IGN entre 3 et 16 caractères.'
+    head-too-short: '{header} IGN est trop court pour être validé! Merci d''utiliser
+      une IGN entre 3 et 16 caractères.'
+    whitelist-head: '{header} Cette tête n''est pas sur la whitelist et ne peut donc
+      pas être utilisée!'
+  headinfo:
+    add-value: '{header} &c{value} &7a bien été ajouté(e) &c{entity} {setting}&7!'
+    no-lore-data: '{header} &cIl n''y a pas de déscription pour cette entité!'
+    no-mask-data: '{header} &cIl n''y a pas de cache pour cette entité!'
+    no-name-data: '{header} &cIl n''y a pas de nom pour cette entité!'
+    remove-value: '{header} &c{value} &7a bien été retiré(e) &c{entity} {setting}&7!'
+    set-value: '{header} &c{entity} {setting} &7a bien été changé en &c{value}&7!'
+  heads:
+    buy-success: '{header} Tu as acheté une tête pour &c{price} &7et maintenant tu
+      as &c{balance}&7!'
+    chat-input: '{header} Tapez un terme que vous souhaitez rechercher!'
+    not-enough-money: '{header} Tu n''as pas assez d''argent!'
+  leaderboards:
+    no-data-lb: '{header} Aucune donnée de classement n''a encore été enregistrée!'
+  levels:
+    level-up: '{header} &c{name} &7a atteint le niveau &c{level}&7!'
+  profile:
+    cant-view-data: '{header} Vous ne pouvez pas voir vos propres données dans la
+      console!'
+  reload:
+    reload-message: '{header} La config a été reload!'
+    reloading-message: '{header} Config reload...'
+  sellhead:
+    false-head: '{header} Cette tête ne peut pas être vendue!'
+    false-item: '{header} Ce n''est pas une tête!'
+    no-heads: '{header} Tu n''as pas de tête valide dans ton inventaire!'
+    not-enough-heads: '{header} Tu n''as pas assez de tête!'
+    sell-success: '{header} Tu as bien vendu des têtes pour &c{price} &7et maintenant
+      tu as &c{balance}&7!'
+  tests:
+    running-tests: Tests ausführen ... (dies kann eine Weile dauern)
+    results: 'Ergebnisse: {results}'
+  whitelist:
+    empty-wl: '{header} La whitelist est vide!'
+    empty-wlw: '{header} La whitelist du monde est vide!'
+    head-a-removed-wl: '{header} Cette tête n''est pas dans la whitelist!'
+    head-added-wl: '{header} &c{name} &7a bien été ajouté à la whitelist!'
+    head-removed-wl: '{header} &c{name} &7a bien été retiré de la whitelist!'
+    wl-a-off: '{header} La whitelist est déjà désactivée!'
+    wl-a-on: '{header} La whitelist est déjà activée!'
+    wl-off: '{header} La whitelist a bien été désactivée!'
+    wl-on: '{header} La whitelist a bien été activée!'
+    wlw-a-off: '{header} La whitelist du monde est déjà désactivée!'
+    wlw-a-on: '{header} La whitelist du monde est déjà activée!'
+    wlw-off: '{header} La whitelist du monde a bien été désactivée!'
+    wlw-on: '{header} La whitelist du monde a bien été activée!'
+    world-a-removed-wl: '{header} Ce monde n''est pas dans la whitelist!'
+    world-added-wl: '{header} &c{name} &7a bien été ajouté à la whitelist!'
+    world-removed-wl: '{header} &c{name} &7a bien été retiré de whitelist!'
+  xp:
+    added-xp: '{header} Ajout de &c{amount} &7XP à &c{player}&7, ils ont maintenant
+      &c{xp}&7!'
+    current-xp: '{header} XP actuel de &c{player}&7: &c{xp}'
+    negative-xp: '{header} Je ne pense pas que vous vouliez faire ça ... (pour autoriser
+      XP négatif, allez dans config.yml > plugin > perks > xp > allow-negative, mais
+      cela a des résultats imprévisibles!)'
+    removed-xp: '{header} Suppression de &c{amount} &7XP de &c{player}&7, ils ont
+      maintenant &c{xp}&7!'
+    reset-xp: '{header} Réinitialisez l''XP de &c{player}&7!'
+descriptions:
+  hp:
+    blacklist: Autorise/Pour désactive la blacklist.
+    blacklistadd: Ajoute une tête à la blacklist.
+    blacklistdel: Élimine une tête à la blacklist.
+    blacklistl: Liste les noms dans la blacklist.
+    blacklistw: Autorise/Pour désactive la blacklist (pour les mondes).
+    blacklistwadd: Élimine une tête à la blacklist (pour les mondes).
+    blacklistwdel: Entfernt ein Craftingrezept aus der Welten-Blacklist.
+    blacklistwl: Liste les mondes dans la blacklist.
+    complete: Complète un challenge.
+    conjure: Obtenit une tête d'un type spécifique.
+    debug: Dépose le dossier déboguer.
+    headinfo: Affiche/modifie les informations sur la tête d'une entité spécifique.
+    help: Affiche le menu d'aide.
+    info: Affiche les renseignements quelque le plugin.
+    profile: Affiche ton profil du plugin.
+    reload: Reload la config.
+    tests: Affichez ou modifiez l'XP d'un joueur.
+    whitelist: Autorise/Pour désactive la whitelist.
+    whitelistadd: Ajoute une tête à la whitelist.
+    whitelistdel: Élimine une tête à la whitelist.
+    whitelistl: Liste les noms dans la whitelist.
+    whitelistw: Autorise/Pour désactive la whitelist (pour les mondes).
+    whitelistwadd: Liste les noms dans la whitelist.
+    whitelistwdel: Élimine une tête à la whitelist (pour les mondes).
+    whitelistwl: Liste les mondes dans la whitelist.
+    xp: Affichez ou modifiez l'XP d'un joueur.
+  addhead: Ajouter une tête de joueur au menu principal.
+  head: Vous-donne une tête.
+  heads: Affiche une sélection de têtes.
+  hpc: Affiche les challenges tu peux compléter.
+  hplb: Affiche le classement des têtes.
+  myhead: Vous-donne votre tête.
+  sellhead: Vend les têtes dans votre main, vous pouvez utiliser le paramètre nombreuse
+    vendre un nombre spécifique, nom d'entité vendre une entité spécifique, et "all"
+    pour vendre tous les têtes.
+event:
+  block-place-denied: '{header} Vous ne pouvez pas placer de têtes vendables!'
+  head-interact-message: '{header} C''est une tête d''&c{name}&7!'
+  head-mhf-interact-message: '{header} C''est une tête d''&c{name}&7!'
+  head-mhf-interact-message-2: '{header} C''est une tête d''&c{name}&7!'
+  lost-money: '{header} Parce que tu as été tué par &c{player}&7, tu as perdu &c{price}&7!'
+startup:
+  faulty-theme: '{header} Un thème défectueux a été mis! Aucun changement de thème
+    ne sera fait.'
+  no-vault: '{header} Vault n''a pas été trouvée! Les têtes ne peuvent pas être vendues
+    et les récompenses des challenges ne peuvent pas être ajoutés/retirés.'
+  no-vault-2: '{header} Vault n''a pas été trouvé au démarrage! Impossible d''ajouter
+    un groupe.'
+  plugin-disabled: '{header} Le plugin est désactivée!'
+  plugin-enabled: '{header} HeadsPlus a bien été activé!'
+  plugin-fail: '{header} HeadsPlus n''a pas réussi à démarrer correctement. Un rapport
+    d''erreur a été créé dans /plugins/HeadsPlus/debug'
+update:
+  current-version: '{header} Actualle version: &c{version}'
+  description: '{header} Description: &c{description}'
+  new-version: '{header} Nouvelle version: &c{version}'
+  plugin-up-to-date: '{header} Le plugin est à jour!'
+  update-found: '{header} Une update a été trouvée pour HeadsPlus!'
