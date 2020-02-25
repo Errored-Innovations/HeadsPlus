@@ -119,6 +119,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                     }
                 } else if (args[1].equalsIgnoreCase("set")) {
+                    // TODO sort out this bs
                     if (args.length > 4) {
                         if (DeathEvents.ableEntities.contains(args[2])) {
                             if (args[3].equalsIgnoreCase("chance")

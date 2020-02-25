@@ -151,8 +151,10 @@ public class DeathEvents implements Listener {
         if (!hp.isDropsEnabled() || checkForMythicMob(hp, e.getEntity())) {
             return;
         }
+        // TODO spawn tracking (again)
         if (!runBlacklistTests(e.getEntity())) return;
         try {
+            // TODO Check for wandering trader/trader llama
             String entity = e.getEntityType().toString().toLowerCase().replaceAll("_", "");
             Random rand = new Random();
             double fixedChance = hpch.getConfig().getDouble(entity + ".chance");
@@ -162,6 +164,7 @@ public class DeathEvents implements Listener {
             if (killer != null) {
                 ItemStack handItem = hp.getNMS().getItemInHand(e.getEntity().getKiller());
                 ConfigurationSection mechanics = hp.getConfiguration().getMechanics();
+                // TODO separate into function
                 if (handItem != null) {
                     if (handItem.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
                             && mechanics.getBoolean("allow-looting-enchantment")
@@ -339,6 +342,8 @@ public class DeathEvents implements Listener {
                         boolean powered = Boolean.parseBoolean(callMethod(methods, entity));
                         heads = storedHeads.get(name + ";" + (powered ? "POWERED" : "default"));
                         break;
+                        // TODO Add IAE catch
+                        // TODO Add horse check for 1.8.x
                     } else if (entity.getType() == EntityType.valueOf("BEE")) {
                         if (methods.equalsIgnoreCase("hasNectar")) {
                             possibleConditions.add(callMethod(methods, entity).equalsIgnoreCase("true") ? "NECTAR" : "default");
