@@ -233,7 +233,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 							} else {
 								getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#" + dc.name().toLowerCase() + "_sheep")));
 							}
-						} catch (NoSuchFieldError ex) {
+						} catch (NoSuchFieldError | IllegalArgumentException ex) {
 							getConfig().addDefault("sheep.name." + dc.name(), new ArrayList<>(Collections.singleton("HP#silver_sheep")));
 						}
 					}

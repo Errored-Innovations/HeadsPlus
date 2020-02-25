@@ -44,7 +44,7 @@ public class HeadsPlusMessagesManager {
             hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
             config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
         }
-        if (config.getDouble("version") != 1.1) {
+        if (config.getDouble("version") != 1.2) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -116,7 +116,11 @@ public class HeadsPlusMessagesManager {
                         en_us.addDefault("textmenus.help.description", "Description");
                         en_us.addDefault("textmenus.help.permission", "Permission");
                         en_us.addDefault("textmenus.help.further-usages", "Further Usages");
-                        en_us.set("version", 1.1);
+                        en_us.addDefault("inventory.icon.reward.currency", "&7${amount}");
+                        en_us.addDefault("inventory.icon.reward.group-add", "&7Group {group} &7(&a+&7)");
+                        en_us.addDefault("inventory.icon.reward.group-remove", "&7Group {group} &7(&c-&7)");
+                        en_us.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(s)");
+                        en_us.set("version", 1.2);
                         en_us.options().copyDefaults(true);
                         try {
                             en_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));

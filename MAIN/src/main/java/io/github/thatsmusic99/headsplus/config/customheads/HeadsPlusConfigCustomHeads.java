@@ -25,6 +25,8 @@ import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
@@ -186,6 +188,22 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 getConfig().getString("heads." + key + ".displayname"));
     }
 
+    public String getTexture(ItemStack skull) {
+        try {
+            Field profileField;
+            profileField = skull.getItemMeta().getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            GameProfile profile = (GameProfile) profileField.get(skull.getItemMeta());
+            String value = profile.getProperties().get("textures").iterator().next().getValue();
+            JSONObject json = (JSONObject) new JSONParser().parse(new String(Base64.getDecoder().decode(value.getBytes())));
+            return new String(Base64.getEncoder().encode(((JSONObject)((JSONObject) json.get("textures")).get("SKIN")).get("url").toString().getBytes()));
+        } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
+            throw new RuntimeException("Reflection error while getting head texture", ex);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public ItemStack getSkullFromTexture(String texture, boolean encoded, String displayName) {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
@@ -198,7 +216,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            gm.getProperties().put("textures", new Property("texture", texture.replaceAll("=", "")));
+            gm.getProperties().put("textures", new Property("textures", texture.replaceAll("=", "")));
         }
 
         try {
@@ -229,7 +247,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     public ItemStack setTexture(String tex, ItemStack is) throws IllegalAccessException, NoSuchFieldException {
         SkullMeta sm = (SkullMeta) is.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(tex.getBytes()), "HPXHead");
-        gm.getProperties().put("textures", new Property("texture", tex.replaceAll("=", "")));
+        gm.getProperties().put("textures", new Property("textures", tex.replaceAll("=", "")));
 
         Field profileField;
         profileField = sm.getClass().getDeclaredField("profile");

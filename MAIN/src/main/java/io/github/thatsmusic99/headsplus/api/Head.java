@@ -26,7 +26,7 @@ public class Head {
     }
 
     public Head(String id, int data) {
-        this.itemStack = new ItemStack(HeadsPlus.getInstance().getNMS().getSkull(data).getType());
+        this.itemStack = HeadsPlus.getInstance().getNMS().getSkull(data);
         this.id = id;
         this.data = data;
     }

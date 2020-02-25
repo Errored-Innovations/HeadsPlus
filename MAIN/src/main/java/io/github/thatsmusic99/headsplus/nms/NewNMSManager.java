@@ -23,7 +23,7 @@ public interface NewNMSManager extends NMSManager {
     }
 
     default ItemStack getSkull(int data) {
-        return new ItemStack(HeadTypes.getMaterial(data), 0);
+        return new ItemStack(HeadTypes.getMaterial(data), 1);
 
     }
 
