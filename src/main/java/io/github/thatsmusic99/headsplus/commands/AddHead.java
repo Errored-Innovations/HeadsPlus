@@ -45,7 +45,6 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                     .replace("{player}", p.getName())
                                     .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
                         }
-                        getDebug().stopTimings(sender, "addhead");
                         return true;
                     } else {
                         sender.sendMessage(hpc.getString("commands.head.head-too-long", sender));

@@ -1,4 +1,4 @@
-package io.github.thatsmusic99.headsplus.util;
+package io.github.thatsmusic99.headsplus.util.prompts;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.conversations.ConversationContext;
