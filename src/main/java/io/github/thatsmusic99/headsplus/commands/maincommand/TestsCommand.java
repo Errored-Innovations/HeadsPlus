@@ -3,9 +3,9 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,7 +13,6 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -32,7 +31,7 @@ public class TestsCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             if (DeathEvents.ableEntities.contains(args[1].toUpperCase())) {
                 if (args.length > 2) {
-                    if (args[2].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
                         int amount = Integer.parseInt(args[2]);
                         String type = args[1].toLowerCase().replaceAll("_", "");
                         sender.sendMessage(hpc.getString("commands.tests.running-tests"));

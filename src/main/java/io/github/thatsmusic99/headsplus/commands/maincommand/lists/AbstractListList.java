@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -22,7 +23,7 @@ public abstract class AbstractListList extends AbstractListCommand {
             List<String> wl = getList();
             int page;
             if (args.length > 1) {
-                if (args[1].matches("^[0-9]+$")) {
+                if (CachedValues.PLAYER_NAME.matcher(args[1]).matches()) {
                     page = Integer.parseInt(args[1]);
                 } else {
                     sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));

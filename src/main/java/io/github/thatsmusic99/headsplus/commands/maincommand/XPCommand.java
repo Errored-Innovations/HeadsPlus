@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -33,7 +34,7 @@ public class XPCommand implements IHeadsPlusCommand {
         if (args.length > 2) {
             if (args[2].equalsIgnoreCase("add")) {
                 if (args.length > 3) {
-                    if (args[3].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[3]).matches()) {
                         int amount = Integer.parseInt(args[3]);
                         player.addXp(amount);
                         sender.sendMessage(hpc.getString("commands.xp.added-xp", sender).replaceAll("\\{player}", args[1])
@@ -49,7 +50,7 @@ public class XPCommand implements IHeadsPlusCommand {
 
             } else if (args[2].equalsIgnoreCase("subtract")) {
                 if (args.length > 3) {
-                    if (args[3].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[3]).matches()) {
                         int amount = Integer.parseInt(args[3]);
                         if (amount > player.getXp() && !HeadsPlus.getInstance().getConfiguration().getPerks().negative_xp) {
                             sender.sendMessage(hpc.getString("commands.xp.negative-xp", sender));

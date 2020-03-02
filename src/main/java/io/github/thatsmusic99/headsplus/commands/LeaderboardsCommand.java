@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +46,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                     String sec = b ? args[0].toUpperCase() : args[0];
                                     if (b || sec.equalsIgnoreCase("player")) {
                                         if (args.length > 1) {
-                                            if (args[1].matches("^[0-9]+$")) {
+                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                                 if (args.length > 2) {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
@@ -61,7 +62,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                                     || args[1].equalsIgnoreCase("selling")
                                                     || args[1].equalsIgnoreCase("hunting")) {
                                                 if (args.length > 2) {
-                                                    if (args[2].matches("^[0-9]+$")) {
+                                                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
                                                         cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[2]), args[1]));
                                                     } else {
                                                         cs.sendMessage(getLeaderboard(cs, sec, 1, args[1]));
@@ -80,7 +81,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                     tests.put("Valid Entity", false);
                                     if (args[0].equalsIgnoreCase("total")) {
                                         if (args.length > 1) {
-                                            if (args[1].matches("^[0-9]+$")) {
+                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                                 if (args.length > 2) {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
@@ -102,11 +103,11 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                         } else {
                                             cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
                                         }
-                                    } else if (args[0].matches("^[0-9]+$")) {
+                                    } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
                                         cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
                                     } else if (args[0].equalsIgnoreCase("player")) {
                                         if (args.length > 1) {
-                                            if (args[1].matches("^[0-9]+$")) {
+                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                                 if (args.length > 2) {
                                                     if (args[2].equalsIgnoreCase("crafting")
                                                             || args[2].equalsIgnoreCase("selling")
@@ -139,7 +140,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                             || args[0].equalsIgnoreCase("selling")
                                             || args[0].equalsIgnoreCase("hunting")) {
                                         if (args.length > 1) {
-                                            if (args[1].matches("^[0-9]+$")) {
+                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                                 cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0]));
                                             } else {
                                                 cs.sendMessage(getLeaderboard(cs, "total", 1, args[0]));

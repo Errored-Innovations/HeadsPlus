@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -137,20 +138,14 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                         if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
                         } else if (hp.getNMS().getPlayer(args[1]) != null) {
-
-                            boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
-                            if (b) {
+                            if (CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
                                 String[] s = new String[2];
                                 s[0] = args[0];
                                 s[1] = args[1];
                                 giveH(s, sender, hp.getNMS().getPlayer(args[1]));
                                 return true;
-                            } else if (!args[0].matches("^[A-Za-z0-9_]+$")) {
-                                sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
-                            } else if (args[0].length() < 3) {
-                                sender.sendMessage(hpc.getString("commands.head.head-too-short", sender));
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.head-too-long", sender));
+                                sender.sendMessage(hpc.getString("commands.head.invalid-args", sender));
                             }
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
@@ -162,8 +157,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	            } else if (args.length > 0) {
 	                if (sender instanceof Player) {
 	                    Player p = (Player) sender;
-	                    boolean b = args[0].matches("^[A-Za-z0-9_]+$") && (2 < args[0].length()) && (args[0].length() < 17);
-	                    if (b) {
+	                    if (CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
 	                        giveH(args, sender, p);
 	                        return true;
 	                    }

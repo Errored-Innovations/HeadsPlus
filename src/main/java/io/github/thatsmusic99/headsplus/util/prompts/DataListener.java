@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class DataListener extends StringPrompt {
     private static final List<String> types = Arrays.asList("id", "texture", "encode", "displayname", "price", "section");
@@ -46,8 +46,7 @@ public class DataListener extends StringPrompt {
             }
 
         } else if (currentType.equalsIgnoreCase("price")) {
-            Pattern pattern = Pattern.compile("^[0-9]+(\\.[0-9]+)?$");
-            if (!pattern.matcher(s).matches()) {
+            if (!CachedValues.DOUBLE_PATTERN.matcher(s).matches()) {
                 context.getForWhom().sendRawMessage("Invalid input");
                 return new DataListener(type, currentType);
             }

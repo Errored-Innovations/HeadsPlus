@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -58,7 +59,7 @@ public class HelpMenu implements IHeadsPlusCommand {
             if (args.length == 0) {
                 helpNoArgs(sender);
             } else if (args.length == 1) {
-                if (args[0].matches("^[0-9]+$")) {
+                if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
                     helpNo(sender, args[0]);
                 } else if (args[0].equalsIgnoreCase("help")) {
                     helpNoArgs(sender);
@@ -67,7 +68,7 @@ public class HelpMenu implements IHeadsPlusCommand {
                 }
             } else {
                 if (args[0].equalsIgnoreCase("help")) {
-                    if (args[1].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                         helpNo(sender, args[1]);
                     } else {
                         helpCmd(sender, args[1]);

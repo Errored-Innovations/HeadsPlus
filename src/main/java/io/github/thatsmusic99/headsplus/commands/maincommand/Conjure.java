@@ -5,19 +5,16 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 @CommandInfo(
@@ -31,7 +28,6 @@ public class Conjure implements IHeadsPlusCommand {
 
     // F
     private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-    private HashMap<Integer, List<String>> autocomplete;
 
     @Override
     public String getCmdDescription(CommandSender cs) {
@@ -46,7 +42,7 @@ public class Conjure implements IHeadsPlusCommand {
             if (DeathEvents.ableEntities.contains(entity)) {
                 int amount = 1;
                 if (args.length > 2) {
-                    if (args[2].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
                         amount = Integer.parseInt(args[2]);
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
@@ -67,7 +63,7 @@ public class Conjure implements IHeadsPlusCommand {
                     }
                 }
                 if (args.length > 4) {
-                    if (args[4].matches("^[0-9]+$")) {
+                    if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
                         index = Integer.parseInt(args[4]);
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));

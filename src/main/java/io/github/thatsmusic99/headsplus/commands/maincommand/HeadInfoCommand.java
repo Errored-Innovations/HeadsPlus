@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -85,7 +86,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         if (args.length > 3) {
                             if (args[3].equalsIgnoreCase("name") || args[3].equalsIgnoreCase("lore") || args[3].equalsIgnoreCase("mask")) {
                                 if (args.length > 4) {
-                                    if (args[4].matches("^[0-9]+$")) {
+                                    if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
                                         switch (args[3].toLowerCase()) {
                                             case "name":
                                                 sender.sendMessage(printNameInfo(type, Integer.parseInt(args[4]), sender));
@@ -154,7 +155,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                             if (PotionEffectType.getByName(args[4]) != null) {
                                 int amplifier = 1;
                                 if (args.length > 5) {
-                                    if (args[5].matches("^[0-9]+$")) {
+                                    if (CachedValues.MATCH_PAGE.matcher(args[5]).matches()) {
                                         amplifier = Integer.parseInt(args[5]);
                                     } else {
                                         sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
@@ -207,7 +208,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                             if (args[3].equalsIgnoreCase("name")
                                     || args[3].equalsIgnoreCase("lore")
                                     || args[3].equalsIgnoreCase("mask")) {
-                                if (args[4].matches("^[0-9]+$")) {
+                                if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
                                     if (args[3].equalsIgnoreCase("name")) {
                                         String path;
                                         if (args.length > 5) {

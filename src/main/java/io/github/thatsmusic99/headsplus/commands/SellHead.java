@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -92,7 +93,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                             }
                         }
                     } else {
-                        if (args.length > 1 && args[1].matches("^[0-9]+$")) {
+                        if (args.length > 1 && CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                             if (!p.hasPermission("headsplus.sellhead")) {
                                 p.sendMessage(hpc.getString("commands.errors.no-perm", p));
                             } else {
@@ -101,15 +102,15 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                                 } else {
                                     double price = 0.0;
                                     int limit = -1;
-                                    if (args[1].matches("^[0-9]+$")) {
+                                    if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                         limit = Integer.parseInt(args[1]);
                                     }
                                     int is = 0;
                                     for (ItemStack i : p.getInventory()) {
                                         if (i != null) {
                                             //    boolean found = false;
-                                            if (nbt().isSellable(i)) {
-                                                String st = nbt().getType(i).toLowerCase();
+                                            if (NBTManager.isSellable(i)) {
+                                                String st = NBTManager.getType(i).toLowerCase();
                                                 if (st.equalsIgnoreCase(args[0])) {
                                                     if (is != limit) {
                                                         price = setPrice(price, args, i, p, limit);
@@ -123,8 +124,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                                     if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 4) {
                                         ItemStack i = p.getInventory().getHelmet();
                                         if (i != null) {
-                                            if (nbt().isSellable(i)) {
-                                                String st = nbt().getType(i).toLowerCase();
+                                            if (NBTManager.isSellable(i)) {
+                                                String st = NBTManager.getType(i).toLowerCase();
                                                 if (st.equalsIgnoreCase(args[0])) {
                                                     if (is != limit) {
                                                         price = setPrice(price, args, i, p, limit);
@@ -136,8 +137,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
                                     ItemStack is2 = nms().getOffHand(p);
                                     if (is2 != null) {
-                                        if (nbt().isSellable(is2)) {
-                                            String st = nbt().getType(is2).toLowerCase();
+                                        if (NBTManager.isSellable(is2)) {
+                                            String st = NBTManager.getType(is2).toLowerCase();
                                             if (st.equalsIgnoreCase(args[0])) {
                                                 if (is != limit) {
                                                     price = setPrice(price, args, is2, p, limit);
@@ -191,8 +192,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		if (a.length > 0) {
 		    if (p.getInventory().getHelmet() != null) {
 		        ItemStack is = p.getInventory().getHelmet();
-		        if (NBTManager.isSellable(is) && !nbt().getType(is).isEmpty()) {
-                    if (a[0].equalsIgnoreCase("all") || nbt().getType(is).equalsIgnoreCase(a[0])) {
+		        if (NBTManager.isSellable(is) && !NBTManager.getType(is).isEmpty()) {
+                    if (a[0].equalsIgnoreCase("all") || NBTManager.getType(is).equalsIgnoreCase(a[0])) {
                         if (is.getAmount() > l && l != -1) {
                             is.setAmount(is.getAmount() - l);
                             l = 0;
@@ -254,14 +255,14 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	}
 	private double setPrice(Double p, String[] a, ItemStack i, Player pl, int limit) {
 		if (a.length > 0) { // More than one argument
-			if (!a[0].matches("^[0-9]+$")) { // More than one head
+			if (!CachedValues.MATCH_PAGE.matcher(a[0]).matches()) { // More than one head
 				if (a[0].equalsIgnoreCase("all")) { // Sell everything
 				    if (NBTManager.isSellable(i)) {
-				        String s = nbt().getType(i).toLowerCase();
+				        String s = NBTManager.getType(i).toLowerCase();
 				        if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
 				            soldHeads.add(s);
 				            int o = i(s, i.getAmount(), limit, false);
-				            p += o * nbt().getPrice(i);
+				            p += o * NBTManager.getPrice(i);
                         }
 				    }
 				} else { // Selected mob
@@ -269,10 +270,10 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 				}
 			} else {
 			    if (Integer.parseInt(a[0]) <= i.getAmount()) {
-					if (nbt().isSellable(i)) {
-					    String s = nbt().getType(i);
+					if (NBTManager.isSellable(i)) {
+					    String s = NBTManager.getType(i);
 					    if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-                            p = nbt().getPrice(i) * Integer.parseInt(a[0]);
+                            p = NBTManager.getPrice(i) * Integer.parseInt(a[0]);
                             soldHeads.add(s);
                             i(s, i.getAmount(), limit, false);
                         }
@@ -290,7 +291,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 4) {
             ItemStack i = p.getInventory().getHelmet();
             if (i != null) {
-                if (nbt().isSellable(i)) {
+                if (NBTManager.isSellable(i)) {
                     price = setPrice(price, a, i, p, -1);
                 }
             }

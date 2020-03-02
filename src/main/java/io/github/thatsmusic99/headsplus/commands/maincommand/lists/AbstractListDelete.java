@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -17,7 +18,7 @@ public abstract class AbstractListDelete extends AbstractListCommand {
     public boolean fire(String[] args, CommandSender sender) {
         try {
             if (args.length > 1) {
-                if (args[1].matches("^[A-Za-z0-9_]+$")) {
+                if (CachedValues.PLAYER_NAME.matcher(args[1]).matches()) {
                     String rHead = args[1].toLowerCase();
                     if (getList().contains(rHead)) {
                         getList().remove(rHead);
