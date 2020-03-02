@@ -93,8 +93,6 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.sellhead-gui", true);
         config.addDefault("plugin.mechanics.debug.create-debug-files", true);
         config.addDefault("plugin.mechanics.debug.print-stacktraces-in-console", true);
-        config.addDefault("plugin.mechanics.debug.console.enabled", false);
-        config.addDefault("plugin.mechanics.debug.console.level", 1);
         config.addDefault("plugin.mechanics.anvil-menu-search", false);
         config.addDefault("plugin.mechanics.mythicmobs.no-hp-drops", true);
         config.addDefault("plugin.mechanics.round-balance-to-2-d-p", true);

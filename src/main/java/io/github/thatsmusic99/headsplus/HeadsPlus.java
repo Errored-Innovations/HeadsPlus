@@ -60,7 +60,6 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigCustomHeads hpchx;
     private DeathEvents de;
     private HeadsPlusCrafting hpcr;
-    private NewMySQLAPI mySQLAPI;
     private HeadsPlusChallenges hpchl;
     private HeadsPlusAPI hapi;
     private HeadsPlusLevels hpl;
@@ -68,7 +67,6 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusConfigItems items;
     private HeadsPlusConfigSounds sounds;
     private HeadsPlusConfigTextMenu menus;
-    private HeadsPlusDebug debug;
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
     private final List<ChallengeSection> challengeSections = new ArrayList<>();
@@ -98,12 +96,10 @@ public class HeadsPlus extends JavaPlugin {
 
             if (!isEnabled()) return;
             // Checks theme, believe it or not!
-            debug("- Checking plugin theme.", 1);
             checkTheme();
 
             // Handles recipes
             if (!getConfiguration().getPerks().disable_crafting) {
-                debug("- Recipes may be added. Creating...", 1);
                 getServer().getPluginManager().registerEvents(new RecipePerms(), this);
             }
             // If sellable heads are enabled and yet there isn't Vault
@@ -117,15 +113,12 @@ public class HeadsPlus extends JavaPlugin {
             }
 
             // Registers plugin events
-            debug("- Registering listeners!", 1);
             registerEvents();
 
             // Registers commands
-            debug("- Registering commands!", 1);
             registerCommands();
 
             // Registers subcommands
-            debug("- Registering subcommands!", 1);
             registerSubCommands();
             JoinEvent.reloaded = false;
 
@@ -135,17 +128,14 @@ public class HeadsPlus extends JavaPlugin {
             }
 
             // Sets up Metrics
-            debug("- Creating Metrics!", 1);
             Metrics metrics = new Metrics(this);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
             metrics.addCustomChart(new Metrics.SimplePie("theme", () -> capitalize(getConfiguration().getMechanics().getString("plugin-theme-dont-change").toLowerCase())));
-            debug("- Metrics complete, can be found at https://bstats.org/plugin/bukkit/HeadsPlus", 2);
             if (getConfiguration().getMechanics().getBoolean("update.check")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         try {
-                            debug("- Checking for update...", 1);
                             update = UpdateChecker.getUpdate();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -268,7 +258,6 @@ public class HeadsPlus extends JavaPlugin {
             connection = DriverManager.getConnection("jdbc:mysql://" + mysql.getString("host") + ":" + mysql.getString("port") + "/" + mysql.getString("database") + "?useSSL=false&autoReconnect=true", mysql.getString("username"), mysql.getString("password"));
             NewMySQLAPI.createTable();
             con = true;
-            debug("- Connected to MySQL!", 2);
         }
     }
 
@@ -284,7 +273,6 @@ public class HeadsPlus extends JavaPlugin {
                 fc.getMechanics().set("plugin-theme-dont-change", mt.name());
                 fc.getConfig().options().copyDefaults(true);
                 fc.save();
-                debug("- Theme set to " + mt.name() + "!", 1);
             } catch (Exception ex) {
                 getLogger().warning("[HeadsPlus] Faulty theme was put in! No theme changes will be made.");
             }
@@ -292,82 +280,50 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerEvents() {
-        debug("- Registering InventoryEvent...", 3);
         getServer().getPluginManager().registerEvents(new InventoryEvent(), this);
-        debug("- Registering HeadInteractEvent...", 3);
         getServer().getPluginManager().registerEvents(new HeadInteractEvent(), this);
-        debug("- Registering DeathEvents...", 3);
         getServer().getPluginManager().registerEvents(de, this);
-        debug("- Registering JoinEvent...", 3);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
-        debug("- Registering PlaceEvent...", 3);
         getServer().getPluginManager().registerEvents(new PlaceEvent(), this);
-        debug("- Registering Creative Pick Event...", 3);
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
-        debug("- Registering LeaderboardEvents...", 3);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
-        debug("- Registering PlayerDeathEvent...", 3);
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
-        debug("- Registering MaskEvent...", 3);
         getServer().getPluginManager().registerEvents(new MaskEvent(), this);
-        debug("- Registering SoundEvent...", 3);
         getServer().getPluginManager().registerEvents(new SoundEvent(), this);
-        debug("- Finished registering listeners!", 2);
     }
 
     private void registerCommands() {
-        debug("- Registering /headsplus...", 3);
         getCommand("headsplus").setExecutor(new HeadsPlusCommand());
-        debug("- Registering /hp's tab completer..", 3);
         getCommand("hp").setTabCompleter(new TabComplete());
-        debug("- Registering /head...", 3);
         getCommand("head").setExecutor(new Head());
         getCommand("head").setTabCompleter(new Head());
-        debug("- Registering /heads...", 3);
         getCommand("heads").setExecutor(new Heads());
-        debug("- Registering /myhead...", 3);
         getCommand("myhead").setExecutor(new MyHead());
-        debug("- Registering /hplb...", 3);
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
-        debug("- Registering /hplb's tab completer..", 3);
         getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
-        debug("- Registering /sellhead...", 3);
         getCommand("sellhead").setExecutor(new SellHead());
-        debug("- Registering /sellhead's tab completer...", 3);
         getCommand("sellhead").setTabCompleter(new TabCompleteSellhead());
-        debug("- Registering /hpc...", 3);
         getCommand("hpc").setExecutor(new ChallengeCommand());
-        debug("- Registering /addhead...", 3);
         getCommand("addhead").setExecutor(new AddHead());
-        debug("- Finished registering commands!", 2);
     }
 
     private void createInstances() {
 
         config = new HeadsPlusMainConfig();
         cs.add(config);
-        debug("- Instance for HeadsPlusMainConfig created!", 3);
         hapi = new HeadsPlusAPI();
-        debug("- Instance for HeadsPlus's API created!", 3);
         nbt = new NBTManager();
-        debug("- Instance for NBTManager created!", 3);
         hpc = new HeadsPlusMessagesManager();
-        debug("- Instance for HeadsPlusMessagesManager created!", 3);
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
-        debug("- Instance for HeadsPlusConfigHeads created!", 3);
         hpchx = new HeadsPlusConfigCustomHeads();
         cs.add(hpchx);
-        debug("- Instance for HeadsPlusConfigCustomHeads created!", 3);
         hpcr = new HeadsPlusCrafting();
         cs.add(hpcr);
-        debug("- Instance for HeadsPlusCrafting created!", 3);
         de = new DeathEvents();
-        debug("- Instance for DeathEvents created!", 3);
         hpchl = new HeadsPlusChallenges();
         cs.add(hpchl);
-        debug("- Instance for HeadsPlusChallenges created!", 3);
-        if (!getDescription().getAuthors().get(0).equals("Thatsmusic99")) {
+        if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals("HeadsPlus")) {
             getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
             getLogger().severe("Only reupload the plugin on other sites with my permission, please!");
             setEnabled(false);
@@ -375,13 +331,11 @@ public class HeadsPlus extends JavaPlugin {
         }
         try {
             setupJSON();
-            debug("- Set up favourites.json and playerinfo.json!", 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (getConfiguration().getMySQL().getBoolean("enabled")) {
-            debug("- MySQL is to be enabled. Opening connection...", 1);
             try {
                 openConnection();
             } catch (SQLException | ClassNotFoundException e) {
@@ -390,22 +344,12 @@ public class HeadsPlus extends JavaPlugin {
         }
         hpl = new HeadsPlusLevels();
         cs.add(hpl);
-        debug("- Instance for HeadsPlusLevels created!", 3);
         items = new HeadsPlusConfigItems();
         cs.add(items);
-        debug("- Instance for HeadsPlusConfigItems created!", 3);
         sounds = new HeadsPlusConfigSounds();
         cs.add(sounds);
-        debug("- Instance for HeadsPlusConfigSounds created!", 3);
-
         menus = new HeadsPlusConfigTextMenu();
         cs.add(menus);
-        debug("- Instance for HeadsPlusConfigTextMenu created!", 3);
-
-        debug = new HeadsPlusDebug();
-        cs.add(debug);
-
-        debug("Instances created.", 1);
     }
 
     public void restartMessagesManager() {
@@ -660,22 +604,8 @@ public class HeadsPlus extends JavaPlugin {
         return nmsversion;
     }
 
-    public HeadsPlusDebug getDebug() {
-        return debug;
-    }
-
     public ChatColor getThemeColour(int i) {
         return ChatColor.valueOf(getConfiguration().getConfig().getString("theme-colours." + i));
-    }
-
-    public void debug(String message, int l) {
-        if (getConfiguration().getMechanics().getBoolean("debug.console.enabled")) {
-            int level = getConfiguration().getMechanics().getInt("debug.console.level");
-            if (l <= level) {
-                getLogger().info("Debug: " + message);
-            }
-        }
-
     }
 
     public Challenge getChallengeByName(String name) {

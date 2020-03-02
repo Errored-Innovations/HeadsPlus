@@ -25,7 +25,6 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
-        getDebug().startTimings(cs, "hpc");
         try {
             if (HeadsPlus.getInstance().hasChallengesEnabled()) {
                 if (cs instanceof Player) {
@@ -45,7 +44,6 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
         }
-        getDebug().stopTimings(cs, "hpc");
         return true;
     }
 

@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusDebug;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -12,15 +11,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public interface IHeadsPlusCommand {
-
-    default HeadsPlusDebug getDebug() {
-        return HeadsPlus.getInstance().getDebug();
-    }
 
     String getCmdDescription(CommandSender sender);
 

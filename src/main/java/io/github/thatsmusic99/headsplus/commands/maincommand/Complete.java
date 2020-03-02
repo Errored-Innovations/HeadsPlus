@@ -35,7 +35,6 @@ public class Complete implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         try {
-            getDebug().startTimings(sender, "complete");
             if (args.length > 1) {
                 Challenge c = HeadsPlus.getInstance().getChallengeByName(args[1]);
                 if (c != null) {
@@ -54,13 +53,11 @@ public class Complete implements IHeadsPlusCommand {
                                 }
                             } else {
                                 sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
-                                getDebug().stopTimings(sender, "complete");
                                 return false;
                             }
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
                         }
-                        getDebug().stopTimings(sender, "complete");
                         return true;
 
                     } else if (sender instanceof Player) {
@@ -78,7 +75,6 @@ public class Complete implements IHeadsPlusCommand {
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
                     }
-                    getDebug().stopTimings(sender, "complete");
                     return true;
                 } else {
                     sender.sendMessage(hpc.getString("commands.challenges.no-such-challenge", sender));
@@ -90,7 +86,6 @@ public class Complete implements IHeadsPlusCommand {
             DebugPrint.createReport(e, "Complete command (checks)", true, sender);
             sender.sendMessage(hpc.getString("commands.errors.cmd-fail", sender));
         }
-        getDebug().stopTimings(sender, "complete");
         return false;
     }
 

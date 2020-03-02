@@ -29,7 +29,6 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        getDebug().startTimings(sender, "addhead");
         if(args.length > 0) {
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
                 if (args[0].length() > 2) {
@@ -60,7 +59,6 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
         } else {
             sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
         }
-        getDebug().stopTimings(sender, "addhead");
         return true;
     }
 
