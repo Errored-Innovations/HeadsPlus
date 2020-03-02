@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,7 @@ public class HeadsPlusMessagesManager {
 
     private static YamlConfiguration config;
     private static HashMap<String, YamlConfiguration> locales;
-    private static HashMap<Player, YamlConfiguration> players;
+    private static HashMap<UUID, YamlConfiguration> players;
 
     public HeadsPlusMessagesManager() {
         HeadsPlus hp = HeadsPlus.getInstance();
@@ -30,7 +32,7 @@ public class HeadsPlusMessagesManager {
         if (mainConfig.getConfig().getBoolean("smart-locale")) {
             locales = new HashMap<>();
             File langDir = new File(hp.getDataFolder() + File.separator + "locale" + File.separator);
-            for (File f : langDir.listFiles()) {
+            for (File f : Objects.requireNonNull(langDir.listFiles())) {
                 locales.put(f.getName().split("_")[0].toLowerCase(), YamlConfiguration.loadConfiguration(f));
             }
             players = new HashMap<>();
@@ -693,11 +695,11 @@ public class HeadsPlusMessagesManager {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
         if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
-            if (players.containsKey(player)) {
-                config = players.get(player);
+            if (players.containsKey(player.getUniqueId())) {
+                config = players.get(player.getUniqueId());
                 if (config == null) {
                     setPlayerLocale(player);
-                    config = players.get(player);
+                    config = players.get(player.getUniqueId());
                 }
             }
         }
@@ -719,13 +721,13 @@ public class HeadsPlusMessagesManager {
         String locale = getLocale(player);
         String first = locale.split("_")[0].toLowerCase();
         if (locales.containsKey(first)) {
-            players.put(player, locales.get(first));
+            players.put(player.getUniqueId(), locales.get(first));
         }
         HPPlayer.getHPPlayer(player).setLocale(locale, false);
     }
 
     public void setPlayerLocale(Player player, String locale, boolean b) {
-        players.put(player, locales.get(locale));
+        players.put(player.getUniqueId(), locales.get(locale));
         if (b) {
             HPPlayer.getHPPlayer(player).setLocale(locale);
         }
@@ -735,7 +737,7 @@ public class HeadsPlusMessagesManager {
         setPlayerLocale(player, locale, true);
     }
     public String getSetLocale(Player player) {
-        return players.get(player).getName().split("_")[0];
+        return players.get(player.getUniqueId()).getName().split("_")[0];
     }
 
     private static String getLocale(Player player) {
