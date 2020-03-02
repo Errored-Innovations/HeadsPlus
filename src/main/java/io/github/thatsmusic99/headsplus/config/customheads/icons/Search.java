@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.util.AnvilSlot;
-import io.github.thatsmusic99.headsplus.util.ChatPrompt;
+import io.github.thatsmusic99.headsplus.util.prompts.ChatPrompt;
 import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;

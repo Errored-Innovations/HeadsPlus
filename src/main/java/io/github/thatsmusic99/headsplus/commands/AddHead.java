@@ -3,12 +3,18 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.conversations.Conversable;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +32,7 @@ import java.util.List;
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -56,7 +63,31 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
             }
         } else {
-            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+            if (sender.hasPermission("headsplus.addhead.texture")) {
+                if (sender instanceof Conversable) {
+                    ConversationFactory factory = new ConversationFactory(HeadsPlus.getInstance());
+                    Conversation conversation = factory.withLocalEcho(false)
+                            .withFirstPrompt(new DataListener(0, "id"))
+                            .buildConversation((Conversable) sender);
+                    conversation.addConversationAbandonedListener(event -> {
+                        if (event.gracefulExit()) {
+                            ConversationContext context = event.getContext();
+                            String id = String.valueOf(context.getSessionData("id"));
+                            HeadsPlusConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
+                            for (Object key : context.getAllSessionData().keySet()) {
+                                if (key.equals("id")) continue;
+                                customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));
+                            }
+                            customHeads.getConfig().options().copyDefaults(true);
+                            customHeads.save();
+                            customHeads.addHeadToCache(id);
+                        }
+                    });
+                    conversation.begin();
+                }
+            } else {
+                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+            }
         }
         return true;
     }

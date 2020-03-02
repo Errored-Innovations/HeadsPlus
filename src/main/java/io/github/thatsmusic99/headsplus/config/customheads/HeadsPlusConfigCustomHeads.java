@@ -478,6 +478,11 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         delaySave();
     }
 
+    public void addHeadToCache(String id) {
+        headsCache.put(id, getSkull(id));
+        allHeadsCache.add(getConfig().getString("heads." + id + ".texture"));
+    }
+
     int autosaveTask = -1;
 
     void delaySave() {
