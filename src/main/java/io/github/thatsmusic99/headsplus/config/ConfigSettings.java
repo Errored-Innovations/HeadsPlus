@@ -1,13 +1,15 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 
-public class ConfigSettings {
+public abstract class ConfigSettings {
 
     protected FileConfiguration config;
     protected File configF;
@@ -47,6 +49,19 @@ public class ConfigSettings {
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public String getDefaultPath() {
+        return "";
+    }
+
+    public Double getDouble(String path) {
+        Double price = CachedValues.getPrice(path, getConfig());
+        if (price != null) {
+            return price;
+        } else {
+            return getDouble(getDefaultPath());
+        }
     }
 
 }

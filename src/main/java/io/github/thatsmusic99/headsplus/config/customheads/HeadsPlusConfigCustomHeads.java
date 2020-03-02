@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -67,6 +68,11 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     }
 
     @Override
+    public String getDefaultPath() {
+        return "options.default-price";
+    }
+
+    @Override
     public void reloadC(boolean a) {
         if (configF == null) {
             File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "headsx.yml");
@@ -78,10 +84,8 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                configF = newFile;
-            } else {
-                configF = newFile;
             }
+            configF = newFile;
         }
         config = YamlConfiguration.loadConfiguration(configF);
         getConfig().addDefault("options.update-heads", true);
@@ -89,15 +93,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         getConfig().addDefault("options.default-price", 10.00);
         getConfig().addDefault("options.price-per-world.example-one", 15.00);
         getConfig().options().copyDefaults(true);
-     //   getConfig().addDefault("options.advent-calendar", true);
-        //    getConfig().addDefault("options.advent-texture", "HP#snowman");
-        //    getConfig().addDefault("options.advent-display-name", "&4[&a&lHeadsPlus &c&lAdvent Calendar!&2]");
-        //    getConfig().addDefault("options.christmas-hype", 0);
-        //    if (getConfig().getBoolean("options.advent-calendar")) {
-        //        for (AdventCManager acm : AdventCManager.values()) {
-        //            getConfig().addDefault("advent-18." + acm.name(), new ArrayList<>());
-        //        }
-        //    }
         if (configF.length() <= 500) {
             loadHeadsX();
         }
@@ -459,7 +454,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             head.set("database", enable);
         }
         head.set("encode", encode);
-        if(price.matches("^([0-9]*\\.)?[0-9]+$")) {
+        if(CachedValues.DOUBLE_PATTERN.matcher(price).matches()) {
             head.set("price", Double.parseDouble(price));
         } else {
             head.set("price", price);

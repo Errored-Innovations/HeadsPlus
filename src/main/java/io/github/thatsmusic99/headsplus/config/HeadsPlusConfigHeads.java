@@ -46,7 +46,13 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 		}
 		
 	}
-    private void addUndefinedHeads() {
+
+	@Override
+	public String getDefaultPath() {
+		return "defaults.price";
+	}
+
+	private void addUndefinedHeads() {
     	for (String key : uHeads) {
             switch (key) {
 				case "bee":
@@ -334,11 +340,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
     }
 
     public double getPrice(String type) {
-        if (getConfig().get(type + ".price").equals("{default}")) {
-	        return getConfig().getDouble("defaults.price");
-	    } else {
-	        return getConfig().getDouble(type + ".price");
-	    }
+		return getDouble(type + ".price");
     }
 
     public String getDisplayName(String type) {

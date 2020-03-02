@@ -10,6 +10,7 @@ import io.github.thatsmusic99.headsplus.config.customheads.icons.Nav;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.customheads.inventories.*;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -433,30 +434,10 @@ public class InventoryManager {
         List<String> price = new ArrayList<>();
         double pr = 0.0;
         if (plugin.econ()) {
-            if (hpchx.getConfig().get("options.price-per-world." + player.getWorld().getName()) instanceof String) {
-                if (((String) hpchx.getConfig().get("options.price-per-world." + player.getWorld().getName())).equalsIgnoreCase("default")) {
-                    if (!hpchx.getConfig().get("options.default-price").equals("free")) {
-                        pr = hpchx.getConfig().getDouble("options.default-price");
-                    }
-                } else {
-                    pr = hpchx.getConfig().getDouble("options.price-per-world." + player.getWorld().getName());
-                }
-            } else if (hpchx.getConfig().get("options.price-per-world." + player.getWorld().getName()) instanceof Double) {
-                pr = hpchx.getConfig().getDouble("options.price-per-world." + player.getWorld().getName());
-            } else if (hpchx.getConfig().get("heads." + str + ".price") instanceof String) {
-                if (!((String) hpchx.getConfig().get("heads." + str + ".price")).equalsIgnoreCase("free")) {
-                    if (((String) hpchx.getConfig().get("heads." + str + ".price")).equalsIgnoreCase("default")) {
-                        if (!hpchx.getConfig().get("options.default-price").equals("free")) {
-                            pr = hpchx.getConfig().getDouble("options.default-price");
-                        }
-                    } else {
-                        pr = hpchx.getConfig().getDouble("heads." + str + ".price");
-                    }
-                }
+            if (hpchx.getConfig().get("options.price-per-world." + player.getWorld().getName()) != null) {
+                pr = hpchx.getDouble("options.price-per-world." + player.getWorld().getName());
             } else {
-                if (!((hpchx.getConfig().getDouble("heads." + str + ".price")) == 0.0)) {
-                    pr = hpchx.getConfig().getDouble("heads." + str + ".price");
-                }
+                pr = hpchx.getDouble("heads." + str + ".price");
             }
         }
         price.add(ChatColor.translateAlternateColorCodes('&', ChatColor.GOLD + "[" + ChatColor.YELLOW + "Price" + ChatColor.GOLD + "] " + ChatColor.GREEN + pr));
@@ -468,7 +449,7 @@ public class InventoryManager {
         ItemMeta sm = s.getItemMeta();
         sm.setLore(price);
         s.setItemMeta(sm);
-        s = plugin.getNBTManager().addDatabaseHead(s, str, pr);
+        s = NBTManager.addDatabaseHead(s, str, pr);
         return s;
     }
 
