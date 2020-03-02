@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -17,6 +16,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -144,6 +144,12 @@ public class DeathEvents implements Listener {
             "ZOMBIE_VILLAGER"));
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
     public static boolean ready = false;
+    private static final HashMap<UUID, CreatureSpawnEvent.SpawnReason> spawnTracker = new HashMap<>();
+
+    @EventHandler
+    public void onEntitySpawn(CreatureSpawnEvent event) {
+        spawnTracker.put(event.getEntity().getUniqueId(), event.getSpawnReason());
+    }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
@@ -151,34 +157,24 @@ public class DeathEvents implements Listener {
         if (!hp.isDropsEnabled() || checkForMythicMob(hp, e.getEntity())) {
             return;
         }
-        // TODO spawn tracking (again)
         if (!runBlacklistTests(e.getEntity())) return;
+        if (spawnTracker.containsKey(e.getEntity().getUniqueId())) {
+            if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(spawnTracker.get(e.getEntity().getUniqueId()).name())) {
+                return;
+            }
+        }
         try {
-            // TODO Check for wandering trader/trader llama
             String entity = e.getEntityType().toString().toLowerCase().replaceAll("_", "");
+            if (e.getEntityType().name().equalsIgnoreCase("WANDERING_TRADER") || e.getEntityType().name().equalsIgnoreCase("TRADER_LLAMA")) {
+                entity = e.getEntity().getType().name().toLowerCase();
+            }
             Random rand = new Random();
             double fixedChance = hpch.getConfig().getDouble(entity + ".chance");
             double randChance = rand.nextDouble() * 100;
             int amount = 1;
             Player killer = e.getEntity().getKiller();
             if (killer != null) {
-                ItemStack handItem = hp.getNMS().getItemInHand(e.getEntity().getKiller());
-                ConfigurationSection mechanics = hp.getConfiguration().getMechanics();
-                // TODO separate into function
-                if (handItem != null) {
-                    if (handItem.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
-                            && mechanics.getBoolean("allow-looting-enchantment")
-                            && !(mechanics.getStringList("looting.ignored-entities").contains(entity))) {
-                        if (mechanics.getBoolean("looting.use-old-system")) {
-                            amount += handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
-                        } else {
-                            fixedChance *= handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
-                            amount = ((int) fixedChance / 100) == 0 ? 1 : (int) (fixedChance / 100);
-                        }
-
-                    }
-                }
-
+                amount = calculateChance(fixedChance, amount, entity, killer);
             }
             if (fixedChance == 0.0) {
                 return;
@@ -199,24 +195,13 @@ public class DeathEvents implements Listener {
             if (!hp.isDropsEnabled()) return;
             Player victim = ep.getEntity();
             Player killer = ep.getEntity().getKiller();
-            HeadsPlusMainConfig c = hp.getConfiguration();
             if (runBlacklistTests(victim)) {
                 Random rand = new Random();
                 double fixedChance = hpch.getConfig().getDouble("player.chance");
                 double randChance = rand.nextDouble() * 100;
-                NMSManager nms = hp.getNMS();
                 int amount = 1;
                 if (killer != null) {
-                    if (nms.getItemInHand(killer).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
-                            && c.getMechanics().getBoolean("allow-looting-enchantment")
-                            && !(c.getMechanics().getStringList("looting.ignored-entities").contains("player"))) {
-                        if (c.getMechanics().getBoolean("looting.use-old-system")) {
-                            amount = HeadsPlus.getInstance().getNMS().getItemInHand(killer).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-                        } else {
-                            fixedChance *= HeadsPlus.getInstance().getNMS().getItemInHand(killer).getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
-                            amount = ((int) fixedChance / 100) == 0 ? 1 : (int) (fixedChance / 100);
-                        }
-                    }
+                    amount = calculateChance(fixedChance, amount, "player", killer);
                 }
 
                 if (fixedChance == 0.0) return;
@@ -254,11 +239,33 @@ public class DeathEvents implements Listener {
         }
 	}
 
+	private int calculateChance(double fixedChance, int amount, String entity, Player killer) {
+        HeadsPlus hp = HeadsPlus.getInstance();
+        ItemStack handItem = hp.getNMS().getItemInHand(killer);
+        ConfigurationSection mechanics = hp.getConfiguration().getMechanics();
+        if (handItem != null) {
+            if (handItem.containsEnchantment(Enchantment.LOOT_BONUS_MOBS)
+                    && mechanics.getBoolean("allow-looting-enchantment")
+                    && !(mechanics.getStringList("looting.ignored-entities").contains(entity))) {
+                if (mechanics.getBoolean("looting.use-old-system")) {
+                    amount += handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
+                } else {
+                    fixedChance *= handItem.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1;
+                    amount = ((int) fixedChance / 100) == 0 ? 1 : (int) (fixedChance / 100);
+                }
+
+            }
+        }
+        return amount;
+    }
+
 	private void setupHeads() {
 	    for (String name : ableEntities) {
 	        try {
-                HeadsPlus.getInstance().debug("Creating head for " + name + "...", 3);
                 String fancyName = name.toLowerCase().replaceAll("_", "");
+                if (name.equalsIgnoreCase("WANDERING_TRADER") || name.equalsIgnoreCase("TRADER_LLAMA")) {
+                    fancyName = name.toLowerCase();
+                }
                 HeadsPlusConfigHeads headsCon = HeadsPlus.getInstance().getHeadsConfig();
                 if (headsCon.getConfig().get(fancyName + ".name") instanceof ConfigurationSection) {
                     for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
@@ -338,41 +345,54 @@ public class DeathEvents implements Listener {
             if (storedData.get(name) != null) {
                 List<String> possibleConditions = new ArrayList<>();
                 for (String methods : storedData.get(name)) {
-                    if (entity.getType() == EntityType.CREEPER) {
-                        boolean powered = Boolean.parseBoolean(callMethod(methods, entity));
-                        heads = storedHeads.get(name + ";" + (powered ? "POWERED" : "default"));
-                        break;
-                        // TODO Add IAE catch
-                        // TODO Add horse check for 1.8.x
-                    } else if (entity.getType() == EntityType.valueOf("BEE")) {
-                        if (methods.equalsIgnoreCase("hasNectar")) {
-                            possibleConditions.add(callMethod(methods, entity).equalsIgnoreCase("true") ? "NECTAR" : "default");
+                    try {
+                        if (entity.getType() == EntityType.CREEPER) {
+                            boolean powered = Boolean.parseBoolean(callMethod(methods, entity));
+                            heads = storedHeads.get(name + ";" + (powered ? "POWERED" : "default"));
+                            break;
+                        } else if (entity.getType() == EntityType.HORSE) {
+                           if (((Horse) entity).getVariant() != Horse.Variant.HORSE) {
+                               heads = storedHeads.get(((Horse) entity).getVariant().name() + ";default");
+                           } else {
+                               heads = storedHeads.get("horse;" + callMethod(methods, entity));
+                           }
+                        } else if (entity.getType() == EntityType.valueOf("BEE")) {
+                            if (methods.equalsIgnoreCase("hasNectar")) {
+                                possibleConditions.add(callMethod(methods, entity).equalsIgnoreCase("true") ? "NECTAR" : "default");
+                            } else {
+                                possibleConditions.add(Integer.parseInt(callMethod(methods, entity)) > 0 ? "ANGRY" : "default");
+                            }
                         } else {
-                            possibleConditions.add(Integer.parseInt(callMethod(methods, entity)) > 0 ? "ANGRY" : "default");
+                            possibleConditions.add(callMethod(methods, entity));
                         }
-                    } else {
+                    } catch (IllegalArgumentException ex) {
                         possibleConditions.add(callMethod(methods, entity));
                     }
+
                 }
                 if (possibleConditions.contains("default") && possibleConditions.size() == 1) {
                     heads = storedHeads.get(name + ";default");
                 } else {
+                    possibleConditions.remove("default");
                     StringBuilder sb = new StringBuilder();
                     for (String s : possibleConditions) {
-                        if (storedHeads.containsKey(name + ";" + s)) {
-                            heads = storedHeads.get(name + ";" + s);
-                            break;
-                        }
                         sb.append(s).append(",");
                     }
-                    if (heads == null) {
-                        sb.replace(sb.length() - 1, sb.length(), "");
-                        if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
-                            heads = storedHeads.get(name + ";" + sb.toString());
-                        } else {
+                    sb.replace(sb.length() - 1, sb.length(), "");
+                    if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
+                        heads = storedHeads.get(name + ";" + sb.toString());
+                    } else {
+                        for (String s : possibleConditions) {
+                            if (storedHeads.containsKey(name + ";" + s)) {
+                                heads = storedHeads.get(name + ";" + s);
+                                break;
+                            }
+                        }
+                        if (heads == null) {
                             heads = storedHeads.get(name + ";default");
                         }
                     }
+
 
                 }
             } else {

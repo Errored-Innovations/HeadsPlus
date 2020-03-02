@@ -16,6 +16,7 @@ import org.json.simple.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class HPPlayer {
 
@@ -26,24 +27,24 @@ public class HPPlayer {
     private List<Challenge> completeChallenges;
     private Level nextLevel = null;
     private List<PotionEffect> activeMasks;
-    public static HashMap<OfflinePlayer, HPPlayer> players = new HashMap<>();
+    public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
     private boolean ignoreFallDamage;
     private String cachedLocale;
     private boolean localeForced;
 
     public HPPlayer(OfflinePlayer p) {
+        HeadsPlus hp = HeadsPlus.getInstance();
         activeMasks = new ArrayList<>();
         favouriteHeads = new ArrayList<>();
         ignoreFallDamage = false;
         this.player = p;
         try {
-            for (Object o : (JSONArray) HeadsPlus.getInstance().getFavourites().getJSON().get(p.getUniqueId().toString())) {
+            for (Object o : (JSONArray) hp.getFavourites().getJSON().get(p.getUniqueId().toString())) {
                 favouriteHeads.add(String.valueOf(o));
             }
         } catch (NullPointerException ignored) {
         }
-        HeadsPlus hp = HeadsPlus.getInstance();
         PlayerScores scores = hp.getScores();
         HeadsPlusAPI hapi = hp.getAPI();
         HashMap<Integer, Level> levels = hp.getLevels();
@@ -56,7 +57,7 @@ public class HPPlayer {
             String loc = scores.getLocale(p.getUniqueId().toString());
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
                 cachedLocale = loc.split(":")[0];
-                localeForced = Boolean.valueOf(loc.split(":")[1]);
+                localeForced = Boolean.parseBoolean(loc.split(":")[1]);
                 hp.getMessagesConfig().setPlayerLocale(getPlayer().getPlayer(), cachedLocale,  false);
             } else {
                 new BukkitRunnable() {
@@ -102,7 +103,7 @@ public class HPPlayer {
             }
         }
         this.completeChallenges = sc;
-        players.put(getPlayer(), this);
+        players.put(getPlayer().getUniqueId(), this);
     }
 
     public void clearMask() {
@@ -161,7 +162,8 @@ public class HPPlayer {
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        return players.get(p.getPlayer()) != null ? players.get(p.getPlayer()) : new HPPlayer(p);
+        UUID uuid = p.getUniqueId();
+        return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
     }
 
     public List<PotionEffect> getActiveMasks() {

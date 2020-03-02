@@ -77,8 +77,9 @@ public class PlayerScores implements JSONFile {
     }
 
     public void deletePlayer(Player p) {
-        json.remove(p.getUniqueId().toString());
-        HPPlayer.players.remove(HPPlayer.getHPPlayer(p));
+        UUID uuid = p.getUniqueId();
+        json.remove(uuid.toString());
+        HPPlayer.players.remove(uuid);
     }
 
     public void setXp(String uuid, int xp) {
