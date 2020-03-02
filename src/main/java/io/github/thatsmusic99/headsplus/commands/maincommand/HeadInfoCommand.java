@@ -77,6 +77,9 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
             HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
             if (args.length > 2) {
                 String type = args[2].toLowerCase().replaceAll("_", "");
+                if (args[2].equalsIgnoreCase("WANDERING_TRADER") || args[2].equalsIgnoreCase("TRADER_LLAMA")) {
+                    type = args[2].toLowerCase();
+                }
                 if (args[1].equalsIgnoreCase("view")) {
                     if (DeathEvents.ableEntities.contains(args[2])) {
                         if (args.length > 3) {
@@ -136,10 +139,13 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                     .replaceAll("\\{value}", args[4])
                                     .replaceAll("\\{entity}", type)
                                     .replaceAll("\\{setting}", args[3]));
-                            return true;
+                        } else {
+                            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                         }
+                    } else {
+                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                     }
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+
                 } else if (args[1].equalsIgnoreCase("add")) {
                     if (args.length > 4) {
                         if (hpch.mHeads.contains(args[2].toLowerCase())
