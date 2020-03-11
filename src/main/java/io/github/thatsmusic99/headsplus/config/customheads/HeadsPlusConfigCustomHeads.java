@@ -48,7 +48,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         getConfig().options().header("HeadsPlus by Thatsmusic99 "
                 + "\n WARNING: This is an advanced section of the plugin. If you do not know what you a doing with it, please do not use it due to risk of crashing your own and other's games. "
                 + "\n For more information visit the GitHub wiki for HeadsX.yml: https://github.com/Thatsmusic99/HeadsPlus/wiki/customheads.yml");
-
+        getConfig().addDefault("options.update-heads", true);
+        getConfig().addDefault("options.version", cVersion);
+        getConfig().addDefault("options.default-price", 10.00);
+        getConfig().addDefault("options.price-per-world.example-one", 15.00);
         for (HeadsXSections h : HeadsXSections.values()) {
             getConfig().addDefault("sections." + h.let + ".display-name", h.dn);
             getConfig().addDefault("sections." + h.let + ".texture", h.tx);
@@ -92,7 +95,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         getConfig().addDefault("options.version", cVersion);
         getConfig().addDefault("options.default-price", 10.00);
         getConfig().addDefault("options.price-per-world.example-one", 15.00);
-        getConfig().options().copyDefaults(true);
         if (configF.length() <= 500) {
             loadHeadsX();
         }
@@ -125,9 +127,8 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                     getConfig().addDefault("heads." + e.name + ".section", e.sec);
                 }
             }
-
-            getConfig().options().copyDefaults(true);
         }
+        getConfig().options().copyDefaults(true);
         save();
         initCategories();
         s = false;
@@ -207,7 +208,12 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         GameProfile gm;
         if (encoded) {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
+            byte[] encodedData;
+            if (texture.startsWith("http")) {
+                encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
+            } else {
+                encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
+            }
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
@@ -473,9 +479,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         delaySave();
     }
 
-    public void addHeadToCache(String id) {
+    public void addHeadToCache(String id, String section) {
         headsCache.put(id, getSkull(id));
         allHeadsCache.add(getConfig().getString("heads." + id + ".texture"));
+        sections.get(section).add(id);
     }
 
     int autosaveTask = -1;

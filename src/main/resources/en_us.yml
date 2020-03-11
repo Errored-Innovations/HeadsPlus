@@ -1,10 +1,18 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
+    next: '&8❰ &a&lNext &8❱'
+    next-2: '&8❰ &a&lNext (2) &8❱'
+    next-3: '&8❰ &a&lNext (3) &8❱'
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Group {group} &7(&a+&7)'
+      group-remove: '&7Group {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(s)'
     challenge:
       reward: '&6Reward: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -78,9 +86,22 @@ commands:
     player-offline: '{header} That player is offline!'
     too-many-args: '{header} Too many arguments!'
   addhead:
+    bad-texture: '{header} The texture you have provided is invalid. It must be a
+      Minecraft texture URL (https://textures.minecraft.net) or a Base64 encoded string.'
+    cancelled: '{header} Cancelled head creation.'
+    custom-head-added: '{header} Added new head with id &c{id}&7!'
+    displayname: '{header} Type in the display name for the head (including colour
+      codes).'
     head-added: '{header} Head for &c{player} &7added!'
     head-adding: '{header} Looking up texture to add for &c{player}&7...'
     head-already-added: '{header} Head for &c{player} &7already in the database!'
+    id: '{header} Type in the ID of the head (e.g. brown_sheep, red_flower_bush)'
+    id-taken: '{header} That ID has been taken (&c{id}&7)!'
+    price: '{header} Type in the price of the head (or "default" for the default value).'
+    section: '{header} Type in the section the head will be put in. (Available sections:
+      &c{sections}&7)'
+    texture: '{header} Type in or copy and paste the texture for the head. (This may
+      require several messages, so when you are done, type "done" in chat and enter.)'
   blacklist:
     bl-a-off: '{header} The blacklist is already disabled!'
     bl-a-on: '{header} The blacklist is already enabled!'

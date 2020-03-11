@@ -302,7 +302,6 @@ public abstract class HeadInventory {
                         lore.add(ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(icon.getLore().get(z), p)).replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())));
                     }
                 }
-                im.setLore(lore);
             } else {
                 io.github.thatsmusic99.headsplus.api.Challenge c = nbt.getChallenge(is);
                 im.setDisplayName(ChatColor.translateAlternateColorCodes('&', icon.getDisplayName().replace("{challenge-name}", c.getChallengeHeader())));
@@ -319,17 +318,19 @@ public abstract class HeadInventory {
                         if (c.getReward().getRewardString() != null) {
                             sb.append(c.getReward().getRewardString());
                         } else if (re == HPChallengeRewardTypes.ECO) {
-                            sb.append("$").append(c.getRewardValue().toString());
+                            sb.append(hpc.getString("inventory.icon.reward.currency", p).replace("{amount}", c.getRewardValue().toString()));
                         } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
                             try {
                                 Material.valueOf(c.getRewardValue().toString());
-                                sb.append(c.getRewardItemAmount()).append(" ").append(WordUtils.capitalize(c.getRewardValue().toString().toLowerCase().replaceAll("_", " ")));//.append("(s)");
+                                sb.append(hpc.getString("inventory.icon.reward.item-give", p)
+                                        .replace("{amount}", String.valueOf(c.getRewardItemAmount()))
+                                        .replace("{item}", WordUtils.capitalize(c.getRewardValue().toString().toLowerCase().replaceAll("_", " "))));
                             } catch (IllegalArgumentException ignored) {
                             }
                         } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
-                            sb.append("Group ").append(c.getRewardValue().toString()).append(" addition");
+                            sb.append(hpc.getString("inventory.icon.reward.group-add", p).replace("{group}", c.getRewardValue().toString()));
                         } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
-                            sb.append("Group ").append(c.getRewardValue().toString()).append(" removal");
+                            sb.append(hpc.getString("inventory.icon.reward.group-remove", p).replace("{group}", c.getRewardValue().toString()));
                         }
                         lore.add(ChatColor.translateAlternateColorCodes('&', loreStr.replace("{challenge-reward}", hpc.formatMsg(sb.toString(), p))
                                 .replace("{reward}", hpc.formatMsg(sb.toString(), p))));
@@ -344,8 +345,8 @@ public abstract class HeadInventory {
                                 .replaceAll("\\{xp}", String.valueOf(c.getGainedXP()))));
                     }
                 }
-                im.setLore(lore);
             }
+            im.setLore(lore);
 
             is.setItemMeta(im);
             is = nbt.setIcon(is, icon);

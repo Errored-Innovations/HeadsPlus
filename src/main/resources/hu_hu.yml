@@ -3,6 +3,11 @@
 language: Magyar (MA)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Csoport {group} &7(&a+&7)'
+      group-remove: '&7Csoport {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(ok)'
     challenge:
       reward: '&6Jutalom: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -62,7 +67,7 @@ textmenus:
     description: Leírás
     permission: Permission
     further-usages: További felhasználások
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:

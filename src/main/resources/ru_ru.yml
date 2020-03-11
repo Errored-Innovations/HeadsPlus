@@ -3,6 +3,11 @@
 language: Русский (RU)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7группа {group} &7(&a+&7)'
+      group-remove: '&7группа {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(ы)'
     challenge:
       reward: '&6Награда: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -62,7 +67,7 @@ textmenus:
     description: Описание
     permission: разрешение
     further-usages: Дальнейшее использование
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -83,6 +88,9 @@ commands:
     player-offline: '{header} Этот игрок не в сети!'
     too-many-args: '{header} Слишком много аргументов!'
   addhead:
+    bad-texture: '{header} Предоставленная вами текстура недействительна. Это должен
+      быть URL текстуры Minecraft (https://textures.minecraft.net) или строка в кодировке
+      Base64.'
     head-added: '{header} Голова для &c{player} &7добавлена!'
     head-adding: '{header} Поиск текстуры для добавления для &c{player}&7...'
     head-already-added: '{header} Отправляйтесь в &c{player} &7уже в базе данных!'

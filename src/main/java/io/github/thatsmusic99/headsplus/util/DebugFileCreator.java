@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,7 +43,9 @@ public class DebugFileCreator {
         o1.put("Server version", Bukkit.getVersion());
         JSONObject o3 = new JSONObject();
         try {
+            o3.put("Autograb enabled", hp.getConfiguration().getConfig().getBoolean("plugin.autograb.enabled"));
             o3.put("Droppable heads enabled", hp.isDropsEnabled());
+            o3.put("Sellable heads enabled", hp.getConfiguration().getPerks().sell_heads);
             o3.put("Uses heads selector", hp.isUsingHeadDatabase());
             o3.put("Uses leaderboards", hp.isUsingLeaderboards());
             o3.put("Stops placement of sellable heads", hp.isStoppingPlaceableHeads());
@@ -57,6 +60,11 @@ public class DebugFileCreator {
 
         }
         o3.put("Cached players", HPPlayer.players.size());
+        JSONArray plugins = new JSONArray();
+        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
+            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+        }
+        o1.put("Other Plugins", plugins);
         o1.put("Plugin values", o3);
         if (e != null) {
             JSONObject o4 = new JSONObject();
@@ -116,7 +124,11 @@ public class DebugFileCreator {
 
         }
         o1.put("Skull Type", s.getType().name());
-
+        JSONArray plugins = new JSONArray();
+        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
+            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+        }
+        o1.put("Other Plugins", plugins);
         o1.put("Server version", Bukkit.getVersion());
         JSONObject o2 = new JSONObject();
         o2.put("Amount", s.getAmount());
@@ -187,6 +199,11 @@ public class DebugFileCreator {
         } catch (NullPointerException ignored) {
 
         }
+        JSONArray plugins = new JSONArray();
+        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
+            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+        }
+        o1.put("Other Plugins", plugins);
         JSONObject o2 = new JSONObject();
         o2.put("Name", player.getPlayer().getName());
         o2.put("UUID", player.getPlayer().getUniqueId());
@@ -249,6 +266,11 @@ public class DebugFileCreator {
         } catch (NullPointerException ignored) {
 
         }
+        JSONArray plugins = new JSONArray();
+        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
+            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+        }
+        o1.put("Other Plugins", plugins);
         JSONObject o2 = new JSONObject();
         o2.put("material", item.getType());
         o2.put("amount", item.getAmount());

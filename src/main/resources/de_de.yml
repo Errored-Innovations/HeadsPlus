@@ -3,6 +3,11 @@
 language: Deutsch (DE)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Gruppe {group} &7(&a+&7)'
+      group-remove: '&7Gruppe {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(n)'
     challenge:
       reward: '&6Belohnung: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -59,7 +64,7 @@ textmenus:
     description: Beschreibung
     permission: Genehmigung
     further-usages: Weitere Verwendung
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   errors:
@@ -75,6 +80,21 @@ commands:
     player-offline: '{header} Der Spieler ist offline!'
     too-many-args: '{header} Zu viele Argumente!'
   addhead:
+    bad-texture: '{header} Die von Ihnen angegebene Textur ist ungültig. Es muss sich
+      um eine Minecraft-Textur-URL (https://textures.minecraft.net) oder eine Base64-codierte
+      Zeichenfolge handeln.'
+    cancelled: '{header} Abgebrochene Kopferstellung.'
+    custom-head-added: '{header} Neuer Kopf mit ID {id} hinzugefügt!'
+    displayname: '{header} Geben Sie den Anzeigenamen für den Kopf ein (einschließlich
+      Farbcodes).'
+    id: '{header} Geben Sie die ID des Kopfes ein (z. B. brown_sheep, red_flower_bush).'
+    id-taken: '{header} Diese ID wurde genommen (&c{id}&7)!'
+    price: '{header} Geben Sie den Preis des Kopfes ein (oder "default" für den Standardwert).'
+    section: '{header} Geben Sie den Abschnitt ein, in den der Kopf eingefügt werden
+      soll. (Verfügbare Abschnitte: &c{sections}&7)'
+    texture: '{header} Geben Sie die Textur für den Kopf ein oder kopieren Sie sie
+      und fügen Sie sie ein. (Dies kann mehrere Nachrichten erfordern. Wenn Sie fertig
+      sind, geben Sie im Chat "done" ein und geben Sie ein.)'
     head-added: '{header} Kopf für &c{player} &7hinzugefügt!'
     head-adding: '{header} Textur für &c{player} &7nachschlagen...'
     head-already-added: '{header} Gehen Sie zu &c{player}&7, das bereits in der Datenbank
@@ -239,6 +259,3 @@ update:
   plugin-up-to-date: '{header} Das Plugin ist auf dem neuesten Stand!'
   update-found: '{header} Ein Update für HeadsPlus wurde gefunden! Schwebe über diese
     Nachricht für mehr Informationen.'
-
-
-

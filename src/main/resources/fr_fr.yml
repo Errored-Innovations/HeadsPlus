@@ -3,6 +3,11 @@
 language: Français (FR)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Groupe {group} &7(&a+&7)'
+      group-remove: '&7Groupe {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(s)'
     challenge:
       reward: '&6Récompense: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -62,7 +67,7 @@ textmenus:
     description: Description
     permission: Autorisation
     further-usages: Autres Usages
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -86,6 +91,21 @@ commands:
     player-offline: '{header} Ce joueur est hors-ligne!'
     too-many-args: '{header} Trop de caractères!'
   addhead:
+    bad-texture: '{header} La texture que vous avez fournie n''est pas valide. Il
+      doit s''agir d''une URL de texture Minecraft (https://textures.minecraft.net)
+      ou d''une chaîne encodée en Base64.'
+    cancelled: '{header} Création de tête annulée.'
+    custom-head-added: '{header} Ajout d''une nouvelle tête avec ID &c{id}&7!'
+    displayname: '{header} Tapez le nom d''affichage de la tête (y compris les codes
+      de couleur).'
+    id: '{header} Tapez l''ID de la tête (par exemple brown_sheep, red_flower_bush).'
+    id-taken: '{header} Cet ID a été pris (&c{id}&7)!'
+    price: '{header} Tapez le prix de la tête (ou "default" pour la valeur par défaut).'
+    section: '{header} Tapez la section dans laquelle la tête sera insérée. (Sections
+      disponibles: &c{sections}&7)'
+    texture: '{header} Tapez ou copiez et collez la texture de la tête. (Cela peut
+      nécessiter plusieurs messages, donc lorsque vous avez terminé, tapez "done"
+      dans le chat et entrez.)'
     head-added: '{header} Tête pour &c{player} &7ajoutée!'
     head-adding: '{header} Recherche de texture à ajouter pour &c{player}&7.'
     head-already-added: '{header} Dirigez-vous vers &c{player} &7déjà dans la base

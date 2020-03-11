@@ -15,7 +15,6 @@ import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,15 +26,14 @@ import java.util.List;
         permission = "headsplus.addhead",
         subcommand = "addhead",
         maincommand = false,
-        usage = "/addhead <player>"
+        usage = "/addhead [player]"
 )
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
-
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if(args.length > 0) {
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
                 if (args[0].length() > 2) {
@@ -47,10 +45,10 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
                             uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
                         }
-                        if(HeadsPlus.getInstance().getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-adding", sender instanceof Player ? (Player) sender : null)
+                        if(hp.getHeadsXConfig().grabProfile(uuid, sender, true)) {
+                            sender.sendMessage(hp.getMessagesConfig().getString("commands.addhead.head-adding", sender)
                                     .replace("{player}", p.getName())
-                                    .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                    .replace("{header}", hp.getMenus().getConfig().getString("profile.header")));
                         }
                         return true;
                     } else {
@@ -67,11 +65,14 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (sender instanceof Conversable) {
                     ConversationFactory factory = new ConversationFactory(HeadsPlus.getInstance());
                     Conversation conversation = factory.withLocalEcho(false)
-                            .withFirstPrompt(new DataListener(0, "id"))
+                            .withFirstPrompt(new DataListener(0, hpc.getString("commands.addhead.id", sender)))
                             .buildConversation((Conversable) sender);
                     conversation.addConversationAbandonedListener(event -> {
                         if (event.gracefulExit()) {
                             ConversationContext context = event.getContext();
+                            if (context.getSessionData("cancel") != null) {
+                                return;
+                            }
                             String id = String.valueOf(context.getSessionData("id"));
                             HeadsPlusConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
                             for (Object key : context.getAllSessionData().keySet()) {
@@ -80,7 +81,8 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             }
                             customHeads.getConfig().options().copyDefaults(true);
                             customHeads.save();
-                            customHeads.addHeadToCache(id);
+                            customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
+                            sender.sendMessage(hpc.getString("commands.addhead.custom-head-added").replaceAll("\\{id}", id));
                         }
                     });
                     conversation.begin();

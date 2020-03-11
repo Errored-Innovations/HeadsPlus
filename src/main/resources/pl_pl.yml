@@ -3,6 +3,11 @@
 language: Polski (PL)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Grupa {group} &7(&a+&7)'
+      group-remove: '&7Grupa {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(y)'
     challenge:
       reward: '&6Nagroda: &a{reward}'
       xp: '&6Dośw.: &a{xp}'
@@ -62,7 +67,7 @@ textmenus:
     description: Opis
     permission: Uprawnienie
     further-usages: Dalsze zastosowania
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -82,6 +87,18 @@ commands:
     player-offline: '{header} Ten gracz jest offline!'
     too-many-args: '{header} Za dużo argumentów!'
   addhead:
+    bad-texture: '{header} Podana tekstura jest nieprawidłowa. Musi to być adres URL
+      tekstury Minecraft (https://textures.minecraft.net) lub ciąg zakodowany w Base64.'
+    cancelled: '{header} Anulowano tworzenie głowy.'
+    custom-head-added: '{header} Dodano nową głowę z identyfikatorem &c{id}&7!'
+    displayname: '{header} Wpisz nazwę wyświetlaną głowy (w tym kody kolorów).'
+    id: '{header} Wpisz identyfikator głowy (np. brown_sheep, red_flower_bush)'
+    id-taken: '{header} Ten identyfikator został zabrany (&c{id}&7)!'
+    price: '{header} Wpisz cenę głowicy (lub „default” dla wartości domyślnej).'
+    section: '{header} Wpisz sekcję, w której zostanie umieszczona głowa. (Dostępne
+      sekcje: &c{sections}&7)'
+    texture: '{header} Wpisz lub skopiuj i wklej teksturę głowy. (Może to wymagać
+      kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wejdź).'
     head-added: '{header} Wyszukiwanie tekstury do dodania dla &c{player}&7...'
     head-adding: '{header} Dodano &c{player}&7!'
     head-already-added: '{header} Udaj się do &c{player} &7już w bazie danych!'

@@ -3,6 +3,11 @@
 language: Romana (RO)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Grupul {group} &7(&a+&7)'
+      group-remove: '&7Grupul {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(e)'
     challenge:
       reward: '&6Recompensa: &a{reward}'
       xp: '&6XP: &a{xp}'
@@ -62,7 +67,7 @@ textmenus:
     description: Descriere
     permission: Permisiune
     further-usages: Utilizari ulterioare
-version: 1.1
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -82,6 +87,21 @@ commands:
     player-offline: '{header} Acest jucator este offline!'
     too-many-args: '{header} Prea multe argumente!'
   addhead:
+    bad-texture: '{header} Textura pe care ati furnizat-o este nevalida. Trebuie sa
+      fie o adresa URL de textura Minecraft (https://textures.minecraft.net) sau un
+      sir codat Base64.'
+    cancelled: '{header} Crearea capului anulata.'
+    custom-head-added: '{header} S-a adaugat un nou cap cu ID &c{id}&7!'
+    displayname: '{header} Introduceti numele afisat pentru cap (inclusiv codurile
+      de culoare).'
+    id: '{header} Introduceti ID-ul capului (de exemplu, brown_sheep, red_flower_bush)'
+    id-taken: '{header} ID-ul a fost luat (&c{id}&7)!'
+    price: '{header} Introduceti pretul capului (sau „default” pentru valoarea implicita).'
+    section: '{header} Tastati sectiunea in care va fi introdus capul (sectiuni disponibile:
+      &c{section}&7)'
+    texture: '{header} Introduceți sau copiați și lipiți textura pentru cap. (Acest
+      lucru poate necesita mai multe mesaje, așa că atunci când ați terminat, tastați
+      „done” în chat și introduceți.)'
     head-added: '{header} S-a adăugat către &c{player}&7!'
     head-adding: '{header} Căutați textură pentru a adăuga &c{player}&7...'
     head-already-added: '{header} Îndreptați-vă spre &c{player} &7deja în baza de

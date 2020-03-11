@@ -1,225 +1,240 @@
-# HeadsPlus by Thatsmusic99 - HAHAHAHHAKITTY (Thatsmusic99)
-# NO CHANGIN VURSHUN!!! is bad :c
-language: LOLCAT (Kingdom of Cats)
+# HeadsPlus by Thatsmusic99 - Magyar (Toldi/Montlikadani)
+# Ne változtassa meg a verziót! Ezt a bővítményben belsőleg használják új üzenetek hozzáadására.
+language: Magyar (MA)
 inventory:
   icon:
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7Csoport {group} &7(&a+&7)'
+      group-remove: '&7Csoport {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(ok)'
     challenge:
-      reward: '&6Treetz: &a{reward}'
-      xp: '&6ex-pee: &a{xp}'
-      count: '&7{challenge-count} chaleng''s'
-    close: '&8❰ &c&lS H U T &8❱'
-    favourites: '&8❰ &b&lkewl hedz :3 &8❱'
+      reward: '&6Jutalom: &a{reward}'
+      xp: '&6XP: &a{xp}'
+      count: '&7{challenge-count} kihívások'
+    close: '&8❰ &c&lBezárás menü &8❱'
+    favourites: '&8❰ &b&lÉrdekes &8❱'
     head:
-      price: '&cMONEYS &8❱ &7{price}'
-      favourite: '&cfav tbh'
-      count: '&7{head-count} hedz'
-    menu: '&8❰ &a&lmane thingie &8❱'
-    start: '&8❰ &a&l1st &8❱'
-    last: '&8❰ &a&lhaha lozr page &8❱'
-    back: '&8❰ &a&lrevrs!! &8❱'
-    back-2: '&8❰ &a&lrevrs!!! (2) &8❱'
-    back-3: '&8❰ &a&lrevrs!!!! (3) &8❱'
-    next: '&8❰ &a&lNYOOOM &8❱'
-    next-2: '&8❰ &a&lNYOOOOM (2) &8❱'
-    next-3: '&8❰ &a&lNYOOOOOM (3) &8❱'
-    search: '&8❰ &e&lfind dis &8❱'
+      price: '&cÁr &8❱ &7{price}'
+      favourite: '&cKedvenc!'
+      count: '&7{head-count} fejek'
+    menu: '&8❰ &a&lFőmenü &8❱'
+    start: '&8❰ &a&lElső oldal &8❱'
+    last: '&8❰ &a&lUtolsó oldal &8❱'
+    back: '&8❰ &a&lMenjen vissza &8❱'
+    back-2: '&8❰ &a&lMenjen vissza (2) &8❱'
+    back-3: '&8❰ &a&lMenjen vissza (3) &8❱'
+    next: '&8❰ &a&lKövetkező &8❱'
+    next-2: '&8❰ &a&lKövetkező (2) &8❱'
+    next-3: '&8❰ &a&lKövetkező (3) &8❱'
+    search: '&8❰ &e&lKeresési fejek &8❱'
     stats:
-      icon: '&8❰ &a&lnumbrz &8❱'
-      total-heads: '&alotsa heds &8❱ &e'
-      total-pages: '&apagez &8❱ &e'
-      total-sections: '&asecshunz &8❱ &e'
-      current-balance: '&abalance rn &8❱ &e'
-      current-section: '&asection rn &8❱ &e'
+      icon: '&8❰ &a&lStatisztikák &8❱'
+      total-heads: '&aÖsszes fej &8❱ &e'
+      total-pages: '&aÖsszes oldal &8❱ &e'
+      total-sections: '&aÖsszes szakasz &8❱ &e'
+      current-balance: '&aAktuális egyenleg &8❱ &e'
+      current-section: '&aAktuális szakasz &8❱ &e'
 textmenus:
   profile:
-    player: Playrr
-    completed-challenges: Complet'd Chalengs
-    total-heads-dropped: heds droppd
-    total-heads-sold: heds selld
-    total-heads-crafted: heds maid
-    current-level: level rn
-    xp-until-next-level: XP til de big one
-  blacklist: Naughty list
-  whitelist: Nice list
-  blacklistw: Woldz naughty list
-  whitelistw: Woldz nice list
+    player: Lejátszó
+    completed-challenges: Befejezett kihívások
+    total-heads-dropped: Az összes fej csökkent
+    total-heads-sold: Eladott összes fej
+    total-heads-crafted: Összes készített fej
+    current-level: Jelenlegi szint
+    xp-until-next-level: XP a következő szintre
+  blacklist: Feketelista
+  whitelist: Fehérlista
+  blacklistw: Világ Feketelista
+  whitelistw: Világ Fehérlista
   info:
-    version: Vershun
-    author: kool kat
-    language: langwaaj
-    contributors: kool kats
-    spigot: SpigotMC linkz
-    discord: Discord serv
-    github: Gitty
+    version: Változat
+    author: Szerző
+    language: Nyelv
+    contributors: Közreműködők
+    spigot: SpigotMC link
+    discord: Discord Server
+    github: Github
   head-info:
-    type: Tip
-    display-name: publicz nam
-    price: Moneyz
-    interact-name: clicky name
-    chance: maybe??
+    type: Típus
+    display-name: Megjelenítendő név
+    price: Ár
+    interact-name: Interact név
+    chance: Véletlen
   help:
-    usage: how 2
-    description: uhh what
-    permission: permy
-    further-usages: how 2 but worse
-version: 1.1
+    usage: Használat
+    description: Leírás
+    permission: Permission
+    further-usages: További felhasználások
+version: 1.2
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
-    invalid-lang: '{header} nU such langwaaj :( kewl langs: &c{languages}'
-    changed-locale: '{header} AAHHAHAHAHAHHA, ur langwaaj iz nao de bestz! &c(LOLCAT)'
-    changed-locale-other: '{header} &c{player}&7''z langwaaj iz nao de kewl &c{language}&7!'
+    invalid-lang: '{header} Ez nem érvényes nyelv! Elérhető nyelvek: &c{languages}'
+    changed-locale: '{header} Helló! Az Ön nyelve most &cmagyarra &7van állítva &c(MA)'
+    changed-locale-other: '{header} A (z) &c{player} &7nyelve most &c{language} &7lett!'
   errors:
-    not-a-player: '{header} u nu playah!'
-    cmd-fail: '{header} uh oh cmd thing faled'
-    disabled: '{header} Dis cmd is ded!'
-    invalid-args: '{header} Badz cmd stuff!'
-    invalid-input-int: '{header} Naw stoopid nums pls'
-    invalid-pg-no: '{header} Badz paige numbz!'
-    no-data: '{header} Dat purrrrzon haz nu day-ta!'
-    no-perm: '{header} U canz nawt do dis!'
-    player-offline: '{header} Dat playah iz ded!'
-    too-many-args: '{header} CMD STUFFZ OVRLODZ'
+    not-a-player: '{header} A parancs/alparancs futtatásához játékosnak kell lennie!'
+    cmd-fail: '{header} Nem sikerült futtatni ezt a parancsot!'
+    disabled: '{header} Ez a parancs le van tiltva.'
+    invalid-args: '{header} Érvénytelen argumentumok!'
+    invalid-input-int: '{header} Ebben a parancsban csak egész számokat használhatsz!'
+    invalid-pg-no: '{header} Érvénytelen oldal szám!'
+    no-data: '{header} Nincsenek adatok ehhez a játékoshoz!'
+    no-perm: '{header} Nincs jogod a parancs használatára.'
+    player-offline: '{header} Ez a játékos offline állapotban van!'
+    too-many-args: '{header} Túl sok argumentum!'
   addhead:
-    head-added: '{header} ey i +1''d a hed :D'
-    head-adding: '{header} +1''n a hed...'
-    head-already-added: '{header} OI hed alredy add''d >:('
+    head-added: '{header} A (z) &c{player} &7hozzáadandó textúra felkutatása ...'
+    head-adding: '{header} A (z) &c{player} &7fej hozzáadva!'
+    head-already-added: '{header} A (z) &c{player} &7fejléce már az adatbázisban található!'
   blacklist:
-    bl-a-off: '{header} Teh naughty list iz alredy off!'
-    bl-a-on: '{header} Teh naughty list iz alredy on!'
-    bl-off: '{header} Teh naughty list iz off!'
-    bl-on: '{header} Teh naughty list iz on!'
-    blw-a-on: '{header} Teh naughty list 4 woldz iz on!'
-    blw-a-off: '{header} Teh naughty list 4 woldz iz off!'
-    empty-bl: '{header} Teh naughty list haz nuffin!'
-    empty-blw: '{header} Teh naughty list 4 woldz has nuffin!'
-    head-a-add: '{header} Teh hed iz alredee add''d!'
-    head-a-removed-bl: '{header} Dis hed iz nawt on teh naughty list!'
-    head-added-bl: '{header} &c{player}&7 haz been add''d 2 teh naughty list!'
-    head-removed-bl: '{header} &c{player}&7 iz nawt on teh naughty list animoar!'
-    world-a-add: '{header} Dis wold iz alredy add''d!'
-    world-added-bl: '{header} &c{world}&7 haz been add''d 2 teh naughty list!'
-    world-a-removed-bl: '{header} Dis wold iz nawt on teh naughty list! :D'
-    world-removed-bl: '{header} &c{world}&7 iz naw longer on teh naughty list!'
+    bl-a-off: '{header} A feketelista már le van tiltva!'
+    bl-a-on: '{header} A feketelista már engedélyezve van!'
+    bl-off: '{header} A feketelista letiltva!'
+    bl-on: '{header} A feketelista engedélyezve van!'
+    blw-a-on: '{header} A világ feketelistája engedélyezve!'
+    blw-a-off: '{header} A világ feketelista le van tiltva!'
+    empty-bl: '{header} A feketelista üres!'
+    empty-blw: '{header} A világ feketelista üres!'
+    head-a-add: '{header} Ez a fej már hozzá van adva!'
+    head-a-removed-bl: '{header} Ez a fej nem szerepel a feketelistán!'
+    head-added-bl: '{header} &c{player}&7 hozzáadva a feketelistához!'
+    head-removed-bl: '{header} &c{player}&7 eltávolítva a feketelistáról!'
+    world-a-add: '{header} Ez a világ már hozzáadva!'
+    world-added-bl: '{header} &c{world}&7 hozzá lett adva a világ a feketelistájához!'
+    world-a-removed-bl: '{header} Ez a világ nem szerepel a feketelistán!'
+    world-removed-bl: '{header} &c{world}&7 eltávolítva a feketelistáról!'
   challenges:
-    already-complete-challenge: '{header} LOL u alredi compleet''d deh chaleng!'
-    cant-complete-challenge: '{header} NU u canz nawt compleet deh chaleng!'
-    challenge-complete: '{header} OMG GUYZ &c{player}&7 DIDZ DA &c{challenge} &7THING!!!'
-    challenge-completed: '&6dun'
-    reward-string: '{header} Kitty treetz: &c{reward}\n{header} ex-pee: &c{xp}'
+    already-complete-challenge: '{header} Már befejezted a kihívást!'
+    cant-complete-challenge: '{header} Nem tudod befejezni ezt a kihívást!'
+    challenge-complete: '{header} &c{player}&7 befejezte a %c küldetést!'
+    challenge-completed: '&6Befejezték!'
+    reward-string: '{header} Jutalom: &c{reward}\n{header} XP: &c{xp}'
   head:
-    alpha-names: '{header} Y U speekz gibberish?'
-    blacklist-head: '{header} Dis hed is banne sah two bad!!'
-    full-inv: '{header} Ur nawt faht enuf 2 get anofa hed!'
-    head-too-long: '{header} Name 2 smol'
-    head-too-short: '{header} NAME 2 BIGZ'
-    whitelist-head: '{header} Dis hed iz nawt aloud!'
+    alpha-names: '{header} Ez a parancs csak az alfanumerikus neveket kezeli!'
+    blacklist-head: '{header} Ez a fej feketelistán szerepel, és nem használható!'
+    full-inv: '{header} Az eszköztárad tele van!'
+    head-too-long: '{header} Az IGN túl hosszú ahhoz, hogy érvényes legyen! Kérjük,
+      használj IGN-t 3 és 16 karakter között.'
+    head-too-short: '{header} Az IGN túl rövid ahhoz, hogy érvényes legyen! Kérjük,
+      használj IGN-t 3 és 16 karakter között.'
+    whitelist-head: '{header} Ez a fej nem engedélyezett, ezért nem használható!'
   head-info:
-    add-value: '{header} &c{value} &7haz bin +1''d 2 &c{entity}&7''z &c{setting}&7!'
-    no-lore-data: '{header} AAAAAAA deres nu lore data D:'
-    no-mask-data: '{header} soz but dere iz nu mAHsk data ;-;'
-    no-name-data: '{header} UMG deres nu naim data D:'
-    remove-value: '{header} &c{value} &7haz bin -1''d 2 &c{entity}&7''z &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''z &c{setting} &7haz bin chainge''d 2 &c{value}&7!!!'
+    add-value: '{header} &c{value} &7hozzáadva &c{entity} {setting} &7beállításához!'
+    no-lore-data: '{header} Ehhez az entitáshoz nincsenek adatok!'
+    no-mask-data: '{header} Nincsenek maszk adatok ehhez az entitáshoz!'
+    no-name-data: '{header} Nincs ilyen névadat ehhez az entitáshoz!'
+    remove-value: '{header} &c{value} &7eltávolítva &c{entity} {setting} &7beállításából!'
+    set-value: '{header} &c{entity}&7''s &c{setting} {value} &7értékre változott!'
   heads:
-    buy-success: '{header} U smh gawt ah hed 4 &c{price}&7 &and nao haz &c{balance}&7!'
-    chat-input: '{header} Teyepe sumthin 2 look 4'
-    not-enough-money: '{header} lol ur broke'
+    buy-success: '{header} Vettél egy fejre &c{price}&7 és most már &c{balance}&7!'
+    chat-input: '{header} Írja be azt a kifejezést, amelyet keresni szeretne.'
+    not-enough-money: '{header} Nincs elég pénzed!'
   leaderboards:
-    no-data-lb: '{header} Naw gud stuffz heer yet...'
+    no-data-lb: '{header} Még nincs értékelő adat!'
   levels:
-    level-up: '{header} OMG &c{player}&7 haz reeched lvl &c{level}&7!'
+    level-up: '{header} &c{player}&7 elérte a &c{level}&7 szintet!'
   profile:
-    cant-view-data: '{header} U r console. I am cat. U shall nawt veww ur data.'
+    cant-view-data: '{header} A saját adataid nem tekintheted meg a konzolban!'
   reload:
-    reload-message: '{header} Dun!'
-    reloading-message: '{header} Relodin teh confeeg...'
+    reload-message: '{header} A konfiguráció újratöltve!'
+    reloading-message: '{header} A konfiguráció újratöltése...'
   sellhead:
-    false-head: '{header} LOL u canz nawt sell dis head!'
-    false-item: '{header} LOL dis iznt a hed'
-    no-heads: '{header} LOL u haz naw gud heds'
-    not-enough-heads: '{header} LOL u haz naw heds'
-    sell-success: '{header} Smh u sold teh hed(s) four &c{price}&7 end nao haz &c{balance}&7!'
+    false-head: '{header} Ez a fej nem értékesíthető!'
+    false-item: '{header} Ez nem egy fej!'
+    no-heads: '{header} Nincsenek érvényes fejek az eszköztáradban!'
+    not-enough-heads: '{header} Nincs elég fejed!'
+    sell-success: '{header} Sikeresen eladtad a fej(ek)et &c{price}&7 és most már
+      &c{balance}&7!'
   tests:
-    running-tests: '{header} RUNRUNRUNRABBITRUUUUUUUUUUN (mai taik a weyel :3)'
-    results: '{header} dere: &c{results}'
+    running-tests: '{header} Tesztek futtatása ... (ez eltarthat egy ideig)'
+    results: '{header} Eredmények: &c{results}'
   whitelist:
-    empty-wl: '{header} Teh nice list haz nuffin!'
-    empty-wlw: '{header} Teh nice list 4 woldz haz nuffin!'
-    head-a-removed-wl: '{header} Dis hed nawt on teh nice list :('
-    head-added-wl: '{header} &c{player}&7 haz been add''d 2 teh nice list!'
-    head-removed-wl: '{header} &c{player}&7 iz naw longer on teh nice list :('
-    wl-a-off: '{header} Teh nice list iz alredy off!'
-    wl-a-on: '{header} Teh naughty list iz alredy on!'
-    wl-off: '{header} Teh nice list iz off!'
-    wl-on: '{header} Teh nice list iz on!'
-    wlw-a-off: '{header} Teh nice list 4 woldz iz alredy off!'
-    wlw-a-on: '{header} Teh nice list 4 woldz iz alredy on!'
-    wlw-off: '{header} Teh nice list 4 woldz iz off!'
-    wlw-on: '{header} Teh nice list 4 woldz iz on!'
-    world-a-removed-wl: '{header} w is naw longer on teh nice list!'
-    world-added-wl: '{header} &c{world}&7 iz nao on teh nice list!'
-    world-removed-wl: '{header} &c{world} &7is naw longer on teh nice list!'
+    empty-wl: '{header} A fehérlista üres!'
+    empty-wlw: '{header} A világ fehérlista üres!'
+    head-a-removed-wl: '{header} Ez a fej nincs a fehérlistán!'
+    head-added-wl: '{header} &c{player}&7 hozzáadva a fehérlistához!'
+    head-removed-wl: '{header} &c{player}&7 eltávolítva a listából!'
+    wl-a-off: '{header} A fehérlista már le van tiltva!'
+    wl-a-on: '{header} A feketelista már engedélyezve van!'
+    wl-off: '{header} A fehérlista letiltva!'
+    wl-on: '{header} A fehérlista engedélyezve!'
+    wlw-a-off: '{header} A világ fehérlista már le van tiltva!'
+    wlw-a-on: '{header} A világ fehérlista már engedélyezve!'
+    wlw-off: '{header} A világ fehérlista letiltva!'
+    wlw-on: '{header} A világ fehérlista engedélyezve!'
+    world-a-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
+    world-added-wl: '{header} &c{world}&7 hozzá lett adva a világ a fehérlistájához!'
+    world-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
   xp:
-    added-xp: '{header} Add''d &c{amount} &7XP-stuffz 2 &c{player}&7, they nao haz
-      &c{xp}&7!'
-    current-xp: '{header} &c{player}&7''s XP-stuffz rn: &c{xp}'
-    negative-xp: '{header} uhhhhhhhhhhh nu (2 alow - XP, go 2 config.yml > plugin
-      > perks > xp > allow-negative, BUT DANGURRRR!!!)'
-    removed-xp: '{header} Stol''d &c{amount} &7XP-stuffz frm &c{player}&7, they nao
-      haz &c{xp}&7!'
-    reset-xp: '{header} Alt+F4''d &c{player}&7''s XP!'
+    added-xp: '{header} A (z) &c{amount} &7XP-t hozzáadta a (z) &c{player}&7, most
+      már van &c{xp}&7!'
+    current-xp: '{header} &c{player} &7jelenlegi XP: &c{xp}'
+    negative-xp: '{header} Nem hiszem, hogy ezt akarsz tenni ... (A negatív XP engedélyezéséhez
+      menj a config.yml > plugin > perks > xp > allow-negative elemre, ennek azonban
+      kiszámíthatatlan eredményei vannak!)'
+    removed-xp: '{header} Eltávolítottuk a (z) &c{amount} &7XP-t a (z) &c{player}&7,
+      mostantól rendelkeznek &c{xp}&7 -nel!'
+    reset-xp: '{header} Állítsa vissza a (z) &c{player} &7XP operációs rendszerét!'
 descriptions:
   hp:
-    blacklist: Turnz teh naughty list on 'n' off
-    blacklistadd: Addz a hed 2 teh naughty list
-    blacklistdel: Remuvz a hed from teh naughty list
-    blacklistl: Listz all 'o' deh heds on teh naughty list
-    blacklistw: Turnz teh naughty list 4 woldz on 'n' off
-    blacklistwadd: Addz a hed 2 teh naughty list 4 woldz
-    blacklistwdel: Remuvz a hed from teh naughty list 4 woldz
-    blacklistwl: Listz all 'o' deh heds on teh naughty list 4 woldz
-    complete: dis compleetz a kewl chaleng
-    conjure: Get a kewl hed or smth
-    debug: Poopz sparkly dee-bug flies!
-    headinfo: Shoez ore chaingez sum hed stuffz
-    help: Shoes deh halp menoo.
-    info: Shoes info 'bowt teh plug-in
-    profile: Shoes u ur prof ;3
-    reload: Relodz teh confeeg
-    tests: RUNRUNRUNRUNRUN
-    whitelist: Turnz teh nice list on 'n' off
-    whitelistadd: Addz a hed 2 teh nice list
-    whitelistdel: Remuvz a hed from teh nice list
-    whitelistl: Listz all 'o' deh heds on teh nice list
-    whitelistw: Turnz teh nice list 4 woldz on 'n' off
-    whitelistwadd: Addz a hed 2 teh nice list 4 woldz
-    whitelistwdel: Remuvz a hed from teh nice list 4 woldz
-    whitelistwl: Listz all 'o' deh heds on teh nice list 4 woldz
-    xp: chainj sum xp .3.
-  addhead: U can add sum nu hedz to deh menoo.
-  head: Givz u a hed
-  heads: MOAR HEDS!!
-  hpc: Shoes ur chalengz.
-  hplb: Shoes u teh LEADRZ!!
-  myhead: Givs u ur hed
-  sellhead: Sells a hed in ur hands or wif teh givn cmd stuff
+    blacklist: Váltja a feketelistát.
+    blacklistadd: Hozzáad egy fejet a feketelistához.
+    blacklistdel: Eltávolítja a fejet a feketelistáról.
+    blacklistl: Minden feketelistában lévő fejet felsorol.
+    blacklistw: Váltja a készletkészítő feketelista be/ki kapcsolását.
+    blacklistwadd: Hozzáad egy világot a barkács receptek fekete listájához.
+    blacklistwdel: Eltávolítja a világot a barkács receptek feketelistajához.
+    blacklistwl: Kilistázza a feketelistában levő világokat.
+    complete: Kihívást jelent.
+    conjure: Visszatér egy adott típusú fejet.
+    debug: Egy hibakereső fájlt bocsát ki.
+    headinfo: Megjeleníti/módosítja az adott entitás fejével kapcsolatos információkat.
+    help: Megjeleníti a segítség menüt.
+    info: Megjeleníti a plugin információit.
+    profile: A bővítmény profilját jeleníti meg.
+    reload: Frissíti a konfigurációs fájlt.
+    tests: Futtatja a mob-esési sebességet.
+    whitelist: Váltja a fehérlistát.
+    whitelistadd: Hozzáad egy fejet a fehérlistához.
+    whitelistdel: Eltávolítja a fejet a fehérlistából.
+    whitelistl: Az összes fejet felsorolja, ami a fehérlistában van.
+    whitelistw: A fehérlista engedélyezése/kikapcsolása.
+    whitelistwadd: Hozzáad egy világot a barkácsoló recept fehérlistájához.
+    whitelistwdel: Eltávolítja a világot a barkácsoló recept fehérlistájából.
+    whitelistwl: Kilistázza a fehérlistában lévő világokat.
+    xp: Megtekintheti vagy módosíthatja a játékos XP-jét.
+  addhead: Adjunk hozzá egy játékos fejét a fej menübe.
+  head: Leidéz egy fejet.
+  heads: Megjeleníti a fejek kiválasztását.
+  hpc: Megjeleníti azokat a kihívásokat, amelyekkel befejezheted.
+  hplb: Megjeleníti a fejlécet.
+  myhead: Leidézi a fejed.
+  sellhead: Eladja a feje(ke)t a kezedben, használd a számparamétert, hogy adjon el
+    egy adott számot, egy entitás nevét, hogy eladja egy adott mob fejét, és mindent
+    eladni minden fejét.
 event:
-  block-place-denied: '{header} Nu dun do dat'
-  head-interact-message: '{header} Dat iz &c{player}&7''s hed!'
-  head-mhf-interact-message: '{header} Dat iz a wild &c{player}&7''s hed!'
-  head-mhf-interact-message-2: '{header} Dat iz a wild &c{player}&7''s hed!'
-  lost-money: '{header} ok so u lost &c{price} &7cos &c{player} &7kicked ur butt B)'
+  block-place-denied: '{header} Nem teheted le a fejeket!'
+  head-interact-message: '{header} Azaz &c{player}&7 feje!'
+  head-mhf-interact-message: '{header} Az egy &c{player}&7 feje!'
+  head-mhf-interact-message-2: '{header} Ez egy &c{player}&7 feje!'
+  lost-money: '{header} Mert &c{player} &7megölte, elvesztette &c{price}&7!'
 startup:
-  faulty-theme: '{header} bad theem alert, uglee won iz on'
-  no-vault: '{header} eh cudnt oh-pen deh vault!!'
-  no-vault-2: '{header} Deh vault wazn''t oh-penned, cud nawt giv/taik rank D:'
-  plugin-disabled: '{header} Kittenz sleepin nao'
-  plugin-enabled: '{header} Angery mode on!!'
-  plugin-fail: '{header} Omg I faled D:'
+  faulty-theme: '{header} Hibás téma került be! A téma módosítása nem történik.'
+  no-vault: '{header} A Vault nem található! A fejeket nem lehet eladni, és a kihívás
+    jutalmak nem tudnak hozzáadni/eltávolítani a csoportokat.'
+  no-vault-2: '{header} A Vault nem indult elindításkor! A csoport hozzáadása nem
+    lehetséges.'
+  plugin-disabled: '{header} A HeadsPlus letiltva!'
+  plugin-enabled: '{header} A HeadsPlus engedélyezve!'
+  plugin-fail: '{header} A HeadsPlus nem indult megfelelően. Hibaüzenet készült a
+    /plugins/HeadsPlus/debug'
 update:
-  current-version: '{header} Vershun rn: &c{version}'
-  description: '{header} Stuffz: &c{description}'
-  new-version: '{header} c00l vershun: &c{version}'
-  plugin-up-to-date: '{header} oboi da plugeen iz up-2-d8!'
-  update-found: '{header} umg guyz an updaitz 4 HeadsPlus waz fownd! Click meh!!'
+  current-version: '{header} Jelenlegi verzió: &c{version}'
+  description: '{header} Leírás: &c{description}'
+  new-version: '{header} Új verzió: &c{version}'
+  plugin-up-to-date: '{header} A bővítmény naprakész!'
+  update-found: '{header} Frissítés található a HeadsPlus pluginban! További információért
+    vidd az egérmutatót az üzenet fölé.'
