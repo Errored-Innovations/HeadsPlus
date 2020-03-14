@@ -60,7 +60,11 @@ public abstract class ConfigSettings {
         if (price != null) {
             return price;
         } else {
-            return getDouble(getDefaultPath());
+            if (!path.equals(getDefaultPath())) {
+                return getDouble(getDefaultPath());
+            } else {
+                return 0.0;
+            }
         }
     }
 
