@@ -46,6 +46,7 @@ public class Conjure implements IHeadsPlusCommand {
                         amount = Integer.parseInt(args[2]);
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
+                        return false;
                     }
                 }
                 int index = 0;
@@ -60,6 +61,7 @@ public class Conjure implements IHeadsPlusCommand {
                         p = (Player) sender;
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
+                        return false;
                     }
                 }
                 if (args.length > 4) {
@@ -67,6 +69,7 @@ public class Conjure implements IHeadsPlusCommand {
                         index = Integer.parseInt(args[4]);
                     } else {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
+                        return false;
                     }
                 }
                 if (args.length > 5) {
