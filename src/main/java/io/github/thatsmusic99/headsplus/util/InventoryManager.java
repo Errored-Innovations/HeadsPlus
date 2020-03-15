@@ -271,10 +271,14 @@ public class InventoryManager {
         for (String entity : entityHeads.keySet()) {
             try {
                 List<EntityHead> heads = entityHeads.get(entity);
-                if (!heads.isEmpty() && !usedEntities.contains(heads.get(0).getId())) {
-                    ItemStack i = heads.get(0).getItemStack();
-                    items.add(i);
-                    usedEntities.add(heads.get(0).getId());
+                if (!heads.isEmpty()) {
+                    EntityHead head = heads.get(0);
+                    if (!usedEntities.contains(head.getId())) {
+                        ItemStack i = head.getItemStack();
+                        items.add(i);
+                        usedEntities.add(head.getId());
+                    }
+
                 }
 
             } catch (Exception e) {
