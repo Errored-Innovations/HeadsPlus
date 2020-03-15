@@ -49,14 +49,9 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 		ItemStack skull = hp.getNMS().getSkullMaterial(1);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta = hp.getNMS().setSkullOwner(n, meta);
-
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
         skull.setItemMeta(meta);
-        Location playerLoc = (p).getLocation();
-        double playerLocY = playerLoc.getY() + 1;
-        playerLoc.setY(playerLocY);
-        World world = (p).getWorld();
-        world.dropItem(playerLoc, skull).setPickupDelay(0);
+        p.getInventory().addItem(skull);
 	}
 
 	private void giveH(String[] args, CommandSender sender, Player p) {

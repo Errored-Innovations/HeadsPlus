@@ -76,7 +76,7 @@ public class Conjure implements IHeadsPlusCommand {
                 try {
                     ItemStack i = de.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
                     i.setAmount(amount);
-                    p.getWorld().dropItem(p.getLocation(), i).setPickupDelay(0);
+                    p.getInventory().addItem(i);
                     return true;
                 } catch (NullPointerException ex) {
                     sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));

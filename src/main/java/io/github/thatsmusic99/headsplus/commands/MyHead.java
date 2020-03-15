@@ -43,11 +43,10 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                         Player target = Bukkit.getPlayer(args[0]);
                         if (target != null && target.isOnline()) {
                             Bukkit.dispatchCommand(target, "minecraft:execute as " + args[1] + "run myhead");
-                            return false;
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.player-offline", null));
-                            return false;
                         }
+                        return false;
                     } else {
                         return false;
                     }
@@ -146,11 +145,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
         meta = nms.setSkullOwner(n, meta);
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
         skull.setItemMeta(meta);
-        Location playerLoc = (p).getLocation();
-        double playerLocY = playerLoc.getY() + 1;
-        playerLoc.setY(playerLocY);
-        World world = (p).getWorld();
-        world.dropItem(playerLoc, skull).setPickupDelay(0);
+        p.getInventory().addItem(skull);
     }
 
     @Override
