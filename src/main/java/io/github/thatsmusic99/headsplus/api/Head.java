@@ -50,7 +50,10 @@ public class Head {
     }
 
     public Head withPlayerName(String name) {
-        itemStack.setItemMeta(HeadsPlus.getInstance().getNMS().setSkullOwner(name, (SkullMeta) itemStack.getItemMeta()));
+        SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
+    //    if (sm == null) return this;
+        sm = HeadsPlus.getInstance().getNMS().setSkullOwner(name, sm);
+        itemStack.setItemMeta(sm);
         return this;
     }
 

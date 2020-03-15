@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.nms;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -11,7 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.UUID;
 
 public interface NMSManager {
 
@@ -20,7 +23,20 @@ public interface NMSManager {
     }
 
     default SkullMeta setSkullOwner(String s, SkullMeta m) {
-        m.setOwner(s);
+        UUID uuid;
+        if (Bukkit.getPlayer(s) != null) {
+            uuid = Bukkit.getPlayer(s).getUniqueId();
+        } else {
+            uuid = UUID.nameUUIDFromBytes(s.getBytes());
+        }
+        GameProfile profile = new GameProfile(uuid, s);
+        try {
+            Field profileField = m.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(m, profile);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return m;
     }
 
