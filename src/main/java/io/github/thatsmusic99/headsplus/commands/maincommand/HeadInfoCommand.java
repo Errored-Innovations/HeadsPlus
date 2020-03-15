@@ -81,8 +81,8 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 if (args[2].equalsIgnoreCase("WANDERING_TRADER") || args[2].equalsIgnoreCase("TRADER_LLAMA")) {
                     type = args[2].toLowerCase();
                 }
-                if (args[1].equalsIgnoreCase("view")) {
-                    if (DeathEvents.ableEntities.contains(args[2])) {
+                if (DeathEvents.ableEntities.contains(args[2]) || args[2].equalsIgnoreCase("player")) {
+                    if (args[1].equalsIgnoreCase("view")) {
                         if (args.length > 3) {
                             if (args[3].equalsIgnoreCase("name") || args[3].equalsIgnoreCase("lore") || args[3].equalsIgnoreCase("mask")) {
                                 if (args.length > 4) {
@@ -112,99 +112,83 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
                                         break;
                                 }
-
                             } else {
                                 sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                             }
                         } else {
                             sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
                         }
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                    }
-                } else if (args[1].equalsIgnoreCase("set")) {
-                    // TODO sort out this bs
-                    if (args.length > 4) {
-                        if (DeathEvents.ableEntities.contains(args[2])) {
+                    } else if (args[1].equalsIgnoreCase("set")) {
+                        if (args.length > 4) {
                             if (args[3].equalsIgnoreCase("chance")
                                     || args[3].equalsIgnoreCase("price")) {
                                 if (isValueValid(args[3], args[4])) {
                                     hpch.getConfig().set(type + "." + args[3], Double.valueOf(args[4]));
-
                                 }
                             } else if (args[3].equalsIgnoreCase("display-name")
                                     || args[3].equalsIgnoreCase("interact-name")) {
                                 hpch.getConfig().set(type + "." + args[3], args[4]);
                             }
                             sender.sendMessage(hpc.getString("commands.head-info.set-value", sender)
-                                    .replaceAll("\\{value}", args[4])
-                                    .replaceAll("\\{entity}", type)
-                                    .replaceAll("\\{setting}", args[3]));
+                                        .replaceAll("\\{value}", args[4])
+                                        .replaceAll("\\{entity}", type)
+                                        .replaceAll("\\{setting}", args[3]));
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                         }
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                    }
-
-                } else if (args[1].equalsIgnoreCase("add")) {
-                    if (args.length > 4) {
-                        if (hpch.mHeads.contains(args[2].toLowerCase())
-                                || hpch.uHeads.contains(args[2].toLowerCase())
-                                || args[2].equalsIgnoreCase("player")) {
-                            if (PotionEffectType.getByName(args[4]) != null) {
-                                int amplifier = 1;
+                    } else if (args[1].equalsIgnoreCase("add")) {
+                        if (args.length > 4) {
+                            if (args[3].equalsIgnoreCase("mask")) {
+                                if (PotionEffectType.getByName(args[4]) != null) {
+                                    int amplifier = 1;
+                                    if (args.length > 5) {
+                                        if (CachedValues.MATCH_PAGE.matcher(args[5]).matches()) {
+                                            amplifier = Integer.parseInt(args[5]);
+                                        } else {
+                                            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                                            return false;
+                                        }
+                                    }
+                                    List<Integer> maskAmp = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
+                                    maskAmp.add(amplifier);
+                                    hpch.getConfig().set(type + ".mask-amplifiers", maskAmp);
+                                    List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
+                                    masks.add(args[4]);
+                                    hpch.getConfig().set(type + ".mask-effects", masks);
+                                } else {
+                                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                                }
+                            } else if (args[3].equalsIgnoreCase("name")) {
+                                String path;
                                 if (args.length > 5) {
-                                    if (CachedValues.MATCH_PAGE.matcher(args[5]).matches()) {
-                                        amplifier = Integer.parseInt(args[5]);
+                                    if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
+                                        path = type + ".name." + args[5];
                                     } else {
                                         sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                                         return false;
                                     }
+                                } else {
+                                    if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
+                                        path = type + ".name.default";
+                                    } else {
+                                        path = type + ".name";
+                                    }
                                 }
-                                List<Integer> maskAmp = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
-                                maskAmp.add(amplifier);
-                                hpch.getConfig().set(type + ".mask-amplifiers", maskAmp);
-                                List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
-                                masks.add(args[4]);
-                                hpch.getConfig().set(type + ".mask-effects", masks);
+                                List<String> s = hpch.getConfig().getStringList(path);
+                                s.add(args[4]);
+                                hpch.getConfig().set(path, s);
+                            } else if (args[3].equalsIgnoreCase("lore")){
+                                List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
+                                lore.add(args[4]);
+                                hpch.getConfig().set(type + "." + args[3], lore);
                             } else {
                                 sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                             }
-                        } else if (args[3].equalsIgnoreCase("name")) {
-                            String path;
-                            if (args.length > 5) {
-                                if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
-                                    path = type + ".name." + args[5];
-                                } else {
-                                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                                    return false;
-                                }
-                            } else {
-                                if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
-                                    path = type + ".name.default";
-                                } else {
-                                    path = type + ".name";
-                                }
-                            }
-                            List<String> s = hpch.getConfig().getStringList(path);
-                            s.add(args[4]);
-                            hpch.getConfig().set(path, s);
-                        } else if (args[3].equalsIgnoreCase("lore")){
-                            List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
-                            lore.add(args[4]);
-                            hpch.getConfig().set(type + "." + args[3], lore);
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                         }
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                    }
-                } else if (args[1].equalsIgnoreCase("remove")) {
-                    if (args.length > 4) {
-                        if (hpch.mHeads.contains(args[2].toLowerCase())
-                            || hpch.uHeads.contains(args[2].toLowerCase())
-                                || args[2].equalsIgnoreCase("player")) {
+                    } else if (args[1].equalsIgnoreCase("remove")) {
+                        if (args.length > 4) {
                             if (args[3].equalsIgnoreCase("name")
                                     || args[3].equalsIgnoreCase("lore")
                                     || args[3].equalsIgnoreCase("mask")) {
@@ -255,6 +239,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 } else {
                     sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                 }
+
             } else {
                 sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
             }
