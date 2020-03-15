@@ -158,6 +158,7 @@ public class DeathEvents implements Listener {
             return;
         }
         if (!runBlacklistTests(e.getEntity())) return;
+        if (e.getEntityType() == EntityType.PLAYER) return;
         if (spawnTracker.containsKey(e.getEntity().getUniqueId())) {
             if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(spawnTracker.get(e.getEntity().getUniqueId()).name())) {
                 return;
@@ -207,7 +208,7 @@ public class DeathEvents implements Listener {
                 if (fixedChance == 0.0) return;
                 if (randChance <= fixedChance) {
                     double lostprice = 0.0;
-                    double price = 0.0;
+                    double price = hpch.getPrice("player");
                     Economy economy = HeadsPlus.getInstance().getEconomy();
                     if (hp.getConfiguration().getPerks().pvp_player_balance_competition
                             && killer != null
@@ -216,11 +217,11 @@ public class DeathEvents implements Listener {
                         price = playerprice * hp.getConfiguration().getPerks().pvp_balance_for_head;
                         lostprice = economy.getBalance(killer) * hp.getConfiguration().getPerks().pvp_percentage_lost;
                     }
-                    Head head = new Head("player").withAmount(amount)
-                            .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", ep.getEntity().getName()))
-                            .withPlayerName(victim.getName())
+                    Head head = new EntityHead("player").withAmount(amount)
+                            .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
                             .withPrice(price)
-                            .withLore(hpch.getLore(victim.getName(), price));
+                            .withLore(hpch.getLore(victim.getName(), price))
+                            .withPlayerName(victim.getName());
                     Location location = victim.getLocation();
                     EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.PLAYER);
                     if (!event.isCancelled()) {
