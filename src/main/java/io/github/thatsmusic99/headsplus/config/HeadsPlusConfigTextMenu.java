@@ -16,6 +16,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -207,6 +208,28 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             return sb.toString();
         }
 
+        public static String translateNameInfo(String type, CommandSender sender, int page) {
+            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
+                return translateColored(sender, type, page);
+            }
+            StringBuilder sb = new StringBuilder();
+            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            PagedLists<String> heads = new PagedLists<>(hpch.getConfig().getStringList(type + ".name"),
+                    ht.getConfig().getInt("head-info.name-info.default.lines-per-page"));
+            if ((page > heads.getTotalPages()) || (0 >= page)) {
+                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+            }
+            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.default.header"), sender)).append("\n");
+            sb.append(translateColors(ht.getConfig().getString("head-info.name-info.default.first-line"), sender)
+                    .replace("{type}", type));
+            for (String name : heads.getContentsInPage(page)) {
+                sb.append("\n").append(translateColors(ht.getConfig().getString("head-info.name-info.default.for-each-line"), sender)
+                        .replace("{name}", name));
+            }
+            return sb.toString();
+        }
+
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
@@ -241,7 +264,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 String s = hpch.getConfig().getStringList(type + ".mask-effects").get(i);
                 int a = 1;
                 try {
-                    a = hpch.getConfig().getIntegerList(type + ".mask-amplifiers").get(i) + 1;
+                    a = hpch.getConfig().getIntegerList(type + ".mask-amplifiers").get(i);
                 } catch (IndexOutOfBoundsException ignored) {
                 }
                 m.add(new Mask(type, a, s));

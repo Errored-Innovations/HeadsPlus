@@ -26,7 +26,7 @@ public class HPPlayer {
     private Level level = null;
     private List<Challenge> completeChallenges;
     private Level nextLevel = null;
-    private List<PotionEffect> activeMasks;
+    private HashMap<String, List<PotionEffect>> activeMasks;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
     private boolean ignoreFallDamage;
@@ -35,7 +35,7 @@ public class HPPlayer {
 
     public HPPlayer(OfflinePlayer p) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        activeMasks = new ArrayList<>();
+        activeMasks = new HashMap<>();
         favouriteHeads = new ArrayList<>();
         ignoreFallDamage = false;
         this.player = p;
@@ -106,12 +106,17 @@ public class HPPlayer {
         players.put(getPlayer().getUniqueId(), this);
     }
 
-    public void clearMask() {
-        for (PotionEffect p : getActiveMasks()) {
-            ((Player) getPlayer()).removePotionEffect(p.getType());
+    public void clearMask(String type) {
+        try {
+            for (PotionEffect p : getActiveMasks(type)) {
+                ((Player) getPlayer()).removePotionEffect(p.getType());
+            }
+            ignoreFallDamage = false;
+            activeMasks.remove(type);
+        } catch (NullPointerException ignored) { // When the mask messes up
+
         }
-        ignoreFallDamage = false;
-        activeMasks.clear();
+
     }
 
     public void addMask(String s) {
@@ -138,7 +143,7 @@ public class HPPlayer {
                 HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
             }
         }
-        activeMasks.addAll(po);
+        activeMasks.put(s, po);
     }
 
     public int getXp() {
@@ -166,8 +171,12 @@ public class HPPlayer {
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
     }
 
-    public List<PotionEffect> getActiveMasks() {
-        return activeMasks;
+    public List<PotionEffect> getActiveMasks(String type) {
+        return activeMasks.get(type);
+    }
+
+    public List<String> getActiveMaskTypes() {
+        return new ArrayList<>(activeMasks.keySet());
     }
 
     public String getLocale() {

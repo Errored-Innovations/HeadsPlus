@@ -62,7 +62,11 @@ public class DebugFileCreator {
         o3.put("Cached players", HPPlayer.players.size());
         JSONArray plugins = new JSONArray();
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            try {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            } catch (Exception ex) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            }
         }
         o1.put("Other Plugins", plugins);
         o1.put("Plugin values", o3);
@@ -126,7 +130,11 @@ public class DebugFileCreator {
         o1.put("Skull Type", s.getType().name());
         JSONArray plugins = new JSONArray();
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            try {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            } catch (Exception ex) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            }
         }
         o1.put("Other Plugins", plugins);
         o1.put("Server version", Bukkit.getVersion());
@@ -201,7 +209,11 @@ public class DebugFileCreator {
         }
         JSONArray plugins = new JSONArray();
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            try {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            } catch (Exception ex) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            }
         }
         o1.put("Other Plugins", plugins);
         JSONObject o2 = new JSONObject();
@@ -215,11 +227,15 @@ public class DebugFileCreator {
         o2.put("Completed challenges", ch);
         o2.put("Level", player.getLevel());
         o2.put("Next level", player.getNextLevel());
-        JSONArray a = new JSONArray();
-        for (PotionEffect p : player.getActiveMasks()) {
-            a.add(p.getType().getName());
+        JSONObject o3 = new JSONObject();
+        for (String type : player.getActiveMaskTypes()) {
+            JSONArray a = new JSONArray();
+            for (PotionEffect p : player.getActiveMasks(type)) {
+                a.add(p.getType().getName());
+            }
+            o3.put(type, a);
         }
-        o2.put("Active effects from masks", a);
+        o2.put("Masks", o3);
         o1.put("Server version", Bukkit.getVersion());
         o1.put("Player details", o2);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
@@ -268,7 +284,11 @@ public class DebugFileCreator {
         }
         JSONArray plugins = new JSONArray();
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            try {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            } catch (Exception ex) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            }
         }
         o1.put("Other Plugins", plugins);
         JSONObject o2 = new JSONObject();

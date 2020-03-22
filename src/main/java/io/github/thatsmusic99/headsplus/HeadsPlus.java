@@ -128,25 +128,19 @@ public class HeadsPlus extends JavaPlugin {
             }
 
             // Sets up Metrics
-            Metrics metrics = new Metrics(this);
+            Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
             metrics.addCustomChart(new Metrics.SimplePie("theme", () -> capitalize(getConfiguration().getMechanics().getString("plugin-theme-dont-change").toLowerCase())));
             if (getConfiguration().getMechanics().getBoolean("update.check")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        try {
-                            update = UpdateChecker.getUpdate();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        update = UpdateChecker.getUpdate();
                         if (update != null) {
                             getServer().getConsoleSender().sendMessage(hpc.getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[2]))
+                                    + "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
                                     + "\n" + hpc.getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
                             getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
-
-
                         } else {
                             getLogger().info(hpc.getString("update.plugin-up-to-date"));
                         }

@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.9.2</hp-project.version>
+        <hp-project.version>v6.9.5-SNAPSHOT-1</hp-project.version>
     </properties>
 
     <build>

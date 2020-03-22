@@ -41,8 +41,10 @@ public class MaskEvent implements Listener {
                             maskMonitors.put((Player) e.getWhoClicked(), new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (e.getWhoClicked().getInventory().getHelmet() == null || e.getWhoClicked().getInventory().getHelmet().getType() == Material.AIR) {
-                                        pl.clearMask();
+                                    if (e.getWhoClicked().getInventory().getHelmet() == null
+                                            || e.getWhoClicked().getInventory().getHelmet().getType() == Material.AIR
+                                            || !NBTManager.getType(e.getWhoClicked().getInventory().getHelmet()).equals(s)) {
+                                        pl.clearMask(s);
                                         maskMonitors.remove(e.getWhoClicked());
                                         cancel();
                                     }

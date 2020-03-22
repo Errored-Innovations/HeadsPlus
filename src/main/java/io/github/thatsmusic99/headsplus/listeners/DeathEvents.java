@@ -375,26 +375,28 @@ public class DeathEvents implements Listener {
                     heads = storedHeads.get(name + ";default");
                 } else {
                     possibleConditions.remove("default");
-                    StringBuilder sb = new StringBuilder();
-                    for (String s : possibleConditions) {
-                        sb.append(s).append(",");
-                    }
-                    sb.replace(sb.length() - 1, sb.length(), "");
-                    if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
-                        heads = storedHeads.get(name + ";" + sb.toString());
-                    } else {
+                    try {
+                        StringBuilder sb = new StringBuilder();
                         for (String s : possibleConditions) {
-                            if (storedHeads.containsKey(name + ";" + s)) {
-                                heads = storedHeads.get(name + ";" + s);
-                                break;
+                            sb.append(s).append(",");
+                        }
+                        sb.replace(sb.length() - 1, sb.length(), "");
+                        if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
+                            heads = storedHeads.get(name + ";" + sb.toString());
+                        } else {
+                            for (String s : possibleConditions) {
+                                if (storedHeads.containsKey(name + ";" + s)) {
+                                    heads = storedHeads.get(name + ";" + s);
+                                    break;
+                                }
+                            }
+                            if (heads == null) {
+                                heads = storedHeads.get(name + ";default");
                             }
                         }
-                        if (heads == null) {
-                            heads = storedHeads.get(name + ";default");
-                        }
+                    } catch (Exception e) {
+                        heads = storedHeads.get(name + ";default");
                     }
-
-
                 }
             } else {
                 heads = storedHeads.get(entity.getType().name() + ";default");

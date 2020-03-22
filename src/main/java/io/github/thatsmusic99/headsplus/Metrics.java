@@ -1,13 +1,15 @@
 package io.github.thatsmusic99.headsplus;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -66,6 +68,9 @@ public class Metrics {
     // The plugin
     private final Plugin plugin;
 
+    // The plugin id
+    private final int pluginId;
+
     // A list with all custom charts
     private final List<CustomChart> charts = new ArrayList<>();
 
@@ -73,12 +78,15 @@ public class Metrics {
      * Class constructor.
      *
      * @param plugin The plugin which stats should be submitted.
+     * @param pluginId The id of the plugin.
+     *                 It can be found at <a href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
      */
-    public Metrics(Plugin plugin) {
+    public Metrics(Plugin plugin, int pluginId) {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
         }
         this.plugin = plugin;
+        this.pluginId = pluginId;
 
         // Get the config file
         File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
@@ -186,24 +194,25 @@ public class Metrics {
      *
      * @return The plugin specific data.
      */
-    public JSONObject getPluginData() {
-        JSONObject data = new JSONObject();
+    public JsonObject getPluginData() {
+        JsonObject data = new JsonObject();
 
         String pluginName = plugin.getDescription().getName();
         String pluginVersion = plugin.getDescription().getVersion();
 
-        data.put("pluginName", pluginName); // Append the name of the plugin
-        data.put("pluginVersion", pluginVersion); // Append the version of the plugin
-        JSONArray customCharts = new JSONArray();
+        data.addProperty("pluginName", pluginName); // Append the name of the plugin
+        data.addProperty("id", pluginId); // Append the id of the plugin
+        data.addProperty("pluginVersion", pluginVersion); // Append the version of the plugin
+        JsonArray customCharts = new JsonArray();
         for (CustomChart customChart : charts) {
             // Add the data of the custom charts
-            JSONObject chart = customChart.getRequestJsonObject();
+            JsonObject chart = customChart.getRequestJsonObject();
             if (chart == null) { // If the chart is null, we skip it
                 continue;
             }
             customCharts.add(chart);
         }
-        data.put("customCharts", customCharts);
+        data.add("customCharts", customCharts);
 
         return data;
     }
@@ -213,7 +222,7 @@ public class Metrics {
      *
      * @return The server specific data.
      */
-    private JSONObject getServerData() {
+    private JsonObject getServerData() {
         // Minecraft specific data
         int playerAmount;
         try {
@@ -228,6 +237,7 @@ public class Metrics {
         }
         int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
         String bukkitVersion = Bukkit.getVersion();
+        String bukkitName = Bukkit.getName();
 
         // OS/Java specific data
         String javaVersion = System.getProperty("java.version");
@@ -236,19 +246,20 @@ public class Metrics {
         String osVersion = System.getProperty("os.version");
         int coreCount = Runtime.getRuntime().availableProcessors();
 
-        JSONObject data = new JSONObject();
+        JsonObject data = new JsonObject();
 
-        data.put("serverUUID", serverUUID);
+        data.addProperty("serverUUID", serverUUID);
 
-        data.put("playerAmount", playerAmount);
-        data.put("onlineMode", onlineMode);
-        data.put("bukkitVersion", bukkitVersion);
+        data.addProperty("playerAmount", playerAmount);
+        data.addProperty("onlineMode", onlineMode);
+        data.addProperty("bukkitVersion", bukkitVersion);
+        data.addProperty("bukkitName", bukkitName);
 
-        data.put("javaVersion", javaVersion);
-        data.put("osName", osName);
-        data.put("osArch", osArch);
-        data.put("osVersion", osVersion);
-        data.put("coreCount", coreCount);
+        data.addProperty("javaVersion", javaVersion);
+        data.addProperty("osName", osName);
+        data.addProperty("osArch", osArch);
+        data.addProperty("osVersion", osVersion);
+        data.addProperty("coreCount", coreCount);
 
         return data;
     }
@@ -257,9 +268,9 @@ public class Metrics {
      * Collects the data and sends it afterwards.
      */
     private void submitData() {
-        final JSONObject data = getServerData();
+        final JsonObject data = getServerData();
 
-        JSONArray pluginData = new JSONArray();
+        JsonArray pluginData = new JsonArray();
         // Search for all other bStats Metrics classes to get their plugin data
         for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
             try {
@@ -267,26 +278,42 @@ public class Metrics {
 
                 for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
                     try {
-                        pluginData.add(provider.getService().getMethod("getPluginData").invoke(provider.getProvider()));
+                        Object plugin = provider.getService().getMethod("getPluginData").invoke(provider.getProvider());
+                        if (plugin instanceof JsonObject) {
+                            pluginData.add((JsonObject) plugin);
+                        } else { // old bstats version compatibility
+                            try {
+                                Class<?> jsonObjectJsonSimple = Class.forName("org.json.simple.JSONObject");
+                                if (plugin.getClass().isAssignableFrom(jsonObjectJsonSimple)) {
+                                    Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString");
+                                    jsonStringGetter.setAccessible(true);
+                                    String jsonString = (String) jsonStringGetter.invoke(plugin);
+                                    JsonObject object = new JsonParser().parse(jsonString).getAsJsonObject();
+                                    pluginData.add(object);
+                                }
+                            } catch (ClassNotFoundException e) {
+                                // minecraft version 1.14+
+                                if (logFailedRequests) {
+                                    this.plugin.getLogger().log(Level.SEVERE, "Encountered unexpected exception", e);
+                                }
+                            }
+                        }
                     } catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) { }
                 }
             } catch (NoSuchFieldException ignored) { }
         }
 
-        data.put("plugins", pluginData);
+        data.add("plugins", pluginData);
 
         // Create a new thread for the connection to the bStats server
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Send the data
-                    sendData(plugin, data);
-                } catch (Exception e) {
-                    // Something went wrong! :(
-                    if (logFailedRequests) {
-                        plugin.getLogger().log(Level.WARNING, "Could not submit plugin stats of " + plugin.getName(), e);
-                    }
+        new Thread(() -> {
+            try {
+                // Send the data
+                sendData(plugin, data);
+            } catch (Exception e) {
+                // Something went wrong! :(
+                if (logFailedRequests) {
+                    plugin.getLogger().log(Level.WARNING, "Could not submit plugin stats of " + plugin.getName(), e);
                 }
             }
         }).start();
@@ -299,7 +326,7 @@ public class Metrics {
      * @param data The data to send.
      * @throws Exception If the request failed.
      */
-    private static void sendData(Plugin plugin, JSONObject data) throws Exception {
+    private static void sendData(Plugin plugin, JsonObject data) throws Exception {
         if (data == null) {
             throw new IllegalArgumentException("Data cannot be null!");
         }
@@ -307,7 +334,7 @@ public class Metrics {
             throw new IllegalAccessException("This method must not be called from the main thread!");
         }
         if (logSentData) {
-            plugin.getLogger().info("Sending data to bStats: " + data.toString());
+            plugin.getLogger().info("Sending data to bStats: " + data);
         }
         HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
 
@@ -325,22 +352,20 @@ public class Metrics {
 
         // Send data
         connection.setDoOutput(true);
-        DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.write(compressedData);
-        outputStream.flush();
-        outputStream.close();
-
-        InputStream inputStream = connection.getInputStream();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+            outputStream.write(compressedData);
+        }
 
         StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            builder.append(line);
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line);
+            }
         }
-        bufferedReader.close();
+
         if (logResponseStatusText) {
-            plugin.getLogger().info("Sent data to bStats and received response: " + builder.toString());
+            plugin.getLogger().info("Sent data to bStats and received response: " + builder);
         }
     }
 
@@ -356,9 +381,9 @@ public class Metrics {
             return null;
         }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        GZIPOutputStream gzip = new GZIPOutputStream(outputStream);
-        gzip.write(str.getBytes(StandardCharsets.UTF_8));
-        gzip.close();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(outputStream)) {
+            gzip.write(str.getBytes(StandardCharsets.UTF_8));
+        }
         return outputStream.toByteArray();
     }
 
@@ -382,16 +407,16 @@ public class Metrics {
             this.chartId = chartId;
         }
 
-        private JSONObject getRequestJsonObject() {
-            JSONObject chart = new JSONObject();
-            chart.put("chartId", chartId);
+        private JsonObject getRequestJsonObject() {
+            JsonObject chart = new JsonObject();
+            chart.addProperty("chartId", chartId);
             try {
-                JSONObject data = getChartData();
+                JsonObject data = getChartData();
                 if (data == null) {
                     // If the data is null we don't send the chart.
                     return null;
                 }
-                chart.put("data", data);
+                chart.add("data", data);
             } catch (Throwable t) {
                 if (logFailedRequests) {
                     Bukkit.getLogger().log(Level.WARNING, "Failed to get data for custom chart with id " + chartId, t);
@@ -401,7 +426,7 @@ public class Metrics {
             return chart;
         }
 
-        protected abstract JSONObject getChartData() throws Exception;
+        protected abstract JsonObject getChartData() throws Exception;
 
     }
 
@@ -424,14 +449,14 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
             String value = callable.call();
             if (value == null || value.isEmpty()) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("value", value);
+            data.addProperty("value", value);
             return data;
         }
     }
@@ -455,9 +480,9 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
-            JSONObject values = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
             Map<String, Integer> map = callable.call();
             if (map == null || map.isEmpty()) {
                 // Null = skip the chart
@@ -469,13 +494,13 @@ public class Metrics {
                     continue; // Skip this invalid
                 }
                 allSkipped = false;
-                values.put(entry.getKey(), entry.getValue());
+                values.addProperty(entry.getKey(), entry.getValue());
             }
             if (allSkipped) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("values", values);
+            data.add("values", values);
             return data;
         }
     }
@@ -499,9 +524,9 @@ public class Metrics {
         }
 
         @Override
-        public JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
-            JSONObject values = new JSONObject();
+        public JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
             Map<String, Map<String, Integer>> map = callable.call();
             if (map == null || map.isEmpty()) {
                 // Null = skip the chart
@@ -509,22 +534,22 @@ public class Metrics {
             }
             boolean reallyAllSkipped = true;
             for (Map.Entry<String, Map<String, Integer>> entryValues : map.entrySet()) {
-                JSONObject value = new JSONObject();
+                JsonObject value = new JsonObject();
                 boolean allSkipped = true;
                 for (Map.Entry<String, Integer> valueEntry : map.get(entryValues.getKey()).entrySet()) {
-                    value.put(valueEntry.getKey(), valueEntry.getValue());
+                    value.addProperty(valueEntry.getKey(), valueEntry.getValue());
                     allSkipped = false;
                 }
                 if (!allSkipped) {
                     reallyAllSkipped = false;
-                    values.put(entryValues.getKey(), value);
+                    values.add(entryValues.getKey(), value);
                 }
             }
             if (reallyAllSkipped) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("values", values);
+            data.add("values", values);
             return data;
         }
     }
@@ -548,14 +573,14 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
             int value = callable.call();
             if (value == 0) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("value", value);
+            data.addProperty("value", value);
             return data;
         }
 
@@ -580,9 +605,9 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
-            JSONObject values = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
             Map<String, Integer> map = callable.call();
             if (map == null || map.isEmpty()) {
                 // Null = skip the chart
@@ -594,13 +619,13 @@ public class Metrics {
                     continue; // Skip this invalid
                 }
                 allSkipped = false;
-                values.put(entry.getKey(), entry.getValue());
+                values.addProperty(entry.getKey(), entry.getValue());
             }
             if (allSkipped) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("values", values);
+            data.add("values", values);
             return data;
         }
 
@@ -625,20 +650,20 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
-            JSONObject values = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
             Map<String, Integer> map = callable.call();
             if (map == null || map.isEmpty()) {
                 // Null = skip the chart
                 return null;
             }
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                JSONArray categoryValues = new JSONArray();
-                categoryValues.add(entry.getValue());
-                values.put(entry.getKey(), categoryValues);
+                JsonArray categoryValues = new JsonArray();
+                categoryValues.add(new JsonPrimitive(entry.getValue()));
+                values.add(entry.getKey(), categoryValues);
             }
-            data.put("values", values);
+            data.add("values", values);
             return data;
         }
 
@@ -663,9 +688,9 @@ public class Metrics {
         }
 
         @Override
-        protected JSONObject getChartData() throws Exception {
-            JSONObject data = new JSONObject();
-            JSONObject values = new JSONObject();
+        protected JsonObject getChartData() throws Exception {
+            JsonObject data = new JsonObject();
+            JsonObject values = new JsonObject();
             Map<String, int[]> map = callable.call();
             if (map == null || map.isEmpty()) {
                 // Null = skip the chart
@@ -677,17 +702,17 @@ public class Metrics {
                     continue; // Skip this invalid
                 }
                 allSkipped = false;
-                JSONArray categoryValues = new JSONArray();
+                JsonArray categoryValues = new JsonArray();
                 for (int categoryValue : entry.getValue()) {
-                    categoryValues.add(categoryValue);
+                    categoryValues.add(new JsonPrimitive(categoryValue));
                 }
-                values.put(entry.getKey(), categoryValues);
+                values.add(entry.getKey(), categoryValues);
             }
             if (allSkipped) {
                 // Null = skip the chart
                 return null;
             }
-            data.put("values", values);
+            data.add("values", values);
             return data;
         }
     }

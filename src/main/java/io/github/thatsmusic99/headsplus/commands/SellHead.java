@@ -185,14 +185,15 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		    if (p.getInventory().getHelmet() != null) {
 		        ItemStack is = p.getInventory().getHelmet();
 		        if (NBTManager.isSellable(is) && !NBTManager.getType(is).isEmpty()) {
-                    if (a[0].equalsIgnoreCase("all") || NBTManager.getType(is).equalsIgnoreCase(a[0])) {
+		            String type = NBTManager.getType(is);
+                    if (a[0].equalsIgnoreCase("all") || type.equalsIgnoreCase(a[0])) {
                         if (is.getAmount() > l && l != -1) {
                             is.setAmount(is.getAmount() - l);
                             l = 0;
                         } else {
                             p.getInventory().setHelmet(new ItemStack(Material.AIR));
                             HPPlayer hp = HPPlayer.getHPPlayer(p);
-                            hp.clearMask();
+                            hp.clearMask(type);
                             if (l != -1) {
                                 l = is.getAmount() - l;
                             }

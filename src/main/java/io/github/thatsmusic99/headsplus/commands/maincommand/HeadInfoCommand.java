@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +31,18 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
 
     // A
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private static final List<String> potions = new ArrayList<>();
+
+    static {
+        try {
+            for (PotionEffectType type : PotionEffectType.values()) {
+                potions.add(type.getName());
+            }
+        } catch (Exception ignored) {
+
+        }
+
+    }
 
     @Override
     public String getCmdDescription(CommandSender sender) {
@@ -63,6 +76,10 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 case "set":
                     StringUtil.copyPartialMatches(args[3], Arrays.asList("chance", "price", "display-name", "interact-name"), results);
                     break;
+            }
+        } else if (args.length == 5) {
+            if (args[3].equalsIgnoreCase("mask")) {
+                StringUtil.copyPartialMatches(args[4], potions, results);
             }
         } else if (args.length == 6) {
             if (args[3].equalsIgnoreCase("name")) {
@@ -100,6 +117,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         }
                                         return true;
                                     }
+
                                 }
                                 switch (args[3].toLowerCase()) {
                                     case "name":
@@ -155,6 +173,10 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                     List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
                                     masks.add(args[4]);
                                     hpch.getConfig().set(type + ".mask-effects", masks);
+                                    sender.sendMessage(hpc.getString("commands.head-info.add-value", sender)
+                                            .replaceAll("\\{value}", args[4])
+                                            .replaceAll("\\{entity}", type)
+                                            .replaceAll("\\{setting}", args[3]));
                                 } else {
                                     sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                                 }
@@ -177,10 +199,18 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                 List<String> s = hpch.getConfig().getStringList(path);
                                 s.add(args[4]);
                                 hpch.getConfig().set(path, s);
+                                sender.sendMessage(hpc.getString("commands.head-info.add-value", sender)
+                                        .replaceAll("\\{value}", args[4])
+                                        .replaceAll("\\{entity}", type)
+                                        .replaceAll("\\{setting}", args[3]));
                             } else if (args[3].equalsIgnoreCase("lore")){
                                 List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
                                 lore.add(args[4]);
                                 hpch.getConfig().set(type + "." + args[3], lore);
+                                sender.sendMessage(hpc.getString("commands.head-info.add-value", sender)
+                                        .replaceAll("\\{value}", args[4])
+                                        .replaceAll("\\{entity}", type)
+                                        .replaceAll("\\{setting}", args[3]));
                             } else {
                                 sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                             }
@@ -212,10 +242,18 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         List<String> s = hpch.getConfig().getStringList(path);
                                         s.remove(Integer.parseInt(args[4]));
                                         hpch.getConfig().set(path, s);
+                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
+                                                .replaceAll("\\{value}", args[4])
+                                                .replaceAll("\\{entity}", type)
+                                                .replaceAll("\\{setting}", args[3]));
                                     } else if (args[3].equalsIgnoreCase("lore")) {
                                         List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
                                         lore.remove(Integer.parseInt(args[4]));
                                         hpch.getConfig().set(type + "." + args[3], lore);
+                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
+                                                .replaceAll("\\{value}", args[4])
+                                                .replaceAll("\\{entity}", type)
+                                                .replaceAll("\\{setting}", args[3]));
                                     } else if (args[3].equalsIgnoreCase("mask")) {
                                         List<Integer> maskAmplifiers = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
                                         maskAmplifiers.remove(Integer.parseInt(args[4]));
@@ -223,6 +261,10 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                         List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
                                         masks.remove(Integer.parseInt(args[4]));
                                         hpch.getConfig().set(type + ".mask-effects", masks);
+                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
+                                                .replaceAll("\\{value}", args[4])
+                                                .replaceAll("\\{entity}", type)
+                                                .replaceAll("\\{setting}", args[3]));
                                     }
                                 } else {
                                     sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
@@ -270,14 +312,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
 
     private String printNameInfo(String type, int page, CommandSender p) {
         try {
-            if (type.equalsIgnoreCase("sheep")
-                    || type.equalsIgnoreCase("parrot")
-                    || type.equalsIgnoreCase("llama")
-                    || type.equalsIgnoreCase("horse")) {
-                return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateColored(p, type, page);
-            } else {
-                return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, p);
-            }
+            return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNameInfo(type, p, page);
         } catch (IllegalArgumentException ex) {
             return hpc.getString("commands.errors.invalid-pg-no", p);
         }
