@@ -21,13 +21,13 @@ public interface JSONFile {
             new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "storage").mkdirs();
             f.createNewFile();
             JSONObject o = new JSONObject();
-            Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-            String s = gson.toJson(o);
-            OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(f));
+            Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create(); // Allows the file to look pretty
+            String s = gson.toJson(o); // Convert the JSONObject to a string
+            OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(f)); // This is used to write the JSON to the file
             try {
-                fw.write(s.replace("\u0026", "&"));
+                fw.write(s.replace("\u0026", "&")); // Then write it
             } finally {
-                fw.flush();
+                fw.flush(); // Before flushing and closing it!
                 fw.close();
             }
         }
