@@ -136,7 +136,12 @@ public class HPPlayer {
             }
 
             try {
-                PotionEffect p = new PotionEffect(PotionEffectType.getByName(is), 1000000, amp);
+                PotionEffectType type = PotionEffectType.getByName(is);
+                if (type == null) {
+                    HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
+                    continue;
+                }
+                PotionEffect p = new PotionEffect(type, 200, amp);
                 p.apply((Player) this.getPlayer());
                 po.add(p);
             } catch (IllegalArgumentException ex) {
@@ -144,6 +149,18 @@ public class HPPlayer {
             }
         }
         activeMasks.put(s, po);
+    }
+
+    public void refreshMasks() {
+        for (String key : getActiveMaskTypes()) {
+            if (getActiveMasks(key) != null) {
+                for (PotionEffect effect : getActiveMasks(key)) {
+                    PotionEffect newEffect = new PotionEffect(effect.getType(), 200, effect.getAmplifier());
+                    ((Player) getPlayer()).removePotionEffect(effect.getType());
+                    newEffect.apply((Player) getPlayer());
+                }
+            }
+        }
     }
 
     public int getXp() {

@@ -26,33 +26,41 @@ public class MaskEvent implements Listener {
     public void onMaskPutOn(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         if (hp.getConfiguration().getPerks().mask_powerups) {
-            NMSManager nms = hp.getNMS();
-            NBTManager nbt = hp.getNBTManager();
             if (e.getRawSlot() == getSlot()) {
 
                 ItemStack ist = e.getCursor();
-                if (ist != null) {
-                    if (ist.getType().equals(nms.getSkull(3).getType())) {
-                        HeadsPlusConfigHeads hpch = hp.getHeadsConfig();
-                        String s = nbt.getType(ist).toLowerCase();
-                        if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-                            HPPlayer pl = HPPlayer.getHPPlayer((OfflinePlayer) e.getWhoClicked());
-                            pl.addMask(s);
-                            maskMonitors.put((Player) e.getWhoClicked(), new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (e.getWhoClicked().getInventory().getHelmet() == null
-                                            || e.getWhoClicked().getInventory().getHelmet().getType() == Material.AIR
-                                            || !NBTManager.getType(e.getWhoClicked().getInventory().getHelmet()).equals(s)) {
-                                        pl.clearMask(s);
-                                        maskMonitors.remove(e.getWhoClicked());
-                                        cancel();
-                                    }
-                                }
-                            });
-                            maskMonitors.get(e.getWhoClicked()).runTaskTimer(HeadsPlus.getInstance(), 20, 40);
+                checkMask((Player) e.getWhoClicked(), ist);
+            }
+        }
+    }
+
+    public static void checkMask(Player player, ItemStack item) {
+        HeadsPlus hp = HeadsPlus.getInstance();
+        NMSManager nms = hp.getNMS();
+        if (item != null) {
+            if (item.getType().equals(nms.getSkull(3).getType())) {
+                HeadsPlusConfigHeads hpch = hp.getHeadsConfig();
+                String s = NBTManager.getType(item).toLowerCase();
+                if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
+                    HPPlayer pl = HPPlayer.getHPPlayer(player);
+                    pl.addMask(s);
+                    maskMonitors.put(player, new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            ItemStack helmet = player.getInventory().getHelmet();
+                            if (helmet == null
+                                    || helmet.getType() == Material.AIR
+                                    || !NBTManager.getType(helmet).equals(s)
+                                    || !player.isOnline()) {
+                                pl.clearMask(s);
+                                maskMonitors.remove(player);
+                                cancel();
+                            } else {
+                                pl.refreshMasks();
+                            }
                         }
-                    }
+                    });
+                    maskMonitors.get(player).runTaskTimer(hp, 20, 60);
                 }
             }
         }

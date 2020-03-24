@@ -34,19 +34,7 @@ public class JoinEvent implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (e.getPlayer().getInventory().getArmorContents()[3] != null) {
-                    NMSManager nms = hp.getNMS();
-                    NBTManager nbt = hp.getNBTManager();
-                    if (e.getPlayer().getInventory().getArmorContents()[3].getType().equals(nms.getSkullMaterial(1).getType())) {
-
-                        HeadsPlusConfigHeads hpch = hp.getHeadsConfig();
-                        String s = nbt.getType(e.getPlayer().getInventory().getArmorContents()[3]).toLowerCase();
-                        if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-                            HPPlayer pl = HPPlayer.getHPPlayer(e.getPlayer());
-                            pl.addMask(s);
-                        }
-                    }
-                }
+                MaskEvent.checkMask(e.getPlayer(), e.getPlayer().getInventory().getArmorContents()[3]);
             }
         }.runTaskLater(hp, 20);
 
