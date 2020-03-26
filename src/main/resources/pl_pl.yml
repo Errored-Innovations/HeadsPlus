@@ -237,9 +237,9 @@ descriptions:
     aby sprzedać wszystkie głowy.
 event:
   block-place-denied: '{header} Nie możesz postawić głów, które da się sprzedać!'
-  head-interact-message: '{header} To jest głowa użytkownika &c{player}&7!'
-  head-mhf-interact-message: '{header} To jest głowa użytkownika &c{player}&7!'
-  head-mhf-interact-message-2: '{header} To jest głowa użytkownika &c{player}&7!'
+  head-interact-message: '{header} To jest głowa użytkownika &c{name}&7!'
+  head-mhf-interact-message: '{header} To jest głowa użytkownika &c{name}&7!'
+  head-mhf-interact-message-2: '{header} To jest głowa użytkownika &c{name}&7!'
   lost-money: '{header} Straciłeś &c{price}&7, ponieważ zostałeś zabity przez &c{player}&7!'
 startup:
   faulty-theme: '{header} Niepoprawny motyw! Nie zastosowano żadnych zmian.'
