@@ -31,7 +31,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), "challenges.yml");
         }
         config = YamlConfiguration.loadConfiguration(configF);
-        if (configF.length() < 1000) {
+        if (configF.length() < 1) {
             updated = true;
             load(false);
         }

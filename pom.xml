@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.10-SNAPSHOT-1</hp-project.version>
+        <hp-project.version>v6.10-SNAPSHOT-2</hp-project.version>
     </properties>
 
     <build>
@@ -189,10 +189,6 @@
         <repository>
             <id>essx-repo</id>
             <url>https://ci.ender.zone/plugin/repository/everything/</url>
-        </repository>
-        <repository>
-            <id>herocraft</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
