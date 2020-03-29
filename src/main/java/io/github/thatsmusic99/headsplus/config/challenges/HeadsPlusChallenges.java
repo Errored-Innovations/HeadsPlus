@@ -69,6 +69,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
     private void addChallenges() {
         HeadsPlus.getInstance().getChallenges().clear();
+        HeadsPlus.getInstance().getChallengeSections().clear();
         HashMap<String, Boolean> prepareOptions = new HashMap<>();
         prepareOptions.put("sections", config.getBoolean("challenges.options.prepare-sections"));
         prepareOptions.put("rewards", config.getBoolean("challenges.options.prepare-rewards"));
@@ -130,7 +131,8 @@ public class HeadsPlusChallenges extends ConfigSettings {
             HeadsPlus.getInstance().getChallenges().add(c);
             sections.get(challenge.getString("section")).addChallenge(c);
         }
-        HeadsPlus.getInstance().getChallengeSections().addAll(sections);
+
+        HeadsPlus.getInstance().getChallengeSections().addAll(sections.values());
     }
 
     private void updateChallenges() {
