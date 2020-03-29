@@ -35,11 +35,14 @@ public class HeadsPlusChallenges extends ConfigSettings {
             updated = true;
             load(false);
         }
-        double v = getConfig().getDouble("challenges.options.current-version");
+        double v = config.getDouble("challenges.options.current-version");
         if ((v < 1.3 || updated)) {
-            getConfig().set("challenges.options.current-version", 1.3);
+            config.set("challenges.options.current-version", 1.3);
             updateChallenges();
         }
+        config.addDefault("challenges.options.prepare-sections", true);
+        config.addDefault("challenges.options.prepare-icons", true);
+        config.addDefault("challenges.options.prepare-rewards", true);
         config.options().copyDefaults(true);
         save();
         addChallenges();
@@ -50,6 +53,9 @@ public class HeadsPlusChallenges extends ConfigSettings {
     public void load(boolean aaaan) {
         getConfig().options().header("HeadsPlus by Thatsmusic99");
         getConfig().addDefault("challenges.options.current-version", 1.3);
+        getConfig().addDefault("challenges.options.prepare-sections", true);
+        getConfig().addDefault("challenges.options.prepare-icons", true);
+        getConfig().addDefault("challenges.options.prepare-rewards", true);
         double v = getConfig().getDouble("challenges.options.current-version");
         if (v < 1.3) {
             updated = true;
@@ -63,83 +69,66 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
     private void addChallenges() {
         HeadsPlus.getInstance().getChallenges().clear();
-        List<ChallengeSection> sections = new ArrayList<>();
-        for (String section : config.getConfigurationSection("sections").getKeys(false)) {
-            if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
-            Material material = Material.valueOf(config.getString("sections." + section + ".material").toUpperCase());
-            int data = config.getInt("sections." + section + ".material-data");
-            String displayName = config.getString("sections." + section + ".display-name");
-            List<String> lore = config.getStringList("sections." + section + ".lore");
-            sections.add(new ChallengeSection(material, (byte) data, displayName, lore, section));
+        HashMap<String, Boolean> prepareOptions = new HashMap<>();
+        prepareOptions.put("sections", config.getBoolean("challenges.options.prepare-sections"));
+        prepareOptions.put("rewards", config.getBoolean("challenges.options.prepare-rewards"));
+        prepareOptions.put("icons", config.getBoolean("challenges.options.prepare-icons"));
+        HashMap<String, ChallengeSection> sections = new HashMap<>();
+        if (prepareOptions.get("sections")) {
+            for (String section : config.getConfigurationSection("sections").getKeys(false)) {
+                if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
+                sections.put(section, getSection(section));
+            }
+        }
+        HashMap<String, Reward> rewards = new HashMap<>();
+        if (prepareOptions.get("rewards")) {
+            for (String rewardName : config.getConfigurationSection("rewards").getKeys(false)) {
+                rewards.put(rewardName, getReward(rewardName));
+            }
+        }
+        HashMap<String, ItemStack> icons = new HashMap<>();
+        if (prepareOptions.get("icons")) {
+            for (String iconName : config.getConfigurationSection("icons").getKeys(false)) {
+                icons.put(iconName, getIcon(iconName));
+            }
         }
         for (String st : config.getConfigurationSection("challenges").getKeys(false)) {
-            String name = config.getString("challenges." + st + ".name");
-            String header = config.getString("challenges." + st + ".header");
-            List<String> desc = config.getStringList("challenges." + st + ".description");
+            ConfigurationSection challenge = config.getConfigurationSection("challenges." + st);
+            assert challenge != null;
+            String name = challenge.getString("name");
+            String header = challenge.getString("header");
+            List<String> desc = challenge.getStringList("description");
             HeadsPlusChallengeTypes type;
             try {
-                type = HeadsPlusChallengeTypes.valueOf(config.getString("challenges." + st + ".type").toUpperCase());
+                type = HeadsPlusChallengeTypes.valueOf(challenge.getString("type").toUpperCase());
             } catch (Exception ex) {
                 continue;
             }
-            int min = config.getInt("challenges." + st + ".min");
-            String headType = config.getString("challenges." + st + ".head-type");
-            int difficulty = config.getInt("challenges." + st + ".difficulty");
-            // Reward information
-            String rewardName = config.getString("challenges." + st + ".reward");
-            HPChallengeRewardTypes rewardType;
-            try {
-                rewardType = HPChallengeRewardTypes.valueOf(config.getString("rewards." + rewardName + ".type").toUpperCase());
-            } catch (Exception e) {
-                rewardType = HPChallengeRewardTypes.NONE;
+            int min = challenge.getInt("min");
+            String headType = challenge.getString("head-type");
+            int difficulty = challenge.getInt("difficulty");
+
+
+            Reward reward;
+            if (prepareOptions.get("rewards")) {
+                reward = rewards.get(challenge.getString("reward"));
+            } else {
+                reward = getReward(challenge.getString("reward"));
             }
-            Object rewardVal = config.get("rewards." + rewardName + ".base-value");
-            int items = config.getInt("rewards." + rewardName + ".item-amount");
-            int xp = config.getInt("rewards." + rewardName + ".base-xp");
-            String sender = config.getString("rewards." + rewardName + ".command-sender");
-            String rewardString = config.getString("rewards." + rewardName + ".reward-string");
-            boolean multiply = config.getBoolean("rewards." + rewardName + ".multiply-by-difficulty");
-
-            Reward reward1 = new Reward(rewardName, rewardType, rewardVal, items, sender, xp, multiply, rewardString);
-
-            String iconName = config.getString("challenges." + st + ".icon");
+            String iconName = challenge.getString("icon");
             ItemStack icon;
             String completeIconName = config.getString("challenges." + st + ".completed-icon");
             ItemStack completedIcon;
-            try {
-                icon = new ItemStack(Material.getMaterial(config.getString("icons." + iconName + ".material")), 1, (byte) config.getInt("icons." + iconName + ".data-value"));
-                String s = config.getString("icons." + iconName + ".skull-name");
-                if (s != null && !s.isEmpty() ) {
-                    if (s.startsWith("HP#")) {
-                        icon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
-                    } else {
-                        SkullMeta sm = (SkullMeta) icon.getItemMeta();
-                        sm = HeadsPlus.getInstance().getNMS().setSkullOwner(s, sm);
-                        icon.setItemMeta(sm);
-                    }
-                }
-                completedIcon = new ItemStack(Material.getMaterial(config.getString("icons." + completeIconName + ".material")), 1, (byte) config.getInt("icons." + completeIconName+ ".data-value"));
-                s = config.getString("icons." + completeIconName + ".skull-name");
-                if (s != null && !s.isEmpty() ) {
-                    if (s.startsWith("HP#")) {
-                        completedIcon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
-                    } else {
-                        SkullMeta sm = (SkullMeta) completedIcon.getItemMeta();
-                        sm = HeadsPlus.getInstance().getNMS().setSkullOwner(s, sm);
-                        completedIcon.setItemMeta(sm);
-                    }
-                }
-            } catch (Exception e) {
-                continue;
+            if (prepareOptions.get("icons")) {
+                icon = icons.get(iconName);
+                completedIcon = icons.get(completeIconName);
+            } else {
+                icon = getIcon(iconName);
+                completedIcon = getIcon(completeIconName);
             }
-
-            Challenge c = new Challenge(st, name, header, desc, min, type, headType, reward1, difficulty, icon, completedIcon);
+            Challenge c = new Challenge(st, name, header, desc, min, type, headType, reward, difficulty, icon, completedIcon);
             HeadsPlus.getInstance().getChallenges().add(c);
-            for (ChallengeSection section : sections) {
-                if (section.getName().equalsIgnoreCase(config.getString("challenges." + st + ".section"))) {
-                    section.addChallenge(c);
-                }
-            }
+            sections.get(challenge.getString("section")).addChallenge(c);
         }
         HeadsPlus.getInstance().getChallengeSections().addAll(sections);
     }
@@ -357,5 +346,47 @@ public class HeadsPlusChallenges extends ConfigSettings {
             pos++;
         }
         return numeral.toString();
+    }
+
+    private Reward getReward(String rewardName) {
+        ConfigurationSection reward = config.getConfigurationSection("rewards." + rewardName);
+        assert reward != null;
+        HPChallengeRewardTypes rewardType;
+        try {
+            rewardType = HPChallengeRewardTypes.valueOf(reward.getString("type").toUpperCase());
+        } catch (Exception e) {
+            rewardType = HPChallengeRewardTypes.NONE;
+        }
+        Object rewardVal = reward.get("base-value");
+        int items = reward.getInt("item-amount");
+        int xp = config.getInt("rewards." + rewardName + ".base-xp");
+        String sender = config.getString("rewards." + rewardName + ".command-sender");
+        String rewardString = config.getString("rewards." + rewardName + ".reward-string");
+        boolean multiply = config.getBoolean("rewards." + rewardName + ".multiply-by-difficulty");
+
+        return new Reward(rewardName, rewardType, rewardVal, items, sender, xp, multiply, rewardString);
+    }
+
+    private ItemStack getIcon(String iconName) {
+        ItemStack icon = new ItemStack(Material.getMaterial(config.getString("icons." + iconName + ".material")), 1, (byte) config.getInt("icons." + iconName + ".data-value"));
+        String s = config.getString("icons." + iconName + ".skull-name");
+        if (s != null && !s.isEmpty() ) {
+            if (s.startsWith("HP#")) {
+                icon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
+            } else {
+                SkullMeta sm = (SkullMeta) icon.getItemMeta();
+                sm = HeadsPlus.getInstance().getNMS().setSkullOwner(s, sm);
+                icon.setItemMeta(sm);
+            }
+        }
+        return icon;
+    }
+
+    private ChallengeSection getSection(String section) {
+        Material material = Material.valueOf(config.getString("sections." + section + ".material").toUpperCase());
+        int data = config.getInt("sections." + section + ".material-data");
+        String displayName = config.getString("sections." + section + ".display-name");
+        List<String> lore = config.getStringList("sections." + section + ".lore");
+        return new ChallengeSection(material, (byte) data, displayName, lore, section);
     }
 }
