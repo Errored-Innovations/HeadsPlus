@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class HPUtils {
 
@@ -52,5 +53,13 @@ public class HPUtils {
 
             }
         }
+    }
+
+    public static int matchCount(Matcher m) {
+        int i = 0;
+        while (m.find()) {
+            i++;
+        }
+        return i;
     }
 }

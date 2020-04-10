@@ -17,6 +17,13 @@ public class HeadsPlusConfigItems extends ConfigSettings {
 
     @Override
     protected void load(boolean nullp) {
+        getConfig().addDefault("version", 0.1);
+        if (getConfig().getDouble("version") < 0.1) {
+            for (String inventory : getConfig().getConfigurationSection("inventories").getKeys(false)) {
+                String items = getConfig().getString("inventories." + inventory + ".icons");
+                getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[HSL]", "C"));
+            }
+        }
         for (Icon i : Icon.icons) {
             getConfig().addDefault("icons." + i.getIconName() + ".material", i.getDefaultMaterial().name());
             getConfig().addDefault("icons." + i.getIconName() + ".display-name", i.getDefaultDisplayName());

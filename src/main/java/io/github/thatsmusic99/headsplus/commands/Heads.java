@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.util.InventoryManager;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,8 +30,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.heads")) {
-                        InventoryManager im2 = InventoryManager.getOrCreate(p);
-                        im2.showScreen(InventoryManager.Type.LIST_MENU);
+                        InventoryManager.getManager(p).open(InventoryManager.InventoryType.HEADS_MENU, new HashMap<>());
                         return true;
                     } else {
                         cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));

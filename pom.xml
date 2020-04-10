@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.10-SNAPSHOT-2</hp-project.version>
+        <hp-project.version>v6.10-SNAPSHOT-4</hp-project.version>
     </properties>
 
     <build>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

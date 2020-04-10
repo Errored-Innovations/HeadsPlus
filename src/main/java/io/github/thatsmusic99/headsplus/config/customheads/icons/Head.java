@@ -79,7 +79,7 @@ public class Head extends ItemStack implements Icon {
             p.sendMessage(hpc.getString("commands.head.full-inv", p));
             return;
         }
-        Double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
+        double price = p.hasPermission("headsplus.bypass.cost") ? 0 : nbt.getPrice(e.getCurrentItem());
         Economy ef = null;
 		if (price > 0.0
                 && HeadsPlus.getInstance().econ()

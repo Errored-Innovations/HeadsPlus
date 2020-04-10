@@ -37,10 +37,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.time.Month;
+import java.util.*;
 
 public class HeadsPlus extends JavaPlugin {
 
@@ -144,6 +142,7 @@ public class HeadsPlus extends JavaPlugin {
                         } else {
                             getLogger().info(hpc.getString("update.plugin-up-to-date"));
                         }
+                        checkDates();
 
                     }
                 }.runTaskAsynchronously(this);
@@ -701,6 +700,23 @@ public class HeadsPlus extends JavaPlugin {
             }
 
             return false;
+        }
+    }
+
+    private void checkDates() {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (month == Calendar.MAY && day == 6) {
+            getLogger().info("Happy anniversary, TM and Nie! <3");
+        } else if (month == Calendar.SEPTEMBER && day == 21) {
+            getLogger().info("Happy Birthday, Nie!");
+        } else if (month == Calendar.SEPTEMBER && day == 23) {
+            getLogger().info("Happy Birthday, TM!");
+        } else if (month == Calendar.DECEMBER && (day == 25 || day == 24)) {
+            getLogger().info("Merry Christmas!");
+        } else if (month == Calendar.APRIL && day == 30) {
+            getLogger().info("Happy Birthday to me!");
         }
     }
 }
