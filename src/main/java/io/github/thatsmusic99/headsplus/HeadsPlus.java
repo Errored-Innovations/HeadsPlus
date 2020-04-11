@@ -91,6 +91,7 @@ public class HeadsPlus extends JavaPlugin {
 
             // Build plugin instances
             createInstances();
+            io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
             if (!isEnabled()) return;
             // Checks theme, believe it or not!

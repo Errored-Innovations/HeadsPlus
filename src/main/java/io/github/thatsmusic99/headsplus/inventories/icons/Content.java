@@ -8,4 +8,6 @@ public abstract class Content extends Icon {
     public Content(ItemStack itemStack) {
         super(itemStack);
     }
+
+    public Content() { super(); }
 }

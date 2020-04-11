@@ -486,7 +486,7 @@ public class NBTManager {
         return getString(i, "headsplus-type");
     }
 
-    public String getID(ItemStack i) {
+    public static String getID(ItemStack i) {
         return getString(i, "head-id");
     }
 
@@ -494,11 +494,11 @@ public class NBTManager {
         return getDouble(i,  "head-price");
     }
 
-    public ItemStack addSection(ItemStack i, String section) {
+    public static ItemStack addSection(ItemStack i, String section) {
         return setString(i, "head-section", section);
     }
 
-    public String getSection(ItemStack i) {
+    public static String getSection(ItemStack i) {
         return getString(i, "head-section");
     }
 
@@ -514,7 +514,7 @@ public class NBTManager {
         return setString(i, "head-challenge", c.getConfigName());
     }
 
-    public Challenge getChallenge(ItemStack i) {
+    public static Challenge getChallenge(ItemStack i) {
         return  HeadsPlus.getInstance().getChallengeByName(getString(i,  "head-challenge"));
     }
 
@@ -526,7 +526,7 @@ public class NBTManager {
         return  getString(i,  "head-challenge-section");
     }
 
-    public ItemStack removeIcon(ItemStack i) {
+    public static ItemStack removeIcon(ItemStack i) {
         try {
             Object nmsItem = getNMSCopy(i);
             Object nbtTag = getNBTTag(nmsItem);

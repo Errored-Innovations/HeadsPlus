@@ -34,7 +34,7 @@ public class JoinEvent implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                MaskEvent.checkMask(e.getPlayer(), e.getPlayer().getInventory().getArmorContents()[3]);
+                MaskEvent.checkMask(e.getPlayer(), e.getPlayer().getInventory().getHelmet());
             }
         }.runTaskLater(hp, 20);
 

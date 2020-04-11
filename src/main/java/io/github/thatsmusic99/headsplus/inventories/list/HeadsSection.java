@@ -1,19 +1,18 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
-import io.github.thatsmusic99.headsplus.inventories.icons.content.SellheadHead;
+import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SellheadCategory extends BaseInventory {
-
-    public SellheadCategory(Player player, HashMap<String, String> context) {
+public class HeadsSection extends BaseInventory {
+    public HeadsSection(Player player, HashMap<String, String> context) {
         super(player, context);
     }
 
@@ -29,7 +28,7 @@ public class SellheadCategory extends BaseInventory {
 
     @Override
     public String getDefaultId() {
-        return null;
+        return "headsection";
     }
 
     @Override
@@ -39,21 +38,11 @@ public class SellheadCategory extends BaseInventory {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
+        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        List<String> heads = hpch.sections.get(context.get("section"));
         List<Content> contents = new ArrayList<>();
-        switch (context.get("type")) { // ignore
-            case "mobs":
-                HashMap<String, List<EntityHead>> heads = HeadsPlus.getInstance().getDeathEvents().getStoredHeads();
-                for (String str : heads.keySet()) {
-                    if (heads.get(str).size() > 0) {
-                        contents.add(new SellheadHead(heads.get(str).get(0).getItemStack()));
-                    }
-                }
-                break;
-            case "mining":
-            case "farming":
-            case "fishing":
-            case "crafting":
-                break;
+        for (String head : heads) {
+            contents.add(new CustomHead(hpch.getSkull(head)));
         }
         return contents;
     }

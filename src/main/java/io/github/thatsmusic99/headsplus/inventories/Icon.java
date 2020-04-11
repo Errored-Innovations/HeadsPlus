@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.inventories;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigItems;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -38,5 +39,9 @@ public abstract class Icon {
 
     public List<String> getLore() {
         return hpi.getStringList("icons." + getId() + ".lore");
+    }
+
+    public Class<? extends Icon> getReplacementIcon() {
+        return Air.class;
     }
 }

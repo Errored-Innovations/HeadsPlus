@@ -259,13 +259,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         return is;
     }
 
-    public void addChristmasHype() {
-        int hype = getConfig().getInt("options.christmas-hype");
-        ++hype;
-        getConfig().set("options.christmas-hype", hype);
-        save();
-    }
-
     public void grabProfile(String id) {
         grabProfile(id, null, false);
     }

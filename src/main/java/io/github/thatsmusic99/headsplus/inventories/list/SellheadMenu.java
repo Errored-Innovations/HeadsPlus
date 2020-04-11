@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SellheadMenu extends BaseInventory {
 
-    public SellheadMenu(Player player) {
-        super(player);
+    public SellheadMenu(Player player, HashMap<String, String> context) {
+        super(player, context);
     }
 
     @Override
@@ -21,10 +21,10 @@ public class SellheadMenu extends BaseInventory {
     @Override
     public String getDefaultItems() {
         return  "GGGGGGGGG" +
-                "GHHHHHHHG" +
-                "GHHHHHHHG" +
-                "GHHHHHHHG" +
-                "GHHHHHHHG" +
+                "GCCCCCCCG" +
+                "GCCCCCCCG" +
+                "GCCCCCCCG" +
+                "GCCCCCCCG" +
                 "GGGBXNGGG";
     }
 
@@ -39,18 +39,8 @@ public class SellheadMenu extends BaseInventory {
     }
 
     @Override
-    public void gatherContents(HashMap<String, String> context, Player player) {
-
-    }
-
-    @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         return null;
     }
 
-
-    @Override
-    public String getContentType() {
-        return null;
-    }
 }

@@ -12,6 +12,6 @@ public class Air extends Icon {
 
     @Override
     public String getId() {
-        return null;
+        return "air";
     }
 }

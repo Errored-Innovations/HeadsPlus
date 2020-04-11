@@ -2,8 +2,12 @@ package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.IconClickEvent;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigItems;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,18 +35,20 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     private UUID uuid;
     private Icon[] icons;
 
-    public BaseInventory(Player player) {
-        this(player, null);
-    }
-
     public BaseInventory(Player player, HashMap<String, String> context) {
+        // Decide if the inventory becomes larger
         larger = hp.getConfig().getBoolean("plugin.larger-menus");
+        // Get the default icons
         icons = new Icon[hpi.getInt("inventories." + getDefaultId() + ".size")];
-        gatherContents(context, player);
+        HeadsPlusConfigItems itemsConf = HeadsPlus.getInstance().getItems();
+        String items = itemsConf.getConfig().getString("inventories." + getDefaultId() + ".icons");
+        int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
+        contents = new PagedLists<>(transformContents(new HashMap<>(), player), contentsPerPage);
         build(context, player);
         player.openInventory(getInventory());
         hp.getServer().getPluginManager().registerEvents(this, hp);
     }
+
     public abstract String getDefaultTitle();
 
     public abstract String getDefaultItems();
@@ -50,8 +56,6 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public abstract String getDefaultId();
 
     public abstract String getName();
-
-    public abstract void gatherContents(HashMap<String, String> context, Player player);
 
     public void build(HashMap<String, String> context, Player player) {
         int totalPages = contents.getTotalPages();
@@ -65,30 +69,59 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         Iterator<Content> contentIt = contents.getContentsInPage(Integer.parseInt(currentPage)).iterator();
         for (int i = 0; i < items.length(); i++) {
             char c = items.charAt(i);
-            Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c);
-            if (iconClass != null) {
-                try {
-                    Icon icon = iconClass.newInstance();
-                    if (icon instanceof Content) {
-                        icon = contentIt.next();
+            Icon icon;
+            if (InventoryManager.cachedNavIcons.containsKey(c)) {
+                InventoryManager.NavIcon tempIcon = InventoryManager.cachedNavIcons.get(c);
+                int currentPageInt = Integer.parseInt(currentPage);
+                int resultPage = currentPageInt + tempIcon.getPagesToShift();
+                if (resultPage < 1 || resultPage > contents.getTotalPages()) {
+                    if (tempIcon.getId().equalsIgnoreCase("last_page") || tempIcon.getId().equalsIgnoreCase("first_page")) {
+                        icon = tempIcon;
+                    } else {
+                        try {
+                            icon = Air.class.newInstance();
+                        } catch (InstantiationException | IllegalAccessException e) {
+                            e.printStackTrace();
+                            return;
+                        }
                     }
-                    inventory.setItem(i, icon.item);
-                    icons[i] = icon;
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
+                } else {
+                    icon = tempIcon;
                 }
-
+            } else {
+                Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c);
+                if (iconClass != null) {
+                    try {
+                        if (Content.class.isAssignableFrom(iconClass) && contentIt.hasNext()) {
+                            icon = contentIt.next();
+                        } else {
+                            if (Content.class.isAssignableFrom(iconClass)
+                                    && !contentIt.hasNext()) {
+                                icon = Air.class.newInstance();
+                            } else {
+                                icon = iconClass.newInstance();
+                            }
+                        }
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                } else {
+                    try {
+                        icon = Air.class.newInstance();
+                        hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
             }
+            inventory.setItem(i, icon.item);
+            icons[i] = icon;
         }
     }
 
     public abstract List<Content> transformContents(HashMap<String, String> context, Player player);
-
-    public void refreshContents() {
-
-    }
-
-    public abstract String getContentType();
 
     @NotNull
     @Override
@@ -100,7 +133,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() != this) return;
         int slot = event.getRawSlot();
-        if (slot > 0 && slot < inventory.getSize()) {
+        if (slot > 0 && slot < event.getInventory().getSize()) {
             event.setCancelled(true);
             IconClickEvent iconEvent = new IconClickEvent((Player) event.getWhoClicked(), icons[slot]);
             Bukkit.getPluginManager().callEvent(iconEvent);
@@ -114,5 +147,9 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 icons = null;
             }
         }
+    }
+
+    public PagedLists<Content> getContents() {
+        return contents;
     }
 }

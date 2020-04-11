@@ -8,26 +8,28 @@ import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class MaskEvent implements Listener {
 
-    private static HashMap<Player, BukkitRunnable> maskMonitors = new HashMap<>();
+    private static HashMap<UUID, BukkitRunnable> maskMonitors = new HashMap<>();
 
     @EventHandler
     public void onMaskPutOn(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         if (hp.getConfiguration().getPerks().mask_powerups) {
             if (e.getRawSlot() == getSlot()) {
-
                 ItemStack ist = e.getCursor();
                 checkMask((Player) e.getWhoClicked(), ist);
             }
@@ -44,7 +46,8 @@ public class MaskEvent implements Listener {
                 if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     pl.addMask(s);
-                    maskMonitors.put(player, new BukkitRunnable() {
+                    UUID uuid = player.getUniqueId();
+                    maskMonitors.put(uuid, new BukkitRunnable() {
                         @Override
                         public void run() {
                             ItemStack helmet = player.getInventory().getHelmet();
@@ -53,14 +56,16 @@ public class MaskEvent implements Listener {
                                     || !NBTManager.getType(helmet).equals(s)
                                     || !player.isOnline()) {
                                 pl.clearMask(s);
-                                maskMonitors.remove(player);
+                                maskMonitors.remove(uuid);
+                                cancel();
+                            } else if (!maskMonitors.containsKey(uuid)) {
                                 cancel();
                             } else {
                                 pl.refreshMasks();
                             }
                         }
                     });
-                    maskMonitors.get(player).runTaskTimer(hp, 20, 60);
+                    maskMonitors.get(uuid).runTaskTimer(hp, 20, 60);
                 }
             }
         }
@@ -76,6 +81,15 @@ public class MaskEvent implements Listener {
                     e.setCancelled(true);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        if (maskMonitors.containsKey(e.getPlayer().getUniqueId())) {
+            HPPlayer player = HPPlayer.getHPPlayer(e.getPlayer());
+            player.clearAllMasks();
+            maskMonitors.remove(e.getPlayer().getUniqueId());
         }
     }
 
