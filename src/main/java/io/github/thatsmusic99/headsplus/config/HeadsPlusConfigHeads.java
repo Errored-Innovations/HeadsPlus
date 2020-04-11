@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import com.google.common.io.Files;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
 import org.apache.commons.lang.WordUtils;
@@ -7,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +17,7 @@ import java.util.List;
 
 public class HeadsPlusConfigHeads extends ConfigSettings {
 	public final List<String> mHeads = new ArrayList<>(Arrays.asList("blaze", "cavespider", "chicken", "cow", "creeper", "enderman", "ghast", "guardian", "irongolem", "mushroomcow", "rabbit", "pig", "sheep", "skeleton", "slime", "spider", "squid", "villager", "witch", "zombie"));
-	public final List<String> uHeads = new ArrayList<>(Arrays.asList("bat", "bee", "cat", "cod", "dolphin", "donkey", "drowned", "enderdragon", "elderguardian", "endermite", "evoker", "fox", "horse", "husk", "llama", "magmacube", "mule", "ocelot", "panda", "parrot", "phantom", "pigzombie", "pillager", "polarbear", "pufferfish", "ravager", "salmon", "shulker", "silverfish", "skeletonhorse", "snowman", "stray", "trader_llama", "tropicalfish", "turtle", "vex", "vindicator", "wandering_trader", "wither", "witherskeleton", "wolf", "zombiehorse", "zombievillager"));
+	public final List<String> uHeads = new ArrayList<>(Arrays.asList("bat", "bee", "cat", "cod", "dolphin", "donkey", "drowned", "enderdragon", "elderguardian", "endermite", "evoker", "fox", "giant", "horse", "husk", "llama", "magmacube", "mule", "ocelot", "panda", "parrot", "phantom", "pigzombie", "pillager", "polarbear", "pufferfish", "ravager", "salmon", "shulker", "silverfish", "skeletonhorse", "snowman", "stray", "trader_llama", "tropicalfish", "turtle", "vex", "vindicator", "wandering_trader", "wither", "witherskeleton", "wolf", "zombiehorse", "zombievillager"));
 	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 
@@ -90,17 +93,9 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 						getConfig().addDefault("cat.name.default", h);
 					}
 					getConfig().addDefault("cat.name.default", new ArrayList<>());
-					getConfig().addDefault("cat.name.TABBY", new ArrayList<>(Collections.singletonList("HP#tabby_cat")));
-					getConfig().addDefault("cat.name.BLACK", new ArrayList<>(Collections.singletonList("HP#black_cat")));
-					getConfig().addDefault("cat.name.RED", new ArrayList<>(Collections.singletonList("HP#red_cat")));
-					getConfig().addDefault("cat.name.SIAMESE", new ArrayList<>(Collections.singletonList("HP#siamese_cat")));
-					getConfig().addDefault("cat.name.BRITISH_SHORTHAIR", new ArrayList<>(Collections.singletonList("HP#british_shorthair_cat")));
-					getConfig().addDefault("cat.name.CALICO", new ArrayList<>(Collections.singletonList("HP#calico_cat")));
-					getConfig().addDefault("cat.name.PERSIAN", new ArrayList<>(Collections.singletonList("HP#persian_cat")));
-					getConfig().addDefault("cat.name.RAGDOLL", new ArrayList<>(Collections.singletonList("HP#ragdoll_cat")));
-					getConfig().addDefault("cat.name.WHITE", new ArrayList<>(Collections.singletonList("HP#white_cat")));
-					getConfig().addDefault("cat.name.JELLIE", new ArrayList<>(Collections.singletonList("HP#jellie_cat")));
-					getConfig().addDefault("cat.name.ALL_BLACK", new ArrayList<>(Collections.singletonList("HP#all_black_cat")));
+					for (String type : Arrays.asList("tabby", "black", "red", "siamese", "british_shorthair", "calico", "persian", "ragdoll", "white", "jellie", "all_black")) {
+						getConfig().addDefault("cat.name." + type.toUpperCase(), new ArrayList<>(Collections.singleton("HP#" + type + "_cat")));
+					}
 					break;
 				case "fox":
 					if (getConfig().get(key + ".name") instanceof List) {
@@ -196,6 +191,8 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
                 case "enderdragon":
                     getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("{mob-default}")));
                     break;
+				case "giant":
+					getConfig().addDefault(key + ".name", Collections.singleton(""));
                 default:
                     getConfig().addDefault(key + ".name", new ArrayList<>(Collections.singleton("HP#" + key)));
                     break;
