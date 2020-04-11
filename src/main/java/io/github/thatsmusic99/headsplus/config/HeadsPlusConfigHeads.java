@@ -19,9 +19,27 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 
 	public HeadsPlusConfigHeads() {
-	    this.conName = "heads";
+	    this.conName = "mobs";
 	    enable(false);
     }
+
+	@Override
+	public void reloadC(boolean nullp) {
+		if (configF == null) {
+			File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "heads.yml");
+			File newFile = new File(HeadsPlus.getInstance().getDataFolder(), "mobs.yml");
+			if (oldFile.exists()) {
+				try {
+					Files.copy(oldFile, newFile);
+					oldFile.delete();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			configF = newFile;
+		}
+		super.reloadC(nullp);
+	}
 
 	@Override
 	public void load(boolean ehhLolIDontNeedThisButJavaIsMakingMeAnywaysSoHiHowAreYou) {
