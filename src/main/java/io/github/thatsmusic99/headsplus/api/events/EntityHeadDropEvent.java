@@ -17,12 +17,14 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
     private Player player;
     private EntityType entityType;
     private Location location;
+    private int amount;
 
-    public EntityHeadDropEvent(Player killer, Head head, Location location, EntityType entityType) {
+    public EntityHeadDropEvent(Player killer, Head head, Location location, EntityType entityType, int amount) {
         this.player = killer;
         this.head = head;
         this.location = location;
         this.entityType = entityType;
+        this.amount = amount;
     }
 
     @Override
@@ -74,6 +76,10 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
 
     public void setHead(Head skull) {
         this.head = skull;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     @Override

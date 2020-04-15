@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
+import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
@@ -223,7 +224,8 @@ public class DeathEvents implements Listener {
                             .withLore(hpch.getLore(victim.getName(), price))
                             .withPlayerName(victim.getName());
                     Location location = victim.getLocation();
-                    EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.PLAYER);
+                    PlayerHeadDropEvent event = new PlayerHeadDropEvent(victim, killer, head, location, amount);
+                    Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         location.getWorld().dropItem(location, head.getItemStack());
                         if (lostprice > 0.0) {
@@ -409,7 +411,8 @@ public class DeathEvents implements Listener {
         EntityHead head = heads.get(random.nextInt(heads.size()));
         head.withAmount(amount);
         Location location = entity.getLocation();
-        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, entity.getType());
+        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, entity.getType(), amount);
+        Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             location.getWorld().dropItem(location, head.getItemStack());
         }
