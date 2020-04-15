@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import io.github.at.main.Main;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
@@ -37,7 +36,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.*;
 import java.nio.file.Files;
 import java.sql.*;
-import java.time.Month;
 import java.util.*;
 
 public class HeadsPlus extends JavaPlugin {
@@ -624,13 +622,6 @@ public class HeadsPlus extends JavaPlugin {
         try {
             if (Bukkit.getServer().getPluginManager().getPlugin("ProjectPG-PRO") instanceof Core) {
                 getLogger().info("I think I see ProjectPG here... are you ready, Aaron?");
-                // "I think we need to get out of here. I'm gonna be dead honest..."
-                // "Oh? Remember what the government said though: we're practically in a permanent curfew?"
-                // ...
-
-                // "Yes, I do. However, if we don't get out of here, we're going to die here. And we can't do that to your sister."
-
-                // PROJECT PG SE0
                 Bukkit.getPluginManager().callEvent(new CommunicateEvent("ProjectPG"));
             }
             if (Bukkit.getServer().getPluginManager().getPlugin("AdvancedOreGenerator") instanceof OreGenerator) {
@@ -641,9 +632,9 @@ public class HeadsPlus extends JavaPlugin {
                 getLogger().info("'Ello SpectateProtection! What's up??");
                 Bukkit.getPluginManager().callEvent(new CommunicateEvent("SpectateProtection"));
             }
-            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") instanceof Main) {
+            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") instanceof io.github.at.main.CoreClass) {
                 getLogger().info("HEY! ADVANCEDTELEPORT! THINK FAST!");
-                Main.getInstance().getLogger().info("Huh?");
+                io.github.at.main.CoreClass.getInstance().getLogger().info("Huh?");
                 getLogger().info("Actually... don't worry about it, it's all good.");
             }
         } catch (NoClassDefFoundError ignored) {
