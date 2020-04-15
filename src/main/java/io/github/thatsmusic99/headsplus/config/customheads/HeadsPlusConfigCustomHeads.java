@@ -7,11 +7,17 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -24,6 +30,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -32,11 +39,10 @@ import org.json.simple.parser.ParseException;
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 2.9;
+    private final double cVersion = 3.0;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
-    public static final String starter = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv";
 
 
     public HeadsPlusConfigCustomHeads() {
@@ -58,7 +64,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         }
         for (HeadsXEnums e : HeadsXEnums.values()) {
             // getConfig().addDefault("heads." + e.name + ".database", true);
-            getConfig().addDefault("heads." + e.name + ".encode", false);
+            getConfig().addDefault("heads." + e.name + ".encode", true);
             getConfig().addDefault("heads." + e.name + ".displayname", e.dn);
             getConfig().addDefault("heads." + e.name + ".texture", e.tex);
             getConfig().addDefault("heads." + e.name + ".price", "default");
@@ -120,7 +126,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             for (HeadsXEnums e : HeadsXEnums.values()) {
                 if (e.v == cVersion) {
                     //getConfig().addDefault("heads." + e.name + ".database", true); // isn't actually a required field
-                    getConfig().addDefault("heads." + e.name + ".encode", false);
+                    getConfig().addDefault("heads." + e.name + ".encode", true);
                     getConfig().addDefault("heads." + e.name + ".displayname", e.dn);
                     getConfig().addDefault("heads." + e.name + ".texture", e.tex);
                     getConfig().addDefault("heads." + e.name + ".price", "default");
@@ -182,6 +188,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 getConfig().getString("heads." + key + ".texture"),
                 getConfig().getBoolean("heads." + key + ".encode"),
                 getConfig().getString("heads." + key + ".displayname"));
+    }
+
+    public double getPrice(String id) {
+        return getDouble("heads." + id + ".price");
     }
 
     public String getTexture(ItemStack skull) {
@@ -453,11 +463,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             head.set("database", enable);
         }
         head.set("encode", encode);
-        if(CachedValues.DOUBLE_PATTERN.matcher(price).matches()) {
-            head.set("price", Double.parseDouble(price));
-        } else {
-            head.set("price", price);
-        }
+        head.set("price", price);
         head.set("section", section);
         head.set("texture", texture);
         head.set("displayname", displayname);
