@@ -6,23 +6,26 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigItems;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
+import io.github.thatsmusic99.headsplus.inventories.icons.list.Glass;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
@@ -40,10 +43,11 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         larger = hp.getConfig().getBoolean("plugin.larger-menus");
         // Get the default icons
         icons = new Icon[hpi.getInt("inventories." + getDefaultId() + ".size")];
+        uuid = player.getUniqueId();
         HeadsPlusConfigItems itemsConf = HeadsPlus.getInstance().getItems();
         String items = itemsConf.getConfig().getString("inventories." + getDefaultId() + ".icons");
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
-        contents = new PagedLists<>(transformContents(new HashMap<>(), player), contentsPerPage);
+        contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
         build(context, player);
         player.openInventory(getInventory());
         hp.getServer().getPluginManager().registerEvents(this, hp);
@@ -75,12 +79,14 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 int currentPageInt = Integer.parseInt(currentPage);
                 int resultPage = currentPageInt + tempIcon.getPagesToShift();
                 if (resultPage < 1 || resultPage > contents.getTotalPages()) {
-                    if (tempIcon.getId().equalsIgnoreCase("last_page") || tempIcon.getId().equalsIgnoreCase("first_page")) {
+                    if ((tempIcon.getId().equalsIgnoreCase("last") && currentPageInt != contents.getTotalPages())
+                            || (tempIcon.getId().equalsIgnoreCase("start") && currentPageInt != 1)) {
                         icon = tempIcon;
+                        icon.initNameAndLore(icon.getId(), player);
                     } else {
                         try {
-                            icon = Air.class.newInstance();
-                        } catch (InstantiationException | IllegalAccessException e) {
+                            icon = Glass.class.getConstructor(Player.class).newInstance(player);
+                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                             e.printStackTrace();
                             return;
                         }
@@ -97,20 +103,23 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                         } else {
                             if (Content.class.isAssignableFrom(iconClass)
                                     && !contentIt.hasNext()) {
-                                icon = Air.class.newInstance();
+                                icon = Air.class.getConstructor(Player.class).newInstance(player);
                             } else {
-                                icon = iconClass.newInstance();
+                                icon = iconClass.getConstructor(Player.class).newInstance(player);
                             }
                         }
-                    } catch (InstantiationException | IllegalAccessException e) {
+                    } catch (InvocationTargetException e) {
+                        e.getTargetException().printStackTrace();
+                        return;
+                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
                         e.printStackTrace();
                         return;
                     }
                 } else {
                     try {
-                        icon = Air.class.newInstance();
+                        icon = Air.class.getConstructor(Player.class).newInstance(player);
                         hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
-                    } catch (InstantiationException | IllegalAccessException e) {
+                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();
                         return;
                     }
@@ -133,19 +142,44 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() != this) return;
         int slot = event.getRawSlot();
-        if (slot > 0 && slot < event.getInventory().getSize()) {
+        Player player = (Player) event.getWhoClicked();
+        if (slot > -1 && slot < event.getInventory().getSize()) {
             event.setCancelled(true);
-            IconClickEvent iconEvent = new IconClickEvent((Player) event.getWhoClicked(), icons[slot]);
+            IconClickEvent iconEvent;
+            try {
+                iconEvent = new IconClickEvent(player, icons[slot]);
+            } catch (NullPointerException ex) {
+                Bukkit.broadcastMessage(Arrays.toString(icons));
+                event.getWhoClicked().sendMessage("There was an error carrying out this action!");
+                destroy(player);
+                event.getWhoClicked().closeInventory();
+                return;
+            }
             Bukkit.getPluginManager().callEvent(iconEvent);
             if (!iconEvent.isCancelled()) {
-                icons[slot].onClick((Player) event.getWhoClicked(), event);
+                iconEvent.setToDestroy(icons[slot].onClick((Player) event.getWhoClicked(), event));
             }
             if (iconEvent.willDestroy()) {
-                inventory = null;
-                contents = null;
-                uuid = null;
-                icons = null;
+                destroy((Player) event.getWhoClicked());
             }
+        }
+    }
+
+    @EventHandler
+    public void onInvClose(InventoryCloseEvent event) {
+        if (event.getInventory().getHolder() != this) return;
+        destroy((Player) event.getPlayer());
+    }
+
+    public void destroy(Player player) {
+        inventory = null;
+        contents = null;
+        uuid = null;
+        icons = null;
+        InventoryManager manager = InventoryManager.getManager(player);
+        HandlerList.unregisterAll(this);
+        if (!manager.isGlitchSlotFilled()) {
+            player.getInventory().setItem(8, new ItemStack(Material.AIR));
         }
     }
 
