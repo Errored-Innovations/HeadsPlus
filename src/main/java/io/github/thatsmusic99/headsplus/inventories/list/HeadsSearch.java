@@ -5,14 +5,16 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HeadsSection extends BaseInventory {
-    public HeadsSection(Player player, HashMap<String, String> context) {
+public class HeadsSearch extends BaseInventory {
+    public HeadsSearch(Player player, HashMap<String, String> context) {
         super(player, context);
     }
 
@@ -39,12 +41,15 @@ public class HeadsSection extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
-        List<String> heads = hpch.sections.get(context.get("section"));
+        String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
-        for (String head : heads) {
-            CustomHead head1 = new CustomHead(head);
-            head1.initNameAndLore(head, player);
-            contents.add(head1);
+        for (String head : hpch.headsCache.keySet()) {
+            final String name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
+            if (name.contains(search)) {
+                CustomHead head1 = new CustomHead(head);
+                head1.initNameAndLore(head, player);
+                contents.add(head1);
+            }
         }
         return contents;
     }

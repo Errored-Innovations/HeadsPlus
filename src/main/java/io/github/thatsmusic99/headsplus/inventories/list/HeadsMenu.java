@@ -38,7 +38,7 @@ public class HeadsMenu extends BaseInventory {
 
     @Override
     public String getDefaultId() {
-        return "headsmenu";
+        return "headmenu";
     }
 
     @Override
@@ -52,6 +52,7 @@ public class HeadsMenu extends BaseInventory {
         HeadsPlusConfigCustomHeads headsConfig = HeadsPlus.getInstance().getHeadsXConfig();
         for (String section : headsConfig.sections.keySet()) {
             ConfigurationSection configSec = headsConfig.getConfig().getConfigurationSection("sections." + section);
+            ConfigurationSection itemSec = hpi.getConfigurationSection("icons.headsection");
             ItemStack item;
             try {
                 item = headsConfig.getSkull(configSec.getString("texture"));
@@ -59,17 +60,22 @@ public class HeadsMenu extends BaseInventory {
                 hp.getLogger().warning("Texture for " + configSec.getString("texture") + " not found.");
                 continue;
             }
-
             SkullMeta meta = (SkullMeta) item.getItemMeta();
-            meta.setDisplayName(hpc.getString(configSec.getString("display-name"), player));
+            try {
+                meta.setDisplayName(hpc.formatMsg(itemSec.getString("display-name")
+                        .replaceAll("\\{head-name}", configSec.getString("display-name")), player));
+            } catch (NullPointerException ex) {
+                hp.getLogger().warning("A problem was found when setting the display name for icon Heads Section with ID " + section + ". Either the item is null, or there is a config error in the display names!");
+            }
+
             List<String> lore = new ArrayList<>();
-            for (String loreStr : configSec.getStringList("lore")) {
-                lore.add(hpc.formatMsg(loreStr, player).replaceAll("\\{head-count}", String.valueOf(headsConfig.sections.get(section).size())));
+            for (String loreStr : itemSec.getStringList("lore")) {
+                lore.add(hpc.formatMsg(loreStr, player)
+                        .replaceAll("\\{head-count}", String.valueOf(headsConfig.sections.get(section).size())));
             }
             meta.setLore(lore);
             item.setItemMeta(meta);
-            item = NBTManager.addSection(item, section);
-            contents.add(new CustomHeadSection(item));
+            contents.add(new CustomHeadSection(item, section));
         }
         return contents;
     }
