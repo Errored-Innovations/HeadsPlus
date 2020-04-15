@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
 import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import io.github.thatsmusic99.headsplus.config.customheads.icons.*;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 
@@ -17,13 +18,7 @@ public class HeadsPlusConfigItems extends ConfigSettings {
 
     @Override
     protected void load(boolean nullp) {
-        getConfig().addDefault("version", 0.1);
-        if (getConfig().getDouble("version") < 0.1) {
-            for (String inventory : getConfig().getConfigurationSection("inventories").getKeys(false)) {
-                String items = getConfig().getString("inventories." + inventory + ".icons");
-                getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[HSL]", "C"));
-            }
-        }
+
         for (Icon i : Icon.icons) {
             getConfig().addDefault("icons." + i.getIconName() + ".material", i.getDefaultMaterial().name());
             getConfig().addDefault("icons." + i.getIconName() + ".display-name", i.getDefaultDisplayName());
@@ -72,7 +67,20 @@ public class HeadsPlusConfigItems extends ConfigSettings {
             getConfig().addDefault("inventories." + inv.getName() + ".icons", inv.getDefaultItems());
             getConfig().addDefault("inventories." + inv.getName() + ".size", 54);
         }
-
+        if (getConfig().getDouble("version") < 0.1) {
+            ConfigurationSection section = getConfig().getConfigurationSection("inventories");
+            if (section != null) {
+                for (String inventory : section.getKeys(false)) {
+                    String items = getConfig().getString("inventories." + inventory + ".icons");
+                    if (inventory.equalsIgnoreCase("challenges-menu")) {
+                        getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[S]", "C"));
+                    } else {
+                        getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[HL]", "C"));
+                    }
+                }
+            }
+        }
+        getConfig().addDefault("version", 0.1);
         getConfig().options().copyDefaults(true);
         save();
     }
