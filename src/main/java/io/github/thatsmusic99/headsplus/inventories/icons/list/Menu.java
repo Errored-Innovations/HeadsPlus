@@ -9,12 +9,12 @@ import java.util.HashMap;
 
 public class Menu extends Icon {
 
-    public Menu() {
-        super();
+    public Menu(Player player) {
+        super(player);
     }
 
     @Override
-    public void onClick(Player player, InventoryClickEvent event) {
+    public boolean onClick(Player player, InventoryClickEvent event) {
         InventoryManager manager = InventoryManager.getManager(player);
         InventoryManager.InventoryType type = manager.getType();
         switch (manager.getType()) {
@@ -35,6 +35,7 @@ public class Menu extends Icon {
                 break;
         }
         manager.open(type, new HashMap<>());
+        return true;
     }
 
     @Override

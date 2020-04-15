@@ -5,13 +5,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class Air extends Icon {
-    @Override
-    public void onClick(Player player, InventoryClickEvent event) {
-        event.setCancelled(true);
+    public Air(Player player) {
+        super(player);
     }
+
+    @Override
+    public boolean onClick(Player player, InventoryClickEvent event) {
+        return false;
+    }
+
 
     @Override
     public String getId() {
         return "air";
+    }
+
+    @Override
+    public void initNameAndLore(String id, Player player) {
     }
 }
