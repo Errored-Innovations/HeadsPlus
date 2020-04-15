@@ -3,19 +3,18 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 @CommandInfo(
@@ -27,13 +26,9 @@ import java.util.List;
 )
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HashMap<String, Boolean> tests = new HashMap<>();
-
     @Override
-    public boolean onCommand(CommandSender cs, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         try {
-            tests.put("No permission", !cs.hasPermission("headsplus.leaderboards"));
-            tests.put("Arguments", args.length > 0);
             if (cs.hasPermission("headsplus.leaderboards")) {
                 new BukkitRunnable() {
                     @Override
@@ -41,8 +36,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                         try {
                             if (args.length > 0) {
                                 try {
-                                    boolean b = HeadsPlus.getInstance().getDeathEvents().ableEntities.contains(EntityType.valueOf(args[0].toUpperCase()));
-                                    tests.put("Valid Entity", b);
+                                    boolean b = DeathEvents.ableEntities.contains(args[0].toUpperCase());
                                     String sec = b ? args[0].toUpperCase() : args[0];
                                     if (b || sec.equalsIgnoreCase("player")) {
                                         if (args.length > 1) {
@@ -78,7 +72,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                         }
                                     }
                                 } catch (IllegalArgumentException ex) {
-                                    tests.put("Valid Entity", false);
                                     if (args[0].equalsIgnoreCase("total")) {
                                         if (args.length > 1) {
                                             if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
