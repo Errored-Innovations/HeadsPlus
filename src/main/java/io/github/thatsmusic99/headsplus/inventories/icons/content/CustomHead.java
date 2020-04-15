@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,18 +18,22 @@ import java.util.List;
 
 public class CustomHead extends Content {
 
+    private double price;
+    private String id;
 
-    public CustomHead(ItemStack itemStack) {
-        super(itemStack);
+    public CustomHead(String id) {
+        super(hp.getHeadsXConfig().getSkull(id));
+        this.price = hp.getHeadsXConfig().getPrice(id);
+        this.id = id;
     }
 
     @Override
-    public void onClick(Player player, InventoryClickEvent event) {
-        ItemStack item = event.getCurrentItem();
+    public boolean onClick(Player player, InventoryClickEvent event) {
+        ItemStack item = event.getCurrentItem().clone();
         if (event.isLeftClick()) { // Check if we're giving the head
             if (player.getInventory().firstEmpty() == -1) { // Check if there is a free space
                 player.sendMessage(hpc.getString("commands.head.full-inv", player));
-                return;
+                return false;
             }
             double price = player.hasPermission("headsplus.bypass.cost") ? 0 : NBTManager.getPrice(item); // Set price to 0 or not
             Economy ef = null;
@@ -39,7 +42,7 @@ public class CustomHead extends Content {
                     && (ef = hp.getEconomy()) != null
                     && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
                 player.sendMessage(hpc.getString("commands.heads.not-enough-money", player)); // K.O
-                return;
+                return false;
             }
             HeadPurchaseEvent purchaseEvent = new HeadPurchaseEvent(player, item);
             Bukkit.getServer().getPluginManager().callEvent(purchaseEvent);
@@ -52,36 +55,29 @@ public class CustomHead extends Content {
                                 .replaceAll("\\{balance}", Double.toString(ef.getBalance(player))));
                     } else {
                         player.sendMessage(hpc.getString("commands.errors.cmd-fail", player) + ": " + er.errorMessage);
-                        return;
+                        return false;
                     }
                 }
                 if (player.getInventory().firstEmpty() == 8) {
                     InventoryManager im = InventoryManager.getManager(player);
-                    if (im != null) {
-                        im.setGlitchSlot(true);
-                    }
+                    im.setGlitchSlot(true);
                 }
+                ItemMeta meta = item.getItemMeta();
+                meta.setLore(new ArrayList<>());
+                item.setItemMeta(meta);
                 player.getInventory().addItem(NBTManager.removeIcon(item));
             }
         } else {
             HPPlayer hpp = HPPlayer.getHPPlayer(player);
-            ItemMeta im2 = item.getItemMeta();
-            String price = String.valueOf(NBTManager.getPrice(item));
-            String id = NBTManager.getID(event.getCurrentItem());
-            List<String> s = new ArrayList<>();
             if (hpp.hasHeadFavourited(id)) {
                 hpp.removeFavourite(id);
             } else {
                 hpp.addFavourite(id);
             }
-            for (String r : getLore()) {
-                s.add(ChatColor.translateAlternateColorCodes('&', r.replaceAll("\\{price}", price)
-                        .replaceAll("\\{favourite}", hpp.hasHeadFavourited(id) ? ChatColor.GOLD + "Favourite!" : "")));
-            }
-            im2.setLore(s);
-            item.setItemMeta(im2);
-            event.getInventory().setItem(event.getSlot(), item);
+            initNameAndLore(id, player);
+            event.getInventory().setItem(event.getSlot(), this.item);
         }
+        return false;
     }
 
     @Override
@@ -89,5 +85,16 @@ public class CustomHead extends Content {
         return "custom-head";
     }
 
-
+    @Override
+    public void initNameAndLore(String id, Player player) {
+        // We only really need to add the lore here
+        List<String> lore = new ArrayList<>();
+        for (String str : hpi.getStringList("icons.head.lore")) {
+            lore.add(hpc.formatMsg(hpc.favourite(str, player, id), player)
+                    .replaceAll("\\{price}", String.valueOf(price)));
+        }
+        ItemMeta im = item.getItemMeta();
+        im.setLore(lore);
+        item.setItemMeta(im);
+    }
 }

@@ -790,7 +790,20 @@ public class HeadsPlusMessagesManager {
             String s = m.group(1);
             string = string.replace("{msg_" + s + "}", getString(s, sender));
         }
-        return string;
+        return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+    public String favourite(String string, Player player, String id) {
+        Pattern pat = Pattern.compile("\\{msg_inventory\\.icon\\.head\\.favourite}");
+        Matcher m = pat.matcher(string);
+        while (m.find()) {
+            if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
+                string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", player));
+            } else {
+                string = string.replace("{msg_inventory.icon.head.favourite}", "");
+            }
+        }
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
     public String getString(String path, CommandSender cs) {

@@ -15,7 +15,7 @@ public class ChallengeSection extends Content {
     }
 
     @Override
-    public void onClick(Player player, InventoryClickEvent event) {
+    public boolean onClick(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
         String section = HeadsPlus.getInstance().getNBTManager().getChallengeSection(event.getCurrentItem());
         InventoryManager manager = InventoryManager.getManager(player);
@@ -24,6 +24,7 @@ public class ChallengeSection extends Content {
         if (!event.isCancelled()) {
         //    im.showChallengeSection(section);
         }
+        return true;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Challenge extends Content {
     }
 
     @Override
-    public void onClick(Player player, InventoryClickEvent event) {
+    public boolean onClick(Player player, InventoryClickEvent event) {
         io.github.thatsmusic99.headsplus.api.Challenge challenge = NBTManager.getChallenge(event.getCurrentItem());
         try {
             if (challenge != null) {
@@ -34,6 +34,7 @@ public class Challenge extends Content {
         } catch (SQLException ex) {
             DebugPrint.createReport(ex, "Completing challenge", false, player);
         }
+        return false;
     }
 
     @Override

@@ -11,8 +11,8 @@ public class SellheadHead extends Content {
     }
 
     @Override
-    public void onClick(Player player, InventoryClickEvent event) {
-
+    public boolean onClick(Player player, InventoryClickEvent event) {
+        return false;
     }
 
     @Override
