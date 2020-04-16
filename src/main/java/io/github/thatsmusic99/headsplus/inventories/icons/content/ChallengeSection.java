@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,9 +52,10 @@ public class ChallengeSection extends Content {
                     lore.add(hpc.formatMsg(loreStr2, player));
                 }
             } else {
-                lore.add(hpc.formatMsg(loreStr.replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())), player));
+                lore.add(hpc.formatMsg(loreStr, player).replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())));
             }
         }
         meta.setLore(lore);
+        item.setItemMeta(meta);
     }
 }
