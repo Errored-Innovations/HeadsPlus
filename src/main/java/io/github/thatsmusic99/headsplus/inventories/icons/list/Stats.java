@@ -46,7 +46,8 @@ public class Stats extends Icon {
                     .replaceAll("\\{heads}", String.valueOf(hpch.allHeadsCache.size()))
                     .replaceAll("\\{balance}", hp.econ() ? String.valueOf(hp.getEconomy().getBalance(player)) : "None")
                     .replaceAll("\\{sections}", String.valueOf(hpch.sections.size()))
-                    .replaceAll("\\{section}", manager.getSection() == null ? "None" : manager.getSection()));
+                    .replaceAll("\\{section}", manager.getSection() == null ? "None" : manager.getSection())
+                    .replaceAll("\\{pages}", String.valueOf(totalPages)));
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
