@@ -21,27 +21,33 @@ public abstract class Icon {
 
     protected static HeadsPlus hp = HeadsPlus.getInstance();
     protected static HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-    protected static FileConfiguration hpi = hp.getItems().getConfig();
+    protected FileConfiguration hpi;
     protected ItemStack item;
     private String id;
 
     public Icon(ItemStack itemStack) {
         item = itemStack;
+        hpi = hp.getItems().getConfig();
     }
 
     public Icon(String id, Player player) {
-        this.id = id;
-        initItem(id);
+        this(id);
         initNameAndLore(id, player);
     }
 
     public Icon(String id) {
+        hpi = hp.getItems().getConfig();
         this.id = id;
         initItem(id);
     }
     public Icon(Player player) {
+        hpi = hp.getItems().getConfig();
         initItem(getId());
         initNameAndLore(getId(), player);
+    }
+
+    public Icon() {
+
     }
 
     protected void initItem(String id) {
@@ -69,10 +75,6 @@ public abstract class Icon {
         return hpi.getStringList("icons." + getId() + ".lore");
     }
 
-    public Class<? extends Icon> getReplacementIcon() {
-        return Air.class;
-    }
-
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));
@@ -83,4 +85,12 @@ public abstract class Icon {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
+
+    public abstract String getDefaultMaterial();
+
+    public abstract int getDefaultDataValue();
+
+    public abstract String getDefaultDisplayName();
+
+    public abstract String[] getDefaultLore();
 }

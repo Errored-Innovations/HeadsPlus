@@ -17,6 +17,7 @@ public class SellheadCategory extends BaseInventory {
         super(player, context);
     }
 
+    public SellheadCategory() {}
     @Override
     public String getDefaultTitle() {
         return null;
@@ -24,17 +25,12 @@ public class SellheadCategory extends BaseInventory {
 
     @Override
     public String getDefaultItems() {
-        return null;
+        return "GGGGGGGGGGCCCCCCCGGCCCCCCCGGCCCCCCCGGCCCCCCCG<{[BMN]}>";
     }
 
     @Override
-    public String getDefaultId() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
+    public String getId() {
+        return "sellhead-category";
     }
 
     @Override
@@ -45,11 +41,11 @@ public class SellheadCategory extends BaseInventory {
                 HashMap<String, List<EntityHead>> heads = HeadsPlus.getInstance().getDeathEvents().getStoredHeads();
                 for (String str : heads.keySet()) {
                     if (heads.get(str).size() > 0) {
-                        contents.add(new SellheadHead(heads.get(str).get(0).getItemStack()));
+                        contents.add(new SellheadHead(heads.get(str).get(0).getItemStack(), str));
                     }
                 }
                 break;
-            case "mining":
+            case "mining": // Guess what
             case "farming":
             case "fishing":
             case "crafting":

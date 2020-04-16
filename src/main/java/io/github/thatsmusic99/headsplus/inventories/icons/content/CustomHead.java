@@ -27,6 +27,8 @@ public class CustomHead extends Content {
         this.id = id;
     }
 
+    public CustomHead() {}
+
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem().clone();
@@ -96,5 +98,15 @@ public class CustomHead extends Content {
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
         item.setItemMeta(im);
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{head-name}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"};
     }
 }

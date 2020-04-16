@@ -16,10 +16,13 @@ import java.util.List;
 public class ChallengeSection extends Content {
 
     private io.github.thatsmusic99.headsplus.api.ChallengeSection section;
+
     public ChallengeSection(io.github.thatsmusic99.headsplus.api.ChallengeSection section) {
         super(new ItemStack(section.getMaterial(), 1, section.getMaterialData()));
         this.section = section;
     }
+
+    public ChallengeSection() {}
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -57,5 +60,15 @@ public class ChallengeSection extends Content {
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{section-name}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[]{"{section-lore}", "{msg_inventory.icon.challenge.count}"};
     }
 }

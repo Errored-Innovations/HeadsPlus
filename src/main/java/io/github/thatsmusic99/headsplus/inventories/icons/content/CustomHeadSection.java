@@ -18,6 +18,8 @@ public class CustomHeadSection extends Content {
         this.section = section;
     }
 
+    public CustomHeadSection() {}
+
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         HashMap<String, String> context = new HashMap<>();
@@ -36,7 +38,17 @@ public class CustomHeadSection extends Content {
 
     @Override
     public String getId() {
-        return "custom-head-section";
+        return "headsection";
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{head-name}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[]{"{msg_inventory.icon.head.count}"};
     }
 
 }

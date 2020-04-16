@@ -12,9 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class HeadsSection extends BaseInventory {
+
     public HeadsSection(Player player, HashMap<String, String> context) {
         super(player, context);
     }
+
+    public HeadsSection() {}
 
     @Override
     public String getDefaultTitle() {
@@ -23,17 +26,12 @@ public class HeadsSection extends BaseInventory {
 
     @Override
     public String getDefaultItems() {
-        return null;
+        return "FGGGSGGGKGCCCCCCCGGCCCCCCCGGCCCCCCCGGCCCCCCCG<{[BMN]}>";
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "headsection";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

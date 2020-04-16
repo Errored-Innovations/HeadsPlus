@@ -21,6 +21,8 @@ public class HeadsMenu extends BaseInventory {
         super(player, context);
     }
 
+    public HeadsMenu() {}
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Heads: {page}/{pages}";

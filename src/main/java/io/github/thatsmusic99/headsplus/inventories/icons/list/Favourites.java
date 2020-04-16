@@ -13,6 +13,8 @@ public class Favourites extends Icon {
         super(player);
     }
 
+    public Favourites() {}
+
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         InventoryManager.getManager(player).open(InventoryManager.InventoryType.HEADS_FAVORITES, new HashMap<>());
@@ -22,5 +24,25 @@ public class Favourites extends Icon {
     @Override
     public String getId() {
         return "favourites";
+    }
+
+    @Override
+    public String getDefaultMaterial() {
+        return "DIAMOND";
+    }
+
+    @Override
+    public int getDefaultDataValue() {
+        return 0;
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{msg_inventory.icon.favourites}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[0];
     }
 }

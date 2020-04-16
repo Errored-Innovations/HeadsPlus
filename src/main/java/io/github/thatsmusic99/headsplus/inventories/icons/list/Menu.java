@@ -13,6 +13,8 @@ public class Menu extends Icon {
         super(player);
     }
 
+    public Menu() {}
+
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         InventoryManager manager = InventoryManager.getManager(player);
@@ -41,5 +43,25 @@ public class Menu extends Icon {
     @Override
     public String getId() {
         return "menu";
+    }
+
+    @Override
+    public String getDefaultMaterial() {
+        return "NETHER_STAR";
+    }
+
+    @Override
+    public int getDefaultDataValue() {
+        return 0;
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
+        return "{msg_inventory.icon.menu}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[0];
     }
 }

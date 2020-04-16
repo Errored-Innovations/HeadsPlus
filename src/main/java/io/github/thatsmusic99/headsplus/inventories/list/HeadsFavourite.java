@@ -17,6 +17,8 @@ public class HeadsFavourite extends BaseInventory {
         super(player, context);
     }
 
+    public HeadsFavourite() {}
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Heads: {page}/{pages}";
@@ -24,17 +26,12 @@ public class HeadsFavourite extends BaseInventory {
 
     @Override
     public String getDefaultItems() {
-        return null;
+        return "GGGGSGGGKGCCCCCCCGGCCCCCCCGGCCCCCCCGGCCCCCCCG<{[BMN]}>";
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "favourites";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

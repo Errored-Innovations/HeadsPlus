@@ -13,6 +13,8 @@ public class SellheadMenu extends BaseInventory {
         super(player, context);
     }
 
+    public SellheadMenu() {}
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Sellhead Menu";
@@ -25,17 +27,12 @@ public class SellheadMenu extends BaseInventory {
                 "GCCCCCCCG" +
                 "GCCCCCCCG" +
                 "GCCCCCCCG" +
-                "GGGBXNGGG";
+                "<{[BXN]}>";
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "sellheadmenu";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

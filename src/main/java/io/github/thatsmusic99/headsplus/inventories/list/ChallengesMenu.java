@@ -16,6 +16,8 @@ public class ChallengesMenu extends BaseInventory {
         super(player, context);
     }
 
+    public ChallengesMenu() {}
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Challenges: {page}/{pages}";
@@ -23,17 +25,12 @@ public class ChallengesMenu extends BaseInventory {
 
     @Override
     public String getDefaultItems() {
-        return null;
+        return "GGGGGGGGGGAAAAAAAGGACACACAGGAACACAAGGAAAAAAAGGGGBXNGGG";
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "challenges-menu";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

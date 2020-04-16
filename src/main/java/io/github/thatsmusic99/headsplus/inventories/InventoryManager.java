@@ -152,6 +152,26 @@ public class InventoryManager {
             return id;
         }
 
+        @Override
+        public String getDefaultMaterial() {
+            return "ARROW";
+        }
+
+        @Override
+        public int getDefaultDataValue() {
+            return 0;
+        }
+
+        @Override
+        public String getDefaultDisplayName() {
+            return "{msg_inventory.icon." + id.replaceAll("_", "-") + "}";
+        }
+
+        @Override
+        public String[] getDefaultLore() {
+            return new String[0];
+        }
+
         public NavIcon(int shiftPages, String type) {
             super(type);
             this.id = type;

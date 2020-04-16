@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.ChatColor;
@@ -12,29 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HeadsSearch extends BaseInventory {
+public class HeadsSearch extends HeadsSection {
     public HeadsSearch(Player player, HashMap<String, String> context) {
         super(player, context);
-    }
-
-    @Override
-    public String getDefaultTitle() {
-        return "HeadsPlus Heads: {page}/{pages}";
-    }
-
-    @Override
-    public String getDefaultItems() {
-        return null;
-    }
-
-    @Override
-    public String getDefaultId() {
-        return "headsection";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

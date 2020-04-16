@@ -15,6 +15,8 @@ public class ChallengesSection extends BaseInventory {
         super(player, context);
     }
 
+    public ChallengesSection() {}
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Challenges: {page}/{pages}";
@@ -22,17 +24,12 @@ public class ChallengesSection extends BaseInventory {
 
     @Override
     public String getDefaultItems() {
-        return null;
+        return "GGGGGGGGGGCCCCCCCGGCCCCCCCGGCCCCCCCGGCCCCCCCG<{[BMN]}>";
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "challenge-section";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override

@@ -2,11 +2,16 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
-import io.github.thatsmusic99.headsplus.config.customheads.Icon;
-import io.github.thatsmusic99.headsplus.config.customheads.icons.*;
-import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
+import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
+import io.github.thatsmusic99.headsplus.inventories.Icon;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.inventories.icons.content.*;
+import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
+import io.github.thatsmusic99.headsplus.inventories.list.*;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HeadsPlusConfigItems extends ConfigSettings {
@@ -18,54 +23,36 @@ public class HeadsPlusConfigItems extends ConfigSettings {
 
     @Override
     protected void load(boolean nullp) {
-
-        for (Icon i : Icon.icons) {
-            getConfig().addDefault("icons." + i.getIconName() + ".material", i.getDefaultMaterial().name());
-            getConfig().addDefault("icons." + i.getIconName() + ".display-name", i.getDefaultDisplayName());
-            getConfig().addDefault("icons." + i.getIconName() + ".lore", i.getDefaultLore());
-            getConfig().addDefault("icons." + i.getIconName() + ".replacement", i.getReplacementIcon().getIconName());
-            if (i instanceof Challenge) {
-                getConfig().addDefault("icons." + i.getIconName() + ".complete-material", ((Challenge) i).getCompleteMaterial().name());
-            }
-            if (!(HeadsPlus.getInstance().getNMS() instanceof NewNMSManager)) {
-                if (i instanceof Challenge) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".complete-data-value", 13);
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 14);
-                } else if (i instanceof Glass) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 8);
-                } else if (i instanceof Head || i instanceof HeadSection){
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 3);
-                } else if (i instanceof ChallengeSection.Easy) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 13);
-                } else if (i instanceof ChallengeSection.EasyMedium) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 5);
-                } else if (i instanceof ChallengeSection.Medium) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 4);
-                } else if (i instanceof ChallengeSection.MediumHard) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 1);
-                } else if (i instanceof ChallengeSection.Hard || i instanceof ChallengeSection.Deadly) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 14);
-                } else if (i instanceof ChallengeSection.Painful) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 2);
-                } else if (i instanceof ChallengeSection.PainfulDeadly) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 6);
-                } else if (i instanceof ChallengeSection.Tedious) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 11);
-                } else if (i instanceof ChallengeSection.TediousPainful) {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 10);
-                } else {
-                    getConfig().addDefault("icons." + i.getIconName() + ".data-value", 0);
-                }
-            }
+        for (Icon i : Arrays.asList(new Challenge(),
+                new ChallengeSection(), new CustomHead(),
+                new CustomHeadSection(), new SellheadHead(), new Air(),
+                new ChallengesPinned(), new Close(), new Favourites(),
+                new Glass(), new Menu(), new Search(), new Stats())) {
+            getConfig().addDefault("icons." + i.getId() + ".material", i.getDefaultMaterial());
+            getConfig().addDefault("icons." + i.getId() + ".data-value", i.getDefaultDataValue());
+            getConfig().addDefault("icons." + i.getId() + ".display-name", i.getDefaultDisplayName());
+            getConfig().addDefault("icons." + i.getId() + ".lore", i.getDefaultLore());
         }
-        for (HeadInventory inv : HeadInventory.getInventories()) {
-            getConfig().addDefault("inventories." + inv.getName() + ".title", inv.getDefaultTitle());
-            if (getConfig().get("inventories." + inv.getName() + ".icons") instanceof List) {
-                HeadsPlus.getInstance().getLogger().warning("Old format for inventories.yml detected for " + inv.getName() + "! Starting over...");
-                getConfig().set("inventories." + inv.getName() + ".icons", inv.getDefaultItems());
+        for (String s : Arrays.asList("next", "next_2", "next_3", "back", "back_2", "back_3", "start", "last")) {
+            getConfig().addDefault("icons." + s + ".material", "ARROW");
+            getConfig().addDefault("icons." + s + ".data-value", 0);
+            getConfig().addDefault("icons." + s + ".display-name", "{msg_inventory.icon." + s.replaceAll("_", "-") + "}");
+            getConfig().addDefault("icons." + s + ".lore", new ArrayList<>());
+        }
+        for (BaseInventory inv : Arrays.asList(new ChallengesMenu(),
+                new ChallengesSection(),
+                new HeadsFavourite(),
+                new HeadsMenu(),
+                new HeadsSection(),
+                new SellheadCategory(),
+                new SellheadMenu(), new ChallengesPinnedInv())) {
+            getConfig().addDefault("inventories." + inv.getId() + ".title", inv.getDefaultTitle());
+            if (getConfig().get("inventories." + inv.getId() + ".icons") instanceof List) {
+                HeadsPlus.getInstance().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");
+                getConfig().set("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
             }
-            getConfig().addDefault("inventories." + inv.getName() + ".icons", inv.getDefaultItems());
-            getConfig().addDefault("inventories." + inv.getName() + ".size", 54);
+            getConfig().addDefault("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
+            getConfig().addDefault("inventories." + inv.getId() + ".size", 54);
         }
         if (getConfig().getDouble("version") < 0.1) {
             ConfigurationSection section = getConfig().getConfigurationSection("inventories");
@@ -73,10 +60,18 @@ public class HeadsPlusConfigItems extends ConfigSettings {
                 for (String inventory : section.getKeys(false)) {
                     String items = getConfig().getString("inventories." + inventory + ".icons");
                     if (inventory.equalsIgnoreCase("challenges-menu")) {
-                        getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[S]", "C"));
-                    } else {
-                        getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[HL]", "C"));
+                        items = items.replaceAll("[S]", "C");
+                        char[] chars = items.toCharArray();
+                        chars[0] = 'P';
+                        getConfig().set("inventories." + inventory + ".icons", String.valueOf(chars));
+                        continue;
+                    } else if (inventory.equalsIgnoreCase("challenge-section")) {
+                        char[] chars = items.toCharArray();
+                        chars[0] = 'P';
+                        getConfig().set("inventories." + inventory + ".icons", String.valueOf(chars));
+                        continue;
                     }
+                    getConfig().set("inventories." + inventory + ".icons", items.replaceAll("[HL]", "C"));
                 }
             }
         }

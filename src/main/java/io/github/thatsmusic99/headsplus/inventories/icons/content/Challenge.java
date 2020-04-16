@@ -116,6 +116,21 @@ public class Challenge extends Content {
         item.setItemMeta(meta);
     }
 
+    @Override
+    public String getDefaultDisplayName() {
+        return "{challenge-name}";
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[]{"{challenge-lore}",
+                "{msg_inventory.icon.challenge.reward}",
+                "{msg_inventory.icon.challenge.xp}",
+                "{msg_inventory.icon.challenge.progress}",
+                "{completed}",
+                "{pinned}"};
+    }
+
     private void initReward(Player player) {
         reward = challenge.getReward().getRewardString();
         String value = challenge.getRewardValue().toString();

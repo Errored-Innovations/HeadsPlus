@@ -6,9 +6,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SellheadHead extends Content {
-    public SellheadHead(ItemStack itemStack) {
+
+    private String type;
+
+    public SellheadHead(ItemStack itemStack, String type) {
         super(itemStack);
     }
+
+    public SellheadHead() {}
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -17,6 +22,16 @@ public class SellheadHead extends Content {
 
     @Override
     public String getId() {
+        return "sellable-head";
+    }
+
+    @Override
+    public String getDefaultDisplayName() {
         return null;
+    }
+
+    @Override
+    public String[] getDefaultLore() {
+        return new String[0];
     }
 }
