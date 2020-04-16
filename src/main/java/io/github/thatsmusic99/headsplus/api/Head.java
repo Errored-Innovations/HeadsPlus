@@ -4,12 +4,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +43,15 @@ public class Head {
     public Head withTexture(String texture) throws NoSuchFieldException, IllegalAccessException {
         SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-        gm.getProperties().put("textures", new Property("texture", texture));
+        byte[] encodedData;
+        if (CachedValues.MINECRAFT_TEXTURES_PATTERN.matcher(texture).matches()) {
+            encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
+        } else if (CachedValues.BASE64_PATTERN.matcher(texture).matches()) {
+            encodedData = texture.getBytes();
+        } else {
+            encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
+        }
+        gm.getProperties().put("textures", new Property("texture", new String(encodedData)));
         Field profile = skullMeta.getClass().getDeclaredField("profile");
         profile.setAccessible(true);
         profile.set(skullMeta, gm);
