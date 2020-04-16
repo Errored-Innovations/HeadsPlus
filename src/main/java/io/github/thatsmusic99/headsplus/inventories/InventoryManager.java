@@ -2,10 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
-import io.github.thatsmusic99.headsplus.inventories.list.HeadsFavourite;
-import io.github.thatsmusic99.headsplus.inventories.list.HeadsMenu;
-import io.github.thatsmusic99.headsplus.inventories.list.HeadsSearch;
-import io.github.thatsmusic99.headsplus.inventories.list.HeadsSection;
+import io.github.thatsmusic99.headsplus.inventories.list.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,6 +43,8 @@ public class InventoryManager {
         inventories.put(InventoryType.HEADS_CATEGORY, HeadsSection.class);
         inventories.put(InventoryType.HEADS_FAVORITES, HeadsFavourite.class);
         inventories.put(InventoryType.HEADS_SEARCH, HeadsSearch.class);
+        inventories.put(InventoryType.CHALLENGES_MENU, ChallengesMenu.class);
+        inventories.put(InventoryType.CHALLENGES_LIST, ChallengesSection.class);
 
         // Allow icons to have their own character
         cachedIcons.put('C', Content.class);

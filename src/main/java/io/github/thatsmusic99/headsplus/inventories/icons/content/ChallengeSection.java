@@ -1,34 +1,61 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ChallengeSection extends Content {
-    public ChallengeSection(ItemStack itemStack) {
-        super(itemStack);
+
+    private io.github.thatsmusic99.headsplus.api.ChallengeSection section;
+    public ChallengeSection(io.github.thatsmusic99.headsplus.api.ChallengeSection section) {
+        super(new ItemStack(section.getMaterial(), 1, section.getMaterialData()));
+        this.section = section;
     }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         event.setCancelled(true);
-        String section = HeadsPlus.getInstance().getNBTManager().getChallengeSection(event.getCurrentItem());
+        HashMap<String, String> context = new HashMap<>();
+        context.put("section", section.getName());
         InventoryManager manager = InventoryManager.getManager(player);
-        SectionChangeEvent changeEvent = new SectionChangeEvent(player, null, section);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-        //    im.showChallengeSection(section);
+        SectionChangeEvent changeEvent = new SectionChangeEvent(player, null, section.getName());
+        Bukkit.getPluginManager().callEvent(changeEvent);
+        if (!changeEvent.isCancelled()) {
+            manager.open(InventoryManager.InventoryType.CHALLENGES_LIST, context);
         }
         return true;
     }
 
     @Override
     public String getId() {
-        return null;
+        return "challenges-section";
+    }
+
+    @Override
+    public void initNameAndLore(String id, Player player) {
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(hpc.formatMsg(hpi.getString("icons.challenges-section.display-name")
+                .replaceAll("\\{section-name}", section.getDisplayName()), player));
+        List<String> lore = new ArrayList<>();
+        for (String loreStr : hpi.getStringList("icons.challenges-section.lore")) {
+            if (loreStr.contains("{section-lore}")) {
+                for (String loreStr2 : section.getLore()) {
+                    lore.add(hpc.formatMsg(loreStr2, player));
+                }
+            } else {
+                lore.add(hpc.formatMsg(loreStr.replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())), player));
+            }
+        }
+        meta.setLore(lore);
     }
 }

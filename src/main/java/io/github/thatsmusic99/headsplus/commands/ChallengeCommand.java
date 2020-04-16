@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.util.InventoryManager;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.challenges")) {
-                        InventoryManager.getOrCreate(p).showScreen(InventoryManager.Type.CHALLENGES_MENU);
+                        InventoryManager.getManager(p).open(InventoryManager.InventoryType.CHALLENGES_MENU, new HashMap<>());
                         return true;
                     } else {
                         cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
@@ -39,7 +39,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                     cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs instanceof Player ? (Player) cs : null));
+                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs));
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);

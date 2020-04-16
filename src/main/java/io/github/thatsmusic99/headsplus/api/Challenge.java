@@ -4,15 +4,11 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Challenge {
@@ -137,39 +133,21 @@ public class Challenge {
     }
 
     public void complete(Player p) {
-        complete(p, null, 0);
-    }
-
-    public void complete(Player p, Inventory i, int slot) {
         HeadsPlus hp = HeadsPlus.getInstance();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
 
-
-        List<String> lore = new ArrayList<>();
-        for (String st : getDescription()) {
-            lore.add(ChatColor.translateAlternateColorCodes('&', st));
-        }
         StringBuilder sb2 = new StringBuilder();
         HPChallengeRewardTypes re = reward.getType();
         if (re != HPChallengeRewardTypes.RUN_COMMAND) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(ChatColor.GOLD).append("Reward: ");
             String rewardString = reward.getRewardString();
             if (rewardString != null) {
-                sb.append(ChatColor.GREEN).append(rewardString);
                 sb2.append(rewardString);
             } else if (re == HPChallengeRewardTypes.ECO) {
-                sb.append(ChatColor.GREEN).append("$").append(getRewardValue());
                 sb2.append("$").append(getRewardValue());
             } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
                 try {
                     Material.valueOf(getRewardValue().toString().toUpperCase());
-                    sb
-                            .append(ChatColor.GREEN)
-                            .append(getRewardItemAmount())
-                            .append(" ")
-                            .append(HeadsPlus.capitalize(getRewardValue().toString().replaceAll("_", " ")));
                     sb2
                             .append(getRewardItemAmount())
                             .append(" ")
@@ -178,20 +156,8 @@ public class Challenge {
                     //
                 }
             }
-            lore.add(sb.toString());
         }
 
-        if (i != null) {
-            ItemStack is = getCompleteIcon();
-            ItemMeta im = is.getItemMeta();
-            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', getChallengeHeader()));
-            lore.add(ChatColor.GOLD + "XP: " + ChatColor.GREEN + getGainedXP());
-            lore.add(ChatColor.GREEN + "Completed!");
-            im.setLore(lore);
-            is.setItemMeta(im);
-            is = hp.getNBTManager().setIcon(is, new io.github.thatsmusic99.headsplus.config.customheads.icons.Challenge());
-            i.setItem(slot, is);
-        }
         player.addXp(getGainedXP());
         reward.reward(p);
         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {

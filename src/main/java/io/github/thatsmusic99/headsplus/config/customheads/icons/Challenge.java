@@ -31,7 +31,7 @@ io.github.thatsmusic99.headsplus.api.Challenge challenge = HeadsPlus.getInstance
             if (challenge != null) {
                 if (!challenge.isComplete(p)) {
                     if (challenge.canComplete(p)) {
-                        challenge.complete(p, e.getInventory(), e.getSlot());
+                        challenge.complete(p);
                     } else {
                         p.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", p));
                     }
