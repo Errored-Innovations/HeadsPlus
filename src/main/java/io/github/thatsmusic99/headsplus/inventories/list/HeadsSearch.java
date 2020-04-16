@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -44,7 +43,13 @@ public class HeadsSearch extends BaseInventory {
         String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
         for (String head : hpch.headsCache.keySet()) {
-            final String name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
+            final String name;
+            try {
+                name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
+            } catch (NullPointerException ex) {
+                hp.getLogger().warning("Null display name for " + head + "!");
+                continue;
+            }
             if (name.contains(search)) {
                 CustomHead head1 = new CustomHead(head);
                 head1.initNameAndLore(head, player);
