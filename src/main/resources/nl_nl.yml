@@ -223,8 +223,8 @@ descriptions:
   hpc: Geeft uitdagingen weer die u kunt voltooien.
   hplb: Geeft het scorebord van de hoofden weer.
   myhead: Spawn in je hoofd.
-  sellhead: Verkoopt het hoofd in je hand, gebruik de nummerparameter om een ​​specifieke te verkopen
-    nummer, entiteitsnaam om het hoofd van een bepaalde maffia te verkopen, en alles om elk hoofd te verkopen.
+  sellhead: 'Verkoopt het hoofd in je hand, gebruik de nummerparameter om een ​​specifieke te verkopen
+    nummer, entiteitsnaam om het hoofd van een bepaalde maffia te verkopen, en alles om elk hoofd te verkopen.'
 event:
   block-place-denied: '{header} Je kunt geen verkoopbare koppen plaatsen!'
   head-interact-message: '{header} Dat is het hoofd van &c{name}&7!'
