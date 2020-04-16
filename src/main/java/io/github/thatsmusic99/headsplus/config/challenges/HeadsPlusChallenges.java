@@ -14,10 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class HeadsPlusChallenges extends ConfigSettings {
 
@@ -77,7 +74,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
         prepareOptions.put("sections", config.getBoolean("challenges.options.prepare-sections"));
         prepareOptions.put("rewards", config.getBoolean("challenges.options.prepare-rewards"));
         prepareOptions.put("icons", config.getBoolean("challenges.options.prepare-icons"));
-        HashMap<String, ChallengeSection> sections = new HashMap<>();
+        LinkedHashMap<String, ChallengeSection> sections = new LinkedHashMap<>();
         if (prepareOptions.get("sections")) {
             for (String section : config.getConfigurationSection("sections").getKeys(false)) {
                 if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
