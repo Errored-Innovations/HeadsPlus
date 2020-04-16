@@ -1,8 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
@@ -36,15 +34,12 @@ public class HeadsFavourite extends BaseInventory {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
         HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
         List<Content> contents = new ArrayList<>();
-        for (String head : hpch.headsCache.keySet()) {
-            if (hpPlayer.hasHeadFavourited(head)) {
-                CustomHead head1 = new CustomHead(head);
-                head1.initNameAndLore(head, player);
-                contents.add(head1);
-            }
+        for (String head : hpPlayer.getFavouriteHeads()) {
+            CustomHead head1 = new CustomHead(head);
+            head1.initNameAndLore(head, player);
+            contents.add(head1);
         }
         return contents;
     }
