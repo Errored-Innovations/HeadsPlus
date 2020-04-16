@@ -21,9 +21,10 @@ public class Challenge extends Content {
     private String reward;
 
     public Challenge(io.github.thatsmusic99.headsplus.api.Challenge challenge, Player player) {
-        super(challenge.isComplete(player) ? challenge.getCompleteIcon() : challenge.getIcon());
+        super(challenge.isComplete(player) ? challenge.getCompleteIcon().clone() : challenge.getIcon().clone());
         this.challenge = challenge;
         initReward(player);
+        initNameAndLore("challenge", player);
     }
 
     @Override
