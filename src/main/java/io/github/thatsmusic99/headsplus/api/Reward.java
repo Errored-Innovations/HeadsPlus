@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reward {
+public class Reward implements Cloneable {
 
     private HPChallengeRewardTypes type;
     private double money;
@@ -132,6 +132,15 @@ public class Reward {
                     player.performCommand(String.valueOf(str).replaceAll("\\{player}", player.getName()));
                 }
             }
+        }
+    }
+
+    public Reward clone() {
+        try {
+            return (Reward) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

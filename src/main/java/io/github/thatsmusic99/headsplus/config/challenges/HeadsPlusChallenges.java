@@ -84,7 +84,8 @@ public class HeadsPlusChallenges extends ConfigSettings {
         HashMap<String, Reward> rewards = new HashMap<>();
         if (prepareOptions.get("rewards")) {
             for (String rewardName : config.getConfigurationSection("rewards").getKeys(false)) {
-                rewards.put(rewardName, getReward(rewardName));
+                Reward reward = getReward(rewardName);
+                rewards.put(rewardName, reward);
             }
         }
         HashMap<String, ItemStack> icons = new HashMap<>();
@@ -112,7 +113,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
             Reward reward;
             if (prepareOptions.get("rewards")) {
-                reward = rewards.get(challenge.getString("reward"));
+                reward = rewards.get(challenge.getString("reward")).clone();
             } else {
                 reward = getReward(challenge.getString("reward"));
             }
