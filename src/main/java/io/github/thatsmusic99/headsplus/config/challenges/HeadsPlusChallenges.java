@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -223,11 +224,11 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 config.addDefault("sections." + section.name() + ".material-data", section.color.ordinal());
                 config.addDefault("sections." + section.name() + ".display-name", section.displayName);
                 config.addDefault("sections." + section.name() + ".lore", new ArrayList<>());
-                for (String t : HeadsPlus.getInstance().getDeathEvents().ableEntities) {
+                for (String t : DeathEvents.ableEntities) {
                     String s = numberToRomanNumeral(section.min);
                     String e = t.replaceAll("_", " ");
                     config.addDefault("challenges." + t + "-" + section.min + "-hunting.name", e + "-" + s + " Hunting");
-                    config.addDefault("challenges." + t + "-" + section.min + "-hunting.header", "&8[&c&l" + e + "-" + s + " Hunting&8]");
+                    config.addDefault("challenges." + t + "-" + section.min + "-hunting.header", "&8[&c&l" + HeadsPlus.capitalize(e) + " Hunting " + s + "&8]");
                     config.addDefault("challenges." + t + "-" + section.min + "-hunting.description", Arrays.asList("&7Get " + (section.min * 5 * difficulty) + " heads from", "&7killing " + t.toLowerCase().replaceAll("_", " ") + "(s)!"));
                     config.addDefault("challenges." + t + "-" + section.min + "-hunting.type", "LEADERBOARD");
                     config.addDefault("challenges." + t + "-" + section.min + "-hunting.min", section.min * 5 * difficulty);
@@ -239,7 +240,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                     config.addDefault("challenges." + t + "-" + section.min + "-hunting.completed-icon", "default-completed");
 
                     config.addDefault("challenges." + t + "-" + section.min + "-crafting.name", e + "-" + s + " Crafting");
-                    config.addDefault("challenges." + t + "-" + section.min + "-crafting.header", "&8[&c&l" + e + "-" + s + " Crafting&8]");
+                    config.addDefault("challenges." + t + "-" + section.min + "-crafting.header", "&8[&a&l"  + HeadsPlus.capitalize(e) + " Crafting " + s + "&8]");
                     config.addDefault("challenges." + t + "-" + section.min + "-crafting.description", Arrays.asList("&7Get " + (section.min * 5 * difficulty) + " heads from", "&7crafting " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
                     config.addDefault("challenges." + t + "-" + section.min + "-crafting.type", "CRAFTING");
                     config.addDefault("challenges." + t + "-" + section.min + "-crafting.min", section.min * 5 * difficulty);
@@ -251,7 +252,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                     config.addDefault("challenges." + t + "-" + section.min + "-crafting.completed-icon", "default-completed");
 
                     config.addDefault("challenges." + t + "-" + section.min + "-selling.name", e + "-" + s + " Selling");
-                    config.addDefault("challenges." + t + "-" + section.min + "-selling.header", "&8[&c&l" + e + "-" + s + " Selling&8]");
+                    config.addDefault("challenges." + t + "-" + section.min + "-selling.header", "&8[&e&l" + HeadsPlus.capitalize(e) + " Selling " + s + "&8]");
                     config.addDefault("challenges." + t + "-" + section.min + "-selling.description", Arrays.asList("&7Sell a total of", "&7" + (section.min * 5 * difficulty) + " " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
                     config.addDefault("challenges." + t + "-" + section.min + "-selling.type", "SELLHEAD");
                     config.addDefault("challenges." + t + "-" + section.min + "-selling.min", section.min * 5 * difficulty);
