@@ -36,6 +36,8 @@ public class Challenge extends Content {
                         challenge.complete(player);
                         item.setType(challenge.getCompleteIcon().getType());
                         item.setDurability(challenge.getCompleteIcon().getDurability());
+                        initNameAndLore("challenge", player);
+                        event.getInventory().setItem(event.getSlot(), item);
                     } else {
                         player.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", player));
                     }
