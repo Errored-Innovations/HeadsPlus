@@ -84,7 +84,7 @@ public class CustomHead extends Content {
 
     @Override
     public String getId() {
-        return "custom-head";
+        return "head";
     }
 
     @Override
@@ -92,8 +92,14 @@ public class CustomHead extends Content {
         // We only really need to add the lore here
         List<String> lore = new ArrayList<>();
         for (String str : hpi.getStringList("icons.head.lore")) {
-            lore.add(hpc.formatMsg(hpc.favourite(str, player, id), player)
-                    .replaceAll("\\{price}", String.valueOf(price)));
+            if (str.contains("{favourite}") || str.contains("{msg_inventory.icon.head.favourite}")) {
+                if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
+                    lore.add(hpc.getString("inventory.icon.head.favourite", player));
+                }
+            } else {
+                lore.add(hpc.formatMsg(str, player).replaceAll("\\{price}", String.valueOf(price)));
+            }
+
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);

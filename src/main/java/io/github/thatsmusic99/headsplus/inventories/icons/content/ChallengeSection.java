@@ -55,7 +55,7 @@ public class ChallengeSection extends Content {
                     lore.add(hpc.formatMsg(loreStr2, player));
                 }
             } else {
-                lore.add(hpc.formatMsg(loreStr, player).replaceAll("\\{challenge-count}", String.valueOf(section.getChallenges().size())));
+                lore.add(hpc.formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
             }
         }
         meta.setLore(lore);

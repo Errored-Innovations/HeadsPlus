@@ -98,7 +98,8 @@ public class Challenge extends Content {
                     } else {
                         lore.add(hpc.formatMsg(hpc.completed(loreStr, player, challenge), player)
                                 .replace("{reward}", reward)
-                                .replaceAll("\\{xp}", String.valueOf(challenge.getGainedXP()))
+                                .replace("{challenge-reward}", reward)
+                                .replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
                                 .replaceAll("\\{heads}", String.valueOf(api.getPlayerInLeaderboards(player,
                                         challenge.getHeadType(),
                                         challenge.getChallengeType().getDatabase(),

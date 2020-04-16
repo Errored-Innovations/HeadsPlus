@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustom
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHeadSection;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -39,13 +38,8 @@ public class HeadsMenu extends BaseInventory {
     }
 
     @Override
-    public String getDefaultId() {
+    public String getId() {
         return "headmenu";
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 
     @Override
