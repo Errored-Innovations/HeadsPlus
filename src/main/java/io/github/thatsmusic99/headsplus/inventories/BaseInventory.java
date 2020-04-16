@@ -68,7 +68,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 hpi.getInt("inventories." + getDefaultId() + ".size"),
                 hpi.getString("inventories." + getDefaultId() + ".title")
                         .replaceAll("\\{page}", currentPage)
-                        .replaceAll("\\{pages}", String.valueOf(totalPages)));
+                        .replaceAll("\\{pages}", String.valueOf(totalPages))
+                        .replaceAll("\\{section}", context.get("section") != null ? context.get("section") : "None"));
         String items = hpi.getString("inventories." + getDefaultId() + ".icons");
         Iterator<Content> contentIt = contents.getContentsInPage(Integer.parseInt(currentPage)).iterator();
         for (int i = 0; i < items.length(); i++) {
@@ -98,15 +99,15 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c);
                 if (iconClass != null) {
                     try {
-                        if (Content.class.isAssignableFrom(iconClass) && contentIt.hasNext()) {
-                            icon = contentIt.next();
-                        } else {
-                            if (Content.class.isAssignableFrom(iconClass)
-                                    && !contentIt.hasNext()) {
-                                icon = Air.class.getConstructor(Player.class).newInstance(player);
+                        if (Content.class.isAssignableFrom(iconClass)) {
+                            if (contentIt.hasNext()) {
+                                icon = contentIt.next();
                             } else {
-                                icon = iconClass.getConstructor(Player.class).newInstance(player);
+                                icon = Air.class.getConstructor(Player.class).newInstance(player);
                             }
+
+                        } else {
+                            icon = iconClass.getConstructor(Player.class).newInstance(player);
                         }
                     } catch (InvocationTargetException e) {
                         e.getTargetException().printStackTrace();
