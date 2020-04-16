@@ -94,6 +94,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     }
                 } else {
                     icon = tempIcon;
+                    icon.initNameAndLore(icon.getId(), player);
                 }
             } else {
                 Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c);
