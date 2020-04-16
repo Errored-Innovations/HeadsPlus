@@ -3,14 +3,17 @@
 language: Русский (RU)
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lЗакрепленные вызовы&8❱'
     reward:
       currency: '&7${amount}'
       group-add: '&7группа {group} &7(&a+&7)'
       group-remove: '&7группа {group} &7(&c-&7)'
       item-give: '&7{amount} {item}(ы)'
     challenge:
-      reward: '&6Награда: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Прогресс &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cЗакрепленные!'
+      reward: '&7Награда &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7{challenge-count} проблемы'
     close: '&8❰ &c&lЗакрыть меню &8❱'
     favourites: '&8❰ &b&lИзбранные &8❱'
@@ -67,7 +70,7 @@ textmenus:
     description: Описание
     permission: разрешение
     further-usages: Дальнейшее использование
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -88,6 +91,17 @@ commands:
     player-offline: '{header} Этот игрок не в сети!'
     too-many-args: '{header} Слишком много аргументов!'
   addhead:
+    cancelled: '{header} Отменено создание головы.'
+    custom-head-added: '{header} Добавлена новая голова с идентификатором &c{id}&7!'
+    displayname: '{header} Введите отображаемое имя для головы (включая цветовые коды).'
+    id: '{header} Введите идентификатор головы (например, brown_sheep, red_flower_bush)'
+    id-taken: '{header} Этот идентификатор был взят (&c{id}&7)!'
+    price: '{header} Введите цену головы (или «default» для значения по умолчанию).'
+    section: '{header} Введите раздел, в который будет вставлена голова. (Доступные
+      разделы: &c{sections}&7)'
+    texture: '{header} Введите или скопируйте и вставьте текстуру для головы. (Для
+      этого может потребоваться несколько сообщений, поэтому, когда вы закончите,
+      введите «done» в чате и введите.)'
     bad-texture: '{header} Предоставленная вами текстура недействительна. Это должен
       быть URL текстуры Minecraft (https://textures.minecraft.net) или строка в кодировке
       Base64.'

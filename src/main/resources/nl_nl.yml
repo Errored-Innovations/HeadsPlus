@@ -1,10 +1,11 @@
 # HeadsPlus by Thatsmusic99 - Nederlands (Tepoloco)
 # Wijzig de versie niet! Dit wordt intern gebruikt in de plug-in om nieuwe berichten toe te voegen.
 language: Nederlands (NL)
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lVastgezette uitdagingen &8❱'
     next: '&8❰ &a&lVolgende &8❱'
     next-2: '&8❰ &a&lVolgende (2) &8❱'
     next-3: '&8❰ &a&lVolgende (3) &8❱'
@@ -14,8 +15,10 @@ inventory:
       group-remove: '&7Groep {group} &7(&c-&7a)'
       item-give: '&7{amount} {item}(s)'
     challenge:
-      reward: '&6Beloning: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Vooruitgang &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cVastgemaakt!'
+      reward: '&7Beloning &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7{challenge-count} uitdagingen'
     close: '&8❰ &c&lSluit Menu &8❱'
     favourites: '&8❰ &b&lFavorieten &8❱'
@@ -73,9 +76,11 @@ commands:
   locale:
     invalid-lang: '{header} Dat is geen geldige taal! Beschikbare talen: &c{languages}'
     changed-locale: '{header} Goedendag! Uw taal is nu ingesteld op &cNederlands (NL)'
-    changed-locale-other: '{header} &7De taal van &c{player}&7 is nu ingesteld op &c{language}&7!'
+    changed-locale-other: '{header} &7De taal van &c{player}&7 is nu ingesteld op
+      &c{language}&7!'
   errors:
-    not-a-player: '{header} Je moet een speler zijn om deze opdracht / subopdracht uit te voeren!'
+    not-a-player: '{header} Je moet een speler zijn om deze opdracht / subopdracht
+      uit te voeren!'
     cmd-fail: '{header} Kan deze opdracht niet uitvoeren!'
     disabled: '{header} Dit command is uitgeschakeld.'
     invalid-args: '{header} Ongeldige argumenten!'
@@ -86,22 +91,23 @@ commands:
     player-offline: '{header} Die speler is offline!'
     too-many-args: '{header} Te veel argumenten!'
   addhead:
-    bad-texture: '{header} De door u opgegeven structuur is ongeldig. Het moet een 
-      Minecraft texture URL (https://textures.minecraft.net) of een Base64-gecodeerde string.'
+    bad-texture: '{header} De door u opgegeven structuur is ongeldig. Het moet een
+            Minecraft texture URL (https://textures.minecraft.net) of een Base64-gecodeerde
+      string.'
     cancelled: '{header} Geannuleerde hoofdcreatie.'
     custom-head-added: '{header} Nieuw hoofd met id &c{id} &7toegevoegd!'
-    displayname: '{header} Typ de weergavenaam voor het hoofd (inclusief kleur
-      codes).'
+    displayname: '{header} Typ de weergavenaam voor het hoofd (inclusief kleur       codes).'
     head-added: '{header} Hoofd voor &c{player} &7toegevoegd!'
     head-adding: '{header} Textuur opzoeken om toe te voegen voor &c{player}&7...'
     head-already-added: '{header} Hoofd voor &c{player} &7al in de database!'
     id: '{header} Voer de ID van het hoofd in (Vb. brown_sheep, red_flower_bush)'
     id-taken: '{header} Dat ID is al in gebruik (&c{id}&7)!'
     price: '{header} Voer de prijs van het hoofd in (of "default" voor de standaardwaarde).'
-    section: '{header} Typ de sectie waarin het hoofd wordt geplaatst. (Beschikbare secties:
-      &c{sections}&7)'
+    section: '{header} Typ de sectie waarin het hoofd wordt geplaatst. (Beschikbare
+      secties: &c{sections}&7)'
     texture: '{header} Typ of kopieer en plak de textuur voor het hoofd. (Dit zou
-      meerdere berichten nodig hebben, dus als je klaar bent, typ je "done" in de chat en voer je in.)'
+            meerdere berichten nodig hebben, dus als je klaar bent, typ je "done"
+      in de chat en voer je in.)'
   blacklist:
     bl-a-off: '{header} De blacklist is al uitgeschakeld!'
     bl-a-on: '{header} De blacklist is al ingeschakeld!'
@@ -122,7 +128,8 @@ commands:
   challenges:
     already-complete-challenge: '{header} Je hebt die uitdaging al volbracht!'
     cant-complete-challenge: '{header} Je kunt deze uitdaging niet voltooien!'
-    challenge-complete: '{header} &c{player} &7heeft de &c{challange} &7uitdaging volbracht!'
+    challenge-complete: '{header} &c{player} &7heeft de &c{challange} &7uitdaging
+      volbracht!'
     challenge-completed: '&6Voltooid!'
     reward-string: '{header} Beloning: &c{reward}\n{header} XP: &c{xp}'
   head:
@@ -130,11 +137,11 @@ commands:
     blacklist-head: '{header} Dit hoofd staat op de blacklist en kan niet worden gebruikt!'
     full-inv: '{header} Je inventaris is vol!'
     head-too-long: '{header} IGN is te lang om geldig te zijn! Gebruik een IGN tussen
-      3 en 16 karakters.'
+            3 en 16 karakters.'
     head-too-short: '{header} IGN is te kort om geldig te zijn! Gebruik een IGN tussen
-      3 en 16 karakters.'
-    whitelist-head: '{header} Dit hoofd staat niet op de whitelist en kan daarom niet worden
-      gebruikt!'
+            3 en 16 karakters.'
+    whitelist-head: '{header} Dit hoofd staat niet op de whitelist en kan daarom niet
+      worden       gebruikt!'
   head-info:
     add-value: '{header} &c{value} &7is toegevoegd aan &c{entity}&7''s &c{setting}&7!'
     no-lore-data: '{header} Er zijn geen lore data voor dit entiteit!'
@@ -143,7 +150,8 @@ commands:
     remove-value: '{header} &c{value} &7is verwijderd van &c{entity}&7''s &c{setting}&7!'
     set-value: '{header} &c{entity}&7''s &c{setting} &7is veranderd naar &c{value}&7!'
   heads:
-    buy-success: '{header} Jij hebt een hoofd gekocht voor &c{price} &en je hebt nu een saldo van &c{balance}&7!'
+    buy-success: '{header} Jij hebt een hoofd gekocht voor &c{price} &en je hebt nu
+      een saldo van &c{balance}&7!'
     chat-input: '{header} Voer een term in waarnaar u wilt zoeken.'
     not-enough-money: '{header} Je hebt niet genoeg geld!'
   leaderboards:
@@ -160,7 +168,8 @@ commands:
     false-item: '{header} Dis is geen hoofd!'
     no-heads: '{header} Je hebt geen geldige hoofden in je inventaris om te verkopen!'
     not-enough-heads: '{header} Jij hebt niet genoeg hoofden!'
-    sell-success: '{header} Je hebt het hoofd succesvol verkocht voor &c{price} &7en je hebt nu een saldo van &c{balance}&7!'
+    sell-success: '{header} Je hebt het hoofd succesvol verkocht voor &c{price} &7en
+      je hebt nu een saldo van &c{balance}&7!'
   tests:
     running-tests: '{header} Testen uitvoeren... (Dit kan een tijdje duren)'
     results: '{header} Resultaten: &c{results}'
@@ -182,11 +191,12 @@ commands:
     world-added-wl: '{header} &c{world} &7is toegevoegd aan de wereld whitelist!'
     world-removed-wl: '{header} &c{world} &7is verwijderd van de whitelist!'
   xp:
-    added-xp: '{header} &c{amount} &7XP toegevoegd aan bij &c{player}&7, heeft nu &c{xp}&7!'
+    added-xp: '{header} &c{amount} &7XP toegevoegd aan bij &c{player}&7, heeft nu
+      &c{xp}&7!'
     current-xp: '{header} &c{player}&7''s huidige XP: &c{xp}'
     negative-xp: '{header} Ik denk niet dat je dat wilt doen... (negatief toestaan
-      XP, ga naar config.yml> plugin> perks> xp> allow-negative, maar dit
-      heeft onvoorspelbare resultaten!)'
+            XP, ga naar config.yml> plugin> perks> xp> allow-negative, maar dit       heeft
+      onvoorspelbare resultaten!)'
     removed-xp: '{header}  &c{amount} &7XP verwijderd van &c{player}&7, heeft nu &c{xp}&7!'
     reset-xp: '{header} Reset &c{player}&7''s XP!'
 descriptions:
@@ -223,8 +233,9 @@ descriptions:
   hpc: Geeft uitdagingen weer die u kunt voltooien.
   hplb: Geeft het scorebord van de hoofden weer.
   myhead: Spawn in je hoofd.
-  sellhead: 'Verkoopt het hoofd in je hand, gebruik de nummerparameter om een ​​specifieke te verkopen
-    nummer, entiteitsnaam om het hoofd van een bepaalde maffia te verkopen, en alles om elk hoofd te verkopen.'
+  sellhead: Verkoopt het hoofd in je hand, gebruik de nummerparameter om een ​​specifieke
+    te verkopen     nummer, entiteitsnaam om het hoofd van een bepaalde maffia te
+    verkopen, en alles om elk hoofd te verkopen.
 event:
   block-place-denied: '{header} Je kunt geen verkoopbare koppen plaatsen!'
   head-interact-message: '{header} Dat is het hoofd van &c{name}&7!'
@@ -232,17 +243,20 @@ event:
   head-mhf-interact-message-2: '{header} Dat is een &c{name}&7''s hoofd!'
   lost-money: '{header} Because you got killed by &c{player}&7, you lost &c{price}&7!'
 startup:
-  faulty-theme: '{header} Er is een foutief thema geplaatst! Er worden geen themawijzigingen doorgevoerd.'
-  no-vault: '{header} Vault niet gevonden! Hoofden kunnen niet worden verkocht en beloningen voor uitdaginen kan niet worden toegevoegd / verwijderd in groepen.'
-  no-vault-2: '{header} Vault werd niet gevonden bij het opstarten! Kan groep niet toevoegen.'
+  faulty-theme: '{header} Er is een foutief thema geplaatst! Er worden geen themawijzigingen
+    doorgevoerd.'
+  no-vault: '{header} Vault niet gevonden! Hoofden kunnen niet worden verkocht en
+    beloningen voor uitdaginen kan niet worden toegevoegd / verwijderd in groepen.'
+  no-vault-2: '{header} Vault werd niet gevonden bij het opstarten! Kan groep niet
+    toevoegen.'
   plugin-disabled: '{header} HeadsPlus is uitgeschakeld!'
   plugin-enabled: '{header} HeadsPlus is ingeschakeld!'
-  plugin-fail: '{header} HeadsPlus is niet goed opgestart. Een foutenrapport
-    is gemaakt in /plugins/HeadsPlus/debug'
+  plugin-fail: '{header} HeadsPlus is niet goed opgestart. Een foutenrapport     is
+    gemaakt in /plugins/HeadsPlus/debug'
 update:
   current-version: '{header} Huidige versie: &c{version}'
   description: '{header} Beschrijving: &c{description}'
   new-version: '{header} Nieuwe versie: &c{version}'
   plugin-up-to-date: '{header} Plugin is up-to-date!'
-  update-found: '{header} Er is een update gevonden voor HeadsPlus! Plaats de muisaanwijzer op het bericht
-    voor meer informatie.'
+  update-found: '{header} Er is een update gevonden voor HeadsPlus! Plaats de muisaanwijzer
+    op het bericht     voor meer informatie.'

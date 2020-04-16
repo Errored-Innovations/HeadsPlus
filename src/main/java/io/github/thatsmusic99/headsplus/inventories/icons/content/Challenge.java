@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigItems;
@@ -27,10 +28,15 @@ public class Challenge extends Content {
         initNameAndLore("challenge", player);
     }
 
+    public Challenge() {
+        super();
+
+    }
+
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
         try {
-            if (challenge != null) {
+            if (event.isLeftClick()) {
                 if (!challenge.isComplete(player)) {
                     if (challenge.canComplete(player)) {
                         challenge.complete(player);
@@ -44,8 +50,16 @@ public class Challenge extends Content {
                 } else {
                     player.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", player));
                 }
+            } else {
+                HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
+                if (hpPlayer.hasChallengePinned(challenge)) {
+                    hpPlayer.removeChallengePin(challenge);
+                } else {
+                    hpPlayer.addChallengePin(challenge);
+                }
+                initNameAndLore("challenge", player);
+                event.getInventory().setItem(event.getSlot(), item);
             }
-            event.setCancelled(true);
         }catch (NullPointerException ignored) {
         } catch (SQLException ex) {
             DebugPrint.createReport(ex, "Completing challenge", false, player);
@@ -76,6 +90,10 @@ public class Challenge extends Content {
                     if (loreStr.contains("{completed}")) {
                         if (challenge.isComplete(player)) {
                             lore.add(hpc.getString("commands.challenges.challenge-completed", player));
+                        }
+                    } else if (loreStr.contains("{pinned}")) {
+                        if (HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)) {
+                            lore.add(hpc.getString("inventory.icon.challenge.pinned", player));
                         }
                     } else {
                         lore.add(hpc.formatMsg(hpc.completed(loreStr, player, challenge), player)

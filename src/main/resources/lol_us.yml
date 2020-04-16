@@ -3,9 +3,12 @@
 language: LOLCAT (Kingdom of Cats)
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lshot chal &8❱'
     challenge:
-      reward: '&6Treetz: &a{reward}'
-      xp: '&6ex-pee: &a{xp}'
+      progress: '&7rn &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cSHOT!'
+      reward: '&7Treetz &8❱ &c{reward}'
+      xp: '&7ex-pee &8❱ &c{xp}'
       count: '&7{challenge-count} chaleng''s'
     close: '&8❰ &c&lS H U T &8❱'
     favourites: '&8❰ &b&lkewl hedz :3 &8❱'
@@ -67,7 +70,7 @@ textmenus:
     description: uhh what
     permission: permy
     further-usages: how 2 but worse
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:

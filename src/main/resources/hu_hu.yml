@@ -3,14 +3,17 @@
 language: Magyar (MA)
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lÖsszetett kihívások &8❱'
     reward:
       currency: '&7${amount}'
       group-add: '&7Csoport {group} &7(&a+&7)'
       group-remove: '&7Csoport {group} &7(&c-&7)'
       item-give: '&7{amount} {item}(ok)'
     challenge:
-      reward: '&6Jutalom: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Haladás &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cRögzítette!'
+      reward: '&7Jutalom &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7{challenge-count} kihívások'
     close: '&8❰ &c&lBezárás menü &8❱'
     favourites: '&8❰ &b&lÉrdekes &8❱'
@@ -67,7 +70,7 @@ textmenus:
     description: Leírás
     permission: Permission
     further-usages: További felhasználások
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -86,6 +89,21 @@ commands:
     player-offline: '{header} Ez a játékos offline állapotban van!'
     too-many-args: '{header} Túl sok argumentum!'
   addhead:
+    bad-texture: '{header} A megadott textúra érvénytelen. Ennek Minecraft textúra
+      URL-jének (https://textures.minecraft.net) vagy Base64 kódolt karakterláncnak
+      kell lennie.'
+    cancelled: '{header} A fej létrehozása megszakítva.'
+    custom-head-added: '{header} Hozzáadott új fej, azonosítóval &c{id}&7!'
+    displayname: '{header} Írja be a fej megjelenített nevét (a színkódokkal együtt).'
+    id: '{header} Írja be a fej azonosítóját (például brown_sheep, red_flower_bush)'
+    id-taken: '{header} Ezt az azonosítót elvették (&c{id}&7)!'
+    price: '{header} Írja be a fej árát (vagy az "alapértelmezett" az alapértelmezett
+      értékhez).'
+    section: '{header} Írja be azt a szekciót, amelybe a fej kerül. (Elérhető szakaszok:
+      &c{szakaszok}&7)'
+    texture: '{header} Írja be, vagy másolja és illessze be a fej textúráját. (Ehhez
+      több üzenet szükséges, ezért ha kész, írja be a "kész" elemet a chatbe, és írja
+      be.)'
     head-added: '{header} A (z) &c{player} &7hozzáadandó textúra felkutatása ...'
     head-adding: '{header} A (z) &c{player} &7fej hozzáadva!'
     head-already-added: '{header} A (z) &c{player} &7fejléce már az adatbázisban található!'

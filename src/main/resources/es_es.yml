@@ -3,14 +3,17 @@
 language: Español (ES)
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lDesafíos fijados &8❱'
     reward:
       currency: '&7${amount}'
       group-add: '&7Grupo {group} &7(&a+&7)'
       group-remove: '&7Grupo {group} &7(&c-&7)'
       item-give: '&7{amount} {item}(s)'
     challenge:
-      reward: '&6Recompensa: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Progreso &8❱ &c{heads}&7/&c{total}'
+      pinned: '&c¡Anclado!'
+      reward: '&7Recompensa &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7{challenge-count} desafíos'
     close: '&8❰ &c&lCerrar menú &8❱'
     favourites: '&8❰ &b&lFavoritas &8❱'
@@ -67,7 +70,7 @@ textmenus:
     description: Descripción
     permission: Permiso
     further-usages: Usos adicionales
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:

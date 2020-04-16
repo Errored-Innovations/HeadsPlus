@@ -3,14 +3,17 @@
 language: Romana (RO)
 inventory:
   icon:
+    pinned-challenges: '&8❰ &b&lProvocari fixate &8❱'
     reward:
       currency: '&7${amount}'
       group-add: '&7Grupul {group} &7(&a+&7)'
       group-remove: '&7Grupul {group} &7(&c-&7)'
       item-give: '&7{amount} {item}(e)'
     challenge:
-      reward: '&6Recompensa: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Progres &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cFixat!'
+      reward: '&7Recompensa &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7{challenge-count} provocari'
     close: '&8❰ &c&lInchideti meniul &8❱'
     favourites: '&8❰ &b&lFavorite &8❱'
@@ -67,7 +70,7 @@ textmenus:
     description: Descriere
     permission: Permisiune
     further-usages: Utilizari ulterioare
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:

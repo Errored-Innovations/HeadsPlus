@@ -17,6 +17,7 @@ import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
+import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.*;
 import io.github.thatsmusic99.og.OreGenerator;
@@ -72,6 +73,7 @@ public class HeadsPlus extends JavaPlugin {
     private HashMap<Integer, Level> levels = new HashMap<>();
     private List<ConfigSettings> cs = new ArrayList<>();
     private Favourites favourites;
+    private Pinned pinned;
     private PlayerScores scores;
     private NBTManager nbt;
 
@@ -86,6 +88,7 @@ public class HeadsPlus extends JavaPlugin {
 
             // Create locale files
             createLocales();
+
 
             // Build plugin instances
             createInstances();
@@ -212,6 +215,14 @@ public class HeadsPlus extends JavaPlugin {
             scores.save();
         } catch (IOException e) {
             DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
+        } catch (NullPointerException ignored) {
+
+        }
+
+        try {
+            pinned.save();
+        } catch (IOException e) {
+            DebugPrint.createReport(e, "Disabling (saving pinned challenges)", false, null);
         } catch (NullPointerException ignored) {
 
         }
@@ -362,6 +373,9 @@ public class HeadsPlus extends JavaPlugin {
         scores = new PlayerScores();
         scores.create();
         scores.read();
+        pinned = new Pinned();
+        pinned.create();
+        pinned.read();
     }
 
     private void createLocales() {
@@ -616,6 +630,10 @@ public class HeadsPlus extends JavaPlugin {
             }
         }
         return null;
+    }
+
+    public Pinned getPinned() {
+        return pinned;
     }
 
     public void checkForMutuals() {

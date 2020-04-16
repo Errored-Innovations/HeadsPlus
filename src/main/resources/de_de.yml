@@ -3,14 +3,20 @@
 language: Deutsch (DE)
 inventory:
   icon:
+    next: '&8❰ &a&lNächste &8❱'
+    next-2: '&8❰ &a&lNächste (2) &8❱'
+    next-3: '&8❰ &a&lNächste (3) &8❱'
+    pinned-challenges: '&8❰ &b&lFestgesteckte Herausforderungen &8❱'
     reward:
       currency: '&7${amount}'
       group-add: '&7Gruppe {group} &7(&a+&7)'
       group-remove: '&7Gruppe {group} &7(&c-&7)'
       item-give: '&7{amount} {item}(n)'
     challenge:
-      reward: '&6Belohnung: &a{reward}'
-      xp: '&6XP: &a{xp}'
+      progress: '&7Fortschritt &8❱ &c{heads}&7/&c{total}'
+      pinned: '&cGepinnt!'
+      reward: '&7Belohnung &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
       count: '&7Herausforderungen: {challenge-count}'
     close: '&8❰ &c&lMenü schließen &8❱'
     favourites: '&8❰ &b&lFavoriten &8❱'
@@ -64,7 +70,7 @@ textmenus:
     description: Beschreibung
     permission: Genehmigung
     further-usages: Weitere Verwendung
-version: 1.2
+version: 1.3
 prefix: '&cHeadsPlus &8» &7'
 commands:
   errors:

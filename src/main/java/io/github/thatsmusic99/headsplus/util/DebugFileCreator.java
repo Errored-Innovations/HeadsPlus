@@ -223,7 +223,7 @@ public class DebugFileCreator {
         o2.put("Online", player.getPlayer().isOnline());
         o2.put("XP", player.getXp());
         List<String> ch = new ArrayList<>();
-        player.getCompleteChallenges().forEach(c -> ch.add(c.getConfigName()));
+        ch.addAll(player.getCompleteChallenges());
         o2.put("Completed challenges", ch);
         o2.put("Level", player.getLevel());
         o2.put("Next level", player.getNextLevel());

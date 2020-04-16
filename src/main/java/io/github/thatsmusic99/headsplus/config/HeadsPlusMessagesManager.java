@@ -136,6 +136,7 @@ public class HeadsPlusMessagesManager {
                         en_us.addDefault("commands.addhead.texture", "{header} Type in or copy and paste the texture for the head. (This may require several messages, so when you are done, type \"done\" in chat and enter.)");
                         en_us.addDefault("inventory.icon.challenge.progress", "&7Progress &8❱ &c{heads}&7/&c{total}");
                         en_us.addDefault("inventory.icon.challenge.pinned", "&cPinned!");
+                        en_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPinned Challenges &8❱");
                         en_us.set("version", version);
                         en_us.options().copyDefaults(true);
                         try {
@@ -217,6 +218,7 @@ public class HeadsPlusMessagesManager {
                         de_de.addDefault("commands.addhead.texture", "{header} Geben Sie die Textur für den Kopf ein oder kopieren Sie sie und fügen Sie sie ein. (Dies kann mehrere Nachrichten erfordern. Wenn Sie fertig sind, geben Sie im Chat \"done\" ein und geben Sie ein.)");
                         de_de.addDefault("inventory.icon.challenge.progress", "&7Fortschritt &8❱ &c{heads}&7/&c{total}");
                         de_de.addDefault("inventory.icon.challenge.pinned", "&cGepinnt!");
+                        de_de.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lFestgesteckte Herausforderungen &8❱");
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
@@ -298,6 +300,7 @@ public class HeadsPlusMessagesManager {
                         es_es.addDefault("commands.addhead.texture", "{header} Escriba o copie y pegue la textura de la cabeza. (Esto puede requerir varios mensajes, así que cuando haya terminado, escriba \"done\" en el chat e ingrese).");
                         es_es.addDefault("inventory.icon.challenge.progress", "&7Progreso &8❱ &c{heads}&7/&c{total}");
                         es_es.addDefault("inventory.icon.challenge.pinned", "&c¡Anclado!");
+                        es_es.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDesafíos fijados &8❱");
                         es_es.set("version", version);
                         es_es.options().copyDefaults(true);
                         try {
@@ -379,6 +382,7 @@ public class HeadsPlusMessagesManager {
                         fr_fr.addDefault("commands.addhead.texture", "{header} Tapez ou copiez et collez la texture de la tête. (Cela peut nécessiter plusieurs messages, donc lorsque vous avez terminé, tapez \"done\" dans le chat et entrez.)");
                         fr_fr.addDefault("inventory.icon.challenge.progress", "&7Le progrès &8❱ &c{heads}&7/&c{total}");
                         fr_fr.addDefault("inventory.icon.challenge.pinned", "&cÉpinglé!");
+                        fr_fr.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDéfis épinglés &8❱");
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
@@ -460,6 +464,7 @@ public class HeadsPlusMessagesManager {
                         hu_hu.addDefault("commands.addhead.texture", "{header} Írja be, vagy másolja és illessze be a fej textúráját. (Ehhez több üzenet szükséges, ezért ha kész, írja be a \"kész\" elemet a chatbe, és írja be.)");
                         hu_hu.addDefault("inventory.icon.challenge.progress", "&7Haladás &8❱ &c{heads}&7/&c{total}");
                         hu_hu.addDefault("inventory.icon.challenge.pinned", "&cRögzítette!");
+                        hu_hu.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lÖsszetett kihívások &8❱");
                         hu_hu.set("version", version);
                         hu_hu.options().copyDefaults(true);
                         try {
@@ -541,6 +546,7 @@ public class HeadsPlusMessagesManager {
                         lol_us.addDefault("commands.addhead.texture", "{header} Putz texturrr of hed here (may needz lotsa lettrs, so when dun, screm \"done\" in de chat)");
                         lol_us.addDefault("inventory.icon.challenge.progress", "&7rn &8❱ &c{heads}&7/&c{total}");
                         lol_us.addDefault("inventory.icon.challenge.pinned", "&cSHOT!");
+                        lol_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lshot chal &8❱");
                         lol_us.set("version", version);
                         lol_us.options().copyDefaults(true);
                         try {
@@ -622,6 +628,7 @@ public class HeadsPlusMessagesManager {
                         pl_pl.addDefault("commands.addhead.texture", "{header} Wpisz lub skopiuj i wklej teksturę głowy. (Może to wymagać kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wejdź).");
                         pl_pl.addDefault("inventory.icon.challenge.progress", "&7Postęp &8❱ &c{heads}&7/&c{total}");
                         pl_pl.addDefault("inventory.icon.challenge.pinned", "&cPrzypięte!");
+                        pl_pl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPrzypięte wyzwania &8❱");
                         pl_pl.set("version", version);
                         pl_pl.options().copyDefaults(true);
                         try {
@@ -703,6 +710,7 @@ public class HeadsPlusMessagesManager {
                         ro_ro.addDefault("commands.addhead.texture", "{header} Introduceți sau copiați și lipiți textura pentru cap. (Acest lucru poate necesita mai multe mesaje, așa că atunci când ați terminat, tastați „done” în chat și introduceți.)");
                         ro_ro.addDefault("inventory.icon.challenge.progress", "&7Progres &8❱ &c{heads}&7/&c{total}");
                         ro_ro.addDefault("inventory.icon.challenge.pinned", "&cFixat!");
+                        ro_ro.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lProvocari fixate &8❱");
                         ro_ro.set("version", version);
                         ro_ro.options().copyDefaults(true);
                         try {
@@ -784,6 +792,7 @@ public class HeadsPlusMessagesManager {
                         ru_ru.addDefault("commands.addhead.texture", "{header} Введите или скопируйте и вставьте текстуру для головы. (Для этого может потребоваться несколько сообщений, поэтому, когда вы закончите, введите «done» в чате и введите.)");
                         ru_ru.addDefault("inventory.icon.challenge.progress", "&7Прогресс &8❱ &c{heads}&7/&c{total}");
                         ru_ru.addDefault("inventory.icon.challenge.pinned", "&cЗакрепленные!");
+                        ru_ru.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lЗакрепленные вызовы&8❱");
                         ru_ru.set("version", version);
                         ru_ru.options().copyDefaults(true);
                         try {
@@ -796,6 +805,7 @@ public class HeadsPlusMessagesManager {
                     {
                         nl_nl.addDefault("inventory.icon.challenge.progress", "&7Vooruitgang &8❱ &c{heads}&7/&c{total}");
                         nl_nl.addDefault("inventory.icon.challenge.pinned", "&cVastgemaakt!");
+                        nl_nl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lVastgezette uitdagingen &8❱");
                         nl_nl.set("version", version);
                         nl_nl.options().copyDefaults(true);
                         try {

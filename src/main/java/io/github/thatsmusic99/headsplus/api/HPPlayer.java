@@ -24,11 +24,12 @@ public class HPPlayer {
     private UUID player;
     private int xp;
     private Level level = null;
-    private List<Challenge> completeChallenges;
+    private List<String> completeChallenges;
     private Level nextLevel = null;
     private HashMap<String, List<PotionEffect>> activeMasks;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
+    private List<String> pinnedChallenges;
     private boolean ignoreFallDamage;
     private String cachedLocale;
     private boolean localeForced;
@@ -37,21 +38,24 @@ public class HPPlayer {
         HeadsPlus hp = HeadsPlus.getInstance();
         activeMasks = new HashMap<>();
         favouriteHeads = new ArrayList<>();
+        pinnedChallenges = new ArrayList<>();
         ignoreFallDamage = false;
         this.player = p.getUniqueId();
         try {
             for (Object o : (JSONArray) hp.getFavourites().getJSON().get(p.getUniqueId().toString())) {
                 favouriteHeads.add(String.valueOf(o));
             }
+            for (Object o : (JSONArray) hp.getPinned().getJSON().get(player.toString())) {
+                pinnedChallenges.add(String.valueOf(o));
+            }
         } catch (NullPointerException ignored) {
         }
         PlayerScores scores = hp.getScores();
-        HeadsPlusAPI hapi = hp.getAPI();
         HashMap<Integer, Level> levels = hp.getLevels();
         this.xp = scores.getXp(p.getUniqueId().toString());
-        List<Challenge> sc = new ArrayList<>();
+        List<String> sc = new ArrayList<>();
         for (String str : scores.getCompletedChallenges(p.getUniqueId().toString())) {
-            sc.add(hapi.getChallengeByConfigName(str));
+            sc.add(str);
         }
         if (hp.getConfiguration().getConfig().getBoolean("smart-locale")) {
             String loc = scores.getLocale(p.getUniqueId().toString());
@@ -186,7 +190,7 @@ public class HPPlayer {
         return nextLevel;
     }
 
-    public List<Challenge> getCompleteChallenges() {
+    public List<String> getCompleteChallenges() {
         return completeChallenges;
     }
 
@@ -228,7 +232,7 @@ public class HPPlayer {
     public void addCompleteChallenge(Challenge c) {
         PlayerScores scores = HeadsPlus.getInstance().getScores();
         scores.completeChallenge(player.toString(), c);
-        completeChallenges.add(c);
+        completeChallenges.add(c.getConfigName());
     }
 
     public void addXp(int xp) {
@@ -308,6 +312,26 @@ public class HPPlayer {
     public void removeFavourite(String s) {
         favouriteHeads.remove(s);
         HeadsPlus.getInstance().getFavourites().removeHead(getPlayer(), s);
+    }
+
+    public boolean hasChallengePinned(Challenge challenge) {
+        return pinnedChallenges.contains(challenge.getConfigName());
+    }
+
+    public void addChallengePin(Challenge challenge) {
+        String s = challenge.getConfigName();
+        pinnedChallenges.add(s);
+        HeadsPlus.getInstance().getPinned().writeData(getPlayer(), s);
+    }
+
+    public void removeChallengePin(Challenge challenge) {
+        String s = challenge.getConfigName();
+        pinnedChallenges.remove(s);
+        HeadsPlus.getInstance().getPinned().removeChallenge(getPlayer(), s);
+    }
+
+    public List<String> getPinnedChallenges() {
+        return pinnedChallenges;
     }
 
     public boolean isIgnoringFallDamage() {
