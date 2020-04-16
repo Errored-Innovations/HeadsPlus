@@ -107,7 +107,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.xp.crafting", 10);
         config.addDefault("plugin.mechanics.xp.head-drops", 10);
         config.addDefault("plugin.mechanics.xp.selling", 10);
-        config.addDefault("plugin.mechanics.blocked-spawn-causes", new ArrayList<>());
+        config.addDefault("plugin.mechanics.blocked-spawn-causes", Collections.singleton("SPAWNER_EGG"));
         //    config.addDefault("plugin.mechanics.ignored-players-head-drops", new ArrayList<>());
         config.set("mysql.passworld", null); // I still love this
         config.options().copyDefaults(true);
