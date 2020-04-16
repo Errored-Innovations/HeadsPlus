@@ -53,9 +53,9 @@ public class HeadsPlusChallenges extends ConfigSettings {
     public void load(boolean aaaan) {
         getConfig().options().header("HeadsPlus by Thatsmusic99");
         getConfig().addDefault("challenges.options.current-version", 1.3);
-        getConfig().addDefault("challenges.options.prepare-sections", true);
         getConfig().addDefault("challenges.options.prepare-icons", true);
         getConfig().addDefault("challenges.options.prepare-rewards", true);
+        getConfig().set("challenges.options.prepare-sections", null);
         double v = getConfig().getDouble("challenges.options.current-version");
         if (v < 1.3) {
             updated = true;
@@ -71,15 +71,12 @@ public class HeadsPlusChallenges extends ConfigSettings {
         HeadsPlus.getInstance().getChallenges().clear();
         HeadsPlus.getInstance().getChallengeSections().clear();
         HashMap<String, Boolean> prepareOptions = new HashMap<>();
-        prepareOptions.put("sections", config.getBoolean("challenges.options.prepare-sections"));
         prepareOptions.put("rewards", config.getBoolean("challenges.options.prepare-rewards"));
         prepareOptions.put("icons", config.getBoolean("challenges.options.prepare-icons"));
         LinkedHashMap<String, ChallengeSection> sections = new LinkedHashMap<>();
-        if (prepareOptions.get("sections")) {
-            for (String section : config.getConfigurationSection("sections").getKeys(false)) {
-                if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
-                sections.put(section, getSection(section));
-            }
+        for (String section : config.getConfigurationSection("sections").getKeys(false)) {
+            if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
+            sections.put(section, getSection(section));
         }
         HashMap<String, Reward> rewards = new HashMap<>();
         if (prepareOptions.get("rewards")) {
