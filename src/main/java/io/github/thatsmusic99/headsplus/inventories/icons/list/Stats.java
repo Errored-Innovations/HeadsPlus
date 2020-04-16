@@ -37,7 +37,7 @@ public class Stats extends Icon {
         for (String loreStr : hpi.getStringList("icons." + id + ".lore")) {
             lore.add(hpc.formatMsg(loreStr, player)
                     .replaceAll("\\{heads}", String.valueOf(hpch.allHeadsCache.size()))
-                    .replaceAll("\\{balance}", String.valueOf(hp.getEconomy().getBalance(player)))
+                    .replaceAll("\\{balance}", hp.econ() ? String.valueOf(hp.getEconomy().getBalance(player)) : "None")
                     .replaceAll("\\{sections}", String.valueOf(hpch.sections.size()))
                     .replaceAll("\\{section}", manager.getSection() == null ? "None" : manager.getSection()));
         }
