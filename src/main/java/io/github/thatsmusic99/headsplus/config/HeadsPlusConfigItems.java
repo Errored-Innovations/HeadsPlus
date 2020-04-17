@@ -1,10 +1,8 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadInventory;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
-import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.*;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
 import io.github.thatsmusic99.headsplus.inventories.list.*;

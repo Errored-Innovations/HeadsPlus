@@ -4,9 +4,11 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.util.*;
+import io.github.thatsmusic99.headsplus.util.DataManager;
+import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -99,7 +101,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                     sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
                 }
             } else if (args[1].equalsIgnoreCase("clearim")) {
-                InventoryManager.pls.clear();
+                InventoryManager.storedInventories.clear();
                 sender.sendMessage(ChatColor.GREEN + "Inventory cache cleared.");
             } else if (args[1].equalsIgnoreCase("item")) {
                 if (sender instanceof Player) {

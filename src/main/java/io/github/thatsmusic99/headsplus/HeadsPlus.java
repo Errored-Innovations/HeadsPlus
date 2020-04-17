@@ -11,6 +11,7 @@ import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
@@ -19,7 +20,9 @@ import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
-import io.github.thatsmusic99.headsplus.util.*;
+import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
+import io.github.thatsmusic99.headsplus.util.IncorrectVersionException;
+import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.og.OreGenerator;
 import io.github.thatsmusic99.pg.Core;
 import io.github.thatsmusic99.specprotect.CoreClass;
@@ -198,11 +201,15 @@ public class HeadsPlus extends JavaPlugin {
     @Override
     public void onDisable() {
 		// close any open interfaces
-		for(Player p : InventoryManager.pls.keySet()) {
-            final InventoryManager im = InventoryManager.pls.get(p);
-			if(im.searchAnvilOpen || im.getInventory() != null) {
-				p.closeInventory();
-			}
+		for(UUID p : InventoryManager.storedInventories.keySet()) {
+		    Player player = Bukkit.getPlayer(p);
+		    if (player != null) {
+                final InventoryManager im = InventoryManager.getManager(player);
+                if(im.getInventory() != null) {
+                    player.closeInventory();
+                }
+            }
+
 		}
         try {
             favourites.save();
@@ -283,7 +290,6 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new InventoryEvent(), this);
         getServer().getPluginManager().registerEvents(new HeadInteractEvent(), this);
         getServer().getPluginManager().registerEvents(de, this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
