@@ -22,15 +22,20 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
     protected static HeadsPlus hp = HeadsPlus.getInstance();
     protected static HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
+    private static Pattern PAGE = Pattern.compile("\\{page}");
+    private static Pattern PAGES = Pattern.compile("\\{pages}");
+    private static Pattern SECTION = Pattern.compile("\\{section}");
     protected FileConfiguration hpi;
     private Inventory inventory;
     protected PagedLists<Content> contents;
@@ -53,8 +58,18 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         String items = hpi.getString("inventories." + getId() + ".icons");
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
         contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
-        build(context, player);
-        player.openInventory(getInventory());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                build(context, player);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.openInventory(getInventory());
+                    }
+                }.runTask(hp);
+            }
+        }.runTaskAsynchronously(hp);
         hp.getServer().getPluginManager().registerEvents(this, hp);
     }
 
@@ -67,12 +82,12 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public void build(HashMap<String, String> context, Player player) {
         int totalPages = contents.getTotalPages();
         String currentPage = context.get("page");
+        String title = PAGE.matcher(hpi.getString("inventories." + getId() + ".title")).replaceAll(currentPage);
+        title = PAGES.matcher(title).replaceAll(String.valueOf(totalPages));
+        title = SECTION.matcher(title).replaceAll(context.get("section") != null ? context.get("section") : "None");
         inventory = Bukkit.createInventory(this,
                 hpi.getInt("inventories." + getId() + ".size"),
-                hpi.getString("inventories." + getId() + ".title")
-                        .replaceAll("\\{page}", currentPage)
-                        .replaceAll("\\{pages}", String.valueOf(totalPages))
-                        .replaceAll("\\{section}", context.get("section") != null ? context.get("section") : "None"));
+                title);
         String items = hpi.getString("inventories." + getId() + ".icons");
         Iterator<Content> contentIt = contents.getContentsInPage(Integer.parseInt(currentPage)).iterator();
         for (int i = 0; i < items.length(); i++) {
