@@ -269,6 +269,54 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         return is;
     }
 
+    public void grabTexture(OfflinePlayer player, boolean force, CommandSender sender) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                System.out.println(NBTManager.getProfile(player));
+                final String[] playerInfo = new String[1];
+                try {
+                    playerInfo[0] = NBTManager.getProfile(player).getProperties().get("textures").iterator().next().getValue();
+                    addTexture(playerInfo[0], force, sender, player);
+                } catch (NoSuchElementException exception) {
+
+                }
+            }
+        }.runTask(HeadsPlus.getInstance());
+
+    }
+
+    private void addTexture(String info, boolean force, CommandSender sender, OfflinePlayer player) {
+        try {
+            JSONObject playerJson = (JSONObject) new JSONParser().parse(new String(Base64.getDecoder().decode(info.getBytes())));
+            JSONObject skinJSON = ((JSONObject)((JSONObject) playerJson.get("textures")).get("SKIN"));
+            String texture = String.valueOf(skinJSON.get("url"));
+            ConfigurationSection section = HeadsPlus.getInstance().getConfig().getConfigurationSection("plugin.autograb");
+            // If the head never existed
+            if(!allHeadsCache.contains(texture)) {
+                addHead(texture, true,
+                        section.getString("title").replace("{player}", player.getName()),
+                        section.getString("section"),
+                        section.getString("price"),
+                        force || section.getBoolean("add-as-enabled"));
+
+            } else if (force && enableHead(texture)){
+                // Keep going.
+            } else if(sender != null) {
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-already-added", sender)
+                        .replace("{player}", player.getName()));
+                return;
+            }
+            if(sender != null) {
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added", sender)
+                        .replace("{player}", player.getName()));
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void grabProfile(String id) {
         grabProfile(id, null, false);
     }

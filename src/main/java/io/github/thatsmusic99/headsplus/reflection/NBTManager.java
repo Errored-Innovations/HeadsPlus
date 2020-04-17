@@ -1,10 +1,9 @@
 package io.github.thatsmusic99.headsplus.reflection;
 
+import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.ChallengeSection;
-import io.github.thatsmusic99.headsplus.config.customheads.Icon;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
@@ -486,66 +485,23 @@ public class NBTManager {
         return getString(i, "headsplus-type");
     }
 
-    public static String getID(ItemStack i) {
-        return getString(i, "head-id");
-    }
-
     public static double getPrice(ItemStack i) {
-        return getDouble(i,  "head-price");
-    }
-
-    public static ItemStack addSection(ItemStack i, String section) {
-        return setString(i, "head-section", section);
-    }
-
-    public static String getSection(ItemStack i) {
-        return getString(i, "head-section");
-    }
-
-    public static Icon getIcon(ItemStack i) {
-        return Icon.getIconFromName(getString(i,  "head-icon"));
-    }
-
-    public static ItemStack setIcon(ItemStack i, Icon icon) {
-        return setString(i, "head-icon", icon.getIconName());
-    }
-
-    public ItemStack setChallenge(ItemStack i, Challenge c) {
-        return setString(i, "head-challenge", c.getConfigName());
-    }
-
-    public static Challenge getChallenge(ItemStack i) {
-        return  HeadsPlus.getInstance().getChallengeByName(getString(i,  "head-challenge"));
-    }
-
-    public ItemStack setChallengeSection(ItemStack i, ChallengeSection section) {
-        return setString(i, "head-challenge-section", section.getName());
-    }
-
-    public String getChallengeSection(ItemStack i) {
-        return  getString(i,  "head-challenge-section");
-    }
-
-    public static ItemStack removeIcon(ItemStack i) {
-        try {
-            Object nmsItem = getNMSCopy(i);
-            Object nbtTag = getNBTTag(nmsItem);
-            if (nbtTag == null) {
-                nbtTag = newNBTTag();
-            }
-            Method method = nbtTag.getClass().getMethod("remove", String.class);
-            method.invoke(nbtTag, "head-icon");
-            nmsItem = setNBTTag(nmsItem, nbtTag);
-            return asBukkitCopy(nmsItem);
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
-        return i;
+        return getDouble(i, "head-price");
     }
 
     public static ItemStack setPrice(ItemStack i, double price) {
         return setDouble(i, "head-price", price);
     }
 
+    public static GameProfile getProfile(OfflinePlayer player) {
+        Method method = null;
+        try {
+            method = player.getClass().getMethod("getProfile");
+            return (GameProfile) method.invoke(player);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

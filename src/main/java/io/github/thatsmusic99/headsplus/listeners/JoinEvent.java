@@ -2,11 +2,8 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,12 +36,13 @@ public class JoinEvent implements Listener {
         }.runTaskLater(hp, 20);
 
         if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {
-            String uuid = e.getPlayer().getUniqueId().toString();
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                uuid = hp.getHeadsXConfig().grabUUID(e.getPlayer().getName(), 3, null);
+                String uuid = hp.getHeadsXConfig().grabUUID(e.getPlayer().getName(), 3, null);
+                hp.getHeadsXConfig().grabProfile(uuid);
+            } else {
+                hp.getHeadsXConfig().grabTexture(e.getPlayer(), false, null);
             }
-            hp.getHeadsXConfig().grabProfile(uuid);
         }
         HPPlayer.getHPPlayer(e.getPlayer());
         if (!reloaded) {
