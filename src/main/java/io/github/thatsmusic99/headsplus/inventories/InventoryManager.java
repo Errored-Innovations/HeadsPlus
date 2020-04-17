@@ -47,6 +47,7 @@ public class InventoryManager {
         inventories.put(InventoryType.CHALLENGES_MENU, ChallengesMenu.class);
         inventories.put(InventoryType.CHALLENGES_LIST, ChallengesSection.class);
         inventories.put(InventoryType.CHALLENGES_PINNED, ChallengesPinnedInv.class);
+        inventories.put(InventoryType.SELLHEAD_CATEGORY, SellheadCategory.class);
 
         // Allow icons to have their own character
         cachedIcons.put('C', Content.class);
@@ -94,6 +95,10 @@ public class InventoryManager {
 
     public void open(InventoryType type, HashMap<String, String> context) {
         // Check if a new inventory is being opened and reset the page
+        if (type == null) {
+            Bukkit.getPlayer(player).closeInventory();
+            return;
+        }
         if (type != this.type) {
             currentPage = 1;
             section = null;

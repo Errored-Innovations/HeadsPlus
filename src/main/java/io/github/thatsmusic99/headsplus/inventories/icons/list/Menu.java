@@ -28,7 +28,7 @@ public class Menu extends Icon {
                 break;
             case SELLHEAD_MENU:
             case SELLHEAD_CATEGORY:
-                type = InventoryManager.InventoryType.SELLHEAD_MENU;
+                type = null;
                 break;
             case CHALLENGES_PINNED:
             case CHALLENGES_LIST:
