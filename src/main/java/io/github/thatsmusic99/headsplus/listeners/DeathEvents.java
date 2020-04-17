@@ -28,8 +28,9 @@ import java.util.*;
 
 public class DeathEvents implements Listener {
 
-    private HashMap<String, List<String>> storedData = new HashMap<>();
-    private HashMap<String, List<EntityHead>> storedHeads = new HashMap<>();
+    private final HashMap<String, List<String>> storedData = new HashMap<>();
+    private LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
+    private static LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
     public DeathEvents() {
         new BukkitRunnable() {
@@ -76,7 +77,7 @@ public class DeathEvents implements Listener {
 
     }
 
-    public HashMap<String, List<EntityHead>> getStoredHeads() {
+    public LinkedHashMap<String, List<EntityHead>> getStoredHeads() {
         return storedHeads;
     }
 
@@ -289,6 +290,7 @@ public class DeathEvents implements Listener {
                                 headItem.withPlayerName(head);
                             }
                             heads.add(headItem);
+                            sellheadCache.putIfAbsent(fancyName, headItem.getItemStack());
                         }
                         storedHeads.put(name + ";" + conditions, heads);
                     }
@@ -329,6 +331,7 @@ public class DeathEvents implements Listener {
                             headItem.withPlayerName(head);
                         }
                         heads.add(headItem);
+                        sellheadCache.putIfAbsent(fancyName, headItem.getItemStack());
                     }
                     storedHeads.put(name + ";default", heads);
                 }
@@ -441,7 +444,8 @@ public class DeathEvents implements Listener {
     }
 
     public void reload() {
-	    storedHeads = new HashMap<>();
+	    storedHeads = new LinkedHashMap<>();
+	    sellheadCache = new LinkedHashMap<>();
         setupHeads();
     }
 
@@ -486,5 +490,9 @@ public class DeathEvents implements Listener {
             return ableEntities.contains(e.getType().name());
         }
 
+    }
+
+    public static LinkedHashMap<String, ItemStack> getSellheadCache() {
+        return sellheadCache;
     }
 }

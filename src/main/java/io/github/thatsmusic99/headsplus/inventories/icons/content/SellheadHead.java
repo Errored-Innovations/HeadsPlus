@@ -11,12 +11,18 @@ public class SellheadHead extends Content {
 
     public SellheadHead(ItemStack itemStack, String type) {
         super(itemStack);
+        this.type = type;
     }
 
     public SellheadHead() {}
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
+        if (event.isRightClick()) {
+            player.performCommand("sellhead " + type + " 1");
+        } else {
+            player.performCommand("sellhead " + type);
+        }
         return false;
     }
 

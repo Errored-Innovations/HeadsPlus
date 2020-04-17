@@ -1,11 +1,17 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.SellheadHead;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +26,7 @@ public class SellheadCategory extends BaseInventory {
     public SellheadCategory() {}
     @Override
     public String getDefaultTitle() {
-        return null;
+        return "HeadsPlus Sellhead: {page}/{pages}";
     }
 
     @Override
@@ -36,13 +42,10 @@ public class SellheadCategory extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
-        switch (context.get("type")) { // ignore
+        switch (context.get("section")) { // ignore
             case "mobs":
-                HashMap<String, List<EntityHead>> heads = HeadsPlus.getInstance().getDeathEvents().getStoredHeads();
-                for (String str : heads.keySet()) {
-                    if (heads.get(str).size() > 0) {
-                        contents.add(new SellheadHead(heads.get(str).get(0).getItemStack(), str));
-                    }
+                for (String str : DeathEvents.getSellheadCache().keySet()) {
+                    contents.add(new SellheadHead(DeathEvents.getSellheadCache().get(str), str));
                 }
                 break;
             case "mining": // Guess what

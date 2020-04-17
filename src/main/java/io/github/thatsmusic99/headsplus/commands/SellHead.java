@@ -6,10 +6,10 @@ import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.util.InventoryManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -51,7 +51,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 			        ItemStack invi = checkHand(p);
                     if (args.length == 0 && (sender.hasPermission("headsplus.sellhead"))) { // If sold via hand
                         if (hp.getConfiguration().getMechanics().getBoolean("sellhead-gui")) {
-							InventoryManager.getOrCreate(p).showScreen(InventoryManager.Type.SELL);
+                            HashMap<String, String> context = new HashMap<>();
+                            context.put("section", "mobs");
+                            InventoryManager.getManager(p).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
                             return true;
                         } else {
                             if (invi != null) {
