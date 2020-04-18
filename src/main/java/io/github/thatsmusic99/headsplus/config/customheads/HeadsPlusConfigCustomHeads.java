@@ -269,7 +269,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         new BukkitRunnable() {
             @Override
             public void run() {
-                System.out.println(NBTManager.getProfile(player));
                 final String[] playerInfo = new String[1];
                 try {
                     playerInfo[0] = NBTManager.getProfile(player).getProperties().get("textures").iterator().next().getValue();
