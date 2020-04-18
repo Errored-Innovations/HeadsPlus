@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 
 public class LeaderboardsCache {
 
-    private static HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
-    private static HeadsPlus hp = HeadsPlus.getInstance();
-    private static boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
+    private static final HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
+    private static final HeadsPlus hp = HeadsPlus.getInstance();
+    private static final boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
 
     public LeaderboardsCache(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
         if (enabled) {

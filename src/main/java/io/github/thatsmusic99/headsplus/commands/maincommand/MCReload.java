@@ -41,7 +41,7 @@ public class MCReload implements IHeadsPlusCommand{
                 @Override
                 public void run() {
                     for (ConfigSettings cs : HeadsPlus.getInstance().getConfigs()) {
-                        cs.reloadC(false);
+                        cs.reloadC();
                     }
                     HPPlayer.players.clear();
                     HeadsPlus.getInstance().reloadDE();

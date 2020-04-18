@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.io.Files;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.Head;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -23,11 +22,11 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 
 	public HeadsPlusConfigHeads() {
 	    this.conName = "mobs";
-	    enable(false);
+	    enable();
     }
 
 	@Override
-	public void reloadC(boolean nullp) {
+	public void reloadC() {
 		if (configF == null) {
 			File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "heads.yml");
 			File newFile = new File(HeadsPlus.getInstance().getDataFolder(), "mobs.yml");
@@ -41,11 +40,11 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 			}
 			configF = newFile;
 		}
-		super.reloadC(nullp);
+		super.reloadC();
 	}
 
 	@Override
-	public void load(boolean ehhLolIDontNeedThisButJavaIsMakingMeAnywaysSoHiHowAreYou) {
+	public void load() {
 		try {
 			getConfig().options().header("HeadsPlus by Thatsmusic99");
 			getConfig().addDefault("version", 0);

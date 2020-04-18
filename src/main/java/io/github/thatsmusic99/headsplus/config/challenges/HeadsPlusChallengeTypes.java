@@ -7,7 +7,7 @@ public enum HeadsPlusChallengeTypes {
     CRAFTING("headspluscraft"),
     MISC("");
 
-    private String database;
+    private final String database;
 
     HeadsPlusChallengeTypes(String d) {
         database = d;

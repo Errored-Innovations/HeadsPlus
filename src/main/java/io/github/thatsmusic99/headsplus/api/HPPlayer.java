@@ -21,15 +21,15 @@ import java.util.UUID;
 public class HPPlayer {
 
     // M
-    private UUID player;
+    private final UUID player;
     private int xp;
     private Level level = null;
-    private List<String> completeChallenges;
+    private final List<String> completeChallenges;
     private Level nextLevel = null;
-    private HashMap<String, List<PotionEffect>> activeMasks;
+    private final HashMap<String, List<PotionEffect>> activeMasks;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private List<String> favouriteHeads;
-    private List<String> pinnedChallenges;
+    private final List<String> favouriteHeads;
+    private final List<String> pinnedChallenges;
     private boolean ignoreFallDamage;
     private String cachedLocale;
     private boolean localeForced;
@@ -54,9 +54,7 @@ public class HPPlayer {
         HashMap<Integer, Level> levels = hp.getLevels();
         this.xp = scores.getXp(p.getUniqueId().toString());
         List<String> sc = new ArrayList<>();
-        for (String str : scores.getCompletedChallenges(p.getUniqueId().toString())) {
-            sc.add(str);
-        }
+        sc.addAll(scores.getCompletedChallenges(p.getUniqueId().toString()));
         if (hp.getConfiguration().getConfig().getBoolean("smart-locale")) {
             String loc = scores.getLocale(p.getUniqueId().toString());
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {

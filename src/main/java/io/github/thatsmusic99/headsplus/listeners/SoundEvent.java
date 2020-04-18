@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 
 public class SoundEvent implements Listener {
 
-    private HeadsPlusConfigSounds sounds = HeadsPlus.getInstance().getSounds();
+    private final HeadsPlusConfigSounds sounds = HeadsPlus.getInstance().getSounds();
 
     @EventHandler
     public void onHeadSell(SellHeadEvent event) {

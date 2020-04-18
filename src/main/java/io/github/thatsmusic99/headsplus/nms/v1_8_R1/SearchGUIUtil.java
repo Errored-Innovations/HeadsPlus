@@ -11,7 +11,7 @@ public class SearchGUIUtil extends SearchGUI {
         super(player, handler);
     }
 
-    private class AnvilContainer extends ContainerAnvil {
+    private static class AnvilContainer extends ContainerAnvil {
         public AnvilContainer(EntityHuman entity) {
             super(entity.inventory, entity.world,new BlockPosition(0, 0, 0), entity);
         }

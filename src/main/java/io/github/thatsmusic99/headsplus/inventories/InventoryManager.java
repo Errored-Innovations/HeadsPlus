@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.inventories;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
-import io.github.thatsmusic99.headsplus.inventories.list.ChallengesPinnedInv;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -35,7 +34,7 @@ public class InventoryManager {
     private int currentPage; // Current page
     private BaseInventory inventory; // Inventory itself
     private boolean isGlitchSlotFilled; // dumb bug that is impossible to reproduce but i was told to fix it anyways
-    private UUID player; // Storing UUID of player to avoid memory leaks
+    private final UUID player; // Storing UUID of player to avoid memory leaks
     private InventoryType type;
     private String section;
 
@@ -141,8 +140,8 @@ public class InventoryManager {
 
     public static class NavIcon extends Icon {
 
-        private int pagesToShift;
-        private String id;
+        private final int pagesToShift;
+        private final String id;
 
         @Override
         public boolean onClick(Player player, InventoryClickEvent event) {

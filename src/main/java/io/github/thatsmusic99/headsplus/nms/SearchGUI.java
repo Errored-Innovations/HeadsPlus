@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class SearchGUI {
 
 
-    public class AnvilClickEvent {
+    public static class AnvilClickEvent {
         private final AnvilSlot slot;
 
         private final String name;

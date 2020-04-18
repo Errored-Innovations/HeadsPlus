@@ -8,18 +8,19 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,14 +28,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
-import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
@@ -82,7 +78,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     }
 
     @Override
-    public void reloadC(boolean a) {
+    public void reloadC() {
         if (configF == null) {
             File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "headsx.yml");
             File newFile = new File(HeadsPlus.getInstance().getDataFolder(), "customheads.yml");
@@ -141,7 +137,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     }
 
     private void headsxEnable() {
-        reloadC(false);
+        reloadC();
        // if (s) {
         //      loadHeadsX();
         //  }
@@ -344,7 +340,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         BufferedReader reader = null;
         try {
             URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
-            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), "UTF8"));
+            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -385,7 +381,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 if (id == null) return;
                 URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", ""));
 
-                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), "UTF8"));
+                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), StandardCharsets.UTF_8));
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {

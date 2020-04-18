@@ -85,22 +85,17 @@ public class RecipePerms implements Listener {
                         a += e.getInventory().getItem(i).getAmount();
                     }
                 }
-                if (a % 2 == 0) {
-                    amount = a / 2;
-                } else {
-                    amount = (a - 1) / 2;
-                }
             } else {
                 for (int i = 80; i <= 83; i++) {
                     if (e.getInventory().getItem(i) != null) {
                         a += e.getInventory().getItem(i).getAmount();
                     }
                 }
-                if (a % 2 == 0) {
-                    amount = a / 2;
-                } else {
-                    amount = (a - 1) / 2;
-                }
+            }
+            if (a % 2 == 0) {
+                amount = a / 2;
+            } else {
+                amount = (a - 1) / 2;
             }
         } else {
             amount = 1;
@@ -111,14 +106,13 @@ public class RecipePerms implements Listener {
     private void fireEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         HeadCraftEvent event;
-        NBTManager nbt = hp.getNBTManager();
         HeadsPlusAPI hapi = hp.getAPI();
         int amount = shift(e);
         event = new HeadCraftEvent((Player) e.getWhoClicked(), e.getCurrentItem(), e.getWhoClicked().getWorld(), e.getWhoClicked().getLocation(), amount, hapi.getSkullType(e.getCurrentItem()));
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            e.setCurrentItem(nbt.makeSellable(e.getCurrentItem()));
-            e.setCurrentItem(nbt.setType(e.getCurrentItem(), hapi.getSkullType(e.getCurrentItem())));
+            e.setCurrentItem(NBTManager.makeSellable(e.getCurrentItem()));
+            e.setCurrentItem(NBTManager.setType(e.getCurrentItem(), hapi.getSkullType(e.getCurrentItem())));
         } else {
             e.setCancelled(true);
         }
@@ -126,7 +120,7 @@ public class RecipePerms implements Listener {
 
     private void denyPermission(InventoryClickEvent e) {
         if(e.getRawSlot() == 0){
-            if(!HeadsPlus.getInstance().getNBTManager().getType(e.getCurrentItem()).isEmpty()){
+            if(!NBTManager.getType(e.getCurrentItem()).isEmpty()){
                 e.getWhoClicked().sendMessage(ChatColor.RED + "You can not craft heads!");
                 e.setCancelled(true);
             }

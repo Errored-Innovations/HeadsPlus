@@ -6,12 +6,12 @@ public class HeadsPlusConfigSounds extends ConfigSettings {
 
     public HeadsPlusConfigSounds() {
         this.conName = "sounds";
-        enable(false);
+        enable();
     }
 
     @Override
-    protected void load(boolean nullp) {
-        super.load(nullp);
+    protected void load() {
+        super.load();
         for (Defaults d : Defaults.values()) {
             getConfig().addDefault("sounds." + d.name + ".sound", HeadsPlus.getInstance().getNMS().getEXPSound().name());
             getConfig().addDefault("sounds." + d.name + ".volume", 1.0f);
@@ -29,8 +29,8 @@ public class HeadsPlusConfigSounds extends ConfigSettings {
         LEVELUP("on-level-up", true),
         HEADCRAFT("on-craft-head", false);
 
-        private String name;
-        private boolean enabled;
+        private final String name;
+        private final boolean enabled;
 
         Defaults(String name, boolean enabled) {
             this.name = name;

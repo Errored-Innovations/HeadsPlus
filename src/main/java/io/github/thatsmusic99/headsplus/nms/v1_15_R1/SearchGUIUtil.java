@@ -28,7 +28,7 @@ public class SearchGUIUtil extends SearchGUI {
         }
     }
 
-    private class AnvilContainer extends ContainerAnvil {
+    private static class AnvilContainer extends ContainerAnvil {
         public AnvilContainer(int id, EntityHuman entity) {
             super(id, entity.inventory, ContainerAccess.at(entity.world, new BlockPosition(0, 0, 0)));
             checkReachable = true;

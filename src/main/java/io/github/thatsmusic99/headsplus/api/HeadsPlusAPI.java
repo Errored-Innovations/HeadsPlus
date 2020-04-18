@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class HeadsPlusAPI {
 
     // S
-    private HeadsPlus hp = HeadsPlus.getInstance();
+    private final HeadsPlus hp = HeadsPlus.getInstance();
     private final HeadsPlusConfigCustomHeads hpcHeadsX = hp.getHeadsXConfig();
     private final HeadsPlusConfigHeads hpcHeads = hp.getHeadsConfig();
 
@@ -33,7 +34,7 @@ public class HeadsPlusAPI {
 
     public boolean isSellable(ItemStack is) {
         if (is.getType() == hp.getNMS().getSkullMaterial(1).getType()) {
-            return hp.getNBTManager().isSellable(is);
+            return NBTManager.isSellable(is);
         }
         return false;
     }
@@ -96,7 +97,7 @@ public class HeadsPlusAPI {
     }
 
     public String getSkullType(ItemStack is) {
-        return hp.getNBTManager().getType(is);
+        return NBTManager.getType(is);
     }
 
     public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database, boolean realtime) throws SQLException {

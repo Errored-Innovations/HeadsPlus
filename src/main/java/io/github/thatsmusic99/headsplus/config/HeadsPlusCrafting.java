@@ -17,7 +17,7 @@ public class HeadsPlusCrafting extends ConfigSettings {
 
 	public HeadsPlusCrafting() {
         this.conName = "crafting";
-	    enable(false);
+	    enable();
     }
 	
 	private void loadCrafting() {
@@ -27,7 +27,7 @@ public class HeadsPlusCrafting extends ConfigSettings {
 	}
 
 	@Override
-	public void reloadC(boolean nnn) {
+	public void reloadC() {
 		if (configF == null) {
 			configF = new File(HeadsPlus.getInstance().getDataFolder(), "crafting.yml");
 		}

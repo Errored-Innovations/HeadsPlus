@@ -27,7 +27,7 @@ import java.util.List;
 public class Conjure implements IHeadsPlusCommand {
 
     // F
-    private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getCmdDescription(CommandSender cs) {

@@ -15,7 +15,7 @@ public enum NMSIndex {
     v1_14_R1(11),
     v1_15_R1(12);
 
-    private int order;
+    private final int order;
 
     NMSIndex(int order) {
         this.order = order;

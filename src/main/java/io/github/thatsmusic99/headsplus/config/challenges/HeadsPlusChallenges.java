@@ -7,7 +7,6 @@ import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,20 +20,20 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
     public HeadsPlusChallenges() {
         this.conName = "challenges";
-        reloadC(false);
+        reloadC();
     }
 
     private boolean updated = false;
 
     @Override
-    public void reloadC(boolean a) {
+    public void reloadC() {
         if (configF == null || !configF.exists()) {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), "challenges.yml");
         }
         config = YamlConfiguration.loadConfiguration(configF);
         if (configF.length() < 1) {
             updated = true;
-            load(false);
+            load();
         }
         double v = config.getDouble("challenges.options.current-version");
         if ((v < 1.3 || updated)) {
@@ -51,7 +50,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
     }
 
     @Override
-    public void load(boolean aaaan) {
+    public void load() {
         getConfig().options().header("HeadsPlus by Thatsmusic99");
         getConfig().addDefault("challenges.options.current-version", 1.3);
         getConfig().addDefault("challenges.options.prepare-icons", true);

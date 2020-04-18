@@ -18,7 +18,7 @@ import java.util.UUID;
 public class Head {
 
     protected ItemStack itemStack;
-    private String id;
+    private final String id;
     private double price; // Pretty much central anyways
     private int data;
 

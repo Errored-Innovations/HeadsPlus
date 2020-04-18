@@ -7,8 +7,6 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +30,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     private final HeadsPlus hp = HeadsPlus.getInstance();
     private final HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
 
-    private List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
+    private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
 
     private boolean startsWithSelector(String arg) {
         for(String selector : selectors) {

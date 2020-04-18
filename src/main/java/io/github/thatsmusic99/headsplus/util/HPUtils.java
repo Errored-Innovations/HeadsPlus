@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 
 public class HPUtils {
 
-    private static HashMap<Player, BossBar> bossBars = new HashMap<>();
+    private static final HashMap<Player, BossBar> bossBars = new HashMap<>();
 
     public static void addBossBar(OfflinePlayer pl) {
         HPPlayer p = HPPlayer.getHPPlayer(pl);

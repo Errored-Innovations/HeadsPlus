@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.util;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -13,14 +14,14 @@ import java.util.*;
 
 public class NewMySQLAPI {
 
-    private static Connection connection = HeadsPlus.getInstance().getConnection();
+    private static final Connection connection = HeadsPlus.getInstance().getConnection();
 
     public static void createTable() {
         for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {
             try {
                 StringBuilder arg = new StringBuilder();
                 arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` VARCHAR(45), `total` VARCHAR(45), ");
-                for (String entity : HeadsPlus.getInstance().getDeathEvents().ableEntities) {
+                for (String entity : DeathEvents.ableEntities) {
                     arg.append(entity).append(" VARCHAR(45), ");
 
                 }

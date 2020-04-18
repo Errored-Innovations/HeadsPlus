@@ -10,10 +10,10 @@ public class LeaderboardIncrementEvent extends Event implements Cancellable{
     // T
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private Player player;
-    private String type;
-    private int oldValue;
-    private int newValue;
+    private final Player player;
+    private final String type;
+    private final int oldValue;
+    private final int newValue;
 
     @Override
     public boolean isCancelled() {

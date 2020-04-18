@@ -23,16 +23,16 @@ import java.util.*;
 
 public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
-    private static HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private static final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
 
     public HeadsPlusConfigTextMenu() {
         this.conName = "textmenus";
-        enable(false);
+        enable();
     }
 
     @Override
-    protected void load(boolean nullp) {
+    protected void load() {
         getConfig().addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
         getConfig().addDefault("help.header", "{default-paged}");
@@ -153,13 +153,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                             .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh", true)))
                             .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft", true)))
                             .replace("{header}", h.getConfig().getString("profile.header")), sender);
-                    if (!(stri.contains("{level}") || (stri.contains("{next-level}")))) {
-                        sb.append(stri).append("\n");
-                    } else {
+                    if (stri.contains("{level}") || (stri.contains("{next-level}"))) {
                         stri = stri.replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', p.getLevel().getDisplayName()))
                                 .replaceAll("\\{next-level}", String.valueOf((p.getNextLevel() != null ? (p.getNextLevel().getRequiredXP() - p.getXp()) : 0)));
-                        sb.append(stri).append("\n");
                     }
+                    sb.append(stri).append("\n");
 
                 } catch (NullPointerException ignored) {
 

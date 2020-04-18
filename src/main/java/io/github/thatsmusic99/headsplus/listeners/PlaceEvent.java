@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -17,7 +18,7 @@ public class PlaceEvent implements Listener {
                 if (hp.getNMS() instanceof NewNMSManager) {
                     if (e.getItemInHand().getType() == ((NewNMSManager) hp.getNMS()).getWallSkull()) {
                         if (!e.getPlayer().hasPermission("headsplus.bypass.preventplacement")) {
-                            if (hp.getNBTManager().isSellable(e.getItemInHand())) {
+                            if (NBTManager.isSellable(e.getItemInHand())) {
                                 e.setCancelled(true);
                                 e.getPlayer().sendMessage(hp.getMessagesConfig().getString("event.block-place-denied", e.getPlayer()));
                             }
@@ -26,7 +27,7 @@ public class PlaceEvent implements Listener {
                 }
                 if (e.getItemInHand().getType() == hp.getNMS().getSkullMaterial(1).getType() ) {
                     if (!e.getPlayer().hasPermission("headsplus.bypass.preventplacement")) {
-                        if (hp.getNBTManager().isSellable(e.getItemInHand())) {
+                        if (NBTManager.isSellable(e.getItemInHand())) {
                             e.setCancelled(true);
                             e.getPlayer().sendMessage(hp.getMessagesConfig().getString("event.block-place-denied", e.getPlayer()));
                         }

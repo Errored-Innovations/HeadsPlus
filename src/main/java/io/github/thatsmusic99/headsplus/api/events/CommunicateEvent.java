@@ -7,7 +7,7 @@ public class CommunicateEvent extends Event {
 
     // S
     private static final HandlerList handlers = new HandlerList();
-    private String plugin;
+    private final String plugin;
 
     public CommunicateEvent(String plugin) {
         this.plugin = plugin;

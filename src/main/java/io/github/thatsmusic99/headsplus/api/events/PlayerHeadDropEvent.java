@@ -2,13 +2,9 @@ package io.github.thatsmusic99.headsplus.api.events;
 
 import io.github.thatsmusic99.headsplus.api.Head;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerHeadDropEvent extends EntityHeadDropEvent {
 

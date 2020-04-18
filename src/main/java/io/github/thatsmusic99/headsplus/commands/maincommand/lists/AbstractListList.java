@@ -1,13 +1,11 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
-import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

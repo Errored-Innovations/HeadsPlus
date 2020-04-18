@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.crafting;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

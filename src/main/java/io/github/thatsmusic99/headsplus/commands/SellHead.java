@@ -62,7 +62,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                                     if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
                                         double price;
                                         if (invi.getAmount() > 0) {
-                                            price = invi.getAmount() * nbt().getPrice(invi);
+                                            price = invi.getAmount() * NBTManager.getPrice(invi);
                                             soldHeads.add(s);
                                             hm.put(s, invi.getAmount());
                                             double balance = HeadsPlus.getInstance().getEconomy().getBalance(p);
@@ -281,7 +281,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		return p;
 	}
 	private void sellAll(Player p, String[] a) {
-		Double price = 0.0;
+		double price = 0.0;
 
         if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 4) {
             ItemStack i = p.getInventory().getHelmet();
@@ -394,7 +394,4 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	    return HeadsPlus.getInstance().getNMS();
     }
 
-    private NBTManager nbt() {
-	    return HeadsPlus.getInstance().getNBTManager();
-    }
 }

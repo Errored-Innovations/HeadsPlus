@@ -7,8 +7,6 @@ import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +21,7 @@ import java.util.UUID;
 
 public class MaskEvent implements Listener {
 
-    private static HashMap<UUID, BukkitRunnable> maskMonitors = new HashMap<>();
+    private static final HashMap<UUID, BukkitRunnable> maskMonitors = new HashMap<>();
 
     @EventHandler
     public void onMaskPutOn(InventoryClickEvent e) {

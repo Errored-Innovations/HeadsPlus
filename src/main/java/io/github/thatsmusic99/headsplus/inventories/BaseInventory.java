@@ -33,15 +33,16 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     protected static HeadsPlus hp = HeadsPlus.getInstance();
     protected static HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-    private static Pattern PAGE = Pattern.compile("\\{page}");
-    private static Pattern PAGES = Pattern.compile("\\{pages}");
-    private static Pattern SECTION = Pattern.compile("\\{section}");
+    private static final Pattern PAGE = Pattern.compile("\\{page}");
+    private static final Pattern PAGES = Pattern.compile("\\{pages}");
+    private static final Pattern SECTION = Pattern.compile("\\{section}");
     protected FileConfiguration hpi;
     private Inventory inventory;
     protected PagedLists<Content> contents;
     private boolean larger;
     private UUID uuid;
     private Icon[] icons;
+    protected boolean suppressWarnings;
 
     // Used for config setup purposes
     public BaseInventory() {
@@ -49,6 +50,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     }
 
     public BaseInventory(Player player, HashMap<String, String> context) {
+        suppressWarnings = hp.getConfiguration().getMechanics().getBoolean("suppress-gui-warnings");
         hpi = hp.getItems().getConfig();
         // Decide if the inventory becomes larger
         larger = hp.getConfig().getBoolean("plugin.larger-menus");
@@ -140,7 +142,9 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 } else {
                     try {
                         icon = Air.class.getConstructor(Player.class).newInstance(player);
-                        hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                        if (!suppressWarnings) {
+                            hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                        }
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();
                         return;

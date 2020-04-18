@@ -26,7 +26,9 @@ public class HeadsSearch extends HeadsSection {
             try {
                 name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
             } catch (NullPointerException ex) {
-                hp.getLogger().warning("Null display name for " + head + "!");
+                if (!suppressWarnings) {
+                    hp.getLogger().warning("Null display name for " + head + "!");
+                }
                 continue;
             }
             if (name.contains(search)) {

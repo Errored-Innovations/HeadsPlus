@@ -17,7 +17,7 @@ public class TabCompleteLB implements TabCompleter {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
-            for (String e : new DeathEvents().ableEntities) {
+            for (String e : DeathEvents.ableEntities) {
                 c.add(WordUtils.capitalize(e.toLowerCase()));
             }
             c.add("Total");

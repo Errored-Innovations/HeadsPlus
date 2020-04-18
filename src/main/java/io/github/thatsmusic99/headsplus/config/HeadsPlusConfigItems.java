@@ -16,11 +16,11 @@ public class HeadsPlusConfigItems extends ConfigSettings {
 
     public HeadsPlusConfigItems() {
         conName = "inventories";
-        enable(false);
+        enable();
     }
 
     @Override
-    protected void load(boolean nullp) {
+    protected void load() {
         for (Icon i : Arrays.asList(new Challenge(),
                 new ChallengeSection(), new CustomHead(),
                 new CustomHeadSection(), new SellheadHead(), new Air(),

@@ -7,11 +7,11 @@ import java.util.List;
 
 public class PagedHashmaps<K, V> {
 
-    private LinkedHashMap<K, V> hs;
-    private int pages;
-    private int contents;
+    private final LinkedHashMap<K, V> hs;
+    private final int pages;
+    private final int contents;
     private int currentPage;
-    private int contentsPerPage;
+    private final int contentsPerPage;
 
     public PagedHashmaps(LinkedHashMap<K, V> hs, int contentsPerPage) {
         if (contentsPerPage < 1) {

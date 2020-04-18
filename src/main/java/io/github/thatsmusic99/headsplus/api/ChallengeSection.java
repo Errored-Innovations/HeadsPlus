@@ -8,12 +8,12 @@ import java.util.List;
 
 public class ChallengeSection {
 
-    private List<Challenge> challenges = new ArrayList<>();
-    private Material material;
-    private byte materialData;
-    private String displayName;
-    private String name;
-    private List<String> lore;
+    private final List<Challenge> challenges = new ArrayList<>();
+    private final Material material;
+    private final byte materialData;
+    private final String displayName;
+    private final String name;
+    private final List<String> lore;
 
     public ChallengeSection(Material mat, byte data, String displayName, List<String> lore, String name) {
         this.material = mat;

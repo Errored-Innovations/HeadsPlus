@@ -14,7 +14,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
  */
 final class JsonString implements JsonRepresentedObject, ConfigurationSerializable {
 
-	private String _value;
+	private final String _value;
 
 	public JsonString(CharSequence value) {
 		_value = value == null ? null : value.toString();

@@ -13,14 +13,14 @@ import java.util.List;
 
 public class Reward implements Cloneable {
 
-    private HPChallengeRewardTypes type;
+    private final HPChallengeRewardTypes type;
     private double money;
     private int xp;
     private ItemStack item;
     private String group;
     private boolean consoleSender = false;
-    private boolean multiply;
-    private String name;
+    private final boolean multiply;
+    private final String name;
     private List<String> commands;
     private String rewardString = null;
 
@@ -28,14 +28,14 @@ public class Reward implements Cloneable {
         this.name = name;
         switch (type) {
             case ECO:
-                money = Double.valueOf(String.valueOf(value));
+                money = Double.parseDouble(String.valueOf(value));
                 break;
             case ADD_GROUP:
             case REMOVE_GROUP:
                 group = String.valueOf(value);
                 break;
             case RUN_COMMAND:
-                commands = new ArrayList<>((List) value);
+                commands = new ArrayList<>((List<String>) value);
                 break;
             case GIVE_ITEM:
                 item = new ItemStack(Material.getMaterial(String.valueOf(value)), amount);

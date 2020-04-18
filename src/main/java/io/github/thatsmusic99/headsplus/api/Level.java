@@ -14,15 +14,15 @@ import java.util.logging.Logger;
 public class Level extends BaseLevel {
 
     // T
-    private String configName;
-    private String displayName;
-    private int requiredXP;
-    private double addedVersion;
-    private boolean rEnabled;
-    private HPChallengeRewardTypes rewardType;
-    private Object rewardValue;
-    private int rewardItemAmount;
-    private String sender;
+    private final String configName;
+    private final String displayName;
+    private final int requiredXP;
+    private final double addedVersion;
+    private final boolean rEnabled;
+    private final HPChallengeRewardTypes rewardType;
+    private final Object rewardValue;
+    private final int rewardItemAmount;
+    private final String sender;
 
     public Level(String configName, String displayName, int requiredXP, double addedVersion, boolean e, HPChallengeRewardTypes rewardType, Object rewardValue, int rewardItemAmount, String sender) {
         super(configName, displayName, requiredXP, addedVersion);
@@ -85,7 +85,7 @@ public class Level extends BaseLevel {
 
         if (re == HPChallengeRewardTypes.ECO) {
             if (hp.econ()) {
-                hp.getEconomy().depositPlayer(p, Double.valueOf(String.valueOf(getRewardValue())));
+                hp.getEconomy().depositPlayer(p, Double.parseDouble(String.valueOf(getRewardValue())));
             } else {
                 hp.getLogger().warning(hpc.getString("startup.no-vault-2"));
             }

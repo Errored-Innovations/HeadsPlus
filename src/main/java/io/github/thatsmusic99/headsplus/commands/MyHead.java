@@ -7,8 +7,6 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,10 +44,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                         } else {
                             sender.sendMessage(hpc.getString("commands.errors.player-offline", null));
                         }
-                        return false;
-                    } else {
-                        return false;
                     }
+                    return false;
                 } else if (!(sender instanceof Player)) {
                     sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
                     return false;

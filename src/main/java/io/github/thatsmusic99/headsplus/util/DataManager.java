@@ -9,7 +9,7 @@ import java.util.*;
 
 public class DataManager {
 
-    private static HeadsPlus hp = HeadsPlus.getInstance();
+    private static final HeadsPlus hp = HeadsPlus.getInstance();
 
     public static LinkedHashMap<OfflinePlayer, Integer> getScores(String database, String section, boolean transfer) {
         if (hp.isConnectedToMySQLDatabase() && !transfer) {

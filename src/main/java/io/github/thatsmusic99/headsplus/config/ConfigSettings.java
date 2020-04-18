@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,22 +14,22 @@ public abstract class ConfigSettings {
     protected File configF;
     public String conName = "";
 
-    protected void enable(boolean nullp) {
-        reloadC(nullp);
-        load(nullp);
+    protected void enable() {
+        reloadC();
+        load();
     }
 
-    protected void load(boolean nullp) {
+    protected void load() {
         getConfig().options().copyDefaults(true);
         save();
     }
 
-    public void reloadC(boolean nullp) {
+    public void reloadC() {
         if (configF == null) {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), conName + ".yml");
         }
         config = YamlConfiguration.loadConfiguration(configF);
-        load(nullp);
+        load();
     }
 
     public void save() {

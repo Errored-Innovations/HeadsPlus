@@ -11,29 +11,29 @@ import java.util.HashMap;
 
 public class HeadsPlusLevels extends ConfigSettings {
 
-    private HashMap<Integer, BaseLevel> levels = new HashMap<>();
+    private final HashMap<Integer, BaseLevel> levels = new HashMap<>();
 
     public HashMap<Integer, BaseLevel> getDefLevels() {
         return levels;
     }
 
-    private double version = 0.1;
+    private final double version = 0.1;
 
     public HeadsPlusLevels() {
         this.conName = "levels";
-        enable(false);
+        enable();
 
     }
 
     @Override
-    public void reloadC(boolean a) {
+    public void reloadC() {
         addDefLevels();
 
         if (configF == null || !configF.exists()) {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), "levels.yml");
         }
         config = YamlConfiguration.loadConfiguration(configF);
-        load(false);
+        load();
         getConfig().options().copyDefaults(true);
         save();
         loadLevels();
@@ -70,7 +70,7 @@ public class HeadsPlusLevels extends ConfigSettings {
     }
 
     @Override
-    public void load(boolean n) {
+    public void load() {
         if (getConfig().getDouble("version") < version) {
 
             getConfig().set("version", 0.1);

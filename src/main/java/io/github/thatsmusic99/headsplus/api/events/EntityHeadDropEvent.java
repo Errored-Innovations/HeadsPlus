@@ -17,7 +17,7 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
     private Player player;
     private EntityType entityType;
     private Location location;
-    private int amount;
+    private final int amount;
 
     public EntityHeadDropEvent(Player killer, Head head, Location location, EntityType entityType, int amount) {
         this.player = killer;

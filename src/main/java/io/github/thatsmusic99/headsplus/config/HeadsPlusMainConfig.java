@@ -19,15 +19,15 @@ public class HeadsPlusMainConfig extends ConfigSettings {
 
     public HeadsPlusMainConfig() {
         this.conName = "config";
-        enable(false);
+        enable();
     }
 
     @Override
-    protected void load(boolean nullp) {
+    protected void load() {
 
         if (config.get("blacklistOn") instanceof Boolean) {
             configF.delete();
-            reloadC(false);
+            reloadC();
         }
         config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
         config.addDefault("locale", "en_us");
@@ -107,6 +107,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.xp.crafting", 10);
         config.addDefault("plugin.mechanics.xp.head-drops", 10);
         config.addDefault("plugin.mechanics.xp.selling", 10);
+        config.addDefault("plugin.mechanics.suppress-gui-warnings", true);
         config.addDefault("plugin.mechanics.blocked-spawn-causes", Collections.singleton("SPAWNER_EGG"));
         //    config.addDefault("plugin.mechanics.ignored-players-head-drops", new ArrayList<>());
         config.set("mysql.passworld", null); // I still love this

@@ -17,9 +17,9 @@ import java.util.Set;
 
 public class DataListener extends StringPrompt {
     private static final List<String> types = Arrays.asList("id", "texture", "displayname", "price", "section");
-    private Set<String> sections = HeadsPlus.getInstance().getHeadsXConfig().sections.keySet();
-    private String message;
-    private int type;
+    private final Set<String> sections = HeadsPlus.getInstance().getHeadsXConfig().sections.keySet();
+    private final String message;
+    private final int type;
 
     public DataListener(int id, String message) {
         this.type = id;

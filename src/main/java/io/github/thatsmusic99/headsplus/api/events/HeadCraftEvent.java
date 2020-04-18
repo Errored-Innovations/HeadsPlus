@@ -13,12 +13,12 @@ public class HeadCraftEvent extends Event implements Cancellable {
     // M
     private boolean cancelled;
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
+    private final Player player;
     private ItemStack skull;
-    private World world;
-    private Location location;
+    private final World world;
+    private final Location location;
     private int headsCrafted;
-    private String entityType;
+    private final String entityType;
 
     public HeadCraftEvent(Player p, ItemStack head, World world, Location location, int hc, String type) {
         player = p;

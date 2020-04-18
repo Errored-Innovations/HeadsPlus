@@ -107,7 +107,7 @@ public class HPExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             String category = args[1].toLowerCase();
             String entity = getFixedString(args[2], false);
-            int position = Integer.valueOf(args[3]);
+            int position = Integer.parseInt(args[3]);
             String option = args[4];
             try {
                 LinkedHashMap<OfflinePlayer, Integer> list;

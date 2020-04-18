@@ -19,7 +19,7 @@ import java.util.Random;
 @CommandInfo(commandname = "tests", permission = "headsplus.maincommand.tests", subcommand = "Tests", usage = "/hp tests <Entity type> <Amount>", maincommand = true)
 public class TestsCommand implements IHeadsPlusCommand {
 
-    private HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public String getCmdDescription(CommandSender sender) {

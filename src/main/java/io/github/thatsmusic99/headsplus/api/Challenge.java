@@ -14,17 +14,17 @@ import java.util.List;
 public class Challenge {
 
     // I
-    private String configName;
-    private String mainName;
-    private String header;
-    private List<String> description;
-    private int requiredHeadAmount;
-    private HeadsPlusChallengeTypes challengeType;
-    private Reward reward;
-    private int difficulty;
-    private ItemStack icon;
-    private ItemStack completeIcon;
-    private String headType;
+    private final String configName;
+    private final String mainName;
+    private final String header;
+    private final List<String> description;
+    private final int requiredHeadAmount;
+    private final HeadsPlusChallengeTypes challengeType;
+    private final Reward reward;
+    private final int difficulty;
+    private final ItemStack icon;
+    private final ItemStack completeIcon;
+    private final String headType;
 
     public Challenge(String configName, String mainName, String header, List<String> description, int requiredHeadAmount, HeadsPlusChallengeTypes challengeType, String headType, Reward reward, int difficulty, ItemStack icon, ItemStack completeIcon) {
         this.configName = configName;

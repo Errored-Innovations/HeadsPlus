@@ -14,7 +14,7 @@ public class SearchGUIUtil extends SearchGUI {
     // Util by ChaseChocolate/frostythedev on Github
     // https://gist.github.com/frostythedev/95b5d494a1697ad4a0a4
 
-    private class AnvilContainer extends ContainerAnvil {
+    private static class AnvilContainer extends ContainerAnvil {
         public AnvilContainer(EntityHuman entity) {
             super(entity.inventory, entity.world,new BlockPosition(0, 0, 0), entity);
         }
