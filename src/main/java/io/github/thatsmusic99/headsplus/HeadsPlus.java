@@ -128,7 +128,6 @@ public class HeadsPlus extends JavaPlugin {
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
             }
-            HeadsPlus.getInstance().restartMessagesManager();
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
@@ -137,7 +136,6 @@ public class HeadsPlus extends JavaPlugin {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        restartMessagesManager();
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
                             getServer().getConsoleSender().sendMessage(hpc.getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
@@ -321,8 +319,6 @@ public class HeadsPlus extends JavaPlugin {
         config = new HeadsPlusMainConfig();
         cs.add(config);
         hpc = new HeadsPlusMessagesManager();
-        items = new HeadsPlusConfigItems();
-        cs.add(items);
         hapi = new HeadsPlusAPI();
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
@@ -354,6 +350,8 @@ public class HeadsPlus extends JavaPlugin {
         }
         hpl = new HeadsPlusLevels();
         cs.add(hpl);
+        items = new HeadsPlusConfigItems();
+        cs.add(items);
         sounds = new HeadsPlusConfigSounds();
         cs.add(sounds);
         menus = new HeadsPlusConfigTextMenu();
