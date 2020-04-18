@@ -16,7 +16,6 @@ import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
@@ -73,12 +72,11 @@ public class HeadsPlus extends JavaPlugin {
     private NMSManager nms;
     private NMSIndex nmsversion;
     private final List<IHeadsPlusCommand> commands = new ArrayList<>();
-    private HashMap<Integer, Level> levels = new HashMap<>();
-    private List<ConfigSettings> cs = new ArrayList<>();
+    private final HashMap<Integer, Level> levels = new HashMap<>();
+    private final List<ConfigSettings> cs = new ArrayList<>();
     private Favourites favourites;
     private Pinned pinned;
     private PlayerScores scores;
-    private NBTManager nbt;
 
     @Override
     public void onEnable() {
@@ -96,6 +94,7 @@ public class HeadsPlus extends JavaPlugin {
             // Build plugin instances
             createInstances();
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
+
 
             if (!isEnabled()) return;
             // Checks theme, believe it or not!
@@ -129,7 +128,7 @@ public class HeadsPlus extends JavaPlugin {
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
             }
-
+            HeadsPlus.getInstance().restartMessagesManager();
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
@@ -138,6 +137,7 @@ public class HeadsPlus extends JavaPlugin {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        restartMessagesManager();
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
                             getServer().getConsoleSender().sendMessage(hpc.getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
@@ -320,9 +320,10 @@ public class HeadsPlus extends JavaPlugin {
 
         config = new HeadsPlusMainConfig();
         cs.add(config);
-        hapi = new HeadsPlusAPI();
-        nbt = new NBTManager();
         hpc = new HeadsPlusMessagesManager();
+        items = new HeadsPlusConfigItems();
+        cs.add(items);
+        hapi = new HeadsPlusAPI();
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
         hpchx = new HeadsPlusConfigCustomHeads();
@@ -353,8 +354,6 @@ public class HeadsPlus extends JavaPlugin {
         }
         hpl = new HeadsPlusLevels();
         cs.add(hpl);
-        items = new HeadsPlusConfigItems();
-        cs.add(items);
         sounds = new HeadsPlusConfigSounds();
         cs.add(sounds);
         menus = new HeadsPlusConfigTextMenu();
@@ -574,10 +573,6 @@ public class HeadsPlus extends JavaPlugin {
 
     protected HeadsPlusLevels getLevelsConfig() {
         return hpl;
-    }
-
-    public NBTManager getNBTManager() {
-        return nbt;
     }
 
     public HeadsPlusCrafting getCraftingConfig() {
