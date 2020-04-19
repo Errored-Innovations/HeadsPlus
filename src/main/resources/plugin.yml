@@ -1,11 +1,11 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: '6.10'
+version: '6.10.1-SNAPSHOT-1'
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
 # Please note this is mostly to let the weird messages from each plugin work.
-softdepend: [Vault, AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION]
+softdepend: [Vault, AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION, PlaceholderAPI, Ultimate_Economy]
 commands:
   head:
     description: Spawns in a head.
