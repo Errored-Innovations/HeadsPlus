@@ -92,7 +92,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             }
             configF = newFile;
         }
-        config = YamlConfiguration.loadConfiguration(configF);
+        performFileChecks();
         getConfig().addDefault("options.update-heads", true);
         getConfig().addDefault("options.version", cVersion);
         getConfig().addDefault("options.default-price", 10.00);

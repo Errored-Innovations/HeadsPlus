@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
@@ -354,7 +355,7 @@ public class NBTManager {
      * @return The value being mapped to the given key.
      */
     public static byte getByte(ItemStack itemStack, String nbtKey) {
-        return Byte.valueOf(String.valueOf(getObject(itemStack, "setByte", nbtKey)));
+        return Byte.parseByte(String.valueOf(getObject(itemStack, "setByte", nbtKey)));
     }
 
     /**
@@ -374,7 +375,7 @@ public class NBTManager {
      * @return The value being mapped to the given key.
      */
     public static double getDouble(ItemStack itemStack, String nbtKey) {
-        return Double.valueOf(String.valueOf(getObject(itemStack, "getDouble", nbtKey)));
+        return Double.parseDouble(String.valueOf(getObject(itemStack, "getDouble", nbtKey)));
     }
 
     /**
@@ -469,6 +470,7 @@ public class NBTManager {
             if (nbtTag == null) {
                 nbtTag = newNBTTag();
             }
+            Block.class.getMethod("setData", byte.class);
             Method method = nbtTag.getClass().getMethod("setString", String.class, String.class);
             method.invoke(nbtTag, "head-id", id);
             Method method1 = nbtTag.getClass().getMethod("setDouble", String.class, double.class);

@@ -14,9 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -43,6 +41,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     private UUID uuid;
     private Icon[] icons;
     protected boolean suppressWarnings;
+    private boolean destroy = false;
 
     // Used for config setup purposes
     public BaseInventory() {
@@ -50,14 +49,18 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     }
 
     public BaseInventory(Player player, HashMap<String, String> context) {
+        // Decide whether warnings need to be suppressed
         suppressWarnings = hp.getConfiguration().getMechanics().getBoolean("suppress-gui-warnings");
         hpi = hp.getItems().getConfig();
         // Decide if the inventory becomes larger
         larger = hp.getConfig().getBoolean("plugin.larger-menus");
         // Get the default icons
         icons = new Icon[hpi.getInt("inventories." + getId() + ".size")];
+        // Get the unique ID of the player, never store the player object
         uuid = player.getUniqueId();
+        // Get the icon list
         String items = hpi.getString("inventories." + getId() + ".icons");
+        // Count the amount of contents that will appear in
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
         contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
         new BukkitRunnable() {
@@ -67,6 +70,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        new NewInventoryEvent(player, getInventory());
                         player.openInventory(getInventory());
                     }
                 }.runTask(hp);
@@ -177,7 +181,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                 iconEvent.setToDestroy(icons[slot].onClick((Player) event.getWhoClicked(), event));
             }
             if (iconEvent.willDestroy()) {
-                destroy((Player) event.getWhoClicked());
+                destroy = true;
             }
         }
     }
@@ -186,6 +190,12 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public void onInvClose(InventoryCloseEvent event) {
         if (event.getInventory().getHolder() != this) return;
         destroy((Player) event.getPlayer());
+    }
+
+    @EventHandler
+    public void onInvNew(NewInventoryEvent event) {
+        if (event.getInventory().getHolder() != this) return;
+        if (destroy) destroy(event.getPlayer());
     }
 
     public void destroy(Player player) {
@@ -202,5 +212,46 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     public PagedLists<Content> getContents() {
         return contents;
+    }
+
+    private static class NewInventoryEvent extends Event implements Cancellable {
+
+        private final UUID player;
+        private boolean cancelled = false;
+        private Inventory inventory;
+
+        public NewInventoryEvent(Player player, Inventory inventory) {
+            this.player = player.getUniqueId();
+            this.inventory = inventory;
+            Bukkit.getPluginManager().callEvent(this);
+        }
+
+        private static final HandlerList HANDLERS = new HandlerList();
+
+        public HandlerList getHandlers() {
+            return HANDLERS;
+        }
+
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
+
+        public Player getPlayer() {
+            return Bukkit.getPlayer(this.player);
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        @Override
+        public void setCancelled(boolean cancelled) {
+            this.cancelled = cancelled;
+        }
+
+        public Inventory getInventory() {
+            return inventory;
+        }
     }
 }

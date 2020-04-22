@@ -1,6 +1,6 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: '6.10.1-SNAPSHOT-1'
+version: '6.10.1'
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99

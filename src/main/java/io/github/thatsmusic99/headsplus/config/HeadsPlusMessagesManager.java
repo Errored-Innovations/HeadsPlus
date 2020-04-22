@@ -7,16 +7,21 @@ import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,13 +33,14 @@ public class HeadsPlusMessagesManager {
 
     public HeadsPlusMessagesManager() {
         HeadsPlus hp = HeadsPlus.getInstance();
+        String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
         HeadsPlusMainConfig mainConfig = hp.getConfiguration();
         String locale = mainConfig.getConfig().getString("locale");
         if (mainConfig.getConfig().getBoolean("smart-locale")) {
             locales = new HashMap<>();
-            File langDir = new File(hp.getDataFolder() + File.separator + "locale" + File.separator);
+            File langDir = new File(dest);
             for (File f : Objects.requireNonNull(langDir.listFiles())) {
-                locales.put(f.getName().split("_")[0].toLowerCase(), YamlConfiguration.loadConfiguration(f));
+                locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
             }
             players = new HashMap<>();
         } else {
@@ -42,10 +48,10 @@ public class HeadsPlusMessagesManager {
         }
         // Main config for non-player entities such as console
         try {
-            config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, locale + ".yml"));
+            config = performChecks(new File(dest, locale + ".yml"), locale);
         } catch (Exception e) {
             hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
-            config = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
+            config = performChecks(new File(dest, "en_us.yml"), "en_us");
         }
         double version = 1.3;
         if (config.getDouble("version") != version) {
@@ -53,16 +59,16 @@ public class HeadsPlusMessagesManager {
                 @Override
                 public void run() {
                     hp.getLogger().info("Locale configs are outdated! Updating messages...");
-                    YamlConfiguration en_us = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
-                    YamlConfiguration de_de = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "de_de.yml"));
-                    YamlConfiguration es_es = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "es_es.yml"));
-                    YamlConfiguration fr_fr = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "fr_fr.yml"));
-                    YamlConfiguration hu_hu = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "hu_hu.yml"));
-                    YamlConfiguration lol_us = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "lol_us.yml"));
-                    YamlConfiguration pl_pl = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "pl_pl.yml"));
-                    YamlConfiguration ro_ro = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ro_ro.yml"));
-                    YamlConfiguration ru_ru = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ru_ru.yml"));
-                    YamlConfiguration nl_nl = YamlConfiguration.loadConfiguration(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "nl_nl.yml"));
+                    YamlConfiguration en_us = performChecks(new File(dest, "en_us.yml"), "en_us");
+                    YamlConfiguration de_de = performChecks(new File(dest, "de_de.yml"), "de_de");
+                    YamlConfiguration es_es = performChecks(new File(dest, "es_es.yml"), "es_es");
+                    YamlConfiguration fr_fr = performChecks(new File(dest, "fr_fr.yml"), "fr_fr");
+                    YamlConfiguration hu_hu = performChecks(new File(dest, "hu_hu.yml"), "hu_hu");
+                    YamlConfiguration lol_us = performChecks(new File(dest, "lol_us.yml"), "lol_us");
+                    YamlConfiguration pl_pl = performChecks(new File(dest, "pl_pl.yml"), "pl_pl");
+                    YamlConfiguration ro_ro = performChecks(new File(dest, "ro_ro.yml"), "ro_ro");
+                    YamlConfiguration ru_ru = performChecks(new File(dest, "ru_ru.yml"), "ru_ru");
+                    YamlConfiguration nl_nl = performChecks(new File(dest, "nl_nl.yml"), "nl_nl");
 
                     {
                         en_us.addDefault("language", "English (US)");
@@ -140,7 +146,7 @@ public class HeadsPlusMessagesManager {
                         en_us.set("version", version);
                         en_us.options().copyDefaults(true);
                         try {
-                            en_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "en_us.yml"));
+                            en_us.save(new File(dest, "en_us.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -222,7 +228,7 @@ public class HeadsPlusMessagesManager {
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
-                            de_de.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "de_de.yml"));
+                            de_de.save(new File(dest, "de_de.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -304,7 +310,7 @@ public class HeadsPlusMessagesManager {
                         es_es.set("version", version);
                         es_es.options().copyDefaults(true);
                         try {
-                            es_es.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "es_es.yml"));
+                            es_es.save(new File(dest, "es_es.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -386,7 +392,7 @@ public class HeadsPlusMessagesManager {
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
-                            fr_fr.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "fr_fr.yml"));
+                            fr_fr.save(new File(dest, "fr_fr.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -468,7 +474,7 @@ public class HeadsPlusMessagesManager {
                         hu_hu.set("version", version);
                         hu_hu.options().copyDefaults(true);
                         try {
-                            hu_hu.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "hu_hu.yml"));
+                            hu_hu.save(new File(dest, "hu_hu.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -550,7 +556,7 @@ public class HeadsPlusMessagesManager {
                         lol_us.set("version", version);
                         lol_us.options().copyDefaults(true);
                         try {
-                            lol_us.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "lol_us.yml"));
+                            lol_us.save(new File(dest, "lol_us.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -632,7 +638,7 @@ public class HeadsPlusMessagesManager {
                         pl_pl.set("version", version);
                         pl_pl.options().copyDefaults(true);
                         try {
-                            pl_pl.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "pl_pl.yml"));
+                            pl_pl.save(new File(dest, "pl_pl.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -714,7 +720,7 @@ public class HeadsPlusMessagesManager {
                         ro_ro.set("version", version);
                         ro_ro.options().copyDefaults(true);
                         try {
-                            ro_ro.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ro_ro.yml"));
+                            ro_ro.save(new File(dest, "ro_ro.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -796,7 +802,7 @@ public class HeadsPlusMessagesManager {
                         ru_ru.set("version", version);
                         ru_ru.options().copyDefaults(true);
                         try {
-                            ru_ru.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "ru_ru.yml"));
+                            ru_ru.save(new File(dest, "ru_ru.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -809,7 +815,7 @@ public class HeadsPlusMessagesManager {
                         nl_nl.set("version", version);
                         nl_nl.options().copyDefaults(true);
                         try {
-                            nl_nl.save(new File(hp.getDataFolder() + File.separator + "locale" + File.separator, "nl_nl.yml"));
+                            nl_nl.save(new File(dest, "nl_nl.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -939,5 +945,39 @@ public class HeadsPlusMessagesManager {
 
     public static HashMap<String, YamlConfiguration> getLocales() {
         return locales;
+    }
+
+    private YamlConfiguration performChecks(File file, String name) {
+        if (file == null) {
+            file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
+        }
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+
+            config.load(file);
+        } catch (InvalidConfigurationException ex) {
+            Logger logger = HeadsPlus.getInstance().getLogger();
+            logger.severe("There is a configuration error in the plugin configuration files! Details below:");
+            logger.severe(ex.getMessage());
+            logger.severe("We have renamed the faulty configuration to " + name + "-errored.yml for you to inspect.");
+            file.renameTo(new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
+            logger.severe("When you believe you have fixed the problems, change the file name back to " + name + ".yml and reload the configuration.");
+            logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
+            logger.severe("The default configuration will be loaded in response to this.");
+            InputStream is = HeadsPlus.getInstance().getResource(name + ".yml");
+            try {
+                file.delete();
+                Files.copy(is, new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
+                file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
+                config.load(file);
+            } catch (FileNotFoundException ignored) {
+
+            } catch (IOException | InvalidConfigurationException e) { // This time, it's me being a dumbass!
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return config;
     }
 }

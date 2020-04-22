@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,6 +73,8 @@ public class MaskEvent implements Listener {
     @EventHandler
     public void onPlayerFall(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
+            Player player = (Player) e.getEntity();
+            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
             HeadsPlus hp = HeadsPlus.getInstance();
             if (hp.getConfiguration().getPerks().mask_powerups) {
                 HPPlayer pl = HPPlayer.getHPPlayer((Player) e.getEntity());

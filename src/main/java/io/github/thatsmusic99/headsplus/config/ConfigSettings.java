@@ -2,11 +2,15 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.yaml.snakeyaml.parser.ParserException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public abstract class ConfigSettings {
 
@@ -25,11 +29,29 @@ public abstract class ConfigSettings {
     }
 
     public void reloadC() {
+        performFileChecks();
+        load();
+    }
+
+    public void performFileChecks() {
         if (configF == null) {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), conName + ".yml");
         }
-        config = YamlConfiguration.loadConfiguration(configF);
-        load();
+        try {
+            config = new YamlConfiguration();
+            config.load(configF);
+        } catch (InvalidConfigurationException ex) {
+            Logger logger = HeadsPlus.getInstance().getLogger();
+            logger.severe("There is a configuration error in the plugin configuration files! Details below:");
+            logger.severe(ex.getMessage());
+            logger.severe("We have renamed the faulty configuration to " + conName + "-errored.yml for you to inspect.");
+            configF.renameTo(new File(HeadsPlus.getInstance().getDataFolder(), conName + "-errored.yml"));
+            logger.severe("When you believe you have fixed the problems, change the file name back to " + conName + ".yml and reload the configuration.");
+            logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
+            logger.severe("The default configuration will be loaded in response to this.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void save() {

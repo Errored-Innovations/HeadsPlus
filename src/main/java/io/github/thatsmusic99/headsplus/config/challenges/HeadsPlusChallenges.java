@@ -27,10 +27,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
     @Override
     public void reloadC() {
-        if (configF == null || !configF.exists()) {
-            configF = new File(HeadsPlus.getInstance().getDataFolder(), "challenges.yml");
-        }
-        config = YamlConfiguration.loadConfiguration(configF);
+        performFileChecks();
         if (configF.length() < 1) {
             updated = true;
             load();

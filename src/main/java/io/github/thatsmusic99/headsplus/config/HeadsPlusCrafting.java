@@ -28,10 +28,7 @@ public class HeadsPlusCrafting extends ConfigSettings {
 
 	@Override
 	public void reloadC() {
-		if (configF == null) {
-			configF = new File(HeadsPlus.getInstance().getDataFolder(), "crafting.yml");
-		}
-		config = YamlConfiguration.loadConfiguration(configF);
+		performFileChecks();
 		loadCrafting();
 		checkCrafting();
 		save();

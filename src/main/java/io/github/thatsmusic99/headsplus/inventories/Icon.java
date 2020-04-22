@@ -52,7 +52,7 @@ public abstract class Icon {
                     (byte) hpi.getInt("icons." + id + ".data-value"));
 
         } catch (NullPointerException ex) {
-            hp.getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists!");
+            hp.getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists! (Error code: 8)");
         }
     }
 
@@ -72,12 +72,16 @@ public abstract class Icon {
 
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));
-        List<String> lore = new ArrayList<>();
-        for (String loreStr : hpi.getStringList("icons." + id + ".lore")) {
-            lore.add(hpc.formatMsg(loreStr, player));
+        try {
+            meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));
+            List<String> lore = new ArrayList<>();
+            for (String loreStr : hpi.getStringList("icons." + id + ".lore")) {
+                lore.add(hpc.formatMsg(loreStr, player));
+            }
+            meta.setLore(lore);
+        } catch (NullPointerException ex) {
+            hp.getLogger().warning("There was a problem setting the display name or lore for icon " + id + "! (Error code: 9)");
         }
-        meta.setLore(lore);
         item.setItemMeta(meta);
     }
 

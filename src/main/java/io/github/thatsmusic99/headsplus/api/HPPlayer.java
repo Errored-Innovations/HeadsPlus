@@ -21,20 +21,21 @@ import java.util.UUID;
 public class HPPlayer {
 
     // M
-    private final UUID player;
+    private UUID player;
     private int xp;
     private Level level = null;
-    private final List<String> completeChallenges;
+    private List<String> completeChallenges;
     private Level nextLevel = null;
-    private final HashMap<String, List<PotionEffect>> activeMasks;
+    private HashMap<String, List<PotionEffect>> activeMasks;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private final List<String> favouriteHeads;
-    private final List<String> pinnedChallenges;
+    private List<String> favouriteHeads;
+    private List<String> pinnedChallenges;
     private boolean ignoreFallDamage;
     private String cachedLocale;
     private boolean localeForced;
 
     public HPPlayer(OfflinePlayer p) {
+        if (Bukkit.getPlayer(p.getUniqueId()) == null) return;
         HeadsPlus hp = HeadsPlus.getInstance();
         activeMasks = new HashMap<>();
         favouriteHeads = new ArrayList<>();
@@ -198,6 +199,7 @@ public class HPPlayer {
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
         UUID uuid = p.getUniqueId();
+
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
     }
 

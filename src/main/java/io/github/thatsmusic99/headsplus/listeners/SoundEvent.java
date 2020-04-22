@@ -70,7 +70,7 @@ public class SoundEvent implements Listener {
             float pitch = (float) sounds.getConfig().getDouble("sounds." + st + ".pitch");
             l.getWorld().playSound(l, s, vol, pitch);
         } catch (IllegalArgumentException ex) {
-            HeadsPlus.getInstance().getLogger().warning("Could not find sound " + sounds.getConfig().getString("sounds." + st + ".sound") + "!");
+            HeadsPlus.getInstance().getLogger().warning("Could not find sound " + sounds.getConfig().getString("sounds." + st + ".sound") + "! (Error code: 7)");
         }
 
     }

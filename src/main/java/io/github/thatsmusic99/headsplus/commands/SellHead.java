@@ -165,6 +165,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         return false;
 	}
 
+
 	@SuppressWarnings("deprecation")
     private static ItemStack checkHand(Player p) {
 		if (Bukkit.getVersion().contains("1.8")) {

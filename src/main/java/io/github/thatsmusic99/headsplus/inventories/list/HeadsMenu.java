@@ -54,7 +54,7 @@ public class HeadsMenu extends BaseInventory {
                 item = headsConfig.getSkull(configSec.getString("texture"));
             } catch (NullPointerException ex) {
                 if (!suppressWarnings) {
-                    hp.getLogger().warning("Texture for " + configSec.getString("texture") + " not found.");
+                    hp.getLogger().warning("Texture for " + configSec.getString("texture") + " not found. (Error code: 10)");
                 }
                 continue;
             }
@@ -62,21 +62,21 @@ public class HeadsMenu extends BaseInventory {
             try {
                 meta.setDisplayName(hpc.formatMsg(itemSec.getString("display-name")
                         .replaceAll("\\{head-name}", configSec.getString("display-name")), player));
+                List<String> lore = new ArrayList<>();
+                for (String loreStr : itemSec.getStringList("lore")) {
+                    lore.add(hpc.formatMsg(loreStr, player)
+                            .replaceAll("\\{head-count}", String.valueOf(headsConfig.sections.get(section).size())));
+                }
+                meta.setLore(lore);
             } catch (NullPointerException ex) {
                 if (!suppressWarnings) {
-                    hp.getLogger().warning("A problem was found when setting the display name for icon Heads Section with ID " + section + ". Either the item is null, or there is a config error in the display names!");
+                    hp.getLogger().warning("A problem was found when setting the display name for icon Heads Section with ID " + section + ". Either the item is null, or there is a config error in the display names! (Error code: 11)");
                 }
             }
-            List<String> lore = new ArrayList<>();
-            for (String loreStr : itemSec.getStringList("lore")) {
-                lore.add(hpc.formatMsg(loreStr, player)
-                        .replaceAll("\\{head-count}", String.valueOf(headsConfig.sections.get(section).size())));
-            }
-            meta.setLore(lore);
+
             item.setItemMeta(meta);
             contents.add(new CustomHeadSection(item, section));
         }
         return contents;
     }
-
 }

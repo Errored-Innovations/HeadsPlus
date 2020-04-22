@@ -17,8 +17,6 @@ public class HeadsPlusLevels extends ConfigSettings {
         return levels;
     }
 
-    private final double version = 0.1;
-
     public HeadsPlusLevels() {
         this.conName = "levels";
         enable();
@@ -28,11 +26,7 @@ public class HeadsPlusLevels extends ConfigSettings {
     @Override
     public void reloadC() {
         addDefLevels();
-
-        if (configF == null || !configF.exists()) {
-            configF = new File(HeadsPlus.getInstance().getDataFolder(), "levels.yml");
-        }
-        config = YamlConfiguration.loadConfiguration(configF);
+        performFileChecks();
         load();
         getConfig().options().copyDefaults(true);
         save();
@@ -71,9 +65,10 @@ public class HeadsPlusLevels extends ConfigSettings {
 
     @Override
     public void load() {
+        double version = 0.2;
         if (getConfig().getDouble("version") < version) {
 
-            getConfig().set("version", 0.1);
+            getConfig().set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
                 if (l.getAddedVersion() == version) {
@@ -127,6 +122,11 @@ public class HeadsPlusLevels extends ConfigSettings {
         levels.put(29, new BaseLevel("bedrock_3", "&5&lBedrock &0&lIII", 150000, 0.1));
         levels.put(30, new BaseLevel("bedrock_4", "&5&lBedrock &0&lIV", 200000, 0.1));
         levels.put(31, new BaseLevel("bedrock_5", "&5&lBedrock &0&lV", 300000, 0.1));
+        levels.put(32, new BaseLevel("netherite", "&4&lNetherite I", 500000, 0.2));
+        levels.put(33, new BaseLevel("netherite_2", "&4&lNetherite II", 750000, 0.2));
+        levels.put(34, new BaseLevel("netherite_3", "&4&lNetherite III", 1000000, 0.2));
+        levels.put(35, new BaseLevel("netherite_4", "&4&lNetherite IV", 1500000, 0.2));
+        levels.put(36, new BaseLevel("netherite_5", "&4&lNetherite V", 2000000, 0.2));
     }
 
 

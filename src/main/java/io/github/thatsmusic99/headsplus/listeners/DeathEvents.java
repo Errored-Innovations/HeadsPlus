@@ -336,7 +336,7 @@ public class DeathEvents implements Listener {
                     storedHeads.put(name + ";default", heads);
                 }
             } catch (Exception e) {
-                HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name.");
+                HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
                 e.printStackTrace();
             }
         }

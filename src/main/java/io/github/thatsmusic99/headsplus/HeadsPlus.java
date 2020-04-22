@@ -241,10 +241,12 @@ public class HeadsPlus extends JavaPlugin {
 
     public boolean econ() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            getLogger().warning("Sellhead disabled due to Vault itself not being found. (Error code: 1)");
             return false;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
+            getLogger().warning("Sellhead disabled due to no economy plugin being found. (Error code: 2)");
             return false;
         }
         econ = rsp.getProvider();
@@ -263,9 +265,15 @@ public class HeadsPlus extends JavaPlugin {
             }
             Class.forName("com.mysql.jdbc.Driver");
             ConfigurationSection mysql = getConfiguration().getMySQL();
-            connection = DriverManager.getConnection("jdbc:mysql://" + mysql.getString("host") + ":" + mysql.getString("port") + "/" + mysql.getString("database") + "?useSSL=false&autoReconnect=true", mysql.getString("username"), mysql.getString("password"));
-            NewMySQLAPI.createTable();
-            con = true;
+            try {
+                connection = DriverManager.getConnection("jdbc:mysql://" + mysql.getString("host") + ":" + mysql.getString("port") + "/" + mysql.getString("database") + "?useSSL=false&autoReconnect=true", mysql.getString("username"), mysql.getString("password"));
+                NewMySQLAPI.createTable();
+                con = true;
+            } catch (SQLException ex) {
+                getLogger().warning("MySQL could not be enabled due to a problem connecting. Details to follow... (Error code: 3)");
+                getLogger().warning(ex.getMessage() + " (MySQL Error code: " + ex.getErrorCode() + ")");
+                getLogger().warning(ex.getCause().getMessage());
+            }
         }
     }
 
@@ -282,7 +290,7 @@ public class HeadsPlus extends JavaPlugin {
                 fc.getConfig().options().copyDefaults(true);
                 fc.save();
             } catch (Exception ex) {
-                getLogger().warning("[HeadsPlus] Faulty theme was put in! No theme changes will be made.");
+                getLogger().warning("Faulty theme was put in! No theme changes will be made.");
             }
         }
     }
@@ -331,7 +339,7 @@ public class HeadsPlus extends JavaPlugin {
         cs.add(hpchl);
         if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals("HeadsPlus")) {
             getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
-            getLogger().severe("Only reupload the plugin on other sites with my permission, please!");
+            getLogger().severe("Only reupload the plugin on other sites with my permission, please! (Error code: 4)");
             setEnabled(false);
             return;
         }
@@ -342,11 +350,17 @@ public class HeadsPlus extends JavaPlugin {
         }
 
         if (getConfiguration().getMySQL().getBoolean("enabled")) {
-            try {
-                openConnection();
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        openConnection();
+                    } catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.runTaskAsynchronously(this);
+
         }
         hpl = new HeadsPlusLevels();
         cs.add(hpl);
@@ -416,7 +430,7 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
             getLogger().severe("https://discord.gg/nbT7wC2");
             getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-13-x.237088/");
-            getLogger().severe("To prevent any further damage, the plugin is being disabled...");
+            getLogger().severe("To prevent any further damage, the plugin is being disabled... (Error code: 5)");
             setEnabled(false);
             return;
         } catch (InstantiationException | IllegalAccessException e) {

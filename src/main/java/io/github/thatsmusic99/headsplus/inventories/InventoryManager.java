@@ -39,6 +39,7 @@ public class InventoryManager {
     private String section;
 
     public static void initiateInvsAndIcons() {
+        // Initiate inventories
         inventories.put(InventoryType.HEADS_MENU, HeadsMenu.class);
         inventories.put(InventoryType.HEADS_CATEGORY, HeadsSection.class);
         inventories.put(InventoryType.HEADS_FAVORITES, HeadsFavourite.class);
