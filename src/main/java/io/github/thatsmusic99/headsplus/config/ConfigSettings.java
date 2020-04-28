@@ -5,10 +5,8 @@ import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.yaml.snakeyaml.parser.ParserException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -34,8 +32,13 @@ public abstract class ConfigSettings {
     }
 
     public void performFileChecks() {
-        if (configF == null) {
+        if (configF == null || !configF.exists()) {
             configF = new File(HeadsPlus.getInstance().getDataFolder(), conName + ".yml");
+            try {
+                configF.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         try {
             config = new YamlConfiguration();
