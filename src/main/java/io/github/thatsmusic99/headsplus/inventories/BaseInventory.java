@@ -24,7 +24,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
@@ -214,7 +217,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         return contents;
     }
 
-    private static class NewInventoryEvent extends Event implements Cancellable {
+    public static class NewInventoryEvent extends Event implements Cancellable {
 
         private final UUID player;
         private boolean cancelled = false;

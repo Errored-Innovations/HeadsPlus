@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class CustomHead extends Content {
 
-    private double price;
+    private double price = 0;
     private String id;
 
     public CustomHead(String id) {
@@ -37,7 +36,7 @@ public class CustomHead extends Content {
                 player.sendMessage(hpc.getString("commands.head.full-inv", player));
                 return false;
             }
-            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : NBTManager.getPrice(item); // Set price to 0 or not
+            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
                     && hp.econ()
