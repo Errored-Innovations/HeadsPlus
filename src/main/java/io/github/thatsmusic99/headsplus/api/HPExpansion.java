@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class HPExpansion extends PlaceholderExpansion {
 
-    private HeadsPlus hp;
+    private final HeadsPlus hp;
 
     public HPExpansion(HeadsPlus headsPlus) {
         hp = headsPlus;
@@ -43,11 +42,6 @@ public class HPExpansion extends PlaceholderExpansion {
     @Override
     public boolean register(){
         if(!canRegister()){
-            return false;
-        }
-        hp = (HeadsPlus) Bukkit.getPluginManager().getPlugin("HeadsPlus");
-
-        if(hp == null){
             return false;
         }
         return PlaceholderAPI.registerPlaceholderHook(getIdentifier(), this);
