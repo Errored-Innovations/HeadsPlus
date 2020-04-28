@@ -80,28 +80,37 @@ public class HPPlayer {
         if (hp.usingLevels()) {
             if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
                 for (int i = levels.size(); i > 0; i--) {
-                    if (levels.get(i).getRequiredXP() <= xp) {
-                        level = levels.get(i);
-                        scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
-                        try {
-                            nextLevel = levels.get(i + 1);
-                        } catch (IndexOutOfBoundsException e) { // End of levels
-                            nextLevel = null;
+                    try {
+                        if (levels.get(i).getRequiredXP() <= xp) {
+                            level = levels.get(i);
+                            scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
+                            try {
+                                nextLevel = levels.get(i + 1);
+                            } catch (IndexOutOfBoundsException e) { // End of levels
+                                nextLevel = null;
+                            }
+                            break;
                         }
-                        break;
+                    } catch (NullPointerException ignored) { // Continue
                     }
+
                 }
             } else {
                 for (int i = levels.size(); i > 0; i--) {
-                    if (levels.get(i).getConfigName().equals(scores.getLevel(p.getUniqueId().toString()))) {
-                        level = levels.get(i);
-                        try {
-                            nextLevel = levels.get(i + 1);
-                        } catch (IndexOutOfBoundsException e) { // End of levels
-                            nextLevel = null;
+                    try {
+                        if (levels.get(i).getConfigName().equals(scores.getLevel(p.getUniqueId().toString()))) {
+                            level = levels.get(i);
+                            try {
+                                nextLevel = levels.get(i + 1);
+                            } catch (IndexOutOfBoundsException e) { // End of levels
+                                nextLevel = null;
+                            }
+                            break;
                         }
-                        break;
+                    } catch (NullPointerException ignored) {
+
                     }
+
                 }
             }
         }
@@ -199,7 +208,6 @@ public class HPPlayer {
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
         UUID uuid = p.getUniqueId();
-
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
     }
 
