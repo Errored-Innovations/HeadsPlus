@@ -9,11 +9,9 @@ import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.io.File;
 import java.util.*;
 
 public class HeadsPlusChallenges extends ConfigSettings {
@@ -132,7 +130,12 @@ public class HeadsPlusChallenges extends ConfigSettings {
 
     private void updateChallenges() {
         if (getConfig().getBoolean("stop-hard-reset")) {
-            // SECTIONS FIRST
+            // Add the default icons first
+            config.addDefault("icons.default.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 14).getType().name());
+            config.addDefault("icons.default.data-value", 14);
+            config.addDefault("icons.default-completed.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13).getType().name());
+            config.addDefault("icons.default-completed.data-value", 13);
+            // Then sections will follow
             for (HeadsPlusChallengeDifficulty section : HeadsPlusChallengeDifficulty.values()) {
                 config.addDefault("sections." + section.name() + ".material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA,  section.color.ordinal()).getType().name());
                 config.addDefault("sections." + section.name() + ".material-data", section.color.ordinal());
@@ -155,6 +158,14 @@ public class HeadsPlusChallenges extends ConfigSettings {
                         String sender = config.getString("challenges." + section.name() + "." + challenge + ".command-sender");
                         String rewardString = config.getString("challenges." + section.name() + "." + challenge + ".reward-string");
 
+                        config.addDefault("rewards." + challenge + ".type", reward);
+                        config.addDefault("rewards." + challenge + ".base-value", rewardVal);
+                        config.addDefault("rewards." + challenge + ".item-amount", items);
+                        config.addDefault("rewards." + challenge + ".xp", xp);
+                        config.addDefault("rewards." + challenge + ".command-sender", sender != null ? sender : "player");
+                        config.addDefault("rewards." + challenge + ".reward-string", rewardString);
+                        config.addDefault("rewards." + challenge + ".multiply-by-difficulty", true);
+
                         // Add section information
                         config.addDefault("challenges." + challenge + ".name", name);
                         config.addDefault("challenges." + challenge + ".header", header);
@@ -168,14 +179,6 @@ public class HeadsPlusChallenges extends ConfigSettings {
                         config.addDefault("challenges." + challenge + ".icon", "default");
                         config.addDefault("challenges." + challenge + ".completed-icon", "default-completed");
 
-                        config.addDefault("rewards." + challenge + ".type", reward);
-                        config.addDefault("rewards." + challenge + ".base-value", rewardVal);
-                        config.addDefault("rewards." + challenge + ".item-amount", items);
-                        config.addDefault("rewards." + challenge + ".xp", xp);
-                        config.addDefault("rewards." + challenge + ".command-sender", sender != null ? sender : "player");
-                        config.addDefault("rewards." + challenge + ".reward-string", rewardString);
-                        config.addDefault("rewards." + challenge + ".multiply-by-difficulty", true);
-
                         config.set("challenges." + section.name() + "." + challenge, null);
                     }
                 } catch (NullPointerException ignored) {
@@ -183,10 +186,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 }
 
             }
-            config.addDefault("icons.default.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 14).getType().name());
-            config.addDefault("icons.default.data-value", 14);
-            config.addDefault("icons.default-completed.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13).getType().name());
-            config.addDefault("icons.default-completed.data-value", 13);
+
         } else {
             config.set("challenges", null);
             config.addDefault("challenges.options.current-version", 1.3);
@@ -275,13 +275,14 @@ public class HeadsPlusChallenges extends ConfigSettings {
         int pos = 0;
         for (int i = length - 1; i > -1; i--) {
             int amount;
+            int num = Integer.parseInt(String.valueOf(no.charAt(i)));
             switch (no.charAt(i)) {
                 case '0':
                     break;
                 case '1':
                 case '2':
                 case '3':
-                    amount = Integer.parseInt(String.valueOf(no.charAt(i)));
+                    amount = num;
                     if (pos == 0) {
                         for (int j = 0; j < amount; j++) {
                             numeral.insert(0, "I");
@@ -309,7 +310,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 case '6':
                 case '7':
                 case '8':
-                    amount = Integer.parseInt(String.valueOf(no.charAt(i))) % 5;
+                    amount = num % 5;
                     StringBuilder fullNumber;
                     if (pos == 0) {
                         fullNumber = new StringBuilder("V");
