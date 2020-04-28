@@ -4,9 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
 import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class HeadsPlusLevels extends ConfigSettings {
@@ -66,12 +64,12 @@ public class HeadsPlusLevels extends ConfigSettings {
     @Override
     public void load() {
         double version = 0.2;
-        if (getConfig().getDouble("version") < version) {
-
+        double current = getConfig().getDouble("version");
+        if (current < version) {
             getConfig().set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
-                if (l.getAddedVersion() == version) {
+                if (l.getAddedVersion() > current) {
                     getConfig().addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
                     getConfig().addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
                     getConfig().addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
