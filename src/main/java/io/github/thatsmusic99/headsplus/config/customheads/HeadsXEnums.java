@@ -392,7 +392,20 @@ public enum HeadsXEnums {
     CITRINE("citrine", "&eCitrine", "6fdf2a24dd6e1b4fbac37939415ba3aa0a4dcc8333c3ad589f9ae9a539ff1cb1", "gems", 3.0),
     BERYL("beryl", "&cBeryl", "e93e2068617872c542ecda1d27df4ece91c699907bf327c4ddb85309412d3939", "gems", 3.0),
     MIDNIGHT_OPAL("midnight_opal", "&9Midnight Opal", "19801721c771c3c4898cb7d248321d89a9087a92d3dd58163cbd4e12ed75b549", "gems", 3.0),
-    DRAGONSBREATH_OPAL("dragonsbreath_opal", "&cDragonsbreath Opal", "5f524166f7ce88a537158766a1c511e322a93a5e11dbf30fa6e85e78da861d8", "gems", 3.0);
+    DRAGONSBREATH_OPAL("dragonsbreath_opal", "&cDragonsbreath Opal", "5f524166f7ce88a537158766a1c511e322a93a5e11dbf30fa6e85e78da861d8", "gems", 3.0),
+    CREEPER("creeper", "&aCreeper", "f4254838c33ea227ffca223dddaabfe0b0215f70da649e944477f44370ca6952", "mobs", 3.1),
+    COW("cow", "&fCow", "5d6c6eda942f7f5f71c3161c7306f4aed307d82895f9d2b07ab4525718edc5", "animals", 3.1),
+    ENDERMAN("enderman", "&7Enderman", "7a59bb0a7a32965b3d90d8eafa899d1835f424509eadd4e6b709ada50b9cf", "mobs", 3.1),
+    GHAST("ghast", "&fGhast", "8b6a72138d69fbbd2fea3fa251cabd87152e4f1c97e5f986bf685571db3cc0", "mobs", 3.1),
+    GUARDIAN("guardian", "&3Guardian", "a0bf34a71e7715b6ba52d5dd1bae5cb85f773dc9b0d457b4bfc5f9dd3cc7c94", "mobs", 3.1),
+    IRON_GOLEM("iron_golem", "&fIron Golem", "22bcaceeb4162f400d44743315932ac820d3119ac8986a0161a726161ccc93fc", "mobs", 3.1),
+    PIG("pig", "&dPig", "621668ef7cb79dd9c22ce3d1f3f4cb6e2559893b6df4a469514e667c16aa4", "animals", 3.1),
+    SKELETON("skeleton", "&fSkeleton", "fca445749251bdd898fb83f667844e38a1dff79a1529f79a42447a0599310ea4", "mobs", 3.1),
+    SLIME("slime", "&aSlime", "895aeec6b842ada8669f846d65bc49762597824ab944f22f45bf3bbb941abe6c", "mobs", 3.1),
+    SPIDER("spider", "&7Spider", "cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1", "mobs", 3.1),
+    SQUID("squid", "&9Squid", "01433be242366af126da434b8735df1eb5b3cb2cede39145974e9c483607bac", "animals", 3.1),
+    WITCH("witch", "&aWitch", "fce6604157fc4ab5591e4bcf507a749918ee9c41e357d47376e0ee7342074c90", "humans", 3.1),
+    ZOMBIE("zombie", "&aZombie", "56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11", "mobs", 3.1);
 
     final String name;
     final String dn;
