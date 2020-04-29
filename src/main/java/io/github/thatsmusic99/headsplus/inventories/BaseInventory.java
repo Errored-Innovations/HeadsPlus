@@ -158,6 +158,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     }
                 }
             }
+            icon.item.setAmount(1);
             inventory.setItem(i, icon.item);
             icons[i] = icon;
         }
@@ -221,7 +222,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
         private final UUID player;
         private boolean cancelled = false;
-        private Inventory inventory;
+        private final Inventory inventory;
 
         public NewInventoryEvent(Player player, Inventory inventory) {
             this.player = player.getUniqueId();
