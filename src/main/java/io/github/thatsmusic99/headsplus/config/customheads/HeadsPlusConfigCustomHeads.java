@@ -35,7 +35,7 @@ import java.util.logging.Level;
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 3.0;
+    private final double cVersion = 3.1;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
