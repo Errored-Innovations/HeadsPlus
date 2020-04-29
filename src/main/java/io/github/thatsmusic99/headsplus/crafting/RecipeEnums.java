@@ -6,7 +6,7 @@ import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 public enum RecipeEnums {
 	
 	BLAZE("BLAZE_POWDER", "blaze"),
-	CAVESPIDER("FERMENTED_SPIDER_EYE", "cavespider"),
+	CAVE_SPIDER("FERMENTED_SPIDER_EYE", "cavespider"),
 	CHICKEN("FEATHER", "chicken"),
     COD(HeadsPlus.getInstance().getNMS().getNewItems(MaterialTranslator.ChangedMaterials.RAW_FISH).name(), "cod"),
     COW("LEATHER", "cow"),
@@ -14,8 +14,8 @@ public enum RecipeEnums {
 	ENDERMAN("ENDER_PEARL", "enderman"),
 	GHAST(HeadsPlus.getInstance().getNMS().getNewItems(MaterialTranslator.ChangedMaterials.FIREWORK_CHARGE).name(), "ghast"),
 	GUARDIAN("PRISMARINE_SHARD", "guardian"),
-    IRONGOLEM("IRON_BLOCK", "irongolem"),
-    MUSHROOMCOW("RED_MUSHROOM", "mushroomcow"),
+    IRON_GOLEM("IRON_BLOCK", "irongolem"),
+    MUSHROOM_COW("RED_MUSHROOM", "mushroomcow"),
     PHANTOM("PHANTOM_MEMBRANE", "phantom"),
     PIG(HeadsPlus.getInstance().getNMS().getNewItems(MaterialTranslator.ChangedMaterials.PORK).name(), "pig"),
     PUFFERFISH("PUFFERFISH", "pufferfish"),
