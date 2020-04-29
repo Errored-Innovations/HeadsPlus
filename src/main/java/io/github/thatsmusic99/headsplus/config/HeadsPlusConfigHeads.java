@@ -17,8 +17,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class HeadsPlusConfigHeads extends ConfigSettings {
-	public final List<String> mHeads = new ArrayList<>();
-	public final List<String> uHeads = new ArrayList<>(Arrays.asList("bat", "bee", "cat", "cod", "dolphin", "donkey", "drowned", "enderdragon", "elderguardian", "endermite", "evoker", "fox", "giant", "horse", "husk", "llama", "magmacube", "mule", "ocelot", "panda", "parrot", "phantom", "pigzombie", "pillager", "polarbear", "pufferfish", "ravager", "salmon", "shulker", "silverfish", "skeletonhorse", "snowman", "stray", "trader_llama", "tropicalfish", "turtle", "vex", "vindicator", "wandering_trader", "wither", "witherskeleton", "wolf", "zombiehorse", "zombievillager"));
 	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 
@@ -82,9 +80,11 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 			}
 			if (getConfig().get(key + ".name") instanceof List) {
 				List<String> h = getConfig().getStringList(key + ".name");
-				getConfig().set(key + ".name", null);
 				getConfig().addDefault(key + ".name.default", h);
+				getConfig().set(key + ".name", null);
 			}
+			getConfig().options().copyDefaults(true);
+			save();
             switch (key) {
 				case "bee":
 					getConfig().addDefault("bee.name.default", initSingleton("HP#bee_mc"));
@@ -165,7 +165,12 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					}
 					break;
 				case "tropicalfish":
-					getConfig().addDefault("tropicalfish.name.default", initSingleton("HP#tropicalfish"));
+				case "pigzombie":
+				case "elderguardian":
+				case "magmacube":
+				case "zombiehorse":
+				case "skeletonhorse":
+					getConfig().addDefault(key + ".name.default", initSingleton("HP#" + key));
 					break;
 				case "villager":
 					getConfig().addDefault(key + ".name.default", initSingleton("HP#villager_plains"));
@@ -184,6 +189,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					break;
 				case "chicken":
 					getConfig().addDefault(key + ".name.default", initSingleton("HP#" + key + "_mc"));
+					break;
                 case "witherskeleton":
                 	getConfig().addDefault(key + ".chance", 2.5);
                 	// Don't stop there
