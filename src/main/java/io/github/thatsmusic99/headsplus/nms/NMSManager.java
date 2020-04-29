@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -42,7 +43,13 @@ public interface NMSManager {
 
     String getSkullOwnerName(SkullMeta m);
 
-    ShapelessRecipe getRecipe(ItemStack i, String name);
+    default ShapelessRecipe getRecipe(ItemStack i, String name) {
+        return new ShapelessRecipe(i);
+    }
+
+    default ShapedRecipe getShapedRecipe(ItemStack i, String name) {
+        return new ShapedRecipe(i);
+    }
 
     OfflinePlayer getOfflinePlayer(String name);
 

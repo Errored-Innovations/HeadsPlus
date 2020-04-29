@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -19,10 +20,7 @@ public class TabCompleteSellhead implements TabCompleter {
     public List<String> onTabComplete(CommandSender cs, Command command, String s, String[] args) {
         if (args.length == 1) {
             List<String> c = new ArrayList<>();
-            HeadsPlusConfigHeads h = HeadsPlus.getInstance().getHeadsConfig();
-            c.addAll(h.mHeads);
-            c.addAll(h.uHeads);
-            c.add("player");
+            c.addAll(SellHead.getRegisteredIDs());
             c.add("all");
             List<String> f = new ArrayList<>();
             StringUtil.copyPartialMatches(args[0], c, f);

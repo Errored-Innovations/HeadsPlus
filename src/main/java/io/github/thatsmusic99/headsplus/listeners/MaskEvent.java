@@ -40,9 +40,8 @@ public class MaskEvent implements Listener {
         NMSManager nms = hp.getNMS();
         if (item != null) {
             if (item.getType().equals(nms.getSkull(3).getType())) {
-                HeadsPlusConfigHeads hpch = hp.getHeadsConfig();
-                String s = NBTManager.getType(item).toLowerCase();
-                if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
+                String s = NBTManager.getType(item);
+                if (DeathEvents.ableEntities.contains(s)) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     pl.addMask(s);
                     UUID uuid = player.getUniqueId();

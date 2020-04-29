@@ -222,7 +222,9 @@ public class NBTManager {
             method1.invoke(nbtTag, nbtKey, value);
             nmsItem = setNBTTag(nmsItem, nbtTag);
             return asBukkitCopy(nmsItem);
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+        } catch (InvocationTargetException e) {
+            e.getTargetException().printStackTrace();
+        } catch (ClassNotFoundException | NoSuchMethodException  | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
         return itemStack;

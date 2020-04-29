@@ -38,8 +38,6 @@ public final class HeadInteractEvent implements Listener {
                         HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
                         FileConfiguration fc = hpch.getConfig();
                         List<String> names = new ArrayList<>();
-                        names.addAll(hpch.mHeads);
-                        names.addAll(hpch.uHeads);
                         names.addAll(hpch.eHeads);
                         names.addAll(hpch.ieHeads);
                         if (TimesSent < 1) {

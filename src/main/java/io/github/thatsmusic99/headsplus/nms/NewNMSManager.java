@@ -1,8 +1,12 @@
 package io.github.thatsmusic99.headsplus.nms;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 public interface NewNMSManager extends NMSManager {
 
@@ -25,6 +29,16 @@ public interface NewNMSManager extends NMSManager {
     default ItemStack getSkull(int data) {
         return new ItemStack(HeadTypes.getMaterial(data), 1);
 
+    }
+
+    @Override
+    default ShapelessRecipe getRecipe(ItemStack i, String name) {
+        return new ShapelessRecipe(new NamespacedKey(HeadsPlus.getInstance(), name), i);
+    }
+
+    @Override
+    default ShapedRecipe getShapedRecipe(ItemStack i, String name) {
+        return new ShapedRecipe(new NamespacedKey(HeadsPlus.getInstance(), name), i);
     }
 
     enum HeadTypes {
