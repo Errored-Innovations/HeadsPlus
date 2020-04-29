@@ -14,19 +14,17 @@ public class SellHeadEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private double totalPaid;
-    private List<String> soldEntities;
     private final Player player;
     private double oldBalance;
     private double newBalance;
     private HashMap<String, Integer> entityAmounts;
 
-    public SellHeadEvent(double tPrice, List<String> se, Player p, double o, double n, HashMap<String, Integer> s) {
-        this.totalPaid = tPrice;
-        this.soldEntities = se;
-        this.player = p;
-        this.oldBalance = o;
-        this.newBalance = n;
-        this.entityAmounts = s;
+    public SellHeadEvent(double price, Player player, double oldBal, double newBal, HashMap<String, Integer> entities) {
+        this.totalPaid = price;
+        this.player = player;
+        this.oldBalance = oldBal;
+        this.newBalance = newBal;
+        this.entityAmounts = entities;
     }
 
     @Override
@@ -56,10 +54,6 @@ public class SellHeadEvent extends Event implements Cancellable {
         return newBalance;
     }
 
-    public List<String> getSoldEntities() {
-        return soldEntities;
-    }
-
     public double getTotalPaid() {
         return totalPaid;
     }
@@ -70,10 +64,6 @@ public class SellHeadEvent extends Event implements Cancellable {
 
     public void setOldBalance(double oldBalance) {
         this.oldBalance = oldBalance;
-    }
-
-    public void setSoldEntities(List<String> soldEntities) {
-        this.soldEntities = soldEntities;
     }
 
     public double getOldBalance() {

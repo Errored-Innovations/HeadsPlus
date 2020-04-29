@@ -1,16 +1,14 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,151 +17,127 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @CommandInfo(
         commandname = "sellhead",
         permission = "headsplus.sellhead",
         subcommand = "sellead",
         maincommand = false,
-        usage = "/sellhead [All|Entity|#] [#]"
+        usage = "/sellhead [All|Head ID] [#]"
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
-	private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
 	private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-	private final List<String> soldHeads = new ArrayList<>();
-	private final HashMap<String, Integer> hm = new HashMap<>();
+	private static final List<String> headIds = new ArrayList<>();
+	private final int[] slots;
+	private final HeadsPlus hp;
 
+	public SellHead(HeadsPlus hp) {
+	    headIds.addAll(DeathEvents.ableEntities);
+	    headIds.add("PLAYER");
+	    if (hp.getNMSVersion().getOrder() > 3) {
+	        slots = new int[46];
+	        slots[45] = 45; // off-hand slot
+        } else {
+	        slots = new int[45];
+        }
+	    for (int i = 0; i < 45; i++) {
+            slots[i] = i;
+        }
+	    this.hp = hp;
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		try {
 
-            HeadsPlus hp = HeadsPlus.getInstance();
-			if (sender instanceof Player) {
-			    Player p = (Player) sender;
-			    if (hp.canSellHeads()) {
-			        soldHeads.clear();
-			        hm.clear();
-			        ItemStack invi = checkHand(p);
-                    if (args.length == 0 && (sender.hasPermission("headsplus.sellhead"))) { // If sold via hand
-                        if (hp.getConfiguration().getMechanics().getBoolean("sellhead-gui")) {
+		    if (hp.canSellHeads()) {
+		        if (sender instanceof Player) {
+		            Player player = (Player) sender;
+		            if (args.length == 0) {
+		                // Open the GUI
+		                if (hp.getConfiguration().getMechanics().getBoolean("sellhead-gui") && player.hasPermission("headsplus.sellhead.gui")) {
                             HashMap<String, String> context = new HashMap<>();
                             context.put("section", "mobs");
-                            InventoryManager.getManager(p).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
+                            InventoryManager.getManager(player).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
                             return true;
                         } else {
-                            if (invi != null) {
-                                if (NBTManager.isSellable(invi)) {
-                                    String s = NBTManager.getType(invi).toLowerCase();
-                                    if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-                                        double price;
-                                        if (invi.getAmount() > 0) {
-                                            price = invi.getAmount() * NBTManager.getPrice(invi);
-                                            soldHeads.add(s);
-                                            hm.put(s, invi.getAmount());
-                                            double balance = HeadsPlus.getInstance().getEconomy().getBalance(p);
-                                            SellHeadEvent she = new SellHeadEvent(price, soldHeads, p, balance, balance + price, hm);
-                                            Bukkit.getServer().getPluginManager().callEvent(she);
-                                            if (!she.isCancelled()) {
-                                                EconomyResponse zr = HeadsPlus.getInstance().getEconomy().depositPlayer(p, price);
-                                                String success = hpc.getString("commands.sellhead.sell-success", p).replaceAll("\\{price}", Double.toString(price)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
-                                                if (zr.transactionSuccess()) {
-
-                                                    if (price > 0) {
-                                                        itemRemoval(p, args, -1);
-                                                        sender.sendMessage(success);
-                                                        return true;
-
-                                                    }
-                                                } else {
-                                                    sender.sendMessage(hpc.getString("commands.errors.cmd-fail", p));
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    sender.sendMessage(hpc.getString("commands.sellhead.false-head", p));
-                                    return true;
+		                    // Get the item in the player's hand
+		                    ItemStack item = checkHand(player);
+		                    // If the item exists and is sellable,
+		                    if (item != null && NBTManager.isSellable(item)) {
+		                        // Get the ID
+		                        String id = NBTManager.getType(item);
+		                        if (headIds.contains(id)) {
+		                            double price = NBTManager.getPrice(item) * item.getAmount();
+		                            SellData data = new SellData(player);
+		                            data.addID(id, item.getAmount());
+		                            data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
+                                    pay(player, data, price);
                                 }
-                            } else {
-                                sender.sendMessage(hpc.getString("commands.sellhead.false-head", p));
-                                return true;
                             }
                         }
                     } else {
-                        if (!p.hasPermission("headsplus.sellhead")) {
-                            p.sendMessage(hpc.getString("commands.errors.no-perm", p));
-                        } else {
-                            if (args[0].equalsIgnoreCase("all")) {
-                                    sellAll(p, args);
-                            } else {
-                                double price = 0.0;
-                                int limit = -1;
-                                if (args.length > 1 && CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+		                if (args[0].equalsIgnoreCase("all")) {
+		                    getValidHeads(player, null, -1);
+                        } else if (headIds.contains(args[0])) {
+                            String fixedId = args[0];
+                            int limit = -1;
+                            if (args.length > 1) {
+                                if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                     limit = Integer.parseInt(args[1]);
                                 }
-                                int is = 0;
-                                for (ItemStack i : p.getInventory()) {
-                                    if (i != null) {
-                                        if (NBTManager.isSellable(i)) {
-                                            String st = NBTManager.getType(i).toLowerCase();
-                                            if (st.equalsIgnoreCase(args[0])) {
-                                                if (is != limit) {
-                                                    price = setPrice(price, args, i, p, limit);
-                                                    ++is;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 4) {
-                                    ItemStack i = p.getInventory().getHelmet();
-                                    if (i != null) {
-                                        if (NBTManager.isSellable(i)) {
-                                            String st = NBTManager.getType(i).toLowerCase();
-                                            if (st.equalsIgnoreCase(args[0])) {
-                                                if (is != limit) {
-                                                    price = setPrice(price, args, i, p, limit);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                ItemStack is2 = nms().getOffHand(p);
-                                if (is2 != null) {
-                                    if (NBTManager.isSellable(is2)) {
-                                        String st = NBTManager.getType(is2).toLowerCase();
-                                        if (st.equalsIgnoreCase(args[0])) {
-                                            if (is != limit) {
-                                                price = setPrice(price, args, is2, p, limit);
-                                            }
-                                        }
-                                    }
-                                }
-                                if (price == 0.0) {
-                                    sender.sendMessage(hpc.getString("commands.sellhead.no-heads", p));
-                                    return true;
-                                }
-                                pay(p, args, price, limit);
-                                return true;
                             }
+                            getValidHeads(player, fixedId, limit);
+                        } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                            getValidHeads(player, null, Integer.parseInt(args[0]));
                         }
                     }
-                } else {
-                    sender.sendMessage(hpc.getString("commands.errors.disabled", p));
                 }
-            } else {
-                sender.sendMessage("[HeadsPlus] You must be a player to run this command!");
             }
         } catch (Exception e) {
 		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
 		}
         return false;
 	}
+
+	public void getValidHeads(Player player, String fixedId, int limit) {
+        double price = 0;
+        SellData data = new SellData(player);
+        for (int slot : slots) {
+            ItemStack item = player.getInventory().getItem(slot);
+            if (item != null && NBTManager.isSellable(item)) {
+                String id = NBTManager.getType(item);
+                if (fixedId != null) {
+                    if (!fixedId.equals(id)) continue;
+                } else if (!headIds.contains(id)){
+                    continue;
+                }
+                double headPrice = NBTManager.getPrice(item);
+                if (limit <= item.getAmount() && limit != -1) {
+                    data.addSlot(slot, limit);
+                    data.addID(id, limit);
+                    price += headPrice * limit;
+                    break;
+                } else {
+                    data.addSlot(slot, item.getAmount());
+                    data.addID(id, item.getAmount());
+                    price += headPrice * item.getAmount();
+                    if (limit != -1) {
+                        limit -= item.getAmount();
+                    }
+                }
+            }
+        }
+        if (price > 0) {
+            pay(player, data, price);
+        }
+    }
 
 
 	@SuppressWarnings("deprecation")
@@ -174,206 +148,80 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 			return p.getInventory().getItemInMainHand();
 		}
 	}
-	@SuppressWarnings("deprecation")
-	private void setHand(Player p, ItemStack i) {
-		if (Bukkit.getVersion().contains("1.8")) {
-			p.getInventory().setItemInHand(i);
-		} else {
-			p.getInventory().setItemInMainHand(i);
-		}
-	}
-	private void itemRemoval(Player p, String[] a, int limit) {
-	    int l = limit;
-		if (a.length > 0) {
-		    if (p.getInventory().getHelmet() != null) {
-		        ItemStack is = p.getInventory().getHelmet();
-		        if (NBTManager.isSellable(is) && !NBTManager.getType(is).isEmpty()) {
-		            String type = NBTManager.getType(is);
-                    if (a[0].equalsIgnoreCase("all") || type.equalsIgnoreCase(a[0])) {
-                        if (is.getAmount() > l && l != -1) {
-                            is.setAmount(is.getAmount() - l);
-                            l = 0;
-                        } else {
-                            p.getInventory().setHelmet(new ItemStack(Material.AIR));
-                            HPPlayer hp = HPPlayer.getHPPlayer(p);
-                            hp.clearMask(type);
-                            if (l != -1) {
-                                l = is.getAmount() - l;
-                            }
-                        }
-                    }
+
+	private void pay(Player player, SellData data, double price) {
+        double balance = hp.getEconomy().getBalance(player);
+        SellHeadEvent event = new SellHeadEvent(price, player, balance, balance + price, data.ids);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            EconomyResponse response = hp.getEconomy().depositPlayer(player, price);
+            if (response.transactionSuccess()) {
+                if (price > 0) {
+                    removeItems(player, data);
+                    player.sendMessage(hpc.getString("commands.sellhead.sell-success", player).replaceAll("\\{price}", Double.toString(price))
+                            .replaceAll("\\{balance}", hp.getConfiguration().fixBalanceStr(balance + price)));
                 }
-
-		    }
-            if (nms().getOffHand(p) != null) {
-                ItemStack is = nms().getOffHand(p);
-                if (NBTManager.isSellable(is) && !NBTManager.getType(is).isEmpty()) {
-                    if (a[0].equalsIgnoreCase("all") || NBTManager.getType(is).equalsIgnoreCase(a[0])) {
-                        if (is.getAmount() > l && l != -1) {
-                            is.setAmount(is.getAmount() - l);
-                            l = 0;
-                        } else {
-                            p.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
-                            if (l != -1) {
-                                l = is.getAmount() - l;
-                            }
-                        }
-                    }
-                }
-            }
-				for (ItemStack is : p.getInventory()) {
-					if (is != null) {
-					    if (NBTManager.isSellable(is) && !NBTManager.getType(is).isEmpty()) {
-					        if (!a[0].equalsIgnoreCase("all")) {
-					            if (!NBTManager.getType(is).equalsIgnoreCase(a[0])) continue;
-                            }
-
-					        if (is.getAmount() > l && l != -1) {
-					            is.setAmount(is.getAmount() - l);
-					            l = 0;
-                            } else if (l > 0) {
-                                p.getInventory().remove(is);
-                                l = l - is.getAmount();
-                                if (l <= -1) {
-                                    l = 0;
-                                }
-                            } else if (l == -1){
-                                p.getInventory().remove(is);
-
-                            }
-
-					    }
-					}
-				}
-		} else {
-		    setHand(p, new ItemStack(Material.AIR));
-		}
-	}
-	private double setPrice(Double p, String[] a, ItemStack i, Player pl, int limit) {
-		if (a.length > 0) { // More than one argument
-			if (!CachedValues.MATCH_PAGE.matcher(a[0]).matches()) { // More than one head
-				if (a[0].equalsIgnoreCase("all")) { // Sell everything
-				    if (NBTManager.isSellable(i)) {
-				        String s = NBTManager.getType(i).toLowerCase();
-				        if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-				            soldHeads.add(s);
-				            int o = i(s, i.getAmount(), limit, false);
-				            p += o * NBTManager.getPrice(i);
-                        }
-				    }
-				} else { // Selected mob
-				    p = f(i, p, a[0], limit);
-				}
-			} else {
-			    if (Integer.parseInt(a[0]) <= i.getAmount()) {
-					if (NBTManager.isSellable(i)) {
-					    String s = NBTManager.getType(i);
-					    if (hpch.mHeads.contains(s) || hpch.uHeads.contains(s) || s.equalsIgnoreCase("player")) {
-                            p = NBTManager.getPrice(i) * Integer.parseInt(a[0]);
-                            soldHeads.add(s);
-                            i(s, i.getAmount(), limit, false);
-                        }
-                    }
-				} else {
-					pl.sendMessage(hpc.getString("commands.sellhead.not-enough-heads", pl));
-				}
-			}
-		}
-		return p;
-	}
-	private void sellAll(Player p, String[] a) {
-		double price = 0.0;
-
-        if (HeadsPlus.getInstance().getNMSVersion().getOrder() < 4) {
-            ItemStack i = p.getInventory().getHelmet();
-            if (i != null) {
-                if (NBTManager.isSellable(i)) {
-                    price = setPrice(price, a, i, p, -1);
-                }
-            }
-        }
-
-    /*    ItemStack is2 = nms().getOffHand(p);
-        if (is2 != null) {
-            if (nms().isSellable(is2)) {
-                price = setPrice(price, a, is2, p, -1);
-            }
-        } */
-		for (ItemStack is : p.getInventory()) {
-            if (is != null) {
-                price = setPrice(price, a, is, p, -1);
-
-            }
-        }
-
-        if (price == 0) {
-            p.sendMessage(hpc.getString("commands.sellhead.no-heads", p));
-            return;
-        }
-
-		pay(p, a, price, -1);
-	}
-	private void pay(Player p, String[] a, double pr, int limit) {
-		Economy econ = HeadsPlus.getInstance().getEconomy();
-		SellHeadEvent she = new SellHeadEvent(pr, soldHeads, p, econ.getBalance(p), econ.getBalance(p) + pr, hm);
-		Bukkit.getServer().getPluginManager().callEvent(she);
-		if (!she.isCancelled()) {
-
-            EconomyResponse zr = econ.depositPlayer(p, pr);
-            String success = hpc.getString("commands.sellhead.sell-success", p).replaceAll("\\{price}", Double.toString(pr)).replaceAll("\\{balance}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(zr.balance));
-
-            if (zr.transactionSuccess()) {
-                itemRemoval(p, a, limit);
-                p.sendMessage(success);
             } else {
-                p.sendMessage(hpc.getString("commands.errors.cmd-fail", p));
+                player.sendMessage(hpc.getString("commands.errors.cmd-fail", player));
             }
         }
-	}
-
-    private Double f(ItemStack i, Double p, String s, int l) {
-	    String st = NBTManager.getType(i).toLowerCase();
-	    if (NBTManager.isSellable(i)) {
-	        if (st.equalsIgnoreCase(s)) {
-	            soldHeads.add(s);
-	            int o = i(s, i.getAmount(), l, true);
-	            p = (o * NBTManager.getPrice(i));
-
-            }
-        }
-        return p;
     }
 
-    private int i(String s, int amount, int l, boolean g) {
-	    if (hm.get(s) == null) {
-	        if (amount > l && l != -1) {
-	            hm.put(s, l);
-	            return l;
-            } else {
-                hm.put(s, amount);
-                return amount;
-            }
-        }
-	    if (hm.get(s) > 0) {
-	        int i = hm.get(s);
-	        i += amount;
-	        if (i > l && l != -1) {
-	            hm.put(s, l);
-	            return l;
-            } else {
-                hm.put(s, i);
-                return g ? i : amount;
-            }
+	public static class SellData {
+	    private final HashMap<String, Integer> ids = new HashMap<>();
+	    private final HashMap<Integer, Integer> slots = new HashMap<>();
+	    private final UUID player;
 
-        } else {
-            if (amount > l && l != -1) {
-                hm.put(s, l);
-                return l;
+	    public SellData(Player player) {
+	        this.player = player.getUniqueId();
+        }
+
+        public HashMap<String, Integer> getIds() {
+            return ids;
+        }
+
+        public UUID getPlayer() {
+            return player;
+        }
+
+        public void addID(String id, int amount) {
+	        if (ids.containsKey(id)) {
+	            int currAmount = ids.get(id);
+	            ids.put(id, currAmount + amount);
             } else {
-                hm.put(s, amount);
-                return amount;
+	            ids.put(id, amount);
             }
         }
+
+        public void addSlot(int slot, int amount) {
+	        slots.put(slot, amount);
+        }
+    }
+
+
+    private void removeItems(Player player, SellData data) {
+	    for (int slot : data.slots.keySet()) {
+	        ItemStack item = player.getInventory().getItem(slot);
+	        int limit = data.slots.get(slot);
+	        if (item != null) {
+	            if (item.getAmount() > limit && limit != -1) {
+	                item.setAmount(item.getAmount() - limit);
+	                break;
+                } else {
+                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+                }
+            }
+        }
+    }
+
+    public static void registerHeadID(String name) {
+	    if (!headIds.contains(name)) {
+            headIds.add(name);
+        }
+    }
+
+    public static List<String> getRegisteredIDs() {
+	    return headIds;
     }
 
     @Override
@@ -387,12 +235,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         return new ArrayList<>();
     }
-
-    private NMSManager nms() {
-	    return HeadsPlus.getInstance().getNMS();
-    }
-
 }
