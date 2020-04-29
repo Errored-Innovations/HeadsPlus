@@ -81,9 +81,7 @@ public class HeadsPlus extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
-            // Set the instance
             instance = this;
-
             // Set up the NMS
             setupNMS();
 
@@ -122,12 +120,12 @@ public class HeadsPlus extends JavaPlugin {
 
             // Registers subcommands
             registerSubCommands();
-            JoinEvent.reloaded = false;
 
             // Hooks PlaceholderAPI
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
             }
+            JoinEvent.reloaded = false;
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
@@ -316,7 +314,7 @@ public class HeadsPlus extends JavaPlugin {
         getCommand("myhead").setExecutor(new MyHead());
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
         getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
-        getCommand("sellhead").setExecutor(new SellHead());
+        getCommand("sellhead").setExecutor(new SellHead(this));
         getCommand("sellhead").setTabCompleter(new TabCompleteSellhead());
         getCommand("hpc").setExecutor(new ChallengeCommand());
         getCommand("addhead").setExecutor(new AddHead());
@@ -466,7 +464,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.add(new Heads());
         commands.add(new LeaderboardsCommand());
         commands.add(new MyHead());
-        commands.add(new SellHead());
+        commands.add(new SellHead(this));
         commands.add(new DebugPrint());
         commands.add(new HeadInfoCommand());
         commands.add(new Conjure());
