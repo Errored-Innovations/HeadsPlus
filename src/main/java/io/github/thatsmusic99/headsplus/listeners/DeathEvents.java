@@ -100,6 +100,7 @@ public class DeathEvents implements Listener {
             "EVOKER",
             "FOX",
             "GHAST",
+            "GIANT",
             "GUARDIAN",
             "HORSE",
             "HUSK",
@@ -156,9 +157,8 @@ public class DeathEvents implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
         final HeadsPlus hp = HeadsPlus.getInstance();
-        if (!hp.isDropsEnabled() || checkForMythicMob(hp, e.getEntity())) {
-            return;
-        }
+        if (!hp.isDropsEnabled()) return;
+        if (checkForMythicMob(hp, e.getEntity())) return;
         if (!runBlacklistTests(e.getEntity())) return;
         if (e.getEntityType() == EntityType.PLAYER) return;
         if (spawnTracker.containsKey(e.getEntity().getUniqueId())) {
@@ -172,7 +172,7 @@ public class DeathEvents implements Listener {
                 entity = e.getEntity().getType().name().toLowerCase();
             }
             Random rand = new Random();
-            double fixedChance = hpch.getConfig().getDouble(entity + ".chance");
+            double fixedChance = hpch.getChance(entity);
             double randChance = rand.nextDouble() * 100;
             int amount = 1;
             Player killer = e.getEntity().getKiller();
@@ -200,7 +200,7 @@ public class DeathEvents implements Listener {
             Player killer = ep.getEntity().getKiller();
             if (runBlacklistTests(victim)) {
                 Random rand = new Random();
-                double fixedChance = hpch.getConfig().getDouble("player.chance");
+                double fixedChance = hpch.getChance("player");
                 double randChance = rand.nextDouble() * 100;
                 int amount = 1;
                 if (killer != null) {
@@ -219,7 +219,7 @@ public class DeathEvents implements Listener {
                         price = playerprice * hp.getConfiguration().getPerks().pvp_balance_for_head;
                         lostprice = economy.getBalance(killer) * hp.getConfiguration().getPerks().pvp_percentage_lost;
                     }
-                    Head head = new EntityHead("player").withAmount(amount)
+                    Head head = new EntityHead("PLAYER").withAmount(amount)
                             .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
                             .withPrice(price)
                             .withLore(hpch.getLore(victim.getName(), price))
@@ -277,9 +277,9 @@ public class DeathEvents implements Listener {
                         for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
                             EntityHead headItem;
                             if (head.equalsIgnoreCase("{mob-default}") && fancyName.equalsIgnoreCase("creeper")) {
-                                headItem = new EntityHead(fancyName, 4);
+                                headItem = new EntityHead(name, 4);
                             } else {
-                                headItem = new EntityHead(fancyName);
+                                headItem = new EntityHead(name);
                             }
                             headItem.withDisplayName(headsCon.getDisplayName(fancyName))
                                     .withPrice(headsCon.getPrice(fancyName))
@@ -290,7 +290,7 @@ public class DeathEvents implements Listener {
                                 headItem.withPlayerName(head);
                             }
                             heads.add(headItem);
-                            sellheadCache.putIfAbsent(fancyName, headItem.getItemStack());
+                            sellheadCache.putIfAbsent(name, headItem.getItemStack());
                         }
                         storedHeads.put(name + ";" + conditions, heads);
                     }
@@ -301,26 +301,26 @@ public class DeathEvents implements Listener {
                         if (head.equalsIgnoreCase("{mob-default}")) {
                             switch (fancyName) {
                                 case "witherskeleton":
-                                    headItem = new EntityHead(fancyName, 1);
+                                    headItem = new EntityHead(name, 1);
                                     break;
                                 case "enderdragon":
-                                    headItem = new EntityHead(fancyName, 5);
+                                    headItem = new EntityHead(name, 5);
                                     break;
                                 case "zombie":
-                                    headItem = new EntityHead(fancyName, 2);
+                                    headItem = new EntityHead(name, 2);
                                     break;
                                 case "creeper":
-                                    headItem = new EntityHead(fancyName, 4);
+                                    headItem = new EntityHead(name, 4);
                                     break;
                                 case "skeleton":
-                                    headItem = new EntityHead(fancyName, 0);
+                                    headItem = new EntityHead(name, 0);
                                     break;
                                 default:
-                                    headItem = new EntityHead(fancyName);
+                                    headItem = new EntityHead(name);
                                     break;
                             }
                         } else {
-                            headItem = new EntityHead(fancyName);
+                            headItem = new EntityHead(name);
                         }
                         headItem.withDisplayName(headsCon.getDisplayName(fancyName))
                                 .withPrice(headsCon.getPrice(fancyName))
@@ -331,7 +331,7 @@ public class DeathEvents implements Listener {
                             headItem.withPlayerName(head);
                         }
                         heads.add(headItem);
-                        sellheadCache.putIfAbsent(fancyName, headItem.getItemStack());
+                        sellheadCache.putIfAbsent(name, headItem.getItemStack());
                     }
                     storedHeads.put(name + ";default", heads);
                 }
@@ -438,8 +438,6 @@ public class DeathEvents implements Listener {
         } catch (NoClassDefFoundError ignored) {
 
         }
-
-
         return false;
     }
 
