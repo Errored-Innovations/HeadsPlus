@@ -308,7 +308,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             HeadsPlus hp = HeadsPlus.getInstance();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
             List<IHeadsPlusCommand> headPerms = new ArrayList<>();
-            for (IHeadsPlusCommand key : hp.getCommands()) {
+            for (IHeadsPlusCommand key : hp.getCommands().values()) {
                 CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
                 if (sender.hasPermission(c.permission())) {
                     headPerms.add(key);
