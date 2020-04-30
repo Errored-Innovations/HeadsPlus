@@ -84,7 +84,7 @@ public class LeaderboardEvents implements Listener {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        DataManager.addToTotal(e.getPlayer(), hp.getAPI().strToEntityType(s).name(), "headsplussh", i);
+                                        DataManager.addToTotal(e.getPlayer(), s, "headsplussh", i);
                                     }
                                 }.runTaskAsynchronously(hp);
                             }
@@ -108,7 +108,7 @@ public class LeaderboardEvents implements Listener {
                                 @Override
                                 public void run() {
                                     HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.crafting") * e.getHeadsCrafted());
-                                    DataManager.addToTotal(e.getPlayer(), hp.getAPI().strToEntityType(e.getEntityType()).name(), "headspluscraft", e.getHeadsCrafted());
+                                    DataManager.addToTotal(e.getPlayer(), e.getEntityType(), "headspluscraft", e.getHeadsCrafted());
                                 }
                             }.runTaskAsynchronously(hp);
                         }
