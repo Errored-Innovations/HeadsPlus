@@ -93,7 +93,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					getConfig().addDefault("bee.name.NECTAR", initSingleton("HP#bee_pollinated"));
 					break;
 				case "creeper":
-					getConfig().addDefault("creeper.name.default", initSingleton("HP#creeper"));
+					getConfig().addDefault("creeper.name.default", initSingleton("{mob-default}"));
 					getConfig().addDefault("creeper.name.POWERED", initSingleton("HP#charged_creeper"));
 					break;
 				case "cat":
@@ -194,6 +194,8 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
                 	getConfig().addDefault(key + ".chance", 2.5);
                 	// Don't stop there
                 case "enderdragon":
+				case "zombie":
+				case "skeleton":
                     getConfig().addDefault(key + ".name.default", initSingleton("{mob-default}"));
                     break;
                 default:
