@@ -4,9 +4,11 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import org.bukkit.Bukkit;
@@ -189,6 +191,35 @@ public class DebugPrint implements IHeadsPlusCommand {
                         sender.sendMessage(ChatColor.RED + "Please ensure you have MySQL enabled.");
                     }
                 }
+            } else if (args[1].equalsIgnoreCase("fix")) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (args.length > 2) {
+                        if (SellHead.getRegisteredIDs().contains(args[2])) {
+                            int slot = player.getInventory().getHeldItemSlot();
+                            // lmao who needs getItemInMainHand
+                            ItemStack item = player.getInventory().getItem(slot);
+                            item = NBTManager.makeSellable(item);
+                            item = NBTManager.setType(item, args[2]);
+                            double price = 0.0;
+                            double headsPrice = HeadsPlus.getInstance().getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
+                            if (headsPrice != 0.0) {
+                                price = headsPrice;
+                            } else {
+                                price = HeadsPlus.getInstance().getCraftingConfig().getPrice(args[2]);
+                            }
+                            item = NBTManager.setPrice(item, price);
+                            player.getInventory().setItem(slot, item);
+                        } else {
+                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                        }
+                    } else {
+                        sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                    }
+                } else {
+                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", sender));
+                }
+
             }
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             if (HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
@@ -202,9 +233,13 @@ public class DebugPrint implements IHeadsPlusCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item", "delete", "save", "transfer"), results);
+            StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item", "delete", "save", "transfer", "fix"), results);
         } else if (args.length == 3) {
-            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+            if (args[1].equalsIgnoreCase("fix")) {
+                StringUtil.copyPartialMatches(args[2], SellHead.getRegisteredIDs(), results);
+            } else {
+                StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+            }
         }
         return results;
     }
