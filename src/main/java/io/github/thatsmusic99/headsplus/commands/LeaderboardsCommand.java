@@ -22,144 +22,62 @@ import java.util.List;
         permission = "headsplus.leaderboards",
         subcommand = "Hplb",
         maincommand = false,
-        usage = "/hplb [Total|Entity|Page No.] [Page No.] [Hunting|Selling|Crafting]"
+        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [ID|Page No.] [Page No.] "
 )
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        try {
             if (cs.hasPermission("headsplus.leaderboards")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        try {
+
                             if (args.length > 0) {
                                 try {
-                                    boolean b = DeathEvents.ableEntities.contains(args[0].toUpperCase());
-                                    String sec = b ? args[0].toUpperCase() : args[0];
-                                    if (b || sec.equalsIgnoreCase("player")) {
-                                        if (args.length > 1) {
-                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                if (args.length > 2) {
-                                                    if (args[2].equalsIgnoreCase("crafting")
-                                                            || args[2].equalsIgnoreCase("selling")
-                                                            || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), args[2]));
-                                                    } else {
-                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), "hunting"));
+                                    switch (args[0].toLowerCase()) {
+                                        case "hunting":
+                                        case "selling":
+                                        case "crafting":
+                                            if (args.length > 1) {
+                                                if (SellHead.getRegisteredIDs().contains(args[1])
+                                                        || args[1].equalsIgnoreCase("total")) {
+                                                    if (args.length > 2) {
+                                                        if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
+                                                            try {
+                                                                cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
+                                                                return;
+                                                            } catch (IllegalArgumentException ignored) {
+                                                            }
+                                                        }
                                                     }
-                                                } else {
-                                                    cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[1]), "hunting"));
+                                                    cs.sendMessage(getLeaderboard(cs, args[1], 1, args[0].toLowerCase()));
+                                                    return;
                                                 }
-                                            } else if (args[1].equalsIgnoreCase("crafting")
-                                                    || args[1].equalsIgnoreCase("selling")
-                                                    || args[1].equalsIgnoreCase("hunting")) {
-                                                if (args.length > 2) {
-                                                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                                                        cs.sendMessage(getLeaderboard(cs, sec, Integer.parseInt(args[2]), args[1]));
-                                                    } else {
-                                                        cs.sendMessage(getLeaderboard(cs, sec, 1, args[1]));
-                                                    }
-                                                } else {
-                                                    cs.sendMessage(getLeaderboard(cs, sec, 1, args[1]));
+                                                if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+                                                    cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
+                                                    return;
                                                 }
-                                            } else {
-                                                cs.sendMessage(getLeaderboard(cs, sec, 1, "hunting"));
                                             }
-                                        } else {
-                                            cs.sendMessage(getLeaderboard(cs, sec, 1, "hunting"));
-                                        }
+                                            cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
+                                            return;
+                                        default:
+                                            if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
+                                                return;
+                                            }
+                                            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                                     }
-                                } catch (IllegalArgumentException ex) {
-                                    if (args[0].equalsIgnoreCase("total")) {
-                                        if (args.length > 1) {
-                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                if (args.length > 2) {
-                                                    if (args[2].equalsIgnoreCase("crafting")
-                                                            || args[2].equalsIgnoreCase("selling")
-                                                            || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), args[2]));
-                                                    } else {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
-                                                    }
-                                                } else {
-                                                    cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
-                                                }
-                                            } else if (args[1].equalsIgnoreCase("crafting")
-                                                    || args[1].equalsIgnoreCase("selling")
-                                                    || args[1].equalsIgnoreCase("hunting")) {
-                                                cs.sendMessage(getLeaderboard(cs, args[0], 1, args[1]));
-                                            } else {
-                                                cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
-                                            }
-                                        } else {
-                                            cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
-                                        }
-                                    } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
-                                    } else if (args[0].equalsIgnoreCase("player")) {
-                                        if (args.length > 1) {
-                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                if (args.length > 2) {
-                                                    if (args[2].equalsIgnoreCase("crafting")
-                                                            || args[2].equalsIgnoreCase("selling")
-                                                            || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), args[2]));
-                                                    } else {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
-                                                    }
-                                                } else {
-                                                    cs.sendMessage(getLeaderboard(cs, args[0], Integer.parseInt(args[1]), "hunting"));
-                                                }
-                                            } else {
-                                                if (args.length > 2) {
-                                                    if (args[2].equalsIgnoreCase("crafting")
-                                                            || args[2].equalsIgnoreCase("selling")
-                                                            || args[2].equalsIgnoreCase("hunting")) {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], 1, args[2]));
-                                                    } else {
-                                                        cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
-                                                    }
-                                                } else {
-                                                    cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
-                                                }
-                                            }
-
-                                        } else {
-                                            cs.sendMessage(getLeaderboard(cs, args[0], 1, "hunting"));
-                                        }
-                                    }  else if (args[0].equalsIgnoreCase("crafting")
-                                            || args[0].equalsIgnoreCase("selling")
-                                            || args[0].equalsIgnoreCase("hunting")) {
-                                        if (args.length > 1) {
-                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0]));
-                                            } else {
-                                                cs.sendMessage(getLeaderboard(cs, "total", 1, args[0]));
-                                            }
-                                        }
-
-
-                                    } else {
-                                        cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
-                                    }
+                                } catch (Exception e) {
+                                    DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
                                 }
-
                             } else {
                                 cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                             }
-                        } catch (Exception e) {
-                            DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
                         }
 
-                    }
-                }.runTaskAsynchronously(HeadsPlus.getInstance());
-
-            }
-        } catch (Exception e) {
-            DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
-        }
+                    }.runTaskAsynchronously(HeadsPlus.getInstance());
+                }
         return false;
     }
 
@@ -180,10 +98,10 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
-        if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
-        } else if (args.length == 4) {
-            StringUtil.copyPartialMatches(args[3], Arrays.asList("hunting", "selling", "crafting"), results);
+        if (args.length == 1) {
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "selling", "crafting"), results);
+        } else if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], SellHead.getRegisteredIDs(), results);
         }
         return results;
     }
