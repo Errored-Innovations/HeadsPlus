@@ -39,12 +39,24 @@ public class RecipeEnumUser {
 	}
 
 	private void addRecipe(String id) {
+	    // Get the Central ID, firstly
 	    String headId = crafting.getString(id + ".head");
-	    EntityHead head = new EntityHead(crafting.getString(id + ".sellhead-id"));
+        EntityHead head;
+        try {
+            // Create the head object
+            head = new EntityHead(crafting.getString(id + ".sellhead-id"));
+        } catch (NullPointerException ex) {
+            // If there's no sellhead ID, stop there
+	        HeadsPlus.getInstance().getLogger().warning("Missing Sellhead ID for " + id + "!");
+	        return;
+        }
+        // Register the Sellhead ID
         SellHead.registerHeadID(crafting.getString(id + ".sellhead-id"));
+        // Apply the price, display name and lore
 	    head.withPrice(hp.getCraftingConfig().getPrice(id))
                 .withDisplayName(hp.getCraftingConfig().getDisplayName(id))
                 .withLore(hp.getCraftingConfig().getLore(id));
+	    // If using a custom texture
         if (headId.startsWith("HP#")) {
             try {
                 head.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(headId));
