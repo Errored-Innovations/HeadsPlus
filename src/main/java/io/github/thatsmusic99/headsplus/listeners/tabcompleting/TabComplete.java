@@ -22,7 +22,7 @@ public class TabComplete implements TabCompleter {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
-            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands()) {
+            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands().values()) {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
                 if (cs.hasPermission(command.permission())) {
                     if (command.maincommand()) {
@@ -46,7 +46,7 @@ public class TabComplete implements TabCompleter {
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
-        for (IHeadsPlusCommand hpc : HeadsPlus.getInstance().getCommands()) {
+        for (IHeadsPlusCommand hpc : HeadsPlus.getInstance().getCommands().values()) {
             CommandInfo c = hpc.getClass().getAnnotation(CommandInfo.class);
             if (c.commandname().equalsIgnoreCase(name)) {
                 if (c.maincommand()){
