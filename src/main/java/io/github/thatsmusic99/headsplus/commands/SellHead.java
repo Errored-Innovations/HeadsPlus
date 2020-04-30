@@ -91,14 +91,23 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                             if (args.length > 1) {
                                 if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
                                     limit = Integer.parseInt(args[1]);
+                                } else {
+                                    sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
+                                    return false;
                                 }
                             }
                             getValidHeads(player, fixedId, limit);
                         } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
                             getValidHeads(player, null, Integer.parseInt(args[0]));
+                        } else {
+                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
                         }
                     }
+                } else {
+                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", sender));
                 }
+            } else {
+                sender.sendMessage(hpc.getString("commands.errors.disabled", sender));
             }
         } catch (Exception e) {
 		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
@@ -136,6 +145,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         }
         if (price > 0) {
             pay(player, data, price);
+        } else {
+            player.sendMessage(hpc.getString("commands.sellhead.no-heads", player));
         }
     }
 
