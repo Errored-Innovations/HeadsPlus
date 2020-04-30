@@ -259,35 +259,41 @@ public class HPPlayer {
         if (hp.usingLevels()) {
             if (nextLevel != null) {
                 if (nextLevel.getRequiredXP() <= getXp()) {
-                    LevelUpEvent event = new LevelUpEvent(getPlayer(), level, nextLevel);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        level = nextLevel;
-                        Player player = getPlayer();
-                        if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
-                            final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.levels.level-up", p)
-                                        .replaceAll("\\{player}", name)
-                                        .replaceAll("\\{name}", name)
-                                        .replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName())));
-                            }
-                        }
-                        HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
-                        scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
-                        if (level.isrEnabled()) {
-                            level.reward(player.getPlayer());
-                        }
-                        for (int i = 1; i < levels.size(); i++) {
-                            if (levels.get(i) == level) {
-                                try {
-                                    nextLevel = levels.get(i + 1);
-                                } catch (IndexOutOfBoundsException e) { // End of levels
-                                    nextLevel = null;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            LevelUpEvent event = new LevelUpEvent(getPlayer(), level, nextLevel);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                level = nextLevel;
+                                Player player = getPlayer();
+                                if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
+                                    final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
+                                    for (Player p : Bukkit.getOnlinePlayers()) {
+                                        p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.levels.level-up", p)
+                                                .replaceAll("\\{player}", name)
+                                                .replaceAll("\\{name}", name)
+                                                .replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName())));
+                                    }
+                                }
+                                HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
+                                scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
+                                if (level.isrEnabled()) {
+                                    level.reward(player.getPlayer());
+                                }
+                                for (int i = 1; i < levels.size(); i++) {
+                                    if (levels.get(i) == level) {
+                                        try {
+                                            nextLevel = levels.get(i + 1);
+                                        } catch (IndexOutOfBoundsException e) { // End of levels
+                                            nextLevel = null;
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
+                    }.runTask(hp);
+
                 } else if (level.getRequiredXP() > getXp()) {
                     HashMap<Integer, Level> levels = hp.getLevels();
                     for (int i = 1; i < levels.size(); i++) {
