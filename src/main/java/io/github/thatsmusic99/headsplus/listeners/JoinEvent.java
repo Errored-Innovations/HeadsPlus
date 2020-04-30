@@ -46,13 +46,14 @@ public class JoinEvent implements Listener {
         }
         HPPlayer.getHPPlayer(e.getPlayer());
         if (!reloaded) {
+            reloaded = true;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     new RecipeEnumUser();
                 }
             }.runTaskAsynchronously(hp);
-            reloaded = true;
+
         }
 
 	}
