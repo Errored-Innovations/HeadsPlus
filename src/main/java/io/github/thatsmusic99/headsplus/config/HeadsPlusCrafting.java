@@ -48,8 +48,12 @@ public class HeadsPlusCrafting extends ConfigSettings {
 			checkForOldFormat(key.str);
 			if (key == RecipeEnums.SHEEP) {
 				for (DyeColor d : DyeColor.values()) {
+					if (d.name().equalsIgnoreCase("LIGHT_GRAY")) { // stupid move ngl
+						getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#silver_sheep");
+					} else {
+						getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#" + d.name().toLowerCase() + "_sheep");
+					}
                     getConfig().addDefault(key.str + "." + d.name() + ".ingredients", new ArrayList<>(Collections.singletonList(nms.getColouredBlock(MaterialTranslator.BlockType.WOOL, d.ordinal()).getType().name())));
-					getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#" + d.name().toLowerCase() + "_sheep");
 					getConfig().addDefault(key.str + "." + d.name() + ".price", "{default}");
 					getConfig().addDefault(key.str + "." + d.name() + ".display-name", "{default}");
 					getConfig().addDefault(key.str + "." + d.name() + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
