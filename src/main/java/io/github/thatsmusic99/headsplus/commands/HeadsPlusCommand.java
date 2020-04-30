@@ -18,9 +18,8 @@ public class HeadsPlusCommand implements CommandExecutor {
         try {
             if ((cmd.getName().equalsIgnoreCase("headsplus")) || (cmd.getName().equalsIgnoreCase("hp"))) {
                 if (args.length > 0) {
-                    if (getCommandByName(args[0]) != null) {
-                        IHeadsPlusCommand command = getCommandByName(args[0]);
-                        assert command != null;
+                    IHeadsPlusCommand command = HeadsPlus.getInstance().getCommands().get(args[0].toLowerCase());
+                    if (command != null) {
                         CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
                         if (sender.hasPermission(c.permission())) {
                             if (c.maincommand()) {
@@ -56,16 +55,4 @@ public class HeadsPlusCommand implements CommandExecutor {
         }
 		return false;
 	}
-
-	private IHeadsPlusCommand getCommandByName(String name) {
-	    for (IHeadsPlusCommand hpc : HeadsPlus.getInstance().getCommands()) {
-            CommandInfo c = hpc.getClass().getAnnotation(CommandInfo.class);
-	        if (c.commandname().equalsIgnoreCase(name)) {
-	            if (c.maincommand()){
-                    return hpc;
-                }
-            }
-        }
-        return null;
-    }
 }

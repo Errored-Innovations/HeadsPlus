@@ -71,7 +71,7 @@ public class HeadsPlus extends JavaPlugin {
     private final List<ChallengeSection> challengeSections = new ArrayList<>();
     private NMSManager nms;
     private NMSIndex nmsversion;
-    private final List<IHeadsPlusCommand> commands = new ArrayList<>();
+    private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
     private final List<ConfigSettings> cs = new ArrayList<>();
     private Favourites favourites;
@@ -438,40 +438,40 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerSubCommands() {
-        commands.add(new BlacklistAdd());
-        commands.add(new BlacklistDelete());
-        commands.add(new BlacklistList());
-        commands.add(new BlacklistToggle());
-        commands.add(new BlacklistwAdd());
-        commands.add(new BlacklistwDelete());
-        commands.add(new BlacklistwList());
-        commands.add(new BlacklistwToggle());
-        commands.add(new HelpMenu());
-        commands.add(new Info());
-        commands.add(new MCReload());
-        commands.add(new ProfileCommand());
-        commands.add(new WhitelistAdd());
-        commands.add(new WhitelistDel());
-        commands.add(new WhitelistList());
-        commands.add(new WhitelistToggle());
-        commands.add(new WhitelistwAdd());
-        commands.add(new WhitelistwDelete());
-        commands.add(new WhitelistwList());
-        commands.add(new WhitelistwToggle());
-        commands.add(new ChallengeCommand());
-        commands.add(new AddHead());
-        commands.add(new Head());
-        commands.add(new Heads());
-        commands.add(new LeaderboardsCommand());
-        commands.add(new MyHead());
-        commands.add(new SellHead(this));
-        commands.add(new DebugPrint());
-        commands.add(new HeadInfoCommand());
-        commands.add(new Conjure());
-        commands.add(new Complete());
-        commands.add(new TestsCommand());
-        commands.add(new XPCommand());
-        commands.add(new LocaleCommand());
+        commands.put("blacklistadd", new BlacklistAdd());
+        commands.put("blacklistdel", new BlacklistDelete());
+        commands.put("blacklistl", new BlacklistList());
+        commands.put("blacklist", new BlacklistToggle());
+        commands.put("blacklistwadd", new BlacklistwAdd());
+        commands.put("blacklistwdel", new BlacklistwDelete());
+        commands.put("blacklistwl", new BlacklistwList());
+        commands.put("blacklistw", new BlacklistwToggle());
+        commands.put("help", new HelpMenu());
+        commands.put("info", new Info());
+        commands.put("reload", new MCReload());
+        commands.put("profile", new ProfileCommand());
+        commands.put("whitelistadd", new WhitelistAdd());
+        commands.put("whitelistdel", new WhitelistDel());
+        commands.put("whitelistl", new WhitelistList());
+        commands.put("whitelist", new WhitelistToggle());
+        commands.put("whitelistwadd", new WhitelistwAdd());
+        commands.put("whitelistwdel", new WhitelistwDelete());
+        commands.put("whitelistwl", new WhitelistwList());
+        commands.put("whitelistw", new WhitelistwToggle());
+        commands.put("hpc", new ChallengeCommand());
+        commands.put("addhead", new AddHead());
+        commands.put("head", new Head());
+        commands.put("heads", new Heads());
+        commands.put("hplb", new LeaderboardsCommand());
+        commands.put("myhead", new MyHead());
+        commands.put("sellhead", new SellHead(this));
+        commands.put("debug", new DebugPrint());
+        commands.put("headinfo", new HeadInfoCommand());
+        commands.put("conjure", new Conjure());
+        commands.put("complete", new Complete());
+        commands.put("tests", new TestsCommand());
+        commands.put("xp", new XPCommand());
+        commands.put("locale", new LocaleCommand());
     }
 
     // GETTERS
@@ -537,7 +537,7 @@ public class HeadsPlus extends JavaPlugin {
         return econ;
     }
 
-    public List<IHeadsPlusCommand> getCommands() {
+    public LinkedHashMap<String, IHeadsPlusCommand> getCommands() {
         return commands;
     }
 
