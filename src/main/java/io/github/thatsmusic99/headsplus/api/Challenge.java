@@ -120,11 +120,11 @@ public class Challenge {
         if (getChallengeType() == HeadsPlusChallengeTypes.MISC) {
             return true;
         } else if (getChallengeType() == HeadsPlusChallengeTypes.CRAFTING) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : HeadsPlus.getInstance().getAPI().strToEntityType(getHeadType()).name(), "headspluscraft", true) >= getRequiredHeadAmount();
+            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluscraft", true) >= getRequiredHeadAmount();
         } else if (getChallengeType() == HeadsPlusChallengeTypes.LEADERBOARD) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : HeadsPlus.getInstance().getAPI().strToEntityType(getHeadType()).name(), "headspluslb", true) >= getRequiredHeadAmount();
+            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluslb", true) >= getRequiredHeadAmount();
         } else {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : HeadsPlus.getInstance().getAPI().strToEntityType(getHeadType()).name(), "headsplussh", true) >= getRequiredHeadAmount();
+            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headsplussh", true) >= getRequiredHeadAmount();
         }
     }
 
