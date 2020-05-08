@@ -26,7 +26,8 @@ public class HPPlayer {
     private Level level = null;
     private List<String> completeChallenges;
     private Level nextLevel = null;
-    private HashMap<String, List<PotionEffect>> activeMasks;
+    private String currentMask;
+    private List<PotionEffect> activeMask;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
     private List<String> pinnedChallenges;
@@ -37,7 +38,7 @@ public class HPPlayer {
     public HPPlayer(OfflinePlayer p) {
         if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
         HeadsPlus hp = HeadsPlus.getInstance();
-        activeMasks = new HashMap<>();
+        activeMask = new ArrayList<>();
         favouriteHeads = new ArrayList<>();
         pinnedChallenges = new ArrayList<>();
         ignoreFallDamage = false;
@@ -118,13 +119,15 @@ public class HPPlayer {
         players.put(getPlayer().getUniqueId(), this);
     }
 
-    public void clearMask(String type) {
+    public void clearMask() {
         try {
-            for (PotionEffect p : getActiveMasks(type)) {
+            ignoreFallDamage = false;
+            currentMask = "";
+            if (!getPlayer().isOnline()) return;
+            for (PotionEffect p : activeMask) {
                 ((Player) getPlayer()).removePotionEffect(p.getType());
             }
-            ignoreFallDamage = false;
-            activeMasks.remove(type);
+            activeMask.clear();
         } catch (NullPointerException ignored) { // When the mask messes up
 
         }
@@ -132,6 +135,7 @@ public class HPPlayer {
     }
 
     public void addMask(String s) {
+        s = s.toLowerCase().replaceAll("_", "");
         HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
         List<PotionEffect> po = new ArrayList<>();
         for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
@@ -153,36 +157,29 @@ public class HPPlayer {
                     HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
                     continue;
                 }
-                PotionEffect p = new PotionEffect(type, 200, amp);
-                getPlayer().addPotionEffect(p);
+                PotionEffect p = new PotionEffect(type, 400, amp);
+                ((Player) getPlayer()).addPotionEffect(p);
                 po.add(p);
             } catch (IllegalArgumentException ex) {
                 HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
             }
         }
-        activeMasks.put(s, po);
+        activeMask = po;
+        currentMask = s;
     }
 
     public void refreshMasks() {
-        for (String key : getActiveMaskTypes()) {
-            if (getActiveMasks(key) != null) {
-                for (PotionEffect effect : getActiveMasks(key)) {
-                    Player player = getPlayer();
-                    player.removePotionEffect(effect.getType());
-                    player.addPotionEffect(new PotionEffect(effect.getType(), 200, effect.getAmplifier()));
-                }
-            }
+        for (PotionEffect effect : activeMask) {
+            Player player = (Player) getPlayer();
+            player.removePotionEffect(effect.getType());
+            player.addPotionEffect(new PotionEffect(effect.getType(), 400, effect.getAmplifier()));
         }
     }
 
     public void clearAllMasks() {
-        for (String key : getActiveMaskTypes()) {
-            if (getActiveMasks(key) != null) {
-                for (PotionEffect effect : getActiveMasks(key)) {
-                    Player player = getPlayer();
-                    player.removePotionEffect(effect.getType());
-                }
-            }
+        for (PotionEffect effect : activeMask) {
+            Player player = (Player) getPlayer();
+            player.removePotionEffect(effect.getType());
         }
     }
 
@@ -202,8 +199,8 @@ public class HPPlayer {
         return completeChallenges;
     }
 
-    public Player getPlayer() {
-        return Bukkit.getPlayer(player);
+    public OfflinePlayer getPlayer() {
+        return Bukkit.getOfflinePlayer(player);
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
@@ -211,12 +208,12 @@ public class HPPlayer {
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
     }
 
-    public List<PotionEffect> getActiveMasks(String type) {
-        return activeMasks.get(type);
+    public List<PotionEffect> getActiveMasks() {
+        return activeMask;
     }
 
-    public List<String> getActiveMaskTypes() {
-        return new ArrayList<>(activeMasks.keySet());
+    public String getActiveMaskType() {
+        return currentMask;
     }
 
     public String getLocale() {
@@ -262,11 +259,11 @@ public class HPPlayer {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            LevelUpEvent event = new LevelUpEvent(getPlayer(), level, nextLevel);
+                            LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), level, nextLevel);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 level = nextLevel;
-                                Player player = getPlayer();
+                                Player player = (Player) getPlayer();
                                 if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
                                     final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                                     for (Player p : Bukkit.getOnlinePlayers()) {
