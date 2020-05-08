@@ -33,7 +33,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
             return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl, sender);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data");
+            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data", sender);
         }
     }
 
