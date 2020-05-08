@@ -35,7 +35,7 @@ public class HPPlayer {
     private boolean localeForced;
 
     public HPPlayer(OfflinePlayer p) {
-        if (Bukkit.getPlayer(p.getUniqueId()) == null) return;
+        if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
         HeadsPlus hp = HeadsPlus.getInstance();
         activeMasks = new HashMap<>();
         favouriteHeads = new ArrayList<>();
