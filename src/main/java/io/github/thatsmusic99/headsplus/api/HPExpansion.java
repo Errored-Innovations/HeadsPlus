@@ -99,14 +99,23 @@ public class HPExpansion extends PlaceholderExpansion {
             // %headsplus_top_CATEGORY_ENTITY_NUMBER_player%
             // %headsplus_top_CATEGORY_ENTITY_NUMBER_score%
             String[] args = identifier.split("_");
+            int length = args.length;
             String category = args[1].toLowerCase();
-            String entity = getFixedString(args[2], false);
-            int position = Integer.parseInt(args[3]);
-            String option = args[4];
+            StringBuilder entitySB = new StringBuilder();
+            for (int i = 2; i < length - 2; i++) {
+                entitySB.append(args[i]).append("_");
+            }
+            entitySB.setLength(entitySB.length() - 1);
+            String entity = getFixedString(entitySB.toString(), false);
+            int position = Integer.parseInt(args[length - 2]);
+            String option = args[length - 1];
             try {
                 LinkedHashMap<OfflinePlayer, Integer> list;
                 if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
                     list = LeaderboardsCache.getType(entity, category, false, false);
+                    if (list == null) {
+                        list = LeaderboardsCache.getType(entity, category, true, true);
+                    }
                 } else {
                     list = LeaderboardsCache.getType(entity, category, true, true);
                 }
