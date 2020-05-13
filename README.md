@@ -19,17 +19,17 @@ The command which is used by the developer herself is `mvn clean install` and sh
 HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in your project, add the following in your project:
 
     <repositories>
-		    <repository>
-		        <id>jitpack.io</id>
-		        <url>https://jitpack.io</url>
-		    </repository>
-	  </repositories>
+	<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+	</repository>
+    </repositories>
     <dependencies>
         <dependency>
-	          <groupId>com.github.Thatsmusic99</groupId>
-	          <artifactId>HeadsPlus</artifactId>
-	          <version>v6.10.5-SNAPSHOT-1</version>
-	      </dependency>
+            <groupId>com.github.Thatsmusic99</groupId>
+	    <artifactId>HeadsPlus</artifactId>
+	    <version>v6.10.5-SNAPSHOT-1</version>
+	</dependency>
     </dependencies>
 
 
