@@ -15,6 +15,24 @@ HeadsPlus uses Maven to manage its dependencies, with most of these provided in 
 
 The command which is used by the developer herself is `mvn clean install` and should work fine on itself.
 
+## Using HeadsPlus in Maven
+HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in your project, add the following in your project:
+
+    <repositories>
+		    <repository>
+		        <id>jitpack.io</id>
+		        <url>https://jitpack.io</url>
+		    </repository>
+	  </repositories>
+    <dependencies>
+        <dependency>
+	          <groupId>com.github.Thatsmusic99</groupId>
+	          <artifactId>HeadsPlus</artifactId>
+	          <version>v6.10.5-SNAPSHOT-1</version>
+	      </dependency>
+    </dependencies>
+
+
 ## More information
 - [Wiki](https://github.com/Thatsmusic99/HeadsPlus/wiki)
 - [Spigot Page](https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/)
