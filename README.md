@@ -17,7 +17,7 @@ The command which is used by the developer herself is `mvn clean install` and sh
 
 ## Using HeadsPlus in Maven
 HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in your project, add the following in your project:
-
+```xml
     <repositories>
 	<repository>
 	    <id>jitpack.io</id>
@@ -31,6 +31,7 @@ HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in 
 	    <version>v6.10.5-SNAPSHOT-1</version>
 	</dependency>
     </dependencies>
+```
 
 
 ## More information
