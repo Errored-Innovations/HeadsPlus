@@ -44,7 +44,7 @@ public class HPExpansion extends PlaceholderExpansion {
         if(!canRegister()){
             return false;
         }
-        return PlaceholderAPI.registerPlaceholderHook(getIdentifier(), this);
+        return super.register();
     }
 
     @Override
@@ -143,8 +143,79 @@ public class HPExpansion extends PlaceholderExpansion {
 
 
         }
-        // We return null if an invalid placeholder (f.e. %example_placeholder3%)
-        // was provided
+
+        if (identifier.startsWith("challenge")) {
+            // Format: %headsplus_CHALLENGE_header%
+            // %headsplus_CHALLENGE_name%
+            // %headsplus_CHALLENGE_description%
+            // %headsplus_CHALLENGE_min-heads%
+            // %headsplus_CHALLENGE_progress%
+            // %headsplus_CHALLENGE_difficulty%
+            // %headsplus_CHALLENGE_type%
+            // %headsplus_CHALLENGE_reward%
+            // %headsplus_CHALLENGE_completed%
+            String[] args = identifier.split("_");
+            if (args.length == 1) return null;
+            StringBuilder name = new StringBuilder();
+            for (int i = 1; i < args.length - 1; i++) {
+                name.append(args[i]);
+            }
+            Challenge challenge = hp.getChallengeByName(name.toString());
+            if (challenge == null) return null;
+            switch (args[args.length - 1].toLowerCase()) {
+                case "header":
+                    return challenge.getChallengeHeader();
+                case "name":
+                    return challenge.getMainName();
+                case "description":
+                    StringBuilder desc = new StringBuilder();
+                    for (String s : challenge.getDescription()) {
+                        desc.append(s);
+                    }
+                    return desc.toString();
+                case "min-heads":
+                    return String.valueOf(challenge.getRequiredHeadAmount());
+                case "progress":
+                    try {
+                        return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player,
+                                    challenge.getHeadType(),
+                                    challenge.getChallengeType().getDatabase(),
+                                    false));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    return null;
+                case "difficulty":
+                    return String.valueOf(challenge.getDifficulty());
+                case "type":
+                    return challenge.getHeadType();
+                case "reward":
+                    if (challenge.getReward().getRewardString() != null) {
+                        return challenge.getReward().getRewardString();
+                    } else {
+                        String reward = "";
+                        HPChallengeRewardTypes type = challenge.getRewardType();
+                        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
+                        String value = challenge.getRewardValue().toString();
+                        if (type == HPChallengeRewardTypes.ECO) {
+                            reward = hpc.getString("inventory.icon.reward.currency").replace("{amount}", value);
+                        } else if (type == HPChallengeRewardTypes.GIVE_ITEM) {
+                            reward = hpc.getString("inventory.icon.reward.item-give")
+                                    .replace("{amount}", String.valueOf(challenge.getRewardItemAmount()))
+                                    .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " ")));
+                        } else if (type == HPChallengeRewardTypes.ADD_GROUP) {
+                            reward = hpc.getString("inventory.icon.reward.group-add").replace("{group}", value);
+                        } else if (type == HPChallengeRewardTypes.REMOVE_GROUP) {
+                            reward = hpc.getString("inventory.icon.reward.group-remove").replace("{group}", value);
+                        }
+                        return reward;
+                    }
+                case "completed":
+                    return challenge.isComplete(player.getPlayer()) ? hp.getMessagesConfig().getString("command.challenges.challenge-completed", player) : "";
+                case "xp":
+                    return String.valueOf(challenge.getGainedXP());
+            }
+        }
         return null;
     }
 
