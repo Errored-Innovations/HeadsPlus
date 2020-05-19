@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,12 +43,7 @@ public class Conjure implements IHeadsPlusCommand {
             if (DeathEvents.ableEntities.contains(entity)) {
                 int amount = 1;
                 if (args.length > 2) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                        amount = Integer.parseInt(args[2]);
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
-                        return false;
-                    }
+                    amount = HPUtils.isInt(args[2]);
                 }
                 int index = 0;
                 String type = "default";
@@ -65,12 +61,7 @@ public class Conjure implements IHeadsPlusCommand {
                     }
                 }
                 if (args.length > 4) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
-                        index = Integer.parseInt(args[4]);
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
-                        return false;
-                    }
+                    index = HPUtils.isInt(args[4]);
                 }
                 if (args.length > 5) {
                     type = args[5];

@@ -62,4 +62,15 @@ public class HPUtils {
         }
         return i;
     }
+
+    public static <T> T notNull(T object, String message) throws NullPointerException {
+        if (object == null) {
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
+
+    public static int isInt(String object) throws NumberFormatException {
+        return Integer.parseInt(object);
+    }
 }
