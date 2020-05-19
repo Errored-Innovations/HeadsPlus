@@ -53,6 +53,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	        slots = new int[45];
         }
 	    for (int i = 0; i < 45; i++) {
+	        if (i == getHeadSlot()) continue;
             slots[i] = i;
         }
 	    this.hp = hp;
