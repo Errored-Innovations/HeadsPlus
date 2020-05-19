@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Reward implements Cloneable {
@@ -35,7 +36,11 @@ public class Reward implements Cloneable {
                 group = String.valueOf(value);
                 break;
             case RUN_COMMAND:
-                commands = new ArrayList<>((List<String>) value);
+                if (value instanceof List) {
+                    commands = new ArrayList<>((List<String>) value);
+                } else {
+                    commands = Collections.singletonList(String.valueOf(value));
+                }
                 break;
             case GIVE_ITEM:
                 item = new ItemStack(Material.getMaterial(String.valueOf(value)), amount);
