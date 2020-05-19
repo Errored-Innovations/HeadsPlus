@@ -14,29 +14,29 @@ import java.util.List;
 
 public abstract class AbstractListDelete extends AbstractListCommand {
 
+    public AbstractListDelete(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        try {
-            if (args.length > 1) {
-                if (CachedValues.PLAYER_NAME.matcher(args[1]).matches()) {
-                    String rHead = args[1].toLowerCase();
-                    if (getList().contains(rHead)) {
-                        getList().remove(rHead);
-                        config.getConfig().set(getPath(), getList());
-                        config.save();
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getType() + "-removed-" + getListType(), sender).replaceAll("\\{player}", args[1]).replaceAll("\\{name}", args[1]));
-                    } else {
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getType() + "-a-removed-" + getListType(), sender));
-                    }
-                    return true;
+        if (args.length > 1) {
+            if (CachedValues.PLAYER_NAME.matcher(args[1]).matches()) {
+                String rHead = args[1].toLowerCase();
+                if (getList().contains(rHead)) {
+                    getList().remove(rHead);
+                    config.getConfig().set(getPath(), getList());
+                    config.save();
+                    hpc.sendMessage("commands." + getFullName() + "." + getType() + "-removed-" + getListType(), sender, "{player}", args[1], "{name}", args[1]);
                 } else {
                     hpc.sendMessage("commands." + getFullName() + "." + getType() + "-a-removed-" + getListType(), sender);
                 }
+                return true;
             } else {
                 hpc.sendMessage("commands.head.alpha-names", sender);
             }
-        } catch (Exception e) {
-            DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);
+        } else {
+            hpc.sendMessage("commands.errors.invalid-args", sender);
         }
         return false;
     }

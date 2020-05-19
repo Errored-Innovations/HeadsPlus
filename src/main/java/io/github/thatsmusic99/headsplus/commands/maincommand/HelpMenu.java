@@ -55,32 +55,27 @@ public class HelpMenu implements IHeadsPlusCommand {
 
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {
-	    try {
-            if (args.length == 0) {
-                helpNoArgs(sender);
-            } else if (args.length == 1) {
-                if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                    helpNo(sender, args[0]);
-                } else if (args[0].equalsIgnoreCase("help")) {
-                    helpNoArgs(sender);
-                } else {
-                    helpNoArgs(sender);
-                }
-            } else {
-                if (args[0].equalsIgnoreCase("help")) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                        helpNo(sender, args[1]);
-                    } else {
-                        helpCmd(sender, args[1]);
-                    }
-                } else {
-                    helpNoArgs(sender);
-                }
-            }
-        } catch (Exception e) {
-	        DebugPrint.createReport(e, "Subcommand (help)", true, sender);
-        }
-
+	    if (args.length == 0) {
+	        helpNoArgs(sender);
+	    } else if (args.length == 1) {
+	        if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+	            helpNo(sender, args[0]);
+	        } else if (args[0].equalsIgnoreCase("help")) {
+	            helpNoArgs(sender);
+	        } else {
+	            helpNoArgs(sender);
+	        }
+	    } else {
+	        if (args[0].equalsIgnoreCase("help")) {
+	            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+	                helpNo(sender, args[1]);
+	            } else {
+	                helpCmd(sender, args[1]);
+	            }
+	        } else {
+	            helpNoArgs(sender);
+	        }
+	    }
         return true;
 	}
 

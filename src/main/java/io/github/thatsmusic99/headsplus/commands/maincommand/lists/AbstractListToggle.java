@@ -15,36 +15,37 @@ import java.util.List;
 
 public abstract class AbstractListToggle extends AbstractListCommand {
 
+    public AbstractListToggle(HeadsPlus hp) {
+        super(hp);
+    }
+
     public abstract HeadsPlusMainConfig.SelectorList getSelList();
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        try {
-            if (args.length == 1) {
-                config.getConfig().set(getPath(), getSelList().enabled = !getSelList().enabled);
-                config.save();
-                sender.sendMessage(hpc.getString("commands." + getFullName() + "." + (getSelList().enabled ? getListType() + "-on" : getListType() + "-off"), sender));
-            } else {
-                if (args[1].equalsIgnoreCase("on")) {
-                    if (!getSelList().enabled) {
-                        config.getConfig().set(getPath(), getSelList().enabled = true);
-                        config.save();
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-on", sender));
-                    } else {
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-a-on", sender));
-                    }
-
-                } else if (args[1].equalsIgnoreCase("off")) {
-                    if (getSelList().enabled) {
-                        config.getConfig().set(getPath(), getSelList().enabled = false);
-                        config.save();
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-off", sender));
-                    } else {
-                        sender.sendMessage(hpc.getString("commands." + getFullName() + "." + getListType() + "-a-off", sender));
-                    }
+        if (args.length == 1) {
+            config.getConfig().set(getPath(), getSelList().enabled = !getSelList().enabled);
+            config.save();
+            hpc.sendMessage("commands." + getFullName() + "." + (getSelList().enabled ? getListType() + "-on" : getListType() + "-off"), sender);
+        } else {
+            if (args[1].equalsIgnoreCase("on")) {
+                if (!getSelList().enabled) {
+                    config.getConfig().set(getPath(), getSelList().enabled = true);
+                    config.save();
+                    hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-on", sender);
                 } else {
-                    sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());
+                    hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-a-on", sender);
                 }
+            } else if (args[1].equalsIgnoreCase("off")) {
+                if (getSelList().enabled) {
+                    config.getConfig().set(getPath(), getSelList().enabled = false);
+                    config.save();
+                    hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-off", sender);
+                } else {
+                    hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-a-off", sender);
+                }
+            } else {
+                sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);
