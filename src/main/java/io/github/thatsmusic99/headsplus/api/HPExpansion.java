@@ -224,7 +224,7 @@ public class HPExpansion extends PlaceholderExpansion {
         if (split) {
             section = identifier.split("_")[1];
         }
-
+        boolean legacy = true;
         switch (section) {
             case "cavespider":
                 section = "CAVE_SPIDER";
@@ -273,11 +273,17 @@ public class HPExpansion extends PlaceholderExpansion {
                 section = "ZOMBIE_VILLAGER";
                 break;
             case "total":
+                legacy = false;
                 section = "total";
                 break;
             default:
+                legacy = false;
                 section = section.toUpperCase();
                 break;
+        }
+        if (legacy && !warned) {
+            hp.getLogger().warning("We've noticed you're using a deprecated format for your placeholders. You must now use " + section + " in your placeholder rather than " + identifier + "! (e.g. %headsplus_top_hunting_IRON_GOLEM_0_player%)");
+            warned = true;
         }
         return  section;
     }
