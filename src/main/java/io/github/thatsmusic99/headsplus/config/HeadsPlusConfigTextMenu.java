@@ -276,9 +276,9 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.first-line"), sender)
                     .replaceAll("\\{type}", type));
             for (Mask mask : hs.getContentsInPage(page)) {
-                sb.append("\n").append(sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.for-each-line"), sender)
+                sb.append("\n").append(translateColors(ht.getConfig().getString("head-info.mask-info.for-each-line"), sender)
                         .replaceAll("\\{effect}", mask.effect)
-                        .replaceAll("\\{amplifier}", String.valueOf(mask.amplifier))));
+                        .replaceAll("\\{amplifier}", String.valueOf(mask.amplifier)));
             }
             return sb.toString();
         }
