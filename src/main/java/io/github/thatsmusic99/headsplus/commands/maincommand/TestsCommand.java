@@ -31,37 +31,34 @@ public class TestsCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             if (DeathEvents.ableEntities.contains(args[1].toUpperCase())) {
                 if (args.length > 2) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                        int amount = Integer.parseInt(args[2]);
-                        String type = args[1].toLowerCase().replaceAll("_", "");
-                        sender.sendMessage(hpc.getString("commands.tests.running-tests"));
-                        double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(type + ".chance");
-                        Random rand = new Random();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                int successes = 0;
-                                for (int in = 0; in < amount; in++) {
-                                    double result = rand.nextDouble() * 100;
-                                    if (result <= chance) {
-                                        successes++;
-                                    }
+                    int amount = HPUtils.isInt(args[2]);
+                    String type = args[1].toLowerCase().replaceAll("_", "");
+                    hpc.sendMessage("commands.tests.running-tests", sender);
+                    double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(type + ".chance");
+                    Random rand = new Random();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            int successes = 0;
+                            for (int in = 0; in < amount; in++) {
+                                double result = rand.nextDouble() * 100;
+                                if (result <= chance) {
+                                    successes++;
                                 }
-                                sender.sendMessage(hpc.getString("commands.tests.results").replaceAll("\\{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)"));
                             }
-                        }.runTaskAsynchronously(HeadsPlus.getInstance());
-                        return true;
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-input-int"));
-                    }
+                            hpc.sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+                        }
+                    }.runTaskAsynchronously(HeadsPlus.getInstance());
+                    return true;
+
                 } else {
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         } else {
-            sender.sendMessage(hpc.getString("commands.errors.invalid-args"));
+            hpc.sendMessage("commands.errors.invalid-args", sender);
         }
 
 
