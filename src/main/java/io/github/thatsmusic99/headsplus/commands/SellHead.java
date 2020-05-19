@@ -6,9 +6,10 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,10 +37,15 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	private static final List<String> headIds = new ArrayList<>();
 	private final int[] slots;
 	private final HeadsPlus hp;
+	private static boolean ignoreCase;
 
 	public SellHead(HeadsPlus hp) {
-	    headIds.addAll(DeathEvents.ableEntities);
-	    headIds.add("PLAYER");
+	    headIds.clear();
+	    ignoreCase = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
+	    for (String entity : DeathEvents.ableEntities) {
+	        registerHeadID(entity);
+        }
+	    registerHeadID("PLAYER");
 	    if (hp.getNMSVersion().getOrder() > 3) {
 	        slots = new int[46];
 	        slots[45] = 45; // off-hand slot
@@ -73,6 +79,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		                    if (item != null && NBTManager.isSellable(item)) {
 		                        // Get the ID
 		                        String id = NBTManager.getType(item);
+                                if (ignoreCase) {
+                                    id = id.toLowerCase();
+                                }
 		                        if (headIds.contains(id)) {
 		                            double price = NBTManager.getPrice(item) * item.getAmount();
 		                            SellData data = new SellData(player);
@@ -83,18 +92,17 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                             }
                         }
                     } else {
-		                if (args[0].equalsIgnoreCase("all")) {
+                        String fixedId = args[0];
+                        if (!hp.getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+                            fixedId = fixedId.toLowerCase();
+                        }
+		                if (fixedId.equalsIgnoreCase("all")) {
 		                    getValidHeads(player, null, -1);
-                        } else if (headIds.contains(args[0])) {
-                            String fixedId = args[0];
+                        } else if (headIds.contains(fixedId)) {
+
                             int limit = -1;
                             if (args.length > 1) {
-                                if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                    limit = Integer.parseInt(args[1]);
-                                } else {
-                                    sender.sendMessage(hpc.getString("commands.errors.invalid-input-int", sender));
-                                    return false;
-                                }
+                                limit = HPUtils.isInt(args[1]);
                             }
                             getValidHeads(player, fixedId, limit);
                         } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
@@ -109,6 +117,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             } else {
                 hpc.sendMessage("commands.errors.disabled", sender);
             }
+        } catch (NumberFormatException e) {
+            hpc.sendMessage("commands.errors.invalid-input-int", sender);
         } catch (Exception e) {
 		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
 		}
@@ -123,7 +133,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             if (item != null && NBTManager.isSellable(item)) {
                 String id = NBTManager.getType(item);
                 if (fixedId != null) {
-                    if (!fixedId.equals(id)) continue;
+                    if (!fixedId.equals(id) || (ignoreCase && !fixedId.equalsIgnoreCase(id))) continue;
                 } else if (!headIds.contains(id)){
                     continue;
                 }
@@ -150,6 +160,14 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         }
     }
 
+    private int getHeadSlot() {
+        NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
+        if (nms.getOrder() == 9 || nms.getOrder() == 10) {
+            return 39;
+        } else {
+            return 5;
+        }
+    }
 
 	@SuppressWarnings("deprecation")
     private static ItemStack checkHand(Player p) {
@@ -226,6 +244,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     public static void registerHeadID(String name) {
+	    if (!ignoreCase) {
+	        name = name.toLowerCase();
+        }
 	    if (!headIds.contains(name)) {
             headIds.add(name);
         }
