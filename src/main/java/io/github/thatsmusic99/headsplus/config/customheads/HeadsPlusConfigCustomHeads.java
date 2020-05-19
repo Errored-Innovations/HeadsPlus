@@ -6,6 +6,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Bukkit;
@@ -39,11 +40,12 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
-
+    public final HeadsPlusMessagesManager hpc;
 
     public HeadsPlusConfigCustomHeads() {
         this.conName = "customheads";
         headsxEnable();
+        hpc = HeadsPlus.getInstance().getMessagesConfig();
     }
 
     private void loadHeadsX() {
@@ -114,13 +116,13 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                 }
             }
             for (HeadsXSections h : HeadsXSections.values()) {
-                if (h.d == cVersion) {
+                if (h.d >= cVersion) {
                     getConfig().addDefault("sections." + h.let + ".display-name", h.dn);
                     getConfig().addDefault("sections." + h.let + ".texture", h.tx);
                 }
             }
             for (HeadsXEnums e : HeadsXEnums.values()) {
-                if (e.v == cVersion) {
+                if (e.v >= cVersion) {
                     //getConfig().addDefault("heads." + e.name + ".database", true); // isn't actually a required field
                     getConfig().addDefault("heads." + e.name + ".encode", true);
                     getConfig().addDefault("heads." + e.name + ".displayname", e.dn);
