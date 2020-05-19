@@ -74,8 +74,8 @@ public class RecipeEnumUser {
         } else {
             head.withPlayerName(headId);
         }
-        if (crafting.getBoolean(id + ".shaped")) {
-            List<String> ingredients = crafting.getStringList(id + ".ingredients");
+        if (headSec.getBoolean("shaped")) {
+            List<String> ingredients = headSec.getStringList("ingredients");
             ShapedRecipe recipe = HeadsPlus.getInstance().getNMS().getShapedRecipe(head.getItemStack(), "hp_" + id);
             int ch = 70;
             Map<String, Character> map = new HashMap<>();
@@ -87,46 +87,59 @@ public class RecipeEnumUser {
                 }
                 shapeBuilder.append(map.get(ingredient));
             }
-            if (shapeBuilder.length() == 4 || shapeBuilder.length() == 9) {
-                int length = (int) Math.pow(shapeBuilder.length(), 0.5);
-                String[] shape = new String[length];
-                for (int i = 0; i < length; i++) {
-                    shape[i] = shapeBuilder.charAt(i * 3) + String.valueOf(shapeBuilder.charAt(i * 3 + 1)) + shapeBuilder.charAt(i * 3 + 2);
+            if (shapeBuilder.length() != 1 && shapeBuilder.length() != 4 && shapeBuilder.length() != 9) {
+                if (!map.containsKey("AIR")) {
+                    ch++;
+                    map.put("AIR", (char) ch);
                 }
-                recipe.shape(shape);
-                int ingCount = 0;
-                for (String ingredient : map.keySet()) {
-                    try {
-                        ingCount++;
-                        String[] ingData = ingredient.split(":");
-                        if (ingData.length > 1) {
-                            recipe.setIngredient(map.get(ingredient), Material.getMaterial(ingData[0]), Byte.parseByte(ingData[1]));
-                        } else {
-                            recipe.setIngredient(map.get(ingredient), Material.getMaterial(ingredient));
-                        }
+                int limit = 4;
+                if (shapeBuilder.length() > 4) {
+                    limit = 9;
+                }
+                for (int length = shapeBuilder.length(); length < limit; length++) {
+                    shapeBuilder.append(map.get("AIR"));
+                }
+            }
+            int length = (int) Math.pow(shapeBuilder.length(), 0.5);
+            String[] shape = new String[length];
+            for (int i = 0; i < length; i++) {
+                StringBuilder shapeL = new StringBuilder();
+                for (int j = 0; j < length; j++) {
+                    shapeL.append(shapeBuilder.charAt(i * length + j));
 
-                    } catch (IllegalArgumentException | NullPointerException e) {
-                        HeadsPlus.getInstance().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
-                        ingCount--;
-                    }
                 }
-                if (ingCount > 0) {
-                    try {
-                        new BukkitRunnable() {
+                shape[i] = shapeL.toString();
+            }
+            recipe.shape(shape);
+            int ingCount = 0;
+            for (String ingredient : map.keySet()) {
+                try {
+                    String[] ingData = ingredient.split(":");
+                    if (ingData.length > 1) {
+                        recipe.setIngredient(map.get(ingredient), Material.getMaterial(ingData[0]), Byte.parseByte(ingData[1]));
+                    } else {
+                        recipe.setIngredient(map.get(ingredient), Material.getMaterial(ingredient));
+                    }
+                    if (!ingredient.equalsIgnoreCase("AIR")) {
+                        ingCount++;
+                    }
+                } catch (NullPointerException e) {
+                    HeadsPlus.getInstance().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
+                }
+            }
+            if (ingCount > 0) {
+                try {
+                    new BukkitRunnable() {
                             @Override
                             public void run() {
                                 Bukkit.addRecipe(recipe);
                             }
-                        }.runTask(HeadsPlus.getInstance());
-                    } catch (IllegalStateException ignored) {
-                    }
+                    }.runTask(HeadsPlus.getInstance());
+                } catch (IllegalStateException ignored) {
                 }
-            } else {
-                HeadsPlus.getInstance().getLogger().warning("Recipe " + id + " has a length of " + shapeBuilder.length() + " ingredients; 4 or 9 are required!");
             }
-
         } else {
-            List<String> ingredients = crafting.getStringList(id + ".ingredients");
+            List<String> ingredients = headSec.getStringList("ingredients");
             int ingCount = 0;
             ShapelessRecipe recipe = HeadsPlus.getInstance().getNMS().getRecipe(head.getItemStack(), "hp_" + id);
             for (String ingredient : ingredients) {
