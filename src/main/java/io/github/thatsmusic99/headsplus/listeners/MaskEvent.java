@@ -2,17 +2,21 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,10 +31,21 @@ public class MaskEvent implements Listener {
     @EventHandler
     public void onMaskPutOn(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
+        ItemStack item;
+        boolean shift = e.isShiftClick();
+        // If we're shift clicking
+        if (shift) {
+            // We need to get the current item
+            item = e.getCurrentItem();
+            ItemStack currHelmet = e.getWhoClicked().getInventory().getHelmet();
+            if (!(currHelmet == null || currHelmet.getType().equals(Material.AIR))) return;
+        } else {
+            if (e.getAction().equals(InventoryAction.PICKUP_ALL)) return;
+            item = e.getCursor();
+        }
         if (hp.getConfiguration().getPerks().mask_powerups) {
-            if (e.getRawSlot() == getSlot()) {
-                ItemStack ist = e.getCursor();
-                checkMask((Player) e.getWhoClicked(), ist);
+            if (e.getRawSlot() == getSlot() || shift) {
+                checkMask((Player) e.getWhoClicked(), item);
             }
         }
     }
@@ -42,11 +57,10 @@ public class MaskEvent implements Listener {
         int reset = maskSettings.getInt("reset-after-x-intervals");
         NMSManager nms = hp.getNMS();
         if (item != null) {
-            if (item.getType().equals(nms.getSkull(3).getType())) {
+            if (nms.isSkull(item)) {
                 String s = NBTManager.getType(item);
-                if (DeathEvents.ableEntities.contains(s)) {
+                if (SellHead.getRegisteredIDs().contains(s)) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
-                    pl.addMask(s);
                     UUID uuid = player.getUniqueId();
                     if (maskMonitors.containsKey(uuid)) {
                         pl.clearMask();
