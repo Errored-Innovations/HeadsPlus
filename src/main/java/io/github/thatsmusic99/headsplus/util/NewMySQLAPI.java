@@ -1,6 +1,6 @@
 package io.github.thatsmusic99.headsplus.util;
 
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.Bukkit;
@@ -81,7 +81,7 @@ public class NewMySQLAPI {
                 }
             }
             hs = DataManager.sortHashMapByValues(hs);
-            new LeaderboardsCache(database + "_" + section, hs);
+            LeaderboardsCache.init(database + "_" + section, hs);
             return hs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -125,7 +125,7 @@ public class NewMySQLAPI {
         UPDATE("UPDATE %1$s SET %2$s='%3$s', total=%4$s WHERE %5$s='%6$s'"),
         CREATE("CREATE TABLE IF NOT EXISTS %1$s"),
         ALTER("ALTER TABLE %1$s ADD COLUMN %2$s VARCHAR(45)"),
-        SELECT_ORDER("SELECT %1$s, %2$s FROM %3$s ORDER BY id"),
+        SELECT_ORDER("SELECT %1$s, %2$s FROM %3$s ORDER BY `id`"),
         SELECT_COUNT("SELECT 1 FROM %1$s WHERE `%2$s`='%3$s'");
 
         String syntax;
