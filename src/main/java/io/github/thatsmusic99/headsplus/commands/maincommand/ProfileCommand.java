@@ -75,7 +75,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
         }
 
 
-        return false;
+        return true;
     }
 
     @Override
