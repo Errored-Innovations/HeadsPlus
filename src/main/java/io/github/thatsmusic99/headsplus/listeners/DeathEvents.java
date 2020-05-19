@@ -269,51 +269,51 @@ public class DeathEvents implements Listener {
                     fancyName = name.toLowerCase();
                 }
                 HeadsPlusConfigHeads headsCon = HeadsPlus.getInstance().getHeadsConfig();
-                    for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
-                        List<EntityHead> heads = new ArrayList<>();
-                        for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
-                            EntityHead headItem;
-                            if (head.equalsIgnoreCase("{mob-default}")) {
-                                switch (fancyName) {
-                                    case "witherskeleton":
-                                        headItem = new EntityHead(name, 1);
-                                        break;
-                                    case "enderdragon":
-                                        headItem = new EntityHead(name, 5);
-                                        break;
-                                    case "zombie":
-                                        headItem = new EntityHead(name, 2);
-                                        break;
-                                    case "creeper":
-                                        headItem = new EntityHead(name, 4);
-                                        break;
-                                    case "skeleton":
-                                        headItem = new EntityHead(name, 0);
-                                        break;
-                                    default:
-                                        headItem = new EntityHead(name);
-                                        break;
-                                }
-                            } else {
-                                headItem = new EntityHead(name);
+                for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
+                    List<EntityHead> heads = new ArrayList<>();
+                    for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
+                        EntityHead headItem;
+                        if (head.equalsIgnoreCase("{mob-default}")) {
+                            switch (fancyName) {
+                                case "witherskeleton":
+                                    headItem = new EntityHead(name, 1);
+                                    break;
+                                case "enderdragon":
+                                    headItem = new EntityHead(name, 5);
+                                    break;
+                                case "zombie":
+                                    headItem = new EntityHead(name, 2);
+                                    break;
+                                case "creeper":
+                                    headItem = new EntityHead(name, 4);
+                                    break;
+                                case "skeleton":
+                                    headItem = new EntityHead(name, 0);
+                                    break;
+                                default:
+                                    headItem = new EntityHead(name);
+                                    break;
                             }
-                            headItem.withDisplayName(headsCon.getDisplayName(fancyName))
-                                    .withPrice(headsCon.getPrice(fancyName))
-                                    .withLore(headsCon.getLore(fancyName));
-                            if (head.startsWith("HP#")) {
-                                headItem.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(head));
-                            } else {
-                                headItem.withPlayerName(head);
-                            }
-                            heads.add(headItem);
-                            sellheadCache.putIfAbsent(name, headItem.getItemStack());
+                        } else {
+                            headItem = new EntityHead(name);
                         }
-                        storedHeads.put(name + ";" + conditions, heads);
+                        headItem.withDisplayName(headsCon.getDisplayName(fancyName))
+                                .withPrice(headsCon.getPrice(fancyName))
+                                .withLore(headsCon.getLore(fancyName));
+                        if (head.startsWith("HP#")) {
+                            headItem.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(head));
+                        } else {
+                            headItem.withPlayerName(head);
+                        }
+                        heads.add(headItem);
+                        sellheadCache.putIfAbsent(name, headItem.getItemStack());
                     }
-
+                    storedHeads.put(name + ";" + conditions, heads);
+                }
+                storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
             } catch (Exception e) {
                 HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
-                e.printStackTrace();
+                storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
             }
         }
         ready = true;
@@ -384,6 +384,10 @@ public class DeathEvents implements Listener {
             }
         } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();
+            return;
+        }
+        if (heads == null) {
+            HeadsPlus.getInstance().getLogger().warning("Found no heads list for " + name + "!");
             return;
         }
         if (heads.isEmpty()) return;
