@@ -14,6 +14,10 @@ import java.util.List;
 
 public abstract class AbstractListAdd extends AbstractListCommand {
 
+    public AbstractListAdd(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         try {
@@ -32,7 +36,7 @@ public abstract class AbstractListAdd extends AbstractListCommand {
                     sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);

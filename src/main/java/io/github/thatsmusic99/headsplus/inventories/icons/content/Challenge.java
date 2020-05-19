@@ -45,10 +45,10 @@ public class Challenge extends Content {
                         initNameAndLore("challenge", player);
                         event.getInventory().setItem(event.getSlot(), item);
                     } else {
-                        player.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", player));
+                        hpc.sendMessage("commands.challenges.cant-complete-challenge", player);
                     }
                 } else {
-                    player.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", player));
+                    hpc.sendMessage("commands.challenges.already-complete-challenge", player);
                 }
             } else {
                 HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);

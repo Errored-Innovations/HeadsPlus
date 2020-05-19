@@ -317,7 +317,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, ht.getConfig().getInt("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
-                sender.sendMessage(hp.getMessagesConfig().getString("commands.errors.invalid-pg-no", sender));
+                hp.getMessagesConfig().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
                 sender.sendMessage(translateColors(ht.getConfig().getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));

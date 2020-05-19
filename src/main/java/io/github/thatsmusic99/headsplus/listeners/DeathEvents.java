@@ -231,9 +231,7 @@ public class DeathEvents implements Listener {
                         location.getWorld().dropItem(location, head.getItemStack());
                         if (lostprice > 0.0) {
                             economy.withdrawPlayer(ep.getEntity(), lostprice);
-                            victim.sendMessage(hp.getMessagesConfig().getString("event.lost-money", ep.getEntity())
-                                    .replace("{player}", killer.getName())
-                                    .replaceAll("\\{price}", String.valueOf(HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))));
+                            hp.getMessagesConfig().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", hp.getConfiguration().fixBalanceStr(price));
                         }
                     }
                 }

@@ -164,16 +164,13 @@ public class Challenge {
         reward.reward(p);
         if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                pl.sendMessage(hp.getMessagesConfig().getString("commands.challenges.challenge-complete", pl)
-                        .replaceAll("\\{challenge}", getMainName())
-                        .replaceAll("\\{player}", p.getName())
-                        .replaceAll("\\{name}", p.getName()));
+                hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
         String message = hp.getMessagesConfig().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
-            p.sendMessage(str.replace("{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())));
+            hpc.sendMessage(str.replace("{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
         }
     }
 }

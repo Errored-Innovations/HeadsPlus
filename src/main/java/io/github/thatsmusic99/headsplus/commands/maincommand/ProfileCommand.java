@@ -26,7 +26,6 @@ import java.util.List;
 )
 public class ProfileCommand implements IHeadsPlusCommand {
 
-    // F
     private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
         try {
             HPPlayer pl = HPPlayer.getHPPlayer(p);
@@ -60,17 +59,18 @@ public class ProfileCommand implements IHeadsPlusCommand {
                     if (cs.hasPermission("headsplus.maincommand.profile.others")) {
                         cs.sendMessage(prof(p, cs));
                     } else {
-                        cs.sendMessage(hp.getMessagesConfig().getString("commands.errors.no-perm"));
+                        hp.getMessagesConfig().sendMessage("commands.errors.no-perm", cs);
                     }
                 }
             } else {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
+                    // Not a player
                     cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
                 } else {
                     cs.sendMessage(prof(p, cs));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
         }
 

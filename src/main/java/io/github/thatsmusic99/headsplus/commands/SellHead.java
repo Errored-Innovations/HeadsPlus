@@ -100,14 +100,14 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                         } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
                             getValidHeads(player, null, Integer.parseInt(args[0]));
                         } else {
-                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                            hpc.sendMessage("commands.errors.invalid-args", sender);
                         }
                     }
                 } else {
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", sender));
+                    hpc.sendMessage("commands.errors.not-a-player", sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.disabled", sender));
+                hpc.sendMessage("commands.errors.disabled", sender);
             }
         } catch (Exception e) {
 		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
@@ -146,7 +146,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         if (price > 0) {
             pay(player, data, price);
         } else {
-            player.sendMessage(hpc.getString("commands.sellhead.no-heads", player));
+            hpc.sendMessage("commands.sellhead.no-heads", player);
         }
     }
 
@@ -169,11 +169,11 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             if (response.transactionSuccess()) {
                 if (price > 0) {
                     removeItems(player, data);
-                    player.sendMessage(hpc.getString("commands.sellhead.sell-success", player).replaceAll("\\{price}", Double.toString(price))
-                            .replaceAll("\\{balance}", hp.getConfiguration().fixBalanceStr(balance + price)));
+                    hpc.sendMessage("commands.sellhead.sell-success", player, hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(balance + price));
+
                 }
             } else {
-                player.sendMessage(hpc.getString("commands.errors.cmd-fail", player));
+               hpc.sendMessage("commands.errors.cmd-fail", player);
             }
         }
     }

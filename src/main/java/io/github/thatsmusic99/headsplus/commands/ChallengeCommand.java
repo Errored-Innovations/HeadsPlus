@@ -26,6 +26,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
         try {
+            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
             if (HeadsPlus.getInstance().hasChallengesEnabled()) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
@@ -33,13 +34,13 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                         InventoryManager.getManager(p).open(InventoryManager.InventoryType.CHALLENGES_MENU, new HashMap<>());
                         return true;
                     } else {
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
+                        hpc.sendMessage("commands.errors.no-perm", p);
                     }
                 } else {
-                    cs.sendMessage("[HeadsPlus] You have to be a player to run this command!");
+                    hpc.sendMessage("commands.errors.not-a-player", cs);
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs));
+                hpc.sendMessage("commands.errors.disabled", cs);
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);

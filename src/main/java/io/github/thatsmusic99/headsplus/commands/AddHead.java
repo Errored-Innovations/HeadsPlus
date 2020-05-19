@@ -46,19 +46,17 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
                         }
                         if(hp.getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                            sender.sendMessage(hp.getMessagesConfig().getString("commands.addhead.head-adding", sender)
-                                    .replace("{player}", p.getName())
-                                    .replace("{header}", hp.getMenus().getConfig().getString("profile.header")));
+                            hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", p.getName());
                         }
                         return true;
                     } else {
-                        sender.sendMessage(hpc.getString("commands.head.head-too-long", sender));
+                        hpc.sendMessage("commands.head.head-too-long", sender);
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.head-too-short", sender));
+                    hpc.sendMessage("commands.head.head-too-short", sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
+                hpc.sendMessage("commands.head.alpha-names", sender);
             }
         } else {
             if (sender.hasPermission("headsplus.addhead.texture")) {
@@ -82,13 +80,13 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             customHeads.getConfig().options().copyDefaults(true);
                             customHeads.save();
                             customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
-                            sender.sendMessage(hpc.getString("commands.addhead.custom-head-added").replaceAll("\\{id}", id));
+                            hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
                         }
                     });
                     conversation.begin();
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         }
         return true;

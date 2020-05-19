@@ -853,7 +853,7 @@ public class HeadsPlusMessagesManager {
         Matcher m = pat.matcher(string);
         while (m.find()) {
             if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
-                string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", player));
+                string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", (CommandSender) player));
             } else {
                 string = string.replace("{msg_inventory.icon.head.favourite}", "");
             }
@@ -866,7 +866,7 @@ public class HeadsPlusMessagesManager {
         Matcher m = pat.matcher(string);
         while (m.find()) {
             if (challenge.isComplete(player)) {
-                string = string.replace("{completed}", getString("command.challenges.challenge-completed", player));
+                string = string.replace("{completed}", getString("command.challenges.challenge-completed", (CommandSender) player));
             } else {
                 string = string.replace("{completed}", "");
             }
@@ -875,17 +875,21 @@ public class HeadsPlusMessagesManager {
     }
 
     public String getString(String path, CommandSender cs) {
-        return cs instanceof Player ? getString(path, (Player) cs) : getString(path);
+        return cs instanceof Player ? getString(path, (OfflinePlayer) cs) : getString(path);
     }
 
     public String getString(String path, Player player) {
+        return getString(path, (CommandSender) player);
+    }
+
+    public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
         if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
-            if (players.containsKey(player.getUniqueId())) {
+            if (players.containsKey(player.getUniqueId()) && player.isOnline()) {
                 config = players.get(player.getUniqueId());
                 if (config == null) {
-                    setPlayerLocale(player);
+                    setPlayerLocale(player.getPlayer());
                     config = players.get(player.getUniqueId());
                 }
             }
@@ -896,7 +900,10 @@ public class HeadsPlusMessagesManager {
         str = str.replaceAll("''", "'");
         str = str.replaceAll("^'", "");
         str = str.replaceAll("'$", "");
-        formatMsg(str, player);
+        if (player.isOnline()) {
+            formatMsg(str, player.getPlayer());
+        }
+
         if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             str = PlaceholderAPI.setPlaceholders(player, str);
         }
@@ -979,5 +986,28 @@ public class HeadsPlusMessagesManager {
             e.printStackTrace();
         }
         return config;
+    }
+
+    public void sendMessage(String str, CommandSender sender, String... replace) {
+        sendMessage(str, sender, true, replace);
+    }
+
+    public void sendMessage(String str, CommandSender sender, boolean translate, String... replace) {
+        if (translate) {
+            str = getString(str);
+        }
+        for (int i = 0; i < replace.length; i += 2) {
+            str = str.replace(replace[i], replace[i + 1]);
+        }
+        if (sender instanceof Player && HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("use-tellraw")) {
+            try {
+                new JSONParser().parse(str);
+            } catch (ParseException e) {
+                str = "{\"text\":\"" + str + "\"}";
+            }
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + sender.getName() + " " + str);
+        } else {
+            sender.sendMessage(str);
+        }
     }
 }

@@ -60,7 +60,7 @@ public class Conjure implements IHeadsPlusCommand {
                     if (sender instanceof Player) {
                         p = (Player) sender;
                     } else {
-                        sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
+                        hpc.sendMessage("commands.errors.not-a-player", sender);
                         return false;
                     }
                 }
@@ -82,15 +82,15 @@ public class Conjure implements IHeadsPlusCommand {
                     p.getInventory().addItem(i);
                     return true;
                 } catch (NullPointerException ex) {
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 } catch (IndexOutOfBoundsException e) {
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-pg-no", sender));
+                    hpc.sendMessage("commands.errors.invalid-pg-no", sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         } else {
-            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+            hpc.sendMessage("commands.errors.invalid-args", sender);
         }
 
         return false;

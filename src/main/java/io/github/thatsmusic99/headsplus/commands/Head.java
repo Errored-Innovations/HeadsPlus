@@ -69,7 +69,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
         boolean wlOn = whitelist.enabled;
         String head = args[0].toLowerCase();
         if (p.getInventory().firstEmpty() == -1) {
-            sender.sendMessage(hpc.getString("commands.head.full-inv", p2));
+            hpc.sendMessage("commands.head.full-inv", p2);
             return;
         }
         if (wlOn) {
@@ -80,7 +80,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
+                        hpc.sendMessage("commands.head.blacklist-head", p2);
                     }
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
                     if (!bl.contains(head)) {
@@ -88,10 +88,10 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     } else if (sender.hasPermission("headsplus.bypass.blacklist")) {
                         giveHead(p, args[0]);
                     } else {
-                        sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
+                        hpc.sendMessage("commands.head.blacklist-head", p2);
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.whitelist-head", p2));
+                    hpc.sendMessage("commands.head.whitelist-head", p2);
                 }
             } else {
                 if (wl.contains(head)) {
@@ -99,7 +99,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 } else if (sender.hasPermission("headsplus.bypass.whitelist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.whitelist-head", p2));
+                    hpc.sendMessage("commands.head.whitelist-head", p2);
                 }
             }
         } else {
@@ -109,7 +109,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 } else if (sender.hasPermission("headsplus.bypass.blacklist")){
                     giveHead(p, args[0]);
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.blacklist-head", p2));
+                    hpc.sendMessage("commands.head.blacklist-head", p2);
                 }
             } else {
                 giveHead(p, args[0]);
@@ -138,14 +138,14 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                                 giveH(s, sender, hp.getNMS().getPlayer(args[1]));
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.invalid-args", sender));
+                                hpc.sendMessage("commands.head.invalid-args", sender);
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
+                            hpc.sendMessage("commands.errors.player-offline", sender);
                         }
 	                    return true;
 	                } else {
-	                    sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
+	                    hpc.sendMessage("commands.errors.no-perm", sender);
 	                }
 	            } else if (args.length > 0) {
 	                if (sender instanceof Player) {
@@ -155,13 +155,13 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	                        return true;
 	                    }
 	                } else {
-	                    sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
+	                    hpc.sendMessage("commands.errors.not-a-player", sender);
 	                }
 	            } else {
-	                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+	                hpc.sendMessage("commands.errors.invalid-args", sender);
 	            }
 	        } else {
-	            sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
+	            hpc.sendMessage("commands.errors.no-perm", sender);
 	        }
         } catch (Exception e) {
 	        DebugPrint.createReport(e, "Command (head)", true, sender);

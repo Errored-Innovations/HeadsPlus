@@ -42,12 +42,12 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                         if (target != null && target.isOnline()) {
                             Bukkit.dispatchCommand(target, "minecraft:execute as " + args[1] + "run myhead");
                         } else {
-                            sender.sendMessage(hpc.getString("commands.errors.player-offline", null));
+                            hpc.sendMessage("commands.errors.player-offline", sender);
                         }
                     }
                     return false;
                 } else if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
+                    hpc.sendMessage("commands.errors.not-a-player", sender);
                     return false;
                 }
                 Player p = (Player) sender;
@@ -67,7 +67,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                 boolean wlOn = whitelist.enabled;
                 String head = sender.getName().toLowerCase();
                 if (p.getInventory().firstEmpty() == -1) {
-                    sender.sendMessage(hpc.getString("commands.head.full-inv", p));
+                    hpc.sendMessage("commands.head.full-inv", p);
                     return true;
                 }
                 if (wlOn) {
@@ -80,7 +80,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                                 giveHead(p, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
+                                hpc.sendMessage("commands.head.blacklist-head", sender);
                                 return true;
                             }
                         } else if (sender.hasPermission("headsplus.bypass.whitelist")) {
@@ -91,11 +91,11 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                                 giveHead(p, sender.getName());
                                 return true;
                             } else {
-                                sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
+                                hpc.sendMessage("commands.head.blacklist-head", sender);
                                 return true;
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.whitelist-head", p));
+                            hpc.sendMessage("commands.head.whitelist-head", sender);
                             return true;
                         }
                     } else {
@@ -106,7 +106,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             giveHead(p, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.whitelist-head", p));
+                            hpc.sendMessage("commands.head.whitelist-head", sender);
                             return true;
                         }
                     }
@@ -119,7 +119,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                             giveHead(p, sender.getName());
                             return true;
                         } else {
-                            sender.sendMessage(hpc.getString("commands.head.blacklist-head", p));
+                            hpc.sendMessage("commands.head.blacklist-head", sender);
                             return true;
                         }
                     } else {

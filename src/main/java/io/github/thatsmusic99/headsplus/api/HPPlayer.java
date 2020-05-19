@@ -271,10 +271,7 @@ public class HPPlayer {
                                 if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
                                     final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                                     for (Player p : Bukkit.getOnlinePlayers()) {
-                                        p.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.levels.level-up", p)
-                                                .replaceAll("\\{player}", name)
-                                                .replaceAll("\\{name}", name)
-                                                .replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName())));
+                                        hp.getMessagesConfig().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
                                     }
                                 }
                                 HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();

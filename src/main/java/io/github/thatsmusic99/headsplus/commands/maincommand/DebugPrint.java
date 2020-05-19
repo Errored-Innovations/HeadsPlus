@@ -44,7 +44,7 @@ public class DebugPrint implements IHeadsPlusCommand {
             e.printStackTrace();
         }
         if (command && sender != null) {
-            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.cmd-fail", sender));
+            hpc.sendMessage("commands.errors.cmd-fail", sender);
         }
 
         if (cs.getBoolean("debug.create-debug-files")) {
@@ -78,7 +78,7 @@ public class DebugPrint implements IHeadsPlusCommand {
     public boolean fire(String[] args, CommandSender sender) {
         try {
             if (args.length < 2) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
                 return false;
             }
             if (args[1].equalsIgnoreCase("dump")) {
@@ -185,7 +185,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                 }
                             }.runTaskAsynchronously(HeadsPlus.getInstance());
                         } else {
-                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                            hpc.sendMessage("commands.errors.invalid-args", sender);
                         }
                     } else {
                         sender.sendMessage(ChatColor.RED + "Please ensure you have MySQL enabled.");
@@ -211,13 +211,13 @@ public class DebugPrint implements IHeadsPlusCommand {
                             item = NBTManager.setPrice(item, price);
                             player.getInventory().setItem(slot, item);
                         } else {
-                            sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                            hpc.sendMessage("commands.errors.invalid-args", sender);
                         }
                     } else {
-                        sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                        hpc.sendMessage("commands.errors.invalid-args", sender);
                     }
                 } else {
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", sender));
+                    hpc.sendMessage("commands.errors.not-a-player", sender);
                 }
 
             }

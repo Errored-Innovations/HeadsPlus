@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,6 +27,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String l, String[] args) {
         try {
+            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
             if (HeadsPlus.getInstance().isUsingHeadDatabase()) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
@@ -33,13 +35,13 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
                         InventoryManager.getManager(p).open(InventoryManager.InventoryType.HEADS_MENU, new HashMap<>());
                         return true;
                     } else {
-                        cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-perm", p));
+                        hpc.sendMessage("commands.errors.no-perm", p);
                     }
                 } else {
-                    cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", cs));
+                    hpc.sendMessage("commands.errors.not-a-player", cs);
                 }
             } else {
-                cs.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.disabled", cs));
+                hpc.sendMessage("commands.errors.disabled", cs);
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (heads)", true, cs);

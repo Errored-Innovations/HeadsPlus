@@ -40,10 +40,10 @@ public class LocaleCommand implements IHeadsPlusCommand {
                 if (args[1].equalsIgnoreCase("refresh")) {
                     if (sender instanceof Player) {
                         messages.setPlayerLocale((Player) sender);
-                        sender.sendMessage(messages.getString("commands.locale.changed-locale", sender));
+                        messages.sendMessage("commands.locale.changed-locale", sender);
                         return true;
                     } else {
-                        sender.sendMessage(messages.getString("commands.errors.not-a-player", sender));
+                        messages.sendMessage("commands.errors.not-a-player", sender);
                     }
                 } else {
                     if (sender.hasPermission("headsplus.maincommand.locale.change")) {
@@ -54,37 +54,36 @@ public class LocaleCommand implements IHeadsPlusCommand {
                                 if (sender.hasPermission("headsplus.maincommand.locale.others")) {
                                     if (player != null && player.isOnline()) {
                                         messages.setPlayerLocale(player, str);
-                                        sender.sendMessage(messages.getString("commands.locale.changed-locale-other", sender)
-                                                .replaceAll("\\{player}", player.getName()).replaceAll("\\{language}", str));
+                                        messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
                                         return true;
                                     } else {
-                                        sender.sendMessage(messages.getString("commands.errors.player-offline", sender));
+                                        messages.sendMessage("commands.errors.player-offline", sender);
                                     }
                                 } else {
-                                    sender.sendMessage(messages.getString("commands.errors.no-perm", sender));
+                                    messages.sendMessage("commands.errors.no-perm", sender);
                                 }
 
                             } else {
                                 if (sender instanceof Player) {
                                     messages.setPlayerLocale((Player) sender, str);
-                                    sender.sendMessage(messages.getString("commands.locale.changed-locale", sender));
+                                    messages.sendMessage("commands.locale.changed-locale", sender);
                                     return true;
                                 } else {
-                                    sender.sendMessage(messages.getString("commands.errors.not-a-player", sender));
+                                    messages.sendMessage("commands.errors.not-a-player", sender);
                                 }
                             }
                         } else {
-                            sender.sendMessage(messages.getString("commands.locale.invalid-lang", sender).replaceAll("\\{languages}", Arrays.toString(languages.toArray())));
+                            messages.sendMessage("commands.locale.invalid-lang", sender, "{languages}", Arrays.toString(languages.toArray()));
                         }
                     } else {
-                        sender.sendMessage(messages.getString("commands.errors.no-perm", sender));
+                        messages.sendMessage("commands.errors.no-perm", sender);
                     }
                 }
             } else {
-                sender.sendMessage(messages.getString("commands.errors.invalid-args", sender));
+                messages.sendMessage("commands.errors.invalid-args", sender);
             }
         } else {
-            sender.sendMessage(messages.getString("commands.errors.disabled", sender));
+            messages.sendMessage("commands.errors.disabled", sender);
         }
         return false;
     }

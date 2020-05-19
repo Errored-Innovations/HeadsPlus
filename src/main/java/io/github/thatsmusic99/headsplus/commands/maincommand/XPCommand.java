@@ -43,7 +43,7 @@ public class XPCommand implements IHeadsPlusCommand {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
 
             } else if (args[2].equalsIgnoreCase("subtract")) {
@@ -62,18 +62,16 @@ public class XPCommand implements IHeadsPlusCommand {
                         sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
                     }
                 } else {
-                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
             } else if (args[2].equalsIgnoreCase("reset")) {
                 player.setXp(0);
-                sender.sendMessage(hpc.getString("commands.xp.reset-xp", sender).replaceAll("\\{player}", args[1]));
+                hpc.sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
             } else {
-                sender.sendMessage(hpc.getString("commands.xp.current-xp", sender).replaceAll("\\{player}", args[1])
-                        .replaceAll("\\{xp}", String.valueOf(player.getXp())));
+                hpc.sendMessage("commands.xp.current-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()));
             }
         } else {
-            sender.sendMessage(hpc.getString("commands.xp.current-xp", sender).replaceAll("\\{player}", args[1])
-                    .replaceAll("\\{xp}", String.valueOf(player.getXp())));
+            hpc.sendMessage("commands.xp.current-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()));
         }
         return false;
     }

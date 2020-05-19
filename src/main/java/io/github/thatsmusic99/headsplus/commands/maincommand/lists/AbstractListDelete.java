@@ -30,10 +30,10 @@ public abstract class AbstractListDelete extends AbstractListCommand {
                     }
                     return true;
                 } else {
-                    sender.sendMessage(hpc.getString("commands.head.alpha-names", sender));
+                    hpc.sendMessage("commands." + getFullName() + "." + getType() + "-a-removed-" + getListType(), sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.head.alpha-names", sender);
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);

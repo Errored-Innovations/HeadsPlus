@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class HeadsPlusCommand implements CommandExecutor {
 
@@ -23,22 +22,29 @@ public class HeadsPlusCommand implements CommandExecutor {
                         CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
                         if (sender.hasPermission(c.permission())) {
                             if (c.maincommand()) {
-                                if (command.fire(args, sender)) {
-                                    return true;
-                                } else {
-                                    sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + c.usage());
-                                    if (command.advancedUsages().length != 0) {
-                                        sender.sendMessage(ChatColor.DARK_RED + "Further usages:");
-                                        for (String s : command.advancedUsages()) {
-                                            sender.sendMessage(ChatColor.RED + s);
+                                try {
+                                    if (command.fire(args, sender)) {
+                                        return true;
+                                    } else {
+                                        sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + c.usage());
+                                        if (command.advancedUsages().length != 0) {
+                                            sender.sendMessage(ChatColor.DARK_RED + "Further usages:");
+                                            for (String s : command.advancedUsages()) {
+                                                sender.sendMessage(ChatColor.RED + s);
+                                            }
                                         }
                                     }
+                                } catch (NumberFormatException numberEx) {
+                                    hpc.sendMessage("commands.errors.invalid-input-int", sender);
+                                } catch (Exception ex) {
+                                    DebugPrint.createReport(ex, "Subcommand (" + c.commandname() + ")", true, sender);
                                 }
+
                             } else {
                                 new HelpMenu().fire(args, sender);
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.errors.no-perm", sender instanceof Player ? (Player) sender : null));
+                            hpc.sendMessage("commands.errors.no-perm", sender);
                         }
                     } else {
                         new HelpMenu().fire(args, sender);

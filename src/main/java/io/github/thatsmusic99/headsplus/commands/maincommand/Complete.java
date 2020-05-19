@@ -46,17 +46,17 @@ public class Complete implements IHeadsPlusCommand {
                                     if (c.canComplete(player.getPlayer())) {
                                         HeadsPlus.getInstance().getChallengeByName(args[1]).complete(player.getPlayer());
                                     } else {
-                                        sender.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", sender));
+                                        hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
                                     }
                                 } else {
-                                    sender.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", sender));
+                                    hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
                                 }
                             } else {
-                                sender.sendMessage(hpc.getString("commands.errors.player-offline", sender));
+                                hpc.sendMessage("commands.errors.player-offline", sender);
                                 return false;
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.errors.no-perm", sender));
+                            hpc.sendMessage("commands.errors.no-perm", sender);
                         }
                         return true;
 
@@ -66,25 +66,25 @@ public class Complete implements IHeadsPlusCommand {
                             if (c.canComplete(p)) {
                                 HeadsPlus.getInstance().getChallengeByName(args[1]).complete((Player) sender);
                             } else {
-                                sender.sendMessage(hpc.getString("commands.challenges.cant-complete-challenge", sender));
+                                hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
                             }
                         } else {
-                            sender.sendMessage(hpc.getString("commands.challenges.already-complete-challenge", sender));
+                            hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
                         }
 
                     } else {
-                        sender.sendMessage(hpc.getString("commands.errors.not-a-player", sender));
+                        hpc.sendMessage("commands.errors.not-a-player", sender);
                     }
                     return true;
                 } else {
-                    sender.sendMessage(hpc.getString("commands.challenges.no-such-challenge", sender));
+                    hpc.sendMessage("commands.challenges.no-such-challenge", sender);
                 }
             } else {
-                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         } catch (SQLException e) {
             DebugPrint.createReport(e, "Complete command (checks)", true, sender);
-            sender.sendMessage(hpc.getString("commands.errors.cmd-fail", sender));
+            hpc.sendMessage("commands.errors.cmd-fail", sender);
         }
         return false;
     }

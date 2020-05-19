@@ -298,13 +298,11 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             } else if (force && enableHead(texture)){
                 // Keep going.
             } else if(sender != null) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-already-added", sender)
-                        .replace("{player}", player.getName()));
+                hpc.sendMessage("commands.addhead.head-already-added", sender, "{player}", player.getName());
                 return;
             }
             if(sender != null) {
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added", sender)
-                        .replace("{player}", player.getName()));
+                hpc.sendMessage("commands.addhead.head-added", sender, "{player}", player.getName());
             }
 
         } catch (ParseException e) {
@@ -432,20 +430,14 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
                                                    forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
                                             if(callback != null) {
-                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added", callback)
-                                                        .replace("{player}", name)
-                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                                hpc.sendMessage("commands.addhead.head-added", callback, "{player}", name);
                                             }
                                        } else if (forceAdd && enableHead(texUrl)){
                                            if(callback != null) {
-                                                callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-added", callback)
-                                                        .replace("{player}", name)
-                                                        .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                               hpc.sendMessage("commands.addhead.head-added", callback, "{player}", name);
                                             }
                                        } else if(callback != null) {
-                                           callback.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.addhead.head-already-added", callback)
-                                                    .replace("{player}", name)
-                                                    .replace("{header}", HeadsPlus.getInstance().getMenus().getConfig().getString("profile.header")));
+                                           hpc.sendMessage("commands.addhead.head-already-added", callback, "{player}", name);
                                        }
                                    }
                                }

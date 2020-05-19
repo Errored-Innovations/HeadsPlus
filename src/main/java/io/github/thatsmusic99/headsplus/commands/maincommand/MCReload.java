@@ -33,25 +33,19 @@ public class MCReload implements IHeadsPlusCommand{
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         HeadsPlusMessagesManager m = HeadsPlus.getInstance().getMessagesConfig();
-        String reloadM = m.getString("commands.reload.reload-message");
-        String reloadingM = m.getString("commands.reload.reloading-message");
-        sender.sendMessage(reloadingM);
-        try {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (ConfigSettings cs : HeadsPlus.getInstance().getConfigs()) {
-                        cs.reloadC();
-                    }
-                    HPPlayer.players.clear();
-                    HeadsPlus.getInstance().reloadDE();
-                    HeadsPlus.getInstance().restartMessagesManager();
-                    sender.sendMessage(reloadM);
+        m.sendMessage("commands.reload.reloading-message", sender);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (ConfigSettings cs : HeadsPlus.getInstance().getConfigs()) {
+                    cs.reloadC();
                 }
-            }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
-        } catch (Exception e) {
-            DebugPrint.createReport(e, "Subcommand (reload)", true, sender);
-        }
+                HPPlayer.players.clear();
+                HeadsPlus.getInstance().reloadDE();
+                HeadsPlus.getInstance().restartMessagesManager();
+                m.sendMessage("commands.reload.reload-message", sender);
+            }
+        }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
         return true;
     }
 

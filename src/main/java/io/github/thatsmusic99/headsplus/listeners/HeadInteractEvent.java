@@ -43,23 +43,17 @@ public final class HeadInteractEvent implements Listener {
                         if (TimesSent < 1) {
                             for (String n : names) {
                                 if (fc.getStringList(n + ".name").contains(owner)) {
-                                    String iMessage1;
                                     String dn = hpch.getInteractName(n).toLowerCase();
                                     if (dn.startsWith("a") || dn.startsWith("e") || dn.startsWith("i") || dn.startsWith("o") || dn.startsWith("u")) {
-                                        iMessage1 = hpc.getString("event.head-mhf-interact-message-2", player);
+                                        hpc.sendMessage("event.head-mhf-interact-message-2", player, "{name}", dn, "{player}", playerName);
                                     } else {
-                                        iMessage1 = hpc.getString("event.head-mhf-interact-message", player);
+                                        hpc.sendMessage("event.head-mhf-interact-message", player, "{name}", dn, "{player}", playerName);
                                     }
-                                    iMessage1 = iMessage1.replaceAll("\\{name}", dn).replaceAll("\\{player}", playerName);
-                                    player.sendMessage(iMessage1);
                                     TimesSent++;
                                     return;
                                 }
                             }
-                            String iMessage1 = hpc.getString("event.head-interact-message", player);
-                            iMessage1 = iMessage1.replaceAll("\\{name}", owner);
-                            iMessage1 = iMessage1.replaceAll("\\{player}", playerName);
-                            player.sendMessage(iMessage1);
+                            hpc.sendMessage("event.head-interact-message", player, "{name}", owner, "{player}", playerName);
                             TimesSent++;
                         } else {
                             TimesSent --;
