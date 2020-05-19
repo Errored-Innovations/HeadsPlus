@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,35 +33,24 @@ public class XPCommand implements IHeadsPlusCommand {
         if (args.length > 2) {
             if (args[2].equalsIgnoreCase("add")) {
                 if (args.length > 3) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[3]).matches()) {
-                        int amount = Integer.parseInt(args[3]);
-                        player.addXp(amount);
-                        sender.sendMessage(hpc.getString("commands.xp.added-xp", sender).replaceAll("\\{player}", args[1])
-                                .replaceAll("\\{xp}", String.valueOf(player.getXp()))
-                                .replaceAll("\\{amount}", String.valueOf(args[3])));
-                        return true;
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                    }
+                    int amount = HPUtils.isInt(args[3]);
+                    player.addXp(amount);
+                    hpc.sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
+                    return true;
+
                 } else {
                     hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
 
             } else if (args[2].equalsIgnoreCase("subtract")) {
                 if (args.length > 3) {
-                    if (CachedValues.MATCH_PAGE.matcher(args[3]).matches()) {
-                        int amount = Integer.parseInt(args[3]);
-                        if (amount > player.getXp() && !HeadsPlus.getInstance().getConfiguration().getPerks().negative_xp) {
-                            sender.sendMessage(hpc.getString("commands.xp.negative-xp", sender));
-                            return true;
-                        }
-                        player.removeXp(amount);
-                        sender.sendMessage(hpc.getString("commands.xp.removed-xp", sender).replaceAll("\\{player}", args[1])
-                                .replaceAll("\\{xp}", String.valueOf(player.getXp()))
-                                .replaceAll("\\{amount}", String.valueOf(args[3])));
-                    } else {
-                        sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                    int amount = HPUtils.isInt(args[3]);
+                    if (amount > player.getXp() && !HeadsPlus.getInstance().getConfiguration().getPerks().negative_xp) {
+                        hpc.sendMessage("commands.xp.negative-xp", sender);
+                        return true;
                     }
+                    player.removeXp(amount);
+                    hpc.sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
                 } else {
                     hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
