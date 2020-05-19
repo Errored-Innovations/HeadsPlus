@@ -57,18 +57,19 @@ public class HPPlayer {
         this.xp = scores.getXp(p.getUniqueId().toString());
         List<String> sc = new ArrayList<>();
         sc.addAll(scores.getCompletedChallenges(p.getUniqueId().toString()));
-        if (hp.getConfiguration().getConfig().getBoolean("smart-locale")) {
+        if (hp.getConfiguration().getConfig().getBoolean("smart-locale") && p.isOnline()) {
+            Player player = p.getPlayer();
             String loc = scores.getLocale(p.getUniqueId().toString());
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
                 cachedLocale = loc.split(":")[0];
                 localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                hp.getMessagesConfig().setPlayerLocale(getPlayer().getPlayer(), cachedLocale,  false);
+                hp.getMessagesConfig().setPlayerLocale(player, cachedLocale,  false);
             } else {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        hp.getMessagesConfig().setPlayerLocale(getPlayer());
-                        cachedLocale = hp.getMessagesConfig().getSetLocale(getPlayer());
+                        hp.getMessagesConfig().setPlayerLocale(player);
+                        cachedLocale = hp.getMessagesConfig().getSetLocale(player);
                         localeForced = false;
                         scores.setLocale(player.toString(), cachedLocale, false);
                     }
@@ -97,9 +98,10 @@ public class HPPlayer {
 
                 }
             } else {
+                String configLevel = scores.getLevel(p.getUniqueId().toString());
                 for (int i = levels.size(); i > 0; i--) {
                     try {
-                        if (levels.get(i).getConfigName().equals(scores.getLevel(p.getUniqueId().toString()))) {
+                        if (levels.get(i).getConfigName().equals(configLevel)) {
                             level = levels.get(i);
                             try {
                                 nextLevel = levels.get(i + 1);
@@ -116,7 +118,7 @@ public class HPPlayer {
             }
         }
         this.completeChallenges = sc;
-        players.put(getPlayer().getUniqueId(), this);
+        players.put(p.getUniqueId(), this);
     }
 
     public void clearMask() {
