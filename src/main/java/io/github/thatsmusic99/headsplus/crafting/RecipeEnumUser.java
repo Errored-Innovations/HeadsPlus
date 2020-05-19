@@ -1,10 +1,12 @@
 package io.github.thatsmusic99.headsplus.crafting;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -39,23 +41,26 @@ public class RecipeEnumUser {
 	}
 
 	private void addRecipe(String id) {
+        ConfigurationSection headSec = crafting.getConfigurationSection(id);
+        if (headSec.getStringList("ingredients").isEmpty()) return;
 	    // Get the Central ID, firstly
-	    String headId = crafting.getString(id + ".head");
-        EntityHead head;
+	    String headId = headSec.getString("head");
+        Head head;
         try {
             // Create the head object
-            head = new EntityHead(crafting.getString(id + ".sellhead-id"));
-        } catch (NullPointerException ex) {
+            head = new EntityHead(headSec.getString("sellhead-id"));
+            // Register the Sellhead ID
+            SellHead.registerHeadID(headSec.getString("sellhead-id"));
+            // Apply the price
+            head.withPrice(hp.getCraftingConfig().getPrice(id));
+        } catch (NullPointerException ignored) {
             // If there's no sellhead ID, stop there
-	        HeadsPlus.getInstance().getLogger().warning("Missing Sellhead ID for " + id + "!");
-	        return;
+	        head = new Head(id);
         }
-        // Register the Sellhead ID
-        SellHead.registerHeadID(crafting.getString(id + ".sellhead-id"));
-        // Apply the price, display name and lore
-	    head.withPrice(hp.getCraftingConfig().getPrice(id))
-                .withDisplayName(hp.getCraftingConfig().getDisplayName(id))
+
+        head.withDisplayName(hp.getCraftingConfig().getDisplayName(id))
                 .withLore(hp.getCraftingConfig().getLore(id));
+
 	    // If using a custom texture
         if (headId.startsWith("HP#")) {
             try {
