@@ -161,7 +161,7 @@ public class HPPlayer {
                     HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
                     continue;
                 }
-                PotionEffect p = new PotionEffect(type, 400, amp);
+                PotionEffect p = new PotionEffect(type, HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), amp);
                 ((Player) getPlayer()).addPotionEffect(p);
                 po.add(p);
             } catch (IllegalArgumentException ex) {
@@ -176,7 +176,7 @@ public class HPPlayer {
         for (PotionEffect effect : activeMask) {
             Player player = (Player) getPlayer();
             player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(effect.getType(), 400, effect.getAmplifier()));
+            player.addPotionEffect(new PotionEffect(effect.getType(), HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), effect.getAmplifier()));
         }
     }
 

@@ -37,6 +37,9 @@ public class MaskEvent implements Listener {
 
     public static void checkMask(Player player, ItemStack item) {
         HeadsPlus hp = HeadsPlus.getInstance();
+        ConfigurationSection maskSettings = hp.getConfiguration().getMechanics().getConfigurationSection("masks");
+        int period = maskSettings.getInt("check-interval");
+        int reset = maskSettings.getInt("reset-after-x-intervals");
         NMSManager nms = hp.getNMS();
         if (item != null) {
             if (item.getType().equals(nms.getSkull(3).getType())) {
@@ -45,25 +48,37 @@ public class MaskEvent implements Listener {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     pl.addMask(s);
                     UUID uuid = player.getUniqueId();
+                    if (maskMonitors.containsKey(uuid)) {
+                        pl.clearMask();
+                        maskMonitors.get(uuid).cancel();
+                        maskMonitors.remove(uuid);
+                    }
+                    pl.addMask(s);
                     maskMonitors.put(uuid, new BukkitRunnable() {
+
+                        private int currentInterval = 0;
+
                         @Override
                         public void run() {
                             ItemStack helmet = player.getInventory().getHelmet();
+                            currentInterval++;
                             if (helmet == null
                                     || helmet.getType() == Material.AIR
                                     || !NBTManager.getType(helmet).equals(s)
                                     || !player.isOnline()) {
-                                pl.clearMask(s);
+                                pl.clearMask();
                                 maskMonitors.remove(uuid);
                                 cancel();
                             } else if (!maskMonitors.containsKey(uuid)) {
+                                pl.clearMask();
                                 cancel();
-                            } else {
+                            } else if (currentInterval == reset) {
                                 pl.refreshMasks();
+                                currentInterval = 0;
                             }
                         }
                     });
-                    maskMonitors.get(uuid).runTaskTimer(hp, 20, 60);
+                    maskMonitors.get(uuid).runTaskTimer(hp, period, period);
                 }
             }
         }
