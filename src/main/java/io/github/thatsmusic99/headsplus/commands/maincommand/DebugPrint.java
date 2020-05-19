@@ -97,10 +97,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                         String s = new DebugFileCreator().createPlayerReport(pl);
                         sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                     } else {
-                        sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data", sender));
+                        hpc.sendMessage("commands.profile.no-data",  sender);
                     }
                 } else {
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
             } else if (args[1].equalsIgnoreCase("clearim")) {
                 InventoryManager.storedInventories.clear();
@@ -112,10 +112,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                         String s = new DebugFileCreator().createItemReport(HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender));
                         sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                     } else {
-                        sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.sellhead.false-item", sender));
+                        hpc.sendMessage("commands.sellhead.false-item", sender);
                     }
                 } else {
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.not-a-player", sender));
+                    hpc.sendMessage("commands.errors.not-a-player", sender);
                 }
             } else if (args[1].equalsIgnoreCase("delete")) {
                 if (args.length > 2) {
@@ -124,10 +124,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                         HeadsPlus.getInstance().getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
                         sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
                     } else {
-                        sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.profile.no-data", sender));
+                        hpc.sendMessage("commands.profile.no-data", sender);
                     }
                 } else {
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-args", sender));
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
             } else if (args[1].equalsIgnoreCase("save")) {
                 try {
