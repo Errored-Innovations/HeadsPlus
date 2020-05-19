@@ -98,6 +98,10 @@ public interface NMSManager {
         return new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) data);
     }
 
+    default boolean isSkull(ItemStack item) {
+        return item.getItemMeta() instanceof SkullMeta;
+    }
+
     HashMap<String, String> getNBTTags(ItemStack item);
 
     default Sound getEXPSound() {

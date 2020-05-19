@@ -96,15 +96,20 @@ public class Challenge extends Content {
                             lore.add(hpc.getString("inventory.icon.challenge.pinned", player));
                         }
                     } else {
-                        lore.add(hpc.formatMsg(hpc.completed(loreStr, player, challenge), player)
-                                .replace("{reward}", reward)
-                                .replace("{challenge-reward}", reward)
-                                .replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
+                        String str = hpc.formatMsg(hpc.completed(loreStr, player, challenge), player);
+                        try {
+                            str = str.replace("{reward}", reward)
+                                    .replace("{challenge-reward}", reward);
+                        } catch (NullPointerException ignored) {
+
+                        }
+                        str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
                                 .replaceAll("\\{heads}", String.valueOf(api.getPlayerInLeaderboards(player,
                                         challenge.getHeadType(),
                                         challenge.getChallengeType().getDatabase(),
                                         true)))
-                                .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount())));
+                                .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
+                        lore.add(str);
                     }
 
                 }

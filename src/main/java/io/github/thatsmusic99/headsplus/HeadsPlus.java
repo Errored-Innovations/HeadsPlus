@@ -124,6 +124,7 @@ public class HeadsPlus extends JavaPlugin {
             // Hooks PlaceholderAPI
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
+                getLogger().info("We've registered our PAPI placeholders!");
             }
             JoinEvent.reloaded = false;
             // Sets up Metrics
@@ -438,26 +439,26 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerSubCommands() {
-        commands.put("blacklistadd", new BlacklistAdd());
-        commands.put("blacklistdel", new BlacklistDelete());
-        commands.put("blacklistl", new BlacklistList());
-        commands.put("blacklist", new BlacklistToggle());
-        commands.put("blacklistwadd", new BlacklistwAdd());
-        commands.put("blacklistwdel", new BlacklistwDelete());
-        commands.put("blacklistwl", new BlacklistwList());
-        commands.put("blacklistw", new BlacklistwToggle());
+        commands.put("blacklistadd", new BlacklistAdd(this));
+        commands.put("blacklistdel", new BlacklistDelete(this));
+        commands.put("blacklistl", new BlacklistList(this));
+        commands.put("blacklist", new BlacklistToggle(this));
+        commands.put("blacklistwadd", new BlacklistwAdd(this));
+        commands.put("blacklistwdel", new BlacklistwDelete(this));
+        commands.put("blacklistwl", new BlacklistwList(this));
+        commands.put("blacklistw", new BlacklistwToggle(this));
         commands.put("help", new HelpMenu());
         commands.put("info", new Info());
         commands.put("reload", new MCReload());
         commands.put("profile", new ProfileCommand());
-        commands.put("whitelistadd", new WhitelistAdd());
-        commands.put("whitelistdel", new WhitelistDel());
-        commands.put("whitelistl", new WhitelistList());
-        commands.put("whitelist", new WhitelistToggle());
-        commands.put("whitelistwadd", new WhitelistwAdd());
-        commands.put("whitelistwdel", new WhitelistwDelete());
-        commands.put("whitelistwl", new WhitelistwList());
-        commands.put("whitelistw", new WhitelistwToggle());
+        commands.put("whitelistadd", new WhitelistAdd(this));
+        commands.put("whitelistdel", new WhitelistDel(this));
+        commands.put("whitelistl", new WhitelistList(this));
+        commands.put("whitelist", new WhitelistToggle(this));
+        commands.put("whitelistwadd", new WhitelistwAdd(this));
+        commands.put("whitelistwdel", new WhitelistwDelete(this));
+        commands.put("whitelistwl", new WhitelistwList(this));
+        commands.put("whitelistw", new WhitelistwToggle(this));
         commands.put("hpc", new ChallengeCommand());
         commands.put("addhead", new AddHead());
         commands.put("head", new Head());

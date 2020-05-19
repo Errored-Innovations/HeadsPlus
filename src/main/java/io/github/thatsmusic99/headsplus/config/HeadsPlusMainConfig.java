@@ -81,7 +81,6 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.perks.pvp.player-balance-competition", false);
         config.addDefault("plugin.perks.pvp.percentage-lost", 0.05);
         config.addDefault("plugin.perks.pvp.percentage-balance-for-head", 0.05);
-        // config.addDefault("plugin.perks.houses.enabled", true);
         config.addDefault("plugin.mechanics.theme", "classic");
         config.addDefault("plugin.mechanics.plugin-theme-dont-change", "classic");
         config.addDefault("plugin.mechanics.update.check", true);
@@ -109,8 +108,11 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.xp.selling", 10);
         config.addDefault("plugin.mechanics.suppress-gui-warnings", true);
         config.addDefault("plugin.mechanics.blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")));
-        //    config.addDefault("plugin.mechanics.ignored-players-head-drops", new ArrayList<>());
-        config.set("mysql.passworld", null); // I still love this
+        config.addDefault("plugin.mechanics.use-tellraw", false);
+        config.addDefault("plugin.mechanics.masks.check-interval", 60);
+        config.addDefault("plugin.mechanics.masks.reset-after-x-intervals", 20);
+        config.addDefault("plugin.mechanics.masks.effect-length", 12000);
+        config.addDefault("plugin.mechanics.sellhead-ids-case-sensitive", true);
         config.options().copyDefaults(true);
         save();
 

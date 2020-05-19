@@ -13,7 +13,7 @@ public class LeaderboardsCache {
     private static final HeadsPlus hp = HeadsPlus.getInstance();
     private static final boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
 
-    public LeaderboardsCache(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
+    public static void init(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
         if (enabled) {
             cache.put(type, contents);
             new BukkitRunnable() {
@@ -23,8 +23,6 @@ public class LeaderboardsCache {
                 }
             }.runTaskLater(hp, hp.getConfiguration().getMechanics().getInt("leaderboards.cache-lifetime-seconds") * 20);
         }
-
-
     }
 
     public static LinkedHashMap<OfflinePlayer, Integer> getType(String section, String database, boolean async, boolean realtime) {

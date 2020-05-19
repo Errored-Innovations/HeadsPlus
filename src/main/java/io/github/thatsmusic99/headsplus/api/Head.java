@@ -29,6 +29,9 @@ public class Head {
 
     public Head(String id, int data) {
         this.itemStack = HeadsPlus.getInstance().getNMS().getSkull(data);
+        if (!HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+            id = id.toLowerCase();
+        }
         this.id = id;
         this.data = data;
     }
@@ -93,5 +96,9 @@ public class Head {
     public Head withAmount(int amount) {
         itemStack.setAmount(amount);
         return this;
+    }
+
+    public int getData() {
+        return data;
     }
 }

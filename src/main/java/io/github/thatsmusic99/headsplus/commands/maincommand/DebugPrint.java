@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
@@ -36,10 +37,18 @@ import java.util.logging.Logger;
 )
 public class DebugPrint implements IHeadsPlusCommand {
 
+    private static HeadsPlus hp;
+    private static HeadsPlusMessagesManager hpc;
+
+    public DebugPrint(HeadsPlus hp) {
+        DebugPrint.hp = hp;
+        hpc = hp.getMessagesConfig();
+    }
+
     // R
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
-        Logger log = HeadsPlus.getInstance().getLogger();
-        ConfigurationSection cs = HeadsPlus.getInstance().getConfiguration().getMechanics();
+        Logger log = hp.getLogger();
+        ConfigurationSection cs = hp.getConfiguration().getMechanics();
         if (cs.getBoolean("debug.print-stacktraces-in-console")) {
             e.printStackTrace();
         }
@@ -109,7 +118,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                 if (sender instanceof Player) {
                     NMSManager nms = HeadsPlus.getInstance().getNMS();
                     if (nms.getItemInHand((Player) sender) != null) {
-                        String s = new DebugFileCreator().createItemReport(HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender));
+                        String s = new DebugFileCreator().createItemReport(nms.getItemInHand((Player) sender));
                         sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                     } else {
                         hpc.sendMessage("commands.sellhead.false-item", sender);
@@ -121,7 +130,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                 if (args.length > 2) {
                     HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
                     if (pl != null) {
-                        HeadsPlus.getInstance().getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
+                        hp.getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
                         sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
                     } else {
                         hpc.sendMessage("commands.profile.no-data", sender);
@@ -131,19 +140,19 @@ public class DebugPrint implements IHeadsPlusCommand {
                 }
             } else if (args[1].equalsIgnoreCase("save")) {
                 try {
-                    HeadsPlus.getInstance().getFavourites().save();
+                    hp.getFavourites().save();
                 } catch (IOException e) {
                     DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
                 }
                 try {
-                    HeadsPlus.getInstance().getScores().save();
+                    hp.getScores().save();
                 } catch (IOException e) {
                     DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
                 }
                 sender.sendMessage(ChatColor.GREEN + "Data has been saved.");
             } else if (args[1].equalsIgnoreCase("transfer")) {
                 if (args.length > 2) {
-                    if (HeadsPlus.getInstance().isConnectedToMySQLDatabase()) {
+                    if (hp.isConnectedToMySQLDatabase()) {
                         if (args[2].equalsIgnoreCase("database")) {
                             sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
                             new BukkitRunnable() {
@@ -201,12 +210,12 @@ public class DebugPrint implements IHeadsPlusCommand {
                             ItemStack item = player.getInventory().getItem(slot);
                             item = NBTManager.makeSellable(item);
                             item = NBTManager.setType(item, args[2]);
-                            double price = 0.0;
-                            double headsPrice = HeadsPlus.getInstance().getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
+                            double price;
+                            double headsPrice = hp.getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
                             if (headsPrice != 0.0) {
                                 price = headsPrice;
                             } else {
-                                price = HeadsPlus.getInstance().getCraftingConfig().getPrice(args[2]);
+                                price = hp.getCraftingConfig().getPrice(args[2]);
                             }
                             item = NBTManager.setPrice(item, price);
                             player.getInventory().setItem(slot, item);
@@ -222,9 +231,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
             }
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
-            if (HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
         return true;
     }

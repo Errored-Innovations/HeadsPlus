@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,6 @@ import java.util.List;
         usage = "/hpc"
 )
 public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
-
 
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {

@@ -21,9 +21,7 @@ import java.util.List;
         maincommand = true,
         usage = "/hp reload"
 )
-public class MCReload implements IHeadsPlusCommand{
-
-    // O
+public class MCReload implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {

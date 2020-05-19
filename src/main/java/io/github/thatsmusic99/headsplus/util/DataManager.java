@@ -24,7 +24,7 @@ public class DataManager {
                 hs.put(p, i);
             }
             hs = sortHashMapByValues(hs);
-            new LeaderboardsCache(database + "_" + section, hs);
+            LeaderboardsCache.init(database + "_" + section, hs);
             return hs;
         }
     }

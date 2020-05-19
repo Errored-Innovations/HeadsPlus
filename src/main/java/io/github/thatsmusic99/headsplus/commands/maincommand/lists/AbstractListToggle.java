@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
@@ -47,8 +48,6 @@ public abstract class AbstractListToggle extends AbstractListCommand {
             } else {
                 sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + getClass().getAnnotation(CommandInfo.class).usage());
             }
-        } catch (Exception e) {
-            DebugPrint.createReport(e, "Subcommand (" + getClass().getAnnotation(CommandInfo.class).commandname() + ")", true, sender);
         }
         return true;
     }

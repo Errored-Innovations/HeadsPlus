@@ -226,13 +226,12 @@ public class DebugFileCreator {
         o2.put("Level", player.getLevel());
         o2.put("Next level", player.getNextLevel());
         JSONObject o3 = new JSONObject();
-        for (String type : player.getActiveMaskTypes()) {
-            JSONArray a = new JSONArray();
-            for (PotionEffect p : player.getActiveMasks(type)) {
-                a.add(p.getType().getName());
-            }
-            o3.put(type, a);
+        String type = player.getActiveMaskType();
+        JSONArray a = new JSONArray();
+        for (PotionEffect p : player.getActiveMasks()) {
+            a.add(p.getType().getName());
         }
+        o3.put(type, a);
         o2.put("Masks", o3);
         o1.put("Server version", Bukkit.getVersion());
         o1.put("Player details", o2);
