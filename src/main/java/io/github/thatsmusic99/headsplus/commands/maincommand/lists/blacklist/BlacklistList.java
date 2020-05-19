@@ -15,12 +15,15 @@ import java.util.List;
         usage = "/hp blacklistl [Page No.]"
 )
 public class BlacklistList extends AbstractListList {
+    public BlacklistList(HeadsPlus hp) {
+        super(hp);
+    }
 
     // L
 
 	@Override
 	public String getCmdDescription(CommandSender cs) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistl", cs);
+		return hpc.getString("descriptions.hp.blacklistl", cs);
 	}
 
     @Override

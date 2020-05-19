@@ -9,8 +9,15 @@ import java.util.List;
 
 public abstract class AbstractListCommand implements IHeadsPlusCommand {
 
-    protected final HeadsPlusMainConfig config = HeadsPlus.getInstance().getConfiguration();
-    protected final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    protected final HeadsPlus hp;
+    protected final HeadsPlusMainConfig config;
+    protected final HeadsPlusMessagesManager hpc;
+
+    public AbstractListCommand(HeadsPlus hp) {
+        this.hp = hp;
+        this.config = hp.getConfiguration();
+        this.hpc = hp.getMessagesConfig();
+    }
 
     public abstract List<String> getList();
     public abstract String getPath();

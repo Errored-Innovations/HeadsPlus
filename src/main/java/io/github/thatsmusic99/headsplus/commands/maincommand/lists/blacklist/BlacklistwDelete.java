@@ -15,12 +15,13 @@ import java.util.List;
 		usage = "/hp blacklistwdel <World Name>"
 )
 public class BlacklistwDelete extends AbstractListDelete {
-
-	// A
+	public BlacklistwDelete(HeadsPlus hp) {
+		super(hp);
+	}
 
 	@Override
 	public String getCmdDescription(CommandSender sender) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistwdel", sender);
+		return hpc.getString("descriptions.hp.blacklistwdel", sender);
 	}
 
 	@Override

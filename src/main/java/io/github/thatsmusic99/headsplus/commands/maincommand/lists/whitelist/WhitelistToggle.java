@@ -17,9 +17,13 @@ import java.util.List;
 )
 public class WhitelistToggle extends AbstractListToggle {
 
+    public WhitelistToggle(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelist", sender);
+        return hpc.getString("descriptions.hp.whitelist", sender);
     }
 
     @Override

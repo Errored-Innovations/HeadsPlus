@@ -16,9 +16,13 @@ import java.util.List;
 )
 public class WhitelistList extends AbstractListList {
 
+    public WhitelistList(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelistl", sender);
+        return hpc.getString("descriptions.hp.whitelistl", sender);
     }
 
     @Override

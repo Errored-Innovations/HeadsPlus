@@ -21,6 +21,10 @@ public class WhitelistwToggle extends AbstractListToggle {
     private final HeadsPlusMainConfig config = HeadsPlus.getInstance().getConfiguration();
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
+    public WhitelistwToggle(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public String getCmdDescription(CommandSender sender) {
         return hpc.getString("descriptions.hp.whitelistw", sender);

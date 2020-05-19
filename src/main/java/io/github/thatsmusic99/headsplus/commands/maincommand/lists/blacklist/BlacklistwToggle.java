@@ -17,11 +17,13 @@ import java.util.List;
 )
 public class BlacklistwToggle extends AbstractListToggle {
 
-    // A
+    public BlacklistwToggle(HeadsPlus hp) {
+        super(hp);
+    }
 
 	@Override
 	public String getCmdDescription(CommandSender sender) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistw", sender);
+		return hpc.getString("descriptions.hp.blacklistw", sender);
 	}
 
     @Override

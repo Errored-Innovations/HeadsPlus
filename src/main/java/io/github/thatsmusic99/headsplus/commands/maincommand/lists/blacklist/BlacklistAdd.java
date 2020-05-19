@@ -16,10 +16,14 @@ import java.util.List;
 )
 public class BlacklistAdd extends AbstractListAdd {
 
+    public BlacklistAdd(HeadsPlus hp) {
+        super(hp);
+    }
+
     // S
     @Override
     public String getCmdDescription(CommandSender cs) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistadd", cs);
+        return hpc.getString("descriptions.hp.blacklistadd", cs);
     }
 
     @Override

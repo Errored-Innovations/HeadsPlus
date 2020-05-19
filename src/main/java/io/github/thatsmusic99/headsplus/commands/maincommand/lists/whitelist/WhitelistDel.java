@@ -16,9 +16,13 @@ import java.util.List;
 )
 public class WhitelistDel extends AbstractListDelete {
 
+    public WhitelistDel(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelistdel", sender);
+        return hpc.getString("descriptions.hp.whitelistdel", sender);
     }
 
     @Override

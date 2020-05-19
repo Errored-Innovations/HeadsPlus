@@ -16,9 +16,13 @@ import java.util.List;
 )
 public class WhitelistwAdd extends AbstractListAdd {
 
+    public WhitelistwAdd(HeadsPlus hp) {
+        super(hp);
+    }
+
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.whitelistwadd", sender);
+        return hpc.getString("descriptions.hp.whitelistwadd", sender);
     }
 
     @Override

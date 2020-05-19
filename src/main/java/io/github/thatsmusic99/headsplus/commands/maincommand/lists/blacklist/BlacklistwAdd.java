@@ -15,12 +15,13 @@ import java.util.List;
         usage = "/hp blacklistwadd <World Name>"
 )
 public class BlacklistwAdd extends AbstractListAdd {
-
-    // I
+    public BlacklistwAdd(HeadsPlus hp) {
+        super(hp);
+    }
 
 	@Override
 	public String getCmdDescription(CommandSender sender) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.blacklistwadd", sender);
+		return hpc.getString("descriptions.hp.blacklistwadd", sender);
 	}
 
     @Override
