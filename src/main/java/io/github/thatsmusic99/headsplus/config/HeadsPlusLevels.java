@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
 import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 
 import java.util.HashMap;
 
@@ -37,26 +38,26 @@ public class HeadsPlusLevels extends ConfigSettings {
         if (hp.usingLevels()) {
             try {
                 for (String s : getConfig().getConfigurationSection("levels").getKeys(false)) {
-                    String dn = getConfig().getString("levels." + s + ".display-name");
+                    String dn = HPUtils.notNull(getConfig().getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
                     double av = getConfig().getDouble("levels." + s + ".added-version");
                     int rxp = getConfig().getInt("levels." + s + ".required-xp");
-                    int h = getConfig().getInt("levels." + s + ".hierachy");
+                    int h = getConfig().getInt("levels." + s + ".hierarchy");
                     boolean e = getConfig().getBoolean("levels." + s + ".rewards.enabled", false);
                     HPChallengeRewardTypes reward;
                     try {
 
-                        reward = HPChallengeRewardTypes.valueOf(getConfig().getString("levels." + s + ".rewards.reward-type").toUpperCase());
+                        reward = HPChallengeRewardTypes.valueOf(HPUtils.notNull(getConfig().getString("levels." + s + ".rewards.reward-type"), "There is no reward type for " + s + "!").toUpperCase());
                     } catch (Exception ex) {
-                        continue;
+                        throw new NullPointerException("The reward type for " + s + " is not valid!");
                     }
-                    Object rewardVal = getConfig().get("levels." + s + ".rewards.reward-value");
+                    Object rewardVal = HPUtils.notNull(getConfig().get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
                     int items = getConfig().getInt("levels." + s + ".rewards.item-amount");
                     String sender = getConfig().getString("levels." + s + ".rewards.command-sender");
                     Level c = new Level(s, dn, rxp, av, e, reward, rewardVal, items, sender);
                     hp.getLevels().put(h, c);
                 }
             } catch (NullPointerException ex) {
-                HeadsPlus.getInstance().getLogger().warning("Levels didn't start up correctly! There is a sample file at https://github.com/Thatsmusic99/HeadsPlus/blob/master/sample-configs/levels.yml you can upload into the data folder to stop this message.");
+                hp.getLogger().warning(ex.getMessage());
             }
         }
     }
