@@ -64,17 +64,21 @@ public class HeadsPlusLevels extends ConfigSettings {
 
     @Override
     public void load() {
-        double version = 0.2;
+        double version = 0.3;
         double current = getConfig().getDouble("version");
         if (current < version) {
             getConfig().set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
+                if (current < 0.3) {
+                    getConfig().set("levels." + l.getConfigName() + ".hierarchy", i);
+                    getConfig().set("levels." + l.getConfigName() + ".hierachy", null);
+                }
                 if (l.getAddedVersion() > current) {
                     getConfig().addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
                     getConfig().addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
                     getConfig().addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    getConfig().addDefault("levels." + l.getConfigName() + ".hierachy", i);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".hierarchy", i);
                     getConfig().addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
                     getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
                     getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);

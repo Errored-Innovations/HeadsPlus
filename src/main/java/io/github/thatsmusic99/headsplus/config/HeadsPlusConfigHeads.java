@@ -122,7 +122,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					getConfig().addDefault(key + ".name.GRAY", initSingleton("HP#gray_" + key));
                     break;
 				case "mushroomcow":
-					getConfig().addDefault(key + ".name.default", initSingleton("HP#red_mushroom"));
+					getConfig().addDefault(key + ".name.default", initSingleton("HP#red_mooshroom"));
 					getConfig().addDefault(key + ".name.RED", initSingleton("HP#red_mooshroom"));
 					getConfig().addDefault(key + ".name.BROWN", initSingleton("HP#brown_mooshroom"));
 					break;
