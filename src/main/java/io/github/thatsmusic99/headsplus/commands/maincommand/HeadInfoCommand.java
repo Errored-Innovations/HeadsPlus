@@ -32,7 +32,8 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
     private static final List<String> potions = new ArrayList<>();
 
-    static {
+
+    public HeadInfoCommand() {
         try {
             for (PotionEffectType type : PotionEffectType.values()) {
                 potions.add(type.getName());
@@ -53,8 +54,8 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
         String[] s = new String[4];
         s[0] = "/hp headinfo view <Entity Type> [Name|Mask|Lore] [Page]";
         s[1] = "/hp headinfo set <Entity Type> <Chance|Price|Display-name|Interact-name> <Value>";
-        s[2] = "/hp headinfo add <Entity Type> <Name|Mask|Lore> <Value|Effect> [Colour|Amplifier]";
-        s[3] = "/hp headinfo remove <Entity Type> <Name|Mask|Lore> <Index> [Colour]";
+        s[2] = "/hp headinfo add <Entity Type> <Name|Mask|Lore> <Value|Effect> [Type|Amplifier]";
+        s[3] = "/hp headinfo remove <Entity Type> <Name|Mask|Lore> <Value> [Type]";
         return s;
     }
 
@@ -78,7 +79,18 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
             }
         } else if (args.length == 5) {
             if (args[3].equalsIgnoreCase("mask")) {
-                StringUtil.copyPartialMatches(args[4], potions, results);
+                if (args[1].equalsIgnoreCase("add")) {
+                    StringUtil.copyPartialMatches(args[4], potions, results);
+                } else if (args[1].equalsIgnoreCase("remove")) {
+                    StringUtil.copyPartialMatches(args[4], HeadsPlus.getInstance().getHeadsConfig()
+                            .getConfig().getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                    || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
+                }
+            } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
+                StringUtil.copyPartialMatches(args[4],
+                        HeadsPlus.getInstance().getHeadsConfig()
+                                .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                        || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "")), results);
             }
         } else if (args.length == 6) {
             if (args[3].equalsIgnoreCase("name")) {
@@ -210,53 +222,38 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                             if (args[3].equalsIgnoreCase("name")
                                     || args[3].equalsIgnoreCase("lore")
                                     || args[3].equalsIgnoreCase("mask")) {
-                                if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
-                                    if (args[3].equalsIgnoreCase("name")) {
-                                        String path;
-                                        if (args.length > 5) {
-                                            if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
-                                                path = type + ".name." + args[5];
-                                            } else {
-                                                sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                                                return false;
-                                            }
+                                List<String> list;
+                                String sub = "name.default";
+                                if (args[3].equalsIgnoreCase("name")) {
+                                    if (args.length > 5) {
+                                        if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
+                                            sub = "name." + args[5];
                                         } else {
-                                            if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
-                                                path = type + ".name.default";
-                                            } else {
-                                                path = type + ".name";
-                                            }
+                                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                                            return false;
                                         }
-                                        List<String> s = hpch.getConfig().getStringList(path);
-                                        s.remove(Integer.parseInt(args[4]));
-                                        hpch.getConfig().set(path, s);
-                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
-                                                .replaceAll("\\{value}", args[4])
-                                                .replaceAll("\\{entity}", type)
-                                                .replaceAll("\\{setting}", args[3]));
-                                    } else if (args[3].equalsIgnoreCase("lore")) {
-                                        List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
-                                        lore.remove(Integer.parseInt(args[4]));
-                                        hpch.getConfig().set(type + "." + args[3], lore);
-                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
-                                                .replaceAll("\\{value}", args[4])
-                                                .replaceAll("\\{entity}", type)
-                                                .replaceAll("\\{setting}", args[3]));
-                                    } else if (args[3].equalsIgnoreCase("mask")) {
-                                        List<Integer> maskAmplifiers = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
-                                        maskAmplifiers.remove(Integer.parseInt(args[4]));
-                                        hpch.getConfig().set(type + ".mask-amplifiers", maskAmplifiers);
-                                        List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
-                                        masks.remove(Integer.parseInt(args[4]));
-                                        hpch.getConfig().set(type + ".mask-effects", masks);
-                                        sender.sendMessage(hpc.getString("commands.head-info.remove-value", sender)
-                                                .replaceAll("\\{value}", args[4])
-                                                .replaceAll("\\{entity}", type)
-                                                .replaceAll("\\{setting}", args[3]));
                                     }
+                                    list = hpch.getConfig().getStringList(type + ".name." + sub);
+                                } else if (args[3].equalsIgnoreCase("lore")) {
+                                    list = hpch.getConfig().getStringList(type + ".lore");
+                                    sub = "lore";
+                                } else if (args[3].equalsIgnoreCase("mask")) {
+                                    list = hpch.getConfig().getStringList(type + ".mask-effects");
+                                    List<Integer> otherList = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
+                                    otherList.remove(list.indexOf(args[4]));
+                                    hpch.getConfig().set(type + ".mask-amplifiers", otherList);
+                                    sub = "mask-effects";
                                 } else {
-                                    sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
+                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                    return false;
                                 }
+                                if (!list.contains(args[4])) {
+                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                    return false;
+                                }
+                                list.remove(args[4]);
+                                hpch.getConfig().set(type + "." + sub, list);
+                                hpc.sendMessage("commands.head-info.remove-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
                             } else {
                                 hpc.sendMessage("commands.errors.invalid-args", sender);
                             }
@@ -278,7 +275,6 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
         } catch (IndexOutOfBoundsException ex) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
         }
-
         return false;
     }
 
