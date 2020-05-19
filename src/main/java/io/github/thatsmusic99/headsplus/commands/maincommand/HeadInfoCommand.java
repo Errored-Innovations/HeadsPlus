@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -41,7 +42,6 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
         } catch (Exception ignored) {
 
         }
-
     }
 
     @Override
@@ -168,12 +168,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                 if (PotionEffectType.getByName(args[4]) != null) {
                                     int amplifier = 1;
                                     if (args.length > 5) {
-                                        if (CachedValues.MATCH_PAGE.matcher(args[5]).matches()) {
-                                            amplifier = Integer.parseInt(args[5]);
-                                        } else {
-                                            sender.sendMessage(hpc.getString("commands.errors.invalid-args", sender));
-                                            return false;
-                                        }
+                                        amplifier = HPUtils.isInt(args[5]);
                                     }
                                     List<Integer> maskAmp = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
                                     maskAmp.add(amplifier);
