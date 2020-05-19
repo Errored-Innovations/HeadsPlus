@@ -1,8 +1,10 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -134,27 +136,27 @@ public class Challenge {
 
     public void complete(Player p) {
         HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
 
         StringBuilder sb2 = new StringBuilder();
         HPChallengeRewardTypes re = reward.getType();
         if (re != HPChallengeRewardTypes.RUN_COMMAND) {
+            String value = String.valueOf(getRewardValue());
             String rewardString = reward.getRewardString();
             if (rewardString != null) {
                 sb2.append(rewardString);
             } else if (re == HPChallengeRewardTypes.ECO) {
-                sb2.append("$").append(getRewardValue());
+                sb2.append(hpc.getString("inventory.icon.reward.currency", p).replace("{amount}", value));
             } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
-                try {
-                    Material.valueOf(getRewardValue().toString().toUpperCase());
-                    sb2
-                            .append(getRewardItemAmount())
-                            .append(" ")
-                            .append(getRewardValue().toString().replaceAll("_", " "));
-                } catch (IllegalArgumentException e) {
-                    //
-                }
+                sb2.append(hpc.getString("inventory.icon.reward.item-give", p)
+                        .replace("{amount}", String.valueOf(getRewardItemAmount()))
+                        .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " "))));
+            } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
+                sb2.append(hpc.getString("inventory.icon.reward.group-add", p).replace("{group}", value));
+            } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
+                sb2.append(hpc.getString("inventory.icon.reward.group-remove", p).replace("{group}", value));
             }
         }
 
