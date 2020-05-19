@@ -135,7 +135,11 @@ public class HPPlayer {
     }
 
     public void addMask(String s) {
-        s = s.toLowerCase().replaceAll("_", "");
+        if (s.equalsIgnoreCase("WANDERING_TRADER") || s.equalsIgnoreCase("TRADER_LLAMA")) {
+            s = s.toLowerCase();
+        } else {
+            s = s.toLowerCase().replaceAll("_", "");
+        }
         HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
         List<PotionEffect> po = new ArrayList<>();
         for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
