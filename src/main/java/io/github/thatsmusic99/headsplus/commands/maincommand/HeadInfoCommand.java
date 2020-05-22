@@ -62,39 +62,52 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
-        if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], Arrays.asList("view", "set", "add", "remove"), results);
-        } else if (args.length == 3) {
-            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getEntities(), results);
-        } else if (args.length == 4) {
-            switch (args[1].toLowerCase()) {
-                case "view":
-                case "add":
-                case "remove":
-                    StringUtil.copyPartialMatches(args[3], Arrays.asList("name", "mask", "lore"), results);
-                    break;
-                case "set":
-                    StringUtil.copyPartialMatches(args[3], Arrays.asList("chance", "price", "display-name", "interact-name"), results);
-                    break;
-            }
-        } else if (args.length == 5) {
-            if (args[3].equalsIgnoreCase("mask")) {
-                if (args[1].equalsIgnoreCase("add")) {
-                    StringUtil.copyPartialMatches(args[4], potions, results);
-                } else if (args[1].equalsIgnoreCase("remove")) {
-                    StringUtil.copyPartialMatches(args[4], HeadsPlus.getInstance().getHeadsConfig()
-                            .getConfig().getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
-                                    || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
+        if (sender.hasPermission("headsplus.maincommand.headinfo")) {
+            if (args.length == 2) {
+                List<String> allowed = new ArrayList<>();
+                for (String str : Arrays.asList("view", "set", "add", "remove")) {
+                    if (sender.hasPermission("headsplus.maincommand.headinfo." + str)) {
+                        allowed.add(str);
+                    }
                 }
-            } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
-                StringUtil.copyPartialMatches(args[4],
-                        HeadsPlus.getInstance().getHeadsConfig()
-                                .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
-                                        || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "")), results);
-            }
-        } else if (args.length == 6) {
-            if (args[3].equalsIgnoreCase("name")) {
-                StringUtil.copyPartialMatches(args[5], IHeadsPlusCommand.getEntityConditions(args[2]), results);
+                StringUtil.copyPartialMatches(args[1], allowed, results);
+            } else if (args.length == 3) {
+                StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getEntities(), results);
+            } else if (args.length == 4) {
+                if (sender.hasPermission("headsplus.maincommand.headinfo." + args[1].toLowerCase())) {
+                    switch (args[1].toLowerCase()) {
+                        case "view":
+                        case "add":
+                        case "remove":
+
+                            StringUtil.copyPartialMatches(args[3], Arrays.asList("name", "mask", "lore"), results);
+                            break;
+                        case "set":
+                            StringUtil.copyPartialMatches(args[3], Arrays.asList("chance", "price", "display-name", "interact-name"), results);
+                            break;
+                    }
+                }
+            } else if (args.length == 5) {
+                if (sender.hasPermission("headsplus.maincommand.headinfo." + args[1].toLowerCase())) {
+                    if (args[3].equalsIgnoreCase("mask")) {
+                        if (args[1].equalsIgnoreCase("add")) {
+                            StringUtil.copyPartialMatches(args[4], potions, results);
+                        } else if (args[1].equalsIgnoreCase("remove")) {
+                            StringUtil.copyPartialMatches(args[4], HeadsPlus.getInstance().getHeadsConfig()
+                                    .getConfig().getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                            || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
+                        }
+                    } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
+                        StringUtil.copyPartialMatches(args[4],
+                                HeadsPlus.getInstance().getHeadsConfig()
+                                        .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                                || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "")), results);
+                    }
+                }
+            } else if (args.length == 6) {
+                if (args[3].equalsIgnoreCase("name") && sender.hasPermission("headsplus.maincommand.headinfo." + args[1].toLowerCase())) {
+                    StringUtil.copyPartialMatches(args[5], IHeadsPlusCommand.getEntityConditions(args[2]), results);
+                }
             }
         }
         return results;
@@ -110,154 +123,158 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                     type = args[2].toLowerCase();
                 }
                 if (DeathEvents.ableEntities.contains(args[2]) || args[2].equalsIgnoreCase("player")) {
-                    if (args[1].equalsIgnoreCase("view")) {
-                        if (args.length > 3) {
-                            if (args[3].equalsIgnoreCase("name") || args[3].equalsIgnoreCase("lore") || args[3].equalsIgnoreCase("mask")) {
-                                if (args.length > 4) {
-                                    if (CachedValues.MATCH_PAGE.matcher(args[4]).matches()) {
+                    if (sender.hasPermission("headsplus.maincommand.headinfo." + args[1].toLowerCase())) {
+                        switch (args[1].toLowerCase()) {
+                            case "view":
+                                if (args.length > 3) {
+                                    if (args.length > 4) {
+                                        int page = HPUtils.isInt(args[4]);
                                         switch (args[3].toLowerCase()) {
                                             case "name":
-                                                sender.sendMessage(printNameInfo(type, Integer.parseInt(args[4]), sender));
+                                                sender.sendMessage(printNameInfo(type, page, sender));
                                                 break;
                                             case "mask":
-                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, Integer.parseInt(args[4])));
+                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, page));
                                                 break;
                                             case "lore":
-                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, Integer.parseInt(args[4])));
+                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, page));
+                                                break;
+                                            default:
+                                                hpc.sendMessage("commands.errors.invalid-args", sender);
                                                 break;
                                         }
                                         return true;
                                     }
-
-                                }
-                                switch (args[3].toLowerCase()) {
-                                    case "name":
-                                        sender.sendMessage(printNameInfo(type, 1, sender));
-                                        break;
-                                    case "mask":
-                                        sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, 1));
-                                        break;
-                                    case "lore":
-                                        sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
-                                        break;
-                                }
-                            } else {
-                                hpc.sendMessage("commands.errors.invalid-args", sender);
-                            }
-                        } else {
-                            sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
-                        }
-                    } else if (args[1].equalsIgnoreCase("set")) {
-                        if (args.length > 4) {
-                            if (args[3].equalsIgnoreCase("chance")
-                                    || args[3].equalsIgnoreCase("price")) {
-                                if (isValueValid(args[3], args[4])) {
-                                    hpch.getConfig().set(type + "." + args[3], Double.valueOf(args[4]));
-                                }
-                            } else if (args[3].equalsIgnoreCase("display-name")
-                                    || args[3].equalsIgnoreCase("interact-name")) {
-                                hpch.getConfig().set(type + "." + args[3], args[4]);
-                            }
-                            hpc.sendMessage("commands.head-info.set-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                    } else if (args[1].equalsIgnoreCase("add")) {
-                        if (args.length > 4) {
-                            if (args[3].equalsIgnoreCase("mask")) {
-                                if (PotionEffectType.getByName(args[4]) != null) {
-                                    int amplifier = 1;
-                                    if (args.length > 5) {
-                                        amplifier = HPUtils.isInt(args[5]);
+                                    switch (args[3].toLowerCase()) {
+                                        case "name":
+                                            sender.sendMessage(printNameInfo(type, 1, sender));
+                                            break;
+                                        case "mask":
+                                            sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, 1));
+                                            break;
+                                        case "lore":
+                                            sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
+                                            break;
+                                        default:
+                                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                                            break;
                                     }
-                                    List<Integer> maskAmp = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
-                                    maskAmp.add(amplifier);
-                                    hpch.getConfig().set(type + ".mask-amplifiers", maskAmp);
-                                    List<String> masks = hpch.getConfig().getStringList(type + ".mask-effects");
-                                    masks.add(args[4]);
-                                    hpch.getConfig().set(type + ".mask-effects", masks);
+                                } else {
+                                    sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
+                                }
+                                break;
+                            case "set":
+                                if (args.length > 4) {
+                                    if (args[3].equalsIgnoreCase("chance")
+                                            || args[3].equalsIgnoreCase("price")) {
+                                        if (isValueValid(args[3], args[4])) {
+                                            hpch.getConfig().set(type + "." + args[3], Double.valueOf(args[4]));
+                                        }
+                                    } else if (args[3].equalsIgnoreCase("display-name")
+                                            || args[3].equalsIgnoreCase("interact-name")) {
+                                        hpch.getConfig().set(type + "." + args[3], args[4]);
+                                    }
+                                    hpc.sendMessage("commands.head-info.set-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
+                                } else {
+                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                }
+                                break;
+                            case "add":
+                                if (args.length > 4) {
+                                    List<String> list;
+                                    String sub = "name.default";
+                                    switch (args[3].toLowerCase()) {
+                                        case "mask":
+                                            if (PotionEffectType.getByName(args[4]) != null) {
+                                                int amplifier = 1;
+                                                if (args.length > 5) {
+                                                    amplifier = HPUtils.isInt(args[5]);
+                                                }
+                                                List<Integer> maskAmp = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
+                                                maskAmp.add(amplifier);
+                                                hpch.getConfig().set(type + ".mask-amplifiers", maskAmp);
+                                                sub = "mask-effects";
+                                            } else {
+                                                hpc.sendMessage("commands.errors.invalid-args", sender);
+                                                return false;
+                                            }
+                                            break;
+                                        case "name":
+                                            if (args.length > 5) {
+                                                if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
+                                                    sub = "name." + args[5];
+                                                } else {
+                                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                                    return false;
+                                                }
+                                            }
+                                            break;
+                                        case "lore":
+                                            sub = "lore";
+                                            break;
+                                        default:
+                                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                                            break;
+                                    }
+                                    list = hpch.getConfig().getStringList(type + "." + sub);
+                                    list.add(args[4]);
+                                    hpch.getConfig().set(type + "." + sub, list);
                                     hpc.sendMessage("commands.head-info.add-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }
-                            } else if (args[3].equalsIgnoreCase("name")) {
-                                String path;
-                                if (args.length > 5) {
-                                    if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
-                                        path = type + ".name." + args[5];
-                                    } else {
+                                break;
+                            case "remove":
+                                if (args.length > 4) {
+                                    List<String> list;
+                                    String sub = "name.default";
+                                    switch (args[3].toLowerCase()) {
+                                        case "name":
+                                            if (args.length > 5) {
+                                                if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
+                                                    sub = "name." + args[5];
+                                                } else {
+                                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                                    return false;
+                                                }
+                                            }
+                                            list = hpch.getConfig().getStringList(type + ".name." + sub);
+                                            break;
+                                        case "lore":
+                                            list = hpch.getConfig().getStringList(type + ".lore");
+                                            sub = "lore";
+                                            break;
+                                        case "mask":
+                                            list = hpch.getConfig().getStringList(type + ".mask-effects");
+                                            List<Integer> otherList = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
+                                            otherList.remove(list.indexOf(args[4]));
+                                            hpch.getConfig().set(type + ".mask-amplifiers", otherList);
+                                            sub = "mask-effects";
+                                            break;
+                                        default:
+                                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                                            return false;
+                                    }
+                                    if (!list.contains(args[4])) {
                                         hpc.sendMessage("commands.errors.invalid-args", sender);
                                         return false;
                                     }
-                                } else {
-                                    if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
-                                        path = type + ".name.default";
-                                    } else {
-                                        path = type + ".name";
-                                    }
-                                }
-                                List<String> s = hpch.getConfig().getStringList(path);
-                                s.add(args[4]);
-                                hpch.getConfig().set(path, s);
-                                hpc.sendMessage("commands.head-info.add-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
+                                    list.remove(args[4]);
+                                    hpch.getConfig().set(type + "." + sub, list);
+                                    hpc.sendMessage("commands.head-info.remove-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
 
-                            } else if (args[3].equalsIgnoreCase("lore")){
-                                List<String> lore = hpch.getConfig().getStringList(type + "." + args[3]);
-                                lore.add(args[4]);
-                                hpch.getConfig().set(type + "." + args[3], lore);
-                                hpc.sendMessage("commands.head-info.add-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
-                            } else {
-                                hpc.sendMessage("commands.errors.invalid-args", sender);
-                            }
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                    } else if (args[1].equalsIgnoreCase("remove")) {
-                        if (args.length > 4) {
-                            if (args[3].equalsIgnoreCase("name")
-                                    || args[3].equalsIgnoreCase("lore")
-                                    || args[3].equalsIgnoreCase("mask")) {
-                                List<String> list;
-                                String sub = "name.default";
-                                if (args[3].equalsIgnoreCase("name")) {
-                                    if (args.length > 5) {
-                                        if (hpch.getConfig().get(type + ".name." + args[5]) != null) {
-                                            sub = "name." + args[5];
-                                        } else {
-                                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                                            return false;
-                                        }
-                                    }
-                                    list = hpch.getConfig().getStringList(type + ".name." + sub);
-                                } else if (args[3].equalsIgnoreCase("lore")) {
-                                    list = hpch.getConfig().getStringList(type + ".lore");
-                                    sub = "lore";
-                                } else if (args[3].equalsIgnoreCase("mask")) {
-                                    list = hpch.getConfig().getStringList(type + ".mask-effects");
-                                    List<Integer> otherList = hpch.getConfig().getIntegerList(type + ".mask-amplifiers");
-                                    otherList.remove(list.indexOf(args[4]));
-                                    hpch.getConfig().set(type + ".mask-amplifiers", otherList);
-                                    sub = "mask-effects";
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
-                                    return false;
                                 }
-                                if (!list.contains(args[4])) {
-                                    hpc.sendMessage("commands.errors.invalid-args", sender);
-                                    return false;
-                                }
-                                list.remove(args[4]);
-                                hpch.getConfig().set(type + "." + sub, list);
-                                hpc.sendMessage("commands.head-info.remove-value", sender, "{value}", args[4], "{entity}", type, "{setting}", args[3]);
-                            } else {
+                                break;
+                            default:
                                 hpc.sendMessage("commands.errors.invalid-args", sender);
-                            }
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                                break;
                         }
                     } else {
-                        hpc.sendMessage("commands.errors.invalid-args", sender);
+                        hpc.sendMessage("commands.errors.no-perm", sender);
                     }
+
                 } else {
                     hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
