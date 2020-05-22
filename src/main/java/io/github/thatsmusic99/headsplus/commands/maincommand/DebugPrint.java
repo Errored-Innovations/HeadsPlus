@@ -45,33 +45,37 @@ public class DebugPrint implements IHeadsPlusCommand {
         hpc = hp.getMessagesConfig();
     }
 
-    // R
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
-        Logger log = hp.getLogger();
-        ConfigurationSection cs = hp.getConfiguration().getMechanics();
-        if (cs.getBoolean("debug.print-stacktraces-in-console")) {
-            e.printStackTrace();
-        }
-        if (command && sender != null) {
-            hpc.sendMessage("commands.errors.cmd-fail", sender);
-        }
+        try {
+            Logger log = hp.getLogger();
+            ConfigurationSection cs = hp.getConfiguration().getMechanics();
+            if (cs.getBoolean("debug.print-stacktraces-in-console")) {
+                e.printStackTrace();
+            }
+            if (command && sender != null) {
+                hpc.sendMessage("commands.errors.cmd-fail", sender);
+            }
 
-        if (cs.getBoolean("debug.create-debug-files")) {
-            log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
-            try {
-                String s = new DebugFileCreator().createReport(e, name);
-                log.severe("Report name: " + s);
-                log.severe("Please submit this report to the developer at one of the following links:");
-                log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                log.severe("https://discord.gg/nbT7wC2");
-                log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
-            } catch (IOException e1) {
-                if (cs.getBoolean("debug.print-stacktraces-in-console")) {
-                    e1.printStackTrace();
+            if (cs.getBoolean("debug.create-debug-files")) {
+                log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
+                try {
+                    String s = new DebugFileCreator().createReport(e, name);
+                    log.severe("Report name: " + s);
+                    log.severe("Please submit this report to the developer at one of the following links:");
+                    log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
+                    log.severe("https://discord.gg/nbT7wC2");
+                    log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
+                } catch (IOException e1) {
+                    if (cs.getBoolean("debug.print-stacktraces-in-console")) {
+                        e1.printStackTrace();
+                    }
                 }
             }
+        } catch (Exception ex) {
+            HeadsPlus.getInstance().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
+            e.printStackTrace();
+            ex.printStackTrace();
         }
-
     }
 
     public DebugPrint() {
@@ -90,145 +94,157 @@ public class DebugPrint implements IHeadsPlusCommand {
                 hpc.sendMessage("commands.errors.invalid-args", sender);
                 return false;
             }
-            if (args[1].equalsIgnoreCase("dump")) {
-                String s = new DebugFileCreator().createReport(null, "Debug command");
-                sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
-            } else if (args[1].equalsIgnoreCase("head")) {
-                if (sender instanceof Player) {
-                    ItemStack is = HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender);
-                    String s = new DebugFileCreator().createHeadReport(is);
-                    sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
-                }
-            } else if (args[1].equalsIgnoreCase("player")) {
-                if (args.length > 2) {
-                    HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
-                    if (pl != null) {
-                        String s = new DebugFileCreator().createPlayerReport(pl);
-                        sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
-                    } else {
-                        hpc.sendMessage("commands.profile.no-data",  sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.invalid-args", sender);
-                }
-            } else if (args[1].equalsIgnoreCase("clearim")) {
-                InventoryManager.storedInventories.clear();
-                sender.sendMessage(ChatColor.GREEN + "Inventory cache cleared.");
-            } else if (args[1].equalsIgnoreCase("item")) {
-                if (sender instanceof Player) {
-                    NMSManager nms = HeadsPlus.getInstance().getNMS();
-                    if (nms.getItemInHand((Player) sender) != null) {
-                        String s = new DebugFileCreator().createItemReport(nms.getItemInHand((Player) sender));
-                        sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
-                    } else {
-                        hpc.sendMessage("commands.sellhead.false-item", sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.not-a-player", sender);
-                }
-            } else if (args[1].equalsIgnoreCase("delete")) {
-                if (args.length > 2) {
-                    HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
-                    if (pl != null) {
-                        hp.getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
-                        sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
-                    } else {
-                        hpc.sendMessage("commands.profile.no-data", sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.invalid-args", sender);
-                }
-            } else if (args[1].equalsIgnoreCase("save")) {
-                try {
-                    hp.getFavourites().save();
-                } catch (IOException e) {
-                    DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
-                }
-                try {
-                    hp.getScores().save();
-                } catch (IOException e) {
-                    DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
-                }
-                sender.sendMessage(ChatColor.GREEN + "Data has been saved.");
-            } else if (args[1].equalsIgnoreCase("transfer")) {
-                if (args.length > 2) {
-                    if (hp.isConnectedToMySQLDatabase()) {
-                        if (args[2].equalsIgnoreCase("database")) {
-                            sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        for (String section : DeathEvents.ableEntities) {
-
-                                            LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
-                                            for (OfflinePlayer player : hashmap.keySet()) {
-                                                DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
-                                            }
-                                            hashmap = DataManager.getScores(section, "headsplussh", true);
-                                            for (OfflinePlayer player : hashmap.keySet()) {
-                                                DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
-                                            }
-                                            hashmap = DataManager.getScores(section, "headspluscraft", true);
-                                            for (OfflinePlayer player : hashmap.keySet()) {
-                                                DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
-                                            }
-                                        }
-                                        LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
-                                        for (OfflinePlayer player : hashmap.keySet()) {
-                                            DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
-                                        }
-                                        hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
-                                        for (OfflinePlayer player : hashmap.keySet()) {
-                                            DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
-                                        }
-                                        hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
-                                        for (OfflinePlayer player : hashmap.keySet()) {
-                                            DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
-                                        }
-                                        sender.sendMessage(ChatColor.GREEN + "Transition successful.");
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        sender.sendMessage(ChatColor.RED + "Transition failed! More information in console error.");
-                                    }
-                                }
-                            }.runTaskAsynchronously(HeadsPlus.getInstance());
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "Please ensure you have MySQL enabled.");
-                    }
-                }
-            } else if (args[1].equalsIgnoreCase("fix")) {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
-                    if (args.length > 2) {
-                        if (SellHead.getRegisteredIDs().contains(args[2])) {
-                            int slot = player.getInventory().getHeldItemSlot();
-                            // lmao who needs getItemInMainHand
-                            ItemStack item = player.getInventory().getItem(slot);
-                            item = NBTManager.makeSellable(item);
-                            item = NBTManager.setType(item, args[2]);
-                            double price;
-                            double headsPrice = hp.getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
-                            if (headsPrice != 0.0) {
-                                price = headsPrice;
+            String subcommand = args[1].toLowerCase();
+            // Subcommands are fairly brief, so there isn't necessarily any point in creating separate classes
+            if (sender.hasPermission("headsplus.maincommand.debug." + subcommand)) {
+                String report;
+                switch (subcommand) {
+                    case "dump":
+                        report = new DebugFileCreator().createReport(null, "Debug command");
+                        sender.sendMessage(ChatColor.GREEN + "Report name: " + report);
+                        break;
+                    case "player":
+                        if (args.length > 2) {
+                            HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
+                            if (pl != null) {
+                                report = new DebugFileCreator().createPlayerReport(pl);
+                                sender.sendMessage(ChatColor.GREEN + "Report name: " + report);
                             } else {
-                                price = hp.getCraftingConfig().getPrice(args[2]);
+                                hpc.sendMessage("commands.profile.no-data",  sender);
                             }
-                            item = NBTManager.setPrice(item, price);
-                            player.getInventory().setItem(slot, item);
                         } else {
                             hpc.sendMessage("commands.errors.invalid-args", sender);
                         }
-                    } else {
-                        hpc.sendMessage("commands.errors.invalid-args", sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.not-a-player", sender);
-                }
+                        break;
+                    case "head":
+                        if (sender instanceof Player) {
+                            ItemStack is = HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender);
+                            String s = new DebugFileCreator().createHeadReport(is);
+                            sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
+                        }
+                        break;
+                    case "clearim":
+                        InventoryManager.storedInventories.clear();
+                        sender.sendMessage(ChatColor.GREEN + "Inventory cache cleared.");
+                        break;
+                    case "item":
+                        if (sender instanceof Player) {
+                            NMSManager nms = HeadsPlus.getInstance().getNMS();
+                            if (nms.getItemInHand((Player) sender) != null) {
+                                String s = new DebugFileCreator().createItemReport(nms.getItemInHand((Player) sender));
+                                sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
+                            } else {
+                                hpc.sendMessage("commands.sellhead.false-item", sender);
+                            }
+                        } else {
+                            hpc.sendMessage("commands.errors.not-a-player", sender);
+                        }
+                        break;
+                    case "delete":
+                        if (args.length > 2) {
+                            HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
+                            if (pl != null) {
+                                hp.getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
+                                sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
+                            } else {
+                                hpc.sendMessage("commands.profile.no-data", sender);
+                            }
+                        } else {
+                            hpc.sendMessage("commands.errors.invalid-args", sender);
+                        }
+                        break;
+                    case "save":
+                        try {
+                            hp.getFavourites().save();
+                        } catch (IOException e) {
+                            DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
+                        }
+                        try {
+                            hp.getScores().save();
+                        } catch (IOException e) {
+                            DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
+                        }
+                        sender.sendMessage(ChatColor.GREEN + "Data has been saved.");
+                        break;
+                    case "transfer":
+                        if (args.length > 2) {
+                            if (hp.isConnectedToMySQLDatabase()) {
+                                if (args[2].equalsIgnoreCase("database")) {
+                                    sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                for (String section : DeathEvents.ableEntities) {
 
+                                                    LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
+                                                    for (OfflinePlayer player : hashmap.keySet()) {
+                                                        DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
+                                                    }
+                                                    hashmap = DataManager.getScores(section, "headsplussh", true);
+                                                    for (OfflinePlayer player : hashmap.keySet()) {
+                                                        DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
+                                                    }
+                                                    hashmap = DataManager.getScores(section, "headspluscraft", true);
+                                                    for (OfflinePlayer player : hashmap.keySet()) {
+                                                        DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
+                                                    }
+                                                }
+                                                LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
+                                                for (OfflinePlayer player : hashmap.keySet()) {
+                                                    DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
+                                                }
+                                                hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
+                                                for (OfflinePlayer player : hashmap.keySet()) {
+                                                    DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
+                                                }
+                                                hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
+                                                for (OfflinePlayer player : hashmap.keySet()) {
+                                                    DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
+                                                }
+                                                sender.sendMessage(ChatColor.GREEN + "Transition successful.");
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                sender.sendMessage(ChatColor.RED + "Transition failed! More information in console error.");
+                                            }
+                                        }
+                                    }.runTaskAsynchronously(HeadsPlus.getInstance());
+                                } else {
+                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                }
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "Please ensure you have MySQL enabled.");
+                            }
+                        }
+                    case "fix":
+                        if (sender instanceof Player) {
+                            Player player = (Player) sender;
+                            if (args.length > 2) {
+                                if (SellHead.getRegisteredIDs().contains(args[2])) {
+                                    int slot = player.getInventory().getHeldItemSlot();
+                                    // lmao who needs getItemInMainHand
+                                    ItemStack item = player.getInventory().getItem(slot);
+                                    item = NBTManager.makeSellable(item);
+                                    item = NBTManager.setType(item, args[2]);
+                                    double price;
+                                    double headsPrice = hp.getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
+                                    if (headsPrice != 0.0) {
+                                        price = headsPrice;
+                                    } else {
+                                        price = hp.getCraftingConfig().getPrice(args[2]);
+                                    }
+                                    item = NBTManager.setPrice(item, price);
+                                    player.getInventory().setItem(slot, item);
+                                } else {
+                                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                                }
+                            } else {
+                                hpc.sendMessage("commands.errors.invalid-args", sender);
+                            }
+                        } else {
+                            hpc.sendMessage("commands.errors.not-a-player", sender);
+                        }
+                }
             }
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
