@@ -64,7 +64,7 @@ public class DebugFileCreator {
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
             try {
                 plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception ex) {
+            } catch (Exception | NoSuchMethodError ex) {
                 plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
             }
         }
@@ -211,8 +211,8 @@ public class DebugFileCreator {
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
             try {
                 plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception ex) {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            } catch (Exception  | NoSuchMethodError ex) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (Legacy)");
             }
         }
         o1.put("Other Plugins", plugins);
@@ -283,7 +283,7 @@ public class DebugFileCreator {
         for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
             try {
                 plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception ex) {
+            } catch (Exception | NoSuchMethodError e) {
                 plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
             }
         }

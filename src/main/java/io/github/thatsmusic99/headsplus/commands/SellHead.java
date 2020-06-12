@@ -37,23 +37,22 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	private static final List<String> headIds = new ArrayList<>();
 	private final int[] slots;
 	private final HeadsPlus hp;
-	private static boolean ignoreCase;
+	private static boolean useCases;
 
 	public SellHead(HeadsPlus hp) {
 	    headIds.clear();
-	    ignoreCase = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
+	    useCases = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
 	    for (String entity : DeathEvents.ableEntities) {
 	        registerHeadID(entity);
         }
 	    registerHeadID("PLAYER");
 	    if (hp.getNMSVersion().getOrder() > 3) {
-	        slots = new int[46];
-	        slots[45] = 45; // off-hand slot
-        } else {
 	        slots = new int[45];
+	        slots[44] = 45; // off-hand slot
+        } else {
+	        slots = new int[44];
         }
-	    for (int i = 0; i < 45; i++) {
-	        if (i == getHeadSlot()) continue;
+	    for (int i = 0; i < 44; i++) {
             slots[i] = i;
         }
 	    this.hp = hp;
@@ -80,7 +79,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		                    if (item != null && NBTManager.isSellable(item)) {
 		                        // Get the ID
 		                        String id = NBTManager.getType(item);
-                                if (ignoreCase) {
+                                if (!useCases) {
                                     id = id.toLowerCase();
                                 }
 		                        if (headIds.contains(id)) {
@@ -131,10 +130,11 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         SellData data = new SellData(player);
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
+            if (slot == player.getInventory().getSize() - 2) continue;
             if (item != null && NBTManager.isSellable(item)) {
                 String id = NBTManager.getType(item);
                 if (fixedId != null) {
-                    if (!fixedId.equals(id) || (ignoreCase && !fixedId.equalsIgnoreCase(id))) continue;
+                    if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
                 } else if (!headIds.contains(id)){
                     continue;
                 }
@@ -188,7 +188,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             if (response.transactionSuccess()) {
                 if (price > 0) {
                     removeItems(player, data);
-                    hpc.sendMessage("commands.sellhead.sell-success", player, hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(balance + price));
+                    hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(balance + price));
 
                 }
             } else {
@@ -245,7 +245,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     public static void registerHeadID(String name) {
-	    if (!ignoreCase) {
+	    if (!useCases) {
 	        name = name.toLowerCase();
         }
 	    if (!headIds.contains(name)) {

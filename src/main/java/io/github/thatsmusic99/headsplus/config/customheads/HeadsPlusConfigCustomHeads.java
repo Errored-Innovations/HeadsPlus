@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
@@ -178,14 +179,20 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         return str.startsWith("HP#");
     }
 
+    @Nullable
     public ItemStack getSkull(String s) {
-        final String key = s.contains("#") ? s.split("#")[1] : s;
-        ItemStack is = headsCache.get(s);
-        // todo? allow loading texture directly from parameter if matches base64 pattern?
-        return is != null ? is.clone() : getSkullFromTexture(
-                getConfig().getString("heads." + key + ".texture"),
-                getConfig().getBoolean("heads." + key + ".encode"),
-                getConfig().getString("heads." + key + ".displayname"));
+        try {
+            final String key = s.contains("#") ? s.split("#")[1] : s;
+            ItemStack is = headsCache.get(s);
+            // todo? allow loading texture directly from parameter if matches base64 pattern?
+            return is != null ? is.clone() : getSkullFromTexture(
+                    getConfig().getString("heads." + key + ".texture"),
+                    getConfig().getBoolean("heads." + key + ".encode"),
+                    getConfig().getString("heads." + key + ".displayname"));
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            HeadsPlus.getInstance().getLogger().severe("An empty ID was found when fetching a head! Please check your customheads.yml configuration or send it to the developer.");
+            return null;
+        }
     }
 
     public double getPrice(String id) {

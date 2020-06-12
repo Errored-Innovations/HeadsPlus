@@ -44,7 +44,7 @@ public class MaskEvent implements Listener {
             item = e.getCursor();
         }
         if (hp.getConfiguration().getPerks().mask_powerups) {
-            if (e.getRawSlot() == getSlot() || shift) {
+            if (e.getRawSlot() == getSlot() || (shift && e.getRawSlot() != getSlot())) {
                 checkMask((Player) e.getWhoClicked(), item);
             }
         }
@@ -59,6 +59,9 @@ public class MaskEvent implements Listener {
         if (item != null) {
             if (nms.isSkull(item)) {
                 String s = NBTManager.getType(item);
+                if (hp.getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+                    s = s.toLowerCase();
+                }
                 if (SellHead.getRegisteredIDs().contains(s)) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     UUID uuid = player.getUniqueId();
@@ -68,6 +71,7 @@ public class MaskEvent implements Listener {
                         maskMonitors.remove(uuid);
                     }
                     pl.addMask(s);
+                    final String type = s;
                     maskMonitors.put(uuid, new BukkitRunnable() {
 
                         private int currentInterval = 0;
@@ -78,7 +82,7 @@ public class MaskEvent implements Listener {
                             currentInterval++;
                             if (helmet == null
                                     || helmet.getType() == Material.AIR
-                                    || !NBTManager.getType(helmet).equals(s)
+                                    || !NBTManager.getType(helmet).equals(type)
                                     || !player.isOnline()) {
                                 pl.clearMask();
                                 maskMonitors.remove(uuid);

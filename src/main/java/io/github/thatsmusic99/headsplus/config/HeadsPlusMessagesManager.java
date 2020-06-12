@@ -1009,7 +1009,13 @@ public class HeadsPlusMessagesManager {
             } catch (ParseException e) {
                 str = "{\"text\":\"" + str + "\"}";
             }
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + sender.getName() + " " + str);
+            final String result = str;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + sender.getName() + " " + result);
+                }
+            }.runTask(HeadsPlus.getInstance());
         } else {
             sender.sendMessage(str);
         }

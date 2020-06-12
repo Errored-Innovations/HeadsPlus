@@ -1,9 +1,10 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: '6.10.5'
+version: '6.10.8'
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
+website: 'https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/'
 # Please note this is mostly to let the weird messages from each plugin work.
 # Vault - Economy support
 # AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION - easter eggs
@@ -38,6 +39,83 @@ commands:
     permission: headsplus.challenges
 
 permissions:
+  headsplus.*:
+    description: Provides access to every single HeadsPlus feature.
+    children:
+      headsplus.addhead: true
+      headsplus.bypass.*: true
+      headsplus.craft: true
+      headsplus.challenges: true
+      headsplus.death.ignore: true
+      headsplus.head: true
+      headsplus.head.others: true
+      headsplus.heads: true
+      headsplus.leaderboards: true
+      headsplus.maincommand: true
+      headsplus.maincommand.*: true
+      headsplus.maincommand.complete.others: true
+      headsplus.maincommand.debug.*: false
+      headsplus.maincommand.headinfo.*: false
+      headsplus.maincommand.locale.change: true
+      headsplus.maincommand.locale.others: true
+      headsplus.maincommand.profile.others: true
+      headsplus.maincommand.xp.*: false
+      headsplus.myhead: true
+      headsplus.notify: true
+      headsplus.sellhead: true
+      headsplus.sellhead.gui: true
+      headsplus.help.viewperms: true
+  headsplus.maincommand.*:
+    description: Provides access to every subcommand in /hp.
+    default: op
+    children:
+      headsplus.maincommand.complete: true
+      headsplus.maincommand.conjure: true
+      headsplus.maincommand.debug: true
+      headsplus.maincommand.debug.*: false
+      headsplus.maincommand.headinfo: true
+      headsplus.maincommand.headinfo.*: false
+      headsplus.maincommand.info: true
+      headsplus.maincommand.locale: true
+      headsplus.maincommand.locale.change: true
+      headsplus.maincommand.locale.others: true
+      headsplus.maincommand.reload: true
+      headsplus.maincommand.profile: true
+      headsplus.maincommand.profile.others: true
+      headsplus.maincommand.tests: true
+      headsplus.maincommand.xp: true
+      headsplus.maincommand.xp.*: false
+  headsplus.maincommand.debug.*:
+    description: Provides access to every debug command.
+    default: false
+    children:
+      headsplus.maincommand.debug.dump: true
+      headsplus.maincommand.debug.player: true
+      headsplus.maincommand.debug.head: true
+      headsplus.maincommand.debug.clearim: true
+      headsplus.maincommand.debug.item: true
+      headsplus.maincommand.debug.delete: true
+      headsplus.maincommand.debug.save: true
+      headsplus.maincommand.debug.transfer: true
+      headsplus.maincommand.debug.fix: true
+  headsplus.bypass.*:
+    description: Bypasses the majority of HeadsPlus checks.
+    default: false
+    children:
+      headsplus.bypass.blacklist: true
+      headsplus.bypass.whitelist: true
+      headsplus.bypass.blacklistw: true
+      headsplus.bypass.whitelistw: true
+      headsplus.bypass.cost: true
+      headsplus.bypass.preventplacement: true
+  headsplus.maincommand.headinfo.*:
+    description: Allows access to some of the /hp headinfo options.
+    default: false
+    children:
+      headsplus.maincommand.headinfo.view: true
+      headsplus.maincommand.headinfo.add: true
+      headsplus.maincommand.headinfo.subtract: true
+      headsplus.maincommand.headinfo.set: true
   headsplus.craft:
     default: true
     description: Allows players to craft heads.
@@ -77,3 +155,24 @@ permissions:
   headsplus.sellhead.gui:
     default: true
     description: Allows you to access the sellhead GUI.
+  headsplus.death.ignore:
+    default: false
+    description: Allows you to not receive a death message when a player drops their head.
+  headsplus.head:
+    default: true
+    description: Allows you to use the /head command.
+  headsplus.head.others:
+    default: op
+    description: Allows you to use the /head command to give heads to other players.
+  headsplus.maincommand.complete:
+    default: op
+    description: Allows you to use the complete subcommand to complete challenges.
+  headsplus.maincommand.complete.others:
+    default: op
+    description: Allows you to fire the complete subcommand and complete challenges for other players.
+  headsplus.maincommand.locale.change:
+    default: false
+    description: Allows you to change the plugin's language for you if the smart locale is enabled.
+  headsplus.maincommand.locale.other:
+    default: false
+    description: Allows you to change other player's plugin language.

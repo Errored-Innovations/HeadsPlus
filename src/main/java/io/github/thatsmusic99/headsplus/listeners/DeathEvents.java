@@ -8,7 +8,7 @@ import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -22,13 +22,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class DeathEvents implements Listener {
 
-    private final HashMap<String, List<String>> storedData = new HashMap<>();
     private LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
     private static LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
@@ -37,37 +34,6 @@ public class DeathEvents implements Listener {
             @Override
             public void run() {
                 try {
-                    NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
-                    if (index.getOrder() < 6) {
-                        storedData.put("HORSE", Arrays.asList("getColor", "getVariant"));
-                    } else {
-                        storedData.put("HORSE", Collections.singletonList("getColor"));
-                    }
-                    storedData.put("SHEEP", Collections.singletonList("getColor"));
-                    storedData.put("RABBIT", Collections.singletonList("getRabbitType"));
-                    if (index.getOrder() > 7) {
-                        storedData.put("LLAMA", Collections.singletonList("getColor"));
-                        storedData.put("PARROT", Collections.singletonList("getVariant"));
-                    }
-                    if (index.getOrder() > 8) {
-                        storedData.put("TROPICAL_FISH", Arrays.asList("getPattern", "getBodyColor", "getPatternColor"));
-                    }
-                    if (index.getOrder() > 10) {
-                        storedData.put("FOX", Collections.singletonList("getFoxType"));
-                        storedData.put("CAT", Collections.singletonList("getCatType"));
-                        storedData.put("TRADER_LLAMA", Collections.singletonList("getColor"));
-                        storedData.put("VILLAGER", Arrays.asList("getVillagerType", "getProfession"));
-                        storedData.put("MUSHROOM_COW", Collections.singletonList("getVariant"));
-                        storedData.put("PANDA", Collections.singletonList("getMainGene"));
-                    } else {
-                        storedData.put("OCELOT", Collections.singletonList("getCatType"));
-                        storedData.put("VILLAGER", Collections.singletonList("getProfession"));
-                    }
-                    if (index.getOrder() > 11) {
-                        storedData.put("BEE", Arrays.asList("getAnger", "hasNectar"));
-                    }
-                    storedData.put("ZOMBIE_VILLAGER", Collections.singletonList("getProfession"));
-                    storedData.put("CREEPER", Collections.singletonList("isPowered"));
                     setupHeads();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -322,69 +288,16 @@ public class DeathEvents implements Listener {
     private void dropHead(Entity entity, Player killer, int amount) {
         Random random = new Random();
         String name = entity.getType().name();
-        List<EntityHead> heads = null;
-        try {
-            if (storedData.get(name) != null) {
-                List<String> possibleConditions = new ArrayList<>();
-                for (String methods : storedData.get(name)) {
-                    try {
-                        if (entity.getType() == EntityType.CREEPER) {
-                            boolean powered = Boolean.parseBoolean(callMethod(methods, entity));
-                            heads = storedHeads.get(name + ";" + (powered ? "POWERED" : "default"));
-                            break;
-                        } else if (entity.getType() == EntityType.HORSE) {
-                           if (((Horse) entity).getVariant() != Horse.Variant.HORSE) {
-                               heads = storedHeads.get(((Horse) entity).getVariant().name() + ";default");
-                           } else {
-                               heads = storedHeads.get("horse;" + callMethod(methods, entity));
-                           }
-                        } else if (entity.getType() == EntityType.valueOf("BEE")) {
-                            if (methods.equalsIgnoreCase("hasNectar")) {
-                                possibleConditions.add(callMethod(methods, entity).equalsIgnoreCase("true") ? "NECTAR" : "default");
-                            } else {
-                                possibleConditions.add(Integer.parseInt(callMethod(methods, entity)) > 0 ? "ANGRY" : "default");
-                            }
-                        } else {
-                            possibleConditions.add(callMethod(methods, entity));
-                        }
-                    } catch (IllegalArgumentException ex) {
-                        possibleConditions.add(callMethod(methods, entity));
-                    }
-
-                }
-                if (possibleConditions.contains("default") && possibleConditions.size() == 1) {
-                    heads = storedHeads.get(name + ";default");
-                } else {
-                    possibleConditions.remove("default");
-                    try {
-                        StringBuilder sb = new StringBuilder();
-                        for (String s : possibleConditions) {
-                            sb.append(s).append(",");
-                        }
-                        sb.replace(sb.length() - 1, sb.length(), "");
-                        if (storedHeads.containsKey(name + ";" + sb.toString()) && !storedHeads.get(name + ";" + sb.toString()).isEmpty()) {
-                            heads = storedHeads.get(name + ";" + sb.toString());
-                        } else {
-                            for (String s : possibleConditions) {
-                                if (storedHeads.containsKey(name + ";" + s)) {
-                                    heads = storedHeads.get(name + ";" + s);
-                                    break;
-                                }
-                            }
-                            if (heads == null) {
-                                heads = storedHeads.get(name + ";default");
-                            }
-                        }
-                    } catch (Exception e) {
-                        heads = storedHeads.get(name + ";default");
-                    }
-                }
-            } else {
-                heads = storedHeads.get(entity.getType().name() + ";default");
+        String meta = EntityDataManager.getMeta(entity);
+        List<EntityHead> heads = storedHeads.get(name + ";" + meta);
+        if (heads == null) {
+            String[] possibleConditions = meta.split(",");
+            for (String str : possibleConditions) {
+                if ((heads = storedHeads.get(name + ";" + str)) != null) break;
             }
-        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            e.printStackTrace();
-            return;
+            if (heads == null) {
+                heads = storedHeads.get(name + ";default");
+            }
         }
         if (heads == null) {
             HeadsPlus.getInstance().getLogger().warning("Found no heads list for " + name + "!");
@@ -401,12 +314,6 @@ public class DeathEvents implements Listener {
         }
 
     }
-
-    private String callMethod(String methodName, Entity entity) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        Method method = entity.getClass().getMethod(methodName);
-        return String.valueOf(method.invoke(entity));
-    }
-
 
     private boolean checkForMythicMob(HeadsPlus hp, Entity e) {
         try {
