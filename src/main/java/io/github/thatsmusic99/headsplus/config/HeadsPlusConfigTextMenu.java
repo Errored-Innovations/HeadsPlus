@@ -99,7 +99,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 "&c(msg_textmenus.info.language} &8» &7{locale}",
                 "&c{msg_textmenus.info.contributors} &8» &7{contributors}",
                 "&c{msg_textmenus.info.spigot} &8» &7https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/",
-                "&c{msg_textmenus.info.discord} &8» &7https://discord.gg/nbT7wC2",
+                "&c{msg_textmenus.info.discord} &8» &7https://discord.gg/eu8h3BG",
                 "&c{msg_textmenus.info.github} &8» &7https://github.com/Thatsmusic99/HeadsPlus")));
         getConfig().options().copyDefaults(true);
         save();
