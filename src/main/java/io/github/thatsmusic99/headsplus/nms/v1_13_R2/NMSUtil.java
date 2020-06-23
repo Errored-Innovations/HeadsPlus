@@ -1,14 +1,11 @@
 package io.github.thatsmusic99.headsplus.nms.v1_13_R2;
 
-import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,12 +39,6 @@ public class NMSUtil implements NewNMSManager {
     @Override
     public Player getPlayer(String name) {
         return Bukkit.getPlayer(name);
-    }
-
-    @Override
-    public GameProfile getGameProfile(ItemStack s) {
-        EntityPlayer e = ((CraftPlayer) ((SkullMeta) s.getItemMeta()).getOwningPlayer().getPlayer()).getHandle();
-        return e.getProfile();
     }
 
     @Override

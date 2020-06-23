@@ -201,14 +201,12 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public String getTexture(ItemStack skull) {
         try {
-            Field profileField;
-            profileField = skull.getItemMeta().getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            GameProfile profile = (GameProfile) profileField.get(skull.getItemMeta());
+            GameProfile profile = ProfileFetcher.getProfile(skull);
+            if (profile == null) return null;
             String value = profile.getProperties().get("textures").iterator().next().getValue();
             JSONObject json = (JSONObject) new JSONParser().parse(new String(Base64.getDecoder().decode(value.getBytes())));
             return new String(Base64.getEncoder().encode(((JSONObject)((JSONObject) json.get("textures")).get("SKIN")).get("url").toString().getBytes()));
-        } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
+        } catch (IllegalAccessException | SecurityException ex) {
             throw new RuntimeException("Reflection error while getting head texture", ex);
         } catch (ParseException e) {
             e.printStackTrace();

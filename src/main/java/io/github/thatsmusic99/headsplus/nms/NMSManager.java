@@ -55,8 +55,6 @@ public interface NMSManager {
 
     Player getPlayer(String name);
 
-    GameProfile getGameProfile(ItemStack s);
-
     ItemStack getItemInHand(Player p);
 
     default ItemStack getSkullMaterial(int amount) {

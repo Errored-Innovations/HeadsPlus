@@ -1,11 +1,9 @@
 package io.github.thatsmusic99.headsplus.nms.v1_15_R1;
 
-import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_15_R1.CraftOfflinePlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,11 +30,6 @@ public class NMSUtil implements NewNMSManager {
     @Override
     public Player getPlayer(String name) {
         return Bukkit.getPlayer(name);
-    }
-
-    @Override
-    public GameProfile getGameProfile(ItemStack s) {
-        return ((CraftOfflinePlayer) ((SkullMeta) s.getItemMeta()).getOwningPlayer()).getProfile();
     }
 
     @Override

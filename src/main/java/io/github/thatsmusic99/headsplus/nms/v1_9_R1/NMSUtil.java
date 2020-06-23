@@ -1,13 +1,10 @@
 package io.github.thatsmusic99.headsplus.nms.v1_9_R1;
 
-import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
 import net.minecraft.server.v1_9_R1.ItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -40,12 +37,6 @@ public class NMSUtil implements NMSManager {
     @Override
     public Player getPlayer(String name) {
         return Bukkit.getPlayer(name);
-    }
-
-    @Override
-    public GameProfile getGameProfile(org.bukkit.inventory.ItemStack s) {
-        EntityPlayer e = ((CraftPlayer) Bukkit.getPlayer(((SkullMeta) s.getItemMeta()).getOwner())).getHandle();
-        return e.getProfile();
     }
 
     @Override
