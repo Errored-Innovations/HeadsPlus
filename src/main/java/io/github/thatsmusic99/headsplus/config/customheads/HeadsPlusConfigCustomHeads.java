@@ -52,7 +52,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     private void loadHeadsX() {
         getConfig().options().header("HeadsPlus by Thatsmusic99 "
                 + "\n WARNING: This is an advanced section of the plugin. If you do not know what you a doing with it, please do not use it due to risk of crashing your own and other's games. "
-                + "\n For more information visit the GitHub wiki for HeadsX.yml: https://github.com/Thatsmusic99/HeadsPlus/wiki/customheads.yml");
+                + "\n For more information visit the GitHub wiki for customheads.yml: https://github.com/Thatsmusic99/HeadsPlus/wiki/customheads.yml");
         getConfig().addDefault("options.update-heads", true);
         getConfig().addDefault("options.version", cVersion);
         getConfig().addDefault("options.default-price", 10.00);
