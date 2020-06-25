@@ -96,7 +96,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         getConfig().addDefault("info.layout", new ArrayList<>(Arrays.asList("{header}",
                 "&c{msg_textmenus.info.version} &8» &7{version}",
                 "&c{msg_textmenus.info.author} &8» &7{author}",
-                "&c(msg_textmenus.info.language} &8» &7{locale}",
+                "&c{msg_textmenus.info.language} &8» &7{locale}",
                 "&c{msg_textmenus.info.contributors} &8» &7{contributors}",
                 "&c{msg_textmenus.info.spigot} &8» &7https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/",
                 "&c{msg_textmenus.info.discord} &8» &7https://discord.gg/eu8h3BG",
