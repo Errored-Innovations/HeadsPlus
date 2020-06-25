@@ -9,7 +9,8 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.10.8</hp-project.version>
+        <hp-project.version>v6.10.9</hp-project.version>
+        <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
     </properties>
 
     <build>
@@ -105,63 +106,63 @@
             <artifactId>craftbukkit-3</artifactId>
             <version>1.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.8-R0.1-SNAPSHOT-latest.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.8-R0.1-SNAPSHOT\craftbukkit-1.8-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-2</artifactId>
             <version>1.8.3-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.8.3-R0.1-SNAPSHOT-latest.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.8.3-R0.1-SNAPSHOT\craftbukkit-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-5</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.8.8-R0.1-SNAPSHOT\craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-4</artifactId>
             <version>1.9.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.9.2-R0.1-SNAPSHOT\craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-6</artifactId>
             <version>1.9.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.9.4-R0.1-SNAPSHOT\craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-7</artifactId>
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.10.2-R0.1-SNAPSHOT\craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-8</artifactId>
             <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.11.2-R0.1-SNAPSHOT\craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-10</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.13.2-R0.1-SNAPSHOT\craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-11</artifactId>
             <version>1.13-R0.1-SNAPSHOT-1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.13.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.13-R0.1-SNAPSHOT\craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -174,14 +175,22 @@
             <artifactId>craftbukkit-12</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.14.4-R0.1-SNAPSHOT\craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-13</artifactId>
-            <version>1.15-R0.1-SNAPSHOT</version>
+            <artifactId>craftbukkit-1.15.1</artifactId>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/spigot-1.15.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.15.1-R0.1-SNAPSHOT\craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <!-- Temporary -->
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.1</artifactId>
+            <version>1.16.1-R0.1</version>
+            <scope>system</scope>
+            <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\spigot-1.16.1.jar</systemPath>
         </dependency>
 
     </dependencies>
