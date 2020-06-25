@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.nms.v1_15_R1;
 
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.AnvilSlot;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
@@ -56,7 +57,7 @@ public class SearchGUIUtil extends SearchGUI {
 
 
     public void open() {
-        EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
+        EntityPlayer p = ProfileFetcher.getHandle(getPlayer());
         final int id = p.nextContainerCounter();
         AnvilContainer container = new AnvilContainer(id, p);
         inv = container.getBukkitView().getTopInventory();

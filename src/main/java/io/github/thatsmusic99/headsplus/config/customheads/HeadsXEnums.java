@@ -405,7 +405,13 @@ public enum HeadsXEnums {
     SPIDER("spider", "&7Spider", "cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1", "mobs", 3.1),
     SQUID("squid", "&9Squid", "01433be242366af126da434b8735df1eb5b3cb2cede39145974e9c483607bac", "animals", 3.1),
     WITCH("witch", "&aWitch", "fce6604157fc4ab5591e4bcf507a749918ee9c41e357d47376e0ee7342074c90", "humans", 3.1),
-    ZOMBIE("zombie", "&aZombie", "56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11", "mobs", 3.1);
+    ZOMBIE("zombie", "&aZombie", "56fc854bb84cf4b7697297973e02b79bc10698460b51a639c60e5e417734e11", "mobs", 3.1),
+    STRIDER("strider", "&cStrider", "18a9adf780ec7dd4625c9c0779052e6a15a451866623511e4c82e9655714b3c1", "mobs", 3.2),
+    COLD_STRIDER("cold_strider", "&dCold Strider", "c738610e2f73b67e5bc12ebcbb6ddc4561c265b9d5a17d20dae493a8250d700b", "mobs", 3.2),
+    HOGLIN("hoglin", "&cHoglin", "9bb9bc0f01dbd762a08d9e77c08069ed7c95364aa30ca1072208561b730e8d75", "mobs", 3.2),
+    ZOGLIN("zoglin", "&dZoglin", "e67e18602e03035ad68967ce090235d8996663fb9ea47578d3a7ebbc42a5ccf9", "mobs", 3.2),
+    PIGLIN("piglin", "&cPiglin", "5081a1239fffe135cbfa4a98a6aa6cc5b0787ad0790f56a16bf07f86374606c5", "mobs", 3.2),
+    ZOMBIFIED_PIGLIN("zombified_piglin", "&dZombified Piglin", "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c", "mobs", 3.2);
 
     final String name;
     final String dn;

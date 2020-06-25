@@ -95,6 +95,10 @@ public class EntityDataManager {
                 builder.append(((Creeper) entity).isPowered() ? "CHARGED" : "");
                 break;
             }
+            case "STRIDER": {
+                builder.append(entity.isOnGround() ? "COLD" : "");
+                break;
+            }
 
         }
         if (builder.length() > 0) {

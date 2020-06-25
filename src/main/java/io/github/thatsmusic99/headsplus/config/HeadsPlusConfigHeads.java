@@ -198,6 +198,8 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 				case "skeleton":
                     getConfig().addDefault(key + ".name.default", initSingleton("{mob-default}"));
                     break;
+				case "strider":
+					getConfig().addDefault(key + ".name.COLD", initSingleton("HP#cold_strider"));
                 default:
                     getConfig().addDefault(key + ".name.default", initSingleton("HP#" + keyS.toLowerCase()));
                     break;

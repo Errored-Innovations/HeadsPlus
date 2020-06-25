@@ -68,6 +68,7 @@ public class DeathEvents implements Listener {
             "GHAST",
             "GIANT",
             "GUARDIAN",
+            "HOGLIN",
             "HORSE",
             "HUSK",
             "IRON_GOLEM",
@@ -80,6 +81,7 @@ public class DeathEvents implements Listener {
             "PARROT",
             "PHANTOM",
             "PIG",
+            "PIGLIN",
             "PIG_ZOMBIE",
             "PILLAGER",
             "POLAR_BEAR",
@@ -97,6 +99,7 @@ public class DeathEvents implements Listener {
             "SPIDER",
             "SQUID",
             "STRAY",
+            "STRIDER",
             "TRADER_LLAMA",
             "TROPICAL_FISH",
             "TURTLE",
@@ -108,9 +111,11 @@ public class DeathEvents implements Listener {
             "WITHER",
             "WITHER_SKELETON",
             "WOLF",
+            "ZOGLIN",
             "ZOMBIE",
             "ZOMBIE_HORSE",
-            "ZOMBIE_VILLAGER"));
+            "ZOMBIE_VILLAGER",
+            "ZOMBIFIED_PIGLIN"));
     private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
     public static boolean ready = false;
     private static final HashMap<UUID, CreatureSpawnEvent.SpawnReason> spawnTracker = new HashMap<>();
