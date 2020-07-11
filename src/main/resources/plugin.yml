@@ -1,6 +1,6 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: '6.10.9'
+version: '6.10.11'
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
@@ -114,7 +114,7 @@ permissions:
     children:
       headsplus.maincommand.headinfo.view: true
       headsplus.maincommand.headinfo.add: true
-      headsplus.maincommand.headinfo.subtract: true
+      headsplus.maincommand.headinfo.remove: true
       headsplus.maincommand.headinfo.set: true
   headsplus.craft:
     default: true

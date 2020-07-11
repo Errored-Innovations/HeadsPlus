@@ -311,8 +311,8 @@ public class HeadsPlus extends JavaPlugin {
         getCommand("hp").setTabCompleter(new TabComplete());
         getCommand("head").setExecutor(new Head());
         getCommand("head").setTabCompleter(new Head());
-        getCommand("heads").setExecutor(new Heads());
         getCommand("myhead").setExecutor(new MyHead());
+        getCommand("heads").setExecutor(new Heads());
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
         getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
         getCommand("sellhead").setExecutor(new SellHead(this));

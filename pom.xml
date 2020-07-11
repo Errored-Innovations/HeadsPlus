@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.10.9</hp-project.version>
+        <hp-project.version>v6.10.11</hp-project.version>
         <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
     </properties>
 
@@ -190,7 +190,13 @@
             <artifactId>craftbukkit-1.16.1</artifactId>
             <version>1.16.1-R0.1</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\spigot-1.16.1.jar</systemPath>
+            <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
