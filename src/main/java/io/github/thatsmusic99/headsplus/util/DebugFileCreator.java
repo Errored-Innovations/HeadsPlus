@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -23,6 +24,7 @@ import java.util.Random;
 @SuppressWarnings("unchecked")
 public class DebugFileCreator {
 
+    @Deprecated
     public String createReport(Exception e, String when) throws IOException {
         HeadsPlus hp = HeadsPlus.getInstance();
         JSONArray array1 = new JSONArray();
@@ -110,6 +112,10 @@ public class DebugFileCreator {
             fw.close();
         }
         return fr.getName();
+    }
+
+    public static String createReport(HeadsPlusException e) {
+        return null;
     }
 
     public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
