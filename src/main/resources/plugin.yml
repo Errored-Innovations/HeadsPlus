@@ -9,8 +9,8 @@ website: 'https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/'
 # Vault - Economy support
 # AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION - easter eggs
 # PlaceholderAPI - Placeholder support
-
-softdepend: [Vault, AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION, PlaceholderAPI, Ultimate_Economy, WorldGuard, MythicMobs]
+# WorldGuard, WorldEdit - WG support
+softdepend: [Vault, AdvancedTeleport, AdvancedOreGenerator, SpectateProtection, HeadsPlusCREATION, PlaceholderAPI, Ultimate_Economy, WorldGuard, WorldEdit, MythicMobs]
 commands:
   head:
     description: Spawns in a head.

@@ -21,6 +21,7 @@ import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.IncorrectVersionException;
+import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.og.OreGenerator;
 import io.github.thatsmusic99.pg.Core;
@@ -77,6 +78,14 @@ public class HeadsPlus extends JavaPlugin {
     private Favourites favourites;
     private Pinned pinned;
     private PlayerScores scores;
+
+    @Override
+    public void onLoad() {
+        instance = this;
+        if (getServer().getPluginManager().getPlugin("WorldGuard") != null && getServer().getPluginManager().getPlugin("WorldEdit") != null) {
+            new FlagHandler();
+        }
+    }
 
     @Override
     public void onEnable() {
