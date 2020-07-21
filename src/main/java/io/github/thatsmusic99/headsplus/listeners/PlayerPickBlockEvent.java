@@ -3,10 +3,15 @@ package io.github.thatsmusic99.headsplus.listeners;
 import com.mojang.authlib.GameProfile;
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.UUID;
+
+import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,14 +23,18 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class PlayerPickBlockEvent implements Listener {
+public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEvent> implements Listener {
 
-    HashSet<HumanEntity> openInventories = new HashSet<>();
+    HashSet<UUID> openInventories = new HashSet<>();
 
-    @EventHandler
-    public void onInventoryCreativeEvent(InventoryCreativeEvent event) {
+    public PlayerPickBlockEvent() {
+        super();
+        Bukkit.getPluginManager().registerEvent(InventoryCreativeEvent.class, this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent"), HeadsPlus.getInstance());
+    }
+    public void onEvent(InventoryCreativeEvent event) {
         if (event.getAction() == InventoryAction.PLACE_ALL // this is weird, but ok
-                && !openInventories.contains(event.getWhoClicked())
+                && !openInventories.contains(event.getWhoClicked().getUniqueId())
                 && isSkull(event.getCursor().getType())) {
             // Block pick event is basically the same event as picking a block from inventory
             // check to see if they are looking at a skull block
@@ -61,13 +70,13 @@ public class PlayerPickBlockEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryOpenEvent(InventoryOpenEvent event) {
         if (event.getInventory().getType() == InventoryType.CREATIVE) {
-            openInventories.add(event.getPlayer());
+            openInventories.add(event.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(InventoryCloseEvent event) {
-        openInventories.remove(event.getPlayer());
+        openInventories.remove(event.getPlayer().getUniqueId());
     }
 
     /**
