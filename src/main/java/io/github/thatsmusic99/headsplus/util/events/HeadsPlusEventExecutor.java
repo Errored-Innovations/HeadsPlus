@@ -31,6 +31,7 @@ public class HeadsPlusEventExecutor implements EventExecutor {
                 } catch (Exception ex) {
                     HeadsPlusException ex1 = new HeadsPlusException(ex, hpListener.getData());
                     DebugFileCreator.createReport(ex1);
+                    handler.finish();
                 }
             }
         }
