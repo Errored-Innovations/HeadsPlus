@@ -25,6 +25,36 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <relocations>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>io.github.thatsmusic99.headsplus.paperlib</shadedPattern> <!-- Replace this -->
+                        </relocation>
+                    </relocations>
+                    <artifactSet>
+                        <excludes>
+                            <exclude>io.github.thatsmusic99:AdvancedOreGenerator</exclude>
+                            <exclude>io.github.thatsmusic99:SpectateProtection</exclude>
+                            <exclude>io.github.at:AdvancedTeleport</exclude>
+                            <exclude>net.elseland.xikage:MythicMobs</exclude>
+                        </excludes>
+                    </artifactSet>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <finalName>HeadsPlus-${hp-project.version}</finalName>
         <resources>
@@ -65,35 +95,28 @@
             <artifactId>AdvancedOreGenerator</artifactId>
             <version>1.2.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/AdvancedOreGenerator.jar</systemPath>
+            <systemPath>${project.basedir}\libs\AdvancedOreGenerator.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.github.thatsmusic99</groupId>
             <artifactId>SpectateProtection</artifactId>
             <version>1.1.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/SpectateProtection-1.1.2.jar</systemPath>
+            <systemPath>${project.basedir}\libs\SpectateProtection-1.1.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.github.at</groupId>
             <artifactId>AdvancedTeleport</artifactId>
             <version>5.0.1-SNAPSHOT-1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/AT-Rewritten.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>io.github.thatsmusic99</groupId>
-            <artifactId>ProjectPG</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/ProjectPG-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}\libs\AT-Rewritten.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.elseland.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
             <version>4.9</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MythicMobs-4.9.0.jar</systemPath>
+            <systemPath>${project.basedir}\libs\MythicMobs-4.9.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -192,6 +215,12 @@
             <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.4</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
@@ -216,6 +245,10 @@
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
     </repositories>
 </project>
