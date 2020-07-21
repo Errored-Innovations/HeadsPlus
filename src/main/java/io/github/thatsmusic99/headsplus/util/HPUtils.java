@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 
 public class HPUtils {
 
-    private static final HashMap<Player, BossBar> bossBars = new HashMap<>();
+    private static final HashMap<UUID, BossBar> bossBars = new HashMap<>();
 
     public static void addBossBar(OfflinePlayer pl) {
         HPPlayer p = HPPlayer.getHPPlayer(pl);
@@ -25,7 +25,7 @@ public class HPUtils {
         if (c.getBoolean("boss-bar.enabled")) {
             if (p.getNextLevel() != null) {
                 try {
-                    if (!bossBars.containsKey(pl.getPlayer())) {
+                    if (!bossBars.containsKey(pl.getPlayer().getUniqueId())) {
                         String s = ChatColor.translateAlternateColorCodes('&', c.getString("boss-bar.title"));
                         BossBar bossBar = Bukkit.getServer().createBossBar(s, BarColor.valueOf(c.getString("boss-bar.color")), BarStyle.SEGMENTED_6);
                         bossBar.addPlayer(pl.getPlayer());
@@ -33,19 +33,19 @@ public class HPUtils {
                         d = 1 - d;
                         bossBar.setProgress(d);
                         bossBar.setVisible(true);
-                        bossBars.put(pl.getPlayer(), bossBar);
+                        bossBars.put(pl.getPlayer().getUniqueId(), bossBar);
                         new BukkitRunnable() {
                             @Override
                             public void run() {
                                 bossBar.setVisible(false);
                                 bossBar.removePlayer(pl.getPlayer());
-                                bossBars.remove(pl.getPlayer());
+                                bossBars.remove(pl.getPlayer().getUniqueId());
                             }
                         }.runTaskLater(HeadsPlus.getInstance(), c.getInt("boss-bar.lifetime") * 20);
                     } else {
                         Double d = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
                         d = 1 - d;
-                        bossBars.get(pl.getPlayer()).setProgress(d);
+                        bossBars.get(pl.getPlayer().getUniqueId()).setProgress(d);
                     }
                 } catch (NoClassDefFoundError | IllegalArgumentException | NullPointerException ignored) {
 
