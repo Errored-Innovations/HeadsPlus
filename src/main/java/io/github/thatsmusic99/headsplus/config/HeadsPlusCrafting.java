@@ -2,13 +2,10 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
-import io.github.thatsmusic99.headsplus.crafting.RecipeUndefinedEnums;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.bukkit.DyeColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

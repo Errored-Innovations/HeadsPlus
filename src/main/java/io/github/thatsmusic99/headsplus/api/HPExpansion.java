@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.OfflinePlayer;

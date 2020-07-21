@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
-import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

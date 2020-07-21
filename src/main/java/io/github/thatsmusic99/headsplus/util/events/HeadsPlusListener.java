@@ -1,8 +1,6 @@
 package io.github.thatsmusic99.headsplus.util.events;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;

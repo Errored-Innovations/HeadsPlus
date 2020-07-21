@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigSounds;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,8 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

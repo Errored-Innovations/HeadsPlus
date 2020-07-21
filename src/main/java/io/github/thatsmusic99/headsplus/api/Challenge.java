@@ -6,7 +6,6 @@ import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
