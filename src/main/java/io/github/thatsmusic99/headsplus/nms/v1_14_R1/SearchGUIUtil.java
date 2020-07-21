@@ -64,6 +64,7 @@ public class SearchGUIUtil extends SearchGUI {
             inv.setItem(slot.getSlot(), items.get(slot));
         }
         p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(id, Containers.ANVIL, new ChatMessage("Repairing")));
+        container.setTitle(new ChatMessage("Repairing"));
         p.activeContainer = container;
         try {
             Field profileField;
