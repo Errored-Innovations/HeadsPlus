@@ -39,7 +39,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         if (addData("is-mythic-mob", isMythicMob(event.getEntity()))) return;
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
-        if (!addData("wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
+        if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
         // TODO New blacklist checks go here
         if (!runBlacklistTests(event.getEntity())) return;
         //
