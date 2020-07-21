@@ -121,29 +121,7 @@ public class DebugFileCreator {
     public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
         HeadsPlus hp = HeadsPlus.getInstance();
         JSONArray array1 = new JSONArray();
-        JSONObject o1 = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-        o1.put("Date", date);
-        o1.put("Special message", getErrorHeader());
-        try {
-            o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
-            o1.put("Has Vault hooked", hp.econ());
-            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
-        } catch (NullPointerException ignored) {
-
-        }
-        o1.put("Skull Type", s.getType().name());
-        JSONArray plugins = new JSONArray();
-        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            try {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception ex) {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
-            }
-        }
-        o1.put("Other Plugins", plugins);
-        o1.put("Server version", Bukkit.getVersion());
+        JSONObject o1 = getBasicInfo();
         JSONObject o2 = new JSONObject();
         o2.put("Amount", s.getAmount());
         o2.put("Durability", s.getDurability());
@@ -181,6 +159,7 @@ public class DebugFileCreator {
             if (!f2.exists()) {
                 f2.mkdir();
             }
+            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
             File f = new File(hp.getDataFolder() + File.separator + "debug" + File.separator, date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
             if (!f.exists()) {
                 fr = f;
@@ -200,28 +179,7 @@ public class DebugFileCreator {
     public String createPlayerReport(HPPlayer player) throws IOException {
         JSONArray array1 = new JSONArray();
         HeadsPlus hp = HeadsPlus.getInstance();
-        JSONObject o1 = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-        o1.put("Date", date);
-        o1.put("Special message", getErrorHeader());
-        try {
-            o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
-            o1.put("Has Vault hooked", hp.econ());
-            o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
-        } catch (NullPointerException ignored) {
-
-        }
-        JSONArray plugins = new JSONArray();
-        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            try {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception  | NoSuchMethodError ex) {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (Legacy)");
-            }
-        }
-        o1.put("Other Plugins", plugins);
+        JSONObject o1 = getBasicInfo();
         JSONObject o2 = new JSONObject();
         o2.put("Name", player.getPlayer().getName());
         o2.put("UUID", player.getPlayer().getUniqueId());
@@ -253,6 +211,7 @@ public class DebugFileCreator {
             if (!f2.exists()) {
                 f2.mkdir();
             }
+            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
             File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
             if (!f.exists()) {
                 fr = f;
@@ -271,6 +230,47 @@ public class DebugFileCreator {
 
     public String createItemReport(ItemStack item) throws IOException {
         JSONArray array1 = new JSONArray();
+        HeadsPlus hp = HeadsPlus.getInstance();
+        JSONObject o1 = getBasicInfo();
+        JSONObject o2 = new JSONObject();
+        o2.put("material", item.getType());
+        o2.put("amount", item.getAmount());
+        JSONObject o3 = new JSONObject();
+        for (String key : hp.getNMS().getNBTTags(item).keySet()) {
+            o3.put(key, hp.getNMS().getNBTTags(item).get(key));
+        }
+        o2.put("NBT Tags", o3);
+        o1.put("Item details", o2);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        array1.add(o1);
+        String str = gson.toJson(array1);
+        OutputStreamWriter fw;
+        boolean cancelled = false;
+        File fr = null;
+
+        for (int i = 0; !cancelled; i++) {
+            File f2 = new File(hp.getDataFolder() + "/debug");
+            if (!f2.exists()) {
+                f2.mkdir();
+            }
+            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
+            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            if (!f.exists()) {
+                fr = f;
+                cancelled = true;
+            }
+        }
+        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        try {
+            fw.write(str.replace("\u0026", "&"));
+        } finally {
+            fw.flush();
+            fw.close();
+        }
+        return fr.getName();
+    }
+
+    private static JSONObject getBasicInfo() {
         HeadsPlus hp = HeadsPlus.getInstance();
         JSONObject o1 = new JSONObject();
         String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
@@ -294,44 +294,10 @@ public class DebugFileCreator {
             }
         }
         o1.put("Other Plugins", plugins);
-        JSONObject o2 = new JSONObject();
-        o2.put("material", item.getType());
-        o2.put("amount", item.getAmount());
-        JSONObject o3 = new JSONObject();
-        for (String key : hp.getNMS().getNBTTags(item).keySet()) {
-            o3.put(key, hp.getNMS().getNBTTags(item).get(key));
-        }
-        o2.put("NBT Tags", o3);
-        o1.put("Item details", o2);
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        array1.add(o1);
-        String str = gson.toJson(array1);
-        OutputStreamWriter fw;
-        boolean cancelled = false;
-        File fr = null;
-
-        for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + "/debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
-            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
-            if (!f.exists()) {
-                fr = f;
-                cancelled = true;
-            }
-        }
-        fw = new OutputStreamWriter(new FileOutputStream(fr));
-        try {
-            fw.write(str.replace("\u0026", "&"));
-        } finally {
-            fw.flush();
-            fw.close();
-        }
-        return fr.getName();
+        return o1;
     }
 
-    private String getErrorHeader() {
+    private static String getErrorHeader() {
         List<String> msgs = new ArrayList<>();
         msgs.add("Oh sorry, did I hurt you?");
         msgs.add("Oopsie Whoopsie! UwU We made a ****y wucky! A wittle ****o boingo! The code monkeys at our headquarters are working VEWY HARD to fix this!");
@@ -387,6 +353,17 @@ public class DebugFileCreator {
         msgs.add("HE FRICKIN' STOLE TOT");
         msgs.add("the child is here");
         msgs.add("HAHAHAHHAHAHAHHAH! FOOOOOOOOOOOOOOOOOOOOOOoooooo... oh wait, it's you again?");
+        msgs.add("wingless has a cursed rust server");
+        msgs.add("THERE IS NO FRIDGE");
+        msgs.add("this meme breaks every rule but it's epic");
+        msgs.add("BEES");
+        msgs.add("Hi there, my name is the Kneecap bot! And I can confirm this a big YIKES moment.");
+        msgs.add("https://media.discordapp.net/attachments/715322160226238635/730734060401590322/mau424glmas31.png");
+        msgs.add("This Java-built addition to your video game software which allows multiple individuals with the required client to connect has spontaneously failed to carry out one of its many functions, please report this troubling situation to the individual who compiled this code so that she can investigate further.");
+        msgs.add("yuganda sekai ni dan dan boku wa sukitootte mienaku natte\n" +
+                "mitsukenaide boku no koto wo mitsumenaide\n" +
+                "dareka ga egaita sekai no naka de anata wo kizutsuketaku wa nai yo\n" +
+                "oboeteite boku no koto wo azayaka na mama");
         int random = new Random().nextInt(msgs.size());
         return msgs.get(random);
     }

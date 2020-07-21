@@ -20,11 +20,10 @@ import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
+import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.og.OreGenerator;
-import io.github.thatsmusic99.pg.Core;
 import io.github.thatsmusic99.specprotect.CoreClass;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -303,9 +302,13 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new HeadInteractEvent(), this);
+        new HPHeadInteractEvent();
+        new HPEntityDeathEvent();
+        new HPEntitySpawnEvent();
+        new HPHeadInteractEvent();
+        new HPBlockPlaceEvent();
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlaceEvent(), this);
+        getServer().getPluginManager().registerEvents(new HPBlockPlaceEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
@@ -652,10 +655,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public void checkForMutuals() {
         try {
-            if (Bukkit.getServer().getPluginManager().getPlugin("ProjectPG-PRO") instanceof Core) {
-                getLogger().info("I think I see ProjectPG here... are you ready, Aaron?");
-                Bukkit.getPluginManager().callEvent(new CommunicateEvent("ProjectPG"));
-            }
             if (Bukkit.getServer().getPluginManager().getPlugin("AdvancedOreGenerator") instanceof OreGenerator) {
                 getLogger().info("What're we gonna do, AOG?");
                 Bukkit.getPluginManager().callEvent(new CommunicateEvent("AOG"));
