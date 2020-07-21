@@ -63,8 +63,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         if (event.getEntity().getKiller() != null) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
         }
-        throw new NullPointerException("hahah random exception time");
-         if (randomChance <= fixedChance) {
+        if (randomChance <= fixedChance) {
             String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
             HPUtils.dropHead(entity, meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
