@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.util;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -21,8 +20,8 @@ public class NewMySQLAPI {
             try {
                 StringBuilder arg = new StringBuilder();
                 arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` VARCHAR(45), `total` VARCHAR(45), ");
-                for (String entity : DeathEvents.ableEntities) {
                     arg.append(entity).append(" VARCHAR(45), ");
+                for (String entity : EntityDataManager.ableEntities) {
 
                 }
                 arg.append("PLAYER VARCHAR(45), PRIMARY KEY (`id`))");

@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -42,7 +42,7 @@ public interface IHeadsPlusCommand {
     }
 
     static List<String> getEntities() {
-        return DeathEvents.ableEntities;
+        return EntityDataManager.ableEntities;
     }
 
     static List<String> getEntityConditions(String entity) {

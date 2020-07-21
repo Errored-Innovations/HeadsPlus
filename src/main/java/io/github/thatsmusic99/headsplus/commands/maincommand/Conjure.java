@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -40,7 +39,7 @@ public class Conjure implements IHeadsPlusCommand {
         if (args.length > 1) {
             Player p = null;
             String entity = args[1].toUpperCase();
-            if (DeathEvents.ableEntities.contains(entity)) {
+            if (EntityDataManager.ableEntities.contains(entity)) {
                 int amount = 1;
                 if (args.length > 2) {
                     amount = HPUtils.isInt(args[2]);
@@ -66,9 +65,8 @@ public class Conjure implements IHeadsPlusCommand {
                 if (args.length > 5) {
                     type = args[5];
                 }
-                DeathEvents de = HeadsPlus.getInstance().getDeathEvents();
                 try {
-                    ItemStack i = de.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
+                    ItemStack i = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
                     i.setAmount(amount);
                     p.getInventory().addItem(i);
                     return true;

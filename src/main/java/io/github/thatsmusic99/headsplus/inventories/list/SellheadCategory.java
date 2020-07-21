@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.inventories.list;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.SellheadHead;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ public class SellheadCategory extends BaseInventory {
         List<Content> contents = new ArrayList<>();
         switch (context.get("section")) { // ignore
             case "mobs":
-                for (String str : DeathEvents.getSellheadCache().keySet()) {
-                    contents.add(new SellheadHead(DeathEvents.getSellheadCache().get(str), str));
+                for (String str : EntityDataManager.getSellheadCache().keySet()) {
+                    contents.add(new SellheadHead(EntityDataManager.getSellheadCache().get(str), str));
                 }
                 break;
             case "mining": // Guess what

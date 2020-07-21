@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.io.Files;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -73,7 +73,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 	}
 
 	private void addUndefinedHeads() {
-    	for (String keyS : DeathEvents.ableEntities) {
+    	for (String keyS : EntityDataManager.ableEntities) {
     		String key = keyS.replaceAll("_", "").toLowerCase();
     		if (keyS.equalsIgnoreCase("TRADER_LLAMA") || keyS.equalsIgnoreCase("WANDERING_TRADER")) {
     			key = keyS.toLowerCase();

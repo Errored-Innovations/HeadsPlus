@@ -7,11 +7,11 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -175,7 +175,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                         @Override
                                         public void run() {
                                             try {
-                                                for (String section : DeathEvents.ableEntities) {
+                                                for (String section : EntityDataManager.ableEntities) {
 
                                                     LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
                                                     for (OfflinePlayer player : hashmap.keySet()) {

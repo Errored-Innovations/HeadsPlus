@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,7 +29,7 @@ public class TestsCommand implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         if (args.length > 1) {
-            if (DeathEvents.ableEntities.contains(args[1].toUpperCase())) {
+            if (EntityDataManager.ableEntities.contains(args[1].toUpperCase())) {
                 if (args.length > 2) {
                     int amount = HPUtils.isInt(args[2]);
                     String type = args[1].toLowerCase().replaceAll("_", "");

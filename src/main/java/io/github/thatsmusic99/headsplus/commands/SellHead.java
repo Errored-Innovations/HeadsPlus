@@ -5,10 +5,10 @@ import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -42,7 +42,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	public SellHead(HeadsPlus hp) {
 	    headIds.clear();
 	    useCases = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
-	    for (String entity : DeathEvents.ableEntities) {
+	    for (String entity : EntityDataManager.ableEntities) {
 	        registerHeadID(entity);
         }
 	    registerHeadID("PLAYER");

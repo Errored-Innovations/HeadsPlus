@@ -6,12 +6,10 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -122,7 +120,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 if (args[2].equalsIgnoreCase("WANDERING_TRADER") || args[2].equalsIgnoreCase("TRADER_LLAMA")) {
                     type = args[2].toLowerCase();
                 }
-                if (DeathEvents.ableEntities.contains(args[2]) || args[2].equalsIgnoreCase("player")) {
+                if (EntityDataManager.ableEntities.contains(args[2]) || args[2].equalsIgnoreCase("player")) {
                     if (sender.hasPermission("headsplus.maincommand.headinfo." + args[1].toLowerCase())) {
                         switch (args[1].toLowerCase()) {
                             case "view":

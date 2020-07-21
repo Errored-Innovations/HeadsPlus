@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,7 +18,7 @@ public class TabCompleteLB implements TabCompleter {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
-            for (String e : DeathEvents.ableEntities) {
+            for (String e : EntityDataManager.ableEntities) {
                 c.add(WordUtils.capitalize(e.toLowerCase()));
             }
             c.add("Total");

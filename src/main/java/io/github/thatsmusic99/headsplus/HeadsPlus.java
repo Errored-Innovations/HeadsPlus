@@ -58,7 +58,6 @@ public class HeadsPlus extends JavaPlugin {
     private HeadsPlusMessagesManager hpc;
     private HeadsPlusConfigHeads hpch;
     private HeadsPlusConfigCustomHeads hpchx;
-    private DeathEvents de;
     private HeadsPlusCrafting hpcr;
     private HeadsPlusChallenges hpchl;
     private HeadsPlusAPI hapi;
@@ -305,7 +304,6 @@ public class HeadsPlus extends JavaPlugin {
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new HeadInteractEvent(), this);
-        getServer().getPluginManager().registerEvents(de, this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new PlaceEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
@@ -342,7 +340,6 @@ public class HeadsPlus extends JavaPlugin {
         cs.add(hpchx);
         hpcr = new HeadsPlusCrafting();
         cs.add(hpcr);
-        de = new DeathEvents();
         hpchl = new HeadsPlusChallenges();
         cs.add(hpchl);
         if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals("HeadsPlus")) {
@@ -611,10 +608,6 @@ public class HeadsPlus extends JavaPlugin {
         return update;
     }
 
-    public DeathEvents getDeathEvents() {
-        return de;
-    }
-
     public HeadsPlusMainConfig getConfiguration() {
         return config;
     }
@@ -682,10 +675,6 @@ public class HeadsPlus extends JavaPlugin {
 
 
 
-    }
-
-    public void reloadDE() {
-        de.reload();
     }
 
     public static String capitalize(String str) {

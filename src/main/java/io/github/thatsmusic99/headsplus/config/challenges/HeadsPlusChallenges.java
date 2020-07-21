@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
-import io.github.thatsmusic99.headsplus.listeners.DeathEvents;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.apache.commons.lang.Validate;
@@ -241,7 +241,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 config.addDefault("sections." + section.name() + ".material-data", section.color.ordinal());
                 config.addDefault("sections." + section.name() + ".display-name", section.displayName);
                 config.addDefault("sections." + section.name() + ".lore", new ArrayList<>());
-                for (String t : DeathEvents.ableEntities) {
+                for (String t : EntityDataManager.ableEntities) {
                     int multiplier = 5;
                     int tempDif = difficulty;
                     switch (t) {
