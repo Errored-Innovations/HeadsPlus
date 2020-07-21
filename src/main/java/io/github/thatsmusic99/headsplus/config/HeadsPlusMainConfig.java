@@ -88,6 +88,9 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.allow-looting-enchantment", true);
         config.addDefault("plugin.mechanics.looting.ignored-entities", new ArrayList<>());
         config.addDefault("plugin.mechanics.looting.use-old-system", false);
+        config.addDefault("plugin.mechanics.looting.thresholds.common", 100);
+        config.addDefault("plugin.mechanics.looting.thresholds.uncommon", 20);
+        config.addDefault("plugin.mechanics.looting.thresholds.rare", 5);
         config.addDefault("plugin.mechanics.stop-placement-of-sellable-heads", false);
         config.addDefault("plugin.mechanics.sellhead-gui", true);
         config.addDefault("plugin.mechanics.debug.create-debug-files", true);

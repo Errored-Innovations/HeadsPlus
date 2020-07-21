@@ -7,13 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
 public class HPEntitySpawnEvent extends HeadsPlusListener<CreatureSpawnEvent> {
 
-    private static final WeakHashMap<UUID, CreatureSpawnEvent.SpawnReason> spawnTracker = new HashMap<>();
+    private static final WeakHashMap<UUID, CreatureSpawnEvent.SpawnReason> spawnTracker = new WeakHashMap<>();
 
     public HPEntitySpawnEvent() {
         super();
