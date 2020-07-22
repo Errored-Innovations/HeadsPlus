@@ -115,8 +115,54 @@ public class DebugFileCreator {
     }
 
     public static String createReport(HeadsPlusException e) {
+        JSONObject json = getBasicInfo();
+        if (e != null) {
+            JSONObject errorInfo = new JSONObject();
+            for (String str : e.getExceptionInfo().keySet()) {
+                errorInfo.put(str, e.getExceptionInfo().get(str));
+            }
+            JSONArray array = new JSONArray();
+            array.addAll(Arrays.asList(getStackTrace(e.getOriginalException()).split("\r\n\t")));
+            errorInfo.put("Exception", array);
+            json.put("Error Information", errorInfo);
+        }
+        try {
+            return save(json);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
         return null;
     }
+
+    private static String save(JSONObject json) throws IOException {
+        HeadsPlus hp = HeadsPlus.getInstance();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        String str = gson.toJson(json);
+        OutputStreamWriter fw;
+        boolean cancelled = false;
+        File fr = null;
+        for (int i = 0; !cancelled; i++) {
+            File f2 = new File(hp.getDataFolder() + File.separator + "debug");
+            if (!f2.exists()) {
+                f2.mkdir();
+            }
+            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
+            File f = new File(hp.getDataFolder() + File.separator + "debug" + File.separator, date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            if (!f.exists()) {
+                fr = f;
+                cancelled = true;
+            }
+        }
+        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        try {
+            fw.write(str.replace("\u0026", "&"));
+        } finally {
+            fw.flush();
+            fw.close();
+        }
+        return fr.getName();
+    }
+
 
     public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
         HeadsPlus hp = HeadsPlus.getInstance();
