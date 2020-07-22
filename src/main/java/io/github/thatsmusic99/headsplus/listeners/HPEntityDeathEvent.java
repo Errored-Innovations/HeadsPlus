@@ -66,7 +66,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         if (randomChance <= fixedChance) {
             String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
-            HPUtils.dropHead(entity, meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
+            HPUtils.dropHead(event.getEntityType().name(), meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
         }
     }
 

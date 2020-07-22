@@ -378,6 +378,7 @@ public class HeadsPlus extends JavaPlugin {
         cs.add(sounds);
         menus = new HeadsPlusConfigTextMenu();
         cs.add(menus);
+        EntityDataManager.init();
     }
 
     public void restartMessagesManager() {
