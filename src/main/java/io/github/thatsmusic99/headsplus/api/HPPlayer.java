@@ -137,12 +137,12 @@ public class HPPlayer {
 
     public void tempClearMasks() {
         try {
+            ignoreFallDamage = false;
             if (!getPlayer().isOnline()) return;
             for (PotionEffect p : activeMask) {
                 ((Player) getPlayer()).removePotionEffect(p.getType());
             }
-        } catch (NullPointerException e) {
-
+        } catch (NullPointerException ignored) {
         }
     }
 
