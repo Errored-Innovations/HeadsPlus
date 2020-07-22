@@ -96,10 +96,13 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                             || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
                         }
                     } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
-                        StringUtil.copyPartialMatches(args[4],
-                                HeadsPlus.getInstance().getHeadsConfig()
-                                        .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
-                                                || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "")), results);
+                        List<String> lore = new ArrayList<>();
+                        for (String str : HeadsPlus.getInstance().getHeadsConfig()
+                                .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                        || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", ""))) {
+                            lore.add(str.replaceAll("§", "&"));
+                        }
+                        StringUtil.copyPartialMatches(args[4], lore, results);
                     }
                 }
             } else if (args.length == 6) {
