@@ -56,11 +56,11 @@ permissions:
       headsplus.maincommand.*: true
       headsplus.maincommand.complete.others: true
       headsplus.maincommand.debug.*: false
-      headsplus.maincommand.headinfo.*: false
+      headsplus.maincommand.headinfo.*: true
       headsplus.maincommand.locale.change: true
       headsplus.maincommand.locale.others: true
       headsplus.maincommand.profile.others: true
-      headsplus.maincommand.xp.*: false
+      headsplus.maincommand.xp.*: true
       headsplus.myhead: true
       headsplus.notify: true
       headsplus.sellhead: true
@@ -75,7 +75,7 @@ permissions:
       headsplus.maincommand.debug: true
       headsplus.maincommand.debug.*: false
       headsplus.maincommand.headinfo: true
-      headsplus.maincommand.headinfo.*: false
+      headsplus.maincommand.headinfo.*: true
       headsplus.maincommand.info: true
       headsplus.maincommand.locale: true
       headsplus.maincommand.locale.change: true
@@ -85,7 +85,7 @@ permissions:
       headsplus.maincommand.profile.others: true
       headsplus.maincommand.tests: true
       headsplus.maincommand.xp: true
-      headsplus.maincommand.xp.*: false
+      headsplus.maincommand.xp.*: true
   headsplus.maincommand.debug.*:
     description: Provides access to every debug command.
     default: false
@@ -111,7 +111,7 @@ permissions:
       headsplus.bypass.preventplacement: true
   headsplus.maincommand.headinfo.*:
     description: Allows access to some of the /hp headinfo options.
-    default: false
+    default: op
     children:
       headsplus.maincommand.headinfo.view: true
       headsplus.maincommand.headinfo.add: true
