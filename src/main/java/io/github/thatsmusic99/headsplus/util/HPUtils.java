@@ -120,8 +120,7 @@ public class HPUtils {
             }
         }
         if (heads == null) {
-            HeadsPlus.getInstance().getLogger().warning("Found no heads list for " + id + "!");
-            return;
+            throw new NullPointerException("Found no heads list for " + id + "!");
         }
         if (heads.isEmpty()) return;
         EntityHead head = heads.get(random.nextInt(heads.size()));
