@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -70,6 +71,7 @@ public class MaskEvent implements Listener {
                     }
                     pl.addMask(s);
                     final String type = s;
+                    boolean hasWG = Bukkit.getPluginManager().isPluginEnabled("WorldGuard");
                     maskMonitors.put(uuid, new BukkitRunnable() {
 
                         private int currentInterval = 0;
@@ -88,6 +90,8 @@ public class MaskEvent implements Listener {
                             } else if (!maskMonitors.containsKey(uuid)) {
                                 pl.clearMask();
                                 cancel();
+                            } else if (hasWG && !FlagHandler.canUseMasks(player)) {
+                                pl.tempClearMasks();
                             } else if (currentInterval == reset) {
                                 pl.refreshMasks();
                                 currentInterval = 0;
