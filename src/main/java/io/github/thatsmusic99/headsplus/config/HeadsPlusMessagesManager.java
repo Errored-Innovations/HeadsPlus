@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -944,11 +945,7 @@ public class HeadsPlusMessagesManager {
             return String.valueOf(entityPlayer.getClass().getField("locale").get(entityPlayer));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
             HeadsPlus.getInstance().getServer().getLogger().info("Whoops, have an error to report...");
-            try {
-                new DebugFileCreator().createReport(e, "Setting Smart Locale (Retrieving)");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            DebugFileCreator.createReport(new HeadsPlusException(e));
             e.printStackTrace();
         }
         return "en_us";

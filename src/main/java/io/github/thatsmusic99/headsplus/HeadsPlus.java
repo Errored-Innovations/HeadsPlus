@@ -20,7 +20,9 @@ import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.og.OreGenerator;
@@ -184,20 +186,16 @@ public class HeadsPlus extends JavaPlugin {
                 DebugPrint.createReport(e, "Startup", false, null);
             } catch (Exception ex) {
                 getLogger().severe("HeadsPlus has failed to start up correctly and can not read the config. An error report has been made in /plugins/HeadsPlus/debug");
-                try {
-                    getLogger().info("First stacktrace: ");
-                    e.printStackTrace();
-                    getLogger().info("Second stacktrace: ");
-                    ex.printStackTrace();
-                    String s = new DebugFileCreator().createReport(e, "Startup");
-                    getLogger().severe("Report name: " + s);
-                    getLogger().severe("Please submit this report to the developer at one of the following links:");
-                    getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                    getLogger().severe("https://discord.gg/nbT7wC2");
-                    getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                getLogger().info("First stacktrace: ");
+                e.printStackTrace();
+                getLogger().info("Second stacktrace: ");
+                ex.printStackTrace();
+                String s = DebugFileCreator.createReport(new HeadsPlusException(e));
+                getLogger().severe("Report name: " + s);
+                getLogger().severe("Please submit this report to the developer at one of the following links:");
+                getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
+                getLogger().severe("https://discord.gg/nbT7wC2");
+                getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
             }
         }
     }

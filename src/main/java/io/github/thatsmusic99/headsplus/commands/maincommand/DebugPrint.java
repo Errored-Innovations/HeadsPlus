@@ -12,6 +12,7 @@ import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -58,18 +59,12 @@ public class DebugPrint implements IHeadsPlusCommand {
 
             if (cs.getBoolean("debug.create-debug-files")) {
                 log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
-                try {
-                    String s = new DebugFileCreator().createReport(e, name);
-                    log.severe("Report name: " + s);
-                    log.severe("Please submit this report to the developer at one of the following links:");
-                    log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                    log.severe("https://discord.gg/nbT7wC2");
-                    log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
-                } catch (IOException e1) {
-                    if (cs.getBoolean("debug.print-stacktraces-in-console")) {
-                        e1.printStackTrace();
-                    }
-                }
+                String s = DebugFileCreator.createReport(new HeadsPlusException(e));
+                log.severe("Report name: " + s);
+                log.severe("Please submit this report to the developer at one of the following links:");
+                log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
+                log.severe("https://discord.gg/nbT7wC2");
+                log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
             }
         } catch (Exception ex) {
             HeadsPlus.getInstance().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
@@ -100,7 +95,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                 String report;
                 switch (subcommand) {
                     case "dump":
-                        report = new DebugFileCreator().createReport(null, "Debug command");
+                        report = DebugFileCreator.createReport(null);
                         sender.sendMessage(ChatColor.GREEN + "Report name: " + report);
                         break;
                     case "player":
