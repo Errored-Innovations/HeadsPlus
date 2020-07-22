@@ -24,11 +24,9 @@ public class HeadsPlusAPI {
 
     // S
     private final HeadsPlus hp = HeadsPlus.getInstance();
-    private final HeadsPlusConfigCustomHeads hpcHeadsX = hp.getHeadsXConfig();
-    private final HeadsPlusConfigHeads hpcHeads = hp.getHeadsConfig();
 
     public ItemStack getHead(String option) {
-        return hpcHeadsX.getSkull(option);
+        return hp.getHeadsXConfig().getSkull(option);
     }
 
     public boolean isSellable(ItemStack is) {
@@ -42,7 +40,7 @@ public class HeadsPlusAPI {
         NMSManager nms = hp.getNMS();
         ItemStack s = nms.getSkullMaterial(1);
         SkullMeta sm = (SkullMeta) s.getItemMeta();
-        GameProfile gm = new GameProfile(UUID.fromString("7091cdbc-ebdc-4eac-a6b2-25dd8acd3a0e"), "HPXHead");
+        GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", texture));
 
         Field profileField = null;
