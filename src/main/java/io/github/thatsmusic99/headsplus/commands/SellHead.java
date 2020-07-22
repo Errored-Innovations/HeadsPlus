@@ -79,10 +79,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		                    if (item != null && NBTManager.isSellable(item)) {
 		                        // Get the ID
 		                        String id = NBTManager.getType(item);
-                                if (!useCases) {
-                                    id = id.toLowerCase();
-                                }
-		                        if (headIds.contains(id)) {
+		                        if (isRegistered(id)) {
 		                            double price = NBTManager.getPrice(item) * item.getAmount();
 		                            SellData data = new SellData(player);
 		                            data.addID(id, item.getAmount());
@@ -93,12 +90,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                         }
                     } else {
                         String fixedId = args[0];
-                        if (!hp.getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
-                            fixedId = fixedId.toLowerCase();
-                        }
 		                if (fixedId.equalsIgnoreCase("all")) {
 		                    getValidHeads(player, null, -1);
-                        } else if (headIds.contains(fixedId)) {
+                        } else if (isRegistered(fixedId)) {
 
                             int limit = -1;
                             if (args.length > 1) {
@@ -135,7 +129,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                 String id = NBTManager.getType(item);
                 if (fixedId != null) {
                     if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
-                } else if (!headIds.contains(id)){
+                } else if (!isRegistered(id)){
                     continue;
                 }
                 double headPrice = NBTManager.getPrice(item);
@@ -255,6 +249,13 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
     public static List<String> getRegisteredIDs() {
 	    return headIds;
+    }
+
+    public static boolean isRegistered(String name) {
+	    if (!useCases) {
+	        name = name.toLowerCase();
+        }
+	    return headIds.contains(name);
     }
 
     @Override
