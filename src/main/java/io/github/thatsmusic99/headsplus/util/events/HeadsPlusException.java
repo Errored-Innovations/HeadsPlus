@@ -13,6 +13,11 @@ public class HeadsPlusException extends Exception {
         this.exceptionInfo = exInfo;
     }
 
+    public HeadsPlusException(Exception ex) {
+        this.originalException = ex;
+        this.exceptionInfo = new HashMap<>();
+    }
+
     public Exception getOriginalException() {
         return originalException;
     }
