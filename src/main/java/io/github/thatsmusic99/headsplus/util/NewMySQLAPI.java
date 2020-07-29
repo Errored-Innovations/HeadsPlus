@@ -19,12 +19,12 @@ public class NewMySQLAPI {
         for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {
             try {
                 StringBuilder arg = new StringBuilder();
-                arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` VARCHAR(256), `total` VARCHAR(256), ");
+                arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` BLOB, `total` BLOB, ");
                 for (String entity : EntityDataManager.ableEntities) {
-                    arg.append(entity).append(" VARCHAR(256), ");
+                    arg.append(entity).append(" BLOB, ");
 
                 }
-                arg.append("PLAYER VARCHAR(256), PRIMARY KEY (`id`))");
+                arg.append("PLAYER BLOB, PRIMARY KEY (`id`))");
                 update(OperationType.CREATE, arg.toString());
                 if (!query(OperationType.SELECT_COUNT, str, "uuid", "server-total").next()) {
                     update(OperationType.INSERT_INTO, str, "uuid", "server-total");
