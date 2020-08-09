@@ -77,6 +77,7 @@ public class InventoryManager {
 
     public void movePage(int pages) {
         currentPage += pages;
+        if (inventory == null) return;
         if (currentPage < 1) {
             currentPage = 1;
         } else if (currentPage > inventory.contents.getTotalPages()) {
