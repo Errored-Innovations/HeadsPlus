@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -44,6 +45,13 @@ public class NMSUtil implements NewNMSManager {
 
     @Override
     public HashMap<String, String> getNBTTags(ItemStack item) {
-        return null;
+        net.minecraft.server.v1_16_R1.ItemStack i = CraftItemStack.asNMSCopy(item);
+        HashMap<String, String> keys = new HashMap<>();
+        if (i.getTag() != null) {
+            for (String str : i.getTag().getKeys()) {
+                keys.put(str, i.getTag().get(str).toString());
+            }
+        }
+        return keys;
     }
 }
