@@ -7,11 +7,14 @@ import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -23,12 +26,50 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class MaskEvent implements Listener {
+public class MaskEvent extends HeadsPlusListener<InventoryClickEvent> {
 
     private static final HashMap<UUID, BukkitRunnable> maskMonitors = new HashMap<>();
 
+    public MaskEvent() {
+        Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
+                this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent"), HeadsPlus.getInstance());
+
+        Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
+                new HeadsPlusListener<EntityDamageEvent>() {
+                    @Override
+                    public void onEvent(EntityDamageEvent event) {
+                        if (event.getEntity() instanceof Player) {
+                            Player player = (Player) event.getEntity();
+                            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
+                            HeadsPlus hp = HeadsPlus.getInstance();
+                            if (hp.getConfiguration().getPerks().mask_powerups) {
+                                HPPlayer pl = HPPlayer.getHPPlayer(player);
+                                if (pl.isIgnoringFallDamage()) {
+                                    event.setCancelled(true);
+                                }
+                            }
+                        }
+                    }
+                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent"), HeadsPlus.getInstance());
+
+        Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class,
+                new HeadsPlusListener<PlayerQuitEvent>() {
+                    @Override
+                    public void onEvent(PlayerQuitEvent event) {
+                        if (maskMonitors.containsKey(event.getPlayer().getUniqueId())) {
+                            HPPlayer player = HPPlayer.getHPPlayer(event.getPlayer());
+                            player.clearAllMasks();
+                            maskMonitors.remove(event.getPlayer().getUniqueId());
+                        }
+                    }
+                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent"), HeadsPlus.getInstance());
+
+
+    }
+
     @EventHandler
-    public void onMaskPutOn(InventoryClickEvent e) {
+    public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         ItemStack item;
         boolean shift = e.isShiftClick();
@@ -58,10 +99,7 @@ public class MaskEvent implements Listener {
         if (item != null) {
             if (nms.isSkull(item)) {
                 String s = NBTManager.getType(item);
-                if (hp.getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
-                    s = s.toLowerCase();
-                }
-                if (SellHead.getRegisteredIDs().contains(s)) {
+                if (SellHead.isRegistered(s)) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     UUID uuid = player.getUniqueId();
                     if (maskMonitors.containsKey(uuid)) {
@@ -75,6 +113,7 @@ public class MaskEvent implements Listener {
                     maskMonitors.put(uuid, new BukkitRunnable() {
 
                         private int currentInterval = 0;
+                        private boolean tempDisable = false;
 
                         @Override
                         public void run() {
@@ -92,7 +131,8 @@ public class MaskEvent implements Listener {
                                 cancel();
                             } else if (hasWG && !FlagHandler.canUseMasks(player)) {
                                 pl.tempClearMasks();
-                            } else if (currentInterval == reset) {
+                                tempDisable = true;
+                            } else if (currentInterval == reset || tempDisable) {
                                 pl.refreshMasks();
                                 currentInterval = 0;
                             }
@@ -101,30 +141,6 @@ public class MaskEvent implements Listener {
                     maskMonitors.get(uuid).runTaskTimer(hp, period, period);
                 }
             }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerFall(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player player = (Player) e.getEntity();
-            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
-            HeadsPlus hp = HeadsPlus.getInstance();
-            if (hp.getConfiguration().getPerks().mask_powerups) {
-                HPPlayer pl = HPPlayer.getHPPlayer((Player) e.getEntity());
-                if (pl.isIgnoringFallDamage()) {
-                    e.setCancelled(true);
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent e) {
-        if (maskMonitors.containsKey(e.getPlayer().getUniqueId())) {
-            HPPlayer player = HPPlayer.getHPPlayer(e.getPlayer());
-            player.clearAllMasks();
-            maskMonitors.remove(e.getPlayer().getUniqueId());
         }
     }
 
