@@ -51,6 +51,7 @@ public class EntityDataManager {
             "PHANTOM",
             "PIG",
             "PIGLIN",
+            "PIGLIN_BRUTE",
             "PIG_ZOMBIE",
             "PILLAGER",
             "POLAR_BEAR",
@@ -87,8 +88,8 @@ public class EntityDataManager {
             "ZOMBIFIED_PIGLIN"));
 
 
-    private static LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
-    private static LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
     public static void init() {
         new BukkitRunnable() {
