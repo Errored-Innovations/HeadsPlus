@@ -135,7 +135,7 @@ public class HeadsPlus extends JavaPlugin {
                 new HPExpansion(this).register();
                 getLogger().info("We've registered our PAPI placeholders!");
             }
-            JoinEvent.reloaded = false;
+            HPPlayerJoinEvent.reloaded = false;
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
@@ -305,7 +305,7 @@ public class HeadsPlus extends JavaPlugin {
         new HPEntitySpawnEvent();
         new HPHeadInteractEvent();
         new HPBlockPlaceEvent();
-        getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new HPPlayerJoinEvent(), this);
         getServer().getPluginManager().registerEvents(new HPBlockPlaceEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
