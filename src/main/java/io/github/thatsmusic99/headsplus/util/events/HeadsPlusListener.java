@@ -9,10 +9,12 @@ import java.util.Set;
 public abstract class HeadsPlusListener<T> implements Listener {
 
     private final HashMap<String, String> data;
+    private final HashMap<String, String[]> possibleValues;
     protected HeadsPlus hp;
 
     public HeadsPlusListener() {
         data = new HashMap<>();
+        possibleValues = new HashMap<>();
         hp = HeadsPlus.getInstance();
     }
 
@@ -21,6 +23,14 @@ public abstract class HeadsPlusListener<T> implements Listener {
     public <D> D addData(String variableName, D data) {
         this.data.put(variableName, String.valueOf(data));
         return data;
+    }
+
+    public void addPossibleData(String key, String... vals) {
+        possibleValues.put(key, vals);
+    }
+
+    public String[] getPossibleData(String key) {
+        return possibleValues.get(key);
     }
 
     public String getData(String variableName) {

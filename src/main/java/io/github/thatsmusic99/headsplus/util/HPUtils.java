@@ -143,6 +143,11 @@ public class HPUtils {
         return fixedAmount;
     }
 
+    public static <T> void addIfAbsent(List<T> list, T element) {
+        if (list.contains(element)) return;
+        list.add(element);
+    }
+
     public enum SkillType {
         HUNTING,
         CRAFTING
