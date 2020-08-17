@@ -27,12 +27,13 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                 if (HeadsPlus.getInstance().getConfiguration().getPerks().click_in) {
                     Player player = event.getPlayer();
                     BlockState block = event.getClickedBlock().getState();
-                    if (block instanceof Skull) {
+                    if (addData("is-skull", block instanceof Skull)) {
 
                         Skull skull = (Skull) block;
                         String owner;
 
-                        owner = getSkullName(skull);
+                        owner = addData("owner", getSkullName(skull));
+                        if (owner == null) return;
                         String playerName = player.getName();
                         HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
                         FileConfiguration fc = hpch.getConfig();
