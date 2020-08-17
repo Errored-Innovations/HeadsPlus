@@ -6,9 +6,11 @@ import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +32,12 @@ public class RecipePerms implements Listener {
 
                 if (c.getPerks().craft_heads) {
                     if (player.hasPermission("headsplus.craft")) {
+                        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+                            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(hapi.getSkullType(e.getCurrentItem())))) {
+                                denyPermission(e);
+                                return;
+                            }
+                        }
                         if (c.getWorldBlacklist().enabled) {
                             if (!c.getWorldBlacklist().list.contains(player.getWorld().getName())
                                     || player.hasPermission("headsplus.bypass.blacklistw")) {
@@ -39,7 +47,6 @@ public class RecipePerms implements Listener {
                                             if (c.getWorldWhitelist().list.contains(player.getWorld().getName())) {
                                                 fireEvent(e);
                                                 return;
-
                                             } else if (player.hasPermission("headsplus.bypass.whitelistw")){
                                                 try {
                                                     fireEvent(e);
