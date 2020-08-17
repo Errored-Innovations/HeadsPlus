@@ -296,7 +296,9 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     private void addTexture(String info, boolean force, CommandSender sender, OfflinePlayer player) {
         try {
             JSONObject playerJson = (JSONObject) new JSONParser().parse(new String(Base64.getDecoder().decode(info.getBytes())));
-            JSONObject skinJSON = ((JSONObject)((JSONObject) playerJson.get("textures")).get("SKIN"));
+            JSONObject textureJson = (JSONObject) playerJson.get("textures");
+            if (textureJson.isEmpty()) return;
+            JSONObject skinJSON = ((JSONObject)textureJson.get("SKIN"));
             String texture = String.valueOf(skinJSON.get("url"));
             ConfigurationSection section = HeadsPlus.getInstance().getConfig().getConfigurationSection("plugin.autograb");
             // If the head never existed

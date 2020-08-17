@@ -4,23 +4,38 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class JoinEvent implements Listener { 
+public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 	
 	public static boolean reloaded = false;
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-	
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
+
+    public HPPlayerJoinEvent() {
+        super();
+        Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
+                this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent"), HeadsPlus.getInstance());
+        addPossibleData("player");
+    }
+
+
+	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.getInstance();
-		if (e.getPlayer().hasPermission("headsplus.notify")) {
-		    if (hp.getConfiguration().getMechanics().getBoolean("update.notify")) {
-                if (HeadsPlus.getUpdate() != null) {
+	    addData("player", e.getPlayer().getName());
+		if (addData("has-update-permission", e.getPlayer().hasPermission("headsplus.notify"))) {
+		    if (addData("update-enabled", hp.getConfiguration().getMechanics().getBoolean("update.notify"))) {
+                if (addData("has-update", HeadsPlus.getUpdate() != null)) {
                     new FancyMessage().text(hpc.getString("update.update-found", e.getPlayer()))
                     .tooltip(hpc.getString("update.current-version", e.getPlayer()).replaceAll("\\{version}", hp.getDescription().getVersion())
 							+ "\n" + hpc.getString("update.new-version", e.getPlayer()).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
@@ -44,6 +59,7 @@ public class JoinEvent implements Listener {
                 hp.getHeadsXConfig().grabTexture(e.getPlayer(), false, null);
             }
         }
+
         HPPlayer.getHPPlayer(e.getPlayer());
         if (!reloaded) {
             reloaded = true;
