@@ -37,7 +37,7 @@ import java.util.logging.Level;
 public class HeadsPlusConfigCustomHeads extends ConfigSettings {
 
     public boolean s = false;
-    private final double cVersion = 3.2;
+    private final double cVersion = 3.3;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
@@ -68,6 +68,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             getConfig().addDefault("heads." + e.name + ".texture", e.tex);
             getConfig().addDefault("heads." + e.name + ".price", "default");
             getConfig().addDefault("heads." + e.name + ".section", e.sec);
+            getConfig().addDefault("heads." + e.name + ".interact-name", e.interactName);
         }
 
         getConfig().options().copyDefaults(true);
@@ -130,6 +131,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                     getConfig().addDefault("heads." + e.name + ".texture", e.tex);
                     getConfig().addDefault("heads." + e.name + ".price", "default");
                     getConfig().addDefault("heads." + e.name + ".section", e.sec);
+                    getConfig().addDefault("heads." + e.name + ".interact-name", e.interactName);
+                }
+                if (getConfig().getConfigurationSection("heads." + e.name) != null) {
+                    getConfig().addDefault("heads." + e.name + ".interact-name", e.interactName);
                 }
             }
         }
