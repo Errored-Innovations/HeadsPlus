@@ -201,7 +201,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 .replace("{display-name}", hpch.getDisplayName(type))
                 .replaceAll("\\{price}", String.valueOf(hpch.getPrice(type)))
                 .replaceAll("\\{interact-name}", hpch.getInteractName(type))
-                .replaceAll("\\{chance}", String.valueOf(hpch.getConfig().getDouble(type + ".chance"))), sender)).append("\n");
+                .replaceAll("\\{chance}", String.valueOf(hpch.getChance(type))), sender)).append("\n");
             }
             return sb.toString();
         }
