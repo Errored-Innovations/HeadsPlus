@@ -310,7 +310,7 @@ public class HeadsPlus extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
-        getServer().getPluginManager().registerEvents(new MaskEvent(), this);
+        getServer().getPluginManager().registerEvents(new HPMaskEvents(), this);
         getServer().getPluginManager().registerEvents(new SoundEvent(), this);
     }
 
@@ -403,7 +403,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createLocales() {
-        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_ch"));
+        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn"));
         File dir = new File(getDataFolder() + File.separator + "locale");
         if (!dir.exists()) {
             dir.mkdirs();
