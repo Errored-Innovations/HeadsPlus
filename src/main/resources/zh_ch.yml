@@ -1,0 +1,239 @@
+# HeadsPlus by Thatsmusic99 - Chinese/CN (Bieck_Smile)
+# 请勿更改版本!在插件内部用于添加新消息.
+language: Chinese (CN)
+version: 1.3
+prefix: '&cHeadsPlus &8» &7'
+inventory:
+  icon:
+    pinned-challenges: '&8❰ &b&l固定挑战 &8❱'
+    next: '&8❰ &a&l下一个 &8❱'
+    next-2: '&8❰ &a&l下一个 (2) &8❱'
+    next-3: '&8❰ &a&l下一个 (3) &8❱'
+  reward:
+    currency: '&7${amount}'
+    group-add: '&7组 {group} &7(&a+&7)'
+    group-remove: '&7组 {group} &7(&c-&7)'
+    item-give: '&7{amount} {item}(s)'
+  challenge:
+    progress: '&7进展 &8❱ &c{heads}&7/&c{total}'
+    pinned: '&c固定!'
+    reward: '&7奖励 &8❱ &c{reward}'
+    xp: '&7XP &8❱ &c{xp}'
+    count: '&7{challenge-count} 挑战'
+  close: '&8❰ &c&l关闭菜单 &8❱'
+  favourites: '&8❰ &b&l收藏夹 &8❱'
+  head:
+    price: '&c价格 &8❱ &7{price}'
+    favourite: '&c喜好!'
+    count: '&7{head-count} 头颅'
+  menu: '&8❰ &a&l主菜单 &8❱'
+  start: '&8❰ &a&l第一页 &8❱'
+  last: '&8❰ &a&l下一页 &8❱'
+  back: '&8❰ &a&l返回 &8❱'
+  back-2: '&8❰ &a&l返回 2 &8❱'
+  back-3: '&8❰ &a&l返回 3 &8❱'
+  search: '&8❰ &e&l搜索头颅 &8❱'
+  stats:
+    icon: '&8❰ &a&l统计 &8❱'
+    total-heads: '&a总头颅 &8❱ &e'
+    total-pages: '&a总页数 &8❱ &e'
+    total-sections: '&a总部分 &8❱ &e'
+    current-balance: '&a当前余额 &8❱ &e'
+    current-section: '&a当前部分 &8❱ &e'
+textmenus:
+  profile:
+    player: Player
+    completed-challenges: 完成的挑战
+    total-heads-dropped: 头颅掉落总数
+    total-heads-sold: 头颅总销售量
+    total-heads-crafted: 制做头颅总数
+    current-level: 当前等级
+    xp-until-next-level: 到下一级所需XP
+  blacklist: 黑名单
+  whitelist: 白名单
+  blacklistw: 世界黑名单
+  whitelistw: 世界白名单
+  info:
+    version: 版本
+    author: 作者
+    language: 语言
+    contributors: 贡献者
+    spigot: Spigot链接
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: 类型
+    display-name: 显示名称
+    price: 价格
+    interact-name: 互动名称
+    chance: 几率
+  help:
+    usage: 用法
+    description: 描述
+    permission: 允许
+    further-usages: 进一步的用法
+commands:
+  locale:
+    invalid-lang: '{header} 那不是有效的语言！可用语言: &c{languages}'
+    changed-locale: '{header} 美好的一天！您的语言现已设置为 &cChinese (CN)'
+    changed-locale-other: '{header} &c{player}&7的语言现在设置为 &c{language}&7!'
+  errors:
+    not-a-player: '{header} 您必须是玩家才能运行此命令/子命令!'
+    cmd-fail: '{header} 无法运行此命令!'
+    disabled: '{header} 该命令被禁用.'
+    invalid-args: '{header} 无效的参数!'
+    invalid-input-int: '{header} 您只能在此命令中使用整数!'
+    invalid-pg-no: '{header} 页码无效!'
+    no-data: '{header} 无该玩家数据!'
+    no-perm: '{header} 您无权使用此命令.'
+    player-offline: '{header} 该玩家离线!'
+    too-many-args: '{header} 参数太多!'
+  addhead:
+    bad-texture: '{header} 您提供的纹理无效。 它一定是 Minecraft纹理网址（https://textures.minecraft.net）或Base64编码的字符串 .'
+    cancelled: '{header} 取消头颅创建.'
+    custom-head-added: '{header} 为新的头颅添加了ID &c{id}&7!'
+    displayname: '{header} 输入头部的显示名称（包括颜色, 代码）.'
+    head-added: '已添加{header} &c{player} &7的头颅!'
+    head-adding: '{header} 查找要添加的纹理 &c{player}&7...'
+    head-already-added: '已在数据库中{header}指向&c {player}&7!'
+    id: '{header} 输入头部的ID（例如，brown_sheep，red_flower_bush）'
+    id-taken: '{header} 该ID已被使用 (&c{id}&7)!'
+    price: '{header} 输入头颅价格（或“默认”为默认值）.'
+    section: '{header} 键入将放置头颅的部分.(可用部分: &c{sections}&7)'
+    texture: '{header} 输入或复制并粘贴头部的纹理.（这可能 需要几条消息，因此完成后，在聊天中输入“done”.）'
+  blacklist:
+    bl-a-off: '{header} 黑名单已被禁用!'
+    bl-a-on: '{header} 黑名单已启用!'
+    bl-off: '{header} 黑名单已被禁用!'
+    bl-on: '{header} 黑名单已启用!'
+    blw-a-on: '{header} 世界黑名单已启用!'
+    blw-a-off: '{header} 世界黑名单已被禁用!'
+    empty-bl: '{header} 黑名单是空的!'
+    empty-blw: '{header} 世界黑名单为空!'
+    head-a-add: '{header} 该头颅已经添加!'
+    head-a-removed-bl: '{header} 这个头颅不在黑名单!'
+    head-added-bl: '{header} &c{player} &7已添加到黑名单!'
+    head-removed-bl: '{header} &c{player} &7已从黑名单中删除!'
+    world-a-add: '{header} 这个世界已经被添加!'
+    world-added-bl: '{header} &c{world} &7已添加到世界黑名单!'
+    world-a-removed-bl: '{header} 这个世界不在黑名单上!'
+    world-removed-bl: '{header} &c{world} &7已从黑名单中删除!'
+  challenges:
+    already-complete-challenge: '{header} 您已经完成了挑战!'
+    cant-complete-challenge: '{header} 你无法完成这个挑战!'
+    challenge-complete: '{header} &c{player} &7已完成 &c{challenge} &7挑战!'
+    challenge-completed: '&6已完成!'
+    reward-string: '{header} 奖励: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} 此命令仅处理字母数字名称!'
+    blacklist-head: '{header} 此头颅已列入黑名单，无法使用!'
+    full-inv: '{header} 您的库存已满!'
+    head-too-long: '{header} IGN时间太长，无法生效！ 请在之间使用IGN 3和16个字符.'
+    head-too-short: '{header} IGN太短，无效！ 请在之间使用IGN 3和16个字符.'
+    whitelist-head: '{header} 此头未列入白名单，因此不能被列入白名单 用过的!'
+  head-info:
+    add-value: '{header} &c{value} &7已添加到 &c{entity}&7''s &c{setting}&7!'
+    no-lore-data: '{header} 没有该实体的击杀数据!'
+    no-mask-data: '{header} 该实体没有遮罩数据!'
+    no-name-data: '{header} 没有该实体的名称数据!'
+    remove-value: '{header} &c{value} &7已从中删除 &c{entity}&7''s &c{setting}&7!'
+    set-value: '{header} &c{entity}&7''s &c{setting} &7已更改为 &c{value}&7!'
+  heads:
+    buy-success: '{header} 你以&c{price}的价格 &7购买了一个头颅 现在还有&c{balance}&7!'
+    chat-input: '{header} 输入您要搜索的字词.'
+    not-enough-money: '{header} 你没有足够的钱!'
+  leaderboards:
+    no-data-lb: 尚未记录排行榜数据!
+  levels:
+    level-up: '{header} &c{player} &7已达到的等级 &c{level}&7!'
+  profile:
+    cant-view-data: '{header} 您无法在控制台中查看自己的数据!'
+  reload:
+    reload-message: '{header} 配置已重新加载!'
+    reloading-message: '{header} 正在重新加载配置...'
+  sellhead:
+    false-head: '{header} 这个头颅不能卖!'
+    false-item: '{header} 这不是头颅!'
+  no-heads: '{header} 您的库存中没有任何有效的库存可以出售!'
+    not-enough-heads: '{header} 你头颅不够!'
+    sell-success: '{header} 您已成功出售的头 &c{price} &7现在有 &c{balance}&7!'
+  tests:
+    running-tests: '{header}正在运行测试...（这可能需要一段时间）'
+    results: '{header} 结果: &c{results}'
+  whitelist:
+    empty-wl: '{header} 白名单为空!'
+    empty-wlw: '{header} 世界白名单是空的!'
+    head-a-removed-wl: '{header} 这个头颅不在白名单上!'
+    head-added-wl: '{header} &c{player} &7已添加到白名单!'
+    head-removed-wl: '{header} &c{player} &7已从白名单中删除!'
+    wl-a-off: '{header} 白名单已被禁用!'
+    wl-a-on: '{header} 黑名单已启用!'
+    wl-off: '{header} 白名单已被禁用!'
+    wl-on: '{header} 白名单已启用!'
+    wlw-a-off: '{header} 世界白名单已被禁用!'
+    wlw-a-on: '{header} 世界白名单已启用!'
+    wlw-off: '{header} 世界白名单已被禁用!'
+    wlw-on: '{header} 世界白名单已启用!'
+    world-a-removed-wl: '{header} &c{world} &7已从白名单中删除!'
+    world-added-wl: '{header} &c{world} &7h被添加到世界白名单中!'
+    world-removed-wl: '{header} &c{world} &7已从白名单中删除!'
+  xp:
+    added-xp: '{header} 加 &c{amount} &7XP 到 &c{player}&7,他现在有&c{xp}&7!'
+    current-xp: '{header} &c{player}&7的 当前XP: &c{xp}'
+    negative-xp: '{header} I不要以为你想这么做... XP，进入config.yml>插件>特权> XP> 允许负，但是这 有不可预测的结果！）'
+    removed-xp: '{header} 已移除 &c{amount} &7XP 从 &c{player}&7, 他现在有 &c{xp}&7!'
+    reset-xp: '{header} 重设 &c{player}&7的XP!'
+descriptions:
+  hp:
+    blacklist: 切换黑名单.
+    blacklistadd: 将头颅添加到黑名单.
+    blacklistdel: 从黑名单中删除一个头颅.
+    blacklistl: 列出所有头颅黑名单.
+    blacklistw: 开启/关闭工艺配方黑名单.
+    blacklistwadd: 为手工配方黑名单添加一个世界.
+    blacklistwdel: 为手工配方黑名单移除世界.
+    blacklistwl: 列出列入黑名单的世界.
+    complete: 完成挑战.
+    conjure: 检索特定类型的头部.
+    debug: 转储调试文件.
+    headinfo: 显示/修改有关特定实体负责人的信息.
+    help: 显示帮助菜单.
+    info: 显示插件信息.
+    profile: 显示您的插件配置文件.
+    reload: 重新加载配置文件.
+    tests: 对怪物掉落率进行测试.
+    whitelist: 切换白名单.
+    whitelistadd: 将头添加到白名单.
+    whitelistdel: 从白名单中删除一个头颅.
+    whitelistl: 列出所有头颅白名单.
+    whitelistw: 开启/关闭工艺配方白名单.
+    whitelistwadd: 为手工配方白名单增添色彩.
+    whitelistwdel: 为手工配方白名单移除一个世界.
+    whitelistwl: 列出列入白名单的世界.
+  xp: 查看或更改玩家的XP.
+  addhead: 将玩家头颅添加到头颅菜单
+  head: 头颅产生.
+  heads: 显示头的选择.
+  hpc: 显示头的选择.
+  hplb: 显示头颅排行榜.
+  myhead: 产生在你的头颅上.
+  sellhead: 出售您手中的头，使用数字参数出售特定的 编号，出售特定头颅头部的实体名称，以及所有出售每个头颅的实体.
+event:
+  block-place-denied: '{header} 您不能放置可出售的头颅!'
+  head-interact-message: '{header} 是 &c{name}&7的头颅!'
+  head-mhf-interact-message: '{header} 是 &c{name}&7的头颅!'
+  head-mhf-interact-message-2: '{header} 是 &c{name}&7的头颅!'
+  lost-money: '{header} 因为你被杀了 &c{player}&7,你输了 &c{price}&7!'
+startup:
+  faulty-theme: '{header} 错误的主题被放入！ 不会更改主题.'
+  no-vault: '{header} 找不到保管箱！无法出售头像并挑战奖励 无法添加/删除组.'
+  no-vault-2: '{header} 启动时未找到保险柜！ 无法添加组.'
+  plugin-disabled: '{header} HeadsPlus已被禁用!'
+  plugin-enabled: '{header} HeadsPlus已启用!'
+  plugin-fail: '{header} HeadsPlus无法正确启动。 错误报告 已在/ plugins / HeadsPlus / debugHeadsPlus无法正确启动中进行.'
+update:
+  current-version: '{header} 当前版本: &c{version}'
+  description: '{header} 描述: &c{description}'
+  new-version: '{header} 新版本: &c{version}'
+  plugin-up-to-date: '{header} 插件是最新的!'
+  update-found: '{header} 已找到HeadsPlus的更新！ 将鼠标悬停在消息上 想要查询更多的信息.'
