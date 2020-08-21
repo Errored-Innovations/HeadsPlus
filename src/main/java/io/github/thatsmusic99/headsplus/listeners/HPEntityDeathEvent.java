@@ -93,22 +93,25 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
                 "SNOW",
                 "TABBY", "SIAMESE", "BRITISH_SHORTHAIR", "CALICO", "PERSIAN", "RAGDOLL", "JELLIE", "ALL_BLACK",
                 "NONE", "");
+
+        addPossibleData("killer", "<Player>");
     }
 
     @Override
     public void onEvent(EntityDeathEvent event) {
         addData("entity-type", event.getEntityType().name());
+        addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
         // Make sure head drops are enabled
         if (!addData("enabled", hp.isDropsEnabled())) return;
         // Make sure the entity is valid
         if (!EntityDataManager.ableEntities.contains(event.getEntityType().name())) return;
         // Make sure the entity isn't from MythicMobs
-        if (addData("is-mythic-mob", isMythicMob(event.getEntity()))) return;
+        if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
         // TODO New blacklist checks go here
-        if (!runBlacklistTests(event.getEntity())) return;
+        if (!HPUtils.runBlacklistTests(event.getEntity())) return;
         //
         if (addData("spawn-cause", HPEntitySpawnEvent.getReason(event.getEntity().getUniqueId())) != null) {
             if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(getData("spawn-cause"))) {
@@ -137,60 +140,6 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         }
     }
 
-    private boolean isMythicMob(Entity entity) {
-        try {
-            if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
-                if (hp.getServer().getPluginManager().getPlugin("MythicMobs") != null) {
-                    return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return false;
-    }
 
-    @Deprecated
-    private boolean runBlacklistTests(LivingEntity e) {
-        HeadsPlusMainConfig c = HeadsPlus.getInstance().getConfiguration();
-        // Killer checks
-        if (e.getKiller() == null) {
-            if (c.getPerks().drops_needs_killer) {
-                return false;
-            } else if (c.getPerks().drops_entities_requiring_killer.contains(e.getName().replaceAll("_", "").toLowerCase())) {
-                return false;
-            } else if (e instanceof Player) {
-                if (c.getPerks().drops_entities_requiring_killer.contains("player")) {
-                    return false;
-                }
-            }
-        }
-        // Whitelist checks
-        if (c.getWorldWhitelist().enabled) {
-            if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        // Blacklist checks
-        if (c.getWorldBlacklist().enabled) {
-            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (e instanceof Player) {
-            return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
-                    || c.getPerks().drops_ignore_players.contains(e.getName()));
-        } else {
-            return true;
-        }
-
-    }
 
 }

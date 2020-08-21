@@ -8,11 +8,7 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -26,7 +22,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent"), HeadsPlus.getInstance());
-        addPossibleData("player");
+        addPossibleData("player", "<Player>");
     }
 
 
@@ -46,7 +42,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         new BukkitRunnable() {
             @Override
             public void run() {
-                MaskEvent.checkMask(e.getPlayer(), e.getPlayer().getInventory().getHelmet());
+                HPMaskEvents.checkMask(e.getPlayer(), e.getPlayer().getInventory().getHelmet());
             }
         }.runTaskLater(hp, 20);
 

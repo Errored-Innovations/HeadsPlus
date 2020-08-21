@@ -30,7 +30,6 @@ public class Challenge extends Content {
 
     public Challenge() {
         super();
-
     }
 
     @Override
@@ -81,42 +80,37 @@ public class Challenge extends Content {
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : items.getConfig().getStringList("icons.challenge.lore")) {
-            try {
-                if (loreStr.contains("{challenge-lore}")) {
-                    for (String loreStr2 : challenge.getDescription()) {
-                        lore.add(hpc.formatMsg(loreStr2, player));
+            if (loreStr.contains("{challenge-lore}")) {
+                for (String loreStr2 : challenge.getDescription()) {
+                    lore.add(hpc.formatMsg(loreStr2, player));
+                }
+            } else {
+                if (loreStr.contains("{completed}")) {
+                    if (challenge.isComplete(player)) {
+                        lore.add(hpc.getString("commands.challenges.challenge-completed", player));
+                    }
+                } else if (loreStr.contains("{pinned}")) {
+                    if (HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)) {
+                        lore.add(hpc.getString("inventory.icon.challenge.pinned", player));
                     }
                 } else {
-                    if (loreStr.contains("{completed}")) {
-                        if (challenge.isComplete(player)) {
-                            lore.add(hpc.getString("commands.challenges.challenge-completed", player));
-                        }
-                    } else if (loreStr.contains("{pinned}")) {
-                        if (HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)) {
-                            lore.add(hpc.getString("inventory.icon.challenge.pinned", player));
-                        }
-                    } else {
-                        String str = hpc.formatMsg(hpc.completed(loreStr, player, challenge), player);
-                        try {
-                            str = str.replace("{reward}", reward)
-                                    .replace("{challenge-reward}", reward);
-                        } catch (NullPointerException ignored) {
+                    String str = hpc.formatMsg(hpc.completed(loreStr, player, challenge), player);
+                    try {
+                        str = str.replace("{reward}", reward)
+                                .replace("{challenge-reward}", reward);
+                    } catch (NullPointerException ignored) {
 
-                        }
-                        str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
-                                .replaceAll("\\{heads}", String.valueOf(api.getPlayerInLeaderboards(player,
-                                        challenge.getHeadType(),
-                                        challenge.getChallengeType().getDatabase(),
-                                        true)))
-                                .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
-                        lore.add(str);
                     }
-
+                    str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
+                            .replaceAll("\\{heads}", String.valueOf(api.getPlayerInLeaderboards(player,
+                                    challenge.getHeadType(),
+                                    challenge.getChallengeType().getDatabase())))
+                            .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
+                    lore.add(str);
                 }
 
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+
         }
         meta.setLore(lore);
         item.setItemMeta(meta);

@@ -3,21 +3,31 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-    private int timesSent = 0;
+    private final List<UUID> sent = new ArrayList<>();
+
+    public HPHeadInteractEvent() {
+        super();
+        Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent"), HeadsPlus.getInstance());
+    }
 
     // TODO - rewrite for interactions overhaul
     @Override
@@ -40,7 +50,8 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                         List<String> names = new ArrayList<>();
                         names.addAll(hpch.eHeads);
                         names.addAll(hpch.ieHeads);
-                        if (timesSent < 1) {
+                        if (!sent.contains(player.getUniqueId())) {
+                            sent.add(player.getUniqueId());
                             for (String n : names) {
                                 if (fc.getStringList(n + ".name").contains(owner)) {
                                     String dn = hpch.getInteractName(n).toLowerCase();
@@ -49,14 +60,12 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                                     } else {
                                         hpc.sendMessage("event.head-mhf-interact-message", player, "{name}", dn, "{player}", playerName);
                                     }
-                                    timesSent++;
                                     return;
                                 }
                             }
                             hpc.sendMessage("event.head-interact-message", player, "{name}", owner, "{player}", playerName);
-                            timesSent++;
                         } else {
-                            timesSent--;
+                            sent.remove(player.getUniqueId());
                         }
                     }
                 }

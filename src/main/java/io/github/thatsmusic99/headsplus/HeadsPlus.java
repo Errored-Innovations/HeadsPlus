@@ -303,15 +303,14 @@ public class HeadsPlus extends JavaPlugin {
         new HPHeadInteractEvent();
         new HPEntityDeathEvent();
         new HPEntitySpawnEvent();
-        new HPHeadInteractEvent();
         new HPBlockPlaceEvent();
-        getServer().getPluginManager().registerEvents(new HPPlayerJoinEvent(), this);
         new HPPlayerDeathEvent();
+        new HPMaskEvents();
+        new HPPlayerJoinEvent();
         getServer().getPluginManager().registerEvents(new HPBlockPlaceEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
-        getServer().getPluginManager().registerEvents(new HPMaskEvents(), this);
+        getServer().getPluginManager().registerEvents(new OldPlayerDeathEvent(), this);
         getServer().getPluginManager().registerEvents(new SoundEvent(), this);
     }
 
