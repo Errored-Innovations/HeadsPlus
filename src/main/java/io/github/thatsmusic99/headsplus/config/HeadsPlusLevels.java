@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.config;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
 import io.github.thatsmusic99.headsplus.api.Level;
+import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 
@@ -53,7 +54,8 @@ public class HeadsPlusLevels extends ConfigSettings {
                     Object rewardVal = HPUtils.notNull(getConfig().get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
                     int items = getConfig().getInt("levels." + s + ".rewards.item-amount");
                     String sender = getConfig().getString("levels." + s + ".rewards.command-sender");
-                    Level c = new Level(s, dn, rxp, av, e, reward, rewardVal, items, sender);
+                    Reward reward1 = new Reward("", reward, rewardVal, items, sender, 0, false);
+                    Level c = new Level(s, dn, rxp, av, e, reward1);
                     hp.getLevels().put(h, c);
                 }
             } catch (NullPointerException ex) {
