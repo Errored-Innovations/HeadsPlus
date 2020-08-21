@@ -20,12 +20,12 @@ public class NewMySQLAPI {
         for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {
             try {
                 StringBuilder arg = new StringBuilder();
-                arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` BLOB, `total` BLOB, ");
+                arg.append(str).append("(`id` INT NOT NULL AUTO_INCREMENT, `uuid` BLOB, `total` INT, ");
                 for (String entity : EntityDataManager.ableEntities) {
-                    arg.append(entity).append(" BLOB, ");
+                    arg.append(entity).append(" INT, ");
 
                 }
-                arg.append("PLAYER BLOB, PRIMARY KEY (`id`))");
+                arg.append("PLAYER INT, PRIMARY KEY (`id`))");
                 update(OperationType.CREATE, arg.toString());
                 if (!query(OperationType.SELECT_COUNT, str, "uuid", "server-total").next()) {
                     update(OperationType.INSERT_INTO, str, "uuid", "server-total");
@@ -69,6 +69,9 @@ public class NewMySQLAPI {
                 case "crafting":
                     mdatabase = "headspluscraft";
                     break;
+                default:
+                    mdatabase = database;
+                    break;
             }
             LinkedHashMap<OfflinePlayer, Integer> hs = new LinkedHashMap<>();
             ResultSet rs = query(OperationType.SELECT_ORDER,  "uuid", section, mdatabase);
@@ -80,6 +83,7 @@ public class NewMySQLAPI {
                 } catch (Exception ignored) {
                 }
             }
+            if (hs.isEmpty()) return hs;
             hs = DataManager.sortHashMapByValues(hs);
             LeaderboardsCache.init(database + "_" + section, hs);
             return hs;
@@ -87,6 +91,7 @@ public class NewMySQLAPI {
             e.printStackTrace();
         }
         return null;
+    }
 
     static int getScore(OfflinePlayer player, String section, String database) {
         try {
