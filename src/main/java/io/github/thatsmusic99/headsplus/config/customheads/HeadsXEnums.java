@@ -413,7 +413,8 @@ public enum HeadsXEnums {
     HOGLIN("&cHoglin", "9bb9bc0f01dbd762a08d9e77c08069ed7c95364aa30ca1072208561b730e8d75", "mobs", 3.2),
     ZOGLIN("&dZoglin", "e67e18602e03035ad68967ce090235d8996663fb9ea47578d3a7ebbc42a5ccf9", "mobs", 3.2),
     PIGLIN("&cPiglin", "5081a1239fffe135cbfa4a98a6aa6cc5b0787ad0790f56a16bf07f86374606c5", "mobs", 3.2),
-    ZOMBIFIED_PIGLIN("&dZombified Piglin", "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c", "mobs", 3.2);
+    ZOMBIFIED_PIGLIN("&dZombified Piglin", "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c", "mobs", 3.2),
+    PIGLIN_BRUTE("&cPiglin Brute", "3e300e9027349c4907497438bac29e3a4c87a848c50b34c21242727b57f4e1cf", "mobs", 3.4);
 
     final String name;
     final String dn;
