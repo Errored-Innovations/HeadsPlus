@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -87,6 +88,33 @@ public class NewMySQLAPI {
         }
         return null;
 
+    static int getScore(OfflinePlayer player, String section, String database) {
+        try {
+            String mdatabase = "";
+            switch (database) {
+                case "hunting":
+                    mdatabase = "headspluslb";
+                    break;
+                case "selling":
+                    mdatabase = "headsplussh";
+                    break;
+                case "crafting":
+                    mdatabase = "headspluscraft";
+                    break;
+                default:
+                    mdatabase = database;
+                    break;
+            }
+            if (mdatabase.isEmpty()) return -1;
+            ResultSet rs = query(OperationType.SELECT,  section, mdatabase, "uuid", player.getUniqueId().toString());
+            if (rs.next()) {
+                return rs.getInt(section);
+            }
+            return 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private static boolean doesPlayerExist(String database, String uuid) {

@@ -8,7 +8,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.OfflinePlayer;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -71,30 +70,15 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("hunting")) {
-            try {
-                return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting", false));
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return "0";
-            }
+            return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
         }
 
         if (identifier.startsWith("crafting")) {
-            try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting", false));
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return "0";
-            }
+            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
         }
 
         if (identifier.startsWith("selling")) {
-            try {
-                return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling", false));
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return "0";
-            }
+            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
         }
 
         if (identifier.startsWith("top")) {
@@ -179,15 +163,9 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "min-heads":
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
-                    try {
-                        return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player,
-                                    challenge.getHeadType(),
-                                    challenge.getChallengeType().getDatabase(),
-                                    false));
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                    return null;
+                    return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player,
+                                challenge.getHeadType(),
+                                challenge.getChallengeType().getDatabase()));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":

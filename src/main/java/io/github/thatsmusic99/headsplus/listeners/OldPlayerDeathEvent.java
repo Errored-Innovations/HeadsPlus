@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 import java.util.List;
 import java.util.Random;
 
-public class PlayerDeathEvent implements Listener {
+public class OldPlayerDeathEvent implements Listener {
 
     @EventHandler
     public void onDeath(PlayerHeadDropEvent e) {

@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -29,6 +30,13 @@ public class DataManager {
         }
     }
 
+    public static int getPlayerScore(OfflinePlayer player, String database, String section) {
+        if (hp.isConnectedToMySQLDatabase()) {
+            return NewMySQLAPI.getScore(player, section, database);
+        } else {
+            return hp.getScores().getPlayerTotal(player.getUniqueId().toString(), section, database);
+        }
+    }
     public static void addToTotal(OfflinePlayer player, String section, String database, int amount) {
         if (hp.isConnectedToMySQLDatabase()) {
             NewMySQLAPI.addToTotal(database, amount, section, player.getUniqueId().toString());

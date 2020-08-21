@@ -3,10 +3,9 @@ package io.github.thatsmusic99.headsplus.api;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -97,15 +95,15 @@ public class HeadsPlusAPI {
         return NBTManager.getType(is);
     }
 
-    public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database, boolean realtime) throws SQLException {
+    public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) {
         try {
-            return LeaderboardsCache.getType(section, database, false, realtime).get(p);
+            return DataManager.getPlayerScore(p, database, section);
         } catch (NullPointerException ex) {
             return -1;
         }
     }
 
-    public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) throws SQLException {
+    public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
         return LeaderboardsCache.getType(section, database, false, true);
     }
 

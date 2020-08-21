@@ -149,9 +149,9 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                     String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
                             .replaceAll("\\{xp}", String.valueOf(p.getXp()))
                             .replaceAll("\\{completed-challenges}", String.valueOf(p.getCompleteChallenges().size()))
-                            .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb", true)))
-                            .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh", true)))
-                            .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft", true)))
+                            .replaceAll("\\{hunter-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
+                            .replaceAll("\\{sellhead-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
+                            .replaceAll("\\{crafting-counter}", String.valueOf(api.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
                             .replace("{header}", h.getConfig().getString("profile.header")), sender);
                     if (stri.contains("{level}") || (stri.contains("{next-level}"))) {
                         stri = stri.replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', p.getLevel().getDisplayName()))
