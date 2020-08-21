@@ -27,6 +27,7 @@ public class LeaderboardEvents implements Listener {
                                 e.getLocation().getWorld().strikeLightning(e.getPlayer().getLocation());
                             }
                         }
+                        HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * e.getAmount());
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -54,6 +55,7 @@ public class LeaderboardEvents implements Listener {
                                 e.getLocation().getWorld().strikeLightning(e.getPlayer().getLocation());
                             }
                         }
+                        HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * e.getAmount());
                         new BukkitRunnable() {
                             @Override
                             public void run() {

@@ -269,12 +269,11 @@ public class HPPlayer {
         PlayerScores scores = HeadsPlus.getInstance().getScores();
         scores.setXp(player.toString(), xp);
         this.xp = xp;
-        if (hp.usingLevels()) {
-            if (nextLevel != null) {
-                if (nextLevel.getRequiredXP() <= getXp()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
+            if (hp.usingLevels()) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        while (nextLevel != null && nextLevel.getRequiredXP() <= getXp()) {
                             LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), level, nextLevel);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -289,7 +288,7 @@ public class HPPlayer {
                                 HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
                                 scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
                                 if (level.isrEnabled()) {
-                                    level.reward(player.getPlayer());
+                                    level.getReward().reward(player.getPlayer());
                                 }
                                 for (int i = 1; i < levels.size(); i++) {
                                     if (levels.get(i) == level) {
@@ -302,9 +301,9 @@ public class HPPlayer {
                                 }
                             }
                         }
-                    }.runTask(hp);
-
-                } else if (level.getRequiredXP() > getXp()) {
+                    }
+                }.runTask(hp);
+                if (level.getRequiredXP() > getXp()) {
                     HashMap<Integer, Level> levels = hp.getLevels();
                     for (int i = 1; i < levels.size(); i++) {
                         if (levels.get(i).getRequiredXP() <= getXp()) {
@@ -321,7 +320,6 @@ public class HPPlayer {
                     nextLevel = levels.get(1);
                 }
             }
-        }
     }
 
     public boolean hasHeadFavourited(String s) {
