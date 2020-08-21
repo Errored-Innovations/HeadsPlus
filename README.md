@@ -5,7 +5,7 @@
 
 [![](https://img.shields.io/github/v/release/Thatsmusic99/HeadsPlus.svg?label=github%20release)](https://github.com/Thatsmusic99/HeadsPlus/releases)
 
-HeadsPlus (referred to as the HeadsPlus Project on Github) is one of Spigot's most ambitious and advanced heads plugins, providing several new and unique features to servers of which have never been seen before. Minecraft's skulls are an important asset to bringing forth incredible amounts of creativity without further intervetion by resource packs, mods and data packs, so HeadsPlus makes sure they are used to the best of their ability.
+HeadsPlus (referred to as the HeadsPlus Project on Github) is one of Spigot's most ambitious and advanced heads plugins, providing several new and unique features to servers of which have never been seen before. Minecraft's skulls are an important asset to bringing forth incredible amounts of creativity without further intervention by resource packs, mods and data packs, so HeadsPlus makes sure they are used to the best of their ability.
 
 Currently, HeadsPlus has 21,000+ downloads, over 50 reviews (55/60) praising the plugin, 600+ live servers with 600-1200 players, and a committed developer always looking to find ways to improve the plugin even more and make it stand out even more among other plugins.
 

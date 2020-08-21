@@ -116,7 +116,7 @@ final class MessagePart implements JsonRepresentedObject, ConfigurationSerializa
 			}
 			json.endObject();
 		} catch (IOException e) {
-			Bukkit.getLogger().log(Level.WARNING, "A problem occured during writing of JSON string", e);
+			Bukkit.getLogger().log(Level.WARNING, "A problem occurred during writing of JSON string", e);
 		}
 	}
 
