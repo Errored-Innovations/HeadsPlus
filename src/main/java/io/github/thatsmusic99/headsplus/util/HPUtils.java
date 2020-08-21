@@ -4,6 +4,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,7 +15,9 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -146,6 +150,63 @@ public class HPUtils {
     public static <T> void addIfAbsent(List<T> list, T element) {
         if (list.contains(element)) return;
         list.add(element);
+    }
+
+    public static boolean isMythicMob(Entity entity) {
+        HeadsPlus hp = HeadsPlus.getInstance();
+        try {
+            if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
+                if (hp.getServer().getPluginManager().getPlugin("MythicMobs") != null) {
+                    return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
+    @Deprecated
+    public static boolean runBlacklistTests(LivingEntity e) {
+        HeadsPlusMainConfig c = HeadsPlus.getInstance().getConfiguration();
+        // Killer checks
+        if (e.getKiller() == null) {
+            if (c.getPerks().drops_needs_killer) {
+                return false;
+            } else if (c.getPerks().drops_entities_requiring_killer.contains(e.getName().replaceAll("_", "").toLowerCase())) {
+                return false;
+            } else if (e instanceof Player) {
+                if (c.getPerks().drops_entities_requiring_killer.contains("player")) {
+                    return false;
+                }
+            }
+        }
+        // Whitelist checks
+        if (c.getWorldWhitelist().enabled) {
+            if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
+                if (e.getKiller() != null) {
+                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
+                        return false;
+                    }
+                }
+            }
+        }
+        // Blacklist checks
+        if (c.getWorldBlacklist().enabled) {
+            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
+                if (e.getKiller() != null) {
+                    if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
+                        return false;
+                    }
+                }
+            }
+        }
+        if (e instanceof Player) {
+            return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
+                    || c.getPerks().drops_ignore_players.contains(e.getName()));
+        } else {
+            return true;
+        }
+
     }
 
     public enum SkillType {
