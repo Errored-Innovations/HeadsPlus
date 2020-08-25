@@ -41,7 +41,7 @@ public class HeadsPlusEventExecutor implements EventExecutor {
                     log.severe("Report name: " + s);
                     log.severe("Please submit this report to the developer at one of the following links:");
                     log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                    log.severe("https://discord.gg/nbT7wC2");
+                    log.severe("https://discord.gg/eu8h3BG");
                     log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
                 }
             }

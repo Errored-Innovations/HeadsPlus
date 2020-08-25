@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class HeadsPlusException extends Exception {
 
-    private HashMap<String, String> exceptionInfo;
-    private Exception originalException;
+    private final HashMap<String, String> exceptionInfo;
+    private final Exception originalException;
 
     // Invocation exception but better
     public HeadsPlusException(Exception originalException, HashMap<String, String> exInfo) {
