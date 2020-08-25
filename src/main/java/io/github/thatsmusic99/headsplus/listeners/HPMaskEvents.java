@@ -72,9 +72,19 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     @EventHandler
     public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
+        Player player = (Player) e.getWhoClicked();
+        for (int i = 0; i < 46; i++) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (item != null) {
+                if (NBTManager.isIcon(item)) {
+                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                }
+            }
+        }
         ItemStack item;
         boolean shift = e.isShiftClick();
         // If we're shift clicking
+
         if (shift) {
             // We need to get the current item
             item = e.getCurrentItem();
@@ -84,6 +94,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
             if (e.getAction().equals(InventoryAction.PICKUP_ALL)) return;
             item = e.getCursor();
         }
+
         if (hp.getConfiguration().getPerks().mask_powerups) {
             if (e.getRawSlot() == getSlot() || (shift && e.getRawSlot() != getSlot())) {
                 checkMask((Player) e.getWhoClicked(), item);

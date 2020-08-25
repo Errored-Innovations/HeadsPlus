@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -64,6 +65,7 @@ public class CustomHead extends Content {
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(new ArrayList<>());
                 item.setItemMeta(meta);
+                item = NBTManager.removeIconNBT(item);
                 player.getInventory().addItem(item);
             }
         } else {

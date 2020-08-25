@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public abstract class Icon {
     private String id;
 
     public Icon(ItemStack itemStack) {
-        item = itemStack;
+        item = NBTManager.addIconNBT(itemStack);
         hpi = hp.getItems().getConfig();
     }
 
@@ -34,11 +35,13 @@ public abstract class Icon {
         hpi = hp.getItems().getConfig();
         this.id = id;
         initItem(id);
+        item = NBTManager.addIconNBT(item);
     }
     public Icon(Player player) {
         hpi = hp.getItems().getConfig();
         initItem(getId());
         initNameAndLore(getId(), player);
+        item = NBTManager.addIconNBT(item);
     }
 
     public Icon() {

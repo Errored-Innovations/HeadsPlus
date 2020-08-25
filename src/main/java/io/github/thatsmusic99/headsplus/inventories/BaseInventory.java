@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Glass;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Stats;
+import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
@@ -179,6 +180,14 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         Player player = (Player) event.getWhoClicked();
         if (slot > -1 && slot < event.getInventory().getSize()) {
             event.setCancelled(true);
+            for (int i = 0; i < 46; i++) {
+                ItemStack item = player.getInventory().getItem(i);
+                if (item != null) {
+                    if (NBTManager.isIcon(item)) {
+                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                    }
+                }
+            }
             IconClickEvent iconEvent = new IconClickEvent(player, icons[slot]);
             Bukkit.getPluginManager().callEvent(iconEvent);
             if (!iconEvent.isCancelled()) {

@@ -464,25 +464,16 @@ public class NBTManager {
         return setString(i, "headsplus-type", type);
     }
 
-    // This is a funny one, ignore this example
-    public static ItemStack addDatabaseHead(ItemStack i, String id, double price) {
-        try {
-            Object nmsItem = getNMSCopy(i);
-            Object nbtTag = getNBTTag(nmsItem);
-            if (nbtTag == null) {
-                nbtTag = newNBTTag();
-            }
-            Block.class.getMethod("setData", byte.class);
-            Method method = nbtTag.getClass().getMethod("setString", String.class, String.class);
-            method.invoke(nbtTag, "head-id", id);
-            Method method1 = nbtTag.getClass().getMethod("setDouble", String.class, double.class);
-            method1.invoke(nbtTag, "head-price", price);
-            nmsItem = setNBTTag(nmsItem, nbtTag);
-            return asBukkitCopy(nmsItem);
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
-        return i;
+    public static ItemStack addIconNBT(ItemStack i) {
+        return setBoolean(i, "hp-gui", true);
+    }
+
+    public static boolean isIcon(ItemStack i) {
+        return getBoolean(i, "hp-gui");
+    }
+
+    public static ItemStack removeIconNBT(ItemStack i) {
+        return setBoolean(i, "hp-gui", false);
     }
 
     public static String getType(ItemStack i) {
