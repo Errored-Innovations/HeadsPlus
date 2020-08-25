@@ -7,43 +7,55 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class RecipePerms implements Listener {
-	
-	@EventHandler
-	public void onCraft(InventoryClickEvent e) {
-	    try {
-            if (e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
-                Player player = (Player) e.getWhoClicked();
-                HeadsPlus hp = HeadsPlus.getInstance();
-                HeadsPlusAPI hapi = hp.getAPI();
-                HeadsPlusMainConfig c = hp.getConfiguration();
-                if (!isValid1_14(e)) return;
+public class RecipePerms extends HeadsPlusListener<InventoryClickEvent> {
 
-                if (c.getPerks().craft_heads) {
-                    if (player.hasPermission("headsplus.craft")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-                            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(hapi.getSkullType(e.getCurrentItem())))) {
-                                denyPermission(e);
-                                return;
-                            }
-                        }
-                        if (c.getWorldBlacklist().enabled) {
-                            if (!c.getWorldBlacklist().list.contains(player.getWorld().getName())
-                                    || player.hasPermission("headsplus.bypass.blacklistw")) {
-                                if (e.getCurrentItem() != null) {
-                                    if (e.getCurrentItem().getItemMeta() instanceof SkullMeta) {
-                                        if (!hapi.getSkullType(e.getCurrentItem()).isEmpty()) {
+    public RecipePerms() {
+        Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class, this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "RecipeHandlingEvent"), HeadsPlus.getInstance());
+    }
+	public void onEvent(InventoryClickEvent e) {
+        addData("player", e.getWhoClicked().getName());
+        addData("inventory-type", e.getInventory().getType().name());
+        addData("slot", e.getRawSlot());
+
+        Player player = (Player) e.getWhoClicked();
+        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlusMainConfig c = hp.getConfiguration();
+        if (e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
+            if (addData("is-correct-slot", isValid1_14(e))) {
+                if (e.getCurrentItem() != null) {
+                    if (e.getCurrentItem().getItemMeta() instanceof SkullMeta) {
+                        String type = addData("type", NBTManager.getType(e.getCurrentItem()));
+                        if (type != null && !type.isEmpty()) {
+                            // Beyond this point, we can start denying events
+                            if (addData("enabled", c.getPerks().craft_heads)) {
+                                if (addData("has-permission", player.hasPermission("headsplus.craft"))) {
+                                    if (addData("has-worldguard", Bukkit.getPluginManager().isPluginEnabled("WorldGuard"))) {
+                                        addData("skull-type", type);
+                                        if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
+                                            denyPermission(e);
+                                            return;
+                                        }
+                                    }
+
+                                    if (c.getWorldBlacklist().enabled) {
+                                        if (!c.getWorldBlacklist().list.contains(player.getWorld().getName())
+                                                || player.hasPermission("headsplus.bypass.blacklistw")) {
+
                                             if (c.getWorldWhitelist().list.contains(player.getWorld().getName())) {
                                                 fireEvent(e);
                                                 return;
@@ -61,25 +73,12 @@ public class RecipePerms implements Listener {
                                     }
                                 }
                             }
-                        }
-                    } else {
-                        if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
-                            denyPermission(e);
-                        } else if (e.getInventory().getType().equals(InventoryType.CRAFTING)){
                             denyPermission(e);
                         }
                     }
                 }
-                if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
-                    denyPermission(e);
-                } else if (e.getInventory().getType().equals(InventoryType.CRAFTING)){
-                    denyPermission(e);
-                }
             }
-        } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Event (RecipeCheckers)", false, null);
         }
-
 	}
 
 	private int shift(InventoryClickEvent e) {
