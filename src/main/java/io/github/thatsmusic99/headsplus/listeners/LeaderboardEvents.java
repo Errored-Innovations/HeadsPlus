@@ -6,87 +6,109 @@ import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
-import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.util.DataManager;
-import org.bukkit.event.EventHandler;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class LeaderboardEvents implements Listener {
 
-    private final HeadsPlus hp = HeadsPlus.getInstance();
-
-    @EventHandler
-    public void onHeadDrop(EntityHeadDropEvent e) {
-        try {
-            if (!e.isCancelled()) {
-                if (e.getPlayer() != null) {
-                    if (hp.isUsingLeaderboards()) {
-                        if (hp.getConfiguration().getPerks().smite_on_head) {
-                            for (int i = 0; i < 5; ++i) {
-                                e.getLocation().getWorld().strikeLightning(e.getPlayer().getLocation());
+    public LeaderboardEvents() {
+        super();
+        HeadsPlus hp = HeadsPlus.getInstance();
+        Bukkit.getPluginManager().registerEvent(EntityHeadDropEvent.class, new HeadsPlusListener<EntityHeadDropEvent>() {
+            @Override
+            public void onEvent(EntityHeadDropEvent event) {
+                if (!event.isCancelled()) {
+                    if (event.getPlayer() != null) {
+                        Player player = event.getPlayer();
+                        if (hp.isUsingLeaderboards()) {
+                            if (hp.getConfiguration().getPerks().smite_on_head) {
+                                for (int i = 0; i < 5; ++i) {
+                                    event.getLocation().getWorld().strikeLightning(player.getLocation());
+                                }
                             }
+                            HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    DataManager.addToTotal(player, event.getEntityType().name(), "headspluslb", event.getAmount());
+                                }
+                            }.runTaskAsynchronously(hp);
+
                         }
-                        HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * e.getAmount());
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                DataManager.addToTotal(e.getPlayer(), e.getEntityType().name(), "headspluslb", e.getAmount());
-                            }
-                        }.runTaskAsynchronously(hp);
-
                     }
                 }
             }
-        } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-        }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent"), hp);
 
-    }
-
-    @EventHandler
-    public void onPHeadDrop(PlayerHeadDropEvent e) {
-        try {
-            if (!e.isCancelled()) {
-                if (e.getPlayer() != null) {
-                    if (hp.isUsingLeaderboards()) {
-                        if (hp.getConfiguration().getPerks().smite_on_head) {
-                            for (int i = 0; i < 5; ++i) {
-                                e.getLocation().getWorld().strikeLightning(e.getPlayer().getLocation());
+        Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, new HeadsPlusListener<PlayerHeadDropEvent>() {
+            @Override
+            public void onEvent(PlayerHeadDropEvent event) {
+                if (!event.isCancelled()) {
+                    if (event.getPlayer() != null) {
+                        Player player = event.getPlayer();
+                        if (hp.isUsingLeaderboards()) {
+                            if (hp.getConfiguration().getPerks().smite_on_head) {
+                                for (int i = 0; i < 5; ++i) {
+                                    event.getLocation().getWorld().strikeLightning(player.getLocation());
+                                }
                             }
+                            HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    DataManager.addToTotal(player, "player", "headspluslb", event.getAmount());
+                                }
+                            }.runTaskAsynchronously(hp);
+
                         }
-                        HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * e.getAmount());
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                DataManager.addToTotal(e.getPlayer(), "player", "headspluslb", e.getAmount());
-                            }
-                        }.runTaskAsynchronously(hp);
-
                     }
                 }
             }
-        } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-        }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent"), hp);
 
-    }
-
-    @EventHandler
-    public void onHeadSold(SellHeadEvent e) {
-        try {
-            if (!e.isCancelled()) {
-                if (hp.isUsingLeaderboards()) {
-                    for (int is : e.getEntityAmounts().values()) {
-                        HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.selling") * is);
+        Bukkit.getPluginManager().registerEvent(SellHeadEvent.class, new HeadsPlusListener<SellHeadEvent>() {
+            @Override
+            public void onEvent(SellHeadEvent event) {
+                if (!event.isCancelled()) {
+                    if (hp.isUsingLeaderboards()) {
+                        for (int is : event.getEntityAmounts().values()) {
+                            HPPlayer.getHPPlayer(event.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.selling") * is);
+                        }
+                        for (String s : event.getEntityAmounts().keySet()) {
+                            for (int i : event.getEntityAmounts().values()) {
+                                if (event.getEntityAmounts().get(s) == i) {
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            DataManager.addToTotal(event.getPlayer(), s, "headsplussh", i);
+                                        }
+                                    }.runTaskAsynchronously(hp);
+                                }
+                            }
+                        }
                     }
-                    for (String s : e.getEntityAmounts().keySet()) {
-                        for (int i : e.getEntityAmounts().values()) {
-                            if (e.getEntityAmounts().get(s) == i) {
+                }
+            }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(SellHeadEvent.class, "SellHeadEvent"), hp);
+
+        Bukkit.getPluginManager().registerEvent(HeadCraftEvent.class, new HeadsPlusListener<HeadCraftEvent>() {
+            @Override
+            public void onEvent(HeadCraftEvent event) {
+                if (!event.isCancelled()) {
+                    if (hp.isUsingLeaderboards()) {
+                        if (event.getEntityType() != null) {
+                            if (!(event.getEntityType().equalsIgnoreCase("invalid") || event.getEntityType().isEmpty())) {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        DataManager.addToTotal(e.getPlayer(), s, "headsplussh", i);
+                                        HPPlayer.getHPPlayer(event.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.crafting") * event.getHeadsCrafted());
+                                        DataManager.addToTotal(event.getPlayer(), event.getEntityType(), "headspluscraft", event.getHeadsCrafted());
                                     }
                                 }.runTaskAsynchronously(hp);
                             }
@@ -94,31 +116,6 @@ public class LeaderboardEvents implements Listener {
                     }
                 }
             }
-        } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-        }
-    }
-
-    @EventHandler
-    public void onHeadCraft(HeadCraftEvent e) {
-        try {
-            if (!e.isCancelled()) {
-                if (hp.isUsingLeaderboards()) {
-                    if (e.getEntityType() != null) {
-                        if (!(e.getEntityType().equalsIgnoreCase("invalid") || e.getEntityType().isEmpty())) {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    HPPlayer.getHPPlayer(e.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.crafting") * e.getHeadsCrafted());
-                                    DataManager.addToTotal(e.getPlayer(), e.getEntityType(), "headspluscraft", e.getHeadsCrafted());
-                                }
-                            }.runTaskAsynchronously(hp);
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            DebugPrint.createReport(ex, "Event (LeaderboardEvents)", false, null);
-        }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(HeadCraftEvent.class, "HeadCraftEvent"), hp);
     }
 }

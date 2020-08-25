@@ -109,7 +109,7 @@ public class HeadsPlus extends JavaPlugin {
 
             // Handles recipes
             if (!getConfiguration().getPerks().disable_crafting) {
-                getServer().getPluginManager().registerEvents(new RecipePerms(), this);
+                new RecipePerms();
             }
             // If sellable heads are enabled and yet there isn't Vault
             if (!(econ()) && (getConfiguration().getPerks().sell_heads)) {
@@ -307,10 +307,10 @@ public class HeadsPlus extends JavaPlugin {
         new HPPlayerDeathEvent();
         new HPMaskEvents();
         new HPPlayerJoinEvent();
-        getServer().getPluginManager().registerEvents(new HPBlockPlaceEvent(), this);
-        getServer().getPluginManager().registerEvents(new PlayerPickBlockEvent(), this);
-        getServer().getPluginManager().registerEvents(new LeaderboardEvents(), this);
-        getServer().getPluginManager().registerEvents(new OldPlayerDeathEvent(), this);
+        new HPBlockPlaceEvent();
+        new PlayerPickBlockEvent();
+        new LeaderboardEvents();
+        new HPPlayerMessageDeathEvent();
         getServer().getPluginManager().registerEvents(new SoundEvent(), this);
     }
 

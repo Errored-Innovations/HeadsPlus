@@ -18,10 +18,10 @@ public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
 
     public void onEvent(BlockPlaceEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        if (hp.isStoppingPlaceableHeads()) {
-            if (hp.getNMS().isSkull(e.getItemInHand())) {
-                if (!e.getPlayer().hasPermission("headsplus.bypass.preventplacement")) {
-                    if (NBTManager.isSellable(e.getItemInHand())) {
+        if (addData("stopping-heads", hp.isStoppingPlaceableHeads())) {
+            if (addData("is-a-skull", hp.getNMS().isSkull(e.getItemInHand()))) {
+                if (!addData("can-bypass", e.getPlayer().hasPermission("headsplus.bypass.preventplacement"))) {
+                    if (addData("is-sellable", NBTManager.isSellable(e.getItemInHand()))) {
                         e.setCancelled(true);
                         hp.getMessagesConfig().sendMessage("event.block-place-denied", e.getPlayer());
                     }

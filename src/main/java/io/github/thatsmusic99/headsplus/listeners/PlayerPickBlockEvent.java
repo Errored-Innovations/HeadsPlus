@@ -31,11 +31,28 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
         super();
         Bukkit.getPluginManager().registerEvent(InventoryCreativeEvent.class, this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent"), HeadsPlus.getInstance());
+
+        Bukkit.getPluginManager().registerEvent(InventoryOpenEvent.class, new HeadsPlusListener<InventoryOpenEvent>() {
+            @Override
+            public void onEvent(InventoryOpenEvent event) {
+                if (event.getInventory().getType() == InventoryType.CREATIVE) {
+                    openInventories.add(event.getPlayer().getUniqueId());
+                }
+            }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent (ICE)"), HeadsPlus.getInstance());
+
+        Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, new HeadsPlusListener<InventoryCloseEvent>() {
+            @Override
+            public void onEvent(InventoryCloseEvent event) {
+                openInventories.remove(event.getPlayer().getUniqueId());
+            }
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent (ICE)"), HeadsPlus.getInstance());
     }
+
     public void onEvent(InventoryCreativeEvent event) {
         if (event.getAction() == InventoryAction.PLACE_ALL // this is weird, but ok
                 && !openInventories.contains(event.getWhoClicked().getUniqueId())
-                && isSkull(event.getCursor().getType())) {
+                && event.getCursor().getItemMeta() instanceof SkullMeta) {
             // Block pick event is basically the same event as picking a block from inventory
             // check to see if they are looking at a skull block
             Block b = event.getWhoClicked().getTargetBlock(null, 6);
@@ -65,27 +82,5 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
                 event.setCursor(it);
             }
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onInventoryOpenEvent(InventoryOpenEvent event) {
-        if (event.getInventory().getType() == InventoryType.CREATIVE) {
-            openInventories.add(event.getPlayer().getUniqueId());
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onInventoryCloseEvent(InventoryCloseEvent event) {
-        openInventories.remove(event.getPlayer().getUniqueId());
-    }
-
-    /**
-     * Somewhat cross-version compatible skull check
-     *
-     * @param m material to check
-     * @return
-     */
-    boolean isSkull(Material m) {
-        return m.name().equals("PLAYER_HEAD") || (m.name().contains("SKULL") && !m.name().contains("_SKULL"));
     }
 }
