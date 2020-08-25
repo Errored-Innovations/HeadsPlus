@@ -89,7 +89,9 @@ public class HPUtils {
     }
 
     public static double calculateChance(double chance, double randChance, Player killer) {
-        ConfigurationSection lootingThresholds = HeadsPlus.getInstance().getConfiguration().getMechanics().getConfigurationSection("looting.thresholds");
+        ConfigurationSection mechanics = HeadsPlus.getInstance().getConfiguration().getMechanics();
+        if (!mechanics.getBoolean("allow-looting-enchantment")) return chance;
+        ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
         if (killer.getInventory().getItem(EquipmentSlot.HAND).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
@@ -98,7 +100,11 @@ public class HPUtils {
         }
         if (level == 0) return chance;
         if (chance <= lootingThresholds.getDouble("rare")) {
-            chance += level;
+            if (chance < 0) {
+                chance *= level;
+            } else {
+                chance += level;
+            }
         } else if (chance <= lootingThresholds.getDouble("uncommon")) {
             if (chance <= randChance) {
                 chance = level / (level + 1);
