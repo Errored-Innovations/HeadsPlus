@@ -1,7 +1,5 @@
 package io.github.thatsmusic99.headsplus.util.events;
 
-import co.aikar.timings.Timings;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.papermc.lib.PaperLib;
 import org.spigotmc.CustomTimingsHandler;
 
@@ -16,22 +14,14 @@ public class HeadsPlusTimingsHandler {
     }
 
     public void start() {
-        if (PaperLib.isPaper()) {
-            if (Timings.isTimingsEnabled()) {
-                Timings.of(HeadsPlus.getInstance(), name).startTiming();
-            }
-        } else {
-            handler = new CustomTimingsHandler("CHRONOS: " + name);
+        if (!PaperLib.isPaper()) {
+            handler = new CustomTimingsHandler("HeadsPlus: " + name);
             handler.startTiming();
         }
     }
 
     public void finish() {
-        if (PaperLib.isPaper()) {
-            if (Timings.isTimingsEnabled()) {
-                Timings.of(HeadsPlus.getInstance(), name).stopTiming();
-            }
-        } else {
+        if (!PaperLib.isPaper()) {
             handler.stopTiming();
         }
     }
