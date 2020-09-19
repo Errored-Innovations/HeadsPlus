@@ -81,13 +81,19 @@ public class HPPlayer {
         }
         if (hp.usingLevels()) {
             if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
-                for (int i = levels.size(); i > 0; i--) {
+                for (int i = hp.getLevelsConfig().getMaxHierarchy(); i > 0; i--) {
                     try {
-                        if (levels.get(i).getRequiredXP() <= xp) {
+                        if (levels.get(i) != null && levels.get(i).getRequiredXP() <= xp) {
                             level = levels.get(i);
+
                             scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
                             try {
-                                nextLevel = levels.get(i + 1);
+                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
+                                    if (levels.get(j) != null) {
+                                        nextLevel = levels.get(j);
+                                        break;
+                                    }
+                                }
                             } catch (IndexOutOfBoundsException e) { // End of levels
                                 nextLevel = null;
                             }
@@ -99,12 +105,17 @@ public class HPPlayer {
                 }
             } else {
                 String configLevel = scores.getLevel(p.getUniqueId().toString());
-                for (int i = levels.size(); i > 0; i--) {
+                for (int i = hp.getLevelsConfig().getMaxHierarchy(); i > 0; i--) {
                     try {
-                        if (levels.get(i).getConfigName().equals(configLevel)) {
+                        if (levels.get(i) != null && levels.get(i).getConfigName().equals(configLevel)) {
                             level = levels.get(i);
                             try {
-                                nextLevel = levels.get(i + 1);
+                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
+                                    if (levels.get(j) != null) {
+                                        nextLevel = levels.get(j);
+                                        break;
+                                    }
+                                }
                             } catch (IndexOutOfBoundsException e) { // End of levels
                                 nextLevel = null;
                             }
@@ -290,10 +301,23 @@ public class HPPlayer {
                                 if (level.isrEnabled()) {
                                     level.getReward().reward(player.getPlayer());
                                 }
-                                for (int i = 1; i < levels.size(); i++) {
+                                for (int i = 1; i < hp.getLevelsConfig().getMaxHierarchy(); i++) {
                                     if (levels.get(i) == level) {
                                         try {
-                                            nextLevel = levels.get(i + 1);
+                                            level = levels.get(i);
+                                            boolean found = false;
+                                            for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
+                                                if (levels.get(j) != null) {
+                                                    nextLevel = levels.get(j);
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!found) {
+                                                nextLevel = null;
+                                            } else {
+                                                break;
+                                            }
                                         } catch (IndexOutOfBoundsException e) { // End of levels
                                             nextLevel = null;
                                         }
@@ -305,11 +329,19 @@ public class HPPlayer {
                 }.runTask(hp);
                 if (level.getRequiredXP() > getXp()) {
                     HashMap<Integer, Level> levels = hp.getLevels();
-                    for (int i = 1; i < levels.size(); i++) {
-                        if (levels.get(i).getRequiredXP() <= getXp()) {
+                    for (int i = 1; i < hp.getLevelsConfig().getMaxHierarchy(); i++) {
+                        if (levels.get(i) != null && levels.get(i).getRequiredXP() <= getXp()) {
                             try {
                                 level = levels.get(i);
-                                nextLevel = levels.get(i + 1);
+                                boolean found = false;
+                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
+                                    if (levels.get(i) != null) {
+                                        nextLevel = levels.get(i + 1);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) nextLevel = null;
                                 return;
                             } catch (IndexOutOfBoundsException e) { // End of levels
                                 nextLevel = null;
