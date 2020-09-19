@@ -22,7 +22,7 @@ public class HeadsPlusEventExecutor implements EventExecutor {
     }
 
     @Override
-    public void execute(@NotNull Listener listener, @NotNull Event event) throws EventException {
+    public void execute(@NotNull Listener listener, @NotNull Event event) {
         if (listener instanceof HeadsPlusListener) {
             // Make sure it's a class we're listening for
             if (eventClass.isAssignableFrom(event.getClass())) {

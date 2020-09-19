@@ -437,6 +437,7 @@ public class HeadsPlus extends JavaPlugin {
                 throw new IncorrectVersionException("Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion + ", this is meant for " + nmsMan.getNMSVersion());
             }
             nmsversion = NMSIndex.valueOf(bukkitVersion);
+            nms = nmsMan;
         } catch (ClassNotFoundException | IncorrectVersionException e) {
             getLogger().severe("ERROR: Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion);
             getLogger().severe("If this is not known of, let the developer know in one of these places:");
@@ -445,11 +446,10 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-13-x.237088/");
             getLogger().severe("To prevent any further damage, the plugin is being disabled... (Error code: 5)");
             setEnabled(false);
-            return;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        nms = nmsMan;
+
     }
 
     private void registerSubCommands() {
@@ -596,7 +596,7 @@ public class HeadsPlus extends JavaPlugin {
         return hpchx;
     }
 
-    protected HeadsPlusLevels getLevelsConfig() {
+    public HeadsPlusLevels getLevelsConfig() {
         return hpl;
     }
 
