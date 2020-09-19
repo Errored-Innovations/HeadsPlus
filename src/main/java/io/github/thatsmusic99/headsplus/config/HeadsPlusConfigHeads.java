@@ -167,10 +167,12 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 				case "tropicalfish":
 				case "pigzombie":
 				case "elderguardian":
-				case "magmacube":
 				case "zombiehorse":
 				case "skeletonhorse":
 					getConfig().addDefault(key + ".name.default", initSingleton("HP#" + key));
+					break;
+				case "magmacube":
+					getConfig().addDefault(key + ".name.default", initSingleton("HP#magma_cube"));
 					break;
 				case "villager":
 					getConfig().addDefault(key + ".name.default", initSingleton("HP#villager_plains"));
