@@ -17,6 +17,8 @@ public class HeadsPlusLevels extends ConfigSettings {
         return levels;
     }
 
+    private int maxHierarchy = 0;
+
     public HeadsPlusLevels() {
         this.conName = "levels";
         enable();
@@ -57,6 +59,9 @@ public class HeadsPlusLevels extends ConfigSettings {
                     Reward reward1 = new Reward("", reward, rewardVal, items, sender, 0, false);
                     Level c = new Level(s, dn, rxp, av, e, reward1);
                     hp.getLevels().put(h, c);
+                    if (h > maxHierarchy) {
+                        maxHierarchy = h;
+                    }
                 }
             } catch (NullPointerException ex) {
                 hp.getLogger().warning(ex.getMessage());
@@ -134,7 +139,7 @@ public class HeadsPlusLevels extends ConfigSettings {
         levels.put(36, new BaseLevel("netherite_5", "&4&lNetherite V", 2000000, 0.2));
     }
 
-
-
-
+    public int getMaxHierarchy() {
+        return maxHierarchy;
+    }
 }
