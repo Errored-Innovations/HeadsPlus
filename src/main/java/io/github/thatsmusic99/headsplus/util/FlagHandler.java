@@ -12,6 +12,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class FlagHandler {
     }
 
     public static boolean isHandling() {
-        return handler != null;
+        return handler != null && HeadsPlus.getInstance().canUseWG();
     }
 
     public static boolean canDrop(Location location, EntityType type) {

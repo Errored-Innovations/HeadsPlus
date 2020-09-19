@@ -33,6 +33,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -78,12 +79,17 @@ public class HeadsPlus extends JavaPlugin {
     private Favourites favourites;
     private Pinned pinned;
     private PlayerScores scores;
+    private boolean canUseWG = false;
 
     @Override
     public void onLoad() {
         instance = this;
-        if (getServer().getPluginManager().getPlugin("WorldGuard") != null && getServer().getPluginManager().getPlugin("WorldEdit") != null) {
-            new FlagHandler();
+        Plugin wg = getServer().getPluginManager().getPlugin("WorldGuard");
+        if (wg != null && getServer().getPluginManager().getPlugin("WorldEdit") != null) {
+            if (wg.getDescription().getVersion().startsWith("7")) {
+                canUseWG = true;
+                new FlagHandler();
+            }
         }
     }
 
@@ -736,5 +742,9 @@ public class HeadsPlus extends JavaPlugin {
         } else if (month == Calendar.APRIL && day == 30) {
             getLogger().info("Happy Birthday to me!");
         }
+    }
+
+    public boolean canUseWG() {
+        return canUseWG;
     }
 }

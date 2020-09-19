@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.11-BETA-1</hp-project.version>
+        <hp-project.version>v6.11-SNAPSHOT-4</hp-project.version>
         <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
     </properties>
 
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.3-SNAPSHOT</version>
+            <version>7.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
