@@ -94,8 +94,8 @@ public class HPUtils {
         ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
-        if (killer.getInventory().getItem(EquipmentSlot.HAND).containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-            ItemStack item = killer.getInventory().getItem(EquipmentSlot.HAND);
+        if (killer.getInventory().getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+            ItemStack item = killer.getInventory().getItemInHand();
             level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
         }
         if (level == 0) return chance;
