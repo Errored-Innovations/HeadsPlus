@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Chinese/CN (Bieck_Smile)
 # 请勿更改版本!在插件内部用于添加新消息.
 language: Chinese (CN)
-version: 1.3
+version: 1.4
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -9,37 +9,37 @@ inventory:
     next: '&8❰ &a&l下一个 &8❱'
     next-2: '&8❰ &a&l下一个 (2) &8❱'
     next-3: '&8❰ &a&l下一个 (3) &8❱'
-  reward:
-    currency: '&7${amount}'
-    group-add: '&7组 {group} &7(&a+&7)'
-    group-remove: '&7组 {group} &7(&c-&7)'
-    item-give: '&7{amount} {item}(s)'
-  challenge:
-    progress: '&7进展 &8❱ &c{heads}&7/&c{total}'
-    pinned: '&c固定!'
-    reward: '&7奖励 &8❱ &c{reward}'
-    xp: '&7XP &8❱ &c{xp}'
-    count: '&7{challenge-count} 挑战'
-  close: '&8❰ &c&l关闭菜单 &8❱'
-  favourites: '&8❰ &b&l收藏夹 &8❱'
-  head:
-    price: '&c价格 &8❱ &7{price}'
-    favourite: '&c喜好!'
-    count: '&7{head-count} 头颅'
-  menu: '&8❰ &a&l主菜单 &8❱'
-  start: '&8❰ &a&l第一页 &8❱'
-  last: '&8❰ &a&l下一页 &8❱'
-  back: '&8❰ &a&l返回 &8❱'
-  back-2: '&8❰ &a&l返回 2 &8❱'
-  back-3: '&8❰ &a&l返回 3 &8❱'
-  search: '&8❰ &e&l搜索头颅 &8❱'
-  stats:
-    icon: '&8❰ &a&l统计 &8❱'
-    total-heads: '&a总头颅 &8❱ &e'
-    total-pages: '&a总页数 &8❱ &e'
-    total-sections: '&a总部分 &8❱ &e'
-    current-balance: '&a当前余额 &8❱ &e'
-    current-section: '&a当前部分 &8❱ &e'
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7组 {group} &7(&a+&7)'
+      group-remove: '&7组 {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(s)'
+    challenge:
+      progress: '&7进展 &8❱ &c{heads}&7/&c{total}'
+      pinned: '&c固定!'
+      reward: '&7奖励 &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
+      count: '&7{challenge-count} 挑战'
+    close: '&8❰ &c&l关闭菜单 &8❱'
+    favourites: '&8❰ &b&l收藏夹 &8❱'
+    head:
+      price: '&c价格 &8❱ &7{price}'
+      favourite: '&c喜好!'
+      count: '&7{head-count} 头颅'
+    menu: '&8❰ &a&l主菜单 &8❱'
+    start: '&8❰ &a&l第一页 &8❱'
+    last: '&8❰ &a&l下一页 &8❱'
+    back: '&8❰ &a&l返回 &8❱'
+    back-2: '&8❰ &a&l返回 2 &8❱'
+    back-3: '&8❰ &a&l返回 3 &8❱'
+    search: '&8❰ &e&l搜索头颅 &8❱'
+    stats:
+      icon: '&8❰ &a&l统计 &8❱'
+      total-heads: '&a总头颅 &8❱ &e'
+      total-pages: '&a总页数 &8❱ &e'
+      total-sections: '&a总部分 &8❱ &e'
+      current-balance: '&a当前余额 &8❱ &e'
+      current-section: '&a当前部分 &8❱ &e'
 textmenus:
   profile:
     player: Player
@@ -73,6 +73,10 @@ textmenus:
     permission: 允许
     further-usages: 进一步的用法
 commands:
+  debug:
+    verbose:
+      enabled: '{header} 为事件&c{event}&7和参数&c{args}&7启用了调试详细信息！'
+      disabled: '{header} 禁用调试冗长！'
   locale:
     invalid-lang: '{header} 那不是有效的语言！可用语言: &c{languages}'
     changed-locale: '{header} 美好的一天！您的语言现已设置为 &cChinese (CN)'
@@ -143,7 +147,7 @@ commands:
     chat-input: '{header} 输入您要搜索的字词.'
     not-enough-money: '{header} 你没有足够的钱!'
   leaderboards:
-    no-data-lb: 尚未记录排行榜数据!
+    no-data-lb: '尚未记录排行榜数据!'
   levels:
     level-up: '{header} &c{player} &7已达到的等级 &c{level}&7!'
   profile:
@@ -154,7 +158,7 @@ commands:
   sellhead:
     false-head: '{header} 这个头颅不能卖!'
     false-item: '{header} 这不是头颅!'
-  no-heads: '{header} 您的库存中没有任何有效的库存可以出售!'
+    no-heads: '{header} 您的库存中没有任何有效的库存可以出售!'
     not-enough-heads: '{header} 你头颅不够!'
     sell-success: '{header} 您已成功出售的头 &c{price} &7现在有 &c{balance}&7!'
   tests:

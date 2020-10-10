@@ -74,7 +74,7 @@ public class HeadsPlusMessagesManager {
                     YamlConfiguration ro_ro = performChecks(new File(dest, "ro_ro.yml"), "ro_ro");
                     YamlConfiguration ru_ru = performChecks(new File(dest, "ru_ru.yml"), "ru_ru");
                     YamlConfiguration nl_nl = performChecks(new File(dest, "nl_nl.yml"), "nl_nl");
-                    YamlConfiguration zh_ch = performChecks(new File(dest, "zh_cn.yml"), "zh_ch");
+                    YamlConfiguration zh_cn = performChecks(new File(dest, "zh_cn.yml"), "zh_cn");
 
                     {
                         en_us.addDefault("language", "English (US)");
