@@ -179,6 +179,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);
             }
         }
+
         return results;
     }
 }

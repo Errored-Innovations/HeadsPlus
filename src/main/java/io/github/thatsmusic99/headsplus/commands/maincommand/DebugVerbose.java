@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.DebugManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -18,10 +19,13 @@ public class DebugVerbose {
             String event = args[2];
             if (event.equalsIgnoreCase("off")) {
                 DebugManager.removeListener(sender);
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.disabled", sender));
             } else {
                 if (args.length > 3) {
                     String[] arguments = args[3].split(",");
                     DebugManager.addListener(sender, event, stringToConditions(arguments));
+                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.enabled", sender)
+                            .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", args[3]));
                 }
             }
 
@@ -33,7 +37,9 @@ public class DebugVerbose {
         List<String> results = new ArrayList<>();
         switch (args.length) {
             case 3:
-                StringUtil.copyPartialMatches(args[2], HeadsPlusEventExecutor.getEvents().keySet(), results);
+                Set<String> events = HeadsPlusEventExecutor.getEvents().keySet();
+                events.add("off");
+                StringUtil.copyPartialMatches(args[2], events, results);
                 break;
             case 4:
                 HeadsPlusListener<?> event = HeadsPlusEventExecutor.getEvents().get(args[2]);
