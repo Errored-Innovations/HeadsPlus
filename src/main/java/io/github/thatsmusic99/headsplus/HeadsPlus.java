@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus;
 
 import io.github.thatsmusic99.headsplus.api.*;
-import io.github.thatsmusic99.headsplus.api.events.CommunicateEvent;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.Head;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
@@ -25,8 +24,6 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
-import io.github.thatsmusic99.og.OreGenerator;
-import io.github.thatsmusic99.specprotect.CoreClass;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -660,23 +657,18 @@ public class HeadsPlus extends JavaPlugin {
 
     public void checkForMutuals() {
         try {
+            HashMap<String, String> pluginCommunications = new HashMap<>();
+            pluginCommunications.put("AdvancedTeleport", "wait, what");
+            pluginCommunications.put("CHRONOS", "GET THE HELL OUT OF MY ROOM I'M PLAYING MINECRAFT");
+            pluginCommunications.put("SimplePets", "red looks kinda sus");
+            pluginCommunications.put("AdvancedOreGenerator", "bro i'm dead");
             getLogger().info("Avengers, assemble!");
 
-            if (Bukkit.getPluginManager().getPlugin("SpectateProtection") instanceof CoreClass) {
-                getLogger().info("'Ello SpectateProtection! What's up??");
-                Bukkit.getPluginManager().callEvent(new CommunicateEvent("SpectateProtection"));
-            }
-            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") != null) {
-                Bukkit.getPluginManager().getPlugin("AdvancedTeleport").getLogger().info("wait, what");
-            }
-            if (Bukkit.getPluginManager().getPlugin("CHRONOS") != null) {
-                Bukkit.getPluginManager().getPlugin("CHRONOS").getLogger().info("GET THE HELL OUT OF MY ROOM I'M PLAYING MINECRAFT");
-            }
-            if (Bukkit.getPluginManager().getPlugin("SimplePets") != null) {
-                Bukkit.getPluginManager().getPlugin("SimplePets").getLogger().info("red looks kinda sus");
-            }
-            if (Bukkit.getServer().getPluginManager().getPlugin("AdvancedOreGenerator") instanceof OreGenerator) {
-                Bukkit.getPluginManager().getPlugin("AdvancedOreGenerator").getLogger().info("bro i'm dead");
+            for (String plugin : pluginCommunications.keySet()) {
+                Plugin actualPlugin = Bukkit.getPluginManager().getPlugin(plugin);
+                if (actualPlugin != null) {
+                    actualPlugin.getLogger().info(pluginCommunications.get(plugin));
+                }
             }
         } catch (NoClassDefFoundError ignored) {
 
