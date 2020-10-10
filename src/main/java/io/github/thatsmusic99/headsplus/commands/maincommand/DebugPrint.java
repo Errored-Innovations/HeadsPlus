@@ -12,6 +12,7 @@ import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -239,6 +240,9 @@ public class DebugPrint implements IHeadsPlusCommand {
                         } else {
                             hpc.sendMessage("commands.errors.not-a-player", sender);
                         }
+                        break;
+                    case "verbose":
+                        DebugVerbose.fire(sender, args);
                 }
             }
         } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
@@ -250,15 +254,24 @@ public class DebugPrint implements IHeadsPlusCommand {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
-        if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item", "delete", "save", "transfer", "fix"), results);
-        } else if (args.length == 3) {
-            if (args[1].equalsIgnoreCase("fix")) {
-                StringUtil.copyPartialMatches(args[2], SellHead.getRegisteredIDs(), results);
-            } else {
-                StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+        if (sender.hasPermission("headsplus.commands.debug")) {
+            if (args.length == 2) {
+                StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item", "delete", "save", "transfer", "fix", "verbose"), results);
+            } else if (args.length > 2) {
+                switch (args[1].toLowerCase()) {
+                    case "fix":
+                        StringUtil.copyPartialMatches(args[2], SellHead.getRegisteredIDs(), results);
+                        break;
+                    case "verbose":
+                        results = DebugVerbose.onTabComplete(sender, args);
+                        break;
+                    default:
+                        StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(sender), results);
+                        break;
+                }
             }
         }
+
         return results;
     }
 }
