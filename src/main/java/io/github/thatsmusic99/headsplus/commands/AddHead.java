@@ -106,7 +106,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(sender), results);
         }
         return results;
     }

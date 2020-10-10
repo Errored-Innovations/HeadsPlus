@@ -99,7 +99,7 @@ public class Complete implements IHeadsPlusCommand {
             }
             StringUtil.copyPartialMatches(args[1], challenges, results);
         } else if (args.length == 3 && sender.hasPermission("headsplus.maincommand.complete.others")) {
-            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(sender), results);
         }
         return results;
     }

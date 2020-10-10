@@ -173,9 +173,9 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);
         } else if (args.length == 3 && sender.hasPermission("headsplus.head.others")) {
-            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[2], IHeadsPlusCommand.getPlayers(sender), results);
         }
         return results;
     }

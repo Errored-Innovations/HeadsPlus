@@ -90,7 +90,7 @@ public class Conjure implements IHeadsPlusCommand {
         if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
         } else if (args.length == 4) {
-            StringUtil.copyPartialMatches(args[3], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[3], IHeadsPlusCommand.getPlayers(sender), results);
         } else if (args.length == 6) {
             StringUtil.copyPartialMatches(args[5], IHeadsPlusCommand.getEntityConditions(args[1]), results);
         }

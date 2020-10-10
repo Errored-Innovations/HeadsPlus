@@ -25,11 +25,21 @@ public interface IHeadsPlusCommand {
 
     List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args);
 
-    static List<String> getPlayers() {
+    static List<String> getPlayers(CommandSender sender) {
         List<String> p = new ArrayList<>();
-        for (Player pl : Bukkit.getOnlinePlayers()) {
-            p.add(pl.getName());
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                if (player.canSee(pl)) {
+                    p.add(pl.getName());
+                }
+            }
+        } else {
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                p.add(pl.getName());
+            }
         }
+
         return p;
     }
 

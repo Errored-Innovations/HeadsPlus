@@ -96,7 +96,7 @@ public class LocaleCommand implements IHeadsPlusCommand {
             locales.add("refresh");
             StringUtil.copyPartialMatches(args[1], locales, results);
         } else if (args.length == 3) {
-            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(), results);
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);
         }
         return results;
     }
