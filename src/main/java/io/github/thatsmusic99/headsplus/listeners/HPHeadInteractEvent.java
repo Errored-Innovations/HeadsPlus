@@ -14,9 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> {
 
@@ -27,6 +25,15 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
         super();
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance());
+
+        int length = Action.values().length;
+        String[] actions = new String[length];
+        for (int i = 0; i < length; i++) {
+            actions[i] = Action.values()[i].name();
+        }
+        addPossibleData("action", actions);
+        addPossibleData("is-skull", "true", "false");
+        addPossibleData("owner", "<Name>");
     }
 
     // TODO - rewrite for interactions overhaul

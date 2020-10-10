@@ -23,6 +23,9 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.getInstance());
         addPossibleData("player", "<Player>");
+        addPossibleData("has-update-permission", "true", "false");
+        addPossibleData("update-enabled", "true", "false");
+        addPossibleData("has-update", "true", "false");
     }
 
 

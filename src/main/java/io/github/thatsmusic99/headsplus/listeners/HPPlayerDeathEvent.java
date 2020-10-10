@@ -27,6 +27,14 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         super();
         Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent", this), HeadsPlus.getInstance());
+        addPossibleData("player", "<Player>");
+        addPossibleData("enabled", "true", "false");
+        addPossibleData("is-mythic-mob", "true", "false");
+        addPossibleData("not-wg-restricted", "true", "false");
+        addPossibleData("amount", "1", "2", "3", "4");
+        addPossibleData("killer", "<Player>");
+        addPossibleData("fixed-chance", "<Chance>");
+        addPossibleData("random-chance", "<Chance>");
     }
 
     @Override
@@ -46,6 +54,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
         if (event.getEntity().getKiller() != null) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
+            addData("killer", event.getEntity().getKiller().getName());
         }
         if (randomChance <= fixedChance) {
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
