@@ -660,18 +660,23 @@ public class HeadsPlus extends JavaPlugin {
 
     public void checkForMutuals() {
         try {
-            if (Bukkit.getServer().getPluginManager().getPlugin("AdvancedOreGenerator") instanceof OreGenerator) {
-                getLogger().info("What're we gonna do, AOG?");
-                Bukkit.getPluginManager().callEvent(new CommunicateEvent("AOG"));
-            }
+            getLogger().info("Avengers, assemble!");
+
             if (Bukkit.getPluginManager().getPlugin("SpectateProtection") instanceof CoreClass) {
                 getLogger().info("'Ello SpectateProtection! What's up??");
                 Bukkit.getPluginManager().callEvent(new CommunicateEvent("SpectateProtection"));
             }
-            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") instanceof io.github.at.main.CoreClass) {
-                getLogger().info("HEY! ADVANCEDTELEPORT! THINK FAST!");
-                io.github.at.main.CoreClass.getInstance().getLogger().info("Huh?");
-                getLogger().info("Actually... don't worry about it, it's all good.");
+            if (Bukkit.getPluginManager().getPlugin("AdvancedTeleport") != null) {
+                Bukkit.getPluginManager().getPlugin("AdvancedTeleport").getLogger().info("wait, what");
+            }
+            if (Bukkit.getPluginManager().getPlugin("CHRONOS") != null) {
+                Bukkit.getPluginManager().getPlugin("CHRONOS").getLogger().info("GET THE HELL OUT OF MY ROOM I'M PLAYING MINECRAFT");
+            }
+            if (Bukkit.getPluginManager().getPlugin("SimplePets") != null) {
+                Bukkit.getPluginManager().getPlugin("SimplePets").getLogger().info("red looks kinda sus");
+            }
+            if (Bukkit.getServer().getPluginManager().getPlugin("AdvancedOreGenerator") instanceof OreGenerator) {
+                Bukkit.getPluginManager().getPlugin("AdvancedOreGenerator").getLogger().info("bro i'm dead");
             }
         } catch (NoClassDefFoundError ignored) {
 
