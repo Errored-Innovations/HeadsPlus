@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Nederlands (Tepoloco)
 # Wijzig de versie niet! Dit wordt intern gebruikt in de plug-in om nieuwe berichten toe te voegen.
 language: Nederlands (NL)
-version: 1.3
+version: 1.4
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -73,6 +73,11 @@ textmenus:
     permission: Permissie
     further-usages: Verdere toepassingen
 commands:
+  debug:
+    verbose:
+      enabled: '{header} De uitgebreide debugging ingeschakeld voor gebeurtenis &c{event}
+        &7en argumenten &c{args}&7!'
+      disabled: '{header} De uitgebreide foutopsporing uitgeschakeld!'
   locale:
     invalid-lang: '{header} Dat is geen geldige taal! Beschikbare talen: &c{languages}'
     changed-locale: '{header} Goedendag! Uw taal is nu ingesteld op &cNederlands (NL)'

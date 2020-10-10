@@ -70,9 +70,14 @@ textmenus:
     description: Opis
     permission: Uprawnienie
     further-usages: Dalsze zastosowania
-version: 1.3
+version: 1.4
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  debug:
+    verbose:
+      enabled: '{header} Włączono szczegółowe debugowanie dla zdarzenia &c{event}
+        &7i argumentów &c{args}&7!'
+      disabled: '{header} Wyłączono szczegółowe debugowanie!'
   locale:
     invalid-lang: '{header} To nie jest poprawny język! Dostępne języki: &c{languages}'
     changed-locale: '{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski

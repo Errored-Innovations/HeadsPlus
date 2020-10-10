@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.3
+version: 1.4
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -73,6 +73,11 @@ textmenus:
     permission: Permission
     further-usages: Further Usages
 commands:
+  debug:
+    verbose:
+      enabled: '{header} Enabled the debugging verbose for event {event} and arguments
+        {args}!'
+      disabled: '{header} Disabled the debugging verbose!'
   locale:
     invalid-lang: '{header} That is not a valid language! Available languages: &c{languages}'
     changed-locale: '{header} Good day! Your language is now set to &cEnglish (US)'

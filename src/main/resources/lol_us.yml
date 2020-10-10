@@ -70,9 +70,13 @@ textmenus:
     description: uhh what
     permission: permy
     further-usages: how 2 but worse
-version: 1.3
+version: 1.4
 prefix: '&cHeadsPlus &8» &7'
 commands:
+  debug:
+    verbose:
+      enabled: '{header} kewl thingie on 4 event &c{event} &7''n'' arrrrrgs &c{args}&7!'
+      disabled: '{header} kewl thingie iz off!'
   locale:
     invalid-lang: '{header} nU such langwaaj :( kewl langs: &c{languages}'
     changed-locale: '{header} AAHHAHAHAHAHHA, ur langwaaj iz nao de bestz! &c(LOLCAT)'

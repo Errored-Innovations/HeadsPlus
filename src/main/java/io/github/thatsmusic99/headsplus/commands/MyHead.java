@@ -34,8 +34,6 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
         try {
             if (sender.hasPermission("headsplus.myhead")) {
-
-
                 if (sender instanceof BlockCommandSender) {
                     if (args.length > 0) {
                         Player target = Bukkit.getPlayer(args[0]);
