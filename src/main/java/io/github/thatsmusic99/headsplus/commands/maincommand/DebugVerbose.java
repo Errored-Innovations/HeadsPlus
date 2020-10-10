@@ -1,5 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
+import io.github.thatsmusic99.headsplus.util.DebugManager;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -10,68 +13,82 @@ import java.util.*;
 
 public class DebugVerbose {
 
-    private static final HashMap<String, DebugConditions> conditions = new HashMap<>();
-
     public static void fire(CommandSender sender, String[] args) {
         if (args.length > 2) {
             String event = args[2];
-
-        }
-    }
-
-    public static class DebugConditions extends HashMap<String, String> {
-
-        private UUID uuid = null;
-
-        public DebugConditions(HashMap<String, String> conditions, CommandSender sender) {
-            if (sender instanceof Player) {
-                uuid = ((Player) sender).getUniqueId();
-            }
-            for (String str : conditions.keySet()) {
-                put(str, conditions.get(str));
-            }
-        }
-
-        public boolean conditionsMet(HashMap<String, String> conditions) {
-            for (String str : keySet()) {
-                if (conditions.containsKey(str)) {
-                    if (!conditions.get(str).equals(get(str))) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public void sendResults(HashMap<String, String> conditions) {
-            if (!conditionsMet(conditions)) return;
-            List<String> results = new ArrayList<>();
-            for (String str : conditions.keySet()) {
-                results.add(str + ": " + conditions.get(str));
-            }
-            if (uuid != null) {
-                FancyMessage message = new FancyMessage().text("Debug Results")
-                        .tooltip(results);
-                message.send(Bukkit.getPlayer(uuid));
+            if (event.equalsIgnoreCase("off")) {
+                DebugManager.removeListener(sender);
             } else {
-                Bukkit.getConsoleSender().sendMessage("Debug results:");
-                for (String str : results) {
-                    Bukkit.getConsoleSender().sendMessage(str);
+                if (args.length > 3) {
+                    String[] arguments = args[3].split(",");
+                    DebugManager.addListener(sender, event, stringToConditions(arguments));
                 }
             }
+
         }
     }
 
+    // hp debug verbose EntityDeathEvent spawn-cause=SPAWN_EGG,entity-type=PIG
     public static List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> results = new ArrayList<>();
         switch (args.length) {
             case 3:
-                StringUtil.copyPartialMatches(args[2], Arrays.asList("HPBlockPlaceEvent", "HPEntityDeathEvent",
-                        "HPEntitySpawnEvent", "HPHeadInteractEvent", "HPPlayerJoinEvent"), results);
+                StringUtil.copyPartialMatches(args[2], HeadsPlusEventExecutor.getEvents().keySet(), results);
                 break;
             case 4:
+                HeadsPlusListener<?> event = HeadsPlusEventExecutor.getEvents().get(args[2]);
+                if (event == null) return results;
+                String[] currentArgs = args[3].split(",");
+                HashMap<String, String> conditions = stringToConditions(currentArgs);
+                int modifyingArg = currentArgs.length - 1;
+                String currentArg;
+                if (args[3].indexOf(",") == args[3].length() - 1) {
+                    if (args[3].length() > 0) {
+                        modifyingArg = currentArgs.length;
+                    }
+                    currentArg = "";
+                } else {
+                    currentArg = currentArgs[modifyingArg];
+                }
+                StringBuilder builder = new StringBuilder();
+                Set<String> possibleSelections = new HashSet<>();
+                // No equal sign, selecting key
+                if (currentArg.contains("=")) {
+                    String arg = currentArg.split("=")[0];
+                    for (int i = 0; i < modifyingArg; i++) {
+                        builder.append(currentArgs[i]).append(",");
+                    }
+                    for (String key : event.getPossibleData(arg)) {
+                        possibleSelections.add(builder.toString() + arg + "=" + key + ",");
+                    }
+                } else {
+                    for (int i = 0; i < modifyingArg; i++) {
+                        builder.append(currentArgs[i]).append(",");
+                    }
+                    for (String key : event.getPossibleValues().keySet()) {
+                        if (!conditions.containsKey(key)) {
+                            possibleSelections.add(builder.toString() + key + "=");
+                        }
+                    }
+                }
+                StringUtil.copyPartialMatches(args[3], possibleSelections, results);
+                break;
 
         }
         return results;
+    }
+
+    private static HashMap<String, String> stringToConditions(String[] args) {
+        HashMap<String, String> conditions = new HashMap<>();
+        for (String argument : args) {
+            try {
+                String[] option = argument.split("=");
+                conditions.put(option[0], option[1]);
+            } catch (IndexOutOfBoundsException ignored) {
+
+            }
+
+        }
+        return conditions;
     }
 }
