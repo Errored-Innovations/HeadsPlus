@@ -35,14 +35,19 @@ public class TabComplete implements TabCompleter {
             return f;
         } else if (args.length >= 2) {
             IHeadsPlusCommand command = getCommandByName(args[0]);
+
             if (command != null) {
-                List<String> results = command.onTabComplete(cs, cmd, s, args);
-                Collections.sort(results);
-                return results;
+                CommandInfo commandInfo = command.getClass().getAnnotation(CommandInfo.class);
+                if (cs.hasPermission(commandInfo.permission())) {
+                    List<String> results = command.onTabComplete(cs, cmd, s, args);
+                    Collections.sort(results);
+                    return results;
+                }
+                return IHeadsPlusCommand.getPlayers(cs);
             }
-            return players();
+            return IHeadsPlusCommand.getPlayers(cs);
         }
-        return players();
+        return IHeadsPlusCommand.getPlayers(cs);
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
@@ -55,13 +60,5 @@ public class TabComplete implements TabCompleter {
             }
         }
         return null;
-    }
-
-    private static List<String> players() {
-        List<String> p = new ArrayList<>();
-        for (Player pl : Bukkit.getOnlinePlayers()) {
-            p.add(pl.getName());
-        }
-        return p;
     }
 }
