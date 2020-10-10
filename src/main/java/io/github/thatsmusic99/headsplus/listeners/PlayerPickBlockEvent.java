@@ -29,24 +29,25 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
 
     public PlayerPickBlockEvent() {
         super();
+        HeadsPlusListener<?> listener;
         Bukkit.getPluginManager().registerEvent(InventoryCreativeEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent", this), HeadsPlus.getInstance());
 
-        Bukkit.getPluginManager().registerEvent(InventoryOpenEvent.class, new HeadsPlusListener<InventoryOpenEvent>() {
+        Bukkit.getPluginManager().registerEvent(InventoryOpenEvent.class, listener = new HeadsPlusListener<InventoryOpenEvent>() {
             @Override
             public void onEvent(InventoryOpenEvent event) {
                 if (event.getInventory().getType() == InventoryType.CREATIVE) {
                     openInventories.add(event.getPlayer().getUniqueId());
                 }
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent (ICE)"), HeadsPlus.getInstance());
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent", listener), HeadsPlus.getInstance());
 
-        Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, new HeadsPlusListener<InventoryCloseEvent>() {
+        Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, listener = new HeadsPlusListener<InventoryCloseEvent>() {
             @Override
             public void onEvent(InventoryCloseEvent event) {
                 openInventories.remove(event.getPlayer().getUniqueId());
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent (ICE)"), HeadsPlus.getInstance());
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent", listener), HeadsPlus.getInstance());
     }
 
     public void onEvent(InventoryCreativeEvent event) {

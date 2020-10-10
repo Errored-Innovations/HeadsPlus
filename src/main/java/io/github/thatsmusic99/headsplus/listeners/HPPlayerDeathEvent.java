@@ -26,7 +26,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
     public HPPlayerDeathEvent() {
         super();
         Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent", this), HeadsPlus.getInstance());
     }
 
     @Override

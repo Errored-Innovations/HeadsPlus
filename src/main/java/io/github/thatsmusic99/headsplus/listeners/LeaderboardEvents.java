@@ -20,7 +20,8 @@ public class LeaderboardEvents implements Listener {
     public LeaderboardEvents() {
         super();
         HeadsPlus hp = HeadsPlus.getInstance();
-        Bukkit.getPluginManager().registerEvent(EntityHeadDropEvent.class, new HeadsPlusListener<EntityHeadDropEvent>() {
+        HeadsPlusListener<?> listener;
+        Bukkit.getPluginManager().registerEvent(EntityHeadDropEvent.class, listener = new HeadsPlusListener<EntityHeadDropEvent>() {
             @Override
             public void onEvent(EntityHeadDropEvent event) {
                 if (!event.isCancelled()) {
@@ -44,9 +45,9 @@ public class LeaderboardEvents implements Listener {
                     }
                 }
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent"), hp);
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent", listener), hp);
 
-        Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, new HeadsPlusListener<PlayerHeadDropEvent>() {
+        Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, listener = new HeadsPlusListener<PlayerHeadDropEvent>() {
             @Override
             public void onEvent(PlayerHeadDropEvent event) {
                 if (!event.isCancelled()) {
@@ -70,9 +71,9 @@ public class LeaderboardEvents implements Listener {
                     }
                 }
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent"), hp);
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", listener), hp);
 
-        Bukkit.getPluginManager().registerEvent(SellHeadEvent.class, new HeadsPlusListener<SellHeadEvent>() {
+        Bukkit.getPluginManager().registerEvent(SellHeadEvent.class, listener = new HeadsPlusListener<SellHeadEvent>() {
             @Override
             public void onEvent(SellHeadEvent event) {
                 if (!event.isCancelled()) {
@@ -95,9 +96,9 @@ public class LeaderboardEvents implements Listener {
                     }
                 }
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(SellHeadEvent.class, "SellHeadEvent"), hp);
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(SellHeadEvent.class, "SellHeadEvent", listener), hp);
 
-        Bukkit.getPluginManager().registerEvent(HeadCraftEvent.class, new HeadsPlusListener<HeadCraftEvent>() {
+        Bukkit.getPluginManager().registerEvent(HeadCraftEvent.class, listener = new HeadsPlusListener<HeadCraftEvent>() {
             @Override
             public void onEvent(HeadCraftEvent event) {
                 if (!event.isCancelled()) {
@@ -116,6 +117,6 @@ public class LeaderboardEvents implements Listener {
                     }
                 }
             }
-        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(HeadCraftEvent.class, "HeadCraftEvent"), hp);
+        }, EventPriority.MONITOR, new HeadsPlusEventExecutor(HeadCraftEvent.class, "HeadCraftEvent", listener), hp);
     }
 }

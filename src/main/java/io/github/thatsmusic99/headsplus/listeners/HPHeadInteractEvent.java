@@ -26,7 +26,7 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
     public HPHeadInteractEvent() {
         super();
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance());
     }
 
     // TODO - rewrite for interactions overhaul

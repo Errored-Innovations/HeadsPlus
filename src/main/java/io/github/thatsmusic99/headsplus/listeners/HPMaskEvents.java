@@ -32,12 +32,13 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
 
     public HPMaskEvents() {
         super();
+        HeadsPlusListener<?> listener;
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.getInstance());
 
         Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
-                new HeadsPlusListener<EntityDamageEvent>() {
+                listener = new HeadsPlusListener<EntityDamageEvent>() {
                     @Override
                     public void onEvent(EntityDamageEvent event) {
                         if (event.getEntity() instanceof Player) {
@@ -52,10 +53,10 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                             }
                         }
                     }
-                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent"), HeadsPlus.getInstance());
+                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent", listener), HeadsPlus.getInstance());
 
         Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class,
-                new HeadsPlusListener<PlayerQuitEvent>() {
+                listener = new HeadsPlusListener<PlayerQuitEvent>() {
                     @Override
                     public void onEvent(PlayerQuitEvent event) {
                         if (maskMonitors.containsKey(event.getPlayer().getUniqueId())) {
@@ -64,7 +65,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                             maskMonitors.remove(event.getPlayer().getUniqueId());
                         }
                     }
-                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent"), HeadsPlus.getInstance());
+                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent", listener), HeadsPlus.getInstance());
 
 
     }

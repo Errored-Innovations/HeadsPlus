@@ -13,7 +13,7 @@ public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
     public HPBlockPlaceEvent() {
         super();
         Bukkit.getPluginManager().registerEvent(BlockPlaceEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(BlockPlaceEvent.class, "BlockPlaceEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(BlockPlaceEvent.class, "BlockPlaceEvent", this), HeadsPlus.getInstance());
     }
 
     public void onEvent(BlockPlaceEvent e) {

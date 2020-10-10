@@ -44,4 +44,8 @@ public abstract class HeadsPlusListener<T> implements Listener {
     public HashMap<String, String> getData() {
         return data;
     }
+
+    public HashMap<String, String[]> getPossibleValues() {
+        return possibleValues;
+    }
 }

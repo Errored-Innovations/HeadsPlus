@@ -21,7 +21,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         super();
         Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.getInstance());
         addPossibleData("player", "<Player>");
     }
 

@@ -25,7 +25,7 @@ public class RecipePerms extends HeadsPlusListener<InventoryClickEvent> {
 
     public RecipePerms() {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryClickEvent.class, "RecipeHandlingEvent"), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "RecipeHandlingEvent", this), HeadsPlus.getInstance());
     }
 	public void onEvent(InventoryClickEvent e) {
         addData("player", e.getWhoClicked().getName());
