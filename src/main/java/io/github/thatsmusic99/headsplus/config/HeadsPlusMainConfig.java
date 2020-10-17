@@ -79,9 +79,9 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.perks.smite-player-if-they-get-a-head", false);
         config.addDefault("plugin.perks.mask-powerups", true);
         config.addDefault("plugin.perks.pvp.player-balance-competition", false);
-        config.addDefault("plugin.perks.pvp.percentage-lost", 0.05);
-        config.addDefault("plugin.perks.pvp.percentage-balance-for-head", 0.05);
         config.addDefault("plugin.perks.pvp.use-killer-balance", false);
+        config.addDefault("plugin.perks.pvp.percentage-lost", 5);
+        config.addDefault("plugin.perks.pvp.percentage-balance-for-head", 5);
         config.addDefault("plugin.mechanics.theme", "classic");
         config.addDefault("plugin.mechanics.plugin-theme-dont-change", "classic");
         config.addDefault("plugin.mechanics.update.check", true);
