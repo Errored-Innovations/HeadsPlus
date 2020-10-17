@@ -52,7 +52,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         double fixedChance = addData("fixed-chance", hpch.getChance("player"));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (event.getEntity().getKiller() != null) {
+        if (killer != null) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
             addData("killer", event.getEntity().getKiller().getName());
         }
@@ -61,12 +61,17 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
             double lostprice = 0.0;
             double price = hpch.getPrice("player");
             Economy economy = HeadsPlus.getInstance().getEconomy();
-            if (hp.getConfiguration().getPerks().pvp_player_balance_competition
-                    && killer != null
-                    && economy.getBalance(killer) > 0.0) {
-                double playerprice = economy.getBalance(killer);
-                price = playerprice * hp.getConfiguration().getPerks().pvp_balance_for_head;
-                lostprice = economy.getBalance(killer) * hp.getConfiguration().getPerks().pvp_percentage_lost;
+            if (hp.getConfiguration().getPerks().pvp_player_balance_competition) {
+                double playerPrice;
+                if (hp.getConfiguration().getPerks().use_killer_balance
+                        && killer != null
+                        && economy.getBalance(killer) > 0.0) {
+                    playerPrice = economy.getBalance(killer);
+                } else {
+                    playerPrice = economy.getBalance(victim);
+                }
+                price = playerPrice * (hp.getConfiguration().getPerks().pvp_balance_for_head / 100);
+                lostprice = playerPrice * (hp.getConfiguration().getPerks().pvp_percentage_lost / 100);
             }
             Head head = new EntityHead("PLAYER").withAmount(amount)
                     .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))

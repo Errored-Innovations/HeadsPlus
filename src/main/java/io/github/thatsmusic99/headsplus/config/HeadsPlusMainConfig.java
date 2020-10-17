@@ -81,6 +81,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.perks.pvp.player-balance-competition", false);
         config.addDefault("plugin.perks.pvp.percentage-lost", 0.05);
         config.addDefault("plugin.perks.pvp.percentage-balance-for-head", 0.05);
+        config.addDefault("plugin.perks.pvp.use-killer-balance", false);
         config.addDefault("plugin.mechanics.theme", "classic");
         config.addDefault("plugin.mechanics.plugin-theme-dont-change", "classic");
         config.addDefault("plugin.mechanics.update.check", true);
@@ -167,6 +168,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         perks.pvp_player_balance_competition = p.getBoolean("pvp.player-balance-competition");
         perks.pvp_percentage_lost = p.getDouble("pvp.percentage-lost");
         perks.pvp_balance_for_head = p.getDouble("pvp.percentage-balance-for-head");
+        perks.use_killer_balance = p.getBoolean("pvp.use-killer-balance");
         perks.ascii = p.getBoolean("ascii-art");
         perks.middle_click_in = p.getBoolean("interact.middle-click-head");
         perks.click_in = p.getBoolean("interact.click-head");
@@ -219,7 +221,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         public boolean drops_needs_killer, ascii, middle_click_in, click_in;
         public boolean sell_heads, drop_heads, craft_heads, disable_crafting, heads_selector, challenges, leaderboards, levels, player_death_messages, smite_on_head, mask_powerups;
         public final List<String> death_messages = new ArrayList<>();
-        public boolean pvp_player_balance_competition, negative_xp;
+        public boolean pvp_player_balance_competition, negative_xp, use_killer_balance;
         public double pvp_percentage_lost, pvp_balance_for_head;
     }
 
