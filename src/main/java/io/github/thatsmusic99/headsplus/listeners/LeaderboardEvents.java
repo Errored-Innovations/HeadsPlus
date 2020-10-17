@@ -30,7 +30,7 @@ public class LeaderboardEvents implements Listener {
                         if (hp.isUsingLeaderboards()) {
                             if (hp.getConfiguration().getPerks().smite_on_head) {
                                 for (int i = 0; i < 5; ++i) {
-                                    event.getLocation().getWorld().strikeLightning(player.getLocation());
+                                    event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                                 }
                             }
                             HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
@@ -56,7 +56,7 @@ public class LeaderboardEvents implements Listener {
                         if (hp.isUsingLeaderboards()) {
                             if (hp.getConfiguration().getPerks().smite_on_head) {
                                 for (int i = 0; i < 5; ++i) {
-                                    event.getLocation().getWorld().strikeLightning(player.getLocation());
+                                    event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                                 }
                             }
                             HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
