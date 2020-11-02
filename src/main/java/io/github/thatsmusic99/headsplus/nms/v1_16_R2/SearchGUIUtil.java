@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.nms.v1_16_R2;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.AnvilSlot;
-import net.minecraft.server.v1_16_R1.*;
+import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
