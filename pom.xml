@@ -9,8 +9,9 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.11</hp-project.version>
+        <hp-project.version>v6.11.1-SNAPSHOT-1</hp-project.version>
         <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
+        <spigot-directory>${user.home}\.m2\repository\org\spigotmc\spigot\</spigot-directory>
     </properties>
 
     <build>
@@ -177,6 +178,13 @@
             <version>1.16.1-R0.1</version>
             <scope>system</scope>
             <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-1.16.4</artifactId>
+            <version>1.16.4-R0.1</version>
+            <scope>system</scope>
+            <systemPath>${spigot-directory}\1.16.4-R0.1-SNAPSHOT\spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
