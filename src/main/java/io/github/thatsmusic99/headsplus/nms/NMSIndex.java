@@ -15,7 +15,8 @@ public enum NMSIndex {
     v1_14_R1(11),
     v1_15_R1(12),
     v1_16_R1(13),
-    v1_16_R2(14);
+    v1_16_R2(14),
+    v1_16_R3(15);
 
     private final int order;
 
