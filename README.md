@@ -43,4 +43,4 @@ HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in 
 
 ## Important documents
 - [Code of Conduct](https://github.com/Thatsmusic99/HeadsPlus/blob/master/CODE_OF_CONDUCT.md)
-- [License (MIT)](https://github.com/Thatsmusic99/HeadsPlus/blob/master/LICENSE)
+- [License (GPLv3)](https://github.com/Thatsmusic99/HeadsPlus/blob/master/LICENSE)
