@@ -111,17 +111,24 @@ public class HeadsPlusCrafting extends ConfigSettings {
 
     public List<String> getLore(String key) {
 		List<String> lore = new ArrayList<>();
-		if (config.get(key + ".lore").equals("{default}")) {
-			for (String str : config.getStringList("base-item.lore")) {
-				lore.add(messages.formatMsg(str, null)
-						.replaceAll("\\{type}", config.getString(key + ".display-type"))
-						.replaceAll("\\{price}", String.valueOf(getPrice(key))));
+		try {
+			if (config.get(key + ".lore").equals("{default}")) {
+				for (String str : config.getStringList("base-item.lore")) {
+					lore.add(messages.formatMsg(str, null)
+							.replaceAll("\\{type}", config.getString(key + ".display-type"))
+							.replaceAll("\\{price}", String.valueOf(getPrice(key))));
+				}
+			} else {
+				for (String str : config.getStringList(key + ".lore")) {
+					lore.add(messages.formatMsg(str, null));
+				}
 			}
-		} else {
+		} catch (NullPointerException ex) {
 			for (String str : config.getStringList(key + ".lore")) {
 				lore.add(messages.formatMsg(str, null));
 			}
 		}
+
 		return lore;
 	}
 
@@ -139,12 +146,19 @@ public class HeadsPlusCrafting extends ConfigSettings {
 	}
 
 	public String getDisplayName(String key) {
-		if (config.get(key + ".display-name").equals("{default}")) {
+		try {
+			if (config.get(key + ".display-name").equals("{default}")) {
+				return messages.formatMsg(config.getString("base-item.display-name"), null)
+						.replaceAll("\\{type}", config.getString(key + ".display-type"));
+			} else {
+				return messages.formatMsg(config.getString(key + ".display-name"), null)
+						.replaceAll("\\{type}", config.getString(key + ".display-type"));
+			}
+		} catch (NullPointerException ex) {
+			HeadsPlus.getInstance().getLogger().warning("No display name found for " + key + ", using default...");
 			return messages.formatMsg(config.getString("base-item.display-name"), null)
 					.replaceAll("\\{type}", config.getString(key + ".display-type"));
-		} else {
-			return messages.formatMsg(config.getString(key + ".display-name"), null)
-					.replaceAll("\\{type}", config.getString(key + ".display-type"));
 		}
+
 	}
 }
