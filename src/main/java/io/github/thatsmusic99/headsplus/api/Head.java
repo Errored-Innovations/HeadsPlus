@@ -48,11 +48,11 @@ public class Head {
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
         byte[] encodedData;
         if (CachedValues.MINECRAFT_TEXTURES_PATTERN.matcher(texture).matches()) {
-            encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
         } else if (CachedValues.BASE64_PATTERN.matcher(texture).matches()) {
             encodedData = texture.getBytes();
         } else {
-            encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
         }
         gm.getProperties().put("textures", new Property("texture", new String(encodedData)));
         Field profile = skullMeta.getClass().getDeclaredField("profile");

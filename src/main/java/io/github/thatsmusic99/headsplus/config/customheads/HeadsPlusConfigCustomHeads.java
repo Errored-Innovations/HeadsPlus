@@ -228,9 +228,9 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
             byte[] encodedData;
             if (texture.startsWith("http")) {
-                encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", texture).getBytes());
+                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
             } else {
-                encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
+                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
             }
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
