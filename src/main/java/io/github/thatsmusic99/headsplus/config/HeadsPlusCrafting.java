@@ -36,56 +36,60 @@ public class HeadsPlusCrafting extends ConfigSettings {
 
 	private void checkCrafting() {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
+        int currentSize = getConfig().saveToString().length();
 	    getConfig().addDefault("base-item.material", nms.getSkull(0).getType().name());
 	    getConfig().addDefault("base-item.data", 0);
 	    getConfig().addDefault("base-item.price", 10.0);
 	    getConfig().addDefault("base-item.display-name", "{type} Head");
 	    getConfig().addDefault("base-item.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
-		for (RecipeEnums key : RecipeEnums.values()) {
-			checkForOldFormat(key.str);
-			if (key == RecipeEnums.SHEEP) {
-				for (DyeColor d : DyeColor.values()) {
-					if (d.name().equalsIgnoreCase("LIGHT_GRAY")) { // stupid move ngl
-						getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#silver_sheep");
-					} else {
-						getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#" + d.name().toLowerCase() + "_sheep");
+	    if (currentSize == 0) {
+			for (RecipeEnums key : RecipeEnums.values()) {
+				checkForOldFormat(key.str);
+				if (key == RecipeEnums.SHEEP) {
+					for (DyeColor d : DyeColor.values()) {
+						if (d.name().equalsIgnoreCase("LIGHT_GRAY")) { // stupid move ngl
+							getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#silver_sheep");
+						} else {
+							getConfig().addDefault(key.str + "." + d.name() + ".head", "HP#" + d.name().toLowerCase() + "_sheep");
+						}
+						getConfig().addDefault(key.str + "." + d.name() + ".ingredients", new ArrayList<>(Collections.singletonList(nms.getColouredBlock(MaterialTranslator.BlockType.WOOL, d.ordinal()).getType().name())));
+						getConfig().addDefault(key.str + "." + d.name() + ".price", "{default}");
+						getConfig().addDefault(key.str + "." + d.name() + ".display-name", "{default}");
+						getConfig().addDefault(key.str + "." + d.name() + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
+						getConfig().addDefault(key.str + "." + d.name() + ".lore", "{default}");
+						getConfig().addDefault(key.str + "." + d.name() + ".shaped", false);
+						getConfig().addDefault(key.str + "." + d.name() + ".sellhead-id", key.name());
+						checkOverload(key.str);
 					}
-                    getConfig().addDefault(key.str + "." + d.name() + ".ingredients", new ArrayList<>(Collections.singletonList(nms.getColouredBlock(MaterialTranslator.BlockType.WOOL, d.ordinal()).getType().name())));
-					getConfig().addDefault(key.str + "." + d.name() + ".price", "{default}");
-					getConfig().addDefault(key.str + "." + d.name() + ".display-name", "{default}");
-					getConfig().addDefault(key.str + "." + d.name() + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
-					getConfig().addDefault(key.str + "." + d.name() + ".lore", "{default}");
-					getConfig().addDefault(key.str + "." + d.name() + ".shaped", false);
-					getConfig().addDefault(key.str + "." + d.name() + ".sellhead-id", key.name());
-					checkOverload(key.str);
-                }
-				continue;
-			} else {
-                getConfig().addDefault(key.str + ".ingredients", new ArrayList<>(Collections.singletonList(key.mat)));
-                switch (key) {
-					case RABBIT:
-						getConfig().addDefault(key.str + ".head", "HP#brown_" + key.name().toLowerCase());
-						break;
-					case MUSHROOM_COW:
-						getConfig().addDefault(key.str + ".head", "HP#red_mooshroom");
-						break;
-					case VILLAGER:
-						getConfig().addDefault(key.str + ".head", "HP#villager_plains");
-						break;
-					default:
-						getConfig().addDefault(key.str + ".head", "HP#" + key.name().toLowerCase());
+					continue;
+				} else {
+					getConfig().addDefault(key.str + ".ingredients", new ArrayList<>(Collections.singletonList(key.mat)));
+					switch (key) {
+						case RABBIT:
+							getConfig().addDefault(key.str + ".head", "HP#brown_" + key.name().toLowerCase());
+							break;
+						case MUSHROOM_COW:
+							getConfig().addDefault(key.str + ".head", "HP#red_mooshroom");
+							break;
+						case VILLAGER:
+							getConfig().addDefault(key.str + ".head", "HP#villager_plains");
+							break;
+						default:
+							getConfig().addDefault(key.str + ".head", "HP#" + key.name().toLowerCase());
+					}
+
 				}
+				getConfig().addDefault(key.str + ".price", "{default}");
+				getConfig().addDefault(key.str + ".display-name", "{default}");
+				getConfig().addDefault(key.str + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
+				getConfig().addDefault(key.str + ".lore", "{default}");
+				getConfig().addDefault(key.str + ".shaped", false);
+				getConfig().addDefault(key.str + ".sellhead-id", key.name());
+				checkOverload(key.str);
 
-            }
-			getConfig().addDefault(key.str + ".price", "{default}");
-			getConfig().addDefault(key.str + ".display-name", "{default}");
-			getConfig().addDefault(key.str + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
-			getConfig().addDefault(key.str + ".lore", "{default}");
-			getConfig().addDefault(key.str + ".shaped", false);
-			getConfig().addDefault(key.str + ".sellhead-id", key.name());
-			checkOverload(key.str);
-
+			}
 		}
+
 	}
 
 	private List<String> checkForOldFormat(String key) {
