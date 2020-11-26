@@ -42,6 +42,7 @@ public class HeadsPlusCrafting extends ConfigSettings {
 	    getConfig().addDefault("base-item.price", 10.0);
 	    getConfig().addDefault("base-item.display-name", "{type} Head");
 	    getConfig().addDefault("base-item.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
+	    getConfig().addDefault("base-item.use-base-item", true);
 	    if (currentSize == 0) {
 			for (RecipeEnums key : RecipeEnums.values()) {
 				checkForOldFormat(key.str);

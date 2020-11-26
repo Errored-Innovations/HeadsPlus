@@ -157,7 +157,9 @@ public class RecipeEnumUser {
                     ingCount--;
                 }
             }
-            recipe.addIngredient(new ItemStack(Material.getMaterial(crafting.getString("base-item.material")), 1, (short) crafting.getInt("base-item.data")).getType());
+            if (crafting.getBoolean("base-item.use-base-item")) {
+                recipe.addIngredient(new ItemStack(Material.getMaterial(crafting.getString("base-item.material")), 1, (short) crafting.getInt("base-item.data")).getType());
+            }
             if (ingCount > 0) {
                 try {
                     new BukkitRunnable() {
