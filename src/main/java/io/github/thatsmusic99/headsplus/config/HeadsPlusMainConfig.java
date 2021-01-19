@@ -1,5 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.RoundingMode;
@@ -9,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class HeadsPlusMainConfig extends ConfigSettings {
+public class HeadsPlusMainConfig extends CMFile {
 
     Perks perks = new Perks();
     SelectorList whitelist_worlds = new SelectorList();
@@ -18,9 +20,26 @@ public class HeadsPlusMainConfig extends ConfigSettings {
     SelectorList blacklist_heads = new SelectorList();
 
     public HeadsPlusMainConfig() {
-        this.conName = "config";
-        enable();
+        super(HeadsPlus.getInstance(), "config");
     }
+
+    @Override
+    public void loadDefaults() {
+        addSection("Main Features", "These are the main features of which appear in HeadsPlus.\n" +
+                "They are placed here for your convenience.");
+
+        addDefault("sell-heads", true, "Whether or not players are able to sell heads.\n" +
+                "This requires the Vault and an economy plugin - such as Essentials - to be enabled!");
+        addDefault("mob-drops", true, "Whether or not mobs drop their heads when they die.\n" +
+                "To see the full settings for this, please look at the mobs.yml config file.");
+        addDefault("enable-crafting", true, "Whether or not players can craft heads.\n" +
+                "Whilst this option is set to true, ");
+    }
+
+     @Override
+     public void moveToNew() {
+
+     }
 
     @Override
     protected void load() {
@@ -174,6 +193,8 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         perks.click_in = p.getBoolean("interact.click-head");
         perks.negative_xp = p.getBoolean("xp.allow-negative");
     }
+
+
 
     public ConfigurationSection getMechanics() {
         return config.getConfigurationSection("plugin.mechanics");

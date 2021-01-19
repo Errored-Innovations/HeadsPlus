@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.11.2-SNAPSHOT-1</hp-project.version>
+        <hp-project.version>v6.12-SNAPSHOT-1</hp-project.version>
         <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
         <spigot-directory>${user.home}\.m2\repository\org\spigotmc\spigot\</spigot-directory>
     </properties>
@@ -65,12 +65,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.4-SNAPSHOT</version>
@@ -86,75 +80,6 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.6</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-3</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8-R0.1-SNAPSHOT\craftbukkit-1.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-2</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8.3-R0.1-SNAPSHOT\craftbukkit-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-5</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8.8-R0.1-SNAPSHOT\craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-4</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.9.2-R0.1-SNAPSHOT\craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-6</artifactId>
-            <version>1.9.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.9.4-R0.1-SNAPSHOT\craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-7</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.10.2-R0.1-SNAPSHOT\craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-8</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.11.2-R0.1-SNAPSHOT\craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-10</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.13.2-R0.1-SNAPSHOT\craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-11</artifactId>
-            <version>1.13-R0.1-SNAPSHOT-1</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.13-R0.1-SNAPSHOT\craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -215,6 +140,12 @@
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.thatsmusic99</groupId>
+            <artifactId>ConfigurationMaster</artifactId>
+            <version>v1.1</version>
         </dependency>
 
     </dependencies>
