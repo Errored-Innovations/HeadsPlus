@@ -144,7 +144,7 @@ public enum HeadsXEnums {
     LLAMA("&6Llama", "818cd457fbaf327fa39f10b5b36166fd018264036865164c02d9e5ff53f45", "animals", 0.0),
     POLAR_BEAR("&fPolar Bear", "442123ac15effa1ba46462472871b88f1b09c1db467621376e2f71656d3fbc", "animals", 0.0),
     YOUTUBE("&cYouTube", "d2f6c07a326def984e72f772ed645449f5ec96c6ca256499b5d2b84a8dce", "logos", 0.5),
-    FACEBOOK("&9Facebook", "d2f6c07a326def984e72f772ed645449f5ec96c6ca256499b5d2b84a8dce", "logos", 0.5),
+    FACEBOOK("&9Facebook", "deb46126904463f07ecfc972aaa37373a22359b5ba271821b689cd5367f75762", "logos", 0.5),
     SKYPE("&bSkype", "2ec182da7d3c0a8acc3be9b77c29be47e08c20b050b13fd4c4c7d71f66273", "logos", 0.5),
     INSTAGRAM("&fInstagram", "ac88d6163fabe7c5e62450eb37a074e2e2c88611c998536dbd8429faa0819453", "logos", 0.5),
     REDDIT("&fReddit!", "4d9bd4b2fa8da8247a82c3d1fa246715f9b6d98c778374da6efc10c89cd64", "logos", 0.5),
