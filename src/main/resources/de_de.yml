@@ -173,6 +173,9 @@ commands:
   reload:
     reload-message: '{header} Konfiguration neu geladen!'
     reloading-message: '{header} Lade Konfiguration neu...'
+  restore:
+    restored-head: '{header} {head} erfolgreich wiederhergestellter!'
+    invalid-head: '{header} {head} ist keine gültige ID!'
   sellhead:
     false-head: '{header} Dieser Kopf kann nicht verkauft werden!'
     false-item: '{header} Das ist kein Kopf!'
@@ -228,6 +231,7 @@ descriptions:
     info: Zeigt Informationen zum Plugin.
     profile: Zeigt dein Profil für das Plugin an.
     reload: Lädt Konfigurationen neu.
+    restore: Stellt einen Kopf wieder her oder repariert ihn, der bereits vom Plugin bereitgestellt wurde.
     tests: Führen Sie Tests für Mob Drop-Raten durch.
     whitelist: Aktiviert und deaktiviert die Whitelist.
     whitelistadd: Fügt einen Kopf zur Whitelist hinzu.

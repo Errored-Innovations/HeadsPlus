@@ -157,6 +157,9 @@ commands:
   reload:
     reload-message: '{header} Dun!'
     reloading-message: '{header} Relodin teh confeeg...'
+  restore:
+    restored-head: '{header} summumd {head}!'
+    invalid-head: '{header} {head} iz not ur frend :('
   sellhead:
     false-head: '{header} LOL u canz nawt sell dis head!'
     false-item: '{header} LOL dis iznt a hed'
@@ -210,6 +213,7 @@ descriptions:
     info: Shoes info 'bowt teh plug-in
     profile: Shoes u ur prof ;3
     reload: Relodz teh confeeg
+    restore: summun an old frend
     tests: RUNRUNRUNRUNRUN
     whitelist: Turnz teh nice list on 'n' off
     whitelistadd: Addz a hed 2 teh nice list

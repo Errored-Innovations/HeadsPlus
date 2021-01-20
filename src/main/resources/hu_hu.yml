@@ -164,6 +164,9 @@ commands:
   reload:
     reload-message: '{header} A konfiguráció újratöltve!'
     reloading-message: '{header} A konfiguráció újratöltése...'
+  restore:
+    restored-head: '{header} Visszaállítva {head}!'
+    invalid-head: '{header} A {head} nem érvényes azonosító!'
   sellhead:
     false-head: '{header} Ez a fej nem értékesíthető!'
     false-item: '{header} Ez nem egy fej!'
@@ -219,6 +222,7 @@ descriptions:
     info: Megjeleníti a plugin információit.
     profile: A bővítmény profilját jeleníti meg.
     reload: Frissíti a konfigurációs fájlt.
+    restore: Visszaállítja vagy megjavítja a plugin által biztosított fejet.
     tests: Futtatja a mob-esési sebességet.
     whitelist: Váltja a fehérlistát.
     whitelistadd: Hozzáad egy fejet a fehérlistához.

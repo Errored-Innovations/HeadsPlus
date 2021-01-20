@@ -168,6 +168,9 @@ commands:
   reload:
     reload-message: '{header} Configuratie opnieuw geladen!'
     reloading-message: '{header} Configuratie herladen...'
+  restore:
+    restored-head: '{header} {head} hersteld!'
+    invalid-head: '{header} {head} is geen geldige ID!'
   sellhead:
     false-head: '{header} Dit hoofd kan niet worden verkocht'
     false-item: '{header} Dis is geen hoofd!'
@@ -222,6 +225,7 @@ descriptions:
     info: Geeft informatie over plugin weer.
     profile: Toont uw profiel voor de plugin.
     reload: Laadt configuratiebestanden opnieuw.
+    restore: Herstelt of repareert een kop die al door de plug-in werd geleverd.
     tests: Voert tests uit voor mob drop-rates.
     whitelist: Schakelt de whitelist om.
     whitelistadd: Voegt een kop toe aan de whitelist.

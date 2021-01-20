@@ -176,6 +176,9 @@ commands:
   reload:
     reload-message: '{header} La config a été reload!'
     reloading-message: '{header} Config reload...'
+  restore:
+    restored-head: '{header} Restauré {head}!'
+    invalid-head: '{header} {head} n''est pas un identifiant valide!'
   sellhead:
     false-head: '{header} Cette tête ne peut pas être vendue!'
     false-item: '{header} Ce n''est pas une tête!'
@@ -231,6 +234,7 @@ descriptions:
     info: Affiche les renseignements quelque le plugin.
     profile: Affiche ton profil du plugin.
     reload: Reload la config.
+    restore: Restaure ou répare une tête déjà fournie par le plugin.
     tests: Affichez ou modifiez l'XP d'un joueur.
     whitelist: Autorise/Pour désactive la whitelist.
     whitelistadd: Ajoute une tête à la whitelist.

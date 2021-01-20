@@ -168,6 +168,9 @@ commands:
   reload:
     reload-message: '{header} Config reincarcat cu succes!'
     reloading-message: '{header} Reincarcare config...'
+  restore:
+    restored-head: '{header} {head} restaurat!'
+    invalid-head: '{header} {head} nu este un ID valid!'
   sellhead:
     false-head: '{header} Acest cap nu poate fi vandut!'
     false-item: '{header} Acesta nu este un cap!'
@@ -198,9 +201,7 @@ commands:
   xp:
     added-xp: '{header} Adăugate &c{amount} &7XP la &c{player}&7, acum au &c{xp}&7!'
     current-xp: '{header} XP-ul actual al &c{player}&7: &c{xp}'
-    negative-xp: '{header} I don''t think you want to do that... (to allow negative
-      XP, go into config.yml > plugin > perks > xp > allow-negative, however this
-      has unpredictable results!)'
+    negative-xp: '{header} Nu cred că vrei să faci asta ... (pentru a permite negativ XP, accesați config.yml > plugin > perks > xp > allow-negative, însă aceasta are rezultate imprevizibile!)'
     removed-xp: '{header} Sters {amount} XP de la {player}, acum au {xp}!'
     reset-xp: '{header} Resetati XP-ul &c{player}&7!'
 descriptions:
@@ -221,6 +222,7 @@ descriptions:
     info: Arata informatii despre plugin.
     profile: Afiseaza profilul pentru plugin-ul.
     reload: Reincarca configuratia.
+    restore: Restaureaza sau repara un cap care a fost deja furnizat de plugin.
     tests: Executa testele pentru ratele de scădere a mafiei.
     whitelist: Porneste sau opreste permiterea.
     whitelistadd: Adauga un cap pe lista celor permise.
