@@ -87,7 +87,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                     Reward reward = getReward(rewardName);
                     rewards.put(rewardName, reward);
                 } catch (NullPointerException ex) {
-                    hp.getLogger().warning(ex.getMessage());
+                    hp.getLogger().warning("Error when creating reward: " + ex.getMessage());
                 }
             }
         }
