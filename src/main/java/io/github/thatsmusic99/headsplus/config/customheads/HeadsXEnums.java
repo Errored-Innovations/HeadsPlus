@@ -416,12 +416,12 @@ public enum HeadsXEnums {
     ZOMBIFIED_PIGLIN("&dZombified Piglin", "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c", "mobs", 3.2),
     PIGLIN_BRUTE("&cPiglin Brute", "3e300e9027349c4907497438bac29e3a4c87a848c50b34c21242727b57f4e1cf", "mobs", 3.4);
 
-    final String name;
-    final String dn;
-    final String tex;
-    final String sec;
-    final Double v;
-    final String interactName;
+    public final String name;
+    public final String dn;
+    public final String tex;
+    public final String sec;
+    public final Double v;
+    public final String interactName;
 
     HeadsXEnums(String dn, String texture, String section, Double version) {
         this.name = name().toLowerCase();
@@ -431,4 +431,6 @@ public enum HeadsXEnums {
         this.sec = section;
         this.v = version;
     }
+
+
 }
