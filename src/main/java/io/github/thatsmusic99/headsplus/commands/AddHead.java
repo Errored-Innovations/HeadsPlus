@@ -63,6 +63,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (sender instanceof Conversable) {
                     ConversationFactory factory = new ConversationFactory(HeadsPlus.getInstance());
                     Conversation conversation = factory.withLocalEcho(false)
+                            .withModality(HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
                             .withFirstPrompt(new DataListener(0, hpc.getString("commands.addhead.id", sender)))
                             .buildConversation((Conversable) sender);
                     conversation.addConversationAbandonedListener(event -> {
