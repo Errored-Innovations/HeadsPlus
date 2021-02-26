@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,10 +15,14 @@ import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class Head {
 
+    private static final PaperUtil util = new PaperUtil();
+
     protected ItemStack itemStack;
+    private String name;
     private final String id;
     private double price; // Pretty much central anyways
     private int data;
@@ -59,14 +64,18 @@ public class Head {
         profile.setAccessible(true);
         profile.set(skullMeta, gm);
         itemStack.setItemMeta(skullMeta);
+        this.name = null; // overwritten by textures
         return this;
     }
 
     public Head withPlayerName(String name) {
+        this.name = name;
+        /*
         SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
     //    if (sm == null) return this;
         sm = HeadsPlus.getInstance().getNMS().setSkullOwner(name, sm);
         itemStack.setItemMeta(sm);
+         */
         return this;
     }
 
@@ -86,7 +95,24 @@ public class Head {
     }
 
     public ItemStack getItemStack() {
+        if (this.name != null) {
+            // set sync
+            SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
+            sm = HeadsPlus.getInstance().getNMS().setSkullOwner(this.name, sm);
+            itemStack.setItemMeta(sm);
+        }
         return itemStack;
+    }
+
+    public CompletableFuture<ItemStack> getItemStackFuture() {
+        if (this.name == null) {
+            return CompletableFuture.completedFuture(this.itemStack);
+        }
+        SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
+        return util.setProfile(sm, this.name).thenApply(newMeta -> {
+            itemStack.setItemMeta(newMeta);
+            return itemStack;
+        });
     }
 
     public String getId() {
