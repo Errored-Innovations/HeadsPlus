@@ -38,7 +38,7 @@ public class DebugVerbose {
         List<String> results = new ArrayList<>();
         switch (args.length) {
             case 3:
-                Set<String> events = HeadsPlusEventExecutor.getEvents().keySet();
+                List<String> events = new ArrayList<>(HeadsPlusEventExecutor.getEvents().keySet());
                 events.add("off");
                 StringUtil.copyPartialMatches(args[2], events, results);
                 break;
