@@ -25,6 +25,7 @@ public class HeadsPlusCrafting extends ConfigSettings {
 	public void reloadC() {
 		performFileChecks();
 		checkCrafting();
+		getConfig().options().copyDefaults(true);
 		save();
 	}
 
