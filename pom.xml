@@ -9,7 +9,7 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.11.3-SNAPSHOT-1</hp-project.version>
+        <hp-project.version>v6.11.3</hp-project.version>
         <craftbukkit-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}bukkit${file.separator}craftbukkit${file.separator}</craftbukkit-directory>
         <spigot-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}spigotmc${file.separator}spigot${file.separator}</spigot-directory>
     </properties>
@@ -207,7 +207,7 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.9.1</version>
+            <version>4.11.0-BETA</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
