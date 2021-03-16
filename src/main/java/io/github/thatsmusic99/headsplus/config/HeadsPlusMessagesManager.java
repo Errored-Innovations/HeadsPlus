@@ -58,7 +58,7 @@ public class HeadsPlusMessagesManager {
             hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
             config = performChecks(new File(dest, "en_us.yml"), "en_us");
         }
-        double version = 1.4;
+        double version = 1.5;
         if (config.getDouble("version") != version) {
             new BukkitRunnable() {
                 @Override
@@ -151,6 +151,9 @@ public class HeadsPlusMessagesManager {
                         en_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPinned Challenges &8❱");
                         en_us.addDefault("commands.debug.verbose.enabled", "{header} Enabled the debugging verbose for event &c{event} &7and arguments &c{args}&7!");
                         en_us.addDefault("commands.debug.verbose.disabled", "{header} Disabled the debugging verbose!");
+                        en_us.addDefault("commands.restore.restored-head", "{header} Restored {head}!");
+                        en_us.addDefault("commands.restore.invalid-head", "{header} {head} is not a valid ID!");
+                        en_us.addDefault("descriptions.hp.restore", "Restores or repairs a head that was already provided by the plugin.");
                         en_us.set("version", version);
                         en_us.options().copyDefaults(true);
                         try {
@@ -235,6 +238,9 @@ public class HeadsPlusMessagesManager {
                         de_de.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lFestgesteckte Herausforderungen &8❱");
                         de_de.addDefault("commands.debug.verbose.enabled", "{header} Das ausführliche Debuggen für Ereignis &c{event} &7und Argumente &c{args} &7wurde aktiviert!");
                         de_de.addDefault("commands.debug.verbose.disabled", "{header} Deaktiviert das ausführliche Debuggen!");
+                        de_de.addDefault("commands.restore.restored-head", "{header} {head} erfolgreich wiederhergestellter!");
+                        de_de.addDefault("commands.restore.invalid-head", "{header} {head} ist keine gültige ID!");
+                        de_de.addDefault("descriptions.hp.restore", "Stellt einen Kopf wieder her oder repariert ihn, der bereits vom Plugin bereitgestellt wurde.");
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
@@ -319,6 +325,9 @@ public class HeadsPlusMessagesManager {
                         es_es.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDesafíos fijados &8❱");
                         es_es.addDefault("commands.debug.verbose.enabled", "{header} ¡Habilitado la depuración detallada para el evento &c{event} &7y los argumentos &c{args}&7!");
                         es_es.addDefault("commands.debug.verbose.disabled", "{header} Deshabilitada la depuración detallada!");
+                        es_es.addDefault("commands.restore.restored-head", "{header} ¡Restaurado/a {cabeza}!");
+                        es_es.addDefault("commands.restore.invalid-head", "{header} ¡{head} no es una identificación válida!");
+                        es_es.addDefault("descriptions.hp.restore", "Restaura o repara un cabezal que ya fue proporcionado por el complemento.");
                         es_es.set("version", version);
                         es_es.options().copyDefaults(true);
                         try {
@@ -403,6 +412,9 @@ public class HeadsPlusMessagesManager {
                         fr_fr.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDéfis épinglés &8❱");
                         fr_fr.addDefault("commands.debug.verbose.enabled", "{header} Activé le débogage détaillé pour l'événement &c{event} &7et les arguments &c{args}&7!");
                         fr_fr.addDefault("commands.debug.verbose.disabled", "{header} Désactivé le débogage détaillé!");
+                        fr_fr.addDefault("commands.restore.restored-head", "{header} Restauré {head}!");
+                        fr_fr.addDefault("commands.restore.invalid-head", "{header} {head} n''est pas un identifiant valide!");
+                        fr_fr.addDefault("descriptions.hp.restore", "Restaure ou répare une tête déjà fournie par le plugin.");
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
@@ -487,6 +499,9 @@ public class HeadsPlusMessagesManager {
                         hu_hu.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lÖsszetett kihívások &8❱");
                         hu_hu.addDefault("commands.debug.verbose.enabled", "{header} Engedélyezte az &c{event} &7esemény és az &c{args} &7argumentumok hibakereső részletezését!");
                         hu_hu.addDefault("commands.debug.verbose.disabled", "{header} Letiltotta a hibakeresési részleteket!");
+                        hu_hu.addDefault("commands.restore.restored-head", "{header} Visszaállítva {head}!");
+                        hu_hu.addDefault("commands.restore.invalid-head", "{header} A {head} nem érvényes azonosító!");
+                        hu_hu.addDefault("descriptions.hp.restore", "Visszaállítja vagy megjavítja a plugin által biztosított fejet.");
                         hu_hu.set("version", version);
                         hu_hu.options().copyDefaults(true);
                         try {
@@ -571,6 +586,10 @@ public class HeadsPlusMessagesManager {
                         lol_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lshot chal &8❱");
                         lol_us.addDefault("commands.debug.verbose.enabled", "{header} kewl thingie on 4 event &c{event} &7'n' arrrrrgs &c{args}&7!");
                         lol_us.addDefault("commands.debug.verbose.disabled", "{header} kewl thingie iz off!");
+                        lol_us.addDefault("commands.restore.restored-head", "{header} summumd {head}!");
+                        lol_us.addDefault("commands.restore.invalid-head", "{header} {head} iz not ur frend :(");
+                        lol_us.addDefault("descriptions.hp.restore", "summun an old frend");
+
                         lol_us.set("version", version);
                         lol_us.options().copyDefaults(true);
                         try {
@@ -655,6 +674,10 @@ public class HeadsPlusMessagesManager {
                         pl_pl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPrzypięte wyzwania &8❱");
                         pl_pl.addDefault("commands.debug.verbose.enabled", "{header} Włączono szczegółowe debugowanie dla zdarzenia &c{event} &7i argumentów &c{args}&7!");
                         pl_pl.addDefault("commands.debug.verbose.disabled", "{header} Wyłączono szczegółowe debugowanie!");
+                        pl_pl.addDefault("commands.restore.restored-head", "{header} Przywrócono {head}!");
+                        pl_pl.addDefault("commands.restore.invalid-head", "{header} {head} nie jest prawidłowym identyfikatorem!");
+                        pl_pl.addDefault("descriptions.hp.restore", "Przywraca lub naprawia głowicę, która została już dostarczona przez wtyczkę.");
+
                         pl_pl.set("version", version);
                         pl_pl.options().copyDefaults(true);
                         try {
@@ -739,6 +762,10 @@ public class HeadsPlusMessagesManager {
                         ro_ro.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lProvocari fixate &8❱");
                         ro_ro.addDefault("commands.debug.verbose.enabled", "{header} A activat depanarea detaliată pentru eveniment &c{event} &7și argumente &c{args}&7!");
                         ro_ro.addDefault("commands.debug.verbose.disabled", "{header} Dezactivat detaliile de depanare!");
+                        ro_ro.addDefault("commands.restore.restored-head", "{header} {head} restaurat!");
+                        ro_ro.addDefault("commands.restore.invalid-head", "{header} {head} nu este un ID valid!");
+                        ro_ro.addDefault("descriptions.hp.restore", "Restaureaza sau repara un cap care a fost deja furnizat de plugin.");
+
                         ro_ro.set("version", version);
                         ro_ro.options().copyDefaults(true);
                         try {
@@ -823,6 +850,10 @@ public class HeadsPlusMessagesManager {
                         ru_ru.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lЗакрепленные вызовы&8❱");
                         ru_ru.addDefault("commands.debug.verbose.enabled", "{header} Включена подробная отладка для события &c{event} &7и аргументов &c{args}&7!");
                         ru_ru.addDefault("commands.debug.verbose.disabled", "{header} Отключена подробная отладка!");
+                        ru_ru.addDefault("commands.restore.restored-head", "{header} Восстановил {head}!");
+                        ru_ru.addDefault("commands.restore.invalid-head", "{header} {head} не является действительным идентификатором!");
+                        ru_ru.addDefault("descriptions.hp.restore", "Восстанавливает или ремонтирует голову, которая уже была предоставлена плагином.");
+
                         ru_ru.set("version", version);
                         ru_ru.options().copyDefaults(true);
                         try {
@@ -838,6 +869,10 @@ public class HeadsPlusMessagesManager {
                         nl_nl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lVastgezette uitdagingen &8❱");
                         nl_nl.addDefault("commands.debug.verbose.enabled", "{header} De uitgebreide debugging ingeschakeld voor gebeurtenis &c{event} &7en argumenten &c{args}&7!");
                         nl_nl.addDefault("commands.debug.verbose.disabled", "{header} De uitgebreide foutopsporing uitgeschakeld!");
+                        nl_nl.addDefault("commands.restore.restored-head", "{header} {head} hersteld!");
+                        nl_nl.addDefault("commands.restore.invalid-head", "{header} {head} is geen geldige ID!");
+                        nl_nl.addDefault("descriptions.hp.restore", "Herstelt of repareert een kop die al door de plug-in werd geleverd.");
+
                         nl_nl.set("version", version);
                         nl_nl.options().copyDefaults(true);
                         try {
@@ -850,6 +885,10 @@ public class HeadsPlusMessagesManager {
                     {
                         zh_cn.addDefault("commands.debug.verbose.enabled", "{header} 为事件&c{event}&7和参数&c{args}&7启用了调试详细信息！");
                         zh_cn.addDefault("commands.debug.verbose.disabled", "{header} 禁用调试冗长！");
+                        zh_cn.addDefault("commands.restore.restored-head", "{header} 已恢复{head}!");
+                        zh_cn.addDefault("commands.restore.invalid-head", "{header} {head}不是有效的ID!");
+                        zh_cn.addDefault("descriptions.hp.restore", "恢复或修复插件已提供的头部.");
+
                         zh_cn.set("version", version);
                         zh_cn.options().copyDefaults(true);
                         try {

@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.4
+version: 1.5
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -163,6 +163,9 @@ commands:
   reload:
     reload-message: '{header} Configuration reloaded!'
     reloading-message: '{header} Configuration reloading...'
+  restore:
+    restored-head: '{header} Restored {head}!'
+    invalid-head: '{header} {head} is not a valid ID!'
   sellhead:
     false-head: '{header} This head cannot be sold!'
     false-item: '{header} This is not a head!'
@@ -217,6 +220,7 @@ descriptions:
     info: Displays plugin information.
     profile: Displays your profile for the plugin.
     reload: Reloads configuration files.
+    restore: Restores or repairs a head that was already provided by the plugin.
     tests: Runs tests for mob drop rates.
     whitelist: Toggles the whitelist.
     whitelistadd: Adds a head to the whitelist.

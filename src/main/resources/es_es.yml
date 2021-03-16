@@ -170,6 +170,9 @@ commands:
   reload:
     reload-message: '{header} ¡Configuración recargada!'
     reloading-message: '{header} Recargando la configuración...'
+  restore:
+    restored-head: '{header} ¡Restaurado/a {cabeza}!'
+    invalid-head: '{header} ¡{head} no es una identificación válida!'
   sellhead:
     false-head: '{header} ¡Esa cabeza no puede ser vendida!'
     false-item: '{header} ¡Eso no es una cabeza!'
@@ -226,6 +229,7 @@ descriptions:
     info: Muestra información sobre el plugin.
     profile: Muestra su perfil en el plugin.
     reload: Recarga los archivos de configuración.
+    restore: Restaura o repara un cabezal que ya fue proporcionado por el complemento.
     tests: Ejecuta pruebas para las tasas de caída de mob.
     whitelist: Activa o desactiva la lsta blanca.
     whitelistadd: Añade cabezas a la lista blanca.

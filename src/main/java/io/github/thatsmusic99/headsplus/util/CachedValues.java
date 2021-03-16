@@ -15,7 +15,11 @@ public class CachedValues {
 
     public static Double getPrice(String path, FileConfiguration config) {
         String value = config.getString(path);
-        assert value != null;
-        return CachedValues.DOUBLE_PATTERN.matcher(value).matches() ? Double.parseDouble(value) : null;
+        if (value != null) {
+            return CachedValues.DOUBLE_PATTERN.matcher(value).matches() ? Double.parseDouble(value) : null;
+        } else {
+            return null;
+        }
+
     }
 }

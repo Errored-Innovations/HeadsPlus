@@ -82,11 +82,13 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
             PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, head, location, amount);
             Bukkit.getPluginManager().callEvent(phdEvent);
             if (!phdEvent.isCancelled()) {
-                location.getWorld().dropItem(location, head.getItemStack());
                 if (lostprice > 0.0) {
                     economy.withdrawPlayer(victim, lostprice);
                     hp.getMessagesConfig().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", hp.getConfiguration().fixBalanceStr(price));
                 }
+                head.getItemStackFuture().thenAccept(itemStack -> {
+                    location.getWorld().dropItem(location, itemStack);
+                });
             }
         }
     }

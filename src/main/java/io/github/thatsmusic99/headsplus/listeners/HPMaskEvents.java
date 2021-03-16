@@ -74,14 +74,17 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         Player player = (Player) e.getWhoClicked();
-        for (int i = 0; i < 46; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (item != null) {
-                if (NBTManager.isIcon(item)) {
-                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
+        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder()) {
+            for (int i = 0; i < 46; i++) {
+                ItemStack item = player.getInventory().getItem(i);
+                if (item != null) {
+                    if (NBTManager.isIcon(item)) {
+                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                    }
                 }
             }
         }
+       
         ItemStack item;
         boolean shift = e.isShiftClick();
         // If we're shift clicking

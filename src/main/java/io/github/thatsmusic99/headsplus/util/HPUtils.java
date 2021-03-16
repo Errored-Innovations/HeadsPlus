@@ -138,7 +138,7 @@ public class HPUtils {
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            location.getWorld().dropItem(location, head.getItemStack());
+            head.getItemStackFuture().thenAccept(itemStack -> location.getWorld().dropItem(location, itemStack));
         }
     }
 

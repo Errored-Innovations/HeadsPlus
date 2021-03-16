@@ -49,7 +49,7 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                         Skull skull = (Skull) block;
                         String owner;
 
-                        owner = addData("owner", getSkullName(skull));
+                        owner = addData("owner", skull.getOwner());
                         if (owner == null) return;
                         String playerName = player.getName();
                         HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
@@ -80,15 +80,6 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
             }
         } catch (NullPointerException ex) {
             //
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private static String getSkullName(Skull s) {
-        if (HeadsPlus.getInstance().getServer().getVersion().contains("1.8")) {
-            return s.getOwner();
-        } else {
-            return s.getOwningPlayer().getName();
         }
     }
 }

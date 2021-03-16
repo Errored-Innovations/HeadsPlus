@@ -484,6 +484,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("tests", new TestsCommand());
         commands.put("xp", new XPCommand());
         commands.put("locale", new LocaleCommand());
+        commands.put("restore", new RestoreCommand());
     }
 
     // GETTERS

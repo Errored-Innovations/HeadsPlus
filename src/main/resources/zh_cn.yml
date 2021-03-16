@@ -155,6 +155,9 @@ commands:
   reload:
     reload-message: '{header} 配置已重新加载!'
     reloading-message: '{header} 正在重新加载配置...'
+  restore:
+    restored-head: '{header} 已恢复{head}!'
+    invalid-head: '{header} {head}不是有效的ID!'
   sellhead:
     false-head: '{header} 这个头颅不能卖!'
     false-item: '{header} 这不是头颅!'
@@ -205,6 +208,7 @@ descriptions:
     info: 显示插件信息.
     profile: 显示您的插件配置文件.
     reload: 重新加载配置文件.
+    restore: 恢复或修复插件已提供的头部.
     tests: 对怪物掉落率进行测试.
     whitelist: 切换白名单.
     whitelistadd: 将头添加到白名单.
