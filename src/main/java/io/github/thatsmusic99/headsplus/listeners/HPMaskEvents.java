@@ -82,6 +82,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                 }
             }
         }
+        
         ItemStack item;
         boolean shift = e.isShiftClick();
         // If we're shift clicking
