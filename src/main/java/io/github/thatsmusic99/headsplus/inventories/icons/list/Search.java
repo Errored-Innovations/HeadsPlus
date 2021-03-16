@@ -45,7 +45,10 @@ public class Search extends Icon {
             s.open();
         } else {
             ConversationFactory c = new ConversationFactory(hp);
-            Conversation conv = c.withFirstPrompt(new ChatPrompt()).withLocalEcho(false).buildConversation(player);
+            Conversation conv = c.withFirstPrompt(new ChatPrompt())
+                    .withLocalEcho(false)
+                    .withModality(hp.getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                    .buildConversation(player);
             conv.addConversationAbandonedListener(event1 -> {
                 if (event1.gracefulExit()) {
                     context.put("search", String.valueOf(event1.getContext().getSessionData("term")));

@@ -9,9 +9,9 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.12-SNAPSHOT-1</hp-project.version>
-        <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
-        <spigot-directory>${user.home}\.m2\repository\org\spigotmc\spigot\</spigot-directory>
+        <hp-project.version>v6.11.3-SNAPSHOT-1</hp-project.version>
+        <craftbukkit-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}bukkit${file.separator}craftbukkit${file.separator}</craftbukkit-directory>
+        <spigot-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}spigotmc${file.separator}spigot${file.separator}</spigot-directory>
     </properties>
 
     <build>
@@ -20,7 +20,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -65,6 +65,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.4-SNAPSHOT</version>
@@ -87,14 +99,14 @@
             <artifactId>craftbukkit-12</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.14.4-R0.1-SNAPSHOT\craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}${file.separator}1.14.4-R0.1-SNAPSHOT${file.separator}craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-1.15.1</artifactId>
             <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.15.1-R0.1-SNAPSHOT\craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}${file.separator}1.15.1-R0.1-SNAPSHOT${file.separator}craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <!-- Temporary -->
@@ -102,25 +114,19 @@
             <artifactId>craftbukkit-1.16.1</artifactId>
             <version>1.16.1-R0.1</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${craftbukkit-directory}${file.separator}1.16.1-R0.1-SNAPSHOT${file.separator}craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-1.16.4</artifactId>
             <version>1.16.4-R0.1</version>
             <scope>system</scope>
-            <systemPath>${spigot-directory}\1.16.4-R0.1-SNAPSHOT\spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${spigot-directory}${file.separator}1.16.4-R0.1-SNAPSHOT${file.separator}spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.16.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

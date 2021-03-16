@@ -116,6 +116,7 @@ public class HeadsPlusMainConfig extends CMFile {
         config.addDefault("plugin.mechanics.debug.create-debug-files", true);
         config.addDefault("plugin.mechanics.debug.print-stacktraces-in-console", true);
         config.addDefault("plugin.mechanics.anvil-menu-search", false);
+        config.addDefault("plugin.mechanics.suppress-messages-during-search", false);
         config.addDefault("plugin.mechanics.mythicmobs.no-hp-drops", true);
         config.addDefault("plugin.mechanics.round-balance-to-2-d-p", true);
         config.addDefault("plugin.mechanics.boss-bar.enabled", true);

@@ -168,6 +168,9 @@ commands:
   reload:
     reload-message: '{header} Konfiguracja przeładowana!'
     reloading-message: '{header} Przeładowywanie konfiguracji...'
+  restore:
+    restored-head: '{header} Przywrócono {head}!'
+    invalid-head: '{header} {head} nie jest prawidłowym identyfikatorem!'
   sellhead:
     false-head: '{header} Ta głowa nie może zostać sprzedana!'
     false-item: '{header} To nie jest głowa!'
@@ -224,6 +227,7 @@ descriptions:
     info: Wyświetla informacje o wtyczce.
     profile: Wyświetla twój profil
     reload: Ładuje ponownie pliki konfiguracji.
+    restore: Przywraca lub naprawia głowicę, która została już dostarczona przez wtyczkę.
     tests: Uruchamia testy dla współczynników upuszczania głów mobów.
     whitelist: Włącza lub wyłącza białą listę.
     whitelistadd: Dodaje głowę do białej listy.

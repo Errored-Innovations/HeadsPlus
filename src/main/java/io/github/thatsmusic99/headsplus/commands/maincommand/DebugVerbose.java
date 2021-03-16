@@ -21,12 +21,13 @@ public class DebugVerbose {
                 DebugManager.removeListener(sender);
                 sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.disabled", sender));
             } else {
+                String[] arguments = new String[0];
                 if (args.length > 3) {
-                    String[] arguments = args[3].split(",");
-                    DebugManager.addListener(sender, event, stringToConditions(arguments));
-                    sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.enabled", sender)
-                            .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", args[3]));
+                    arguments = args[3].split(",");
                 }
+                DebugManager.addListener(sender, event, stringToConditions(arguments));
+                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.enabled", sender)
+                        .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", arguments.length == 0 ? "(none)" : args[3]));
             }
 
         }
@@ -37,7 +38,7 @@ public class DebugVerbose {
         List<String> results = new ArrayList<>();
         switch (args.length) {
             case 3:
-                Set<String> events = HeadsPlusEventExecutor.getEvents().keySet();
+                List<String> events = new ArrayList<>(HeadsPlusEventExecutor.getEvents().keySet());
                 events.add("off");
                 StringUtil.copyPartialMatches(args[2], events, results);
                 break;

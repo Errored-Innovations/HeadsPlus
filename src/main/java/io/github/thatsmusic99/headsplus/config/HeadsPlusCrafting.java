@@ -14,30 +14,26 @@ import java.util.List;
 public class HeadsPlusCrafting extends ConfigSettings {
 
 	private static HeadsPlusMessagesManager messages;
+
 	public HeadsPlusCrafting() {
         this.conName = "crafting";
         messages = HeadsPlus.getInstance().getMessagesConfig();
 	    enable();
     }
-	
-	private void loadCrafting() {
-		getConfig().options().header("HeadsPlus by Thatsmusic99 - due to the way Bukkit works, this config can only be reloaded on restart.\nInstructions for setting up can be found at: https://github.com/Thatsmusic99/HeadsPlus/wiki");
-		getConfig().options().copyDefaults(true);
-		save();
-	}
 
 	@Override
 	public void reloadC() {
 		performFileChecks();
-		loadCrafting();
 		checkCrafting();
+		getConfig().options().copyDefaults(true);
 		save();
 	}
 
 	private void checkCrafting() {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
         int currentSize = getConfig().saveToString().length();
-	    getConfig().addDefault("base-item.material", nms.getSkull(0).getType().name());
+		getConfig().options().header("HeadsPlus by Thatsmusic99 - due to the way Bukkit works, this config can only be reloaded on restart.\nInstructions for setting up can be found at: https://github.com/Thatsmusic99/HeadsPlus/wiki");
+		getConfig().addDefault("base-item.material", nms.getSkull(0).getType().name());
 	    getConfig().addDefault("base-item.data", 0);
 	    getConfig().addDefault("base-item.price", 10.0);
 	    getConfig().addDefault("base-item.display-name", "{type} Head");
