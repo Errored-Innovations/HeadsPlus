@@ -25,15 +25,46 @@ public class HeadsPlusMainConfig extends CMFile {
 
     @Override
     public void loadDefaults() {
-        addSection("Main Features", "These are the main features of which appear in HeadsPlus.\n" +
-                "They are placed here for your convenience.");
+        addSection("Main Features");
 
         addDefault("sell-heads", true, "Whether or not players are able to sell heads.\n" +
                 "This requires the Vault and an economy plugin - such as Essentials - to be enabled!");
         addDefault("mob-drops", true, "Whether or not mobs drop their heads when they die.\n" +
                 "To see the full settings for this, please look at the mobs.yml config file.");
         addDefault("enable-crafting", true, "Whether or not players can craft heads.\n" +
-                "Whilst this option is set to true, ");
+                "Whilst this option is set to true,");
+        addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
+                "The permission for this is heasplus.heads.");
+        addDefault("challenges", true);
+        addDefault("leaderboards", true);
+        addDefault("levels", true);
+        addDefault("masks", true);
+        addDefault("interactions", true);
+
+        addSection("Mob Drops");
+        addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")));
+        addDefault("ignored-players", new ArrayList<>());
+        addDefault("needs-killer", false);
+        addDefault("entities-needing-killer", new ArrayList<>(Collections.singleton("player")));
+        addDefault("enable-looting", true);
+        addDefault("thresholds.common", 100);
+        addDefault("thresholds.uncommon", 20);
+        addDefault("thresholds.rare", 5);
+        addDefault("looting-ignored", new ArrayList<>());
+        addDefault("disable-for-mythic-mobs", true);
+        addDefault("enable-player-head-death-messages", false);
+        addDefault("player-head-death-messages",
+                new ArrayList<>(Arrays.asList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
+                        "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
+                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job.")));
+
+        addSection("Selling Heads");
+        addDefault("stop-placement-of-sellable-heads", false);
+        addDefault("use-sellhead-gui", true);
+        addDefault("case-sensitive-names", true);
+
+        addSection("Restrictions");
+
     }
 
      @Override
@@ -41,8 +72,7 @@ public class HeadsPlusMainConfig extends CMFile {
 
      }
 
-    @Override
-    protected void load() {
+    protected void loadS() {
 
         if (config.get("blacklistOn") instanceof Boolean) {
             configF.delete();

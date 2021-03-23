@@ -100,7 +100,6 @@ public class HeadsPlus extends JavaPlugin {
             // Create locale files
             createLocales();
 
-
             // Build plugin instances
             createInstances();
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
