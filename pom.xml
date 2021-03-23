@@ -93,110 +93,109 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.8</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.8</artifactId>
             <version>1.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.8-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.8.3</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.8.3</artifactId>
             <version>1.8.3-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.8.8</artifactId>
+            <artifactId>craftbukkit-1.8.8</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.9.2</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.9.2</artifactId>
             <version>1.9.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.9.4</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.9.4</artifactId>
             <version>1.9.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.10.2</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.10.2</artifactId>
             <version>1.10.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.11.2</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.11.2</artifactId>
             <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.13.2</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.13.2</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.13</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.13</artifactId>
             <version>1.13-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.13-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
+            <groupId>org.bukkit</groupId>
             <artifactId>spigot-1.12.2</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.12.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.12.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.14.4</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.14.4</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.15.2</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.15.2</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <!-- Temporary -->
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.16.1</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.1</artifactId>
             <version>1.16.1-R0.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.16.4</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.4</artifactId>
             <version>1.16.4-R0.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.2</artifactId>
             <version>1.16.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}spigot-1.16.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.papermc</groupId>
