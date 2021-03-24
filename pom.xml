@@ -10,7 +10,7 @@
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>v6.11.4+${env.JOB_NAME}</hp-project.version>
+        <hp-project.version>v6.11.4+${env.BUILD_NUMBER}</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
