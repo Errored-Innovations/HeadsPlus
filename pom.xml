@@ -9,7 +9,8 @@
     <version>7.0.0</version>
 
     <properties>
-        <hp-project.version>v6.11.3</hp-project.version>
+        <!--suppress UnresolvedMavenProperty -->
+        <hp-project.version>v6.11.4+${env.GIT_COMMIT}</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
