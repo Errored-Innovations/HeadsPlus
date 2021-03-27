@@ -21,6 +21,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -162,7 +163,8 @@ public class HPUtils {
         HeadsPlus hp = HeadsPlus.getInstance();
         try {
             if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
-                if (hp.getServer().getPluginManager().getPlugin("MythicMobs") != null) {
+                Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");
+                if (plugin != null && plugin.isEnabled()) {
                     return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
                 }
             }
