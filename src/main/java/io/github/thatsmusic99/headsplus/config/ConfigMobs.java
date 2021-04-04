@@ -16,11 +16,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class HeadsPlusConfigHeads extends ConfigSettings {
+public class ConfigMobs extends ConfigSettings {
 	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 
-	public HeadsPlusConfigHeads() {
+	public ConfigMobs() {
 	    this.conName = "mobs";
 	    enable();
     }
