@@ -3,9 +3,9 @@ package io.github.thatsmusic99.headsplus.config.customheads;
 import com.google.common.io.Files;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
@@ -34,19 +34,75 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
-public class HeadsPlusConfigCustomHeads extends ConfigSettings {
+public class CustomHeadsConfig extends CMFile {
 
-    public boolean s = false;
     private final double cVersion = 3.4;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
     public final HeadsPlusMessagesManager hpc;
+    public static CustomHeadsConfig instance;
 
-    public HeadsPlusConfigCustomHeads() {
-        this.conName = "customheads";
+    public CustomHeadsConfig() {
+        super(HeadsPlus.getInstance(), "customheads");
         headsxEnable();
         hpc = HeadsPlus.getInstance().getMessagesConfig();
+    }
+
+    @Override
+    public void loadTitle() {
+        // Don't load any title
+    }
+
+    @Override
+    public void loadDefaults() {
+        addComment("This is where heads from custom textures can be made.\n" +
+                "To use a custom head in another config such as mobs.yml, use HP#head_id, where head_id is the config section of the head.");
+        addSection("Main Options");
+        addDefault("update-heads", true, "Whether the plugin should add more heads included with updates.");
+        addDefault("default-price", 10.00);
+        addLenientSection("price-per-world");
+        addDefault("price-per-world.example-one", 15.00);
+        addDefault("autograb", false);
+        addDefault("automatically-enable-grabbed-heads", true);
+        addDefault("current-version", cVersion, "Please do not change this! This is used to track updates made.");
+        boolean updateHeads = getConfig().getBoolean("update-heads");
+        double currentVersion = getConfig().getDouble("current-version");
+        if (updateHeads && currentVersion < cVersion) {
+            getConfig().set("current-version", cVersion);
+            // Sections
+            for (HeadsXSections h : HeadsXSections.values()) {
+                if (isNew() || h.d > currentVersion) {
+                    addDefault("sections." + h.let + ".display-name", h.dn);
+                    addDefault("sections." + h.let + ".texture", h.tx);
+                    addDefault("sections." + h.let + ".enabled", true);
+                    addDefault("sections." + h.let + ".permission", "headsplus.section." + h.let);
+                }
+            }
+            // Heads
+            for (HeadsXEnums head : HeadsXEnums.values()) {
+                if (isNew() || head.v > currentVersion) {
+                    getConfig().addDefault("heads." + head.name + ".displayname", head.dn);
+                    getConfig().addDefault("heads." + head.name + ".texture", head.tex);
+                    getConfig().addDefault("heads." + head.name + ".price", "default");
+                    getConfig().addDefault("heads." + head.name + ".section", head.sec);
+                    getConfig().addDefault("heads." + head.name + ".interact-name", head.interactName);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void moveToNew() {
+        moveTo("options.update-heads", "update-heads");
+        moveTo("options.version", "current-version");
+        moveTo("options.default-price", "default-price");
+        moveTo("options.price-per-world", "price-per-world");
+        // May as well add these.
+        for (HeadsXSections h : HeadsXSections.values()) {
+            addDefault("sections." + h.let + ".enabled", true);
+            addDefault("sections." + h.let + ".permission", "headsplus.section." + h.let);
+        }
     }
 
     private void loadHeadsX() {
@@ -141,7 +197,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         getConfig().options().copyDefaults(true);
         save();
         initCategories();
-        s = false;
+    }
+
+    public static CustomHeadsConfig get() {
+        return instance;
     }
 
     private void headsxEnable() {
@@ -149,7 +208,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
        // if (s) {
         //      loadHeadsX();
         //  }
-        s = false;
     }
 
     private void initCategories() {
@@ -551,4 +609,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             autosaveTask = -1;
         }
     }
+
+
 }
