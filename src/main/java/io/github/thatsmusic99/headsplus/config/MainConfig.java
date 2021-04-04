@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.customheads.CustomHeadsConfig;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.RoundingMode;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class HeadsPlusMainConfig extends CMFile {
+public class MainConfig extends CMFile {
 
     Perks perks = new Perks();
     SelectorList whitelist_worlds = new SelectorList();
@@ -19,8 +20,11 @@ public class HeadsPlusMainConfig extends CMFile {
     SelectorList whitelist_heads = new SelectorList();
     SelectorList blacklist_heads = new SelectorList();
 
-    public HeadsPlusMainConfig() {
+    private static MainConfig instance;
+
+    public MainConfig() {
         super(HeadsPlus.getInstance(), "config");
+        instance = this;
     }
 
     @Override
@@ -63,12 +67,18 @@ public class HeadsPlusMainConfig extends CMFile {
         addDefault("use-sellhead-gui", true);
         addDefault("case-sensitive-names", true);
 
+        addSection("Masks");
+        addDefault("check-interval", 60);
+        addDefault("reset-after-x-intervals", 20);
+        addDefault("effect-length", 12000);
+
         addSection("Restrictions");
 
     }
 
      @Override
      public void moveToNew() {
+        moveTo("plugin.autograb.enabled", "autograb", CustomHeadsConfig.get());
 
      }
 
@@ -225,7 +235,9 @@ public class HeadsPlusMainConfig extends CMFile {
         perks.negative_xp = p.getBoolean("xp.allow-negative");
     }
 
-
+    public static MainConfig get() {
+        return instance;
+    }
 
     public ConfigurationSection getMechanics() {
         return config.getConfigurationSection("plugin.mechanics");
