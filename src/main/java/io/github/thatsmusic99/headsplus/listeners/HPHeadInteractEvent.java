@@ -1,7 +1,8 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigInteractions;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -52,25 +53,13 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                         owner = addData("owner", skull.getOwner());
                         if (owner == null) return;
                         String playerName = player.getName();
-                        HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-                        FileConfiguration fc = hpch.getConfig();
+                        ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
                         List<String> names = new ArrayList<>();
                         names.addAll(hpch.eHeads);
                         names.addAll(hpch.ieHeads);
                         if (!sent.contains(player.getUniqueId())) {
                             sent.add(player.getUniqueId());
-                            for (String n : names) {
-                                if (fc.getStringList(n + ".name").contains(owner)) {
-                                    String dn = hpch.getInteractName(n).toLowerCase();
-                                    if (dn.startsWith("a") || dn.startsWith("e") || dn.startsWith("i") || dn.startsWith("o") || dn.startsWith("u")) {
-                                        hpc.sendMessage("event.head-mhf-interact-message-2", player, "{name}", dn, "{player}", playerName);
-                                    } else {
-                                        hpc.sendMessage("event.head-mhf-interact-message", player, "{name}", dn, "{player}", playerName);
-                                    }
-                                    return;
-                                }
-                            }
-                            hpc.sendMessage("event.head-interact-message", player, "{name}", owner, "{player}", playerName);
+                            ConfigInteractions.get().getMessageForHead(skull).thenAccept(player::sendMessage);
                         } else {
                             sent.remove(player.getUniqueId());
                         }
