@@ -192,7 +192,7 @@ public class HPExpansion extends PlaceholderExpansion {
                         return reward;
                     }
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? hp.getMessagesConfig().getString("command.challenges.challenge-completed", player) : "";
+                    return challenge.isComplete(player.getPlayer()) ? hp.getMessagesConfig().getString("command.challenges.challenge-completed", player.getPlayer()) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }

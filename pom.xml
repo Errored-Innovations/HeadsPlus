@@ -31,7 +31,6 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.3</version>
                 <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                     <relocations>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
@@ -96,6 +95,20 @@
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-13-1</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-13-2</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-12</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
@@ -151,7 +164,7 @@
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster</artifactId>
-            <version>v1.0</version>
+            <version>v1.0.1</version>
         </dependency>
 
     </dependencies>
