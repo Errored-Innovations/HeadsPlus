@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus;
 
+import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.Head;
@@ -8,8 +9,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
@@ -19,7 +19,7 @@ import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
@@ -40,6 +40,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 public class HeadsPlus extends JavaPlugin {
 
@@ -55,15 +56,15 @@ public class HeadsPlus extends JavaPlugin {
     private boolean con = false;
     // Config variables
     private HeadsPlusMessagesManager hpc;
-    private HeadsPlusConfigHeads hpch;
-    private HeadsPlusConfigCustomHeads hpchx;
-    private HeadsPlusCrafting hpcr;
+    private ConfigMobs hpch;
+    private ConfigCustomHeads hpchx;
+    private ConfigCrafting hpcr;
     private HeadsPlusChallenges hpchl;
     private HeadsPlusAPI hapi;
     private HeadsPlusLevels hpl;
-    private HeadsPlusMainConfig config;
-    private HeadsPlusConfigItems items;
-    private HeadsPlusConfigSounds sounds;
+    private MainConfig config;
+    private ConfigInventories items;
+    private ConfigSounds sounds;
     private HeadsPlusConfigTextMenu menus;
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
@@ -77,6 +78,9 @@ public class HeadsPlus extends JavaPlugin {
     private Pinned pinned;
     private PlayerScores scores;
     private boolean canUseWG = false;
+
+    public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), task);
+    public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.getInstance(), task);
 
     @Override
     public void onLoad() {
@@ -283,24 +287,6 @@ public class HeadsPlus extends JavaPlugin {
         }
     }
 
-    private void checkTheme() {
-        HeadsPlusMainConfig fc = getInstance().getConfiguration();
-        if (!fc.getMechanics().getString("theme").equalsIgnoreCase(fc.getMechanics().getString("plugin-theme-dont-change"))) {
-            try {
-                MenuThemes mt = MenuThemes.valueOf(fc.getMechanics().getString("theme").toUpperCase());
-                fc.getConfig().set("theme-colours.1", mt.c1);
-                fc.getConfig().set("theme-colours.2", mt.c2);
-                fc.getConfig().set("theme-colours.3", mt.c3);
-                fc.getConfig().set("theme-colours.4", mt.c4);
-                fc.getMechanics().set("plugin-theme-dont-change", mt.name());
-                fc.getConfig().options().copyDefaults(true);
-                fc.save();
-            } catch (Exception ex) {
-                getLogger().warning("Faulty theme was put in! No theme changes will be made.");
-            }
-        }
-    }
-
     private void registerEvents() {
         new HPHeadInteractEvent();
         new HPEntityDeathEvent();
@@ -332,10 +318,18 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createInstances() {
-
-        config = new HeadsPlusMainConfig();
-        cs.add(config);
-        hpc = new HeadsPlusMessagesManager();
+        List<CMFile> configFiles = new ArrayList<>();
+        configFiles.add(new MainConfig());
+        configFiles.add(new ConfigAnimations());
+        configFiles.add(new ConfigCustomHeads());
+        configFiles.add(new ConfigCrafting());
+        configFiles.add(new ConfigInteractions());
+        configFiles.add(new ConfigInventories());
+        configFiles.add(new ConfigMasks());
+        configFiles.add(new ConfigMobs());
+        configFiles.add(new ConfigSounds());
+        config = new MainConfig();
+        //hpc = new HeadsPlusMessagesManager();
         hapi = new HeadsPlusAPI();
         hpch = new HeadsPlusConfigHeads();
         cs.add(hpch);
