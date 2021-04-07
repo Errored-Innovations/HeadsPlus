@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.entity.Player;
@@ -36,7 +36,7 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        ConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));

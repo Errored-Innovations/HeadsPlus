@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.apache.commons.lang.Validate;

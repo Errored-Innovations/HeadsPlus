@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.util.DataManager;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -194,20 +194,19 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         public static String translateNormal(String type, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             for (String str : h.getConfig().getStringList("head-info.normal-layout")) {
                 sb.append(translateColors(str.replaceAll("\\{header}", h.getConfig().getString("head-info.header"))
                 .replace("{type}", type)
                 .replace("{display-name}", hpch.getDisplayName(type))
                 .replaceAll("\\{price}", String.valueOf(hpch.getPrice(type)))
-                .replaceAll("\\{interact-name}", hpch.getInteractName(type))
                 .replaceAll("\\{chance}", String.valueOf(hpch.getChance(type))), sender)).append("\n");
             }
             return sb.toString();
         }
 
         public static String translateNameInfo(String type, CommandSender sender, int page) {
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
                 return translateColored(sender, type, page);
             }
@@ -231,7 +230,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             List<Head> h = new ArrayList<>();
             for (String t : hpch.getConfig().getConfigurationSection(type + ".name").getKeys(false)) {
                 for (String r : hpch.getConfig().getStringList(type + ".name." + t)) {
@@ -256,7 +255,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         public static String translateMaskInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             List<Mask> m = new ArrayList<>();
             for (int i = 0; i < hpch.getConfig().getStringList(type + ".mask-effects").size(); i++) {
                 String s = hpch.getConfig().getStringList(type + ".mask-effects").get(i);
@@ -286,7 +285,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         public static String translateLoreInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             PagedLists<String> lore = new PagedLists<>(hpch.getLore(type), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);

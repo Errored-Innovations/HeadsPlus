@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.MainConfig.SelectorList;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;

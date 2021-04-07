@@ -27,7 +27,7 @@ public abstract class AbstractListAdd extends AbstractListCommand {
                 } else {
                     getList().add(aHead);
                     config.getConfig().set(getPath(), getList());
-                    config.save();
+                    config.save(true);
                     hpc.sendMessage("commands." + getFullName() + "." + getType() + "-added-" + getListType(), sender, "{name}", args[1], "{player}", args[1]);
                 }
                 } else {

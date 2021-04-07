@@ -8,7 +8,7 @@ import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;

@@ -3,10 +3,10 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -117,7 +117,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         try {
-            HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             if (args.length > 2) {
                 String type = args[2].toLowerCase().replaceAll("_", "");
                 if (args[2].equalsIgnoreCase("WANDERING_TRADER") || args[2].equalsIgnoreCase("TRADER_LLAMA")) {
@@ -283,7 +283,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                 hpc.sendMessage("commands.errors.invalid-args", sender);
             }
             hpch.getConfig().options().copyDefaults(true);
-            hpch.save();
+            hpch.save(true);
             return true;
         } catch (IndexOutOfBoundsException ex) {
             hpc.sendMessage("commands.errors.invalid-args", sender);

@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsXEnums;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,7 +31,7 @@ public class RestoreCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             try {
                 HeadsXEnums headToBeAdded = HeadsXEnums.valueOf(args[1].toUpperCase());
-                HeadsPlusConfigCustomHeads customHeadsConfig = HeadsPlus.getInstance().getHeadsXConfig();
+                ConfigCustomHeads customHeadsConfig = HeadsPlus.getInstance().getHeadsXConfig();
                 customHeadsConfig.getConfig().set("heads." + headToBeAdded.name, null);
                 customHeadsConfig.addHead(headToBeAdded.tex,
                         true,

@@ -1,13 +1,10 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.util.DebugManager;
+import io.github.thatsmusic99.headsplus.managers.DebugManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
-import mkremins.fanciful.FancyMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.*;

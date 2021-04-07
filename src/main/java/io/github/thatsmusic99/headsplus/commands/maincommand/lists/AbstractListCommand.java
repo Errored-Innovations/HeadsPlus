@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class AbstractListCommand implements IHeadsPlusCommand {
 
     protected final HeadsPlus hp;
-    protected final HeadsPlusMainConfig config;
+    protected final MainConfig config;
     protected final HeadsPlusMessagesManager hpc;
 
     public AbstractListCommand(HeadsPlus hp) {

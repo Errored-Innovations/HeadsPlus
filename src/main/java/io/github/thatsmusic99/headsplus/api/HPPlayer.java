@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -163,7 +163,7 @@ public class HPPlayer {
         } else {
             s = s.toLowerCase().replaceAll("_", "");
         }
-        HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+        ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
         List<PotionEffect> po = new ArrayList<>();
         for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
             String is = hpch.getConfig().getStringList(s + ".mask-effects").get(i).toUpperCase();

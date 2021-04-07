@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.*;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigSounds;
+import io.github.thatsmusic99.headsplus.config.ConfigSounds;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 
 public class SoundEvent implements Listener {
 
-    private final HeadsPlusConfigSounds sounds = HeadsPlus.getInstance().getSounds();
+    private final ConfigSounds sounds = HeadsPlus.getInstance().getSounds();
 
     @EventHandler
     public void onHeadSell(SellHeadEvent event) {

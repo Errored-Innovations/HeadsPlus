@@ -10,9 +10,11 @@ import java.util.logging.Level;
 public class PaperUtil implements PaperImpl {
 
     private final PaperImpl internalImpl;
+    private static PaperUtil instance;
 
     public PaperUtil() {
         PaperImpl impl;
+        instance = this;
         if (PaperLib.isPaper()) {
             try {
                 impl = new ActualPaperImpl();
@@ -33,4 +35,7 @@ public class PaperUtil implements PaperImpl {
         return internalImpl.setProfile(meta, name);
     }
 
+    public static PaperUtil get() {
+        return instance;
+    }
 }
