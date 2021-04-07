@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.config.customheads;
 
-import com.google.common.io.Files;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.configurationmaster.CMFile;
@@ -25,7 +24,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -34,19 +32,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
-public class CustomHeadsConfig extends CMFile {
+public class ConfigCustomHeads extends CMFile {
 
     private final double cVersion = 3.4;
     public final Map<String, List<String>> sections = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
-    public final HeadsPlusMessagesManager hpc;
-    public static CustomHeadsConfig instance;
+    public static ConfigCustomHeads instance;
 
-    public CustomHeadsConfig() {
+    public ConfigCustomHeads() {
         super(HeadsPlus.getInstance(), "customheads");
-        headsxEnable();
-        hpc = HeadsPlus.getInstance().getMessagesConfig();
+        instance = this;
     }
 
     @Override
@@ -66,10 +62,10 @@ public class CustomHeadsConfig extends CMFile {
         addDefault("autograb", false);
         addDefault("automatically-enable-grabbed-heads", true);
         addDefault("current-version", cVersion, "Please do not change this! This is used to track updates made.");
-        boolean updateHeads = getConfig().getBoolean("update-heads");
-        double currentVersion = getConfig().getDouble("current-version");
+        boolean updateHeads = getBoolean("update-heads");
+        double currentVersion = getDouble("current-version");
         if (updateHeads && currentVersion < cVersion) {
-            getConfig().set("current-version", cVersion);
+            set("current-version", cVersion);
             // Sections
             for (HeadsXSections h : HeadsXSections.values()) {
                 if (isNew() || h.d > currentVersion) {
@@ -82,11 +78,11 @@ public class CustomHeadsConfig extends CMFile {
             // Heads
             for (HeadsXEnums head : HeadsXEnums.values()) {
                 if (isNew() || head.v > currentVersion) {
-                    getConfig().addDefault("heads." + head.name + ".displayname", head.dn);
-                    getConfig().addDefault("heads." + head.name + ".texture", head.tex);
-                    getConfig().addDefault("heads." + head.name + ".price", "default");
-                    getConfig().addDefault("heads." + head.name + ".section", head.sec);
-                    getConfig().addDefault("heads." + head.name + ".interact-name", head.interactName);
+                    addDefault("heads." + head.name + ".displayname", head.dn);
+                    addDefault("heads." + head.name + ".texture", head.tex);
+                    addDefault("heads." + head.name + ".price", "default");
+                    addDefault("heads." + head.name + ".section", head.sec);
+                    addDefault("heads." + head.name + ".interact-name", head.interactName);
                 }
             }
         }
@@ -99,9 +95,10 @@ public class CustomHeadsConfig extends CMFile {
         moveTo("options.default-price", "default-price");
         moveTo("options.price-per-world", "price-per-world");
         // May as well add these.
-        for (HeadsXSections h : HeadsXSections.values()) {
-            addDefault("sections." + h.let + ".enabled", true);
-            addDefault("sections." + h.let + ".permission", "headsplus.section." + h.let);
+        for (String key : getConfig().getConfigurationSection("sections").getKeys(false)) {
+            addDefault("sections." + key + ".enabled", true);
+            addDefault("sections." + key + ".permission", "headsplus.section." + key);
+
         }
     }
 
@@ -128,18 +125,16 @@ public class CustomHeadsConfig extends CMFile {
         }
 
         getConfig().options().copyDefaults(true);
-        save();
+        save(false);
         initCategories();
     }
 
-    @Override
     public String getDefaultPath() {
         return "options.default-price";
     }
 
-    @Override
     public void reloadC() {
-        if (configF == null) {
+      /*  if (configF == null) {
             File oldFile = new File(HeadsPlus.getInstance().getDataFolder(), "headsx.yml");
             File newFile = new File(HeadsPlus.getInstance().getDataFolder(), "customheads.yml");
             if (oldFile.exists()) {
@@ -152,14 +147,12 @@ public class CustomHeadsConfig extends CMFile {
             }
             configF = newFile;
         }
-        performFileChecks();
+        performFileChecks(); */
         getConfig().addDefault("options.update-heads", true);
         getConfig().addDefault("options.version", cVersion);
         getConfig().addDefault("options.default-price", 10.00);
         getConfig().addDefault("options.price-per-world.example-one", 15.00);
-        if (configF.length() <= 500) {
-            loadHeadsX();
-        }
+
         boolean b = getConfig().getBoolean("options.update-heads");
         if (getConfig().getDouble("options.version") < cVersion && b) {
             for (String str : getConfig().getConfigurationSection("heads").getKeys(false)) {
@@ -195,11 +188,11 @@ public class CustomHeadsConfig extends CMFile {
             }
         }
         getConfig().options().copyDefaults(true);
-        save();
+        save(true);
         initCategories();
     }
 
-    public static CustomHeadsConfig get() {
+    public static ConfigCustomHeads get() {
         return instance;
     }
 
@@ -232,9 +225,6 @@ public class CustomHeadsConfig extends CMFile {
             HeadsPlus.getInstance().getLogger().log(Level.SEVERE, "Failed to init skull database", ex);
             sections.clear();
             return;
-        }
-        if (getConfig().getBoolean("options.advent-calendar")) {
-            sections.put("advent-calendar", new ArrayList<>());
         }
     }
 
@@ -370,11 +360,11 @@ public class CustomHeadsConfig extends CMFile {
             } else if (force && enableHead(texture)){
                 // Keep going.
             } else if(sender != null) {
-                hpc.sendMessage("commands.addhead.head-already-added", sender, "{player}", player.getName());
+                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-already-added", sender, "{player}", player.getName());
                 return;
             }
             if(sender != null) {
-                hpc.sendMessage("commands.addhead.head-added", sender, "{player}", player.getName());
+                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", player.getName());
             }
 
         } catch (ParseException e) {
@@ -502,14 +492,14 @@ public class CustomHeadsConfig extends CMFile {
                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"), 
                                                    forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
                                             if(callback != null) {
-                                                hpc.sendMessage("commands.addhead.head-added", callback, "{player}", name);
+                                                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", callback, "{player}", name);
                                             }
                                        } else if (forceAdd && enableHead(texUrl)){
                                            if(callback != null) {
-                                               hpc.sendMessage("commands.addhead.head-added", callback, "{player}", name);
+                                               HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", callback, "{player}", name);
                                             }
                                        } else if(callback != null) {
-                                           hpc.sendMessage("commands.addhead.head-already-added", callback, "{player}", name);
+                                           HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-already-added", callback, "{player}", name);
                                        }
                                    }
                                }
@@ -596,7 +586,7 @@ public class CustomHeadsConfig extends CMFile {
     void delaySave() {
         if (autosaveTask == -1 && HeadsPlus.getInstance().isEnabled()) {
             autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), ()->{
-                save();
+                save(true);
                 autosaveTask = -1;
             }, 5 * 60).getTaskId();
         }
@@ -605,7 +595,7 @@ public class CustomHeadsConfig extends CMFile {
     public void flushSave() {
         if (autosaveTask != -1) {
             Bukkit.getScheduler().cancelTask(autosaveTask);
-            save();
+            save(true);
             autosaveTask = -1;
         }
     }

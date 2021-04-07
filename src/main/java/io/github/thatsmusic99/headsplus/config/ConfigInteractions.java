@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsXEnums;
 import org.bukkit.Location;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 
 public class ConfigInteractions extends CMFile {
 
@@ -128,6 +130,19 @@ public class ConfigInteractions extends CMFile {
     }
 
     private String getMessage(String path, Player player) {
+        String message = getString(path + ".message", getString("defaults.message"));
+        // Default message is null, what the hell
+        if (message == null) return "";
+        Pattern defaultsPattern = Pattern.compile("\\{(.+)}");
+        if (defaultsPattern.matcher(message).matches()) {
+            String pointer = defaultsPattern.matcher(message).group(1);
+            if (getConfig().getConfigurationSection("defaults").getKeys(false).contains(pointer)) {
+                message = getString("defaults." + pointer, getString("defaults.message"));
+            }
+        }
 
+        if (message == null) return "";
+
+        return HeadsPlusMessagesManager.get().formatMsg(message, player);
     }
 }
