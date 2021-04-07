@@ -59,7 +59,7 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
                         names.addAll(hpch.ieHeads);
                         if (!sent.contains(player.getUniqueId())) {
                             sent.add(player.getUniqueId());
-                            ConfigInteractions.get().getMessageForHead(skull).thenAccept(player::sendMessage);
+                            ConfigInteractions.get().getMessageForHead(skull, player).thenAccept(player::sendMessage);
                         } else {
                             sent.remove(player.getUniqueId());
                         }
