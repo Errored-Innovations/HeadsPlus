@@ -25,12 +25,11 @@ import java.util.Set;
 )
 public class LocaleCommand implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager messages = HeadsPlus.getInstance().getMessagesConfig();
     private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return messages.getString("descriptions.hp.locale", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.locale", sender);
     }
 
     @Override
@@ -39,11 +38,11 @@ public class LocaleCommand implements IHeadsPlusCommand {
             if (args.length > 1) {
                 if (args[1].equalsIgnoreCase("refresh")) {
                     if (sender instanceof Player) {
-                        messages.setPlayerLocale((Player) sender);
-                        messages.sendMessage("commands.locale.changed-locale", sender);
+                        HeadsPlusMessagesManager.get().setPlayerLocale((Player) sender);
+                        HeadsPlusMessagesManager.get().sendMessage("commands.locale.changed-locale", sender);
                         return true;
                     } else {
-                        messages.sendMessage("commands.errors.not-a-player", sender);
+                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.not-a-player", sender);
                     }
                 } else {
                     if (sender.hasPermission("headsplus.maincommand.locale.change")) {
@@ -53,37 +52,37 @@ public class LocaleCommand implements IHeadsPlusCommand {
                                 Player player = Bukkit.getPlayer(args[2]);
                                 if (sender.hasPermission("headsplus.maincommand.locale.others")) {
                                     if (player != null && player.isOnline()) {
-                                        messages.setPlayerLocale(player, str);
-                                        messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
+                                        HeadsPlusMessagesManager.get().setPlayerLocale(player, str);
+                                        HeadsPlusMessagesManager.get().sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
                                         return true;
                                     } else {
-                                        messages.sendMessage("commands.errors.player-offline", sender);
+                                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.player-offline", sender);
                                     }
                                 } else {
-                                    messages.sendMessage("commands.errors.no-perm", sender);
+                                    HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                                 }
 
                             } else {
                                 if (sender instanceof Player) {
-                                    messages.setPlayerLocale((Player) sender, str);
-                                    messages.sendMessage("commands.locale.changed-locale", sender);
+                                    HeadsPlusMessagesManager.get().setPlayerLocale((Player) sender, str);
+                                    HeadsPlusMessagesManager.get().sendMessage("commands.locale.changed-locale", sender);
                                     return true;
                                 } else {
-                                    messages.sendMessage("commands.errors.not-a-player", sender);
+                                    HeadsPlusMessagesManager.get().sendMessage("commands.errors.not-a-player", sender);
                                 }
                             }
                         } else {
-                            messages.sendMessage("commands.locale.invalid-lang", sender, "{languages}", Arrays.toString(languages.toArray()));
+                            HeadsPlusMessagesManager.get().sendMessage("commands.locale.invalid-lang", sender, "{languages}", Arrays.toString(languages.toArray()));
                         }
                     } else {
-                        messages.sendMessage("commands.errors.no-perm", sender);
+                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                     }
                 }
             } else {
-                messages.sendMessage("commands.errors.invalid-args", sender);
+                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             }
         } else {
-            messages.sendMessage("commands.errors.disabled", sender);
+            HeadsPlusMessagesManager.get().sendMessage("commands.errors.disabled", sender);
         }
         return false;
     }

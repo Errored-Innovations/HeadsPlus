@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
@@ -21,54 +22,53 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.sql.SQLException;
 import java.util.*;
 
-public class HeadsPlusConfigTextMenu extends ConfigSettings {
+public class ConfigTextMenus extends CMFile {
 
-    private static final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private static final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
 
-    public HeadsPlusConfigTextMenu() {
-        this.conName = "textmenus";
-        enable();
+    public ConfigTextMenus() {
+        super(HeadsPlus.getInstance(), "textmenus");
     }
 
     @Override
-    protected void load() {
-        getConfig().addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("help.header", "{default-paged}");
-        getConfig().addDefault("help.for-each-line", "&c{usage} &8» &7{description}");
-        getConfig().addDefault("help.lines-per-page", 8);
-        getConfig().addDefault("help.command-help.header", "{default}");
-        getConfig().addDefault("help.command-help.layout", new ArrayList<>(Arrays.asList("{header}",
+    public void loadDefaults() {
+        addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("help.header", "{default-paged}");
+        addDefault("help.for-each-line", "&c{usage} &8» &7{description}");
+        addDefault("help.lines-per-page", 8);
+        addDefault("help.command-help.header", "{default}");
+        addDefault("help.command-help.layout", new ArrayList<>(Arrays.asList("{header}",
                 "&c{msg_textmenus.help.usage} &8» &7{usage}",
                 "&c{msg_textmenus.help.description} &8» &7{description}",
                 "&c{msg_textmenus.help.permission} &8» &7{permission}",
                 "&c{msg_textmenus.help.further-usages} &8» &7{further-usage}")));
-        getConfig().addDefault("head-info.header", "{default}");
-        getConfig().addDefault("head-info.normal-layout", new ArrayList<>(Arrays.asList("{header}",
+        addDefault("head-info.header", "{default}");
+        addDefault("head-info.normal-layout", new ArrayList<>(Arrays.asList("{header}",
                 "&c{msg_textmenus.head-info.type} &8» &7{type}",
                 "&c{msg_textmenus.head-info.display-name} &8» &7{display-name}",
                 "&c{msg_textmenus.head-info.price} &8» &7{price}",
                 "&c{msg_textmenus.head-info.interact-name} &8» &7{interact-name}",
                 "&c{msg_textmenus.head-info.chance} &8» &7{chance}")));
-        getConfig().addDefault("head-info.mask-info.header", "{default}");
-        getConfig().addDefault("head-info.mask-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
-        getConfig().addDefault("head-info.mask-info.for-each-line", "&c{effect} &8» &7({amplifier})");
-        getConfig().addDefault("head-info.mask-info.lines-per-page", 8);
-        getConfig().addDefault("head-info.lore-info.header", "{default}");
-        getConfig().addDefault("head-info.lore-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
-        getConfig().addDefault("head-info.lore-info.for-each-line", "&8» &7{lore}");
-        getConfig().addDefault("head-info.lore-info.lines-per-page", 8);
-        getConfig().addDefault("head-info.name-info.colored.header", "{default}");
-        getConfig().addDefault("head-info.name-info.colored.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
-        getConfig().addDefault("head-info.name-info.colored.for-each-line", "&c{name} &8» &7({color})");
-        getConfig().addDefault("head-info.name-info.colored.lines-per-page", 8);
-        getConfig().addDefault("head-info.name-info.default.header", "{default}");
-        getConfig().addDefault("head-info.name-info.default.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
-        getConfig().addDefault("head-info.name-info.default.for-each-line", "&8» &7{name}");
-        getConfig().addDefault("head-info.name-info.default.lines-per-page", 8);
-        getConfig().addDefault("profile.header", "{default}");
-        getConfig().addDefault("profile.layout", new ArrayList<>(Arrays.asList("{header}",
+        addDefault("head-info.mask-info.header", "{default}");
+        addDefault("head-info.mask-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
+        addDefault("head-info.mask-info.for-each-line", "&c{effect} &8» &7({amplifier})");
+        addDefault("head-info.mask-info.lines-per-page", 8);
+        addDefault("head-info.lore-info.header", "{default}");
+        addDefault("head-info.lore-info.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
+        addDefault("head-info.lore-info.for-each-line", "&8» &7{lore}");
+        addDefault("head-info.lore-info.lines-per-page", 8);
+        addDefault("head-info.name-info.colored.header", "{default}");
+        addDefault("head-info.name-info.colored.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
+        addDefault("head-info.name-info.colored.for-each-line", "&c{name} &8» &7({color})");
+        addDefault("head-info.name-info.colored.lines-per-page", 8);
+        addDefault("head-info.name-info.default.header", "{default}");
+        addDefault("head-info.name-info.default.first-line", "&c{msg_textmenus.head-info.type} &8» &7{type}");
+        addDefault("head-info.name-info.default.for-each-line", "&8» &7{name}");
+        addDefault("head-info.name-info.default.lines-per-page", 8);
+        addDefault("profile.header", "{default}");
+        addDefault("profile.layout", new ArrayList<>(Arrays.asList("{header}",
                 "&c{msg_textmenus.profile.player} &8» &7{player}",
                 "&cXP &8» &7{xp}",
                 "&c{msg_textmenus.profile.completed-challenges} &8» &7{completed-challenges}",
@@ -77,23 +77,23 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
                 "&c{msg_textmenus.profile.current-level} &8» &7{level}",
                 "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
-        getConfig().addDefault("blacklist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lBlacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("blacklist.default.for-each-line", "&8» &7{name}");
-        getConfig().addDefault("blacklist.default.lines-per-page", 8);
-        getConfig().addDefault("blacklist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Blacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("blacklist.world.for-each-line", "&8» &7{name}");
-        getConfig().addDefault("blacklist.world.lines-per-page", 8);
-        getConfig().addDefault("whitelist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWhitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("whitelist.default.for-each-line", "&8» &7{name}");
-        getConfig().addDefault("whitelist.default.lines-per-page", 8);
-        getConfig().addDefault("whitelist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Whitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        getConfig().addDefault("whitelist.world.for-each-line", "&8» &7{name}");
-        getConfig().addDefault("whitelist.world.lines-per-page", 8);
-        getConfig().addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━&c．・");
-        getConfig().addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
-        getConfig().addDefault("leaderboard.lines-per-page", 8);
-        getConfig().addDefault("info.header", "{default}");
-        getConfig().addDefault("info.layout", new ArrayList<>(Arrays.asList("{header}",
+        addDefault("blacklist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lBlacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("blacklist.default.for-each-line", "&8» &7{name}");
+        addDefault("blacklist.default.lines-per-page", 8);
+        addDefault("blacklist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Blacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("blacklist.world.for-each-line", "&8» &7{name}");
+        addDefault("blacklist.world.lines-per-page", 8);
+        addDefault("whitelist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWhitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("whitelist.default.for-each-line", "&8» &7{name}");
+        addDefault("whitelist.default.lines-per-page", 8);
+        addDefault("whitelist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Whitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("whitelist.world.for-each-line", "&8» &7{name}");
+        addDefault("whitelist.world.lines-per-page", 8);
+        addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━&c．・");
+        addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
+        addDefault("leaderboard.lines-per-page", 8);
+        addDefault("info.header", "{default}");
+        addDefault("info.layout", new ArrayList<>(Arrays.asList("{header}",
                 "&c{msg_textmenus.info.version} &8» &7{version}",
                 "&c{msg_textmenus.info.author} &8» &7{author}",
                 "&c{msg_textmenus.info.language} &8» &7{locale}",
@@ -101,8 +101,6 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 "&c{msg_textmenus.info.spigot} &8» &7https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/",
                 "&c{msg_textmenus.info.discord} &8» &7https://discord.gg/eu8h3BG",
                 "&c{msg_textmenus.info.github} &8» &7https://github.com/Thatsmusic99/HeadsPlus")));
-        getConfig().options().copyDefaults(true);
-        save();
     }
 
     private static String translateColors(String s, CommandSender sender) {
@@ -124,10 +122,10 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
         public static String translate(CommandSender sender, String type, String type2, List<String> l, int page) {
 
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
             PagedLists<String> list = new PagedLists<>(l, h.getConfig().getInt(type + "." + type2 + ".lines-per-page"));
             if ((page > list.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(h.getConfig().getString(type + "." + type2 + ".header")
                     .replaceAll("\\{page}", String.valueOf(page))
@@ -142,7 +140,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
     public static class ProfileTranslator {
         public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
             HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
             for (String str : h.getConfig().getStringList("profile.layout")) {
                 try {
@@ -193,7 +191,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translateNormal(String type, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
             ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             for (String str : h.getConfig().getStringList("head-info.normal-layout")) {
                 sb.append(translateColors(str.replaceAll("\\{header}", h.getConfig().getString("head-info.header"))
@@ -211,11 +209,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
                 return translateColored(sender, type, page);
             }
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             PagedLists<String> heads = new PagedLists<>(hpch.getConfig().getStringList(type + ".name"),
                     ht.getConfig().getInt("head-info.name-info.default.lines-per-page"));
             if ((page > heads.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.default.header"), sender)).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.default.first-line"), sender)
@@ -229,7 +227,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             List<Head> h = new ArrayList<>();
             for (String t : hpch.getConfig().getConfigurationSection(type + ".name").getKeys(false)) {
@@ -239,7 +237,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
             PagedLists<Head> hs = new PagedLists<>(h, ht.getConfig().getInt("head-info.name-info.colored.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.header"), sender)).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.name-info.colored.first-line"), sender)
@@ -254,7 +252,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translateMaskInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             List<Mask> m = new ArrayList<>();
             for (int i = 0; i < hpch.getConfig().getStringList(type + ".mask-effects").size(); i++) {
@@ -269,7 +267,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             }
             PagedLists<Mask> hs = new PagedLists<>(m, ht.getConfig().getInt("head-info.mask-info.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.header"), sender)).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.mask-info.first-line"), sender)
@@ -284,11 +282,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translateLoreInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
             PagedLists<String> lore = new PagedLists<>(hpch.getLore(type), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
-                return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.invalid-pg-no", sender);
+                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.header"), sender)).append("\n");
             sb.append(translateColors(ht.getConfig().getString("head-info.lore-info.first-line"), sender)
@@ -305,7 +303,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static void translateHelpMenu(CommandSender sender, int page) {
             HeadsPlus hp = HeadsPlus.getInstance();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             List<IHeadsPlusCommand> headPerms = new ArrayList<>();
             for (IHeadsPlusCommand key : hp.getCommands().values()) {
                 CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
@@ -316,7 +314,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
             PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, ht.getConfig().getInt("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
-                hp.getMessagesConfig().sendMessage("commands.errors.invalid-pg-no", sender);
+                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
                 sender.sendMessage(translateColors(ht.getConfig().getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
@@ -339,7 +337,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translateCommandHelp(IHeadsPlusCommand key, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
             for (String s : ht.getConfig().getStringList("help.command-help.layout")) {
                 if (!s.contains("{permission}") || sender.hasPermission("headsplus.help.viewperms")) {
                     if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
@@ -363,11 +361,11 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translate(CommandSender sender, String section, String database, int page) {
             PagedHashmaps<OfflinePlayer, Integer> ph = null;
-            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
             try {
                 HeadsPlus hp = HeadsPlus.getInstance();
                 StringBuilder sb = new StringBuilder();
-                HeadsPlusConfigTextMenu ht = hp.getMenus();
+                ConfigTextMenus ht = hp.getMenus();
                 ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), ht.getConfig().getInt("leaderboard.lines-per-page"));
                 sb.append(translateColors(ht.getConfig().getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
@@ -402,7 +400,7 @@ public class HeadsPlusConfigTextMenu extends ConfigSettings {
 
         public static String translate(CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            HeadsPlusConfigTextMenu h = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
             HeadsPlus hp = HeadsPlus.getInstance();
             for (String s : h.getConfig().getStringList("info.layout")) {
                 sb.append("\n").append(translateColors(s

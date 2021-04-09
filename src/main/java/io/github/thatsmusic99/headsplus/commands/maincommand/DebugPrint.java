@@ -43,7 +43,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     public DebugPrint(HeadsPlus hp) {
         DebugPrint.hp = hp;
-        hpc = hp.getMessagesConfig();
+        hpc = HeadsPlusMessagesManager.get();
     }
 
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
@@ -79,7 +79,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.debug", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.debug", sender);
     }
 
     @Override

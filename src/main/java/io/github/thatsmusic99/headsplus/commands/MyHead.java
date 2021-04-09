@@ -28,7 +28,7 @@ import java.util.List;
 )
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
@@ -144,7 +144,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.myhead", sender);
     }
 
     @Override

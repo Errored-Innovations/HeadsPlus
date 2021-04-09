@@ -16,7 +16,7 @@ public abstract class AbstractListCommand implements IHeadsPlusCommand {
     public AbstractListCommand(HeadsPlus hp) {
         this.hp = hp;
         this.config = hp.getConfiguration();
-        this.hpc = hp.getMessagesConfig();
+        this.hpc = HeadsPlusMessagesManager.get();
     }
 
     public abstract List<String> getList();

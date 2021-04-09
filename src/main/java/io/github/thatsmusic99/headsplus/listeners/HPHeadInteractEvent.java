@@ -19,7 +19,7 @@ import java.util.*;
 
 public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private final List<UUID> sent = new ArrayList<>();
 
     public HPHeadInteractEvent() {

@@ -4,7 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -28,7 +28,7 @@ import java.util.List;
 public class HeadInfoCommand implements IHeadsPlusCommand {
 
     // A
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private static final List<String> potions = new ArrayList<>();
 
 
@@ -92,7 +92,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                             StringUtil.copyPartialMatches(args[4], potions, results);
                         } else if (args[1].equalsIgnoreCase("remove")) {
                             StringUtil.copyPartialMatches(args[4], HeadsPlus.getInstance().getHeadsConfig()
-                                    .getConfig().getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
+                                    .getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
                                             || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
                         }
                     } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
@@ -135,10 +135,10 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                                 sender.sendMessage(printNameInfo(type, page, sender));
                                                 break;
                                             case "mask":
-                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, page));
+                                                sender.sendMessage(ConfigTextMenus.HeadInfoTranslator.translateMaskInfo(sender, type, page));
                                                 break;
                                             case "lore":
-                                                sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, page));
+                                                sender.sendMessage(ConfigTextMenus.HeadInfoTranslator.translateLoreInfo(sender, type, page));
                                                 break;
                                             default:
                                                 hpc.sendMessage("commands.errors.invalid-args", sender);
@@ -151,17 +151,17 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                                             sender.sendMessage(printNameInfo(type, 1, sender));
                                             break;
                                         case "mask":
-                                            sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateMaskInfo(sender, type, 1));
+                                            sender.sendMessage(ConfigTextMenus.HeadInfoTranslator.translateMaskInfo(sender, type, 1));
                                             break;
                                         case "lore":
-                                            sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
+                                            sender.sendMessage(ConfigTextMenus.HeadInfoTranslator.translateLoreInfo(sender, type, 1));
                                             break;
                                         default:
                                             hpc.sendMessage("commands.errors.invalid-args", sender);
                                             break;
                                     }
                                 } else {
-                                    sender.sendMessage(HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNormal(type, sender));
+                                    sender.sendMessage(ConfigTextMenus.HeadInfoTranslator.translateNormal(type, sender));
                                 }
                                 break;
                             case "set":
@@ -306,7 +306,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
 
     private String printNameInfo(String type, int page, CommandSender p) {
         try {
-            return HeadsPlusConfigTextMenu.HeadInfoTranslator.translateNameInfo(type, p, page);
+            return ConfigTextMenus.HeadInfoTranslator.translateNameInfo(type, p, page);
         } catch (IllegalArgumentException ex) {
             return hpc.getString("commands.errors.invalid-pg-no", p);
         }

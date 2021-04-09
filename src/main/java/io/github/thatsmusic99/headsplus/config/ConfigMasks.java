@@ -14,7 +14,7 @@ public class ConfigMasks extends CMFile {
     @Override
     public void loadDefaults() {
         addExample("masks.creeper.when-wearing", "animation:creeper");
-        addExample("masks.creeper.effects", Collections.singleton("INVISIBILITY"));
+        addExample("masks.creeper.effects", Collections.singletonList("INVISIBILITY"));
 
     }
 }

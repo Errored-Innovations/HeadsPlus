@@ -19,7 +19,7 @@ import java.util.List;
 public class WhitelistwToggle extends AbstractListToggle {
 
     private final MainConfig config = HeadsPlus.getInstance().getConfiguration();
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     public WhitelistwToggle(HeadsPlus hp) {
         super(hp);

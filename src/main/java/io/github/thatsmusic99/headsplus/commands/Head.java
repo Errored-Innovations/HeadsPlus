@@ -30,7 +30,7 @@ import java.util.List;
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlus hp = HeadsPlus.getInstance();
-    private final HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
 

@@ -26,7 +26,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
         try {
-            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
             if (HeadsPlus.getInstance().hasChallengesEnabled()) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
@@ -50,7 +50,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hpc", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hpc", sender);
     }
 
     @Override

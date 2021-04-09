@@ -43,15 +43,13 @@ public class HeadsPlusMessagesManager {
         HeadsPlus hp = HeadsPlus.getInstance();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
         String locale = MainConfig.get().getString("locale");
+        locales = new HashMap<>();
         if (MainConfig.get().getBoolean("smart-locale")) {
-            locales = new HashMap<>();
             File langDir = new File(dest);
             for (File f : Objects.requireNonNull(langDir.listFiles())) {
                 locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
             }
             players = new HashMap<>();
-        } else {
-            locales = new HashMap<>();
         }
         // Main config for non-player entities such as console
         try {

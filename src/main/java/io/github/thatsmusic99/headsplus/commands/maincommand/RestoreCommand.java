@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsXEnums;
 import org.bukkit.command.Command;
@@ -23,7 +24,7 @@ import java.util.List;
 public class RestoreCommand implements IHeadsPlusCommand {
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.restore", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.restore", sender);
     }
 
     @Override
@@ -39,14 +40,14 @@ public class RestoreCommand implements IHeadsPlusCommand {
                         headToBeAdded.sec,
                         "default",
                         true);
-                HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.restore.restored-head", sender, "{head}", args[1]);
+                HeadsPlusMessagesManager.get().sendMessage("commands.restore.restored-head", sender, "{head}", args[1]);
                 return true;
             } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.restore.invalid-head", sender, "{head}", args[1]);
+                HeadsPlusMessagesManager.get().sendMessage("commands.restore.invalid-head", sender, "{head}", args[1]);
                 return true;
             }
         } else {
-            HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.errors.invalid-args", sender);
+            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return false;
         }
     }

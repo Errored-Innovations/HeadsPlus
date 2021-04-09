@@ -15,8 +15,15 @@ import java.util.List;
 
 public class ConfigInventories extends CMFile {
 
+    private static ConfigInventories instance;
+
     public ConfigInventories() {
         super(HeadsPlus.getInstance(), "inventories");
+        instance = this;
+    }
+
+    public static ConfigInventories get() {
+        return instance;
     }
 
     @Override
