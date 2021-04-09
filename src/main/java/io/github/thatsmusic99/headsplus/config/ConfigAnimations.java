@@ -17,6 +17,8 @@ public class ConfigAnimations extends CMFile {
         addComment("This is the config where you can make head animations come to life.\n" +
                 "For technical reasons, these will only work in inventories and masks.");
 
+        addLenientSection("animations");
+
         addExample("animations.creeper.looping-mode", "loop-reverse", "");
         addExample("animations.creeper.pausing-period", 4);
         addExample("animations.creeper.textures", new ArrayList<>(Arrays.asList(

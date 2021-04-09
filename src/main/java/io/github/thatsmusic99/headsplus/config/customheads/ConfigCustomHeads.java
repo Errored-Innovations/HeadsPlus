@@ -62,8 +62,15 @@ public class ConfigCustomHeads extends CMFile {
         addDefault("autograb", false);
         addDefault("automatically-enable-grabbed-heads", true);
         addDefault("current-version", cVersion, "Please do not change this! This is used to track updates made.");
-        boolean updateHeads = getBoolean("update-heads");
+
+        addLenientSection("sections");
+        addLenientSection("heads");
+
+        boolean updateHeads = getBoolean("update-heads", true);
         double currentVersion = getDouble("current-version");
+        if (isNew()) {
+            currentVersion = 0.0;
+        }
         if (updateHeads && currentVersion < cVersion) {
             set("current-version", cVersion);
             // Sections

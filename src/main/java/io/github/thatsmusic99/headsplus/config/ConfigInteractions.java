@@ -37,11 +37,10 @@ public class ConfigInteractions extends CMFile {
      */
     @Override
     public void loadDefaults() {
-        getConfig().options().header("HeadsPlus by Thatsmusic99");
-        double version = getConfig().getDouble("version");
+        double version = getDouble("version");
         if (version < 0.1) {
             // Default values
-            getConfig().set("version", 0.1);
+            set("version", 0.1);
             addDefault("defaults.message", "{msg_event.head-interact-message}");
             addDefault("defaults.consonant-message", "{msg_event.head-mhf-interact-message}");
             addDefault("defaults.vowel-message", "{msg_event.head-mhf-interact-message-2}");
