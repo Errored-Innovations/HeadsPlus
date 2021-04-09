@@ -30,7 +30,7 @@ import java.util.List;
 )
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {

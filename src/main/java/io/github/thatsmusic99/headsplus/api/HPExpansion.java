@@ -176,7 +176,7 @@ public class HPExpansion extends PlaceholderExpansion {
                     } else {
                         String reward = "";
                         HPChallengeRewardTypes type = challenge.getRewardType();
-                        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
+                        HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
                         String value = challenge.getRewardValue().toString();
                         if (type == HPChallengeRewardTypes.ECO) {
                             reward = hpc.getString("inventory.icon.reward.currency").replace("{amount}", value);
@@ -192,7 +192,7 @@ public class HPExpansion extends PlaceholderExpansion {
                         return reward;
                     }
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? hp.getMessagesConfig().getString("command.challenges.challenge-completed", player.getPlayer()) : "";
+                    return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player.getPlayer()) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }
