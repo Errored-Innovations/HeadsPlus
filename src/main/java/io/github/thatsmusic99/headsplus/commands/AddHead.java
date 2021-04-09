@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -43,9 +44,9 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                         String uuid = p.getUniqueId().toString();
                         if (!hp.getServer().getOnlineMode()) {
                             hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                            uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
+                            uuid = AutograbManager.grabUUID(p.getName(), 3, null);
                         }
-                        if(hp.getHeadsXConfig().grabProfile(uuid, sender, true)) {
+                        if (AutograbManager.grabProfile(uuid, sender, true)) {
                             hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", p.getName());
                         }
                         return true;
