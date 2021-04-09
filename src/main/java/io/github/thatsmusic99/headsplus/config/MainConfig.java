@@ -47,6 +47,14 @@ public class MainConfig extends CMFile {
         addDefault("masks", true);
         addDefault("interactions", true);
 
+        addSection("MySQL");
+        addDefault("enable-mysql", false);
+        addDefault("mysql-host", "127.0.0.1");
+        addDefault("mysql-port", 3306);
+        addDefault("mysql-database", "database");
+        addDefault("mysql-username", "username");
+        addDefault("mysql-password", "password");
+
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
         addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")));
@@ -76,6 +84,10 @@ public class MainConfig extends CMFile {
         addDefault("effect-length", 12000);
 
         addSection("Restrictions");
+
+        addSection("Updates");
+        addDefault("check-for-updates", true);
+        addDefault("notify-admins-about-updates", true);
 
     }
 
