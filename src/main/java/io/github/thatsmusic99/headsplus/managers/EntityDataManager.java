@@ -21,7 +21,8 @@ public class EntityDataManager {
 
     public static void createEntityList() {
         for (EntityType type : EntityType.values()) {
-            if (type.isAlive()) ableEntities.add(type.name());
+            // who decided that an armor stand is alive?
+            if (type.isAlive() && !type.name().equals("ARMOR_STAND")) ableEntities.add(type.name());
         }
         Collections.sort(ableEntities);
     }
