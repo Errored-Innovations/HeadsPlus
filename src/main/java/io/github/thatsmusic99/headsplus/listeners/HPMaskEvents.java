@@ -47,7 +47,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                             HeadsPlus hp = HeadsPlus.getInstance();
                             if (hp.getConfiguration().getPerks().mask_powerups) {
                                 HPPlayer pl = HPPlayer.getHPPlayer(player);
-                                if (pl.isIgnoringFallDamage()) {
+                                if (pl.isIgnoringFallDamage() && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
                                     event.setCancelled(true);
                                 }
                             }
