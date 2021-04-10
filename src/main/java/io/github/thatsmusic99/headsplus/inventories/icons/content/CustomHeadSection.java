@@ -30,6 +30,7 @@ public class CustomHeadSection extends Content {
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
+        if (!player.hasPermission(section.getPermission())) return false;
         HashMap<String, String> context = new HashMap<>();
         context.put("section", section.getName());
         InventoryManager manager = InventoryManager.getManager(player);
