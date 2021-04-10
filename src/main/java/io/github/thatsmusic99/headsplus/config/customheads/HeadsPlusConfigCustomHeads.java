@@ -192,7 +192,6 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             // todo? allow loading texture directly from parameter if matches base64 pattern?
             return is != null ? is.clone() : getSkullFromTexture(
                     getConfig().getString("heads." + key + ".texture"),
-                    getConfig().getBoolean("heads." + key + ".encode"),
                     getConfig().getString("heads." + key + ".displayname"));
         } catch (ArrayIndexOutOfBoundsException ex) {
             HeadsPlus.getInstance().getLogger().severe("An empty ID was found when fetching a head! Please check your customheads.yml configuration or send it to the developer.");
@@ -219,22 +218,21 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         return null;
     }
 
-    public ItemStack getSkullFromTexture(String texture, boolean encoded, String displayName) {
+    public ItemStack getSkullFromTexture(String texture, String displayName) {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
         ItemStack i = nms.getSkullMaterial(1);
         SkullMeta sm = (SkullMeta) i.getItemMeta();
-        GameProfile gm;
-        if (encoded) {
-            gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            byte[] encodedData;
-            if (texture.startsWith("http")) {
-                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
-            } else {
-                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
-            }
+        if (texture == null) return null;
+        GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+
+        byte[] encodedData;
+        if (CachedValues.MINECRAFT_TEXTURES_PATTERN.matcher(texture).matches() || CachedValues.MINECRAFT_EDUCATION_PATTERN.matcher(texture).matches()) {
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
+            gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
+        } else if (CachedValues.HASH_PATTERN.matcher(texture).matches()) {
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
-            gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
             gm.getProperties().put("textures", new Property("textures", texture.replaceAll("=", "")));
         }
 
