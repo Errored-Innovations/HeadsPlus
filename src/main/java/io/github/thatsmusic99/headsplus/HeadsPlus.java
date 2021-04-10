@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadPackLoader;
 import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
@@ -342,6 +343,7 @@ public class HeadsPlus extends JavaPlugin {
         cs.add(hpch);
         hpchx = new HeadsPlusConfigCustomHeads();
         cs.add(hpchx);
+        HeadPackLoader.init();
         hpcr = new HeadsPlusCrafting();
         cs.add(hpcr);
         hpchl = new HeadsPlusChallenges();

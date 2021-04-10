@@ -10,6 +10,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -18,6 +19,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -39,6 +41,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     public boolean s = false;
     private final double cVersion = 3.4;
     public final Map<String, List<String>> sections = new HashMap<>();
+    public final Map<String, SectionInfo> sectionsCache = new HashMap<>();
     public final Map<String, ItemStack> headsCache = new HashMap<>();
     public final Set<String> allHeadsCache = new HashSet<>();
     public final HeadsPlusMessagesManager hpc;
@@ -155,7 +158,16 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     private void initCategories() {
         sections.clear();
         for (String cat : getConfig().getConfigurationSection("sections").getKeys(false)) {
-            sections.put(cat, new ArrayList<>());
+            SectionInfo info = new SectionInfo(cat,
+                    getConfig().getString("sections." + cat + ".display-name"),
+                    getConfig().getString("sections." + cat + ".texture"),
+                    getConfig().getString("sections." + cat + ".permission", "headsplus.section." + cat),
+                    getConfig().getBoolean("sections." + cat + ".enabled", true));
+            if (info.isEnabled()) {
+                sections.put(cat, new ArrayList<>());
+                sectionsCache.put(cat, info);
+            }
+
         }
         ConfigurationSection heads = getConfig().getConfigurationSection("heads");
         try {
@@ -166,8 +178,8 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
                     List<String> list = sections.get(sec);
                     if (list != null) {
                         list.add(head);
-                        headsCache.put(head, getSkull(head));
                     }
+                    headsCache.put(head, getSkull(head));
                 }
             }
         } catch (RuntimeException ex) {
@@ -185,14 +197,13 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     }
 
     @Nullable
-    public ItemStack getSkull(String s) {
+    public ItemStack getSkull(@NotNull String s) {
         try {
             final String key = s.contains("#") ? s.split("#")[1] : s;
-            ItemStack is = headsCache.get(s);
+            ItemStack is = headsCache.get(key);
             // todo? allow loading texture directly from parameter if matches base64 pattern?
             return is != null ? is.clone() : getSkullFromTexture(
                     getConfig().getString("heads." + key + ".texture"),
-                    getConfig().getBoolean("heads." + key + ".encode"),
                     getConfig().getString("heads." + key + ".displayname"));
         } catch (ArrayIndexOutOfBoundsException ex) {
             HeadsPlus.getInstance().getLogger().severe("An empty ID was found when fetching a head! Please check your customheads.yml configuration or send it to the developer.");
@@ -219,22 +230,21 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         return null;
     }
 
-    public ItemStack getSkullFromTexture(String texture, boolean encoded, String displayName) {
+    public ItemStack getSkullFromTexture(String texture, String displayName) {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
         ItemStack i = nms.getSkullMaterial(1);
         SkullMeta sm = (SkullMeta) i.getItemMeta();
-        GameProfile gm;
-        if (encoded) {
-            gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            byte[] encodedData;
-            if (texture.startsWith("http")) {
-                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
-            } else {
-                encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
-            }
+        if (texture == null) return null;
+        GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+
+        byte[] encodedData;
+        if (CachedValues.MINECRAFT_TEXTURES_PATTERN.matcher(texture).matches() || CachedValues.MINECRAFT_EDUCATION_PATTERN.matcher(texture).matches()) {
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture).getBytes());
+            gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
+        } else if (CachedValues.HASH_PATTERN.matcher(texture).matches()) {
+            encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
             gm.getProperties().put("textures", new Property("textures", new String(encodedData)));
         } else {
-            gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
             gm.getProperties().put("textures", new Property("textures", texture.replaceAll("=", "")));
         }
 
@@ -525,6 +535,42 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         }
 		allHeadsCache.add(texture);
         delaySave();
+    }
+
+    public static class SectionInfo {
+        private String name;
+        private String displayName;
+        private String permission;
+        private String texture;
+        private boolean enabled;
+
+        public SectionInfo(String name, String displayName, String texture, String permission, boolean enabled) {
+            this.name = name;
+            this.displayName = displayName;
+            this.permission = permission;
+            this.enabled = enabled;
+            this.texture = texture;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getPermission() {
+            return permission;
+        }
+
+        public String getTexture() {
+            return texture;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
     }
 
     public void addHeadToCache(String id, String section) {

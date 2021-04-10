@@ -22,8 +22,12 @@ public class CustomHead extends Content {
     private String id;
 
     public CustomHead(String id) {
+        this(id, hp.getHeadsXConfig().getPrice(id));
+    }
+
+    public CustomHead(String id, double price) {
         super(hp.getHeadsXConfig().getSkull(id));
-        this.price = hp.getHeadsXConfig().getPrice(id);
+        this.price = price;
         this.id = id;
     }
 
