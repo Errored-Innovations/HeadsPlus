@@ -185,10 +185,10 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
     }
 
     @Nullable
-    public ItemStack getSkull(String s) {
+    public ItemStack getSkull(@NotNull String s) {
         try {
             final String key = s.contains("#") ? s.split("#")[1] : s;
-            ItemStack is = headsCache.get(s);
+            ItemStack is = headsCache.get(key);
             // todo? allow loading texture directly from parameter if matches base64 pattern?
             return is != null ? is.clone() : getSkullFromTexture(
                     getConfig().getString("heads." + key + ".texture"),
