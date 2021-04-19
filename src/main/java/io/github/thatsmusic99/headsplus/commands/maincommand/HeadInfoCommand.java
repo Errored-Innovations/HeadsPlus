@@ -284,6 +284,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
             }
             hpch.getConfig().options().copyDefaults(true);
             hpch.save();
+            EntityDataManager.init();
             return true;
         } catch (IndexOutOfBoundsException ex) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
