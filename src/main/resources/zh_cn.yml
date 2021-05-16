@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Chinese/CN (Bieck_Smile)
 # 请勿更改版本!在插件内部用于添加新消息.
 language: Chinese (CN)
-version: 1.4
+version: 1.5
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
