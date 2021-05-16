@@ -4,7 +4,7 @@ version: ${hp-project.version}
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
-contributors: [DariusTK, Toldi, AlansS53, Gniewny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, Stashenko, Tepoloco, YouHaveTrouble, Bieck_Smile, PaulBGD]
+contributors: [DariusTK, Toldi, AlansS53, Gniewny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, Stashenko, Tepoloco, YouHaveTrouble, Bieck_Smile, PaulBGD, andy3559167]
 website: 'https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/'
 # Please note this is mostly to let the weird messages from each plugin work.
 # Vault - Economy support
