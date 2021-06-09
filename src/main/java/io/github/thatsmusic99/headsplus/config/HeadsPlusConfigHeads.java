@@ -86,6 +86,14 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 			getConfig().options().copyDefaults(true);
 			save();
             switch (key) {
+				case "axolotl":
+					getConfig().addDefault("axolotl.name.default", initSingleton("HP#lucy_axolotl"));
+					for (String color : new String[]{"LUCY", "WILD", "GOLD", "CYAN", "BLUE"}) {
+						getConfig().addDefault("axolotl.name." + color, initSingleton("HP#" + color.toLowerCase() + "_axolotl"));
+					}
+					getConfig().addDefault("bee.name.ANGRY", initSingleton("HP#bee_angry"));
+					getConfig().addDefault("bee.name.ANGRY,NECTAR", initSingleton("HP#bee_pollinated_angry"));
+					getConfig().addDefault("bee.name.NECTAR", initSingleton("HP#bee_pollinated"));
 				case "bee":
 					getConfig().addDefault("bee.name.default", initSingleton("HP#bee_mc"));
 					getConfig().addDefault("bee.name.ANGRY", initSingleton("HP#bee_angry"));

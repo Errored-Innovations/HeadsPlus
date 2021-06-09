@@ -16,7 +16,9 @@ import java.util.List;
 
 public class EntityDataManager {
 
-    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList("BAT",
+    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList(
+            "AXOLOTL",
+            "BAT",
             "BLAZE",
             "BEE",
             "CAT",
@@ -36,6 +38,8 @@ public class EntityDataManager {
             "FOX",
             "GHAST",
             "GIANT",
+            "GLOW_SQUID",
+            "GOAT",
             "GUARDIAN",
             "HOGLIN",
             "HORSE",
@@ -115,6 +119,9 @@ public class EntityDataManager {
         String result = "default";
         StringBuilder builder = new StringBuilder();
         switch (entity.getType().name()) {
+            case "AXOLOTL":
+                // TODO
+                break;
             case "HORSE": {
                 Horse horse = (Horse) entity;
                 if (index.getOrder() < 6) {

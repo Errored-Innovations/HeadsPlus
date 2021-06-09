@@ -414,7 +414,14 @@ public enum HeadsXEnums {
     ZOGLIN("&dZoglin", "e67e18602e03035ad68967ce090235d8996663fb9ea47578d3a7ebbc42a5ccf9", "mobs", 3.2),
     PIGLIN("&cPiglin", "5081a1239fffe135cbfa4a98a6aa6cc5b0787ad0790f56a16bf07f86374606c5", "mobs", 3.2),
     ZOMBIFIED_PIGLIN("&dZombified Piglin", "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c", "mobs", 3.2),
-    PIGLIN_BRUTE("&cPiglin Brute", "3e300e9027349c4907497438bac29e3a4c87a848c50b34c21242727b57f4e1cf", "mobs", 3.4);
+    PIGLIN_BRUTE("&cPiglin Brute", "3e300e9027349c4907497438bac29e3a4c87a848c50b34c21242727b57f4e1cf", "mobs", 3.4),
+    LUCY_AXOLOTL("&dAxolotl", "5c138f401c67fc2e1e387d9c90a9691772ee486e8ddbf2ed375fc8348746f936", "animals", 3.5),
+    WILD_AXOLOTL("&6Wild Axolotl", "4d7efe02012cf31ae2708e7d7df079726575c7ee8504328175fe544708187dce", "animals", 3.5),
+    GOLD_AXOLOTL("&eGold Axolotl", "7f80cc1492e44668cccdb40178c3a6689e8dfc0d234e98553fb7debc26fcaeac", "animals", 3.5),
+    CYAN_AXOLOTL("&bCyan Axolotl", "e1c2d0c3b96ad45b466388e028b247aafe36b26b12c411ecb72e9b50ea21e52c", "animals", 3.5),
+    BLUE_AXOLOTL("&3Blue Axolotl", "eef630657e4a279b0b7ea0f67905920af365f9c84ca9f34a32b53343ff629910", "animals", 3.5),
+    GLOW_SQUID("&3Glow Squid", "3e94a1bb1cb00aaa153a74daf4b0eea20b8974522fe9901eb55aef478ebeff0d", "animals", 3.5),
+    GOAT("&fGoat", "a662336d8ae092407e58f7cc80d20f20e7650357a454ce16e3307619a0110648", "animals", 3.5);
 
     public final String name;
     public final String dn;
