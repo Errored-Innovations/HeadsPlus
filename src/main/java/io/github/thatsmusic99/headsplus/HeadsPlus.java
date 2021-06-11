@@ -407,7 +407,6 @@ public class HeadsPlus extends JavaPlugin {
         }
     }
 
-
     private void setupNMS() {
         String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
         NMSManager nmsMan = null;
