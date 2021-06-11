@@ -40,23 +40,26 @@ public class Search extends Icon {
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
-            ItemStack is = new ItemStack(Material.NAME_TAG);
-            s.setSlot(AnvilSlot.INPUT_LEFT, is);
-            s.open();
-        } else {
-            ConversationFactory c = new ConversationFactory(hp);
-            Conversation conv = c.withFirstPrompt(new ChatPrompt())
-                    .withLocalEcho(false)
-                    .withModality(hp.getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
-                    .buildConversation(player);
-            conv.addConversationAbandonedListener(event1 -> {
-                if (event1.gracefulExit()) {
-                    context.put("search", String.valueOf(event1.getContext().getSessionData("term")));
-                    manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
-                }
-            });
-            conv.begin();
+            if (s != null) {
+                ItemStack is = new ItemStack(Material.NAME_TAG);
+                s.setSlot(AnvilSlot.INPUT_LEFT, is);
+                s.open();
+                return true;
+            }
+
         }
+        ConversationFactory c = new ConversationFactory(hp);
+        Conversation conv = c.withFirstPrompt(new ChatPrompt())
+                .withLocalEcho(false)
+                .withModality(hp.getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                .buildConversation(player);
+        conv.addConversationAbandonedListener(event1 -> {
+            if (event1.gracefulExit()) {
+                context.put("search", String.valueOf(event1.getContext().getSessionData("term")));
+                manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
+            }
+        });
+        conv.begin();
         return true;
     }
 

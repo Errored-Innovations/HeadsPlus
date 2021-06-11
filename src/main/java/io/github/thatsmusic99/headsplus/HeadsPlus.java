@@ -389,7 +389,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createLocales() {
-        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn"));
+        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn", "zh_tw"));
         File dir = new File(getDataFolder() + File.separator + "locale");
         if (!dir.exists()) {
             dir.mkdirs();

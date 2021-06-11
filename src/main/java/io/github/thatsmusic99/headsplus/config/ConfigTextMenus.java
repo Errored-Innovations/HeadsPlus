@@ -408,7 +408,7 @@ public class ConfigTextMenus extends CMFile {
                         .replace("{header}", h.getConfig().getString("info.header"))
                         .replace("{author}", String.valueOf(hp.getAuthor()))
                         .replace("{locale}", hp.getConfiguration().getConfig().getString("locale"))
-                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD"), sender));
+                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167"), sender));
             }
             return sb.toString();
         }

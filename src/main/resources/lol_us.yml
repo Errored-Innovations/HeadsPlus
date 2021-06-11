@@ -70,7 +70,7 @@ textmenus:
     description: uhh what
     permission: permy
     further-usages: how 2 but worse
-version: 1.4
+version: 1.5
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
