@@ -120,7 +120,7 @@ public class EntityDataManager {
         StringBuilder builder = new StringBuilder();
         switch (entity.getType().name()) {
             case "AXOLOTL":
-                // TODO
+                builder.append(((Axolotl) entity).getVariant());
                 break;
             case "HORSE": {
                 Horse horse = (Horse) entity;

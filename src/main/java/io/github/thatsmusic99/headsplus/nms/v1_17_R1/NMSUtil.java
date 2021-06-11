@@ -2,10 +2,8 @@ package io.github.thatsmusic99.headsplus.nms.v1_17_R1;
 
 import io.github.thatsmusic99.headsplus.nms.NewNMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import io.github.thatsmusic99.headsplus.nms.v1_16_R3.SearchGUIUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -15,7 +13,7 @@ import java.util.HashMap;
 public class NMSUtil implements NewNMSManager {
     @Override
     public SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) {
-        return new SearchGUIUtil(p, a);
+        return null;
     }
 
     @Override
@@ -45,14 +43,6 @@ public class NMSUtil implements NewNMSManager {
 
     @Override
     public HashMap<String, String> getNBTTags(ItemStack item) {
-        // TODO change
-        net.minecraft.server.v1_16_R3.ItemStack i = CraftItemStack.asNMSCopy(item);
-        HashMap<String, String> keys = new HashMap<>();
-        if (i.getTag() != null) {
-            for (String str : i.getTag().getKeys()) {
-                keys.put(str, i.getTag().get(str).toString());
-            }
-        }
-        return keys;
+        return new HashMap<>();
     }
 }
