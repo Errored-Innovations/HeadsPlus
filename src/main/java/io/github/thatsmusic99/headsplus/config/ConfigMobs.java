@@ -212,12 +212,12 @@ public class ConfigMobs extends CMFile {
     }
 
     private void addPlayerHeads() {
-    	getConfig().addDefault("player.chance", 100);
-    	getConfig().addDefault("player.display-name", "{player}'s head");
-    	getConfig().addDefault("player.price", "{default}");
-        getConfig().addDefault("player.mask-effects", new ArrayList<>());
-        getConfig().addDefault("player.mask-amplifiers", new ArrayList<>());
-        getConfig().addDefault("player.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
+    	addDefault("player.chance", 100);
+    	addDefault("player.display-name", "{player}'s head");
+    	addDefault("player.price", "{default}");
+        addDefault("player.mask-effects", new ArrayList<>());
+        addDefault("player.mask-amplifiers", new ArrayList<>());
+        addDefault("player.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
     }
 
     public double getPrice(String type) {

@@ -59,7 +59,7 @@ public class ConfigCustomHeads extends CMFile {
         addDefault("default-price", 10.00);
         addLenientSection("price-per-world");
         addDefault("price-per-world.example-one", 15.00);
-        addDefault("autograb", false);
+        addDefault("autograb", false, "Autograb is a feature that grabs ");
         addDefault("automatically-enable-grabbed-heads", true);
         addDefault("current-version", cVersion, "Please do not change this! This is used to track updates made.");
 

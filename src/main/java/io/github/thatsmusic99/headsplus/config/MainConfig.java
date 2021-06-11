@@ -20,6 +20,9 @@ public class MainConfig extends CMFile {
     SelectorList whitelist_heads = new SelectorList();
     SelectorList blacklist_heads = new SelectorList();
 
+    private MainFeatures mainFeatures;
+    private MySQL mySQL;
+
     private static MainConfig instance;
 
     public MainConfig() {
@@ -41,7 +44,7 @@ public class MainConfig extends CMFile {
                 "Whilst this option is set to true,");
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
                 "The permission for this is heasplus.heads.");
-        addDefault("challenges", true);
+        addDefault("challenges", true, "Whether players should be able to complete challenges or not.");
         addDefault("leaderboards", true);
         addDefault("levels", true);
         addDefault("masks", true);
@@ -57,7 +60,9 @@ public class MainConfig extends CMFile {
 
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
-        addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")));
+        addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")),
+                "Spawn causes that stop heads dropping from a given mob.\n" +
+                        "In this example, mobs spawned using spawner eggs will not drop heads at all.");
         addDefault("ignored-players", new ArrayList<>());
         addDefault("needs-killer", false);
         addDefault("entities-needing-killer", new ArrayList<>(Collections.singleton("player")));
@@ -247,6 +252,12 @@ public class MainConfig extends CMFile {
         perks.negative_xp = p.getBoolean("xp.allow-negative");
     } */
 
+    @Override
+    public void postSave() {
+        mainFeatures = new MainFeatures();
+        mySQL = new MySQL();
+    }
+
     public static MainConfig get() {
         return instance;
     }
@@ -288,6 +299,27 @@ public class MainConfig extends CMFile {
             return String.valueOf(balance);
         }
 
+    }
+
+
+    public class MainFeatures {
+        public boolean SELL_HEADS = getBoolean("sell-heads"),
+                MOB_DROPS = getBoolean("mob-drops"),
+                ENABLE_CRAFTING = getBoolean("enable-crafting"),
+                HEADS_SELECTOR = getBoolean("heads-selector"),
+                CHALLENGES = getBoolean("challenges"),
+                LEADERBOARDS = getBoolean("leaderboards"),
+                LEVELS = getBoolean("levels"),
+                MASKS = getBoolean("masks"),
+                INTERACTIONS = getBoolean("interactions");
+    }
+
+    public class MySQL {
+        public boolean ENABLE_MYSQL = getBoolean("enable-mysql");
+        public String MYSQL_HOST = getString("mysql-host"),
+                MYSQL_DATABASE = getString("mysql-database"),
+                MYSQL_USERNAME = getString("mysql-username"),
+                MYSQL_PASSWORD = getString("mysql-password");
     }
 
     public static class Perks {
