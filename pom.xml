@@ -200,12 +200,6 @@
             <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
             <version>1.0.4</version>
