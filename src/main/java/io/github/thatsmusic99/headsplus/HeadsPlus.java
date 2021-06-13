@@ -489,7 +489,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public boolean hasChallengesEnabled() {
-        return getConfiguration().getPerks().challenges;
+        return MainConfig.get().getMainFeatures().CHALLENGES;
     }
 
     public boolean isConnectedToMySQLDatabase() {
@@ -501,11 +501,11 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public boolean isDropsEnabled() {
-        return getConfiguration().getPerks().drop_heads;
+        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
 
     public boolean canSellHeads() {
-        return (econ()) && (getConfiguration().getPerks().sell_heads);
+        return (econ()) && (MainConfig.get().getMainFeatures().SELL_HEADS);
     }
 
     public Connection getConnection() {
@@ -606,10 +606,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public NMSIndex getNMSVersion() {
         return nmsversion;
-    }
-
-    public ChatColor getThemeColour(int i) {
-        return ChatColor.valueOf(getConfiguration().getConfig().getString("theme-colours." + i));
     }
 
     public Challenge getChallengeByName(String name) {

@@ -290,6 +290,10 @@ public class MainConfig extends CMFile {
         return getConfig().getConfigurationSection("mysql");
     }
 
+    public MainFeatures getMainFeatures() {
+        return mainFeatures;
+    }
+
     public String fixBalanceStr(double balance) {
         if (getMechanics().getBoolean("round-balance-to-2-d-p")) {
             DecimalFormat format = new DecimalFormat("#.##");
@@ -320,6 +324,18 @@ public class MainConfig extends CMFile {
                 MYSQL_DATABASE = getString("mysql-database"),
                 MYSQL_USERNAME = getString("mysql-username"),
                 MYSQL_PASSWORD = getString("mysql-password");
+    }
+
+    public class MobDrops {
+        public List<String> BLOCKED_SPAWN_CAUSES = getStringList("blocked-spawn-causes"),
+                IGNORED_PLAYERS = getStringList("ignored-players"),
+                ENTITIES_NEEDING_KILLER = getStringList("entities-needing-killer"),
+                LOOTING_IGNORED = getStringList("looting-ignored"),
+                PLAYER_HEAD_DEATH_MESSAGES = getStringList("player-head-death-messages");
+        public boolean NEEDS_KILLER = getBoolean("needs-killer"),
+                ENABLE_LOOTING = getBoolean("enable-looting"),
+                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
+
     }
 
     public static class Perks {
