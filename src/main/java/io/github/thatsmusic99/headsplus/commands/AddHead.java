@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -31,7 +30,7 @@ import java.util.List;
 )
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -44,9 +43,9 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                         String uuid = p.getUniqueId().toString();
                         if (!hp.getServer().getOnlineMode()) {
                             hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                            uuid = AutograbManager.grabUUID(p.getName(), 3, null);
+                            uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
                         }
-                        if (AutograbManager.grabProfile(uuid, sender, true)) {
+                        if(hp.getHeadsXConfig().grabProfile(uuid, sender, true)) {
                             hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", p.getName());
                         }
                         return true;
@@ -74,13 +73,13 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            ConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
+                            HeadsPlusConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
                                 customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));
                             }
                             customHeads.getConfig().options().copyDefaults(true);
-                            customHeads.save(true);
+                            customHeads.save();
                             customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
                             hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
                         }

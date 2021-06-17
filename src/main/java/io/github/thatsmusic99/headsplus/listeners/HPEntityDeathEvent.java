@@ -1,13 +1,15 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.*;
@@ -22,7 +24,7 @@ import java.util.Random;
 
 public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
 
-    private final ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+    private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
 
     public HPEntityDeathEvent() {
         super();
@@ -97,7 +99,6 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
 
     @Override
     public void onEvent(EntityDeathEvent event) {
-
         addData("entity-type", event.getEntityType().name());
         addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
         // Make sure head drops are enabled

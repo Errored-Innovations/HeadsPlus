@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 
 public class HeadsPlusCommand implements CommandExecutor {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         try {

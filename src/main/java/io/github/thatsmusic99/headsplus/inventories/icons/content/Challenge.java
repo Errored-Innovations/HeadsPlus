@@ -4,7 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigItems;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import org.apache.commons.lang.WordUtils;
@@ -73,7 +73,7 @@ public class Challenge extends Content {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        ConfigInventories items = hp.getItems();
+        HeadsPlusConfigItems items = hp.getItems();
         HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(items.getConfig().getString("icons.challenge.display-name")

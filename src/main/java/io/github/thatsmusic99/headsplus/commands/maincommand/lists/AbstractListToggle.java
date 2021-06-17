@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
-import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,19 +19,19 @@ public abstract class AbstractListToggle extends AbstractListCommand {
         super(hp);
     }
 
-    public abstract MainConfig.SelectorList getSelList();
+    public abstract HeadsPlusMainConfig.SelectorList getSelList();
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         if (args.length == 1) {
             config.getConfig().set(getPath(), getSelList().enabled = !getSelList().enabled);
-            config.save(true);
+            config.save();
             hpc.sendMessage("commands." + getFullName() + "." + (getSelList().enabled ? getListType() + "-on" : getListType() + "-off"), sender);
         } else {
             if (args[1].equalsIgnoreCase("on")) {
                 if (!getSelList().enabled) {
                     config.getConfig().set(getPath(), getSelList().enabled = true);
-                    config.save(true);
+                    config.save();
                     hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-on", sender);
                 } else {
                     hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-a-on", sender);
@@ -39,7 +39,7 @@ public abstract class AbstractListToggle extends AbstractListCommand {
             } else if (args[1].equalsIgnoreCase("off")) {
                 if (getSelList().enabled) {
                     config.getConfig().set(getPath(), getSelList().enabled = false);
-                    config.save(true);
+                    config.save();
                     hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-off", sender);
                 } else {
                     hpc.sendMessage("commands." + getFullName() + "." + getListType() + "-a-off", sender);

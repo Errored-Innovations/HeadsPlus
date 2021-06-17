@@ -4,8 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -30,16 +29,16 @@ public class ProfileCommand implements IHeadsPlusCommand {
     private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
         try {
             HPPlayer pl = HPPlayer.getHPPlayer(p);
-            return ConfigTextMenus.ProfileTranslator.translate(pl, sender);
+            return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl, sender);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            return HeadsPlusMessagesManager.get().getString("commands.errors.no-data", sender);
+            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data", sender);
         }
     }
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.profile", sender);
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.profile", sender);
     }
 
     @Override
@@ -60,13 +59,13 @@ public class ProfileCommand implements IHeadsPlusCommand {
                     if (cs.hasPermission("headsplus.maincommand.profile.others")) {
                         cs.sendMessage(prof(p, cs));
                     } else {
-                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
+                        hp.getMessagesConfig().sendMessage("commands.errors.no-perm", cs);
                     }
                 }
             } else {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
                     // Not a player
-                    HeadsPlusMessagesManager.get().sendMessage("commands.profile.cant-view-data", cs);
+                    cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
                 } else {
                     cs.sendMessage(prof(p, cs));
                 }

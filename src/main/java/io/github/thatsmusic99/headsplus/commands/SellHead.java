@@ -4,12 +4,11 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -35,7 +34,7 @@ import java.util.UUID;
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
-	private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+	private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 	private static final List<String> headIds = new ArrayList<>();
 	private final int[] slots;
 	private final HeadsPlus hp;
@@ -43,7 +42,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
 	public SellHead(HeadsPlus hp) {
 	    headIds.clear();
-	    useCases = MainConfig.get().getBoolean("case-sensitive-names");
+	    useCases = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
 	    for (String entity : EntityDataManager.ableEntities) {
 	        registerHeadID(entity);
         }
@@ -262,7 +261,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.sellhead", sender);
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.sellhead", sender);
     }
 
     @Override

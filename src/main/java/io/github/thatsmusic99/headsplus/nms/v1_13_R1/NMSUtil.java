@@ -3,11 +3,12 @@ package io.github.thatsmusic99.headsplus.nms.v1_13_R1;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import net.minecraft.server.v1_13_R1.ItemStack;
+import io.github.thatsmusic99.headsplus.nms.v1_12_R1.SearchGUIUtil;
+import net.minecraft.server.v1_12_R1.ItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -51,7 +52,7 @@ public class NMSUtil implements NMSManager {
         ItemStack i = CraftItemStack.asNMSCopy(item);
         HashMap<String, String> keys = new HashMap<>();
         if (i.getTag() != null) {
-            for (String str : i.getTag().getKeys()) {
+            for (String str : i.getTag().c()) {
                 keys.put(str, i.getTag().get(str).toString());
             }
         }

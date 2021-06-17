@@ -1,6 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

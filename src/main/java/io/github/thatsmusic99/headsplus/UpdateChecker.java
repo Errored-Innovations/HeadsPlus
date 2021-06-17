@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,12 +48,8 @@ class UpdateChecker {
         URL url = new URL(urlStr);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.addRequestProperty("User-Agent", "HeadsPlusPluginAgent");
-        try {
-            InputStream inputStream = connection.getInputStream();
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            return (JSONArray) new JSONParser().parse(reader);
-        } catch (FileNotFoundException ex) {
-            return null;
-        }
+        InputStream inputStream = connection.getInputStream();
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        return (JSONArray) new JSONParser().parse(reader);
     }
 }

@@ -1,29 +1,23 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 
-public class ConfigSounds extends CMFile {
+public class HeadsPlusConfigSounds extends ConfigSettings {
 
-    private static ConfigSounds instance;
-
-    public ConfigSounds() {
-        super(HeadsPlus.getInstance(), "sounds");
-        instance = this;
+    public HeadsPlusConfigSounds() {
+        this.conName = "sounds";
+        enable();
     }
 
     @Override
-    public void loadDefaults() {
+    protected void load() {
+        super.load();
         for (Defaults d : Defaults.values()) {
-            addDefault("sounds." + d.name + ".sound", HeadsPlus.getInstance().getNMS().getEXPSound().name());
-            addDefault("sounds." + d.name + ".volume", 1.0f);
-            addDefault("sounds." + d.name + ".pitch", 1.0f);
-            addDefault("sounds." + d.name + ".enabled", d.enabled);
+            getConfig().addDefault("sounds." + d.name + ".sound", HeadsPlus.getInstance().getNMS().getEXPSound().name());
+            getConfig().addDefault("sounds." + d.name + ".volume", 1.0f);
+            getConfig().addDefault("sounds." + d.name + ".pitch", 1.0f);
+            getConfig().addDefault("sounds." + d.name + ".enabled", d.enabled);
         }
-    }
-
-    public static ConfigSounds get() {
-        return instance;
     }
 
     private enum Defaults {

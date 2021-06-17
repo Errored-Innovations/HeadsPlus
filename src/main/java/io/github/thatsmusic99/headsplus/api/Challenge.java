@@ -135,7 +135,7 @@ public class Challenge {
 
     public void complete(Player p) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
 
@@ -166,7 +166,7 @@ public class Challenge {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
-        String message = HeadsPlusMessagesManager.get().getString("commands.challenges.reward-string", p);
+        String message = hp.getMessagesConfig().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
             hpc.sendMessage(str.replace("{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);

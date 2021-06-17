@@ -1,8 +1,7 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.entity.Player;
@@ -19,6 +18,7 @@ public class Stats extends Icon {
     public Stats() {}
 
     public Stats(Player player, Integer totalPages) {
+        hpi = hp.getItems().getConfig();
         initItem("stats");
         this.totalPages = totalPages;
         initNameAndLore("stats", player);
@@ -36,12 +36,12 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+        meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));
         List<String> lore = new ArrayList<>();
-        for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
+        for (String loreStr : hpi.getStringList("icons." + id + ".lore")) {
             lore.add(hpc.formatMsg(loreStr, player)
                     .replaceAll("\\{heads}", String.valueOf(hpch.allHeadsCache.size()))
                     .replaceAll("\\{balance}", hp.econ() ? String.valueOf(hp.getEconomy().getBalance(player)) : "None")

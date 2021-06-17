@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.AbstractListToggle;
-import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.command.CommandSender;
 
@@ -18,8 +18,8 @@ import java.util.List;
 )
 public class WhitelistwToggle extends AbstractListToggle {
 
-    private final MainConfig config = HeadsPlus.getInstance().getConfiguration();
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final HeadsPlusMainConfig config = HeadsPlus.getInstance().getConfiguration();
+    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
 
     public WhitelistwToggle(HeadsPlus hp) {
         super(hp);
@@ -31,7 +31,7 @@ public class WhitelistwToggle extends AbstractListToggle {
     }
 
     @Override
-    public MainConfig.SelectorList getSelList() {
+    public HeadsPlusMainConfig.SelectorList getSelList() {
         return config.getWorldWhitelist();
     }
 

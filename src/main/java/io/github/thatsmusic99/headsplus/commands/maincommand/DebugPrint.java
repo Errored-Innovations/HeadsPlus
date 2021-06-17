@@ -9,9 +9,10 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
+import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,7 +44,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     public DebugPrint(HeadsPlus hp) {
         DebugPrint.hp = hp;
-        hpc = HeadsPlusMessagesManager.get();
+        hpc = hp.getMessagesConfig();
     }
 
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
@@ -79,7 +80,7 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.debug", sender);
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.debug", sender);
     }
 
     @Override

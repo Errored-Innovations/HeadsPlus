@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.ChatColor;
@@ -18,7 +18,7 @@ public class HeadsSearch extends HeadsSection {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
         String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
         for (String head : hpch.headsCache.keySet()) {

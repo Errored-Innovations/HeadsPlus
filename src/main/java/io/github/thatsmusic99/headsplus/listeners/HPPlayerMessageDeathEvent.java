@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
@@ -36,7 +35,7 @@ public class HPPlayerMessageDeathEvent extends HeadsPlusListener<PlayerHeadDropE
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!p.hasPermission("headsplus.death.ignore")) {
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                        s.get(thing).replaceAll("\\{header}", HeadsPlusMessagesManager.get().getString("prefix", p)).replaceAll("\\{killer}", event.getPlayer().getName()).replaceAll("\\{player}", event.getDeadPlayer().getName())));
+                                        s.get(thing).replaceAll("\\{header}", hp.getMessagesConfig().getString("prefix", p)).replaceAll("\\{killer}", event.getPlayer().getName()).replaceAll("\\{player}", event.getDeadPlayer().getName())));
                             }
                         }
                     }

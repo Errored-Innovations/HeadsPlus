@@ -1,8 +1,5 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.RoundingMode;
@@ -12,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MainConfig extends CMFile {
+public class HeadsPlusMainConfig extends ConfigSettings {
 
     Perks perks = new Perks();
     SelectorList whitelist_worlds = new SelectorList();
@@ -20,120 +17,46 @@ public class MainConfig extends CMFile {
     SelectorList whitelist_heads = new SelectorList();
     SelectorList blacklist_heads = new SelectorList();
 
-    private MainFeatures mainFeatures;
-    private MySQL mySQL;
-    private Updates updates;
-
-    private static MainConfig instance;
-
-    public MainConfig() {
-        super(HeadsPlus.getInstance(), "config");
-        instance = this;
+    public HeadsPlusMainConfig() {
+        this.conName = "config";
+        enable();
     }
 
     @Override
-    public void loadDefaults() {
-        addSection("Main Features");
+    protected void load() {
 
-        addDefault("sell-heads", true, "Whether or not players are able to sell heads.\n" +
-                "This requires the Vault and an economy plugin - such as Essentials - to be enabled!\n" +
-                "To troubleshoot this, please make sure that Economy in /vault-info isn't null. If it is, you don't have an economy plugin.\n" +
-                "If it isn't null and HeadsPlus isn't picking it up, please contact the developer.");
-        addDefault("mob-drops", true, "Whether or not mobs drop their heads when they die.\n" +
-                "To see the full settings for this, please look at the mobs.yml config file.");
-        addDefault("enable-crafting", true, "Whether or not players can craft heads.\n" +
-                "Whilst this option is set to true,");
-        addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
-                "The permission for this is heasplus.heads.");
-        addDefault("challenges", true, "Whether players should be able to complete challenges or not.");
-        addDefault("leaderboards", true);
-        addDefault("levels", true);
-        addDefault("masks", true);
-        addDefault("interactions", true);
-
-        addSection("MySQL");
-        addDefault("enable-mysql", false);
-        addDefault("mysql-host", "127.0.0.1");
-        addDefault("mysql-port", 3306);
-        addDefault("mysql-database", "database");
-        addDefault("mysql-username", "username");
-        addDefault("mysql-password", "password");
-
-        addSection("Mob Drops");
-        addComment("Configure this further in the mobs.yml config file.");
-        addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")),
-                "Spawn causes that stop heads dropping from a given mob.\n" +
-                        "In this example, mobs spawned using spawner eggs will not drop heads at all.");
-        addDefault("ignored-players", new ArrayList<>());
-        addDefault("needs-killer", false);
-        addDefault("entities-needing-killer", new ArrayList<>(Collections.singleton("player")));
-        addDefault("enable-looting", true);
-        addDefault("thresholds.common", 100);
-        addDefault("thresholds.uncommon", 20);
-        addDefault("thresholds.rare", 5);
-        addDefault("looting-ignored", new ArrayList<>());
-        addDefault("disable-for-mythic-mobs", true);
-        addDefault("enable-player-head-death-messages", false);
-        addDefault("player-head-death-messages",
-                new ArrayList<>(Arrays.asList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
-                        "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
-                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job.")));
-
-        addSection("Selling Heads");
-        addDefault("stop-placement-of-sellable-heads", false);
-        addDefault("use-sellhead-gui", true);
-        addDefault("case-sensitive-names", true);
-
-        addSection("Masks");
-        addDefault("check-interval", 60);
-        addDefault("reset-after-x-intervals", 20);
-        addDefault("effect-length", 12000);
-
-        addSection("Restrictions");
-
-        addSection("Updates");
-        addDefault("check-for-updates", true);
-        addDefault("notify-admins-about-updates", true);
-
-    }
-
-     @Override
-     public void moveToNew() {
-        moveTo("plugin.autograb.enabled", "autograb", ConfigCustomHeads.get());
-        moveTo("plugin.autograb.add-as-enabled", "automatically-enable-grabbed-heads", ConfigCustomHeads.get());
-
-     }
-    /*
-    protected void loadS() {
-
-        getConfig().options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
-        getConfig().addDefault("locale", "en_us");
-        getConfig().addDefault("smart-locale", false);
-        getConfig().addDefault("blacklist.default.enabled", true);
-        getConfig().addDefault("blacklist.world.enabled", true);
-        getConfig().addDefault("whitelist.default.enabled", false);
-        getConfig().addDefault("whitelist.world.enabled", false);
-        getConfig().addDefault("blacklist.default.list", new ArrayList<>());
-        getConfig().addDefault("blacklist.world.list", new ArrayList<>());
-        getConfig().addDefault("whitelist.default.list", new ArrayList<>());
-        getConfig().addDefault("whitelist.world.list", new ArrayList<>());
-        getConfig().addDefault("mysql.host", "localhost");
-        getConfig().addDefault("mysql.port", "3306");
-        getConfig().addDefault("mysql.database", "db");
-        getConfig().addDefault("mysql.username", "username");
-        getConfig().addDefault("mysql.password", "password");
-        getConfig().addDefault("mysql.enabled", false);
-        getConfig().addDefault("theme-colours.1", "DARK_BLUE");
-        getConfig().addDefault("theme-colours.2", "GOLD");
-        getConfig().addDefault("theme-colours.3", "GRAY");
-        getConfig().addDefault("theme-colours.4", "DARK_AQUA");
-        getConfig().addDefault("plugin.larger-menus", false);
-        getConfig().addDefault("plugin.autograb.enabled", false);
-        getConfig().addDefault("plugin.autograb.add-as-enabled", true);
-        getConfig().addDefault("plugin.autograb.section", "players");
-        getConfig().addDefault("plugin.autograb.title", "&8[&6{player}&8]");
-        getConfig().addDefault("plugin.autograb.price", "default");
-        getConfig().addDefault("plugin.perks.interact.middle-click-head", true);
+        if (config.get("blacklistOn") instanceof Boolean) {
+            configF.delete();
+            reloadC();
+        }
+        config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
+        config.addDefault("locale", "en_us");
+        config.addDefault("smart-locale", false);
+        config.addDefault("blacklist.default.enabled", true);
+        config.addDefault("blacklist.world.enabled", true);
+        config.addDefault("whitelist.default.enabled", false);
+        config.addDefault("whitelist.world.enabled", false);
+        config.addDefault("blacklist.default.list", new ArrayList<>());
+        config.addDefault("blacklist.world.list", new ArrayList<>());
+        config.addDefault("whitelist.default.list", new ArrayList<>());
+        config.addDefault("whitelist.world.list", new ArrayList<>());
+        config.addDefault("mysql.host", "localhost");
+        config.addDefault("mysql.port", "3306");
+        config.addDefault("mysql.database", "db");
+        config.addDefault("mysql.username", "username");
+        config.addDefault("mysql.password", "password");
+        config.addDefault("mysql.enabled", false);
+        config.addDefault("theme-colours.1", "DARK_BLUE");
+        config.addDefault("theme-colours.2", "GOLD");
+        config.addDefault("theme-colours.3", "GRAY");
+        config.addDefault("theme-colours.4", "DARK_AQUA");
+        config.addDefault("plugin.larger-menus", false);
+        config.addDefault("plugin.autograb.enabled", false);
+        config.addDefault("plugin.autograb.add-as-enabled", true);
+        config.addDefault("plugin.autograb.section", "players");
+        config.addDefault("plugin.autograb.title", "&8[&6{player}&8]");
+        config.addDefault("plugin.autograb.price", "default");
+        config.addDefault("plugin.perks.interact.middle-click-head", true);
         config.addDefault("plugin.perks.interact.click-head", true);
         config.addDefault("plugin.perks.xp.allow-negative", false);
         config.addDefault("plugin.perks.ascii-art", true);
@@ -204,15 +127,15 @@ public class MainConfig extends CMFile {
         whitelist_heads.list.clear();
         blacklist_heads.list.clear();
 
-        ConfigurationSection l = getConfig().getConfigurationSection("blacklist.world");
+        ConfigurationSection l = config.getConfigurationSection("blacklist.world");
         blacklist_worlds.list.addAll(l.getStringList("list"));
         blacklist_worlds.enabled = l.getBoolean("enabled");
 
-        l = getConfig().getConfigurationSection("whitelist.world");
+        l = config.getConfigurationSection("whitelist.world");
         whitelist_worlds.list.addAll(l.getStringList("list"));
         whitelist_worlds.enabled = l.getBoolean("enabled");
 
-        l = getConfig().getConfigurationSection("blacklist.default");
+        l = config.getConfigurationSection("blacklist.default");
         blacklist_heads.list.addAll(l.getStringList("list"));
         blacklist_heads.enabled = l.getBoolean("enabled");
 
@@ -251,21 +174,10 @@ public class MainConfig extends CMFile {
         perks.middle_click_in = p.getBoolean("interact.middle-click-head");
         perks.click_in = p.getBoolean("interact.click-head");
         perks.negative_xp = p.getBoolean("xp.allow-negative");
-    } */
-
-    @Override
-    public void postSave() {
-        mainFeatures = new MainFeatures();
-        mySQL = new MySQL();
-        updates = new Updates();
-    }
-
-    public static MainConfig get() {
-        return instance;
     }
 
     public ConfigurationSection getMechanics() {
-        return getConfig().getConfigurationSection("plugin.mechanics");
+        return config.getConfigurationSection("plugin.mechanics");
     }
 
     public Perks getPerks() {
@@ -289,11 +201,7 @@ public class MainConfig extends CMFile {
     }
 
     public ConfigurationSection getMySQL() {
-        return getConfig().getConfigurationSection("mysql");
-    }
-
-    public MainFeatures getMainFeatures() {
-        return mainFeatures;
+        return config.getConfigurationSection("mysql");
     }
 
     public String fixBalanceStr(double balance) {
@@ -304,45 +212,6 @@ public class MainConfig extends CMFile {
         } else {
             return String.valueOf(balance);
         }
-
-    }
-
-
-    public class MainFeatures {
-        public boolean SELL_HEADS = getBoolean("sell-heads"),
-                MOB_DROPS = getBoolean("mob-drops"),
-                ENABLE_CRAFTING = getBoolean("enable-crafting"),
-                HEADS_SELECTOR = getBoolean("heads-selector"),
-                CHALLENGES = getBoolean("challenges"),
-                LEADERBOARDS = getBoolean("leaderboards"),
-                LEVELS = getBoolean("levels"),
-                MASKS = getBoolean("masks"),
-                INTERACTIONS = getBoolean("interactions");
-    }
-
-    public class MySQL {
-        public boolean ENABLE_MYSQL = getBoolean("enable-mysql");
-        public String MYSQL_HOST = getString("mysql-host"),
-                MYSQL_DATABASE = getString("mysql-database"),
-                MYSQL_USERNAME = getString("mysql-username"),
-                MYSQL_PASSWORD = getString("mysql-password");
-    }
-
-    public class MobDrops {
-        public List<String> BLOCKED_SPAWN_CAUSES = getStringList("blocked-spawn-causes"),
-                IGNORED_PLAYERS = getStringList("ignored-players"),
-                ENTITIES_NEEDING_KILLER = getStringList("entities-needing-killer"),
-                LOOTING_IGNORED = getStringList("looting-ignored"),
-                PLAYER_HEAD_DEATH_MESSAGES = getStringList("player-head-death-messages");
-        public boolean NEEDS_KILLER = getBoolean("needs-killer"),
-                ENABLE_LOOTING = getBoolean("enable-looting"),
-                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
-
-    }
-
-    public class Updates {
-        public boolean CHECK_FOR_UPDATES = getBoolean("check-for-updates"),
-                NOTIFY_ADMINS = getBoolean("notify-admins-about-updates");
 
     }
 

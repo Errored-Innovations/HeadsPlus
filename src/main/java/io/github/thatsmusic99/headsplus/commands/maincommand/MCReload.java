@@ -1,13 +1,12 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,22 +26,23 @@ public class MCReload implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.reload");
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.reload");
     }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        HeadsPlusMessagesManager.get().sendMessage("commands.reload.reloading-message", sender);
+        HeadsPlusMessagesManager m = HeadsPlus.getInstance().getMessagesConfig();
+        m.sendMessage("commands.reload.reloading-message", sender);
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (CMFile cs : HeadsPlus.getInstance().getConfigs()) {
-                    cs.reload();
+                for (ConfigSettings cs : HeadsPlus.getInstance().getConfigs()) {
+                    cs.reloadC();
                 }
                 HPPlayer.players.clear();
                 EntityDataManager.init();
                 HeadsPlus.getInstance().restartMessagesManager();
-                HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);
+                m.sendMessage("commands.reload.reload-message", sender);
             }
         }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
         return true;

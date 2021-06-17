@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
     protected static HeadsPlus hp = HeadsPlus.getInstance();
-    protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    protected static HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");
     private static final Pattern SECTION = Pattern.compile("\\{section}");

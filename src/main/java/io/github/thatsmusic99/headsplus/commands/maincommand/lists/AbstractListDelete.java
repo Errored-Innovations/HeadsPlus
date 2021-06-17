@@ -25,7 +25,7 @@ public abstract class AbstractListDelete extends AbstractListCommand {
                 if (getList().contains(rHead)) {
                     getList().remove(rHead);
                     config.getConfig().set(getPath(), getList());
-                    config.save(true);
+                    config.save();
                     hpc.sendMessage("commands." + getFullName() + "." + getType() + "-removed-" + getListType(), sender, "{player}", args[1], "{name}", args[1]);
                 } else {
                     hpc.sendMessage("commands." + getFullName() + "." + getType() + "-a-removed-" + getListType(), sender);

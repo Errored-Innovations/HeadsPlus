@@ -2,8 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -84,12 +83,12 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     }
 
     private String getLeaderboard(CommandSender sender, String sec, int page, String part) {
-        return ConfigTextMenus.LeaderBoardTranslator.translate(sender, sec, part, page);
+        return HeadsPlusConfigTextMenu.LeaderBoardTranslator.translate(sender, sec, part, page);
     }
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hplb", sender);
+        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hplb", sender);
     }
 
     @Override

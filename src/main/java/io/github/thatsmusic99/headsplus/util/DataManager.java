@@ -1,9 +1,7 @@
-package io.github.thatsmusic99.headsplus.managers;
+package io.github.thatsmusic99.headsplus.util;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
-import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
-import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -55,7 +53,7 @@ public class DataManager {
         }
     }
 
-    public static LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValues(HashMap<OfflinePlayer, Integer> passedMap) {
+    static LinkedHashMap<OfflinePlayer, Integer> sortHashMapByValues(HashMap<OfflinePlayer, Integer> passedMap) {
         List<OfflinePlayer> mapKeys = new ArrayList<>(passedMap.keySet());
         List<Integer> mapValues = new ArrayList<>(passedMap.values());
         Collections.sort(mapValues);

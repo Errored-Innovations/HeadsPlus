@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
 import io.github.thatsmusic99.headsplus.api.Level;
@@ -10,7 +9,7 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 
 import java.util.HashMap;
 
-public class ConfigLevels extends CMFile {
+public class HeadsPlusLevels extends ConfigSettings {
 
     private final HashMap<Integer, BaseLevel> levels = new HashMap<>();
 
@@ -20,16 +19,26 @@ public class ConfigLevels extends CMFile {
 
     private int maxHierarchy = 0;
 
-    public ConfigLevels() {
-        super(HeadsPlus.getInstance(), "levels");
-        addDefLevels();
+    public HeadsPlusLevels() {
+        this.conName = "levels";
+        enable();
+
     }
 
     @Override
-    public void postSave() {
+    public void reloadC() {
+        addDefLevels();
+        performFileChecks();
+        load();
+        getConfig().options().copyDefaults(true);
+        save();
+        loadLevels();
+    }
+
+    private void loadLevels() {
         HeadsPlus hp = HeadsPlus.getInstance();
         hp.getLevels().clear();
-        //if (hp.usingLevels()) {
+        if (hp.usingLevels()) {
             try {
                 for (String s : getConfig().getConfigurationSection("levels").getKeys(false)) {
                     String dn = HPUtils.notNull(getConfig().getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
@@ -57,35 +66,37 @@ public class ConfigLevels extends CMFile {
             } catch (NullPointerException ex) {
                 hp.getLogger().warning(ex.getMessage());
             }
-        //}
+        }
     }
 
     @Override
-    public void loadDefaults() {
+    public void load() {
         double version = 0.3;
-        double current = getDouble("version");
-        if (isNew() || current < version) {
-            set("version", version);
+        double current = getConfig().getDouble("version");
+        if (current < version) {
+            getConfig().set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
                 if (current < 0.3) {
-                    set("levels." + l.getConfigName() + ".hierarchy", i);
-                    set("levels." + l.getConfigName() + ".hierachy", null);
+                    getConfig().set("levels." + l.getConfigName() + ".hierarchy", i);
+                    getConfig().set("levels." + l.getConfigName() + ".hierachy", null);
                 }
                 if (l.getAddedVersion() > current) {
-                    addExample("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-                    addExample("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-                    addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    addExample("levels." + l.getConfigName() + ".hierarchy", i);
-                    addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
-                    addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
-                    addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
-                    addDefault("levels." + l.getConfigName() + ".rewards.item-amount", 0);
-                    addDefault("levels." + l.getConfigName() + ".rewards.command-sender", "player");
+                    getConfig().addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".hierarchy", i);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.item-amount", 0);
+                    getConfig().addDefault("levels." + l.getConfigName() + ".rewards.command-sender", "player");
                 }
 
             }
         }
+
+        save();
     }
 
     private void addDefLevels() {

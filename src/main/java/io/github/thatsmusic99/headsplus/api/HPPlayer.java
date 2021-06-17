@@ -2,8 +2,7 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -64,13 +63,13 @@ public class HPPlayer {
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
                 cachedLocale = loc.split(":")[0];
                 localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                HeadsPlusMessagesManager.get().setPlayerLocale(player, cachedLocale,  false);
+                hp.getMessagesConfig().setPlayerLocale(player, cachedLocale,  false);
             } else {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        HeadsPlusMessagesManager.get().setPlayerLocale(player);
-                        cachedLocale = HeadsPlusMessagesManager.get().getSetLocale(player);
+                        hp.getMessagesConfig().setPlayerLocale(player);
+                        cachedLocale = hp.getMessagesConfig().getSetLocale(player);
                         localeForced = false;
                         scores.setLocale(player.toString(), cachedLocale, false);
                     }
@@ -164,7 +163,7 @@ public class HPPlayer {
         } else {
             s = s.toLowerCase().replaceAll("_", "");
         }
-        ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+        HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
         List<PotionEffect> po = new ArrayList<>();
         for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
             String is = hpch.getConfig().getStringList(s + ".mask-effects").get(i).toUpperCase();
@@ -294,7 +293,7 @@ public class HPPlayer {
                                 if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
                                     final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                                     for (Player p : Bukkit.getOnlinePlayers()) {
-                                        HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
+                                        hp.getMessagesConfig().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
                                     }
                                 }
                                 HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();

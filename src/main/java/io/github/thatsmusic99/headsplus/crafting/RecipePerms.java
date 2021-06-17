@@ -3,7 +3,8 @@ package io.github.thatsmusic99.headsplus.crafting;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
-import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -13,7 +14,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -31,7 +34,7 @@ public class RecipePerms extends HeadsPlusListener<InventoryClickEvent> {
 
         Player player = (Player) e.getWhoClicked();
         HeadsPlus hp = HeadsPlus.getInstance();
-        MainConfig c = hp.getConfiguration();
+        HeadsPlusMainConfig c = hp.getConfiguration();
         if (e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
             if (addData("is-correct-slot", isValid1_14(e))) {
                 if (e.getCurrentItem() != null) {
