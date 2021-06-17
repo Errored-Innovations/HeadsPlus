@@ -4,7 +4,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
 
-    private final HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
+    private final ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
 
     public HPPlayerDeathEvent() {
         super();
@@ -84,7 +85,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
             if (!phdEvent.isCancelled()) {
                 if (lostprice > 0.0) {
                     economy.withdrawPlayer(victim, lostprice);
-                    hp.getMessagesConfig().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", hp.getConfiguration().fixBalanceStr(price));
+                    HeadsPlusMessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", hp.getConfiguration().fixBalanceStr(price));
                 }
                 head.getItemStackFuture().thenAccept(itemStack -> {
                     location.getWorld().dropItem(location, itemStack);

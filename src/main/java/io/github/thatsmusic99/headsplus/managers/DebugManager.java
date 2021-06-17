@@ -1,4 +1,4 @@
-package io.github.thatsmusic99.headsplus.util;
+package io.github.thatsmusic99.headsplus.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

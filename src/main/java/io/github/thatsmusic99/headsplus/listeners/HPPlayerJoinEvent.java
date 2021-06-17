@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
@@ -15,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 	
 	public static boolean reloaded = false;
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     public HPPlayerJoinEvent() {
         super();
@@ -52,10 +53,10 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                String uuid = hp.getHeadsXConfig().grabUUID(e.getPlayer().getName(), 3, null);
-                hp.getHeadsXConfig().grabProfile(uuid);
+                String uuid = AutograbManager.grabUUID(e.getPlayer().getName(), 3, null);
+                AutograbManager.grabProfile(uuid);
             } else {
-                hp.getHeadsXConfig().grabTexture(e.getPlayer(), false, null);
+                AutograbManager.grabTexture(e.getPlayer(), false, null);
             }
         }
 

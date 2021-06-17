@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
@@ -90,7 +91,7 @@ public class CustomHead extends Content {
     public void initNameAndLore(String id, Player player) {
         // We only really need to add the lore here
         List<String> lore = new ArrayList<>();
-        for (String str : hpi.getStringList("icons.head.lore")) {
+        for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
             if (str.contains("{favourite}") || str.contains("{msg_inventory.icon.head.favourite}")) {
                 if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
                     lore.add(hpc.getString("inventory.icon.head.favourite", player));

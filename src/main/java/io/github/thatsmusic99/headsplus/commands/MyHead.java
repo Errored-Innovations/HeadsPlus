@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.MainConfig.SelectorList;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
@@ -29,8 +29,8 @@ import java.util.List;
 )
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
     private final PaperUtil util = new PaperUtil();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
@@ -147,7 +147,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.myhead", sender);
     }
 
     @Override

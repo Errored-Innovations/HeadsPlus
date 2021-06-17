@@ -1,105 +1,37 @@
-package io.github.thatsmusic99.headsplus.util;
+package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class EntityDataManager {
 
-    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList(
-            "AXOLOTL",
-            "BAT",
-            "BLAZE",
-            "BEE",
-            "CAT",
-            "CAVE_SPIDER",
-            "CHICKEN",
-            "COD",
-            "COW",
-            "CREEPER",
-            "DOLPHIN",
-            "DONKEY",
-            "DROWNED",
-            "ELDER_GUARDIAN",
-            "ENDER_DRAGON",
-            "ENDERMAN",
-            "ENDERMITE",
-            "EVOKER",
-            "FOX",
-            "GHAST",
-            "GIANT",
-            "GLOW_SQUID",
-            "GOAT",
-            "GUARDIAN",
-            "HOGLIN",
-            "HORSE",
-            "HUSK",
-            "IRON_GOLEM",
-            "LLAMA",
-            "MAGMA_CUBE",
-            "MULE",
-            "MUSHROOM_COW",
-            "OCELOT",
-            "PANDA",
-            "PARROT",
-            "PHANTOM",
-            "PIG",
-            "PIGLIN",
-            "PIGLIN_BRUTE",
-            "PIG_ZOMBIE",
-            "PILLAGER",
-            "POLAR_BEAR",
-            "PUFFERFISH",
-            "RABBIT",
-            "RAVAGER",
-            "SALMON",
-            "SHEEP",
-            "SHULKER",
-            "SILVERFISH",
-            "SKELETON",
-            "SKELETON_HORSE",
-            "SLIME",
-            "SNOWMAN",
-            "SPIDER",
-            "SQUID",
-            "STRAY",
-            "STRIDER",
-            "TRADER_LLAMA",
-            "TROPICAL_FISH",
-            "TURTLE",
-            "VEX",
-            "VILLAGER",
-            "VINDICATOR",
-            "WANDERING_TRADER",
-            "WITCH",
-            "WITHER",
-            "WITHER_SKELETON",
-            "WOLF",
-            "ZOGLIN",
-            "ZOMBIE",
-            "ZOMBIE_HORSE",
-            "ZOMBIE_VILLAGER",
-            "ZOMBIFIED_PIGLIN"));
+    public static final List<String> ableEntities = new ArrayList<>();
 
 
     private static final LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
     private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
+    public static void createEntityList() {
+        for (EntityType type : EntityType.values()) {
+            // who decided that an armor stand is alive?
+            if (type.isAlive() && !type.name().equals("ARMOR_STAND")) ableEntities.add(type.name());
+        }
+        Collections.sort(ableEntities);
+    }
     public static void init() {
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
+
                     storedHeads.clear();
                     sellheadCache.clear();
                     setupHeads();
@@ -231,26 +163,26 @@ public class EntityDataManager {
                         fancyName = name.toLowerCase().replaceAll("_", "");
                         break;
                 }
-                HeadsPlusConfigHeads headsCon = HeadsPlus.getInstance().getHeadsConfig();
+                ConfigMobs headsCon = HeadsPlus.getInstance().getHeadsConfig();
                 for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
                     List<EntityHead> heads = new ArrayList<>();
-                    for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
+                    for (String head : headsCon.getConfig().getStringList(name + ".name." + conditions)) {
                         EntityHead headItem;
                         if (head.equalsIgnoreCase("{mob-default}")) {
-                            switch (fancyName) {
-                                case "witherskeleton":
+                            switch (name) {
+                                case "WITHER_SKELETON":
                                     headItem = new EntityHead(name, 1);
                                     break;
-                                case "enderdragon":
+                                case "ENDER_DRAGON":
                                     headItem = new EntityHead(name, 5);
                                     break;
-                                case "zombie":
+                                case "ZOMBIE":
                                     headItem = new EntityHead(name, 2);
                                     break;
-                                case "creeper":
+                                case "CREEPER":
                                     headItem = new EntityHead(name, 4);
                                     break;
-                                case "skeleton":
+                                case "SKELETON":
                                     headItem = new EntityHead(name, 0);
                                     break;
                                 default:

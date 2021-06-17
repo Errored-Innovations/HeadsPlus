@@ -4,7 +4,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +20,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -175,7 +175,7 @@ public class HPUtils {
 
     @Deprecated
     public static boolean runBlacklistTests(LivingEntity e) {
-        HeadsPlusMainConfig c = HeadsPlus.getInstance().getConfiguration();
+        MainConfig c = HeadsPlus.getInstance().getConfiguration();
         // Killer checks
         if (e.getKiller() == null) {
             if (c.getPerks().drops_needs_killer) {

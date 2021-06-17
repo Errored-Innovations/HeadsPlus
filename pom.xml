@@ -96,73 +96,17 @@
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.8</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.8.3</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>craftbukkit-1.8.8</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.9.2</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.9.4</artifactId>
-            <version>1.9.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.10.2</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.11.2</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.13.2</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.13</artifactId>
+            <artifactId>craftbukkit-13-1</artifactId>
             <version>1.13-R0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>spigot-1.12.2</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <artifactId>craftbukkit-13-2</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.12.2-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -216,6 +160,12 @@
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.thatsmusic99</groupId>
+            <artifactId>ConfigurationMaster</artifactId>
+            <version>v1.0.1</version>
         </dependency>
 
     </dependencies>

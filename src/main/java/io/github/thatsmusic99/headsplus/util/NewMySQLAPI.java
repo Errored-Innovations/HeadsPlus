@@ -1,6 +1,8 @@
 package io.github.thatsmusic99.headsplus.util;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -34,7 +36,7 @@ public class NewMySQLAPI {
 
     }
 
-    static void addToTotal(String database, int addition, String section, String uuid) {
+    public static void addToTotal(String database, int addition, String section, String uuid) {
         try {
             if (!doesPlayerExist(database, uuid)) addPlayer(database, uuid);
             ResultSet set = query(OperationType.SELECT, section, database, "uuid", uuid);
@@ -53,7 +55,7 @@ public class NewMySQLAPI {
         }
     }
 
-    static LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
+    public static LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
         try {
             String mdatabase = "";
             switch (database) {
@@ -90,7 +92,7 @@ public class NewMySQLAPI {
         return null;
     }
 
-    static int getScore(OfflinePlayer player, String section, String database) {
+    public static int getScore(OfflinePlayer player, String section, String database) {
         try {
             String mdatabase = "";
             switch (database) {

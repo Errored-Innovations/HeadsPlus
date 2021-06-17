@@ -39,7 +39,7 @@ public class DataListener extends StringPrompt {
     @Override
     public Prompt acceptInput(@NotNull ConversationContext context, @Nullable String s) {
         assert s != null;
-        HeadsPlusMessagesManager messages = HeadsPlus.getInstance().getMessagesConfig();
+        HeadsPlusMessagesManager messages = HeadsPlusMessagesManager.get();
         Conversable user = context.getForWhom();
         if (s.equalsIgnoreCase("cancel")) {
             user.sendRawMessage(messages.getString("commands.addhead.cancelled", (CommandSender) user));

@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand.lists;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,7 +31,7 @@ public abstract class AbstractListList extends AbstractListCommand {
             hpc.sendMessage("commands." + getFullName() + "." + "empty-" + getListType(), sender);
             return true;
         }
-        sender.sendMessage(HeadsPlusConfigTextMenu.BlacklistTranslator.translate(sender, getExtendedType(), getType(), wl, page));
+        sender.sendMessage(ConfigTextMenus.BlacklistTranslator.translate(sender, getExtendedType(), getType(), wl, page));
         return true;
     }
 

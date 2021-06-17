@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -29,7 +30,7 @@ public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
                 if (!addData("can-bypass", e.getPlayer().hasPermission("headsplus.bypass.preventplacement"))) {
                     if (addData("is-sellable", NBTManager.isSellable(e.getItemInHand()))) {
                         e.setCancelled(true);
-                        hp.getMessagesConfig().sendMessage("event.block-place-denied", e.getPlayer());
+                        HeadsPlusMessagesManager.get().sendMessage("event.block-place-denied", e.getPlayer());
                     }
                 }
             }

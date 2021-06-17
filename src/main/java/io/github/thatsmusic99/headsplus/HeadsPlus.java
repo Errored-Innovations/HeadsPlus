@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus;
 
+import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.api.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.Head;
@@ -7,9 +8,8 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
-import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallenges;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.crafting.RecipePerms;
+import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
@@ -19,7 +19,7 @@ import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
@@ -40,6 +40,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 public class HeadsPlus extends JavaPlugin {
 
@@ -54,17 +55,16 @@ public class HeadsPlus extends JavaPlugin {
     private Connection connection;
     private boolean con = false;
     // Config variables
-    private HeadsPlusMessagesManager hpc;
-    private HeadsPlusConfigHeads hpch;
-    private HeadsPlusConfigCustomHeads hpchx;
-    private HeadsPlusCrafting hpcr;
-    private HeadsPlusChallenges hpchl;
+    private ConfigMobs hpch;
+    private ConfigCustomHeads hpchx;
+    private ConfigCrafting hpcr;
+    private ConfigChallenges hpchl;
     private HeadsPlusAPI hapi;
-    private HeadsPlusLevels hpl;
-    private HeadsPlusMainConfig config;
-    private HeadsPlusConfigItems items;
-    private HeadsPlusConfigSounds sounds;
-    private HeadsPlusConfigTextMenu menus;
+    private ConfigLevels hpl;
+    private MainConfig config;
+    private ConfigInventories items;
+    private ConfigSounds sounds;
+    private ConfigTextMenus menus;
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
     private final List<ChallengeSection> challengeSections = new ArrayList<>();
@@ -72,11 +72,14 @@ public class HeadsPlus extends JavaPlugin {
     private NMSIndex nmsversion;
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
-    private final List<ConfigSettings> cs = new ArrayList<>();
+    private List<CMFile> configFiles = new ArrayList<>();
     private Favourites favourites;
     private Pinned pinned;
     private PlayerScores scores;
     private boolean canUseWG = false;
+
+    public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), task);
+    public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.getInstance(), task);
 
     @Override
     public void onLoad() {
@@ -93,6 +96,8 @@ public class HeadsPlus extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            EntityDataManager.createEntityList();
+
             instance = this;
             // Set up the NMS
             setupNMS();
@@ -100,29 +105,27 @@ public class HeadsPlus extends JavaPlugin {
             // Create locale files
             createLocales();
 
-
             // Build plugin instances
             createInstances();
+            new HeadsPlusMessagesManager();
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
 
             if (!isEnabled()) return;
-            // Checks theme, believe it or not!
-            checkTheme();
 
             // Handles recipes
-            if (!getConfiguration().getPerks().disable_crafting) {
-                new RecipePerms();
-            }
+            //if (!getConfiguration().getPerks().disable_crafting) {
+            //    new RecipePerms();
+            //}
             // If sellable heads are enabled and yet there isn't Vault
-            if (!(econ()) && (getConfiguration().getPerks().sell_heads)) {
-                getServer().getConsoleSender().sendMessage(hpc.getString("startup.no-vault"));
-            }
+            //if (!(econ()) && (getConfiguration().getPerks().sell_heads)) {
+            //    getServer().getConsoleSender().sendMessage(hpc.getString("startup.no-vault"));
+            //}
 
             // If Vault exists
-            if (econ()) {
-                setupPermissions();
-            }
+            //if (econ()) {
+            //    setupPermissions();
+            //}
 
             // Registers plugin events
             registerEvents();
@@ -143,18 +146,18 @@ public class HeadsPlus extends JavaPlugin {
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> getConfiguration().getConfig().getString("locale")));
             metrics.addCustomChart(new Metrics.SimplePie("theme", () -> capitalize(getConfiguration().getMechanics().getString("plugin-theme-dont-change").toLowerCase())));
-            if (getConfiguration().getMechanics().getBoolean("update.check")) {
+           // if (getConfiguration().getMechanics().getBoolean("update.check")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
-                            getServer().getConsoleSender().sendMessage(hpc.getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + hpc.getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                                    + "\n" + hpc.getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
+                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
                             getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
                         } else {
-                            getLogger().info(hpc.getString("update.plugin-up-to-date"));
+                            getLogger().info(HeadsPlusMessagesManager.get().getString("update.plugin-up-to-date"));
                         }
                         checkDates();
 
@@ -167,9 +170,9 @@ public class HeadsPlus extends JavaPlugin {
                     }
                 }.runTaskLater(this, 20);
 
-            }
-            getServer().getConsoleSender().sendMessage(hpc.getString("startup.plugin-enabled"));
-            if (getConfiguration().getPerks().ascii) {
+           // }
+            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("startup.plugin-enabled"));
+           // if (getConfiguration().getPerks().ascii) {
                 getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
                         "§c$$\\   $$\\                           $$\\           §9$$$$$$$\\  $$\\\n" +
                         "§c$$ |  $$ |                          $$ |          §9$$  __$$\\ $$ |\n" +
@@ -182,7 +185,7 @@ public class HeadsPlus extends JavaPlugin {
                         ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
                         ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
                         ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
-            }
+           // }
 
         } catch (Exception e) {
             try {
@@ -238,7 +241,7 @@ public class HeadsPlus extends JavaPlugin {
         } catch (NullPointerException ignored) {
 
         }
-        getLogger().info(hpc.getString("startup.plugin-disabled"));
+        getLogger().info(HeadsPlusMessagesManager.get().getString("startup.plugin-disabled"));
     }
 
     public static HeadsPlus getInstance() {
@@ -273,31 +276,13 @@ public class HeadsPlus extends JavaPlugin {
             Class.forName("com.mysql.jdbc.Driver");
             ConfigurationSection mysql = getConfiguration().getMySQL();
             try {
-                connection = DriverManager.getConnection("jdbc:mysql://" + mysql.getString("host") + ":" + mysql.getString("port") + "/" + mysql.getString("database") + "?useSSL=false&autoReconnect=true", mysql.getString("username"), mysql.getString("password"));
+                connection = DriverManager.getConnection("jdbc:mysql://" + MainConfig.get().getString("mysql-host") + ":" + MainConfig.get().getInteger("mysql-port") + "/" + MainConfig.get().getString("mysql-database") + "?useSSL=false&autoReconnect=true", MainConfig.get().getString("mysql-username"), MainConfig.get().getString("mysql-password"));
                 NewMySQLAPI.createTable();
                 con = true;
             } catch (SQLException ex) {
                 getLogger().warning("MySQL could not be enabled due to a problem connecting. Details to follow... (Error code: 3)");
                 getLogger().warning(ex.getMessage() + " (MySQL Error code: " + ex.getErrorCode() + ")");
                 getLogger().warning(ex.getCause().getMessage());
-            }
-        }
-    }
-
-    private void checkTheme() {
-        HeadsPlusMainConfig fc = getInstance().getConfiguration();
-        if (!fc.getMechanics().getString("theme").equalsIgnoreCase(fc.getMechanics().getString("plugin-theme-dont-change"))) {
-            try {
-                MenuThemes mt = MenuThemes.valueOf(fc.getMechanics().getString("theme").toUpperCase());
-                fc.getConfig().set("theme-colours.1", mt.c1);
-                fc.getConfig().set("theme-colours.2", mt.c2);
-                fc.getConfig().set("theme-colours.3", mt.c3);
-                fc.getConfig().set("theme-colours.4", mt.c4);
-                fc.getMechanics().set("plugin-theme-dont-change", mt.name());
-                fc.getConfig().options().copyDefaults(true);
-                fc.save();
-            } catch (Exception ex) {
-                getLogger().warning("Faulty theme was put in! No theme changes will be made.");
             }
         }
     }
@@ -333,32 +318,38 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createInstances() {
+        configFiles = new ArrayList<>();
+        configFiles.add(new MainConfig());
+        configFiles.add(new ConfigAnimations());
+        configFiles.add(new ConfigChallenges());
+        configFiles.add(new ConfigCustomHeads());
+        configFiles.add(new ConfigCrafting());
+        configFiles.add(new ConfigInteractions());
+        configFiles.add(new ConfigInventories());
+        configFiles.add(new ConfigLevels());
+        configFiles.add(new ConfigMasks());
+        configFiles.add(new ConfigMobs());
+        configFiles.add(new ConfigSounds());
+        configFiles.add(new ConfigTextMenus());
 
-        config = new HeadsPlusMainConfig();
-        cs.add(config);
-        hpc = new HeadsPlusMessagesManager();
-        hapi = new HeadsPlusAPI();
-        hpch = new HeadsPlusConfigHeads();
-        cs.add(hpch);
-        hpchx = new HeadsPlusConfigCustomHeads();
-        cs.add(hpchx);
-        hpcr = new HeadsPlusCrafting();
-        cs.add(hpcr);
-        hpchl = new HeadsPlusChallenges();
-        cs.add(hpchl);
         if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals("HeadsPlus")) {
             getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
             getLogger().severe("Only reupload the plugin on other sites with my permission, please! (Error code: 4)");
             setEnabled(false);
             return;
         }
+
+        for (CMFile file : configFiles) {
+            file.load();
+        }
+
         try {
             setupJSON();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (getConfiguration().getMySQL().getBoolean("enabled")) {
+        if (MainConfig.get().getBoolean("enable-mysql")) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -371,20 +362,12 @@ public class HeadsPlus extends JavaPlugin {
             }.runTaskAsynchronously(this);
 
         }
-        hpl = new HeadsPlusLevels();
-        cs.add(hpl);
-        items = new HeadsPlusConfigItems();
-        cs.add(items);
-        sounds = new HeadsPlusConfigSounds();
-        cs.add(sounds);
-        menus = new HeadsPlusConfigTextMenu();
-        cs.add(menus);
         EntityDataManager.init();
     }
 
     public void restartMessagesManager() {
         createLocales();
-        hpc = new HeadsPlusMessagesManager();
+        new HeadsPlusMessagesManager();
     }
 
     private boolean setupPermissions() {
@@ -423,7 +406,6 @@ public class HeadsPlus extends JavaPlugin {
             }
         }
     }
-
 
     private void setupNMS() {
         String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
@@ -507,7 +489,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public boolean hasChallengesEnabled() {
-        return getConfiguration().getPerks().challenges;
+        return MainConfig.get().getMainFeatures().CHALLENGES;
     }
 
     public boolean isConnectedToMySQLDatabase() {
@@ -519,11 +501,11 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public boolean isDropsEnabled() {
-        return getConfiguration().getPerks().drop_heads;
+        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
 
     public boolean canSellHeads() {
-        return (econ()) && (getConfiguration().getPerks().sell_heads);
+        return (econ()) && (MainConfig.get().getMainFeatures().SELL_HEADS);
     }
 
     public Connection getConnection() {
@@ -542,7 +524,7 @@ public class HeadsPlus extends JavaPlugin {
         return getConfiguration().getPerks().leaderboards;
     }
 
-    public HeadsPlusConfigTextMenu getMenus() {
+    public ConfigTextMenus getMenus() {
         return menus;
     }
 
@@ -566,7 +548,7 @@ public class HeadsPlus extends JavaPlugin {
         return author;
     }
 
-    public HeadsPlusChallenges getChallengeConfig() {
+    public ConfigChallenges getChallengeConfig() {
         return hpchl;
     }
 
@@ -582,28 +564,24 @@ public class HeadsPlus extends JavaPlugin {
         return nms;
     }
 
-    public HeadsPlusConfigHeads getHeadsConfig() {
+    public ConfigMobs getHeadsConfig() {
         return hpch;
     }
 
-    public HeadsPlusMessagesManager getMessagesConfig() {
-        return hpc;
-    }
-
-    public HeadsPlusConfigCustomHeads getHeadsXConfig() {
+    public ConfigCustomHeads getHeadsXConfig() {
         return hpchx;
     }
 
-    public HeadsPlusLevels getLevelsConfig() {
+    public ConfigLevels getLevelsConfig() {
         return hpl;
     }
 
-    public HeadsPlusCrafting getCraftingConfig() {
+    public ConfigCrafting getCraftingConfig() {
         return hpcr;
     }
 
-    public List<ConfigSettings> getConfigs() {
-        return cs;
+    public List<CMFile> getConfigs() {
+        return configFiles;
     }
 
     public boolean usingLevels() {
@@ -614,24 +592,20 @@ public class HeadsPlus extends JavaPlugin {
         return update;
     }
 
-    public HeadsPlusMainConfig getConfiguration() {
+    public MainConfig getConfiguration() {
         return config;
     }
 
-    public HeadsPlusConfigItems getItems() {
+    public ConfigInventories getItems() {
         return items;
     }
 
-    public HeadsPlusConfigSounds getSounds() {
+    public ConfigSounds getSounds() {
         return sounds;
     }
 
     public NMSIndex getNMSVersion() {
         return nmsversion;
-    }
-
-    public ChatColor getThemeColour(int i) {
-        return ChatColor.valueOf(getConfiguration().getConfig().getString("theme-colours." + i));
     }
 
     public Challenge getChallengeByName(String name) {

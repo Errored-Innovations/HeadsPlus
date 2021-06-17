@@ -36,20 +36,20 @@ public class HeadsPlusMessagesManager {
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<UUID, YamlConfiguration> players;
 
+    private static HeadsPlusMessagesManager instance;
+
     public HeadsPlusMessagesManager() {
+        instance = this;
         HeadsPlus hp = HeadsPlus.getInstance();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
-        HeadsPlusMainConfig mainConfig = hp.getConfiguration();
-        String locale = mainConfig.getConfig().getString("locale");
-        if (mainConfig.getConfig().getBoolean("smart-locale")) {
-            locales = new HashMap<>();
+        String locale = MainConfig.get().getString("locale");
+        locales = new HashMap<>();
+        if (MainConfig.get().getBoolean("smart-locale")) {
             File langDir = new File(dest);
             for (File f : Objects.requireNonNull(langDir.listFiles())) {
                 locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
             }
             players = new HashMap<>();
-        } else {
-            locales = new HashMap<>();
         }
         // Main config for non-player entities such as console
         try {
@@ -922,6 +922,13 @@ public class HeadsPlusMessagesManager {
             String s = m.group(1);
             string = string.replace("{msg_" + s + "}", getString(s, sender));
         }
+        if (sender instanceof Player && HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            string = PlaceholderAPI.setPlaceholders((Player) sender, string);
+        }
+        string = string.replaceAll("\\{header}", config.getString("prefix"));
+        string = string.replaceAll("''", "'");
+        string = string.replaceAll("^'", "");
+        string = string.replaceAll("'$", "");
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
@@ -952,14 +959,10 @@ public class HeadsPlusMessagesManager {
     }
 
     public String getString(String path, CommandSender cs) {
-        return cs instanceof Player ? getString(path, (OfflinePlayer) cs) : getString(path);
+        return cs instanceof Player ? getString(path, (Player) cs) : getString(path);
     }
 
     public String getString(String path, Player player) {
-        return getString(path, (CommandSender) player);
-    }
-
-    public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
         if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
@@ -973,19 +976,7 @@ public class HeadsPlusMessagesManager {
         }
         String str = config.getString(path);
         if (str == null) return "";
-        str = str.replaceAll("\\{header}", config.getString("prefix"));
-        str = str.replaceAll("''", "'");
-        str = str.replaceAll("^'", "");
-        str = str.replaceAll("'$", "");
-        if (player.isOnline()) {
-            formatMsg(str, player.getPlayer());
-        }
-
-        if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            str = PlaceholderAPI.setPlaceholders(player, str);
-        }
-        str = ChatColor.translateAlternateColorCodes('&', str);
-        return str;
+        return formatMsg(str, player.getPlayer());
     }
 
     public void setPlayerLocale(Player player) {
@@ -1088,5 +1079,9 @@ public class HeadsPlusMessagesManager {
         } else {
             sender.sendMessage(str);
         }
+    }
+
+    public static HeadsPlusMessagesManager get() {
+        return instance;
     }
 }

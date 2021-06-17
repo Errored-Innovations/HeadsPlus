@@ -27,7 +27,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String l, String[] args) {
         try {
-            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
             if (HeadsPlus.getInstance().isUsingHeadDatabase()) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
@@ -51,7 +51,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.heads", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.heads", sender);
     }
 
     @Override

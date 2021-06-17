@@ -3,7 +3,8 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +24,12 @@ public class Info implements IHeadsPlusCommand {
 	// D
 	@Override
 	public String getCmdDescription(CommandSender cs) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.info", cs);
+		return HeadsPlusMessagesManager.get().getString("descriptions.hp.info", cs);
 	}
 
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {
-		sender.sendMessage(HeadsPlusConfigTextMenu.InfoTranslator.translate(sender));
+		sender.sendMessage(ConfigTextMenus.InfoTranslator.translate(sender));
 		return true;
 	}
 
