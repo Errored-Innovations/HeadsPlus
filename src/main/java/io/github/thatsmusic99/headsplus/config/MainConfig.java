@@ -22,6 +22,7 @@ public class MainConfig extends CMFile {
 
     private MainFeatures mainFeatures;
     private MySQL mySQL;
+    private Updates updates;
 
     private static MainConfig instance;
 
@@ -256,6 +257,7 @@ public class MainConfig extends CMFile {
     public void postSave() {
         mainFeatures = new MainFeatures();
         mySQL = new MySQL();
+        updates = new Updates();
     }
 
     public static MainConfig get() {
@@ -335,6 +337,12 @@ public class MainConfig extends CMFile {
         public boolean NEEDS_KILLER = getBoolean("needs-killer"),
                 ENABLE_LOOTING = getBoolean("enable-looting"),
                 DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
+
+    }
+
+    public class Updates {
+        public boolean CHECK_FOR_UPDATES = getBoolean("check-for-updates"),
+                NOTIFY_ADMINS = getBoolean("notify-admins-about-updates");
 
     }
 

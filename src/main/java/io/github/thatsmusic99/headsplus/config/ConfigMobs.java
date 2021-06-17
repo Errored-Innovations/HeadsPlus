@@ -26,6 +26,9 @@ public class ConfigMobs extends CMFile {
 
 	@Override
 	public void loadDefaults() {
+		addComment("This configuration file has become more complex compared to previous versions.\n" +
+				"If you have trouble understanding how it works, please use the /hp config mobs command instead.");
+
 		addDefault("defaults.price", 10.0);
 		addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
 		addDefault("defaults.display-name", "{type} Head");
@@ -82,12 +85,21 @@ public class ConfigMobs extends CMFile {
 	}
 
 	private void addHeads() {
+		/* New format:
+		 AXOLOTL:
+		   default:
+		     HP#lucy_axolotl:
+		       chance: 5
+
+
+		 */
     	for (String key : EntityDataManager.ableEntities) {
             switch (key) {
 				case "AXOLOTL":
-					addDefault("axolotl.name.default", initSingleton("HP#lucy_axolotl"));
+					addLenientSection(key + ".default");
+					getConfig().createSection(key + ".default.HP#lucy_axolotl");
 					for (String color : new String[]{"LUCY", "WILD", "GOLD", "CYAN", "BLUE"}) {
-						addDefault("axolotl.name." + color, initSingleton("HP#" + color.toLowerCase() + "_axolotl"));
+						addExample("." + color + "." + "HP#" + color.toLowerCase() + "_axolotl.chance", "{default}");
 					}
 					break;
 				case "BEE":
