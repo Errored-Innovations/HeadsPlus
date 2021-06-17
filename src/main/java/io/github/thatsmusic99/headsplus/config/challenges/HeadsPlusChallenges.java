@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,6 +25,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
     }
 
     private boolean updated = false;
+    private final PaperUtil util = new PaperUtil();
 
     @Override
     public void reloadC() {
@@ -402,8 +404,7 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 icon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
             } else {
                 SkullMeta sm = (SkullMeta) icon.getItemMeta();
-                sm = HeadsPlus.getInstance().getNMS().setSkullOwner(s, sm);
-                icon.setItemMeta(sm);
+                util.setProfile(sm, s).thenAccept(icon::setItemMeta);
             }
         }
         return icon;

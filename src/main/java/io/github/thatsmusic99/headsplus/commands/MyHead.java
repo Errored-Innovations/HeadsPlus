@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.BlockCommandSender;
@@ -29,6 +30,7 @@ import java.util.List;
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final PaperUtil util = new PaperUtil();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
@@ -132,14 +134,15 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
         return false;
     }
-    private static void giveHead(Player p, String n) {
+
+    private void giveHead(Player p, String n) {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
         ItemStack skull = nms.getSkullMaterial(1);
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta = nms.setSkullOwner(n, meta);
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
-        skull.setItemMeta(meta);
-        p.getInventory().addItem(skull);
+        util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+            skull.setItemMeta(meta);
+            p.getInventory().addItem(skull);
+        });
     }
 
     @Override
