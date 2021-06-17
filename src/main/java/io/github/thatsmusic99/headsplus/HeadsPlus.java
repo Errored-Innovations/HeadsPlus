@@ -320,9 +320,9 @@ public class HeadsPlus extends JavaPlugin {
     private void registerCommands() {
         getCommand("headsplus").setExecutor(new HeadsPlusCommand());
         getCommand("hp").setTabCompleter(new TabComplete());
-        getCommand("head").setExecutor(new Head());
-        getCommand("head").setTabCompleter(new Head());
-        getCommand("myhead").setExecutor(new MyHead());
+        //getCommand("head").setExecutor(new Head());
+        //getCommand("head").setTabCompleter(new Head());
+        //getCommand("myhead").setExecutor(new MyHead());
         getCommand("heads").setExecutor(new Heads());
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
         getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
