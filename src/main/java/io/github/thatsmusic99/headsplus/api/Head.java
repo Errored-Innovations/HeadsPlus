@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Material;
@@ -60,9 +61,7 @@ public class Head {
             encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
         }
         gm.getProperties().put("textures", new Property("texture", new String(encodedData)));
-        Field profile = skullMeta.getClass().getDeclaredField("profile");
-        profile.setAccessible(true);
-        profile.set(skullMeta, gm);
+        skullMeta = ProfileFetcher.setProfile(skullMeta, gm);
         itemStack.setItemMeta(skullMeta);
         this.name = null; // overwritten by textures
         return this;
@@ -98,7 +97,7 @@ public class Head {
         if (this.name != null) {
             // set sync
             SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
-            sm = HeadsPlus.getInstance().getNMS().setSkullOwner(this.name, sm);
+            sm = ProfileFetcher.setProfile(sm, this.name);
             itemStack.setItemMeta(sm);
         }
         return itemStack;

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
@@ -60,27 +61,15 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
             if (b != null && b.getState() instanceof Skull) {
                 // fill in the item data
                 Skull s = (Skull) b.getState();
-                GameProfile profile;
                 try {
-                    Field profileField;
-                    profileField = s.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profile = (GameProfile) profileField.get(s);
-                } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
-                    throw new RuntimeException("Reflection error while setting head texture", ex);
+                    GameProfile profile = ProfileFetcher.getProfile(s);
+                    ItemStack it = event.getCursor();
+                    SkullMeta sm = (SkullMeta) it.getItemMeta();
+                    it.setItemMeta(ProfileFetcher.setProfile(sm, profile));
+                    event.setCursor(it);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-                ItemStack it = event.getCursor();
-                SkullMeta sm = (SkullMeta) it.getItemMeta();
-                try {
-                    Field profileField;
-                    profileField = sm.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(sm, profile);
-                } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
-                    throw new RuntimeException("Reflection error while setting head texture", ex);
-                }
-                it.setItemMeta(sm);
-                event.setCursor(it);
             }
         }
     }

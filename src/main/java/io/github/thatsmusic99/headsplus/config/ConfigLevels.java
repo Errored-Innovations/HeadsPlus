@@ -73,10 +73,10 @@ public class ConfigLevels extends CMFile {
                     set("levels." + l.getConfigName() + ".hierachy", null);
                 }
                 if (l.getAddedVersion() > current) {
-                    addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-                    addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-                    addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    addDefault("levels." + l.getConfigName() + ".hierarchy", i);
+                    addExample("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
+                    addExample("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
+                    addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
+                    addExample("levels." + l.getConfigName() + ".hierarchy", i);
                     addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
                     addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
                     addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);

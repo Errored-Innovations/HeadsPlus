@@ -1,0 +1,247 @@
+# HeadsPlus by Thatsmusic99 - Chinese: Taiwan (andy3559167)
+# 請勿變更版本 在外掛程式內部用於新增新訊息.
+language: Chinese (TW)
+version: 1.5
+prefix: '&cHeadsPlus &8» &7'
+inventory:
+  icon:
+    pinned-challenges: '&8❰ &b&固定挑戰 &8❱'
+    next: '&8❰ &a&l下一個 &8❱'
+    next-2: '&8❰ &a&l下一個 (2) &8❱'
+    next-3: '&8❰ &a&l下一個 (3) &8❱'
+    reward:
+      currency: '&7${amount}'
+      group-add: '&7組 {group} &7(&a+&7)'
+      group-remove: '&7組 {group} &7(&c-&7)'
+      item-give: '&7{amount} {item}(s)'
+    challenge:
+      progress: '&7進展 &8❱ &c{heads}&7/&c{total}'
+      pinned: '&c固定!'
+      reward: '&7獎勵 &8❱ &c{reward}'
+      xp: '&7XP &8❱ &c{xp}'
+      count: '&7{challenge-count} 挑戰'
+    close: '&8❰ &c&l關閉菜單 &8❱'
+    favourites: '&8❰ &b&l收藏夾 &8❱'
+    head:
+      price: '&c價格 &8❱ &7{price}'
+      favourite: '&c喜好!'
+      count: '&7{head-count} 頭顱'
+    menu: '&8❰ &a&l主菜單 &8❱'
+    start: '&8❰ &a&l第一頁 &8❱'
+    last: '&8❰ &a&l下一頁 &8❱'
+    back: '&8❰ &a&l返回 &8❱'
+    back-2: '&8❰ &a&l返回 2 &8❱'
+    back-3: '&8❰ &a&l返回 3 &8❱'
+    search: '&8❰ &e&l搜尋頭顱 &8❱'
+    stats:
+      icon: '&8❰ &a&l統計 &8❱'
+      total-heads: '&a總頭顱 &8❱ &e'
+      total-pages: '&a總頁數 &8❱ &e'
+      total-sections: '&a總部分 &8❱ &e'
+      current-balance: '&a當前餘額 &8❱ &e'
+      current-section: '&a當前部分 &8❱ &e'
+textmenus:
+  profile:
+    player: Player
+    completed-challenges: 完成挑戰
+    total-heads-dropped: 頭顱掉落總數
+    total-heads-sold: 頭顱銷售總數
+    total-heads-crafted: 製作頭顱總數
+    current-level: 當前等級
+    xp-until-next-level: 到下一級所需XP
+  blacklist: 黑名單
+  whitelist: 白名單
+  blacklistw: 世界黑名單
+  whitelistw: 世界白名單
+  info:
+    version: 版本
+    author: 作者
+    language: 語言
+    contributors: 貢獻者
+    spigot: Spigot連結
+    discord: Discord Server
+    github: Github
+  head-info:
+    type: 類型
+    display-name: 顯示名稱
+    price: 價格
+    interact-name: 互動名稱
+    chance: 機率
+  help:
+    usage: 用法
+    description: 描述
+    permission: 允許
+    further-usages: 進一步的用法
+commands:
+  debug:
+    verbose:
+      enabled: '{header} 為事件&c{event}&7和参數&c{args}&7啟用了調試詳細信息！'
+      disabled: '{header} 禁用調試冗長！'
+  locale:
+    invalid-lang: '{header} 那不是有效的語言！可用語言: &c{languages}'
+    changed-locale: '{header} 美好的一天！ 您的語言已設定為 &cChinese (CN)'
+    changed-locale-other: '{header} &c{player}&7的語言現在設置為 &c{language}&7!'
+  errors:
+    not-a-player: '{header} 您必須是玩家才能執行此指令/子命令!'
+    cmd-fail: '{header} 無法執行此指令!'
+    disabled: '{header} 這個指令被禁用.'
+    invalid-args: '{header} 無效的參數!'
+    invalid-input-int: '{header} 您只能在此指令中使用整數!'
+    invalid-pg-no: '{header} 頁碼無效!'
+    no-data: '{header} 無該玩家資料!'
+    no-perm: '{header} 您無權使用此指令.'
+    player-offline: '{header} 該玩家離線!'
+    too-many-args: '{header} 參數太多!'
+  addhead:
+    bad-texture: '{header} 您提供的紋理無效。 它一定是 Minecraft紋理網址（https://textures.minecraft.net）或Base64编码的字符串 .'
+    cancelled: '{header} 取消頭顱建立.'
+    custom-head-added: '{header} 為新的頭顱添加了ID &c{id}&7!'
+    displayname: '{header} 輸入頭部的顯示名稱（包括顏色， 代碼）.'
+    head-added: '已添加{header} &c{player} &7的頭顱!'
+    head-adding: '{header} 尋找要新增的紋理 &c{player}&7...'
+    head-already-added: '已在資料庫中{header}指向&c {player}&7!'
+    id: '{header} 輸入頭顱的ID（例如，brown_sheep，red_flower_bush）'
+    id-taken: '{header} 此ID已被使用 (&c{id}&7)!'
+    price: '{header} 輸入頭顱價格（或“默认”为默认值）.'
+    section: '{header} 鍵入將放置頭顱的部分.(可用部分: &c{sections}&7)'
+    texture: '{header} 輸入或複製並貼上頭部的紋理.（這可能需要幾條訊息，因此完成後，在聊天中輸入“done”.）'
+  blacklist:
+    bl-a-off: '{header} 黑名單已被禁用!'
+    bl-a-on: '{header} 黑名單已啟用!'
+    bl-off: '{header} 黑名單已被禁用!'
+    bl-on: '{header} 黑名單已啟用!'
+    blw-a-on: '{header} 世界黑名單已啟用!'
+    blw-a-off: '{header} 世界黑名單已被禁用!'
+    empty-bl: '{header} 黑名單是空的!'
+    empty-blw: '{header} 世界黑名單為空!'
+    head-a-add: '{header} 該頭顱已經添加!'
+    head-a-removed-bl: '{header} 這個頭顱不在黑名單!'
+    head-added-bl: '{header} &c{player} &7已添加到黑名單!'
+    head-removed-bl: '{header} &c{player} &7已從黑名單中刪除!'
+    world-a-add: '{header} 這個世界已經被添加!'
+    world-added-bl: '{header} &c{world} &7已添加到世界黑名單!'
+    world-a-removed-bl: '{header} 這個世界不在黑名單上!'
+    world-removed-bl: '{header} &c{world} &7已從黑名單中刪除!'
+  challenges:
+    already-complete-challenge: '{header} 您已經完成了挑戰!'
+    cant-complete-challenge: '{header} 您無法完成了挑戰!'
+    challenge-complete: '{header} &c{player} &7已完成 &c{challenge} &7挑戰!'
+    challenge-completed: '&6已完成!'
+    reward-string: '{header} 獎勵: &c{reward}\n{header} XP: &c{xp}'
+  head:
+    alpha-names: '{header} 此指令只會處理字母數位名稱!'
+    blacklist-head: '{header} 此頭顱已列入黑名單，無法使用!'
+    full-inv: '{header} 您的背包已滿!'
+    head-too-long: '{header} IGN時間太長，無法生效！ 請在之間使用IGN 3和16个字符.'
+    head-too-short: '{header} IGN太短，無效！ 請在之間使用IGN 3和16个字符.'
+    whitelist-head: '{header} 此頭未列入白名單，因此不能被列入白名單 用過的!'
+  head-info:
+    add-value: '{header} &c{value} &7已添加到 &c{entity}&7''s &c{setting}&7!'
+    no-lore-data: '{header} 沒有該實體的擊殺資料!'
+    no-mask-data: '{header} 該實體沒有遮罩資料!'
+    no-name-data: '{header}沒有該實體的名稱資料!'
+    remove-value: '{header} &c{value} &7已從中刪除 &c{entity}&7''s &c{setting}&7!'
+    set-value: '{header} &c{entity}&7''s &c{setting} &7已更改為    &c{value}&7!'
+  heads:
+    buy-success: '{header} 你以&c{price}的價格 &7購買了一个頭顱 現在還有&c{balance}&7!'
+    chat-input: '{header} 輸入您要搜尋的字詞.'
+    not-enough-money: '{header} 你沒有足夠的錢QQ!'
+  leaderboards:
+    no-data-lb: '尚未記錄排行榜資料!'
+  levels:
+    level-up: '{header} &c{player} &7已達到的等級 &c{level}&7!'
+  profile:
+    cant-view-data: '{header} 您無法在控制台中查看自己的資料!'
+  reload:
+    reload-message: '{header} 配置已重新載入!'
+    reloading-message: '{header} 重新載入設定...'
+  restore:
+    restored-head: '{header} 已恢復{head}!'
+    invalid-head: '{header} {head}不是有效的ID!'
+  sellhead:
+    false-head: '{header} 這個頭顱不能賣!'
+    false-item: '{header} 這不是頭顱!'
+    no-heads: '{header} 的背包中沒有任何有效的物品可以出售!'
+    not-enough-heads: '{header} 你頭顱不夠!'
+    sell-success: '{header} 您已成功出售的頭 &c{price} &7現在有 &c{balance}&7!'
+  tests:
+    running-tests: '{header}正在執行測試...（這可能需要一段時間）'
+    results: '{header} 结果: &c{results}'
+  whitelist:
+    empty-wl: '{header} 白名單为空!'
+    empty-wlw: '{header} 世界白名單是空的!'
+    head-a-removed-wl: '{header} 这个頭顱不在白名單上!'
+    head-added-wl: '{header} &c{player} &7已添加到白名單!'
+    head-removed-wl: '{header} &c{player} &7已從白名單中删除!'
+    wl-a-off: '{header} 白名單已被禁用!'
+    wl-a-on: '{header} 黑名單已啟用!'
+    wl-off: '{header} 白名單已被禁用!'
+    wl-on: '{header} 白名ㄉ安已啟用!'
+    wlw-a-off: '{header} 世界白名單已被禁用!'
+    wlw-a-on: '{header} 世界白名單已啟用!'
+    wlw-off: '{header} 世界白名單已被禁用!'
+    wlw-on: '{header} 世界白名單已啟用!'
+    world-a-removed-wl: '{header} &c{world} &7已從白名單中删除!'
+    world-added-wl: '{header} &c{world} &7h被添加到世界白名單中!'
+    world-removed-wl: '{header} &c{world} &7已從白名單中删除!'
+  xp:
+    added-xp: '{header} 加 &c{amount} &7XP 到 &c{player}&7,他現在有&c{xp}&7!'
+    current-xp: '{header} &c{player}&7的 當前XP: &c{xp}'
+    negative-xp: '{header} I不要以為你想這樣做... XP，進入config.yml>插件>特權> XP> 允許負，但是這 有不可預測的结果！）'
+    removed-xp: '{header} 已移除 &c{amount} &7XP 從 &c{player}&7, 他現在有 &c{xp}&7!'
+    reset-xp: '{header} 重設 &c{player}&7的XP!'
+descriptions:
+  hp:
+    blacklist: 切換黑名單.
+    blacklistadd: 將頭顱添加到黑名單.
+    blacklistdel: 從黑名單中删除一個頭顱.
+    blacklistl: 列出所有頭顱黑名單.
+    blacklistw: 打開/關閉工藝配方黑名單.
+    blacklistwadd: 為手動配方黑名單加入一個世界.
+    blacklistwdel: 為手動配方黑名單移除世界.
+    blacklistwl: 列出列入黑名單的世界.
+    complete: 完成挑戰.
+    conjure: 搜尋特定類型的頭顱.
+    debug: 轉儲調試文件.
+    headinfo:  顯示/修改有關特定實體負責人的資訊..
+    help: 顯示說明選單.
+    info: 顯示插件信息.
+    profile: 顯示您的插件配置文件.
+    reload: 重新加載配置文件.
+    restore: 恢復或修复插件已提供的頭顱.
+    tests: 對怪物掉落率進行測試.
+    whitelist: 切換白名單.
+    whitelistadd: 將頭添加到白名單.
+    whitelistdel: 從白名單中删除一個頭顱.
+    whitelistl: 列出所有頭顱白名單.
+    whitelistw: 開啟/關閉工藝配方白名單.
+    whitelistwadd: 為手工配方白名單增添色彩.
+    whitelistwdel: 為手工配方白名單移除一个世界.
+    whitelistwl: 列出列入白名單的世界.
+  xp: 查看或更改玩家的XP.
+  addhead: 將玩家頭顱添加到頭顱菜單
+  head: 頭顱產生.
+  heads: 顯示頭的選擇.
+  hpc: 顯示頭的選擇.
+  hplb: 顯示頭顱排行榜.
+  myhead: 產生在你的頭顱上.
+  sellhead: 出售您手中的頭，使用数字参数出售特定的 编号，出售特定头颅头部的实体名称，以及所有出售每个头颅的实体.
+event:
+  block-place-denied: '{header}您不能放置可出售的頭顱!'
+  head-interact-message: '{header} 是 &c{name}&7的頭顱!'
+  head-mhf-interact-message: '{header} 是 &c{name}&7的頭顱!'
+  head-mhf-interact-message-2: '{header} 是 &c{name}&7的頭顱!'
+  lost-money: '{header} 因为你被殺了 &c{player}&7,你輸了 &c{price}&7!'
+startup:
+  faulty-theme: '{header} 脞物的主題被放入！ 不會更改主題.'
+  no-vault: '{header} 找不到保管箱！ 無法出售頭像並挑戰獎勵 無法新增/刪除群組.'
+  no-vault-2: '{header} 啟動時未找到保險櫃！  無法新增群組.'
+  plugin-disabled: '{header} HeadsPlus已被禁用!'
+  plugin-enabled: '{header} HeadsPlus已啟用!'
+  plugin-fail: '{header} HeadsPlus無法正確啟動。 錯誤報告已在/ plugins / HeadsPlus / debugHeadsPlus无法正确启动中进行.'
+update:
+  current-version: '{header} 當前版本: &c{version}'
+  description: '{header} 描述: &c{description}'
+  new-version: '{header} 新版本: &c{version}'
+  plugin-up-to-date: '{header} 插件是最新的!'
+  update-found: '{header} 已找到HeadsPlus的更新！ 將滑鼠移動在訊息上 要查詢更多的資訊.'

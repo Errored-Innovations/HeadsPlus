@@ -5,6 +5,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.Reward;
+import io.github.thatsmusic99.headsplus.config.FeatureConfig;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
@@ -16,10 +18,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
-public class ConfigChallenges extends CMFile {
+public class ConfigChallenges extends FeatureConfig {
 
     public ConfigChallenges() {
-        super(HeadsPlus.getInstance(), "challenges");
+        super("challenges");
     }
 
     @Override
@@ -329,5 +331,10 @@ public class ConfigChallenges extends CMFile {
         String displayName = HPUtils.notNull(getString("sections." + section + ".display-name"), "Section " + section + " does not have a display name!");
         List<String> lore = HPUtils.notNull(getStringList("sections." + section + ".lore"), "Section " + section + " does not have a lore option! This can cause problems!");
         return new ChallengeSection(material, (byte) data, displayName, lore, section);
+    }
+
+    @Override
+    public boolean shouldLoad() {
+        return MainConfig.get().getMainFeatures().CHALLENGES;
     }
 }

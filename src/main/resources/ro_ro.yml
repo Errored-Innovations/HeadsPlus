@@ -70,7 +70,7 @@ textmenus:
     description: Descriere
     permission: Permisiune
     further-usages: Utilizari ulterioare
-version: 1.4
+version: 1.5
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:

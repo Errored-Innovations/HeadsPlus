@@ -44,13 +44,13 @@ public class AutograbManager {
             }
             String json = sb.toString();
             JSONObject resp = (JSONObject) JSONValue.parse(json);
-            if(resp == null || resp.isEmpty()) {
+            if (resp == null || resp.isEmpty()) {
                 HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
                 if(callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
                 return null;
-            } else if(resp.containsKey("error")) {
+            } else if (resp.containsKey("error")) {
                 // Retry
                 if(tries > 0) {
                     grabUUID(username, tries - 1, callback);

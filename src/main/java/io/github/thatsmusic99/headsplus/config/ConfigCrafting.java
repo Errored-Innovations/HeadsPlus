@@ -18,7 +18,10 @@ public class ConfigCrafting extends CMFile {
 
 	@Override
 	public void loadDefaults() {
-		addDefault("base-item.material", "PLAYER_HEAD");
+
+
+
+	/*	addDefault("base-item.material", "PLAYER_HEAD");
 		addDefault("base-item.data", 0);
 		addDefault("base-item.price", 10.0);
 		addDefault("base-item.display-name", "{type} Head");
@@ -65,8 +68,10 @@ public class ConfigCrafting extends CMFile {
 			addDefault(key.str + ".shaped", false);
 			addDefault(key.str + ".sellhead-id", key.name());
 
-		}
+		} */
 	}
+
+
 
     public List<String> getLore(String key) {
 		List<String> lore = new ArrayList<>();

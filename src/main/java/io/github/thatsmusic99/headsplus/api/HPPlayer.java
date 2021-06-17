@@ -328,7 +328,7 @@ public class HPPlayer {
                         }
                     }
                 }.runTask(hp);
-                if (level.getRequiredXP() > getXp()) {
+                if (level == null || level.getRequiredXP() > getXp()) {
                     HashMap<Integer, Level> levels = hp.getLevels();
                     for (int i = 1; i < hp.getLevelsConfig().getMaxHierarchy(); i++) {
                         if (levels.get(i) != null && levels.get(i).getRequiredXP() <= getXp()) {

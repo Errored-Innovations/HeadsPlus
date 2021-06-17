@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -183,9 +184,7 @@ public class DebugFileCreator {
         } catch (NullPointerException ignored) {
         }
         try {
-            Field pro = ((SkullMeta) s.getItemMeta()).getClass().getDeclaredField("profile");
-            pro.setAccessible(true);
-            GameProfile gm = (GameProfile) pro.get(s.getItemMeta());
+            GameProfile gm = ProfileFetcher.getProfile(s);
             o2.put("Texture", gm.getProperties().get("textures").iterator().next().getValue());
         } catch (NullPointerException ignored) {
 

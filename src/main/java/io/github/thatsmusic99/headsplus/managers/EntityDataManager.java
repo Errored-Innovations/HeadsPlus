@@ -51,6 +51,9 @@ public class EntityDataManager {
         String result = "default";
         StringBuilder builder = new StringBuilder();
         switch (entity.getType().name()) {
+            case "AXOLOTL":
+                builder.append(((Axolotl) entity).getVariant());
+                break;
             case "HORSE": {
                 Horse horse = (Horse) entity;
                 if (index.getOrder() < 6) {

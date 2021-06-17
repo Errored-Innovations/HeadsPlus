@@ -28,56 +28,58 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        if (HeadsPlus.getInstance().getConfiguration().getPerks().leaderboards) {
             if (cs.hasPermission("headsplus.leaderboards")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
 
-                            if (args.length > 0) {
-                                try {
-                                    switch (args[0].toLowerCase()) {
-                                        case "hunting":
-                                        case "selling":
-                                        case "crafting":
-                                            if (args.length > 1) {
-                                                if (SellHead.getRegisteredIDs().contains(args[1])
-                                                        || args[1].equalsIgnoreCase("total")) {
-                                                    if (args.length > 2) {
-                                                        if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                                                            try {
-                                                                cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
-                                                                return;
-                                                            } catch (IllegalArgumentException ignored) {
-                                                            }
+                        if (args.length > 0) {
+                            try {
+                                switch (args[0].toLowerCase()) {
+                                    case "hunting":
+                                    case "selling":
+                                    case "crafting":
+                                        if (args.length > 1) {
+                                            if (SellHead.getRegisteredIDs().contains(args[1])
+                                                    || args[1].equalsIgnoreCase("total")) {
+                                                if (args.length > 2) {
+                                                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
+                                                        try {
+                                                            cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
+                                                            return;
+                                                        } catch (IllegalArgumentException ignored) {
                                                         }
                                                     }
-                                                    cs.sendMessage(getLeaderboard(cs, args[1], 1, args[0].toLowerCase()));
-                                                    return;
                                                 }
-                                                if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                    cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
-                                                    return;
-                                                }
-                                            }
-                                            cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
-                                            return;
-                                        default:
-                                            if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
+                                                cs.sendMessage(getLeaderboard(cs, args[1], 1, args[0].toLowerCase()));
                                                 return;
                                             }
-                                            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
-                                    }
-                                } catch (Exception e) {
-                                    DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
+                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
+                                                return;
+                                            }
+                                        }
+                                        cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
+                                        return;
+                                    default:
+                                        if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                                            cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
+                                            return;
+                                        }
+                                        cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                                 }
-                            } else {
-                                cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
+                            } catch (Exception e) {
+                                DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
                             }
+                        } else {
+                            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
                         }
+                    }
 
-                    }.runTaskAsynchronously(HeadsPlus.getInstance());
-                }
+                }.runTaskAsynchronously(HeadsPlus.getInstance());
+            }
+        }
         return false;
     }
 

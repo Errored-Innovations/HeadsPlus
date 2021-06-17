@@ -180,11 +180,13 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         Player player = (Player) event.getWhoClicked();
         if (slot > -1 && slot < event.getInventory().getSize()) {
             event.setCancelled(true);
-            for (int i = 0; i < 46; i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null) {
-                    if (NBTManager.isIcon(item)) {
-                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
+            if (hp.getNMSVersion().getOrder() > 3) {
+                for (int i = 0; i < 46; i++) {
+                    ItemStack item = player.getInventory().getItem(i);
+                    if (item != null) {
+                        if (NBTManager.isIcon(item)) {
+                            player.getInventory().setItem(i, new ItemStack(Material.AIR));
+                        }
                     }
                 }
             }

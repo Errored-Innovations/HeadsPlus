@@ -90,7 +90,7 @@ public class NBTManager {
     public static ItemStack asBukkitCopy(Object itemStack) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String version = HeadsPlus.getInstance().getNMS().getNMSVersion();
         Class<?> clazz = Class.forName("org.bukkit.craftbukkit." + version + ".inventory.CraftItemStack");
-        Class<?> itemClass = Class.forName("net.minecraft.server." + version + ".ItemStack");
+        Class<?> itemClass = getNMSClass("ItemStack", version, "world.item.");
         Method method = clazz.getMethod("asBukkitCopy", itemClass);
         return (ItemStack) method.invoke(method, itemStack);
     }
@@ -125,7 +125,7 @@ public class NBTManager {
      */
     public static Object setNBTTag(Object itemStack, Object nbtTag) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String version = HeadsPlus.getInstance().getNMS().getNMSVersion();
-        Class<?> clazz = Class.forName("net.minecraft.server." + version + ".NBTTagCompound");
+        Class<?> clazz = getNMSClass("NBTTagCompound", version, "nbt.");
         Method method = itemStack.getClass().getMethod("setTag", clazz);
         method.invoke(itemStack, nbtTag);
         return itemStack;
@@ -144,7 +144,7 @@ public class NBTManager {
      */
     public static Object newNBTTag() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         String version = HeadsPlus.getInstance().getNMS().getNMSVersion();
-        Constructor<?> con = Class.forName("net.minecraft.server." + version + ".NBTTagCompound").getConstructor();
+        Constructor<?> con = getNMSClass("NBTTagCompound", version, "nbt.").getConstructor();
         return con.newInstance();
     }
 
@@ -495,6 +495,19 @@ public class NBTManager {
             return (GameProfile) method.invoke(player);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Class<?> getNMSClass(String name, String version, String actualLoc) {
+        try {
+            return Class.forName("net.minecraft." + actualLoc + name);
+        } catch (ClassNotFoundException e) {
+            try {
+                return Class.forName("net.minecraft.server." + version + "." + name);
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
         }
         return null;
     }

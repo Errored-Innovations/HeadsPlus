@@ -6,12 +6,12 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>7.0.0</version>
+    <version>6.11.7</version>
 
     <properties>
-        <hp-project.version>v6.11.3-SNAPSHOT-1</hp-project.version>
-        <craftbukkit-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}bukkit${file.separator}craftbukkit${file.separator}</craftbukkit-directory>
-        <spigot-directory>${user.home}${file.separator}.m2${file.separator}repository${file.separator}org${file.separator}spigotmc${file.separator}spigot${file.separator}</spigot-directory>
+        <!--suppress UnresolvedMavenProperty -->
+        <hp-project.version>6.11.7+DEV_${env.BUILD_NUMBER}</hp-project.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
@@ -31,6 +31,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.3</version>
                 <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <relocations>
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
@@ -66,13 +67,13 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -109,38 +110,38 @@
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-12</artifactId>
+            <artifactId>craftbukkit-1.14.4</artifactId>
             <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}${file.separator}1.14.4-R0.1-SNAPSHOT${file.separator}craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.15.1</artifactId>
-            <version>1.15.1-R0.1-SNAPSHOT</version>
+            <artifactId>craftbukkit-1.15.2</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}${file.separator}1.15.1-R0.1-SNAPSHOT${file.separator}craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <!-- Temporary -->
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit-1.16.1</artifactId>
             <version>1.16.1-R0.1</version>
             <scope>system</scope>
-            <systemPath>${craftbukkit-directory}${file.separator}1.16.1-R0.1-SNAPSHOT${file.separator}craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-1.16.4</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.4</artifactId>
             <version>1.16.4-R0.1</version>
             <scope>system</scope>
-            <systemPath>${spigot-directory}${file.separator}1.16.4-R0.1-SNAPSHOT${file.separator}spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit-1.16.2</artifactId>
             <version>1.16.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.papermc</groupId>
@@ -151,7 +152,7 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.9.1</version>
+            <version>4.11.0-BETA</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

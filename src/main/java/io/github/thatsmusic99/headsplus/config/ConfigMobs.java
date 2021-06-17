@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
@@ -25,6 +26,9 @@ public class ConfigMobs extends CMFile {
 
 	@Override
 	public void loadDefaults() {
+		addComment("This configuration file has become more complex compared to previous versions.\n" +
+				"If you have trouble understanding how it works, please use the /hp config mobs command instead.");
+
 		addDefault("defaults.price", 10.0);
 		addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
 		addDefault("defaults.display-name", "{type} Head");
@@ -81,8 +85,23 @@ public class ConfigMobs extends CMFile {
 	}
 
 	private void addHeads() {
+		/* New format:
+		 AXOLOTL:
+		   default:
+		     HP#lucy_axolotl:
+		       chance: 5
+
+
+		 */
     	for (String key : EntityDataManager.ableEntities) {
             switch (key) {
+				case "AXOLOTL":
+					addLenientSection(key + ".default");
+					getConfig().createSection(key + ".default.HP#lucy_axolotl");
+					for (String color : new String[]{"LUCY", "WILD", "GOLD", "CYAN", "BLUE"}) {
+						addExample("." + color + "." + "HP#" + color.toLowerCase() + "_axolotl.chance", "{default}");
+					}
+					break;
 				case "BEE":
 					addDefault(key + ".name.default", initSingleton("HP#bee_mc"));
 					addDefault(key + ".name.ANGRY", initSingleton("HP#bee_angry"));
@@ -212,12 +231,12 @@ public class ConfigMobs extends CMFile {
     }
 
     private void addPlayerHeads() {
-    	getConfig().addDefault("player.chance", 100);
-    	getConfig().addDefault("player.display-name", "{player}'s head");
-    	getConfig().addDefault("player.price", "{default}");
-        getConfig().addDefault("player.mask-effects", new ArrayList<>());
-        getConfig().addDefault("player.mask-amplifiers", new ArrayList<>());
-        getConfig().addDefault("player.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
+    	addDefault("player.default.chance", 100);
+    	addDefault("player.default.display-name", "{player}'s head");
+    	addDefault("player.default.price", "{default}");
+        addDefault("player.default.mask-effects", new ArrayList<>());
+        addDefault("player.default.mask-amplifiers", new ArrayList<>());
+        addDefault("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
     }
 
     public double getPrice(String type) {
@@ -225,10 +244,10 @@ public class ConfigMobs extends CMFile {
     }
 
     public String getDisplayName(String type) {
-        if (getConfig().get(type + ".display-name").equals("{default}")) {
-            return ChatColor.translateAlternateColorCodes('&', getConfig().getString("defaults.display-name").replaceAll("\\{type}", WordUtils.capitalize(type)));
+        if (getString(type + ".display-name", "").equals("{default}")) {
+            return ChatColor.translateAlternateColorCodes('&', getString("defaults.display-name", "").replaceAll("\\{type}", WordUtils.capitalize(type)));
         } else {
-            return ChatColor.translateAlternateColorCodes('&', getConfig().getString(type + ".display-name").replaceAll("\\{type}", WordUtils.capitalize(type)));
+            return ChatColor.translateAlternateColorCodes('&', getString(type + ".display-name", "").replaceAll("\\{type}", WordUtils.capitalize(type)));
         }
     }
 
@@ -261,6 +280,6 @@ public class ConfigMobs extends CMFile {
 	}
 
 	private List<String> initSingleton(String s) {
-		return new ArrayList<>(Collections.singleton(s));
+		return Lists.newArrayList(s);
 	}
 }
