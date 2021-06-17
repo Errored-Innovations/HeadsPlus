@@ -61,9 +61,7 @@ public class Head {
             encodedData = Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
         }
         gm.getProperties().put("textures", new Property("texture", new String(encodedData)));
-        Field profile = skullMeta.getClass().getDeclaredField("profile");
-        profile.setAccessible(true);
-        profile.set(skullMeta, gm);
+        skullMeta = ProfileFetcher.setProfile(skullMeta, gm);
         itemStack.setItemMeta(skullMeta);
         this.name = null; // overwritten by textures
         return this;

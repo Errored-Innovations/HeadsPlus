@@ -237,20 +237,8 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
             gm.getProperties().put("textures", new Property("textures", texture.replaceAll("=", "")));
         }
-
-        try {
-            Field profileField;
-            profileField = sm.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(sm, gm);
-            if (displayName != null) {
-                sm.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
-            }
-            i.setItemMeta(sm);
-            return i;
-        } catch (NoSuchFieldException | IllegalAccessException | SecurityException ex) {
-            throw new RuntimeException("Reflection error while setting head texture", ex);
-        }
+        i.setItemMeta(ProfileFetcher.setProfile(sm, gm));
+        return i;
     }
 
     public String getTextures(String s) {
@@ -267,13 +255,7 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         SkullMeta sm = (SkullMeta) is.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(tex.getBytes()), "HPXHead");
         gm.getProperties().put("textures", new Property("textures", tex.replaceAll("=", "")));
-
-        Field profileField;
-        profileField = sm.getClass().getDeclaredField("profile");
-
-        profileField.setAccessible(true);
-        profileField.set(sm, gm);
-        is.setItemMeta(sm);
+        is.setItemMeta(ProfileFetcher.setProfile(sm, gm));
         return is;
     }
 

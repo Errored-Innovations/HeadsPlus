@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -12,6 +13,18 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class ProfileFetcher {
+
+    public static GameProfile getProfile(Skull skull) throws IllegalAccessException {
+        Field profile;
+        try {
+            profile = skull.getClass().getDeclaredField("profile");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            return null;
+        }
+        profile.setAccessible(true);
+        return (GameProfile) profile.get(skull);
+    }
 
     public static GameProfile getProfile(ItemStack item) throws IllegalAccessException {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -34,6 +47,10 @@ public class ProfileFetcher {
             uuid = UUID.nameUUIDFromBytes(name.getBytes());
         }
         GameProfile profile = new GameProfile(uuid, name);
+        return setProfile(meta, profile);
+    }
+
+    public static SkullMeta setProfile(SkullMeta meta, GameProfile profile) {
         try {
             Method profileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
             profileMethod.setAccessible(true);

@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
@@ -40,23 +41,7 @@ public class HeadsPlusAPI {
         SkullMeta sm = (SkullMeta) s.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", texture));
-
-        Field profileField = null;
-        try {
-            profileField = sm.getClass().getDeclaredField("profile");
-        } catch (NoSuchFieldException | SecurityException e) {
-            if (hp.getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
-        }
-        profileField.setAccessible(true);
-        try {
-            profileField.set(sm, gm);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            if (hp.getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
-        }
+        ProfileFetcher.setProfile(sm, gm);
         sm.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayname));
         s.setItemMeta(sm);
         return s;
@@ -71,24 +56,7 @@ public class HeadsPlusAPI {
     public SkullMeta setSkullMeta(SkullMeta m, String t) {
         GameProfile gm = new GameProfile(UUID.fromString("7091cdbc-ebdc-4eac-a6b2-25dd8acd3a0e"), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", t));
-
-        Field profileField = null;
-        try {
-            profileField = m.getClass().getDeclaredField("profile");
-        } catch (NoSuchFieldException | SecurityException e) {
-            if (hp.getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
-        }
-        profileField.setAccessible(true);
-        try {
-            profileField.set(m, gm);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            if (hp.getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
-        }
-        return m;
+        return ProfileFetcher.setProfile(m, gm);
     }
 
     public String getSkullType(ItemStack is) {
