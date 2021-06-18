@@ -26,6 +26,7 @@ public class EntityDataManager {
         }
         Collections.sort(ableEntities);
     }
+
     public static void init() {
         new BukkitRunnable() {
             @Override

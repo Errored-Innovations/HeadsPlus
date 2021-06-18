@@ -13,23 +13,19 @@ import java.util.concurrent.CompletableFuture;
 public class ProfileManager {
 
     public static CompletableFuture<String> getName(SkullMeta meta) {
-        return CompletableFuture
-                .supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
                     GameProfile profile = getProfile(meta);
                     if (profile != null) return profile.getName();
                     return "";
-                }, HeadsPlus.async)
-                .thenApplyAsync(name -> name, HeadsPlus.sync);
+        }, HeadsPlus.async).thenApplyAsync(name -> name, HeadsPlus.sync);
     }
 
     public static CompletableFuture<UUID> getUUID(SkullMeta meta) {
-        return CompletableFuture
-                .supplyAsync(() -> {
-                    GameProfile profile = getProfile(meta);
-                    if (profile != null) return profile.getId();
-                    return null;
-                }, HeadsPlus.async)
-                .thenApplyAsync(id -> id, HeadsPlus.sync);
+        return CompletableFuture.supplyAsync(() -> {
+            GameProfile profile = getProfile(meta);
+            if (profile != null) return profile.getId();
+            return null;
+        }, HeadsPlus.async).thenApplyAsync(id -> id, HeadsPlus.sync);
     }
 
     public static CompletableFuture<String> getB64Texture(SkullMeta meta) {
