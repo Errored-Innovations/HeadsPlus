@@ -327,6 +327,7 @@ public class HeadsPlus extends JavaPlugin {
         configFiles.add(new ConfigChallenges());
         configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
+        configFiles.add(new ConfigHeads());
         configFiles.add(new ConfigInteractions());
         configFiles.add(new ConfigInventories());
         configFiles.add(new ConfigLevels());
