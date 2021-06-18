@@ -174,19 +174,16 @@ public class HeadsPlus extends JavaPlugin {
            // }
             getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("startup.plugin-enabled"));
            // if (getConfiguration().getPerks().ascii) {
-                getServer().getConsoleSender().sendMessage("\n" + ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
-                        "§c$$\\   $$\\                           $$\\           §9$$$$$$$\\  $$\\\n" +
-                        "§c$$ |  $$ |                          $$ |          §9$$  __$$\\ $$ |\n" +
-                        "§c$$ |  $$ | $$$$$$\\   $$$$$$\\   $$$$$$$ | $$$$$$$\\ §9$$ |  $$ |$$ |$$\\   $$\\  $$$$$$$\\\n" +
-                        "§4$$$$$$$$ |$$  __$$\\  \\____$$\\ $$  __$$ |$$  _____|§1$$$$$$$  |$$ |$$ |  $$ |$$  _____|\n" +
-                        "§4$$  __$$ |$$$$$$$$ | $$$$$$$ |$$ /  $$ |\\$$$$$$\\  §1$$  ____/ $$ |$$ |  $$ |\\$$$$$$\\\n" +
-                        "§4$$ |  $$ |$$   ____|$$  __$$ |$$ |  $$ | \\____$$\\ §1$$ |      $$ |$$ |  $$ | \\____$$\\\n" +
-                        "§4$$ |  $$ |\\$$$$$$$\\ \\$$$$$$$ |\\$$$$$$$ |$$$$$$$  |§1$$ |      $$ |\\$$$$$$  |$$$$$$$  |\n" +
-                        "§4\\__|  \\__| \\_______| \\_______| \\_______|\\_______/ §1\\__|      \\__| \\______/ \\_______/\n" +
-                        ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n" +
-                        ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n" +
-                        ChatColor.DARK_BLUE + "-------------------------------------------------------------------------\n");
+                getServer().getConsoleSender().sendMessage("                                                               §f\n" +
+                        "§c    __  __               __     §9____  __                   §e_____§r\n" +
+                        "§c   / / / /__  ____ _____/ /____§9/ __ \\/ /_  _______  §e _   _/__  /§r\n" +
+                        "§c  / /_/ / _ \\/ __ `/ __  / ___§9/ /_/ / / / / / ___/  §e| | / / / / §r\n" +
+                        "§4 / __  /  __/ /_/ / /_/ /__  §1/ ____/ / /_/ /__  /   §6| |/ / / /  §r\n" +
+                        "§4/_/ /_/\\___/\\__,_/\\__,_/____§1/_/   /_/\\__,_/____/    §6|___/ /_/  §r\n" +
+                        "                                                                \n" +
+                        ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n");
            // }
+            fullyEnabled = true;
 
         } catch (Exception e) {
             try {
