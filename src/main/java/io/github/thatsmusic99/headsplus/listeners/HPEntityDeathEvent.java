@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -10,7 +9,10 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Cat;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -51,12 +53,6 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         addPossibleData("fixed-chance", "<double>");
         addPossibleData("random-chance", "<double>");
         List<String> metadata = new ArrayList<>();
-        NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
-        if (index.getOrder() < 6) {
-            for (Horse.Variant variant : Horse.Variant.values()) {
-                HPUtils.addIfAbsent(metadata, variant.name());
-            }
-        }
         for (Horse.Color color : Horse.Color.values()) {
             HPUtils.addIfAbsent(metadata, color.name());
         }
@@ -66,20 +62,12 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         for (Rabbit.Type type : Rabbit.Type.values()) {
             HPUtils.addIfAbsent(metadata, type.name());
         }
-        if (index.getOrder() > 8) {
-            for (TropicalFish.Pattern pattern : TropicalFish.Pattern.values()) {
-                HPUtils.addIfAbsent(metadata, pattern.name());
-            }
+        for (TropicalFish.Pattern pattern : TropicalFish.Pattern.values()) {
+            HPUtils.addIfAbsent(metadata, pattern.name());
         }
         metadata.add("SNOW");
-        if (index.getOrder() > 10) {
-            for (Cat.Type type : Cat.Type.values()) {
-                HPUtils.addIfAbsent(metadata, type.name());
-            }
-        } else {
-            for (Ocelot.Type type : Ocelot.Type.values()) {
-                HPUtils.addIfAbsent(metadata, type.name());
-            }
+        for (Cat.Type type : Cat.Type.values()) {
+            HPUtils.addIfAbsent(metadata, type.name());
         }
 
 

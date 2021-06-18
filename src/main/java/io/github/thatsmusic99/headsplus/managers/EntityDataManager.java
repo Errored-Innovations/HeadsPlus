@@ -3,14 +3,16 @@ package io.github.thatsmusic99.headsplus.managers;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class EntityDataManager {
 
@@ -49,7 +51,6 @@ public class EntityDataManager {
     }
 
     public static String getMeta(Entity entity) {
-        NMSIndex index = HeadsPlus.getInstance().getNMSVersion();
         String result = "default";
         StringBuilder builder = new StringBuilder();
         switch (entity.getType().name()) {
@@ -58,12 +59,7 @@ public class EntityDataManager {
                 break;
             case "HORSE": {
                 Horse horse = (Horse) entity;
-                if (index.getOrder() < 6) {
-                    builder.append(horse.getColor()).append(",");
-                    builder.append(horse.getVariant()).append(",");
-                } else {
-                    builder.append(horse.getColor());
-                }
+                builder.append(horse.getColor());
                 break;
             }
             case "SHEEP": {
@@ -100,26 +96,16 @@ public class EntityDataManager {
             }
             case "VILLAGER": {
                 Villager villager = (Villager) entity;
-                if (index.getOrder() > 10) {
-                    builder.append(villager.getVillagerType()).append(",");
-                }
+                builder.append(villager.getVillagerType()).append(",");
                 builder.append(villager.getProfession());
                 break;
             }
             case "MUSHROOM_COW": {
-                if (index.getOrder() > 10) {
-                    builder.append(((MushroomCow) entity).getVariant());
-                }
+                builder.append(((MushroomCow) entity).getVariant());
                 break;
             }
             case "PANDA": {
                 builder.append(((Panda) entity).getMainGene());
-                break;
-            }
-            case "OCELOT": {
-                if (index.getOrder() < 11) {
-                    builder.append(((Ocelot) entity).getCatType());
-                }
                 break;
             }
             case "BEE": {
@@ -129,9 +115,7 @@ public class EntityDataManager {
             }
             case "ZOMBIE_VILLAGER": {
                 ZombieVillager zombie = (ZombieVillager) entity;
-                if (index.getOrder() > 10) {
-                    builder.append(zombie.getVillagerType()).append(",");
-                }
+                builder.append(zombie.getVillagerType()).append(",");
                 builder.append(zombie.getVillagerProfession());
                 break;
             }

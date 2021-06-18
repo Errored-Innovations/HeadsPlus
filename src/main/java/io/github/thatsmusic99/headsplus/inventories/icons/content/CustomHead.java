@@ -66,7 +66,7 @@ public class CustomHead extends Content {
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(new ArrayList<>());
                 item.setItemMeta(meta);
-                item = NBTManager.removeIconNBT(item);
+                PersistenceManager.get().removeIcon(item);
                 player.getInventory().addItem(item);
             }
         } else {

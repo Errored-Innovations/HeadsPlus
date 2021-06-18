@@ -6,10 +6,10 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -48,12 +48,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	        registerHeadID(entity);
         }
 	    registerHeadID("PLAYER");
-	    if (hp.getNMSVersion().getOrder() > 3) {
-	        slots = new int[45];
-	        slots[44] = 45; // off-hand slot
-        } else {
-	        slots = new int[44];
-        }
+	    slots = new int[45];
+	    slots[44] = 45; // off-hand slot
 	    for (int i = 0; i < 44; i++) {
             slots[i] = i;
         }
@@ -78,11 +74,11 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 		                    // Get the item in the player's hand
 		                    ItemStack item = checkHand(player);
 		                    // If the item exists and is sellable,
-		                    if (item != null && NBTManager.isSellable(item)) {
+		                    if (item != null && PersistenceManager.get().isSellable(item)) {
 		                        // Get the ID
-		                        String id = NBTManager.getType(item);
+		                        String id = PersistenceManager.get().getSellType(item);
 		                        if (isRegistered(id)) {
-		                            double price = NBTManager.getPrice(item) * item.getAmount();
+		                            double price = PersistenceManager.get().getSellPrice(item) * item.getAmount();
 		                            SellData data = new SellData(player);
 		                            data.addID(id, item.getAmount());
 		                            data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
@@ -127,8 +123,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
-            if (item != null && NBTManager.isSellable(item)) {
-                String id = NBTManager.getType(item);
+            if (item != null && PersistenceManager.get().isSellable(item)) {
+                String id = PersistenceManager.get().getSellType(item);
                 if (fixedId != null) {
                     if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
                 } else if (!isRegistered(id)){
@@ -154,15 +150,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             pay(player, data, price);
         } else {
             hpc.sendMessage("commands.sellhead.no-heads", player);
-        }
-    }
-
-    private int getHeadSlot() {
-        NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
-        if (nms.getOrder() == 9 || nms.getOrder() == 10) {
-            return 39;
-        } else {
-            return 5;
         }
     }
 

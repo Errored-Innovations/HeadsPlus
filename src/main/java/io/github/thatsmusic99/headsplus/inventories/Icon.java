@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.inventories;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +22,8 @@ public abstract class Icon {
     private String id;
 
     public Icon(ItemStack itemStack) {
-        item = NBTManager.addIconNBT(itemStack);
+        item = itemStack;
+        PersistenceManager.get().makeIcon(item);
     }
 
     public Icon(String id, Player player) {
@@ -32,13 +34,13 @@ public abstract class Icon {
     public Icon(String id) {
         this.id = id;
         initItem(id);
-        item = NBTManager.addIconNBT(item);
+        PersistenceManager.get().makeIcon(item);
     }
 
     public Icon(Player player) {
         initItem(getId());
         initNameAndLore(getId(), player);
-        item = NBTManager.addIconNBT(item);
+        PersistenceManager.get().makeIcon(item);
     }
 
     public Icon() {

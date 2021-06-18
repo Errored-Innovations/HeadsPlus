@@ -1,9 +1,7 @@
 package io.github.thatsmusic99.headsplus.nms;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;

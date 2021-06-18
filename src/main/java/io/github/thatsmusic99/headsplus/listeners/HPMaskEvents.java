@@ -3,9 +3,8 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -15,7 +14,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -74,13 +72,11 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         Player player = (Player) e.getWhoClicked();
-        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder()) {
-            for (int i = 0; i < 46; i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null) {
-                    if (NBTManager.isIcon(item)) {
-                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
-                    }
+        for (int i = 0; i < 46; i++) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (item != null) {
+                if (PersistenceManager.get().isIcon(item)) {
+                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
                 }
             }
         }
@@ -100,7 +96,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
         }
 
         if (hp.getConfiguration().getPerks().mask_powerups) {
-            if (e.getRawSlot() == getSlot() || (shift && e.getRawSlot() != getSlot())) {
+            if (e.getRawSlot() == 5 || (shift && e.getRawSlot() != 5)) {
                 checkMask((Player) e.getWhoClicked(), item);
             }
         }
@@ -114,7 +110,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
         NMSManager nms = hp.getNMS();
         if (item != null) {
             if (nms.isSkull(item)) {
-                String s = NBTManager.getType(item);
+                String s = PersistenceManager.get().getSellType(item);
                 if (SellHead.isRegistered(s)) {
                     HPPlayer pl = HPPlayer.getHPPlayer(player);
                     UUID uuid = player.getUniqueId();
@@ -137,7 +133,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                             currentInterval++;
                             if (helmet == null
                                     || helmet.getType() == Material.AIR
-                                    || !NBTManager.getType(helmet).equals(type)
+                                    || !PersistenceManager.get().getSellType(helmet).equals(type)
                                     || !player.isOnline()) {
                                 pl.clearMask();
                                 maskMonitors.remove(uuid);
@@ -157,15 +153,6 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                     maskMonitors.get(uuid).runTaskTimer(hp, period, period);
                 }
             }
-        }
-    }
-
-    private int getSlot() {
-        NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
-        if (nms.getOrder() == 9 || nms.getOrder() == 10) {
-            return 39;
-        } else {
-            return 5;
         }
     }
 }
