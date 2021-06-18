@@ -95,6 +95,9 @@ public class MainConfig extends CMFile {
         addDefault("check-for-updates", true);
         addDefault("notify-admins-about-updates", true);
 
+        addSection("Miscellaneous");
+        addDefault("debug", false, "Enables the debugging verbose in the console.");
+
     }
 
      @Override
