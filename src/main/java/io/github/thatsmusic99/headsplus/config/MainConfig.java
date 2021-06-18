@@ -46,6 +46,7 @@ public class MainConfig extends CMFile {
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
                 "The permission for this is heasplus.heads.");
         addDefault("challenges", true, "Whether players should be able to complete challenges or not.");
+
         addDefault("leaderboards", true);
         addDefault("levels", true);
         addDefault("masks", true);
@@ -90,6 +91,15 @@ public class MainConfig extends CMFile {
         addDefault("effect-length", 12000);
 
         addSection("Restrictions");
+        addDefault("whitelist-worlds", false, "Whether or not the list below should be treated as a whitelist.\n" +
+                "If this is disabled, all worlds in the lists below will not have the respected event occur in them.\n" +
+                "If this is enabled, on the other hand, any worlds not in the lists will not have the respected event occur in them.");
+
+        addDefault("mob-drops-list", new ArrayList<>());
+        addDefault("crafting-list", new ArrayList<>());
+        addDefault("masks-list", new ArrayList<>());
+        addDefault("levels", new ArrayList<>());
+
 
         addSection("Updates");
         addDefault("check-for-updates", true);
