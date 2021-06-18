@@ -122,8 +122,8 @@ public class RecipePerms extends HeadsPlusListener<InventoryClickEvent> {
     }
 
     private void denyPermission(InventoryClickEvent e) {
-        if(e.getRawSlot() == 0){
-            if(!NBTManager.getType(e.getCurrentItem()).isEmpty()){
+        if (e.getRawSlot() == 0) {
+            if (!NBTManager.getType(e.getCurrentItem()).isEmpty()) {
                 e.getWhoClicked().sendMessage(ChatColor.RED + "You can not craft heads!");
                 e.setCancelled(true);
             }

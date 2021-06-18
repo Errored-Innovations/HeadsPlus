@@ -10,6 +10,7 @@ import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -29,15 +30,14 @@ public class HeadsPlusAPI {
     }
 
     public boolean isSellable(ItemStack is) {
-        if (is.getType() == hp.getNMS().getSkullMaterial(1).getType()) {
+        if (is.getType() == Material.PLAYER_HEAD) {
             return NBTManager.isSellable(is);
         }
         return false;
     }
 
     public ItemStack createSkull(String texture, String displayname) {
-        NMSManager nms = hp.getNMS();
-        ItemStack s = nms.getSkullMaterial(1);
+        ItemStack s = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta sm = (SkullMeta) s.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", texture));

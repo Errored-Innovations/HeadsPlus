@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.api;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -26,20 +27,19 @@ public class Head {
     private String name;
     private final String id;
     private double price; // Pretty much central anyways
-    private int data;
+    private Material type;
 
     public Head(String id) {
-        this(id, 3);
-        data = 3;
+        this(id, Material.PLAYER_HEAD);
     }
 
-    public Head(String id, int data) {
-        this.itemStack = HeadsPlus.getInstance().getNMS().getSkull(data);
+    public Head(String id, Material type) {
+        this.itemStack = new ItemStack(type);
         if (!HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
             id = id.toLowerCase();
         }
         this.id = id;
-        this.data = data;
+        this.type = type;
     }
 
     public Head withDisplayName(String name) {
@@ -88,8 +88,8 @@ public class Head {
     public Head withPrice(double price) {
         this.price = price;
         itemStack.setType(Material.DIAMOND);
-        itemStack = NBTManager.setPrice(itemStack, price);
-        itemStack.setType(HeadsPlus.getInstance().getNMS().getSkull(data).getType());
+        PersistenceManager.get().setSellPrice(itemStack, price);
+        itemStack.setType(type);
         return this;
     }
 
@@ -121,9 +121,5 @@ public class Head {
     public Head withAmount(int amount) {
         itemStack.setAmount(amount);
         return this;
-    }
-
-    public int getData() {
-        return data;
     }
 }

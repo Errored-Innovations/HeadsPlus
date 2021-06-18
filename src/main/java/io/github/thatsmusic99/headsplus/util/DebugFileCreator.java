@@ -35,7 +35,7 @@ public class DebugFileCreator {
         o1.put("Special message", getErrorHeader());
         try {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getNMSVersion());
+            o1.put("NMS version", Bukkit.getVersion());
             o1.put("Has Vault hooked", hp.econ());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
@@ -180,7 +180,7 @@ public class DebugFileCreator {
         } catch (NullPointerException ignored) {
         }
         try {
-            o2.put("Owning Player", hp.getNMS().getSkullOwnerName((SkullMeta) s.getItemMeta()));
+            o2.put("Owning Player", ((SkullMeta) s.getItemMeta()).getOwner());
         } catch (NullPointerException ignored) {
         }
         try {

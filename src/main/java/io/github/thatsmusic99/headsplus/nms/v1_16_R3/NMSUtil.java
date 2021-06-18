@@ -12,10 +12,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.HashMap;
 
 public class NMSUtil implements NewNMSManager {
-    @Override
-    public SearchGUI getSearchGUI(Player p, SearchGUI.AnvilClickEventHandler a) {
-        return new SearchGUIUtil(p, a);
-    }
 
     @Override
     public String getSkullOwnerName(SkullMeta m) {

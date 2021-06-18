@@ -9,6 +9,7 @@ import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +49,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     }
 
 	private void giveHead(Player p, String n) {
-        ItemStack skull = hp.getNMS().getSkullMaterial(1);
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
             skull.setItemMeta(meta);
@@ -134,12 +135,12 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	                if (sender.hasPermission("headsplus.head.others")) {
                         if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
-                        } else if (hp.getNMS().getPlayer(args[1]) != null) {
+                        } else if (Bukkit.getPlayer(args[1]) != null) {
                             if (CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
                                 String[] s = new String[2];
                                 s[0] = args[0];
                                 s[1] = args[1];
-                                giveH(s, sender, hp.getNMS().getPlayer(args[1]));
+                                giveH(s, sender, Bukkit.getPlayer(args[1]));
                                 return true;
                             } else {
                                 hpc.sendMessage("commands.head.invalid-args", sender);

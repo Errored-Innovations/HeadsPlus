@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -172,26 +173,26 @@ public class EntityDataManager {
                         if (head.equalsIgnoreCase("{mob-default}")) {
                             switch (name) {
                                 case "WITHER_SKELETON":
-                                    headItem = new EntityHead(name, 1);
+                                    headItem = new EntityHead(name, Material.WITHER_SKELETON_SKULL);
                                     break;
                                 case "ENDER_DRAGON":
-                                    headItem = new EntityHead(name, 5);
+                                    headItem = new EntityHead(name, Material.DRAGON_HEAD);
                                     break;
                                 case "ZOMBIE":
-                                    headItem = new EntityHead(name, 2);
+                                    headItem = new EntityHead(name, Material.ZOMBIE_HEAD);
                                     break;
                                 case "CREEPER":
-                                    headItem = new EntityHead(name, 4);
+                                    headItem = new EntityHead(name, Material.CREEPER_HEAD);
                                     break;
                                 case "SKELETON":
-                                    headItem = new EntityHead(name, 0);
+                                    headItem = new EntityHead(name, Material.SKELETON_SKULL);
                                     break;
                                 default:
-                                    headItem = new EntityHead(name);
+                                    headItem = new EntityHead(name, Material.PLAYER_HEAD);
                                     break;
                             }
                         } else {
-                            headItem = new EntityHead(name);
+                            headItem = new EntityHead(name, Material.PLAYER_HEAD);
                         }
                         headItem.withDisplayName(headsCon.getDisplayName(fancyName))
                                 .withPrice(headsCon.getPrice(fancyName))

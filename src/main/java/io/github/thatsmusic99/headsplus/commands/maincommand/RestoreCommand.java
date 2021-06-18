@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsXEnums;
+import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;

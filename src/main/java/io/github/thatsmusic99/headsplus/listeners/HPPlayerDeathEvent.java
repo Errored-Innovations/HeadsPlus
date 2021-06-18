@@ -14,6 +14,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -74,7 +75,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
                 price = playerPrice * (hp.getConfiguration().getPerks().pvp_balance_for_head / 100);
                 lostprice = playerPrice * (hp.getConfiguration().getPerks().pvp_percentage_lost / 100);
             }
-            Head head = new EntityHead("PLAYER").withAmount(amount)
+            Head head = new EntityHead("PLAYER", Material.PLAYER_HEAD).withAmount(amount)
                     .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
                     .withPrice(price)
                     .withLore(hpch.getLore(victim.getName(), price))

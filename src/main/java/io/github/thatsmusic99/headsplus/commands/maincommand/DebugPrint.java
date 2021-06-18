@@ -113,7 +113,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "head":
                         if (sender instanceof Player) {
-                            ItemStack is = HeadsPlus.getInstance().getNMS().getItemInHand((Player) sender);
+                            ItemStack is = ((Player) sender).getInventory().getItemInMainHand();
                             String s = new DebugFileCreator().createHeadReport(is);
                             sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                         }
@@ -124,13 +124,9 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "item":
                         if (sender instanceof Player) {
-                            NMSManager nms = HeadsPlus.getInstance().getNMS();
-                            if (nms.getItemInHand((Player) sender) != null) {
-                                String s = new DebugFileCreator().createItemReport(nms.getItemInHand((Player) sender));
-                                sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
-                            } else {
-                                hpc.sendMessage("commands.sellhead.false-item", sender);
-                            }
+                            ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
+                            String s = new DebugFileCreator().createItemReport(item);
+                            sender.sendMessage(ChatColor.GREEN + "Report name: " + s);
                         } else {
                             hpc.sendMessage("commands.errors.not-a-player", sender);
                         }

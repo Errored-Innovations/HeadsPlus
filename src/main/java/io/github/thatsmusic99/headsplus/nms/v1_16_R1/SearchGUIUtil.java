@@ -45,7 +45,7 @@ public class SearchGUIUtil extends SearchGUI {
                 try {
                     ContainerProperty.class.getDeclaredMethod("a", int.class).invoke(this.levelCost, 0);
                 } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                    Logger.getLogger(io.github.thatsmusic99.headsplus.nms.v1_14_R1.SearchGUIUtil.class.getName()).log(Level.SEVERE, "Anvil Error", ex);
+                    Logger.getLogger(io.github.thatsmusic99.headsplus.nms.v1_16_R1.SearchGUIUtil.class.getName()).log(Level.SEVERE, "Anvil Error", ex);
                 }
             } else {
                 this.levelCost.set(0);

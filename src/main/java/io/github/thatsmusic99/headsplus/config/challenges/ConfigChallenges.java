@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.config.challenges;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
@@ -8,8 +7,8 @@ import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
-import io.github.thatsmusic99.headsplus.util.MaterialTranslator;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -56,18 +55,15 @@ public class ConfigChallenges extends FeatureConfig {
 
         addLenientSection("icons");
 
-        addExample("icons.default.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 14).getType().name());
-        addExample("icons.default.data-value", 14);
-        addExample("icons.default-completed.material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA, 13).getType().name());
-        addExample("icons.default-completed.data-value", 13);
+        addExample("icons.default.material", "RED_TERRACOTTA");
+        addExample("icons.default-completed.material", "LIME_TERRACOTTA");
 
         int difficulty = 5;
 
         addLenientSection("sections");
 
         for (HeadsPlusChallengeDifficulty section : HeadsPlusChallengeDifficulty.values()) {
-            addExample("sections." + section.name() + ".material", HeadsPlus.getInstance().getNMS().getColouredBlock(MaterialTranslator.BlockType.TERRACOTTA,  section.color.ordinal()).getType().name());
-            addExample("sections." + section.name() + ".material-data", section.color.ordinal());
+            addExample("sections." + section.name() + ".material", section.material);
             addExample("sections." + section.name() + ".display-name", section.displayName);
             addExample("sections." + section.name() + ".lore", new ArrayList<>());
             for (String t : EntityDataManager.ableEntities) {
@@ -318,7 +314,7 @@ public class ConfigChallenges extends FeatureConfig {
                 icon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
             } else {
                 SkullMeta sm = (SkullMeta) icon.getItemMeta();
-                sm = HeadsPlus.getInstance().getNMS().setSkullOwner(s, sm);
+                sm = ProfileFetcher.setProfile(sm, s);
                 icon.setItemMeta(sm);
             }
         }

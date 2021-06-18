@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -49,9 +50,10 @@ public class ProfileCommand implements IHeadsPlusCommand {
             OfflinePlayer p;
             NMSManager nms = hp.getNMS();
             if (args.length == 1) {
-                p = nms.getOfflinePlayer(cs.getName());
+                // TODO: better on a separate thread
+                p = Bukkit.getOfflinePlayer(cs.getName());
             } else {
-                p = nms.getOfflinePlayer(args[1]);
+                p = Bukkit.getOfflinePlayer(args[1]);
             }
             if (cs instanceof Player) {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {

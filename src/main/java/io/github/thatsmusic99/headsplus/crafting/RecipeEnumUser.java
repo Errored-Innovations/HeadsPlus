@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +49,7 @@ public class RecipeEnumUser {
         Head head;
         try {
             // Create the head object
-            head = new EntityHead(headSec.getString("sellhead-id"));
+            head = new EntityHead(headSec.getString("sellhead-id"), Material.PLAYER_HEAD);
             // Register the Sellhead ID
             SellHead.registerHeadID(headSec.getString("sellhead-id"));
             // Apply the price
@@ -76,7 +77,7 @@ public class RecipeEnumUser {
         }
         if (headSec.getBoolean("shaped")) {
             List<String> ingredients = headSec.getStringList("ingredients");
-            ShapedRecipe recipe = HeadsPlus.getInstance().getNMS().getShapedRecipe(head.getItemStack(), "hp_" + id);
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(HeadsPlus.getInstance(), "crafting_" + id), head.getItemStack());
             int ch = 70;
             Map<String, Character> map = new HashMap<>();
             StringBuilder shapeBuilder = new StringBuilder();
@@ -141,7 +142,7 @@ public class RecipeEnumUser {
         } else {
             List<String> ingredients = headSec.getStringList("ingredients");
             int ingCount = 0;
-            ShapelessRecipe recipe = HeadsPlus.getInstance().getNMS().getRecipe(head.getItemStack(), "hp_" + id);
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(HeadsPlus.getInstance(), "crafting_" + id), head.getItemStack());
             for (String ingredient : ingredients) {
                 try {
                     ingCount++;
