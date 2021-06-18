@@ -26,28 +26,6 @@ public class Search extends Icon {
         player.closeInventory();
         HashMap<String, String> context = new HashMap<>();
         InventoryManager manager = InventoryManager.getManager(player);
-        if (hp.getConfiguration().getMechanics().getBoolean("anvil-menu-search", false)) {
-            SearchGUI s = null;
-            try {
-                s = hp.getNMS().getSearchGUI(player, event1 -> {
-                    if (event1.getSlot().equals(AnvilSlot.OUTPUT)) {
-                        event1.setWillClose(false);
-                        event1.setWillDestroy(false);
-                        context.put("search", event1.getName().replace(":", ""));
-                        manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
-                    }
-                });
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
-            }
-            if (s != null) {
-                ItemStack is = new ItemStack(Material.NAME_TAG);
-                s.setSlot(AnvilSlot.INPUT_LEFT, is);
-                s.open();
-                return true;
-            }
-
-        }
         ConversationFactory c = new ConversationFactory(hp);
         Conversation conv = c.withFirstPrompt(new ChatPrompt())
                 .withLocalEcho(false)
@@ -68,23 +46,4 @@ public class Search extends Icon {
         return "search";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "NAME_TAG";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.search}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

@@ -22,24 +22,4 @@ public class Glass extends Icon {
     public String getId() {
         return "glass";
     }
-
-    @Override
-    public String getDefaultMaterial() {
-        return HeadsPlus.getInstance().getNMSVersion().getOrder() > 8 ?  "LIGHT_GRAY_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 8;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "&c";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

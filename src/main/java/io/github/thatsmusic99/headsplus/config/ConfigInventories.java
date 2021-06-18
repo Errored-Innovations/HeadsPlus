@@ -4,6 +4,7 @@ import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
+import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.*;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
@@ -28,15 +29,10 @@ public class ConfigInventories extends CMFile {
 
     @Override
     public void loadDefaults() {
-        for (Icon i : Arrays.asList(new Challenge(),
-                new ChallengeSection(), new CustomHead(),
-                new CustomHeadSection(), new SellheadHead(), new Air(),
-                new ChallengesPinned(), new Close(), new Favourites(),
-                new Glass(), new Menu(), new Search(), new Stats())) {
-            addDefault("icons." + i.getId() + ".material", i.getDefaultMaterial());
-            addDefault("icons." + i.getId() + ".data-value", i.getDefaultDataValue());
-            addDefault("icons." + i.getId() + ".display-name", i.getDefaultDisplayName());
-            addDefault("icons." + i.getId() + ".lore", i.getDefaultLore());
+        for (InventoryManager.IconType i : InventoryManager.IconType.values()) {
+            addDefault("icons." + i.getId() + ".material", i.getMaterial());
+            addDefault("icons." + i.getId() + ".display-name", i.getDisplayName());
+            addDefault("icons." + i.getId() + ".lore", i.getLore());
         }
         for (String s : Arrays.asList("next", "next_2", "next_3", "back", "back_2", "back_3", "start", "last")) {
             addDefault("icons." + s + ".material", "ARROW");

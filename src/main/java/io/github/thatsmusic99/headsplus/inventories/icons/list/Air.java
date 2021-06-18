@@ -25,24 +25,4 @@ public class Air extends Icon {
     public void initNameAndLore(String id, Player player) {
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "AIR";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
-
 }

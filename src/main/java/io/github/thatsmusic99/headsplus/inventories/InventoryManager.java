@@ -1,11 +1,14 @@
 package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.inventories.icons.content.*;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,20 +18,97 @@ import java.util.UUID;
 public class InventoryManager {
 
     public enum InventoryType {
-        SELLHEAD_MENU, // Unused right now
-        SELLHEAD_CATEGORY,
-        HEADS_MENU,
-        HEADS_CATEGORY,
-        HEADS_SEARCH,
-        HEADS_FAVORITES,
-        CHALLENGES_MENU,
-        CHALLENGES_LIST,
-        CHALLENGES_PINNED
+        SELLHEAD_MENU(SellheadMenu.class), // Unused right now
+        SELLHEAD_CATEGORY(SellheadCategory.class),
+        HEADS_MENU(HeadsMenu.class),
+        HEADS_CATEGORY(HeadsSection.class),
+        HEADS_SEARCH(HeadsSearch.class),
+        HEADS_FAVORITES(HeadsFavourite.class),
+        CHALLENGES_MENU(ChallengesMenu.class),
+        CHALLENGES_LIST(ChallengesSection.class),
+        CHALLENGES_PINNED(ChallengesPinnedInv.class);
+
+        private Class<? extends BaseInventory> inventory;
+
+        InventoryType(Class<? extends BaseInventory> inventory) {
+            this.inventory = inventory;
+        }
+
+        public BaseInventory getInventory(Player player, HashMap<String, String> context) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            return inventory.getConstructor(Player.class, HashMap.class).newInstance(player, context);
+        }
+    }
+
+    public enum IconType {
+        CONTENT(null, 'C', null, null, null, Content.class),
+        CHALLENGE("challenge", null, null, "{challenge-name}", new String[]{"{challenge-lore}",
+                "{msg_inventory.icon.challenge.reward}",
+                "{msg_inventory.icon.challenge.xp}",
+                "{msg_inventory.icon.challenge.progress}",
+                "{completed}",
+                "{pinned}"}, Challenge.class),
+        CHALLENGE_SECTION("challenges-section", null, null, "{section-name}",
+                new String[]{"{section-lore}", "{msg_inventory.icon.challenge.count}"}, ChallengeSection.class),
+        CUSTOM_HEAD("head", null, null, "{head-name}",
+                new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"}, CustomHead.class),
+        CUSTOM_HEAD_SECTION("headsection", null, null, "{head-name}", new String[]{"{msg_inventory.icon.head.count}"}, CustomHeadSection.class),
+        SELLHEAD_HEAD("sellable-head", null, null, "{head-name}", new String[]{}, SellheadHead.class), // TODO
+        GLASS("glass", 'G', Material.LIGHT_GRAY_STAINED_GLASS_PANE.name(), "&c", new String[]{}, Glass.class),
+        CLOSE("close", 'X', Material.BARRIER.name(), "{msg_inventory.icon.close}", new String[]{}, Close.class),
+        AIR("air", 'A', Material.AIR.name(), "", new String[]{}, Air.class),
+        MENU("menu", 'M', Material.NETHER_STAR.name(), "{msg_inventory.icon.menu}", new String[]{}, Menu.class),
+        FAVOURITES("favourites", 'F', Material.DIAMOND.name(), "{msg_inventory.icon.favourites}", new String[]{}, Favourites.class),
+        STATS("stats", 'S', Material.PAPER.name(), "{msg_inventory.icon.stats.icon}", new String[]{"{msg_inventory.icon.stats.total-heads} {heads}",
+                "{msg_inventory.icon.stats.total-pages} {pages}",
+                "{msg_inventory.icon.stats.total-sections} {sections}",
+                "{msg_inventory.icon.stats.current-balance} {balance}",
+                "{msg_inventory.icon.stats.current-section} {section}"}, Stats.class),
+        SEARCH("search", 'K', Material.NAME_TAG.name(), "{msg_inventory.icon.search}", new String[]{}, Search.class),
+        PINNED_CHALLENGES("pinned-challenges", 'P', Material.DIAMOND.name(), "{msg_inventory.icon.pinned-challenges}", new String[]{}, ChallengesPinned.class);
+
+        private Class<? extends Icon> icon;
+        private Character c;
+        private String id;
+        private String material;
+        private String displayName;
+        private String[] lore;
+
+        IconType(String id, Character c, String material, String name, String[] lore, Class<? extends Icon> icon) {
+            this.id = id;
+            this.icon = icon;
+            this.material = material;
+            this.displayName = name;
+            this.lore = lore;
+            this.c = c;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public Class<? extends Icon> getIcon() {
+            return icon;
+        }
+
+        public String getMaterial() {
+            return material;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String[] getLore() {
+            return lore;
+        }
+
+        public Character getChar() {
+            return c;
+        }
     }
 
     public static final HashMap<UUID, InventoryManager> storedInventories = new HashMap<>(); // Stores Inventories
-    public static final HashMap<InventoryType, Class<? extends BaseInventory>> inventories = new HashMap<>(); // Allows inventories to be retrieved via type
-    public static final HashMap<Character, Class<? extends Icon>> cachedIcons = new HashMap<>(); // Stores icons with their stored character (exception for content icons)
+    public static final HashMap<Character, IconType> cachedIcons = new HashMap<>(); // Stores icons with their stored character (exception for content icons)
     public static final HashMap<Character, NavIcon> cachedNavIcons = new HashMap<>(); // Nav Icons have their own special settings
 
     private int currentPage; // Current page
@@ -39,26 +119,16 @@ public class InventoryManager {
     private String section;
 
     public static void initiateInvsAndIcons() {
-        // Initiate inventories
-        inventories.put(InventoryType.HEADS_MENU, HeadsMenu.class);
-        inventories.put(InventoryType.HEADS_CATEGORY, HeadsSection.class);
-        inventories.put(InventoryType.HEADS_FAVORITES, HeadsFavourite.class);
-        inventories.put(InventoryType.HEADS_SEARCH, HeadsSearch.class);
-        inventories.put(InventoryType.CHALLENGES_MENU, ChallengesMenu.class);
-        inventories.put(InventoryType.CHALLENGES_LIST, ChallengesSection.class);
-        inventories.put(InventoryType.CHALLENGES_PINNED, ChallengesPinnedInv.class);
-        inventories.put(InventoryType.SELLHEAD_CATEGORY, SellheadCategory.class);
-
         // Allow icons to have their own character
-        cachedIcons.put('C', Content.class);
-        cachedIcons.put('G', Glass.class); // Ahaha, glass and class!! Haha, get it? Ahahahaaahhh...
-        cachedIcons.put('X', Close.class); // OH MY GOD CLOSE AND CLASS OH MY FU- wait, that doesn't have the same ring to it. :(
-        cachedIcons.put('A', Air.class);
-        cachedIcons.put('M', Menu.class);
-        cachedIcons.put('F', Favourites.class);
-        cachedIcons.put('S', Stats.class);
-        cachedIcons.put('K', Search.class);
-        cachedIcons.put('P', ChallengesPinned.class);
+        cachedIcons.put('C', IconType.CONTENT);
+        cachedIcons.put('G', IconType.GLASS);
+        cachedIcons.put('X', IconType.CLOSE);
+        cachedIcons.put('A', IconType.AIR);
+        cachedIcons.put('M', IconType.MENU);
+        cachedIcons.put('F', IconType.FAVOURITES);
+        cachedIcons.put('S', IconType.STATS);
+        cachedIcons.put('K', IconType.SEARCH);
+        cachedIcons.put('P', IconType.PINNED_CHALLENGES);
 
         initNavIcons();
     }
@@ -111,7 +181,7 @@ public class InventoryManager {
             context.put("section", section);
         }
         try {
-            inventory = inventories.get(type).getConstructor(Player.class, HashMap.class).newInstance(Bukkit.getPlayer(player), context);
+            inventory = type.getInventory(Bukkit.getPlayer(player), context);
             this.type = type;
         } catch (InvocationTargetException ex) {
             ex.getTargetException().printStackTrace(); // Invoked constructor threw an exception
@@ -156,26 +226,6 @@ public class InventoryManager {
         @Override
         public String getId() {
             return id;
-        }
-
-        @Override
-        public String getDefaultMaterial() {
-            return "ARROW";
-        }
-
-        @Override
-        public int getDefaultDataValue() {
-            return 0;
-        }
-
-        @Override
-        public String getDefaultDisplayName() {
-            return "{msg_inventory.icon." + id.replaceAll("_", "-") + "}";
-        }
-
-        @Override
-        public String[] getDefaultLore() {
-            return new String[0];
         }
 
         public NavIcon(int shiftPages, String type) {

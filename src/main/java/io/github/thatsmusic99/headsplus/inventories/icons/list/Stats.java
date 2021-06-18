@@ -52,28 +52,4 @@ public class Stats extends Icon {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
-
-    @Override
-    public String getDefaultMaterial() {
-        return "PAPER";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.stats.icon}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.stats.total-heads} {heads}",
-                "{msg_inventory.icon.stats.total-pages} {pages}",
-                "{msg_inventory.icon.stats.total-sections} {sections}",
-                "{msg_inventory.icon.stats.current-balance} {balance}",
-                "{msg_inventory.icon.stats.current-section} {section}"};
-    }
 }

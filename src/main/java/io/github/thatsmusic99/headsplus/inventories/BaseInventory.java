@@ -41,7 +41,6 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     protected FileConfiguration hpi;
     private Inventory inventory;
     protected PagedLists<Content> contents;
-    private boolean larger;
     private UUID uuid;
     private Icon[] icons;
     protected boolean suppressWarnings;
@@ -56,8 +55,6 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         // Decide whether warnings need to be suppressed
         suppressWarnings = hp.getConfiguration().getMechanics().getBoolean("suppress-gui-warnings");
         hpi = hp.getItems().getConfig();
-        // Decide if the inventory becomes larger
-        larger = hp.getConfig().getBoolean("plugin.larger-menus");
         // Get the default icons
         icons = new Icon[hpi.getInt("inventories." + getId() + ".size")];
         // Get the unique ID of the player, never store the player object
@@ -125,7 +122,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     icon.initNameAndLore(icon.getId(), player);
                 }
             } else {
-                Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c);
+                Class<? extends Icon> iconClass = InventoryManager.cachedIcons.get(c).getIcon();
                 if (iconClass != null) {
                     try {
                         if (Content.class.isAssignableFrom(iconClass)) {

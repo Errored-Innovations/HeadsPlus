@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -104,15 +105,5 @@ public class CustomHead extends Content {
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
         item.setItemMeta(im);
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{head-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"};
     }
 }

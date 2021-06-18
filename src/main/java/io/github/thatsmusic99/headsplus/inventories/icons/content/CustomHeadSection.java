@@ -40,14 +40,4 @@ public class CustomHeadSection extends Content {
         return "headsection";
     }
 
-    @Override
-    public String getDefaultDisplayName() {
-        return "{head-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.head.count}"};
-    }
-
 }

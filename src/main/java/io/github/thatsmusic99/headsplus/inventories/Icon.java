@@ -68,10 +68,6 @@ public abstract class Icon {
         return item;
     }
 
-    public List<String> getLore() {
-        return ConfigInventories.get().getStringList("icons." + getId() + ".lore");
-    }
-
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         try {
@@ -86,12 +82,4 @@ public abstract class Icon {
         }
         item.setItemMeta(meta);
     }
-
-    public abstract String getDefaultMaterial();
-
-    public abstract int getDefaultDataValue();
-
-    public abstract String getDefaultDisplayName();
-
-    public abstract String[] getDefaultLore();
 }
