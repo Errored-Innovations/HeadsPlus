@@ -1,4 +1,4 @@
-package io.github.thatsmusic99.headsplus.config.customheads;
+package io.github.thatsmusic99.headsplus.config.defaults;
 
 import org.bukkit.ChatColor;
 

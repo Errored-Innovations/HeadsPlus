@@ -15,7 +15,7 @@ public class ConfigSounds extends CMFile {
     @Override
     public void loadDefaults() {
         for (Defaults d : Defaults.values()) {
-            addDefault("sounds." + d.name + ".sound", HeadsPlus.getInstance().getNMS().getEXPSound().name());
+            addDefault("sounds." + d.name + ".sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
             addDefault("sounds." + d.name + ".volume", 1.0f);
             addDefault("sounds." + d.name + ".pitch", 1.0f);
             addDefault("sounds." + d.name + ".enabled", d.enabled);

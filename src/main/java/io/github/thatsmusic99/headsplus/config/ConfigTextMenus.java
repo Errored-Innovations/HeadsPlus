@@ -105,10 +105,7 @@ public class ConfigTextMenus extends CMFile {
 
     private static String translateColors(String s, CommandSender sender) {
         HeadsPlus hp = HeadsPlus.getInstance();
-        return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s).replaceAll("\\{1}", hp.getThemeColour(1).toString())
-                .replaceAll("\\{2}", hp.getThemeColour(2).toString())
-                .replaceAll("\\{3}", hp.getThemeColour(3).toString())
-                .replaceAll("\\{4}", hp.getThemeColour(4).toString()), sender));
+        return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s), sender));
     }
 
 
@@ -343,7 +340,7 @@ public class ConfigTextMenus extends CMFile {
                     if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
                         sb.append(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
                         for (String s2 : key.advancedUsages()) {
-                            sb.append("\n").append(HeadsPlus.getInstance().getThemeColour(4)).append(translateColors(s2, sender));
+                            sb.append("\n").append(translateColors(s2, sender));
                         }
                     } else if (!s.contains("{further-usage}")){
                         CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);

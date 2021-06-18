@@ -5,30 +5,23 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
+import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -97,8 +90,8 @@ public class ConfigCustomHeads extends CMFile {
 
     @Override
     public void moveToNew() {
-        moveTo("options.update-heads", "update-heads");
-        moveTo("options.version", "current-version");
+        moveTo("options.update-heads", "update-heads", ConfigHeads.get());
+        moveTo("options.version", "current-version", ConfigHeads.get());
         moveTo("options.default-price", "default-price");
         moveTo("options.price-per-world", "price-per-world");
         // May as well add these.
@@ -177,8 +170,7 @@ public class ConfigCustomHeads extends CMFile {
     }
 
     public ItemStack getSkullFromTexture(String texture, boolean encoded, String displayName) {
-        NMSManager nms = HeadsPlus.getInstance().getNMS();
-        ItemStack i = nms.getSkullMaterial(1);
+        ItemStack i = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta sm = (SkullMeta) i.getItemMeta();
         GameProfile gm;
         if (encoded) {

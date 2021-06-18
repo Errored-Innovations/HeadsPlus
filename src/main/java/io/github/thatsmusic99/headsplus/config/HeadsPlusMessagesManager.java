@@ -35,14 +35,13 @@ public class HeadsPlusMessagesManager {
     private static YamlConfiguration config;
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<UUID, YamlConfiguration> players;
-
     private static HeadsPlusMessagesManager instance;
 
     public HeadsPlusMessagesManager() {
         instance = this;
         HeadsPlus hp = HeadsPlus.getInstance();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
-        String locale = MainConfig.get().getString("locale");
+        String locale = "en_us"; // TODO: Make config value
         locales = new HashMap<>();
         if (MainConfig.get().getBoolean("smart-locale")) {
             File langDir = new File(dest);
