@@ -340,7 +340,14 @@ public class HeadsPlus extends JavaPlugin {
         }
 
         for (CMFile file : configFiles) {
-            file.load();
+            if (file instanceof MainConfig) file.load();
+            if (file instanceof FeatureConfig) {
+                if (((FeatureConfig) file).shouldLoad()) {
+                    file.load();
+                }
+            } else {
+                file.load();
+            }
         }
 
         try {
