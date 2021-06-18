@@ -13,6 +13,7 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.nms.NMSIndex;
 import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
@@ -293,6 +294,7 @@ public class HeadsPlus extends JavaPlugin {
         new HPBlockPlaceEvent();
         new HPPlayerDeathEvent();
         new HPMaskEvents();
+        new HPPlayerCraftEvent();
         new HPPlayerJoinEvent();
         new HPBlockPlaceEvent();
         new PlayerPickBlockEvent();
@@ -317,6 +319,8 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createInstances() {
+        new PersistenceManager();
+
         configFiles = new ArrayList<>();
         configFiles.add(new MainConfig());
         configFiles.add(new ConfigAnimations());
@@ -366,7 +370,6 @@ public class HeadsPlus extends JavaPlugin {
                     }
                 }
             }.runTaskAsynchronously(this);
-
         }
         EntityDataManager.init();
     }
