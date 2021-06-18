@@ -77,6 +77,7 @@ public class HeadsPlus extends JavaPlugin {
     private Pinned pinned;
     private PlayerScores scores;
     private boolean canUseWG = false;
+    private boolean fullyEnabled = false;
 
     public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), task);
     public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.getInstance(), task);
@@ -100,7 +101,7 @@ public class HeadsPlus extends JavaPlugin {
 
             instance = this;
             // Set up the NMS
-            setupNMS();
+            if (!checkVersion()) return;
 
             // Create locale files
             createLocales();
@@ -208,6 +209,7 @@ public class HeadsPlus extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (!fullyEnabled) return;
 		// close any open interfaces
 		for(UUID p : InventoryManager.storedInventories.keySet()) {
 		    Player player = Bukkit.getPlayer(p);
@@ -414,28 +416,26 @@ public class HeadsPlus extends JavaPlugin {
         }
     }
 
-    private void setupNMS() {
+    private boolean checkVersion() {
         String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        NMSManager nmsMan = null;
-        try {
-            nmsMan = (NMSManager) Class.forName("io.github.thatsmusic99.headsplus.nms." + bukkitVersion + ".NMSUtil").newInstance();
-            if (!nmsMan.getNMSVersion().equals(bukkitVersion)) {
-                throw new IncorrectVersionException("Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion + ", this is meant for " + nmsMan.getNMSVersion());
-            }
-            nmsversion = NMSIndex.valueOf(bukkitVersion);
-            nms = nmsMan;
-        } catch (ClassNotFoundException | IncorrectVersionException e) {
-            getLogger().severe("ERROR: Incorrect version of HeadsPlus being used! You are using version " + bukkitVersion);
-            getLogger().severe("If this is not known of, let the developer know in one of these places:");
-            getLogger().severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-            getLogger().severe("https://discord.gg/nbT7wC2");
-            getLogger().severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-13-x.237088/");
-            getLogger().severe("To prevent any further damage, the plugin is being disabled... (Error code: 5)");
+        int number = Integer.parseInt(bukkitVersion.split("_")[1]);
+        if (number < 15) {
+            getLogger().severe("!!! YOU ARE USING HEADSPLUS ON AN OLD UNSUPPORTED VERSION. !!!");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.17.");
+            getLogger().severe("Please update your server if you wish to continue using the plugin.");
+            getLogger().severe("To prevent any damage, the plugin is now disabling...");
             setEnabled(false);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            return false;
+        } else if (number > 17) {
+            getLogger().severe("!!! YOU ARE USING HEADSPLUS ON A NEW UNSUPPORTED VERSION. !!!");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.17.");
+            getLogger().severe("Considering this is a new version though, there's a chance the plugin still works.");
+            getLogger().severe("The plugin will remain enabled, but update it as soon as possible.");
+            getLogger().severe("If this is the latest version and you find problems/bugs, please report them.");
+            getLogger().severe("Any new entities with special properties will be implemented in a newer plugin version.");
+            getLogger().severe("And lastly, how DARE you update faster than I can, pesky lass");
         }
-
+        return true;
     }
 
     private void registerSubCommands() {
@@ -711,11 +711,11 @@ public class HeadsPlus extends JavaPlugin {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         if (month == Calendar.MAY && day == 6) {
-            getLogger().info("Happy anniversary, TM and Nie! <3");
+            getLogger().info("Happy anniversary, Holly and Nie! <3");
         } else if (month == Calendar.SEPTEMBER && day == 21) {
             getLogger().info("Happy Birthday, Nie!");
         } else if (month == Calendar.SEPTEMBER && day == 23) {
-            getLogger().info("Happy Birthday, TM!");
+            getLogger().info("Happy Birthday, Holly!");
         } else if (month == Calendar.DECEMBER && (day == 25 || day == 24)) {
             getLogger().info("Merry Christmas!");
         } else if (month == Calendar.APRIL && day == 30) {
