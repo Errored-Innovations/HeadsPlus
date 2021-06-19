@@ -22,7 +22,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,46 +35,41 @@ public class HPUtils {
 
     public static void addBossBar(OfflinePlayer pl) {
         HPPlayer p = HPPlayer.getHPPlayer(pl);
-        ConfigurationSection c = HeadsPlus.getInstance().getConfiguration().getMechanics();
-        if (c.getBoolean("boss-bar.enabled")) {
-            if (p.getNextLevel() != null) {
-                try {
-                    if (!bossBars.containsKey(pl.getPlayer().getUniqueId())) {
-                        String s = ChatColor.translateAlternateColorCodes('&', c.getString("boss-bar.title"));
-                        BossBar bossBar = Bukkit.getServer().createBossBar(s, BarColor.valueOf(c.getString("boss-bar.color")), BarStyle.SEGMENTED_6);
-                        bossBar.addPlayer(pl.getPlayer());
-                        Double d = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
-                        d = 1 - d;
-                        bossBar.setProgress(d);
-                        bossBar.setVisible(true);
-                        bossBars.put(pl.getPlayer().getUniqueId(), bossBar);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                bossBar.setVisible(false);
-                                bossBar.removePlayer(pl.getPlayer());
-                                bossBars.remove(pl.getPlayer().getUniqueId());
-                            }
-                        }.runTaskLater(HeadsPlus.getInstance(), c.getInt("boss-bar.lifetime") * 20);
-                    } else {
-                        Double d = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
-                        d = 1 - d;
-                        bossBars.get(pl.getPlayer().getUniqueId()).setProgress(d);
-                    }
-                } catch (NoClassDefFoundError | IllegalArgumentException | NullPointerException ignored) {
-
-                }
-
+        ConfigurationSection config = HeadsPlus.getInstance().getConfiguration().getMechanics();
+        if (!config.getBoolean("boss-bar.enabled")) return;
+        if (p.getNextLevel() == null) return;
+        try {
+            if (!bossBars.containsKey(p.getUuid())) {
+                String s = ChatColor.translateAlternateColorCodes('&', config.getString("boss-bar.title"));
+                BossBar bossBar = Bukkit.getServer().createBossBar(s, BarColor.valueOf(config.getString("boss-bar.color")), BarStyle.SEGMENTED_6);
+                if (pl.getPlayer() != null)
+                    bossBar.addPlayer(pl.getPlayer());
+                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                percentageProgress = 1 - percentageProgress;
+                bossBar.setProgress(percentageProgress);
+                bossBar.setVisible(true);
+                bossBars.put(p.getUuid(), bossBar);
+                Bukkit.getScheduler().runTaskLater(HeadsPlus.getInstance(), () -> {
+                    bossBar.setVisible(false);
+                    bossBar.removePlayer(pl.getPlayer());
+                    bossBars.remove(pl.getPlayer().getUniqueId());
+                }, config.getLong("boss-bar.lifetime") * 20);
+            } else {
+                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                percentageProgress = 1 - percentageProgress;
+                bossBars.get(p.getUuid()).setProgress(percentageProgress);
             }
+        } catch (NoClassDefFoundError | IllegalArgumentException ignored) {
+
         }
     }
 
     public static int matchCount(Matcher m) {
-        int i = 0;
+        int matches = 0;
         while (m.find()) {
-            i++;
+            matches++;
         }
-        return i;
+        return matches;
     }
 
     public static <T> T notNull(T object, String message) throws NullPointerException {
@@ -95,8 +89,8 @@ public class HPUtils {
         ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
-        if (killer.getInventory().getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-            ItemStack item = killer.getInventory().getItemInHand();
+        if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+            ItemStack item = killer.getInventory().getItemInMainHand();
             level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
         }
         if (level == 0) return chance;
@@ -161,6 +155,7 @@ public class HPUtils {
 
     public static boolean isMythicMob(Entity entity) {
         HeadsPlus hp = HeadsPlus.getInstance();
+
         try {
             if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
                 Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");

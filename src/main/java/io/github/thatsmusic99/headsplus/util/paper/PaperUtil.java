@@ -1,13 +1,10 @@
 package io.github.thatsmusic99.headsplus.util.paper;
 
-import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.papermc.lib.PaperLib;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
