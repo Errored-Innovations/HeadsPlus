@@ -30,7 +30,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         super();
         Bukkit.getPluginManager().registerEvent(EntityDeathEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(EntityDeathEvent.class, "EntityDeathEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(EntityDeathEvent.class, "EntityDeathEvent", this), HeadsPlus.getInstance(), true);
 
         int length = EntityDataManager.ableEntities.size();
         String[] entities = new String[length];
