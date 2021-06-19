@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
 
@@ -26,7 +27,7 @@ public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
         HeadsPlus hp = HeadsPlus.getInstance();
         addData("player", e.getPlayer().getName());
         if (addData("stopping-heads", hp.isStoppingPlaceableHeads())) {
-            if (addData("is-a-skull", hp.getNMS().isSkull(e.getItemInHand()))) {
+            if (addData("is-a-skull", e.getItemInHand().getItemMeta() instanceof SkullMeta)) {
                 if (!addData("can-bypass", e.getPlayer().hasPermission("headsplus.bypass.preventplacement"))) {
                     if (addData("is-sellable", PersistenceManager.get().isSellable(e.getItemInHand()))) {
                         e.setCancelled(true);
