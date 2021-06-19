@@ -17,6 +17,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LeaderboardEvents implements Listener {
 
+
+
     public LeaderboardEvents() {
         super();
         HeadsPlus hp = HeadsPlus.getInstance();

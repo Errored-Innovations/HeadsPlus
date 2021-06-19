@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigInteractions;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
@@ -17,13 +18,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.*;
 
-public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> {
+public class HPHeadInteractListener extends HeadsPlusListener<PlayerInteractEvent> {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private final List<UUID> sent = new ArrayList<>();
 
-    public HPHeadInteractEvent() {
-        super();
+    @Override
+    public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance());
 
@@ -37,35 +37,32 @@ public class HPHeadInteractEvent extends HeadsPlusListener<PlayerInteractEvent> 
         addPossibleData("owner", "<Name>");
     }
 
+    @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().INTERACTIONS;
+    }
+
     // TODO - rewrite for interactions overhaul
     @Override
     public void onEvent(PlayerInteractEvent event) {
         try {
             if (addData("action", event.getAction()) == Action.RIGHT_CLICK_BLOCK) {
-                if (HeadsPlus.getInstance().getConfiguration().getPerks().click_in) {
-                    Player player = event.getPlayer();
-                    BlockState block = event.getClickedBlock().getState();
-                    if (addData("is-skull", block instanceof Skull)) {
+                Player player = event.getPlayer();
+                BlockState block = event.getClickedBlock().getState();
+                if (addData("is-skull", block instanceof Skull)) {
 
-                        Skull skull = (Skull) block;
-                        String owner;
+                    Skull skull = (Skull) block;
+                    String owner;
 
-                        owner = addData("owner", skull.getOwner());
-                        if (owner == null) return;
-                        String playerName = player.getName();
-                        ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
-                        List<String> names = new ArrayList<>();
-                        names.addAll(hpch.eHeads);
-                        names.addAll(hpch.ieHeads);
-                        if (!sent.contains(player.getUniqueId())) {
-                            sent.add(player.getUniqueId());
-                            ConfigInteractions.get().getMessageForHead(skull, player).thenAccept(player::sendMessage);
-                        } else {
-                            sent.remove(player.getUniqueId());
-                        }
+                    owner = addData("owner", skull.getOwner());
+                    if (owner == null) return;
+                    if (!sent.contains(player.getUniqueId())) {
+                        sent.add(player.getUniqueId());
+                        ConfigInteractions.get().getMessageForHead(skull, player).thenAccept(player::sendMessage);
+                    } else {
+                        sent.remove(player.getUniqueId());
                     }
                 }
-
             }
         } catch (NullPointerException ex) {
             //

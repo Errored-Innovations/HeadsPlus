@@ -71,7 +71,7 @@ public class ConfigMobs extends CMFile {
 				"ocelot", "panda", "parrot", "phantom", "pig", "piglin", "pillager", "pufferfish", "rabbit", "ravager", "salmon", "sheep",
 				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "turtle", "vex", "villager",
 				"vindicator", "witch", "wither", "wolf", "zoglin", "zombie")) {
-			moveTo(entity, entity.toUpperCase());
+			moveTo(entity + ".name", entity.toUpperCase());
 		}
 
 		for (String entity : Arrays.asList("CAVE_SPIDER", "ELDER_GUARDIAN", "ENDER_DRAGON", "IRON_GOLEM", "MAGMA_CUBE",
@@ -96,87 +96,86 @@ public class ConfigMobs extends CMFile {
     	for (String key : EntityDataManager.ableEntities) {
             switch (key) {
 				case "AXOLOTL":
-					addLenientSection(key + ".default");
-					getConfig().createSection(key + ".default.HP#lucy_axolotl");
+					addDefaultHead(key + ".default", "HP#lucy_axolotl");
 					for (String color : new String[]{"LUCY", "WILD", "GOLD", "CYAN", "BLUE"}) {
-						addExample("." + color + "." + "HP#" + color.toLowerCase() + "_axolotl.chance", "{default}");
+						addDefaultHead(key + "." + color, "HP#" + color.toLowerCase() + "_axolotl");
 					}
 					break;
 				case "BEE":
-					addDefault(key + ".name.default", initSingleton("HP#bee_mc"));
-					addDefault(key + ".name.ANGRY", initSingleton("HP#bee_angry"));
-					addDefault(key + ".name.ANGRY,NECTAR", initSingleton("HP#bee_pollinated_angry"));
-					addDefault(key + ".name.NECTAR", initSingleton("HP#bee_pollinated"));
+					addDefaultHead(key + ".default", "HP#bee_mc");
+					addDefaultHead(key + ".ANGRY", "HP#bee_angry");
+					addDefaultHead(key + ".ANGRY,NECTAR", "HP#bee_pollinated_angry");
+					addDefaultHead(key + ".NECTAR", "HP#bee_pollinated");
 					break;
 				case "CREEPER":
-					addDefault(key + ".name.default", initSingleton("{mob-default}"));
-					addDefault(key + ".name.POWERED", initSingleton("HP#charged_creeper"));
+					addDefaultHead(key + ".default", "{mob-default}");
+					addDefaultHead(key + ".POWERED", "HP#charged_creeper");
 					break;
 				case "CAT":
-					addDefault(key + ".name.default", initSingleton("HP#tabby_cat"));
+					addDefaultHead(key + ".default", "HP#tabby_cat");
 					for (String type : Arrays.asList("tabby", "black", "red", "siamese", "british_shorthair", "calico", "persian", "ragdoll", "white", "jellie", "all_black")) {
-						addDefault(key + ".name." + type.toUpperCase(), initSingleton("HP#" + type + "_cat"));
+						addDefaultHead(key + "." + type.toUpperCase(), "HP#" + type + "_cat");
 					}
 					break;
 				case "FOX":
-					addDefault(key + ".name.default", initSingleton("HP#fox_mc"));
-					addDefault(key + ".name.RED", initSingleton("HP#fox_mc"));
-					addDefault(key + ".name.SNOW", initSingleton("HP#snow_fox"));
+					addDefaultHead(key + ".default", "HP#fox_mc");
+					addDefaultHead(key + ".RED", "HP#fox_mc");
+					addDefaultHead(key + ".SNOW", "HP#snow_fox");
 					break;
 				case "HORSE":
-					addDefault(key + ".name.default", initSingleton("HP#brown_horse"));
+					addDefaultHead(key + ".default","HP#brown_horse");
 					for (Horse.Color variant : Horse.Color.values()) {
-						addDefault(key + ".name." + variant.name(), initSingleton("HP#" + variant.name().toLowerCase() + "_horse"));
+						addDefaultHead(key + "." + variant.name(), "HP#" + variant.name().toLowerCase() + "_horse");
 					}
 					break;
                 case "LLAMA":
                 case "TRADER_LLAMA":
-					addDefault(key + ".name.default", initSingleton("HP#creamy_" + key.toLowerCase()));
-                	addDefault(key + ".name.CREAMY", initSingleton("HP#creamy_" + key.toLowerCase()));
-					addDefault(key + ".name.WHITE", initSingleton("HP#white_" + key.toLowerCase()));
-					addDefault(key + ".name.BROWN", initSingleton("HP#brown_" + key.toLowerCase()));
-					addDefault(key + ".name.GRAY", initSingleton("HP#gray_" + key.toLowerCase()));
+					addDefaultHead(key + ".default", "HP#creamy_" + key.toLowerCase());
+                	addDefaultHead(key + ".CREAMY", "HP#creamy_" + key.toLowerCase());
+					addDefaultHead(key + ".WHITE", "HP#white_" + key.toLowerCase());
+					addDefaultHead(key + ".BROWN", "HP#brown_" + key.toLowerCase());
+					addDefaultHead(key + ".GRAY", "HP#gray_" + key.toLowerCase());
                     break;
 				case "MUSHROOM_COW":
-					addDefault(key + ".name.default", initSingleton("HP#red_mooshroom"));
-					addDefault(key + ".name.RED", initSingleton("HP#red_mooshroom"));
-					addDefault(key + ".name.BROWN", initSingleton("HP#brown_mooshroom"));
+					addDefaultHead(key + ".default", "HP#red_mooshroom");
+					addDefaultHead(key + ".RED", "HP#red_mooshroom");
+					addDefaultHead(key + ".BROWN", "HP#brown_mooshroom");
 					break;
 				case "OCELOT":
-					addDefault( key + ".name.default", initSingleton("HP#ocelot"));
-					addDefault(key + ".name.WILD_OCELOT", initSingleton("HP#ocelot"));
-					addDefault(key + ".name.BLACK_CAT", initSingleton("HP#black_cat"));
-					addDefault(key + ".name.RED_CAT", initSingleton("HP#red_cat"));
-					addDefault(key + ".name.SIAMESE_CAT", initSingleton("HP#siamese_cat"));
+					addDefaultHead( key + ".default", "HP#ocelot");
+					addDefaultHead(key + ".WILD_OCELOT", "HP#ocelot");
+					addDefaultHead(key + ".BLACK_CAT", "HP#black_cat");
+					addDefaultHead(key + ".RED_CAT", "HP#red_cat");
+					addDefaultHead(key + ".SIAMESE_CAT", "HP#siamese_cat");
 					break;
 				case "PANDA":
 					for (String gene : Arrays.asList("NORMAL", "PLAYFUL", "LAZY", "WORRIED", "BROWN", "WEAK", "AGGRESSIVE")) {
-						addDefault(key + ".name." + gene, initSingleton("HP#panda_" + gene.toLowerCase()));
+						addDefaultHead(key + "." + gene, "HP#panda_" + gene.toLowerCase());
 					}
 					break;
                 case "PARROT":
-                	addDefault(key + ".name.default", initSingleton("HP#red_parrot"));
+                	addDefaultHead(key + ".default", "HP#red_parrot");
                 	for (String colour : new String[]{"RED", "BLUE", "GREEN", "CYAN", "GRAY"}) {
-                		addDefault(key + ".name." + colour, initSingleton("HP#" + colour.toLowerCase() + "_parrot"));
+                		addDefaultHead(key + "." + colour, "HP#" + colour.toLowerCase() + "_parrot");
 					}
                     break;
 				case "RABBIT":
-					addDefault(key + ".name.default", initSingleton("HP#brown_rabbit"));
+					addDefaultHead(key + ".default", "HP#brown_rabbit");
 					for (Rabbit.Type type : Rabbit.Type.values()) {
-						addDefault(key + ".name." + type.name(), initSingleton("HP#" + type.name().toLowerCase() + "_rabbit"));
+						addDefaultHead(key + "." + type.name(), "HP#" + type.name().toLowerCase() + "_rabbit");
 					}
 					break;
 				case "SHEEP":
-					addDefault(key + ".name.default", initSingleton("HP#white_sheep"));
+					addDefaultHead(key + ".default", "HP#white_sheep");
 					for (DyeColor dc : DyeColor.values()) {
 						try {
 							if (dc == DyeColor.valueOf("LIGHT_GRAY")) {
-								addDefault(key + ".name." + dc.name(), initSingleton("HP#silver_sheep"));
+								addDefaultHead(key + "." + dc.name(), "HP#silver_sheep");
 							} else {
-								addDefault(key + ".name." + dc.name(), initSingleton("HP#" + dc.name().toLowerCase() + "_sheep"));
+								addDefaultHead(key + "." + dc.name(), "HP#" + dc.name().toLowerCase() + "_sheep");
 							}
 						} catch (NoSuchFieldError | IllegalArgumentException ex) {
-							addDefault(key + ".name." + dc.name(), initSingleton("HP#silver_sheep"));
+							addDefaultHead(key + "." + dc.name(), "HP#silver_sheep");
 						}
 					}
 					break;
@@ -185,58 +184,53 @@ public class ConfigMobs extends CMFile {
 				case "ELDER_GUARDIAN":
 				case "ZOMBIE_HORSE":
 				case "SKELETON_HORSE":
-					addDefault(key + ".name.default", initSingleton("HP#" + key.toLowerCase().replaceAll("_", "")));
+					addDefaultHead(key + ".default", "HP#" + key.toLowerCase().replaceAll("_", ""));
 					break;
 				case "VILLAGER":
-					addDefault(key + ".name.default", initSingleton("HP#villager_plains"));
+					addDefaultHead(key + ".default", "HP#villager_plains");
 					for (String biome : Arrays.asList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA", "JUNGLE")) {
-						addDefault(key + ".name." + biome, initSingleton("HP#villager_" + biome.toLowerCase()));
+						addDefaultHead(key + "." + biome, "HP#villager_" + biome.toLowerCase());
 					}
 					break;
 				case "ZOMBIE_VILLAGER":
-					addDefault(key + ".name.default", initSingleton("HP#zombie_villager_plains"));
-					for (String biome : new ArrayList<>(Arrays.asList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA", "JUNGLE"))) {
-						addDefault(key + ".name." + biome, initSingleton("HP#zombie_villager_" + biome.toLowerCase()));
+					addDefaultHead(key + ".default", "HP#zombie_villager_plains");
+					for (String biome : Lists.newArrayList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA", "JUNGLE")) {
+						addDefaultHead(key + "." + biome, "HP#zombie_villager_" + biome.toLowerCase());
 					}
 					break;
 				case "GIANT":
-					addDefault(key + ".name.default", initSingleton("HP#zombie"));
+					addDefaultHead(key + ".default", "HP#zombie");
 					break;
 				case "CHICKEN":
-					addDefault(key + ".name.default", initSingleton("HP#" + key.toLowerCase() + "_mc"));
+					addDefaultHead(key + ".default", "HP#" + key.toLowerCase() + "_mc");
 					break;
                 case "WITHER_SKELETON":
-                	addDefault(key + ".chance", 2.5);
-                	// Don't stop there
+                	addDefaultHead(key + ".default", "{mob-default}");
+                	addExample(key + ".default.{mob-default}.chance", 2.5);
+                	break;
                 case "ENDER_DRAGON":
 				case "ZOMBIE":
 				case "SKELETON":
-                    addDefault(key + ".name.default", initSingleton("{mob-default}"));
+                    addDefaultHead(key + ".default", "{mob-default}");
                     break;
 				case "STRIDER":
-					addDefault(key + ".name.COLD", initSingleton("HP#cold_strider"));
+					addDefaultHead(key + ".COLD", "HP#cold_strider");
                 default:
-                    addDefault(key + ".name.default", initSingleton("HP#" + key.toLowerCase()));
+                    addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
                     break;
             }
-
-    		addDefault(key + ".chance", "{default}");
-    	    addDefault(key + ".display-name", "{default}");
-    	    addDefault(key + ".price", "{default}");
-
-    		addDefault(key + ".mask-effects", new ArrayList<>());
-    		addDefault(key + ".mask-amplifiers", new ArrayList<>());
-    		addDefault(key + ".lore", "{default}");
     	}
     }
 
     private void addPlayerHeads() {
-    	addDefault("player.default.chance", 100);
-    	addDefault("player.default.display-name", "{player}'s head");
-    	addDefault("player.default.price", "{default}");
-        addDefault("player.default.mask-effects", new ArrayList<>());
-        addDefault("player.default.mask-amplifiers", new ArrayList<>());
-        addDefault("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
+		addLenientSection("player");
+		getConfig().createSection("player.default");
+    	addExample("player.default.chance", 100);
+    	addExample("player.default.display-name", "{player}'s head");
+    	addExample("player.default.price", "{default}");
+        addExample("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
+
+        addExample("player.Thatsmusic99.display-name", "oi mate it's a bit rood to stab me innit?");
     }
 
     public double getPrice(String type) {
@@ -281,5 +275,16 @@ public class ConfigMobs extends CMFile {
 
 	private List<String> initSingleton(String s) {
 		return Lists.newArrayList(s);
+	}
+
+	private void createExampleSection(String path) {
+		if (isNew()) {
+			getConfig().createSection(path);
+		}
+	}
+
+	private void addDefaultHead(String path, String head) {
+		addLenientSection(path);
+		createExampleSection(path + "." + head);
 	}
 }

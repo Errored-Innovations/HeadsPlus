@@ -58,18 +58,17 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
             // Block pick event is basically the same event as picking a block from inventory
             // check to see if they are looking at a skull block
             Block b = event.getWhoClicked().getTargetBlock(null, 6);
-            if (b != null && b.getState() instanceof Skull) {
-                // fill in the item data
-                Skull s = (Skull) b.getState();
-                try {
-                    GameProfile profile = ProfileFetcher.getProfile(s);
-                    ItemStack it = event.getCursor();
-                    SkullMeta sm = (SkullMeta) it.getItemMeta();
-                    it.setItemMeta(ProfileFetcher.setProfile(sm, profile));
-                    event.setCursor(it);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+            if (!(b.getState() instanceof Skull)) return;
+            // fill in the item data
+            Skull s = (Skull) b.getState();
+            try {
+                GameProfile profile = ProfileFetcher.getProfile(s);
+                ItemStack it = event.getCursor();
+                SkullMeta sm = (SkullMeta) it.getItemMeta();
+                it.setItemMeta(ProfileFetcher.setProfile(sm, profile));
+                event.setCursor(it);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
     }

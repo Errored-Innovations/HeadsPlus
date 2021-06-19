@@ -29,7 +29,6 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         addPossibleData("has-update", "true", "false");
     }
 
-
 	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.getInstance();
 	    addData("player", e.getPlayer().getName());

@@ -22,6 +22,8 @@ public class MainConfig extends CMFile {
 
     private MainFeatures mainFeatures;
     private MySQL mySQL;
+    private MobDrops mobDrops;
+    private SellingHeads sellingHeads;
     private Updates updates;
 
     private static MainConfig instance;
@@ -270,6 +272,8 @@ public class MainConfig extends CMFile {
     public void postSave() {
         mainFeatures = new MainFeatures();
         mySQL = new MySQL();
+        mobDrops = new MobDrops();
+        sellingHeads = new SellingHeads();
         updates = new Updates();
     }
 
@@ -307,6 +311,14 @@ public class MainConfig extends CMFile {
 
     public MainFeatures getMainFeatures() {
         return mainFeatures;
+    }
+
+    public SellingHeads getSellingHeads() {
+        return sellingHeads;
+    }
+
+    public MobDrops getMobDrops() {
+        return mobDrops;
     }
 
     public String fixBalanceStr(double balance) {
@@ -349,8 +361,15 @@ public class MainConfig extends CMFile {
                 PLAYER_HEAD_DEATH_MESSAGES = getStringList("player-head-death-messages");
         public boolean NEEDS_KILLER = getBoolean("needs-killer"),
                 ENABLE_LOOTING = getBoolean("enable-looting"),
-                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
+                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs"),
+                ENABLE_PLAYER_DEATH_MESSAGES = getBoolean("enable-player-head-death-messages");
 
+    }
+
+    public class SellingHeads {
+        public boolean STOP_PLACEMENT = getBoolean("stop-placement-of-sellable-heads"),
+                USE_GUI = getBoolean("use-sellhead-gui"),
+                CASE_INSENSITIVE = getBoolean("case-sensitive-names");
     }
 
     public class Updates {

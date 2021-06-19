@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.api;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
@@ -14,7 +15,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class HeadsPlusAPI {
     private final HeadsPlus hp = HeadsPlus.getInstance();
 
     public ItemStack getHead(String option) {
-        return hp.getHeadsXConfig().getSkull(option);
+        return ConfigCustomHeads.get().getSkull(option);
     }
 
     public boolean isSellable(ItemStack is) {

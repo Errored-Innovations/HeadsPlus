@@ -184,6 +184,7 @@ public class AutograbManager {
             public void run() {
                 final String[] playerInfo = new String[1];
                 try {
+                    // TODO - replacement
                     playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
                     addTexture(playerInfo[0], force, sender, player);
                 } catch (NoSuchElementException exception) {

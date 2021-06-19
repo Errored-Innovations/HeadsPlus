@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -23,10 +24,8 @@ import java.util.Random;
 
 public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
 
-    private final ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
-
-    public HPPlayerDeathEvent() {
-        super();
+    @Override
+    public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent", this), HeadsPlus.getInstance());
         addPossibleData("player", "<Player>");
@@ -37,6 +36,11 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         addPossibleData("killer", "<Player>");
         addPossibleData("fixed-chance", "<Chance>");
         addPossibleData("random-chance", "<Chance>");
+    }
+
+    @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
 
     @Override
