@@ -10,7 +10,6 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -50,42 +49,18 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     }
 
     @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().MASKS;
+    }
+
+    @Override
     public void init() {
-        HeadsPlusListener<?> listener;
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.getInstance());
 
-        Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
-                listener = new HeadsPlusListener<EntityDamageEvent>() {
-                    @Override
-                    public void onEvent(EntityDamageEvent event) {
-                        if (event.getEntity() instanceof Player) {
-                            Player player = (Player) event.getEntity();
-                            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
-                            HeadsPlus hp = HeadsPlus.getInstance();
-                            if (hp.getConfiguration().getPerks().mask_powerups) {
-                                HPPlayer pl = HPPlayer.getHPPlayer(player);
-                                if (pl.isIgnoringFallDamage() && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                                    event.setCancelled(true);
-                                }
-                            }
-                        }
-                    }
-                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent", listener), HeadsPlus.getInstance());
-
-        Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class,
-                listener = new HeadsPlusListener<PlayerQuitEvent>() {
-                    @Override
-                    public void onEvent(PlayerQuitEvent event) {
-                        if (maskMonitors.containsKey(event.getPlayer().getUniqueId())) {
-                            HPPlayer player = HPPlayer.getHPPlayer(event.getPlayer());
-                            player.clearAllMasks();
-                            maskMonitors.remove(event.getPlayer().getUniqueId());
-                        }
-                    }
-                }, EventPriority.NORMAL, new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent", listener), HeadsPlus.getInstance());
-
+        new MaskDamageListener().init();
+        new MaskPlayerLeaveListener().init();
     }
 
     public static void checkMask(Player player, ItemStack item) {
@@ -110,9 +85,9 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
 
         private int currentInterval = 0;
         private boolean tempDisable = false;
-        private HPPlayer hpPlayer;
-        private Player player;
-        private String type;
+        private final HPPlayer hpPlayer;
+        private final Player player;
+        private final String type;
 
         public MaskRunnable(Player player, String type) {
             this.player = player;
@@ -141,6 +116,49 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
                 hpPlayer.refreshMasks();
                 currentInterval = 0;
             }
+        }
+    }
+
+    private static class MaskDamageListener extends HeadsPlusListener<EntityDamageEvent> {
+
+        @Override
+        public void onEvent(EntityDamageEvent event) {
+            if (!(event.getEntity() instanceof Player)) return;
+            Player player = (Player) event.getEntity();
+            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
+            HPPlayer pl = HPPlayer.getHPPlayer(player);
+            if (pl.isIgnoringFallDamage() && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
+                event.setCancelled(true);
+            }
+        }
+
+        @Override
+        public void init() {
+            Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
+                    this, EventPriority.NORMAL,
+                    new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent", this),
+                    HeadsPlus.getInstance(), true);
+
+        }
+    }
+
+    private static class MaskPlayerLeaveListener extends HeadsPlusListener<PlayerQuitEvent> {
+
+        @Override
+        public void onEvent(PlayerQuitEvent event) {
+            if (maskMonitors.containsKey(event.getPlayer().getUniqueId())) {
+                HPPlayer player = HPPlayer.getHPPlayer(event.getPlayer());
+                player.clearAllMasks();
+                maskMonitors.remove(event.getPlayer().getUniqueId());
+            }
+        }
+
+        @Override
+        public void init() {
+            Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class,
+                    this, EventPriority.MONITOR,
+                    new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent", this),
+                    HeadsPlus.getInstance());
         }
     }
 }
