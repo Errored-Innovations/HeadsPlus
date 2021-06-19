@@ -231,6 +231,10 @@ public class HPPlayer {
         return Bukkit.getOfflinePlayer(player);
     }
 
+    public UUID getUuid() {
+        return player;
+    }
+
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
         UUID uuid = p.getUniqueId();
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
