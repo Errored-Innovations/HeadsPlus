@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
@@ -190,8 +191,8 @@ public class DebugFileCreator {
 
         }
 
-        o2.put("Can be sold", hp.getAPI().isSellable(s));
-        o2.put("Skull Type", hp.getAPI().getSkullType(s));
+        o2.put("Can be sold", PersistenceManager.get().isSellable(s));
+        o2.put("Skull Type", PersistenceManager.get().getSellType(s));
         o1.put("Head details", o2);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
         array1.add(o1);
