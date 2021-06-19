@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.HPExpansion;
 import io.github.thatsmusic99.headsplus.api.Level;
+import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
@@ -274,18 +275,25 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new HPPlayerJoinEvent());
         listeners.add(new HPBlockPlaceEvent());
         listeners.add(new PlayerPickBlockEvent());
-        listeners.add(new LeaderboardEvents());
         listeners.add(new HPPlayerMessageDeathEvent());
-        getServer().getPluginManager().registerEvents(new SoundEvent(), this);
+        listeners.add(new SoundEvent<SellHeadEvent>("on-sell-head"));
+        listeners.add(new SoundEvent<HeadPurchaseEvent>("on-buy-head"));
+        listeners.add(new SoundEvent<SectionChangeEvent>("on-change-section"));
+        listeners.add(new SoundEvent<EntityHeadDropEvent>("on-entity-head-drop"));
+        listeners.add(new SoundEvent<PlayerHeadDropEvent>("on-player-head-drop", "getDeadPlayer"));
+        listeners.add(new SoundEvent<LevelUpEvent>("on-level-up"));
+        listeners.add(new SoundEvent<HeadCraftEvent>("on-craft-head"));
         initiateEvents();
     }
 
     public void initiateEvents() {
         HandlerList.unregisterAll(this);
+        new LeaderboardEvents();
         for (HeadsPlusListener<?> listener : listeners) {
             if (!listener.shouldEnable()) continue;
             listener.init();
         }
+
     }
 
     private void registerCommands() {

@@ -18,17 +18,6 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 	public static boolean reloaded = false;
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
-    public HPPlayerJoinEvent() {
-        super();
-        Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
-                this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.getInstance());
-        addPossibleData("player", "<Player>");
-        addPossibleData("has-update-permission", "true", "false");
-        addPossibleData("update-enabled", "true", "false");
-        addPossibleData("has-update", "true", "false");
-    }
-
 	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.getInstance();
 	    Player player = e.getPlayer();
@@ -68,4 +57,15 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         }
 
 	}
+
+    @Override
+    public void init() {
+        Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
+                this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.getInstance());
+        addPossibleData("player", "<Player>");
+        addPossibleData("has-update-permission", "true", "false");
+        addPossibleData("update-enabled", "true", "false");
+        addPossibleData("has-update", "true", "false");
+    }
 }

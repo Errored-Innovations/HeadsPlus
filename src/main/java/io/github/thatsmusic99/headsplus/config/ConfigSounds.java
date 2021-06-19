@@ -42,7 +42,5 @@ public class ConfigSounds extends CMFile {
             this.name = name;
             this.enabled = enabled;
         }
-
-
     }
 }
