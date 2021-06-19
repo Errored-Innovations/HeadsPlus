@@ -54,6 +54,7 @@ public class MainConfig extends CMFile {
         addDefault("levels", true);
         addDefault("masks", true);
         addDefault("interactions", true);
+        addDefault("block-pickup", true);
 
         addSection("MySQL");
         addDefault("enable-mysql", false);
@@ -355,7 +356,8 @@ public class MainConfig extends CMFile {
                 LEADERBOARDS = getBoolean("leaderboards"),
                 LEVELS = getBoolean("levels"),
                 MASKS = getBoolean("masks"),
-                INTERACTIONS = getBoolean("interactions");
+                INTERACTIONS = getBoolean("interactions"),
+                BLOCK_PICKUP = getBoolean("block-pickup");
     }
 
     public class MySQL {

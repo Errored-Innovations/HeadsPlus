@@ -40,7 +40,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         if (!HPUtils.runBlacklistTests(event.getEntity())) return;
         //
         if (addData("spawn-cause", HPEntitySpawnEvent.getReason(event.getEntity().getUniqueId())) != null) {
-            if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(getData("spawn-cause"))) {
+            if (MainConfig.get().getMobDrops().BLOCKED_SPAWN_CAUSES.contains(getData("spawn-cause"))) {
                 return;
             }
         }
