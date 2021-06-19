@@ -2,15 +2,12 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigInteractions;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -25,7 +22,7 @@ public class HPHeadInteractListener extends HeadsPlusListener<PlayerInteractEven
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance(), true);
 
         int length = Action.values().length;
         String[] actions = new String[length];

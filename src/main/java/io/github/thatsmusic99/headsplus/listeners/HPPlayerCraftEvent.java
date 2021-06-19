@@ -42,14 +42,14 @@ public class HPPlayerCraftEvent extends HeadsPlusListener<InventoryClickEvent> {
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         if (type == null || type.isEmpty()) return;
         if (!player.hasPermission("headsplus.craft")) {
-            e.getWhoClicked().sendMessage(ChatColor.RED + "You can not craft heads!");
+            e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
             e.setCancelled(true);
             return;
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
             if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
-                e.getWhoClicked().sendMessage(ChatColor.RED + "You can not craft heads!");
+                e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
                 e.setCancelled(true);
                 return;
             }
