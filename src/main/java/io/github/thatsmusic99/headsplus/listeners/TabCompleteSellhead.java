@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TabCompleteSellhead implements TabCompleter {
@@ -22,7 +21,6 @@ public class TabCompleteSellhead implements TabCompleter {
             c.add("all");
             List<String> f = new ArrayList<>();
             StringUtil.copyPartialMatches(args[0], c, f);
-            Collections.sort(f);
             return f;
         }
         List<String> p = new ArrayList<>();
