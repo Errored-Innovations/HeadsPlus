@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -15,8 +16,16 @@ public class HPEntitySpawnEvent extends HeadsPlusListener<CreatureSpawnEvent> {
 
     private static final WeakHashMap<UUID, CreatureSpawnEvent.SpawnReason> spawnTracker = new WeakHashMap<>();
 
-    public HPEntitySpawnEvent() {
-        super();
+    @Override
+    public void onEvent(CreatureSpawnEvent event) {
+        addData("entity-type", event.getEntity().getType());
+        addData("entity-uuid", event.getEntity().getUniqueId().toString());
+        addData("spawn-reason", event.getSpawnReason().name());
+        spawnTracker.put(event.getEntity().getUniqueId(), event.getSpawnReason());
+    }
+
+    @Override
+    public void init() {
         Bukkit.getPluginManager().registerEvent(CreatureSpawnEvent.class,
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(CreatureSpawnEvent.class, "CreatureSpawnEvent", this), HeadsPlus.getInstance(), true);
@@ -35,11 +44,8 @@ public class HPEntitySpawnEvent extends HeadsPlusListener<CreatureSpawnEvent> {
     }
 
     @Override
-    public void onEvent(CreatureSpawnEvent event) {
-        addData("entity-type", event.getEntity().getType());
-        addData("entity-uuid", event.getEntity().getUniqueId().toString());
-        addData("spawn-reason", event.getSpawnReason().name());
-        spawnTracker.put(event.getEntity().getUniqueId(), event.getSpawnReason());
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
 
     public static CreatureSpawnEvent.SpawnReason getReason(UUID uuid) {

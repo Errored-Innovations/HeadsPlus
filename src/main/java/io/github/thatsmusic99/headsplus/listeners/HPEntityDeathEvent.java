@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -24,10 +25,49 @@ import java.util.Random;
 
 public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
 
-    private final ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+    @Override
+    public void onEvent(EntityDeathEvent event) {
+        addData("entity-type", event.getEntityType().name());
+        addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
+        // Make sure the entity is valid
+        if (!EntityDataManager.ableEntities.contains(event.getEntityType().name())) return;
+        // Make sure the entity isn't from MythicMobs
+        if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
+        // And make sure there is no WG region saying no
+        // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
+        if (!addData("not-wg-restricted", !hp.canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
+        // TODO New blacklist checks go here
+        if (!HPUtils.runBlacklistTests(event.getEntity())) return;
+        //
+        if (addData("spawn-cause", HPEntitySpawnEvent.getReason(event.getEntity().getUniqueId())) != null) {
+            if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(getData("spawn-cause"))) {
+                return;
+            }
+        }
+        String entity;
+        switch (event.getEntityType().name()) {
+            case "WANDERING_TRADER":
+            case "TRADER_LLAMA":
+                entity = event.getEntityType().name().toLowerCase();
+                break;
+            default:
+                entity = event.getEntityType().name().toLowerCase().replaceAll("_", "");
+        }
+        double fixedChance = addData("fixed-chance", hpch.getChance(entity));
+        if (fixedChance == 0) return;
+        double randomChance = addData("random-chance", new Random().nextDouble() * 100);
+        if (event.getEntity().getKiller() != null) {
+            fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
+        }
+        if (randomChance <= fixedChance) {
+            String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
+            int amount = addData("amount", HPUtils.getAmount(fixedChance));
+            HPUtils.dropHead(event.getEntityType().name(), meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
+        }
+    }
 
-    public HPEntityDeathEvent() {
-        super();
+    @Override
+    public void init() {
         Bukkit.getPluginManager().registerEvent(EntityDeathEvent.class,
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(EntityDeathEvent.class, "EntityDeathEvent", this), HeadsPlus.getInstance(), true);
@@ -84,49 +124,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
     }
 
     @Override
-    public void onEvent(EntityDeathEvent event) {
-
-        addData("entity-type", event.getEntityType().name());
-        addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
-        // Make sure head drops are enabled
-        if (!addData("enabled", hp.isDropsEnabled())) return;
-        // Make sure the entity is valid
-        if (!EntityDataManager.ableEntities.contains(event.getEntityType().name())) return;
-        // Make sure the entity isn't from MythicMobs
-        if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
-        // And make sure there is no WG region saying no
-        // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
-        if (!addData("not-wg-restricted", !hp.canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
-        // TODO New blacklist checks go here
-        if (!HPUtils.runBlacklistTests(event.getEntity())) return;
-        //
-        if (addData("spawn-cause", HPEntitySpawnEvent.getReason(event.getEntity().getUniqueId())) != null) {
-            if (hp.getConfiguration().getMechanics().getStringList("blocked-spawn-causes").contains(getData("spawn-cause"))) {
-                return;
-            }
-        }
-        String entity;
-        switch (event.getEntityType().name()) {
-            case "WANDERING_TRADER":
-            case "TRADER_LLAMA":
-                entity = event.getEntityType().name().toLowerCase();
-                break;
-            default:
-                entity = event.getEntityType().name().toLowerCase().replaceAll("_", "");
-        }
-        double fixedChance = addData("fixed-chance", hpch.getChance(entity));
-        if (fixedChance == 0) return;
-        double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (event.getEntity().getKiller() != null) {
-            fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
-        }
-        if (randomChance <= fixedChance) {
-            String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
-            int amount = addData("amount", HPUtils.getAmount(fixedChance));
-            HPUtils.dropHead(event.getEntityType().name(), meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
-        }
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
-
-
-
 }
