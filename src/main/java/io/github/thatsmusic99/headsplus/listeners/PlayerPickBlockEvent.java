@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import com.mojang.authlib.GameProfile;
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -10,10 +9,8 @@ import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
