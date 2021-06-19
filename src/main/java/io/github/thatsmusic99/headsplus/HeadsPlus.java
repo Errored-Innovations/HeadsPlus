@@ -269,6 +269,7 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new HPEntitySpawnEvent());
         listeners.add(new HPBlockPlaceEvent());
         listeners.add(new HPPlayerDeathEvent());
+        listeners.add(new HPItemCheckListener());
         listeners.add(new HPMaskEvents());
         listeners.add(new HPPlayerCraftEvent());
         listeners.add(new HPPlayerJoinEvent());
