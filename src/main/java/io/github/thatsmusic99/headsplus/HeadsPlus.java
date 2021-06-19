@@ -290,7 +290,7 @@ public class HeadsPlus extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("headsplus").setExecutor(new HeadsPlusCommand());
-        getCommand("hp").setTabCompleter(new TabComplete());
+        getCommand("hp").setTabCompleter(new HeadsPlusCommand());
         getCommand("head").setExecutor(new Head());
         getCommand("head").setTabCompleter(new Head());
         getCommand("myhead").setExecutor(new MyHead());
