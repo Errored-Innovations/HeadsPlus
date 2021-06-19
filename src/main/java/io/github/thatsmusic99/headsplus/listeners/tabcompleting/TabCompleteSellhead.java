@@ -1,4 +1,4 @@
-package io.github.thatsmusic99.headsplus.listeners;
+package io.github.thatsmusic99.headsplus.listeners.tabcompleting;
 
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import org.bukkit.Bukkit;
