@@ -74,10 +74,9 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
         Player player = (Player) e.getWhoClicked();
         for (int i = 0; i < 46; i++) {
             ItemStack item = player.getInventory().getItem(i);
-            if (item != null) {
-                if (PersistenceManager.get().isIcon(item)) {
-                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
-                }
+            if (item == null) return;
+            if (PersistenceManager.get().isIcon(item)) {
+                player.getInventory().setItem(i, new ItemStack(Material.AIR));
             }
         }
 

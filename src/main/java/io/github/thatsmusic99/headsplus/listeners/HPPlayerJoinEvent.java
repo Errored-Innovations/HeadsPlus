@@ -9,9 +9,9 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 	
@@ -31,44 +31,40 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 
 	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.getInstance();
-	    addData("player", e.getPlayer().getName());
-		if (addData("has-update-permission", e.getPlayer().hasPermission("headsplus.notify"))) {
+	    Player player = e.getPlayer();
+	    addData("player", player.getName());
+		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
 		    if (addData("update-enabled", hp.getConfiguration().getMechanics().getBoolean("update.notify"))) {
                 if (addData("has-update", HeadsPlus.getUpdate() != null)) {
-                    new FancyMessage().text(hpc.getString("update.update-found", e.getPlayer()))
-                    .tooltip(hpc.getString("update.current-version", e.getPlayer()).replaceAll("\\{version}", hp.getDescription().getVersion())
-							+ "\n" + hpc.getString("update.new-version", e.getPlayer()).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
-							+ "\n" + hpc.getString("update.description", e.getPlayer()).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(e.getPlayer());
+                    new FancyMessage().text(hpc.getString("update.update-found", player))
+                    .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
+							+ "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
+							+ "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
                 }
             }
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                HPMaskEvents.checkMask(e.getPlayer(), e.getPlayer().getInventory().getHelmet());
-            }
-        }.runTaskLater(hp, 20);
+		Bukkit.getScheduler().runTaskLater(HeadsPlus.getInstance(), () -> {
+		    if (!player.isOnline())
+		        return;
+            HPMaskEvents.checkMask(player, player.getInventory().getHelmet());
+        }, 20);
 
         if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                String uuid = AutograbManager.grabUUID(e.getPlayer().getName(), 3, null);
+                String uuid = AutograbManager.grabUUID(player.getName(), 3, null);
+                //TODO sync post request?
                 AutograbManager.grabProfile(uuid);
             } else {
-                AutograbManager.grabTexture(e.getPlayer(), false, null);
+                // here too?
+                AutograbManager.grabTexture(player, false, null);
             }
         }
 
-        HPPlayer.getHPPlayer(e.getPlayer());
+        HPPlayer.getHPPlayer(player);
         if (!reloaded) {
             reloaded = true;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    new RecipeEnumUser();
-                }
-            }.runTaskAsynchronously(hp);
-
+            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), RecipeEnumUser::new);
         }
 
 	}
