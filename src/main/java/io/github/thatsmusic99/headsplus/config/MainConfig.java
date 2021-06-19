@@ -24,6 +24,7 @@ public class MainConfig extends CMFile {
     private MySQL mySQL;
     private MobDrops mobDrops;
     private SellingHeads sellingHeads;
+    private Masks masks;
     private Updates updates;
 
     private static MainConfig instance;
@@ -274,6 +275,7 @@ public class MainConfig extends CMFile {
         mySQL = new MySQL();
         mobDrops = new MobDrops();
         sellingHeads = new SellingHeads();
+        masks = new Masks();
         updates = new Updates();
     }
 
@@ -319,6 +321,10 @@ public class MainConfig extends CMFile {
 
     public MobDrops getMobDrops() {
         return mobDrops;
+    }
+
+    public Masks getMasks() {
+        return masks;
     }
 
     public String fixBalanceStr(double balance) {
@@ -372,11 +378,18 @@ public class MainConfig extends CMFile {
                 CASE_INSENSITIVE = getBoolean("case-sensitive-names");
     }
 
+    public class Masks {
+        public int CHECK_INTERVAL = getInteger("check-interval"),
+                RESET_INTERVAL = getInteger("reset-after-x-intervals"),
+                EFFECT_LENGTH = getInteger("effect-length");
+    }
+
     public class Updates {
         public boolean CHECK_FOR_UPDATES = getBoolean("check-for-updates"),
                 NOTIFY_ADMINS = getBoolean("notify-admins-about-updates");
 
     }
+
 
     public static class Perks {
 
