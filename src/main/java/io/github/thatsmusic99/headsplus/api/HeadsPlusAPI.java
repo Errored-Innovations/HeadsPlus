@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.api;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
@@ -31,7 +30,7 @@ public class HeadsPlusAPI {
 
     public boolean isSellable(ItemStack is) {
         if (is.getType() == Material.PLAYER_HEAD) {
-            return NBTManager.isSellable(is);
+            return PersistenceManager.get().isSellable(is);
         }
         return false;
     }
@@ -60,7 +59,7 @@ public class HeadsPlusAPI {
     }
 
     public String getSkullType(ItemStack is) {
-        return NBTManager.getType(is);
+        return PersistenceManager.get().getSellType(is);
     }
 
     public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) {

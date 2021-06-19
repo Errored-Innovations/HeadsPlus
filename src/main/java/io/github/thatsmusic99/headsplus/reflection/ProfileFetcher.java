@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +38,16 @@ public class ProfileFetcher {
         }
         profile.setAccessible(true);
         return (GameProfile) profile.get(meta);
+    }
+
+    public static GameProfile getProfile(OfflinePlayer player) {
+        try {
+            Method method = player.getClass().getMethod("getProfile");
+            return (GameProfile) method.invoke(player);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static SkullMeta setProfile(SkullMeta meta, String name) {

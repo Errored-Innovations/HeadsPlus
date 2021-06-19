@@ -67,7 +67,7 @@
     <dependencies>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
+            <artifactId>paper</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
@@ -94,34 +94,6 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.10.6</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.15.2</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.16.1</artifactId>
-            <version>1.16.1-R0.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.16.4</artifactId>
-            <version>1.16.4-R0.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.16.2</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}${file.separator}libs${file.separator}craftbukkit-1.16.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>io.papermc</groupId>

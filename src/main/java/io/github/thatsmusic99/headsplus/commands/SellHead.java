@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -130,7 +129,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                 } else if (!isRegistered(id)){
                     continue;
                 }
-                double headPrice = NBTManager.getPrice(item);
+                double headPrice = PersistenceManager.get().getSellPrice(item);
                 if (limit <= item.getAmount() && limit != -1) {
                     data.addSlot(slot, limit);
                     data.addID(id, limit);

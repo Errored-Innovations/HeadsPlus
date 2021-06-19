@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

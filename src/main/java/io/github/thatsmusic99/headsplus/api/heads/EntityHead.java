@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.api.heads;
 
 import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
 import org.bukkit.Material;
 
 public class EntityHead extends Head {

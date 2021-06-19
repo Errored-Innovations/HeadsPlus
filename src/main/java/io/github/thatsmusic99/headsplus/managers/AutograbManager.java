@@ -4,7 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -184,7 +184,7 @@ public class AutograbManager {
             public void run() {
                 final String[] playerInfo = new String[1];
                 try {
-                    playerInfo[0] = NBTManager.getProfile(player).getProperties().get("textures").iterator().next().getValue();
+                    playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
                     addTexture(playerInfo[0], force, sender, player);
                 } catch (NoSuchElementException exception) {
 

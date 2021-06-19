@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -19,6 +18,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -107,51 +107,48 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
         ConfigurationSection maskSettings = hp.getConfiguration().getMechanics().getConfigurationSection("masks");
         int period = maskSettings.getInt("check-interval");
         int reset = maskSettings.getInt("reset-after-x-intervals");
-        NMSManager nms = hp.getNMS();
-        if (item != null) {
-            if (nms.isSkull(item)) {
-                String s = PersistenceManager.get().getSellType(item);
-                if (SellHead.isRegistered(s)) {
-                    HPPlayer pl = HPPlayer.getHPPlayer(player);
-                    UUID uuid = player.getUniqueId();
-                    if (maskMonitors.containsKey(uuid)) {
-                        pl.clearMask();
-                        maskMonitors.get(uuid).cancel();
-                        maskMonitors.remove(uuid);
-                    }
-                    pl.addMask(s);
-                    final String type = s;
-                    boolean hasWG = Bukkit.getPluginManager().isPluginEnabled("WorldGuard");
-                    maskMonitors.put(uuid, new BukkitRunnable() {
-
-                        private int currentInterval = 0;
-                        private boolean tempDisable = false;
-
-                        @Override
-                        public void run() {
-                            ItemStack helmet = player.getInventory().getHelmet();
-                            currentInterval++;
-                            if (helmet == null
-                                    || helmet.getType() == Material.AIR
-                                    || !PersistenceManager.get().getSellType(helmet).equals(type)
-                                    || !player.isOnline()) {
-                                pl.clearMask();
-                                maskMonitors.remove(uuid);
-                                cancel();
-                            } else if (!maskMonitors.containsKey(uuid)) {
-                                pl.clearMask();
-                                cancel();
-                            } else if (hasWG && !FlagHandler.canUseMasks(player)) {
-                                pl.tempClearMasks();
-                                tempDisable = true;
-                            } else if (currentInterval == reset || tempDisable) {
-                                pl.refreshMasks();
-                                currentInterval = 0;
-                            }
-                        }
-                    });
-                    maskMonitors.get(uuid).runTaskTimer(hp, period, period);
+        if (item != null && item.getItemMeta() instanceof SkullMeta) {
+            String s = PersistenceManager.get().getSellType(item);
+            if (SellHead.isRegistered(s)) {
+                HPPlayer pl = HPPlayer.getHPPlayer(player);
+                UUID uuid = player.getUniqueId();
+                if (maskMonitors.containsKey(uuid)) {
+                    pl.clearMask();
+                    maskMonitors.get(uuid).cancel();
+                    maskMonitors.remove(uuid);
                 }
+                pl.addMask(s);
+                final String type = s;
+                boolean hasWG = Bukkit.getPluginManager().isPluginEnabled("WorldGuard");
+                maskMonitors.put(uuid, new BukkitRunnable() {
+
+                    private int currentInterval = 0;
+                    private boolean tempDisable = false;
+
+                    @Override
+                    public void run() {
+                        ItemStack helmet = player.getInventory().getHelmet();
+                        currentInterval++;
+                        if (helmet == null
+                                || helmet.getType() == Material.AIR
+                                || !PersistenceManager.get().getSellType(helmet).equals(type)
+                                || !player.isOnline()) {
+                            pl.clearMask();
+                            maskMonitors.remove(uuid);
+                            cancel();
+                        } else if (!maskMonitors.containsKey(uuid)) {
+                            pl.clearMask();
+                            cancel();
+                        } else if (hasWG && !FlagHandler.canUseMasks(player)) {
+                            pl.tempClearMasks();
+                            tempDisable = true;
+                        } else if (currentInterval == reset || tempDisable) {
+                            pl.refreshMasks();
+                            currentInterval = 0;
+                        }
+                    }
+                });
+                maskMonitors.get(uuid).runTaskTimer(hp, period, period);
             }
         }
     }

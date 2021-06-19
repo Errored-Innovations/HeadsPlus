@@ -14,8 +14,6 @@ import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabComplete;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
@@ -23,7 +21,6 @@ import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
-import io.github.thatsmusic99.headsplus.util.events.IncorrectVersionException;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -69,8 +66,6 @@ public class HeadsPlus extends JavaPlugin {
     // Other management stuff
     private final List<Challenge> challenges = new ArrayList<>();
     private final List<ChallengeSection> challengeSections = new ArrayList<>();
-    private NMSManager nms;
-    private NMSIndex nmsversion;
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
     private List<CMFile> configFiles = new ArrayList<>();
@@ -568,10 +563,6 @@ public class HeadsPlus extends JavaPlugin {
         return challengeSections;
     }
 
-    public NMSManager getNMS() {
-        return nms;
-    }
-
     public ConfigMobs getHeadsConfig() {
         return hpch;
     }
@@ -610,10 +601,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public ConfigSounds getSounds() {
         return sounds;
-    }
-
-    public NMSIndex getNMSVersion() {
-        return nmsversion;
     }
 
     public Challenge getChallengeByName(String name) {

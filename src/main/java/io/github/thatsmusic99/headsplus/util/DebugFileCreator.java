@@ -280,11 +280,6 @@ public class DebugFileCreator {
         JSONObject o2 = new JSONObject();
         o2.put("material", item.getType());
         o2.put("amount", item.getAmount());
-        JSONObject o3 = new JSONObject();
-        for (String key : hp.getNMS().getNBTTags(item).keySet()) {
-            o3.put(key, hp.getNMS().getNBTTags(item).get(key));
-        }
-        o2.put("NBT Tags", o3);
         o1.put("Item details", o2);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
         array1.add(o1);
@@ -323,7 +318,6 @@ public class DebugFileCreator {
         o1.put("Special message", getErrorHeader());
         try {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
             o1.put("Has Vault hooked", hp.econ());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));

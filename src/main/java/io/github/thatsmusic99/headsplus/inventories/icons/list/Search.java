@@ -2,15 +2,11 @@ package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import io.github.thatsmusic99.headsplus.util.AnvilSlot;
 import io.github.thatsmusic99.headsplus.util.prompts.ChatPrompt;
-import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 

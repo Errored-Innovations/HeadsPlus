@@ -7,8 +7,7 @@ import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
@@ -215,8 +214,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     int slot = player.getInventory().getHeldItemSlot();
                                     // lmao who needs getItemInMainHand
                                     ItemStack item = player.getInventory().getItem(slot);
-                                    item = NBTManager.makeSellable(item);
-                                    item = NBTManager.setType(item, args[2]);
+                                    PersistenceManager.get().setSellable(item, true);
+                                    PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
                                     double headsPrice = hp.getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
                                     if (headsPrice != 0.0) {
@@ -224,7 +223,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     } else {
                                         price = hp.getCraftingConfig().getPrice(args[2]);
                                     }
-                                    item = NBTManager.setPrice(item, price);
+                                    PersistenceManager.get().setSellPrice(item, price);
                                     player.getInventory().setItem(slot, item);
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
