@@ -283,30 +283,37 @@ public class MainConfig extends CMFile {
         return instance;
     }
 
+    @Deprecated
     public ConfigurationSection getMechanics() {
         return getConfig().getConfigurationSection("plugin.mechanics");
     }
 
+    @Deprecated
     public Perks getPerks() {
         return perks;
     }
 
+    @Deprecated
     public SelectorList getWorldBlacklist() {
         return blacklist_worlds;
     }
 
+    @Deprecated
     public SelectorList getWorldWhitelist() {
         return whitelist_worlds;
     }
 
+    @Deprecated
     public SelectorList getHeadsBlacklist() {
         return blacklist_heads;
     }
 
+    @Deprecated
     public SelectorList getHeadsWhitelist() {
         return whitelist_heads;
     }
 
+    @Deprecated
     public ConfigurationSection getMySQL() {
         return getConfig().getConfigurationSection("mysql");
     }
