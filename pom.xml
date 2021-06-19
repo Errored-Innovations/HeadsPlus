@@ -153,5 +153,9 @@
             <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>pluginwiki-repo</id>
+            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 </project>
