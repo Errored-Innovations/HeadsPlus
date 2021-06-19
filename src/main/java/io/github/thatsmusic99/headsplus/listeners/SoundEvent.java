@@ -3,75 +3,58 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.config.ConfigSounds;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class SoundEvent implements Listener {
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-    private final ConfigSounds sounds = HeadsPlus.getInstance().getSounds();
+public class SoundEvent<T> extends HeadsPlusListener<T> {
 
-    @EventHandler
-    public void onHeadSell(SellHeadEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-sell-head.enabled")) {
-            playSound(event.getPlayer(), "on-sell-head");
-        }
+    private String section;
+    private String playerAccessor;
+
+    public SoundEvent(String section) {
+        this.section = section;
+        this.playerAccessor = "getPlayer";
     }
 
-    @EventHandler
-    public void onHeadBuy(HeadPurchaseEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-buy-head.enabled")) {
-            playSound(event.getPlayer(), "on-buy-head");
-        }
+    public SoundEvent(String section, String playerAccessor) {
+        this.section = section;
+        this.playerAccessor = playerAccessor;
     }
 
-    @EventHandler
-    public void onSectionChange(SectionChangeEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-change-section.enabled")) {
-            playSound(event.getPlayer(), "on-change-section");
-        }
-    }
-
-    @EventHandler
-    public void onEntityHeadDrop(EntityHeadDropEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-entity-head-drop.enabled")) {
-            if (event.getPlayer() != null) {
-                playSound(event.getPlayer(), "on-entity-head-drop");
+    @Override
+    public void onEvent(T event) {
+        if (ConfigSounds.get().getBoolean("sounds." + section + ".enabled")) {
+            try {
+                Sound s = Sound.valueOf(ConfigSounds.get().getString("sounds." + section + ".sound"));
+                float vol = (float) ConfigSounds.get().getDouble("sounds." + section + ".volume");
+                float pitch = (float) ConfigSounds.get().getDouble("sounds." +section + ".pitch");
+                Player player = getPlayer(event);
+                if (player == null) return;
+                player.playSound(player.getLocation(), s, vol, pitch);
+            } catch (IllegalArgumentException ex) {
+                HeadsPlus.getInstance().getLogger().warning("Could not find sound " + ConfigSounds.get().getString("sounds." + section + ".sound") + "! (Error code: 7)");
             }
         }
     }
 
-    @EventHandler
-    public void onPlayerHeadDrop(PlayerHeadDropEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-player-head-drop.enabled")) {
-            playSound(event.getDeadPlayer(), "on-player-head-drop");
-        }
-    }
-
-    @EventHandler
-    public void onLevelUp(LevelUpEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-level-up.enabled")) {
-            playSound(event.getPlayer(), "on-level-up");
-        }
-    }
-
-    @EventHandler
-    public void onHeadCraft(HeadCraftEvent event) {
-        if (sounds.getConfig().getBoolean("sounds.on-craft-head.enabled")) {
-            playSound(event.getPlayer(), "on-craft-head");
-        }
-    }
-
-    private void playSound(Player player, String st) {
+    private Player getPlayer(T event) {
         try {
-            Sound s = Sound.valueOf(sounds.getConfig().getString("sounds." + st + ".sound"));
-            float vol = (float) sounds.getConfig().getDouble("sounds." + st + ".volume");
-            float pitch = (float) sounds.getConfig().getDouble("sounds." + st + ".pitch");
-            player.playSound(player.getLocation(), s, vol, pitch);
-        } catch (IllegalArgumentException ex) {
-            HeadsPlus.getInstance().getLogger().warning("Could not find sound " + sounds.getConfig().getString("sounds." + st + ".sound") + "! (Error code: 7)");
+            Method playerMethod = event.getClass().getDeclaredMethod(playerAccessor);
+            return (Player) playerMethod.invoke(event);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public void init() {
 
     }
 }
