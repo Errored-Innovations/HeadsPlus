@@ -22,7 +22,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,9 +63,6 @@ public class HPUtils {
                     }
                 } catch (NoClassDefFoundError | IllegalArgumentException | NullPointerException ignored) {
 
-                }
-
-            }
         }
     }
 
@@ -95,8 +91,8 @@ public class HPUtils {
         ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
-        if (killer.getInventory().getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-            ItemStack item = killer.getInventory().getItemInHand();
+        if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+            ItemStack item = killer.getInventory().getItemInMainHand();
             level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
         }
         if (level == 0) return chance;
@@ -161,6 +157,7 @@ public class HPUtils {
 
     public static boolean isMythicMob(Entity entity) {
         HeadsPlus hp = HeadsPlus.getInstance();
+
         try {
             if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
                 Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");
