@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Arrays;
 
+@Deprecated
 public class Pinned implements JSONFile {
 
     private JSONObject json = new JSONObject();

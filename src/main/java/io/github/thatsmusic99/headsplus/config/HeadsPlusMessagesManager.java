@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Deprecated // Locale system is being redone
 public class HeadsPlusMessagesManager {
 
     private static YamlConfiguration config;

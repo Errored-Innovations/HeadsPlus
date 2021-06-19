@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+@Deprecated // Going to be reformatted for SQL
 public class DataManager {
 
     private static final HeadsPlus hp = HeadsPlus.getInstance();

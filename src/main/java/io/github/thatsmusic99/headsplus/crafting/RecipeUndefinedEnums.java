@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.crafting;
 
+@Deprecated
 public enum RecipeUndefinedEnums {
 	
 	BAT("bat"),

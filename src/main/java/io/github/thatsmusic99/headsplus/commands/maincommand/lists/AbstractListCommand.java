@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
 import java.util.List;
 
+@Deprecated // Being replaced by restrictions
 public abstract class AbstractListCommand implements IHeadsPlusCommand {
 
     protected final HeadsPlus hp;
@@ -15,7 +16,7 @@ public abstract class AbstractListCommand implements IHeadsPlusCommand {
 
     public AbstractListCommand(HeadsPlus hp) {
         this.hp = hp;
-        this.config = hp.getConfiguration();
+        this.config = MainConfig.get();
         this.hpc = HeadsPlusMessagesManager.get();
     }
 

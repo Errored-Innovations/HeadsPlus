@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class PlayerScores implements JSONFile {
 
     private JSONObject json = new JSONObject();

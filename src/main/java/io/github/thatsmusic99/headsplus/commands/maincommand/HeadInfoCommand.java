@@ -25,6 +25,7 @@ import java.util.List;
         maincommand = true,
         usage = "/hp headinfo <view> <Entity Type> [Name|Mask|Lore] [Page]"
 )
+@Deprecated // Being replaced by /hp config mobs
 public class HeadInfoCommand implements IHeadsPlusCommand {
 
     // A

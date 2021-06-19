@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public abstract class AbstractListAdd extends AbstractListCommand {
 
     public AbstractListAdd(HeadsPlus hp) {

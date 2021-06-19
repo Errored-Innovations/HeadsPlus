@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 
+@Deprecated // should probably replace regardless lmao
 class UpdateChecker {
 
     private final static String versionURL = "https://api.spiget.org/v2/resources/40265/versions?size=1000";

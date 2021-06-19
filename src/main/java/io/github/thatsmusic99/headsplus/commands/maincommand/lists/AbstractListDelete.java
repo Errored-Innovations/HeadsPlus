@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public abstract class AbstractListDelete extends AbstractListCommand {
 
     public AbstractListDelete(HeadsPlus hp) {

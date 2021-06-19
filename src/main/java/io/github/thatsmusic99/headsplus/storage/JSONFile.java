@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 
+@Deprecated
 public interface JSONFile {
 
     String getName();

@@ -35,6 +35,7 @@ import java.util.logging.Logger;
         maincommand = true,
         usage = "/hp debug <dump|head|player|clearim|item|delete|save|transfer> <Player IGN>|<Database>"
 )
+@Deprecated // Also needs a cleanup
 public class DebugPrint implements IHeadsPlusCommand {
 
     private static HeadsPlus hp;

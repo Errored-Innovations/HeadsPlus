@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Arrays;
 
+@Deprecated
 public class Favourites implements JSONFile {
 
     private JSONObject json = new JSONObject();
