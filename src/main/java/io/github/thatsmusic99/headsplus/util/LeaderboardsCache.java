@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.util;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -12,12 +13,11 @@ public class LeaderboardsCache {
 
     private static final HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
     private static final HeadsPlus hp = HeadsPlus.get();
-    private static final boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
 
     public static void init(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
-        if (enabled) {
+        if (MainConfig.get().getLeaderboards().CACHE_LEADERBOARDS) {
             cache.put(type, contents);
-            Bukkit.getScheduler().runTaskLater(hp, () -> cache.remove(type), hp.getConfiguration().getMechanics().getInt("leaderboards.cache-lifetime-seconds") * 20);
+            Bukkit.getScheduler().runTaskLater(hp, () -> cache.remove(type), MainConfig.get().getLeaderboards().CACHE_DURATION * 20L);
         }
     }
 

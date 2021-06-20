@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 
+@Deprecated
 public class ConfigCustomHeads extends CMFile {
 
     private final double cVersion = 3.4;

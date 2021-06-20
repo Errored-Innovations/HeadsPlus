@@ -2,7 +2,9 @@ package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.IconClickEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Glass;
@@ -53,8 +55,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     public BaseInventory(Player player, HashMap<String, String> context) {
         // Decide whether warnings need to be suppressed
-        suppressWarnings = hp.getConfiguration().getMechanics().getBoolean("suppress-gui-warnings");
-        hpi = hp.getItems().getConfig();
+        suppressWarnings = MainConfig.get().getMiscellaneous().SUPPRESS_GUI_WARNINGS;
+        hpi = ConfigInventories.get().getConfig();
         // Get the default icons
         icons = new Icon[hpi.getInt("inventories." + getId() + ".size")];
         // Get the unique ID of the player, never store the player object

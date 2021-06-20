@@ -1061,7 +1061,7 @@ public class HeadsPlusMessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
-        if (sender instanceof Player && HeadsPlus.get().getConfiguration().getMechanics().getBoolean("use-tellraw")) {
+        if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
             try {
                 new JSONParser().parse(str);
             } catch (ParseException e) {

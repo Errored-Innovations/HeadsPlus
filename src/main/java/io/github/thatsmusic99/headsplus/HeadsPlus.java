@@ -72,6 +72,7 @@ public class HeadsPlus extends JavaPlugin {
     private PlayerScores scores;
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
+    private boolean vaultEnabled = false;
 
     public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), task);
     public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.get(), task);
@@ -96,7 +97,8 @@ public class HeadsPlus extends JavaPlugin {
             instance = this;
             // Set up the NMS
             if (!checkVersion()) return;
-
+            // Set up Vault connection
+            vaultEnabled = econ();
             // Create locale files
             createLocales();
 
@@ -252,7 +254,12 @@ public class HeadsPlus extends JavaPlugin {
             }
             Class.forName("com.mysql.jdbc.Driver");
             try {
-                connection = DriverManager.getConnection("jdbc:mysql://" + MainConfig.get().getString("mysql-host") + ":" + MainConfig.get().getInteger("mysql-port") + "/" + MainConfig.get().getString("mysql-database") + "?useSSL=false&autoReconnect=true", MainConfig.get().getString("mysql-username"), MainConfig.get().getString("mysql-password"));
+                connection = DriverManager.getConnection(
+                        "jdbc:mysql://" + MainConfig.get().getMySQL().MYSQL_HOST + ":" +
+                                MainConfig.get().getMySQL().MYSQL_PORT + "/" +
+                                MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
+                        MainConfig.get().getMySQL().MYSQL_USERNAME,
+                        MainConfig.get().getMySQL().MYSQL_PASSWORD);
                 NewMySQLAPI.createTable();
                 con = true;
             } catch (SQLException ex) {
@@ -352,7 +359,7 @@ public class HeadsPlus extends JavaPlugin {
             e.printStackTrace();
         }
 
-        if (MainConfig.get().getBoolean("enable-mysql")) {
+        if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -488,8 +495,8 @@ public class HeadsPlus extends JavaPlugin {
         return con;
     }
 
-    public boolean canSellHeads() {
-        return (econ()) && (MainConfig.get().getMainFeatures().SELL_HEADS);
+    public boolean isVaultEnabled() {
+        return vaultEnabled;
     }
 
     public Connection getConnection() {

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
 import org.apache.commons.lang.WordUtils;
@@ -14,7 +15,6 @@ import java.util.List;
 
 public class Challenge {
 
-    // I
     private final String configName;
     private final String mainName;
     private final String header;
@@ -117,15 +117,14 @@ public class Challenge {
     }
 
     public boolean canComplete(Player p) throws SQLException {
-        HeadsPlusAPI hapi = HeadsPlus.get().getAPI();
         if (getChallengeType() == HeadsPlusChallengeTypes.MISC) {
             return true;
         } else if (getChallengeType() == HeadsPlusChallengeTypes.CRAFTING) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluscraft") >= getRequiredHeadAmount();
+            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluscraft") >= getRequiredHeadAmount();
         } else if (getChallengeType() == HeadsPlusChallengeTypes.LEADERBOARD) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluslb") >= getRequiredHeadAmount();
+            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluslb") >= getRequiredHeadAmount();
         } else {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headsplussh") >= getRequiredHeadAmount();
+            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headsplussh") >= getRequiredHeadAmount();
         }
     }
 
@@ -134,7 +133,6 @@ public class Challenge {
     }
 
     public void complete(Player p) {
-        HeadsPlus hp = HeadsPlus.get();
         HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
@@ -161,7 +159,7 @@ public class Challenge {
 
         player.addXp(getGainedXP());
         reward.reward(p);
-        if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
+        if (MainConfig.get().getChallenges().BROADCAST_CHALLENGE_COMPLETE) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }

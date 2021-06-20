@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,12 +17,11 @@ import java.util.List;
 
 public class ConfigMobs extends CMFile {
 
-	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
-	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
 	private static ConfigMobs instance;
 
 	public ConfigMobs() {
 	    super(HeadsPlus.get(), "mobs");
+	    instance = this;
     }
 
 	public static ConfigMobs get() {
@@ -51,13 +51,12 @@ public class ConfigMobs extends CMFile {
 			ConfigurationSection name = section.getConfigurationSection("name");
 			if (name == null) continue;
 			for (String nameKey : name.getKeys(false)) {
-				if (name.get(nameKey) instanceof List) {
-					for (String actualName : name.getStringList(nameKey)) {
-						if (actualName.startsWith("HP#")) {
-							moveTo(key + ".interact-name", "special.textures." + actualName + ".name", ConfigInteractions.get());
-						} else {
-							moveTo(key + ".interact-name", "special.names." + actualName + ".name", ConfigInteractions.get());
-						}
+				if (!(name.get(nameKey) instanceof List)) continue;
+				for (String actualName : name.getStringList(nameKey)) {
+					if (actualName.startsWith("HP#")) {
+						moveTo(key + ".interact-name", "special.textures." + actualName + ".name", ConfigInteractions.get());
+					} else {
+						moveTo(key + ".interact-name", "special.names." + actualName + ".name", ConfigInteractions.get());
 					}
 				}
 			}
@@ -260,7 +259,7 @@ public class ConfigMobs extends CMFile {
 	}
 
     public String getDisplayName(String path) {
-
+		return getString(path + ".display-name", getString("defaults.display-name"));
 	}
 
     public double getChance(String path) {
@@ -278,21 +277,18 @@ public class ConfigMobs extends CMFile {
 		return lore;
     }
 
-    public List<String> getLore(String name, double price) {
+    public List<String> getLore(String name, double price, String killerName) {
 		List<String> lore = new ArrayList<>();
 		List<String> configLore = getStringList("player.lore", getStringList("defaults.lore"));
 
 		for (String l : configLore) {
-			lore.add(ChatColor.translateAlternateColorCodes('&', l)
-					.replace("{type}", "Player")
-					.replace("{price}", String.valueOf(price))
-					.replace("{player}", name));
+			HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
+					new HPUtils.PlaceholderInfo("{type}", "Player", true),
+					new HPUtils.PlaceholderInfo("{price}", price, true),
+					new HPUtils.PlaceholderInfo("{player}", name, true),
+					new HPUtils.PlaceholderInfo("{killer}", killerName, killerName != null));
 		}
 		return lore;
-	}
-
-	private List<String> initSingleton(String s) {
-		return Lists.newArrayList(s);
 	}
 
 	private void createExampleSection(String path) {

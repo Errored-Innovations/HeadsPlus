@@ -3,6 +3,8 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -23,8 +25,8 @@ public class CustomHead extends Content {
     private String id;
 
     public CustomHead(String id) {
-        super(hp.getHeadsXConfig().getSkull(id));
-        this.price = hp.getHeadsXConfig().getPrice(id);
+        super(ConfigCustomHeads.get().getSkull(id));
+        this.price = ConfigCustomHeads.get().getPrice(id);
         this.id = id;
     }
 
@@ -41,7 +43,7 @@ public class CustomHead extends Content {
             double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
-                    && hp.econ()
+                    && hp.isVaultEnabled()
                     && (ef = hp.getEconomy()) != null
                     && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
                 hpc.sendMessage("commands.heads.not-enough-money", player); // K.O
@@ -53,7 +55,9 @@ public class CustomHead extends Content {
                 if(price > 0.0 && ef != null) {
                     EconomyResponse er = ef.withdrawPlayer(player, price);
                     if(er.transactionSuccess()) {
-                        hpc.sendMessage("commands.heads.buy-success", player, "{price}", hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(ef.getBalance(player)));
+                        hpc.sendMessage("commands.heads.buy-success", player,
+                                "{price}", MainConfig.get().fixBalanceStr(price),
+                                "{balance}", MainConfig.get().fixBalanceStr(ef.getBalance(player)));
                     } else {
                         hpc.sendMessage(hpc.getString("commands.errors.cmd-fail", player) + ": " + er.errorMessage, player, false);
                         return false;

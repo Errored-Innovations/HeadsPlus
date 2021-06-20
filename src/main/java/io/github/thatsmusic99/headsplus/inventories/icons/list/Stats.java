@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,18 +37,19 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.get().getHeadsXConfig();
+        ConfigCustomHeads hpch = ConfigCustomHeads.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
-            lore.add(hpc.formatMsg(loreStr, player)
-                    .replaceAll("\\{heads}", String.valueOf(hpch.allHeadsCache.size()))
-                    .replaceAll("\\{balance}", hp.econ() ? String.valueOf(hp.getEconomy().getBalance(player)) : "None")
-                    .replaceAll("\\{sections}", String.valueOf(hpch.sections.size()))
-                    .replaceAll("\\{section}", manager.getSection() == null ? "None" : manager.getSection())
-                    .replaceAll("\\{pages}", String.valueOf(totalPages)));
+            HPUtils.parseLorePlaceholders(lore, hpc.formatMsg(loreStr, player),
+                    new HPUtils.PlaceholderInfo("{head}", hpch.allHeadsCache.size(), true),
+                    new HPUtils.PlaceholderInfo("{balance}", hp.getEconomy().getBalance(player), hp.isVaultEnabled()),
+                    new HPUtils.PlaceholderInfo("{sections}",  hpch.sections.size(), true),
+                    new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
+                    new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
+
         }
         meta.setLore(lore);
         item.setItemMeta(meta);

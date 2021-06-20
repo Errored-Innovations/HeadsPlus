@@ -38,10 +38,8 @@ class UpdateChecker {
             }
 
         } catch (ParseException | IOException e) {
-            if (hp.getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-                return null;
-            }
+            e.printStackTrace();
+            return null;
         }
         return null;
     }

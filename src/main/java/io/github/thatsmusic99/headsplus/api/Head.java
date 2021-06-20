@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.api;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -34,7 +35,7 @@ public class Head {
 
     public Head(String id, Material type) {
         this.itemStack = new ItemStack(type);
-        if (!HeadsPlus.get().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+        if (MainConfig.get().getSellingHeads().CASE_INSENSITIVE) {
             id = id.toLowerCase();
         }
         this.id = id;

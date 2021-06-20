@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -50,7 +51,7 @@ public class XPCommand implements IHeadsPlusCommand {
                         if (sender.hasPermission("headsplus.maincommand.xp.subtract")) {
                             if (args.length > 3) {
                                 int amount = HPUtils.isInt(args[3]);
-                                if (amount > player.getXp() && !HeadsPlus.get().getConfiguration().getPerks().negative_xp) {
+                                if (amount > player.getXp() && !MainConfig.get().getMiscellaneous().ALLOW_NEGATIVE_XP) {
                                     hpc.sendMessage("commands.xp.negative-xp", sender);
                                     return true;
                                 }

@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.config;
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,14 @@ public class ConfigCrafting extends CMFile {
 		addDefault("defaults.display-name", "{type} head");
 		addDefault("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}", "&7Type &8» &c{type}"));
 		addDefault("defaults.sellable", true);
+
+		addLenientSection("recipes");
+		if (isNew()) {
+			for (RecipeEnums key : RecipeEnums.values()) {
+
+			}
+		}
+
 
 	/*	addDefault("base-item.material", "PLAYER_HEAD");
 		addDefault("base-item.data", 0);

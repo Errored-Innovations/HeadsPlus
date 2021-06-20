@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -56,7 +57,7 @@ public interface IHeadsPlusCommand {
     }
 
     static List<String> getEntityConditions(String entity) {
-        Object section = HeadsPlus.get().getHeadsConfig().getConfig().get(entity.toLowerCase().replaceAll("_", "") + ".name");
+        Object section = MainConfig.get().getConfig().get(entity);
         return section instanceof ConfigurationSection ? new ArrayList<>(((ConfigurationSection) section).getKeys(false)) : new ArrayList<>();
     }
 }

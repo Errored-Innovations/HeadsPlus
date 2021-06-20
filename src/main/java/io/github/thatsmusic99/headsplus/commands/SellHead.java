@@ -58,56 +58,54 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		try {
-
-		    if (hp.canSellHeads()) {
-		        if (sender instanceof Player) {
-		            Player player = (Player) sender;
-		            if (args.length == 0) {
-		                // Open the GUI
-		                if (hp.getConfiguration().getMechanics().getBoolean("sellhead-gui") && player.hasPermission("headsplus.sellhead.gui")) {
-                            HashMap<String, String> context = new HashMap<>();
-                            context.put("section", "mobs");
-                            InventoryManager.getManager(player).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
-                            return true;
-                        } else {
-		                    // Get the item in the player's hand
-		                    ItemStack item = checkHand(player);
-		                    // If the item exists and is sellable,
-		                    if (item != null && PersistenceManager.get().isSellable(item)) {
-		                        // Get the ID
-		                        String id = PersistenceManager.get().getSellType(item);
-		                        if (isRegistered(id)) {
-		                            double price = PersistenceManager.get().getSellPrice(item) * item.getAmount();
-		                            SellData data = new SellData(player);
-		                            data.addID(id, item.getAmount());
-		                            data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
-                                    pay(player, data, price);
-                                }
-                            }
-                        }
-                    } else {
-                        String fixedId = args[0];
-		                if (fixedId.equalsIgnoreCase("all")) {
-		                    getValidHeads(player, null, -1);
-                        } else if (isRegistered(fixedId)) {
-
-                            int limit = -1;
-                            if (args.length > 1) {
-                                limit = HPUtils.isInt(args[1]);
-                            }
-                            getValidHeads(player, fixedId, limit);
-                        } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                            getValidHeads(player, null, Integer.parseInt(args[0]));
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.not-a-player", sender);
-                }
-            } else {
+		    if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
                 hpc.sendMessage("commands.errors.disabled", sender);
+                return true;
             }
+		    if (!(sender instanceof Player)) {
+                hpc.sendMessage("commands.errors.not-a-player", sender);
+                return true;
+            }
+		    Player player = (Player) sender;
+		    if (args.length == 0) {
+		        // Open the GUI
+                if (MainConfig.get().getSellingHeads().USE_GUI && player.hasPermission("headsplus.sellhead.gui")) {
+                    HashMap<String, String> context = new HashMap<>();
+                    context.put("section", "mobs");
+                    InventoryManager.getManager(player).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
+                    return true;
+                } else {
+                    // Get the item in the player's hand
+                    ItemStack item = checkHand(player);
+                    // If the item exists and is sellable,
+                    if (item == null || !PersistenceManager.get().isSellable(item)) return true;
+                    // Get the ID
+                    String id = PersistenceManager.get().getSellType(item);
+                    if (!isRegistered(id)) return true;
+                    double price = PersistenceManager.get().getSellPrice(item) * item.getAmount();
+                    SellData data = new SellData(player);
+                    data.addID(id, item.getAmount());
+                    data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
+                    pay(player, data, price);
+                }
+		    } else {
+                String fixedId = args[0];
+                if (fixedId.equalsIgnoreCase("all")) {
+                    getValidHeads(player, null, -1);
+                } else if (isRegistered(fixedId)) {
+
+                    int limit = -1;
+                    if (args.length > 1) {
+                        limit = HPUtils.isInt(args[1]);
+                    }
+                    getValidHeads(player, fixedId, limit);
+                } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                    getValidHeads(player, null, Integer.parseInt(args[0]));
+                } else {
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                }
+            }
+
         } catch (NumberFormatException e) {
             hpc.sendMessage("commands.errors.invalid-input-int", sender);
         } catch (Exception e) {
@@ -122,26 +120,25 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
-            if (item != null && PersistenceManager.get().isSellable(item)) {
-                String id = PersistenceManager.get().getSellType(item);
-                if (fixedId != null) {
-                    if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
-                } else if (!isRegistered(id)){
-                    continue;
-                }
-                double headPrice = PersistenceManager.get().getSellPrice(item);
-                if (limit <= item.getAmount() && limit != -1) {
-                    data.addSlot(slot, limit);
-                    data.addID(id, limit);
-                    price += headPrice * limit;
-                    break;
-                } else {
-                    data.addSlot(slot, item.getAmount());
-                    data.addID(id, item.getAmount());
-                    price += headPrice * item.getAmount();
-                    if (limit != -1) {
-                        limit -= item.getAmount();
-                    }
+            if (item == null || !PersistenceManager.get().isSellable(item)) continue;
+            String id = PersistenceManager.get().getSellType(item);
+            if (fixedId != null) {
+                if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
+            } else if (!isRegistered(id)){
+                continue;
+            }
+            double headPrice = PersistenceManager.get().getSellPrice(item);
+            if (limit <= item.getAmount() && limit != -1) {
+                data.addSlot(slot, limit);
+                data.addID(id, limit);
+                price += headPrice * limit;
+                break;
+            } else {
+                data.addSlot(slot, item.getAmount());
+                data.addID(id, item.getAmount());
+                price += headPrice * item.getAmount();
+                if (limit != -1) {
+                    limit -= item.getAmount();
                 }
             }
         }
@@ -168,11 +165,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         if (!event.isCancelled()) {
             EconomyResponse response = hp.getEconomy().depositPlayer(player, price);
             if (response.transactionSuccess()) {
-                if (price > 0) {
-                    removeItems(player, data);
-                    hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(balance + price));
-
-                }
+                if (price == 0) return;
+                removeItems(player, data);
+                hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", MainConfig.get().fixBalanceStr(price), "{balance}", MainConfig.get().fixBalanceStr(balance + price));
             } else {
                hpc.sendMessage("commands.errors.cmd-fail", player);
             }

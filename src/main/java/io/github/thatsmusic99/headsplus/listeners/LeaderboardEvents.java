@@ -36,8 +36,8 @@ public class LeaderboardEvents implements Listener {
         public void onEvent(EntityHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
-            if (MainConfig.get().getMobDrops().SMITE_LOL) {
+            HPPlayer.getHPPlayer(player).addXp(0 * event.getAmount());
+            if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                 }
@@ -64,9 +64,9 @@ public class LeaderboardEvents implements Listener {
         @Override
         public void onEvent(SellHeadEvent event) {
             for (int is : event.getEntityAmounts().values()) {
-                HPPlayer.getHPPlayer(event.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.selling") * is);
+                HPPlayer.getHPPlayer(event.getPlayer()).addXp(0 * is);
             }
-            if (!hp.isUsingLeaderboards()) return;
+            if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
             for (String s : event.getEntityAmounts().keySet()) {
                 for (int i : event.getEntityAmounts().values()) {
                     if (event.getEntityAmounts().get(s) == i) {
@@ -94,8 +94,8 @@ public class LeaderboardEvents implements Listener {
         public void onEvent(PlayerHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player).addXp(hp.getConfiguration().getMechanics().getInt("xp.head-drops") * event.getAmount());
-            if (hp.getConfiguration().getPerks().smite_on_head) {
+            HPPlayer.getHPPlayer(player).addXp(0 * event.getAmount());
+            if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                 }
@@ -121,7 +121,7 @@ public class LeaderboardEvents implements Listener {
 
         @Override
         public void onEvent(HeadCraftEvent event) {
-            HPPlayer.getHPPlayer(event.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.crafting") * event.getHeadsCrafted());
+            HPPlayer.getHPPlayer(event.getPlayer()).addXp(0 * event.getHeadsCrafted());
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getEntityType() == null) return;
             if (!(event.getEntityType().equalsIgnoreCase("invalid") || event.getEntityType().isEmpty())) {
                 Bukkit.getScheduler().runTaskAsynchronously(hp, () -> {

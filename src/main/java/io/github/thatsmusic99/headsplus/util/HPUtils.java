@@ -171,6 +171,14 @@ public class HPUtils {
         return false;
     }
 
+    public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {
+        for (PlaceholderInfo placeholder : placeholders) {
+            if (!message.contains(placeholder.placeholder)) continue;
+            if (!placeholder.requirement) continue;
+            lore.add(message.replace(placeholder.placeholder, placeholder.replacement));
+        }
+    }
+
     @Deprecated
     public static boolean runBlacklistTests(LivingEntity e) {
        /* MainConfig c = HeadsPlus.get().getConfiguration();
@@ -219,5 +227,17 @@ public class HPUtils {
     public enum SkillType {
         HUNTING,
         CRAFTING
+    }
+
+    public static class PlaceholderInfo {
+        private String placeholder;
+        private String replacement;
+        private boolean requirement;
+
+        public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
+            this.placeholder = placeholder;
+            this.replacement = String.valueOf(replacement);
+            this.requirement = requirement;
+        }
     }
 }

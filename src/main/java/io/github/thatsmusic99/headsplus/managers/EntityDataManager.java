@@ -169,11 +169,10 @@ public class EntityDataManager {
                             }
                         }
 
-                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(name + "." + conditions, head));
+                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(name + "." + conditions + "." + head));
                         headInfo.setLore(ConfigMobs.get().getLore(name + "." + conditions)); // TODO
 
                         heads.add(headInfo);
-                        sellheadCache.putIfAbsent(name, headItem.getItemStack());
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }

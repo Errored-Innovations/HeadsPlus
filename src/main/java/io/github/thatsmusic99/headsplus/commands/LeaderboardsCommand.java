@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,7 +29,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if (HeadsPlus.get().getConfiguration().getPerks().leaderboards) {
+        if (MainConfig.get().getMainFeatures().LEADERBOARDS) {
             if (cs.hasPermission("headsplus.leaderboards")) {
                 new BukkitRunnable() {
                     @Override

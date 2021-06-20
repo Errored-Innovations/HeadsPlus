@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -311,7 +312,7 @@ public class ConfigChallenges extends FeatureConfig {
         String s = getString("icons." + iconName + ".skull-name");
         if (s != null && !s.isEmpty() ) {
             if (s.startsWith("HP#")) {
-                icon = HeadsPlus.get().getHeadsXConfig().getSkull(s);
+                icon = ConfigCustomHeads.get().getSkull(s);
             } else {
                 SkullMeta sm = (SkullMeta) icon.getItemMeta();
                 sm = ProfileFetcher.setProfile(sm, s);

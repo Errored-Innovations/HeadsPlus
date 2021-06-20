@@ -3,12 +3,11 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.MainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+            meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });
@@ -59,7 +58,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
 	private void giveH(String[] args, CommandSender sender, Player p) {
         Player p2 = sender instanceof Player ? (Player) sender : null;
-	    SelectorList blacklist = hp.getConfiguration().getHeadsBlacklist();
+	   /* SelectorList blacklist = hp.getConfiguration().getHeadsBlacklist();
         SelectorList whitelist = hp.getConfiguration().getHeadsWhitelist();
         List<String> bl = new ArrayList<>();
         for (String str : blacklist.list) {
@@ -120,6 +119,8 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 giveHead(p, args[0]);
             }
         }
+	    */
+        giveHead(p, args[0]);
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.util.prompts;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 public class DataListener extends StringPrompt {
     private static final List<String> types = Arrays.asList("id", "texture", "displayname", "price", "section");
-    private final Set<String> sections = HeadsPlus.get().getHeadsXConfig().sections.keySet();
+    private final Set<String> sections = ConfigCustomHeads.get().sections.keySet();
     private final String message;
     private final int type;
 
@@ -76,7 +77,7 @@ public class DataListener extends StringPrompt {
                 return new DataListener(type, messages.getString("commands.addhead." + currentType));
             }
         } else if (currentType.equalsIgnoreCase("id")) {
-            if (HeadsPlus.get().getHeadsXConfig().headsCache.containsKey(s)) {
+            if (ConfigCustomHeads.get().headsCache.containsKey(s)) {
                 user.sendRawMessage(messages.getString("commands.addhead.id-taken", (CommandSender) user).replaceAll("\\{id}", s));
                 return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
             }

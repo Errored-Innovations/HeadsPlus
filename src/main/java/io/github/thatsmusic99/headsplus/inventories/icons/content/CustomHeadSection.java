@@ -11,7 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class CustomHeadSection extends Content {
+
     private String section;
+
     public CustomHeadSection(ItemStack itemStack, String section) {
         super(itemStack);
         this.section = section;

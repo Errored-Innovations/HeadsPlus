@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.prompts.ChatPrompt;
@@ -25,7 +26,7 @@ public class Search extends Icon {
         ConversationFactory c = new ConversationFactory(hp);
         Conversation conv = c.withFirstPrompt(new ChatPrompt())
                 .withLocalEcho(false)
-                .withModality(hp.getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                .withModality(MainConfig.get().getMiscellaneous().SUPPRESS_MESSAGES_DURING_SEARCH)
                 .buildConversation(player);
         conv.addConversationAbandonedListener(event1 -> {
             if (event1.gracefulExit()) {

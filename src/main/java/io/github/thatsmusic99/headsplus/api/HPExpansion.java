@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -70,15 +71,15 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("hunting")) {
-            return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
         }
 
         if (identifier.startsWith("crafting")) {
-            return String.valueOf(HeadsPlus.get().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
         }
 
         if (identifier.startsWith("selling")) {
-            return String.valueOf(HeadsPlus.get().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
         }
 
         if (identifier.startsWith("top")) {
@@ -98,7 +99,7 @@ public class HPExpansion extends PlaceholderExpansion {
             String option = args[length - 1];
             try {
                 LinkedHashMap<OfflinePlayer, Integer> list;
-                if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
+                if (MainConfig.get().getLeaderboards().CACHE_LEADERBOARDS) {
                     list = LeaderboardsCache.getType(entity, category, false, false);
                     if (list == null) {
                         list = LeaderboardsCache.getType(entity, category, true, true);
@@ -163,7 +164,7 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "min-heads":
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
-                    return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player,
+                    return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
                                 challenge.getHeadType(),
                                 challenge.getChallengeType().getDatabase()));
                 case "difficulty":

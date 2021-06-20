@@ -11,7 +11,6 @@ import org.bukkit.event.HandlerList;
 
 public class EntityHeadDropEvent extends Event implements Cancellable {
 
-    // O
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private HeadManager.HeadInfo head;
@@ -75,7 +74,7 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    public void setHead(Head skull) {
+    public void setHeadInfo(HeadManager.HeadInfo skull) {
         this.head = skull;
     }
 

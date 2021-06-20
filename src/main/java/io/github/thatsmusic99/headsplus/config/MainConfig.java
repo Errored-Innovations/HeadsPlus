@@ -25,9 +25,12 @@ public class MainConfig extends CMFile {
     private PlayerDrops playerDrops;
     private SellingHeads sellingHeads;
     private Masks masks;
+    private Challenges challenges;
     private Levels levels;
+    private Leaderboards leaderboards;
     private Localisation localisation;
     private Updates updates;
+    private Miscellaneous miscellaneous;
 
     private static MainConfig instance;
 
@@ -115,11 +118,19 @@ public class MainConfig extends CMFile {
         addDefault("levels", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
 
+        addSection("Challenges");
+        addDefault("broadcast-challenge-complete", true);
+
         addSection("Levels");
         addDefault("add-boss-bars", true);
         addDefault("boss-bar-color", "RED");
         addDefault("boss-bar-title", "&c&lXP to next HP level");
         addDefault("boss-bar-lifetime", 5);
+        addDefault("broadcast-level-up", true);
+
+        addSection("Leaderboards");
+        addDefault("cache-leaderboards", true);
+        addDefault("cache-duration", 300);
 
         addSection("Updates");
         addDefault("check-for-updates", true);
@@ -128,12 +139,16 @@ public class MainConfig extends CMFile {
         addSection("Localisation");
         addDefault("locale", "en_us");
         addDefault("smart-locale", false);
+        addDefault("use-tellraw", true);
 
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
         addDefault("smite-player", false, "This April Fool's feature genuinely got me a complaint.\n" +
                 "Basically, it strikes the player with lightning whenever a head is dropped. That is it.\n" +
                 "Someone genuinely complained about it.");
+        addDefault("suppress-gui-warnings", true);
+        addDefault("allow-negative-xp", false);
+        addDefault("suppress-messages-during-search", false);
 
     }
 
@@ -301,9 +316,12 @@ public class MainConfig extends CMFile {
         playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
         masks = new Masks();
+        challenges = new Challenges();
         levels = new Levels();
+        leaderboards = new Leaderboards();
         localisation = new Localisation();
         updates = new Updates();
+        miscellaneous = new Miscellaneous();
     }
 
     public static MainConfig get() {
@@ -340,13 +358,12 @@ public class MainConfig extends CMFile {
         return whitelist_heads;
     }
 
-    @Deprecated
-    public ConfigurationSection getMySQL() {
-        return getConfig().getConfigurationSection("mysql");
-    }
-
     public MainFeatures getMainFeatures() {
         return mainFeatures;
+    }
+
+    public MySQL getMySQL() {
+        return mySQL;
     }
 
     public SellingHeads getSellingHeads() {
@@ -365,8 +382,16 @@ public class MainConfig extends CMFile {
         return masks;
     }
 
+    public Challenges getChallenges() {
+        return challenges;
+    }
+
     public Levels getLevels() {
         return levels;
+    }
+
+    public Leaderboards getLeaderboards() {
+        return leaderboards;
     }
 
     public Localisation getLocalisation() {
@@ -375,6 +400,10 @@ public class MainConfig extends CMFile {
 
     public Updates getUpdates() {
         return updates;
+    }
+
+    public Miscellaneous getMiscellaneous() {
+        return miscellaneous;
     }
 
     public String fixBalanceStr(double balance) {
@@ -408,6 +437,7 @@ public class MainConfig extends CMFile {
                 MYSQL_DATABASE = getString("mysql-database"),
                 MYSQL_USERNAME = getString("mysql-username"),
                 MYSQL_PASSWORD = getString("mysql-password");
+        public int MYSQL_PORT = getInteger("mysql-port");
     }
 
     public class MobDrops {
@@ -442,16 +472,27 @@ public class MainConfig extends CMFile {
                 EFFECT_LENGTH = getInteger("effect-length");
     }
 
+    public class Challenges {
+        public boolean BROADCAST_CHALLENGE_COMPLETE = getBoolean("broadcast-challenge-complete");
+    }
+
     public class Levels {
-        public boolean ENABLE_BOSS_BARS = getBoolean("add-boss-bars");
+        public boolean ENABLE_BOSS_BARS = getBoolean("add-boss-bars"),
+                BROADCAST_LEVEL_UP = getBoolean("broadcast-level-up");
         public String BOSS_BAR_COLOR = getString("boss-bar-color"),
                 BOSS_BAR_TITLE = getString("boss-bar-title");
         public int BOSS_BAR_LIFETIME = getInteger("boss-bar-lifetime");
     }
 
+    public class Leaderboards {
+        public boolean CACHE_LEADERBOARDS = getBoolean("cache-leaderboards");
+        public int CACHE_DURATION = getInteger("cache-duration");
+    }
+
     public class Localisation {
         public String LOCALE = getString("locale");
-        public boolean SMART_LOCALE = getBoolean("smart-locale");
+        public boolean SMART_LOCALE = getBoolean("smart-locale"),
+                USE_TELLRAW = getBoolean("use-tellraw");
     }
 
     public class Updates {
@@ -460,6 +501,13 @@ public class MainConfig extends CMFile {
 
     }
 
+    public class Miscellaneous {
+        public boolean DEBUG = getBoolean("debug"),
+                ALLOW_NEGATIVE_XP = getBoolean("allow-negative-xp"),
+                SMITE_PLAYER = getBoolean("smite-player"),
+                SUPPRESS_GUI_WARNINGS = getBoolean("suppress-gui-warnings"),
+                SUPPRESS_MESSAGES_DURING_SEARCH = getBoolean("suppress-messages-during-search");
+    }
 
     public static class Perks {
 

@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -81,24 +82,24 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
                 lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
             }
 
+            // TODO - lore
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo().withTexture(victim.getName())
-                    .withLore();
+                    .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
 
-            Head head = new EntityHead("PLAYER", Material.PLAYER_HEAD).withAmount(amount)
-                    .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
-                    .withPrice(price)
-                    .withLore(hpch.getLore(victim.getName(), price))
-                    .withPlayerName(victim.getName());
             Location location = victim.getLocation();
             PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, headInfo, location, amount);
             Bukkit.getPluginManager().callEvent(phdEvent);
             if (!phdEvent.isCancelled()) {
                 if (lostprice > 0.0) {
                     economy.withdrawPlayer(victim, lostprice);
-                    HeadsPlusMessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", hp.getConfiguration().fixBalanceStr(price));
+                    HeadsPlusMessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
                 }
-                head.getItemStackFuture().thenAccept(itemStack -> {
-                    location.getWorld().dropItem(location, itemStack);
+                double finalPrice = price;
+                headInfo.buildHead().thenAccept(item -> {
+                    item.setAmount(amount);
+                    PersistenceManager.get().setSellType(item, "mobs_player");
+                    PersistenceManager.get().setSellPrice(item, finalPrice);
+                    location.getWorld().dropItem(location, item);
                 });
             }
         }

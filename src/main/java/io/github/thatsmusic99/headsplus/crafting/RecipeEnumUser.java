@@ -4,6 +4,8 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
+import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,7 +24,7 @@ import java.util.Map;
 public class RecipeEnumUser {
 
     private final HeadsPlus hp = HeadsPlus.get();
-	private final FileConfiguration crafting = hp.getCraftingConfig().getConfig();
+	private final FileConfiguration crafting = ConfigCrafting.get().getConfig();
 
 	public RecipeEnumUser() {
 	    addEnumToConfig();
@@ -54,19 +56,19 @@ public class RecipeEnumUser {
             // Register the Sellhead ID
             SellHead.registerHeadID(headSec.getString("sellhead-id"));
             // Apply the price
-            head.withPrice(hp.getCraftingConfig().getPrice(id));
+            head.withPrice(ConfigCrafting.get().getPrice(id));
         } catch (NullPointerException ignored) {
             // If there's no sellhead ID, stop there
 	        head = new Head(id);
         }
 
-        head.withDisplayName(hp.getCraftingConfig().getDisplayName(id))
-                .withLore(hp.getCraftingConfig().getLore(id));
+        head.withDisplayName(ConfigCrafting.get().getDisplayName(id))
+                .withLore(ConfigCrafting.get().getLore(id));
 
 	    // If using a custom texture
         if (headId.startsWith("HP#")) {
             try {
-                head.withTexture(HeadsPlus.get().getHeadsXConfig().getTextures(headId));
+                head.withTexture(ConfigCustomHeads.get().getTextures(headId));
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {

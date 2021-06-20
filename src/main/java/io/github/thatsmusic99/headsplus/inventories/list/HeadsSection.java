@@ -36,8 +36,7 @@ public class HeadsSection extends BaseInventory {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.get().getHeadsXConfig();
-        List<String> heads = hpch.sections.get(context.get("section"));
+        List<String> heads = ConfigCustomHeads.get().sections.get(context.get("section"));
         List<Content> contents = new ArrayList<>();
         for (String head : heads) {
             CustomHead head1 = new CustomHead(head);

@@ -108,7 +108,7 @@ public class Reward implements Cloneable {
     public void reward(Player player) {
         HeadsPlus hp = HeadsPlus.get();
         HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-        if (hp.econ()) {
+        if (hp.isVaultEnabled()) {
             if (type == HPChallengeRewardTypes.ECO) {
                     hp.getEconomy().depositPlayer(player, getMoney());
             } else if (type == HPChallengeRewardTypes.ADD_GROUP) {

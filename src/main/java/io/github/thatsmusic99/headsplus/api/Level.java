@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 public class Level extends BaseLevel {
 
-    // T
     private final String configName;
     private final String displayName;
     private final int requiredXP;

@@ -19,10 +19,16 @@ public class ConfigLevels extends CMFile {
     }
 
     private int maxHierarchy = 0;
+    private static ConfigLevels instance;
 
     public ConfigLevels() {
         super(HeadsPlus.get(), "levels");
+        instance = this;
         addDefLevels();
+    }
+
+    public static ConfigLevels get() {
+        return instance;
     }
 
     @Override

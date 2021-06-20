@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class HeadPurchaseEvent extends Event implements Cancellable {
 
-    // E
 	private final Player player;
 	private final ItemStack itemStack;
 	private boolean cancelled = false;

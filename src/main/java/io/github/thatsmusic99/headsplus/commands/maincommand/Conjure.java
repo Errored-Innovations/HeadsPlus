@@ -5,6 +5,8 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -66,9 +68,13 @@ public class Conjure implements IHeadsPlusCommand {
                     type = args[5];
                 }
                 try {
-                    ItemStack i = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
-                    i.setAmount(amount);
-                    p.getInventory().addItem(i);
+                    HeadManager.HeadInfo info = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index);
+                    int finalAmount = amount;
+                    Player finalPlayer = p;
+                    info.buildHead().thenAccept(item -> {
+                        item.setAmount(finalAmount);
+                        finalPlayer.getInventory().addItem(item);
+                    });
                     return true;
                 } catch (NullPointerException ex) {
                     hpc.sendMessage("commands.errors.invalid-args", sender);

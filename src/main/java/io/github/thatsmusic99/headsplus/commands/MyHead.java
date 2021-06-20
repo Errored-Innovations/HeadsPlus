@@ -1,8 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.MainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
@@ -51,7 +50,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     return false;
                 }
                 Player p = (Player) sender;
-                SelectorList blacklist = HeadsPlus.get().getConfiguration().getHeadsBlacklist();
+                /*SelectorList blacklist = HeadsPlus.get().getConfiguration().getHeadsBlacklist();
                 SelectorList whitelist = HeadsPlus.get().getConfiguration().getHeadsWhitelist();
                 HeadsPlus.get().saveConfig();
                 List<String> bl = new ArrayList<>();
@@ -126,7 +125,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                         giveHead(p, sender.getName());
                         return true;
                     }
-                }
+                } */
+                giveHead(p, sender.getName());
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (myhead)", true, sender);
@@ -138,7 +138,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.get().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ConfigMobs.get().getPlayerDisplayName(n)));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });

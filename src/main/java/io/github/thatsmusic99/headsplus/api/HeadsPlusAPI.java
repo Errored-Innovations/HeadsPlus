@@ -22,21 +22,18 @@ import java.util.UUID;
 @Deprecated
 public class HeadsPlusAPI {
 
-    // S
-    private final HeadsPlus hp = HeadsPlus.get();
-
-    public ItemStack getHead(String option) {
+    public static ItemStack getHead(String option) {
         return ConfigCustomHeads.get().getSkull(option);
     }
 
-    public boolean isSellable(ItemStack is) {
+    public static boolean isSellable(ItemStack is) {
         if (is.getType() == Material.PLAYER_HEAD) {
             return PersistenceManager.get().isSellable(is);
         }
         return false;
     }
 
-    public ItemStack createSkull(String texture, String displayname) {
+    public static ItemStack createSkull(String texture, String displayname) {
         ItemStack s = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta sm = (SkullMeta) s.getItemMeta();
         GameProfile gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
@@ -47,23 +44,23 @@ public class HeadsPlusAPI {
         return s;
     }
 
-    public String getTexture(String owner) {
+    public static String getTexture(String owner) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(owner);
         GameProfile gm = new GameProfile(p.getUniqueId(), owner);
         return gm.getProperties().get("textures").iterator().next().getValue();
     }
 
-    public SkullMeta setSkullMeta(SkullMeta m, String t) {
+    public static SkullMeta setSkullMeta(SkullMeta m, String t) {
         GameProfile gm = new GameProfile(UUID.fromString("7091cdbc-ebdc-4eac-a6b2-25dd8acd3a0e"), "HPXHead");
         gm.getProperties().put("textures", new Property("texture", t));
         return ProfileFetcher.setProfile(m, gm);
     }
 
-    public String getSkullType(ItemStack is) {
+    public static String getSkullType(ItemStack is) {
         return PersistenceManager.get().getSellType(is);
     }
 
-    public int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) {
+    public static int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) {
         try {
             return DataManager.getPlayerScore(p, database, section);
         } catch (NullPointerException ex) {
@@ -71,15 +68,15 @@ public class HeadsPlusAPI {
         }
     }
 
-    public LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
+    public static LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
         return LeaderboardsCache.getType(section, database, false, true);
     }
 
-    public List<Challenge> getChallenges() {
-        return hp.getChallenges();
+    public static List<Challenge> getChallenges() {
+        return HeadsPlus.get().getChallenges();
     }
 
-    public Challenge getChallenge(String challengeName) {
+    public static Challenge getChallenge(String challengeName) {
         for (Challenge c : getChallenges()) {
             if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', c.getChallengeHeader())).equals(challengeName)) {
                 return c;
@@ -88,7 +85,7 @@ public class HeadsPlusAPI {
         return null;
     }
 
-    public Challenge getChallengeByConfigName(String name) {
+    public static Challenge getChallengeByConfigName(String name) {
         for (Challenge c : getChallenges()) {
             if (c.getConfigName().equals(name)) {
                 return c;

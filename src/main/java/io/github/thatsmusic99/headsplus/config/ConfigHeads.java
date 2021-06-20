@@ -29,12 +29,15 @@ public class ConfigHeads extends CMFile {
         addDefault("version", 3.5);
 
         addLenientSection("heads");
-        for (HeadsXEnums head : HeadsXEnums.values()) {
-            if (isNew() || head.version > getDouble("version")) {
-                addDefault("heads." + head.name() + ".display-name", head.displayName);
-                addDefault("heads." + head.name() + ".texture", head.texture);
+        if (isNew() || getDouble("version") < 3.5) {
+            for (HeadsXEnums head : HeadsXEnums.values()) {
+                if (head.version > getDouble("version")) {
+                    addDefault("heads." + head.name() + ".display-name", head.displayName);
+                    addDefault("heads." + head.name() + ".texture", head.texture);
+                }
             }
         }
+
     }
 
     @Override

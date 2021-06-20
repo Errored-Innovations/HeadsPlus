@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
@@ -37,9 +38,9 @@ public class DebugFileCreator {
         try {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
             o1.put("NMS version", Bukkit.getVersion());
-            o1.put("Has Vault hooked", hp.econ());
+            o1.put("Has Vault hooked", hp.isVaultEnabled());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
+            o1.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 
         }
@@ -47,19 +48,19 @@ public class DebugFileCreator {
         o1.put("Server version", Bukkit.getVersion());
         JSONObject o3 = new JSONObject();
         try {
-            o3.put("Autograb enabled", hp.getConfiguration().getConfig().getBoolean("plugin.autograb.enabled"));
+            o3.put("Autograb enabled", ConfigHeadsSelector.get().getBoolean("autograb"));
             o3.put("Droppable heads enabled", MainConfig.get().getMainFeatures().MOB_DROPS);
-            o3.put("Sellable heads enabled", hp.getConfiguration().getPerks().sell_heads);
-            o3.put("Uses heads selector", hp.isUsingHeadDatabase());
-            o3.put("Uses leaderboards", hp.isUsingLeaderboards());
-            o3.put("Stops placement of sellable heads", hp.isStoppingPlaceableHeads());
+            o3.put("Sellable heads enabled", MainConfig.get().getMainFeatures().SELL_HEADS);
+            o3.put("Uses heads selector", MainConfig.get().getMainFeatures().HEADS_SELECTOR);
+            o3.put("Uses leaderboards", MainConfig.get().getMainFeatures().LEADERBOARDS);
+            o3.put("Stops placement of sellable heads", MainConfig.get().getSellingHeads().STOP_PLACEMENT);
             o3.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o3.put("Player death messages", hp.isDeathMessagesEnabled());
+            o3.put("Player death messages", MainConfig.get().getPlayerDrops().ENABLE_PLAYER_DEATH_MESSAGES);
             o3.put("Total challenges", hp.getChallenges().size());
             o3.put("Total levels", hp.getLevels().size());
-            o3.put("Masks enabled", hp.getConfiguration().getPerks().mask_powerups);
-            o3.put("Allows looting enchantment", hp.getConfiguration().getMechanics().getBoolean("allow-looting-enchantment"));
-            o3.put("Levels enabled", hp.usingLevels());
+            o3.put("Masks enabled", MainConfig.get().getMainFeatures().MASKS);
+            o3.put("Allows looting enchantment", MainConfig.get().getMobDrops().ENABLE_LOOTING);
+            o3.put("Levels enabled", MainConfig.get().getMainFeatures().LEVELS);
         } catch (NullPointerException ignored) {
 
         }
@@ -257,9 +258,9 @@ public class DebugFileCreator {
         basicInfo.put("Special message", getErrorHeader());
         try {
             basicInfo.put("HeadsPlus version", hp.getDescription().getVersion());
-            basicInfo.put("Has Vault hooked", hp.econ());
+            basicInfo.put("Has Vault hooked", hp.isVaultEnabled());
             basicInfo.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            basicInfo.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
+            basicInfo.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 
         }

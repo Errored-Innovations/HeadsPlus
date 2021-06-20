@@ -5,6 +5,8 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.commands.SellHead;
+import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -49,23 +51,19 @@ public class DebugPrint implements IHeadsPlusCommand {
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
         try {
             Logger log = hp.getLogger();
-            ConfigurationSection cs = hp.getConfiguration().getMechanics();
-            if (cs.getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
             if (command && sender != null) {
                 hpc.sendMessage("commands.errors.cmd-fail", sender);
             }
 
-            if (cs.getBoolean("debug.create-debug-files")) {
-                log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
-                String s = DebugFileCreator.createReport(new HeadsPlusException(e));
-                log.severe("Report name: " + s);
-                log.severe("Please submit this report to the developer at one of the following links:");
-                log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
-                log.severe("https://discord.gg/nbT7wC2");
-                log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
-            }
+            log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
+            String s = DebugFileCreator.createReport(new HeadsPlusException(e));
+            log.severe("Report name: " + s);
+            log.severe("Please submit this report to the developer at one of the following links:");
+            log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");
+            log.severe("https://discord.gg/nbT7wC2");
+            log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
+
         } catch (Exception ex) {
             HeadsPlus.get().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
             e.printStackTrace();
@@ -218,11 +216,11 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     PersistenceManager.get().setSellable(item, true);
                                     PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
-                                    double headsPrice = hp.getHeadsConfig().getPrice(args[2].toLowerCase().replaceAll("_", ""));
+                                    double headsPrice = ConfigMobs.get().getPrice(args[2].toLowerCase().replaceAll("_", ""));
                                     if (headsPrice != 0.0) {
                                         price = headsPrice;
                                     } else {
-                                        price = hp.getCraftingConfig().getPrice(args[2]);
+                                        price = ConfigCrafting.get().getPrice(args[2]);
                                     }
                                     PersistenceManager.get().setSellPrice(item, price);
                                     player.getInventory().setItem(slot, item);

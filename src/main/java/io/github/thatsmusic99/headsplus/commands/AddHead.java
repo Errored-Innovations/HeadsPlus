@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
@@ -64,7 +65,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (sender instanceof Conversable) {
                     ConversationFactory factory = new ConversationFactory(HeadsPlus.get());
                     Conversation conversation = factory.withLocalEcho(false)
-                            .withModality(HeadsPlus.get().getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                            .withModality(MainConfig.get().getMiscellaneous().SUPPRESS_MESSAGES_DURING_SEARCH)
                             .withFirstPrompt(new DataListener(0, hpc.getString("commands.addhead.id", sender)))
                             .buildConversation((Conversable) sender);
                     conversation.addConversationAbandonedListener(event -> {
@@ -74,7 +75,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            ConfigCustomHeads customHeads = HeadsPlus.get().getHeadsXConfig();
+                            ConfigCustomHeads customHeads = ConfigCustomHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
                                 customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));

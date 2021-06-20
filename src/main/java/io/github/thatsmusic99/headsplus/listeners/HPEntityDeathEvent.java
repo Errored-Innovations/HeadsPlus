@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
@@ -44,7 +45,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
             }
         }
         String entity = event.getEntityType().name();
-        double fixedChance = addData("fixed-chance", hpch.getChance(entity));
+        double fixedChance = addData("fixed-chance", ConfigMobs.get().getChance(entity));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
         if (event.getEntity().getKiller() != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains(entity)) {

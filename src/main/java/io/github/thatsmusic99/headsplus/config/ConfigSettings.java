@@ -65,9 +65,7 @@ public abstract class ConfigSettings {
             config.save(configF);
         } catch (IOException e) {
             HeadsPlus.get().getLogger().severe("Error thrown when saving the config. If there's a second error below, ignore me and look at that instead.");
-            if (HeadsPlus.get().getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 

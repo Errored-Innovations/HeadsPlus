@@ -9,7 +9,6 @@ import org.bukkit.event.HandlerList;
 
 public class PlayerHeadDropEvent extends EntityHeadDropEvent {
 
-    // M
     private static final HandlerList handlers = new HandlerList();
     private final Player deadPlayer;
 
