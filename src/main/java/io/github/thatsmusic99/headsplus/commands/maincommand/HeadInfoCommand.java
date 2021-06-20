@@ -100,7 +100,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         List<String> lore = new ArrayList<>();
                         for (String str : ConfigMobs.get()
                                 .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
-                                        || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", ""))) {
+                                        || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", ""), "default")) {
                             lore.add(str.replaceAll("§", "&"));
                         }
                         StringUtil.copyPartialMatches(args[4], lore, results);

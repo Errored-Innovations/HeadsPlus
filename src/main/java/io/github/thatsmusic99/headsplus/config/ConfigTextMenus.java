@@ -270,7 +270,7 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateLoreInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type), instance.getConfig().getInt("head-info.lore-info.lines-per-page"));
+            PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type, "default"), instance.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
