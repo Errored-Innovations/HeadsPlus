@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated
 public class Head {
 
     private static final PaperUtil util = new PaperUtil();

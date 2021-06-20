@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import org.bukkit.Material;
 
+@Deprecated
 public class EntityHead extends Head {
 
     public EntityHead(String id, Material type) {
