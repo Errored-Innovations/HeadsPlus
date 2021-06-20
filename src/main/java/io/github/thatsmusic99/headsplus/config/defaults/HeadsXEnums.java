@@ -424,19 +424,19 @@ public enum HeadsXEnums {
     GOAT("&fGoat", "a662336d8ae092407e58f7cc80d20f20e7650357a454ce16e3307619a0110648", "animals", 3.5);
 
     public final String name;
-    public final String dn;
-    public final String tex;
-    public final String sec;
-    public final Double v;
+    public final String displayName;
+    public final String texture;
+    public final String section;
+    public final Double version;
     public final String interactName;
 
-    HeadsXEnums(String dn, String texture, String section, Double version) {
+    HeadsXEnums(String displayName, String texture, String section, Double version) {
         this.name = name().toLowerCase();
-        this.interactName = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', dn));
-        this.dn = "&8❰ " + dn + " &8❱";
-        this.tex = texture;
-        this.sec = section;
-        this.v = version;
+        this.interactName = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', displayName));
+        this.displayName = "&8❰ " + displayName + " &8❱";
+        this.texture = texture;
+        this.section = section;
+        this.version = version;
     }
 
 

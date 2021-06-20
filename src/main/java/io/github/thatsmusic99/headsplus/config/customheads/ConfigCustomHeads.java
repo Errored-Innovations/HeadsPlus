@@ -76,11 +76,11 @@ public class ConfigCustomHeads extends CMFile {
             }
             // Heads
             for (HeadsXEnums head : HeadsXEnums.values()) {
-                if (isNew() || head.v > currentVersion) {
-                    addDefault("heads." + head.name + ".displayname", head.dn);
-                    addDefault("heads." + head.name + ".texture", head.tex);
+                if (isNew() || head.version > currentVersion) {
+                    addDefault("heads." + head.name + ".displayname", head.displayName);
+                    addDefault("heads." + head.name + ".texture", head.texture);
                     addDefault("heads." + head.name + ".price", "default");
-                    addDefault("heads." + head.name + ".section", head.sec);
+                    addDefault("heads." + head.name + ".section", head.section);
                     addDefault("heads." + head.name + ".interact-name", head.interactName);
                 }
             }
