@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.managers;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +12,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +34,7 @@ public class HeadManager {
 
     public void registerHead(String key, HeadInfo headInfo) {
         heads.put(key, headInfo);
+        HeadsPlus.debug("Registered head " + key + ".");
     }
 
     public HeadInfo getHeadInfo(String key) {
@@ -82,7 +84,8 @@ public class HeadManager {
                 str = "https://textures.minecraft.net/texture/" + str;
             }
             if (str.startsWith("http")) {
-
+                str = String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", str);
+                str = new String(Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8)));
             }
             this.texture = str;
             return this;
@@ -118,14 +121,21 @@ public class HeadManager {
             meta.setDisplayName(displayName);
             meta.setLore(lore);
             if (material != Material.PLAYER_HEAD) return CompletableFuture.completedFuture(head);
+            HeadsPlus.debug("Building a head.");
             if (player != null) {
-                ((SkullMeta) meta).setOwner(player);
+                HeadsPlus.debug("Setting a player skull.");
+                return new PaperUtil().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
+                    head.setItemMeta(newMeta);
+                    return head;
+                });
             } else if (texture != null) {
-                return new PaperUtil().setProfile((SkullMeta) meta, texture).thenApply(newMeta -> {
+                HeadsPlus.debug("Setting a texture. " + texture);
+                return new PaperUtil().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });
             }
+            HeadsPlus.debug("Setting the metadata now...");
             head.setItemMeta(meta);
             return CompletableFuture.completedFuture(head);
         }

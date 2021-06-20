@@ -586,6 +586,10 @@ public class HeadsPlus extends JavaPlugin {
 
     public static String capitalize(String str) {
         return capitalize(str, null);
+    public static void debug(String message) {
+        if (MainConfig.get().getMiscellaneous().DEBUG) {
+            get().getLogger().info(message);
+        }
     }
 
     public static String capitalize(String str, char[] delimiters) {
