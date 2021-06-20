@@ -169,8 +169,10 @@ public class EntityDataManager {
                             }
                         }
 
-                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(name + "." + conditions + "." + head));
-                        headInfo.setLore(ConfigMobs.get().getLore(name + "." + conditions)); // TODO
+                        headInfo.withDisplayName(
+                                ConfigMobs.get().getDisplayName(name + "." + conditions + "." + head)
+                                        .replaceAll("\\{type}", HeadsPlus.capitalize(name)));
+                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions)); // TODO
 
                         heads.add(headInfo);
                     }

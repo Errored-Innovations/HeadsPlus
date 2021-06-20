@@ -266,13 +266,13 @@ public class ConfigMobs extends CMFile {
 		return getDouble(path + ".chance", getDouble("defaults.chance"));
 	}
 
-    public List<String> getLore(String type) {
+    public List<String> getLore(String type, String conditions) {
 		List<String> lore = new ArrayList<>();
-		List<String> configLore = getStringList(type + ".lore", getStringList("defaults.lore"));
+		List<String> configLore = getStringList(type + "." + conditions + ".lore", getStringList("defaults.lore"));
 		for (String l : configLore) {
-			lore.add(ChatColor.translateAlternateColorCodes('&', l)
-					.replace("{type}", type)
-					.replace("{price}", String.valueOf(getPrice(type))));
+			HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
+					new HPUtils.PlaceholderInfo("{type}", type, type != null),
+					new HPUtils.PlaceholderInfo("{price}", getPrice(type), HeadsPlus.get().isVaultEnabled()));
 		}
 		return lore;
     }
