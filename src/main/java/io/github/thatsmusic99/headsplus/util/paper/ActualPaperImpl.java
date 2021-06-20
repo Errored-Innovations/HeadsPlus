@@ -19,6 +19,7 @@ public class ActualPaperImpl implements PaperImpl {
     @Override
     public CompletableFuture<SkullMeta> setProfile(SkullMeta meta, String name) {
         return CompletableFuture.supplyAsync(() -> {
+            HeadsPlus.debug("Setting the head name using Paper. Also, you're stupid lmfao");
             UUID uuid;
             Player player = Bukkit.getPlayer(name);
             if (player != null) {
@@ -41,10 +42,9 @@ public class ActualPaperImpl implements PaperImpl {
     @Override
     public CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture) {
         return CompletableFuture.supplyAsync(() -> {
-            PlayerProfile profile = meta.getPlayerProfile();
-            if (profile == null) profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            ProfileProperty property = new ProfileProperty("textures", texture);
-            profile.setProperty(property);
+            HeadsPlus.debug("Setting the head texture using Paper.");
+            PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+            profile.setProperty(new ProfileProperty("textures", texture));
             profile.complete();
             meta.setPlayerProfile(profile);
             return meta;

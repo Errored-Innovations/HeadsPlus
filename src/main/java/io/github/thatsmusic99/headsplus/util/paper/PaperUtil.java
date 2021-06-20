@@ -51,7 +51,7 @@ public class PaperUtil implements PaperImpl {
             profile.getProperties().put("textures", new Property("texture", texture));
             return CompletableFuture.completedFuture(ProfileFetcher.setProfile(meta, profile));
         }
-        return internalImpl.setProfile(meta, texture);
+        return internalImpl.setProfileTexture(meta, texture);
     }
 
     public static PaperUtil get() {
