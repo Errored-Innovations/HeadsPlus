@@ -484,16 +484,8 @@ public class HeadsPlus extends JavaPlugin {
         return version;
     }
 
-    public boolean hasChallengesEnabled() {
-        return MainConfig.get().getMainFeatures().CHALLENGES;
-    }
-
     public boolean isConnectedToMySQLDatabase() {
         return con;
-    }
-
-    public boolean isDropsEnabled() {
-        return MainConfig.get().getMainFeatures().MOB_DROPS;
     }
 
     public boolean canSellHeads() {

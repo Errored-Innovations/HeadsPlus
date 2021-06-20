@@ -24,13 +24,13 @@ public class HPPlayerMessageDeathEvent extends HeadsPlusListener<PlayerHeadDropE
 
     @Override
     public boolean shouldEnable() {
-        return MainConfig.get().getMobDrops().ENABLE_PLAYER_DEATH_MESSAGES;
+        return MainConfig.get().getPlayerDrops().ENABLE_PLAYER_DEATH_MESSAGES;
     }
 
     public void onEvent(PlayerHeadDropEvent event) {
         if (event.getPlayer() == null) return;
         Random r = new Random();
-        List<String> s = MainConfig.get().getMobDrops().PLAYER_HEAD_DEATH_MESSAGES;
+        List<String> s = MainConfig.get().getPlayerDrops().PLAYER_HEAD_DEATH_MESSAGES;
         int thing = r.nextInt(s.size());
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission("headsplus.death.ignore")) continue;

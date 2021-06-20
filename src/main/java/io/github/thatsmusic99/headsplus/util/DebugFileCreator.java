@@ -48,7 +48,7 @@ public class DebugFileCreator {
         JSONObject o3 = new JSONObject();
         try {
             o3.put("Autograb enabled", hp.getConfiguration().getConfig().getBoolean("plugin.autograb.enabled"));
-            o3.put("Droppable heads enabled", hp.isDropsEnabled());
+            o3.put("Droppable heads enabled", MainConfig.get().getMainFeatures().MOB_DROPS);
             o3.put("Sellable heads enabled", hp.getConfiguration().getPerks().sell_heads);
             o3.put("Uses heads selector", hp.isUsingHeadDatabase());
             o3.put("Uses leaderboards", hp.isUsingLeaderboards());

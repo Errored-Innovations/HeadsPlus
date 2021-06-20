@@ -9,8 +9,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MainConfig extends CMFile {
@@ -24,14 +22,17 @@ public class MainConfig extends CMFile {
     private MainFeatures mainFeatures;
     private MySQL mySQL;
     private MobDrops mobDrops;
+    private PlayerDrops playerDrops;
     private SellingHeads sellingHeads;
     private Masks masks;
+    private Levels levels;
+    private Localisation localisation;
     private Updates updates;
 
     private static MainConfig instance;
 
     public MainConfig() {
-        super(HeadsPlus.getInstance(), "config");
+        super(HeadsPlus.get(), "config");
         instance = this;
     }
 
@@ -67,10 +68,9 @@ public class MainConfig extends CMFile {
 
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
-        addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG")),
+        addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG"),
                 "Spawn causes that stop heads dropping from a given mob.\n" +
                         "In this example, mobs spawned using spawner eggs will not drop heads at all.");
-        addDefault("ignored-players", new ArrayList<>());
         addDefault("needs-killer", false);
         addDefault("entities-needing-killer", Lists.newArrayList("player"));
         addDefault("enable-looting", true);
@@ -79,11 +79,19 @@ public class MainConfig extends CMFile {
         addDefault("thresholds.rare", 5);
         addDefault("looting-ignored", new ArrayList<>());
         addDefault("disable-for-mythic-mobs", true);
+
+        addSection("Player Head Drops");
+        addComment("Note - this is also further configured in the mobs.yml file.");
+        addDefault("ignored-players", new ArrayList<>());
         addDefault("enable-player-head-death-messages", false);
         addDefault("player-head-death-messages",
                 Lists.newArrayList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
                         "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
                         "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."));
+        addDefault("adjust-price-according-to-balance", false);
+        addDefault("use-victim-balance", true);
+        addDefault("percentage-taken-off-victim", 0.05);
+        addDefault("percentage-of-balance-as-price", 0.05);
 
         addSection("Selling Heads");
         addDefault("stop-placement-of-sellable-heads", false);
@@ -100,15 +108,26 @@ public class MainConfig extends CMFile {
                 "If this is disabled, all worlds in the lists below will not have the respected event occur in them.\n" +
                 "If this is enabled, on the other hand, any worlds not in the lists will not have the respected event occur in them.");
 
-        addDefault("mob-drops-list", new ArrayList<>());
+        addDefault("mob-drops-list", new ArrayList<>(), "Worlds in which heads cannot drop from mobs...\n" +
+                "... Or worlds in which heads can only drop in if whitelist-worlds is enabled.");
         addDefault("crafting-list", new ArrayList<>());
         addDefault("masks-list", new ArrayList<>());
         addDefault("levels", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
 
+        addSection("Levels");
+        addDefault("add-boss-bars", true);
+        addDefault("boss-bar-color", "RED");
+        addDefault("boss-bar-title", "&c&lXP to next HP level");
+        addDefault("boss-bar-lifetime", 5);
+
         addSection("Updates");
         addDefault("check-for-updates", true);
         addDefault("notify-admins-about-updates", true);
+
+        addSection("Localisation");
+        addDefault("locale", "en_us");
+        addDefault("smart-locale", false);
 
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
@@ -279,8 +298,11 @@ public class MainConfig extends CMFile {
         mainFeatures = new MainFeatures();
         mySQL = new MySQL();
         mobDrops = new MobDrops();
+        playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
         masks = new Masks();
+        levels = new Levels();
+        localisation = new Localisation();
         updates = new Updates();
     }
 
@@ -335,8 +357,20 @@ public class MainConfig extends CMFile {
         return mobDrops;
     }
 
+    public PlayerDrops getPlayerDrops() {
+        return playerDrops;
+    }
+
     public Masks getMasks() {
         return masks;
+    }
+
+    public Levels getLevels() {
+        return levels;
+    }
+
+    public Localisation getLocalisation() {
+        return localisation;
     }
 
     public Updates getUpdates() {
@@ -378,15 +412,22 @@ public class MainConfig extends CMFile {
 
     public class MobDrops {
         public List<String> BLOCKED_SPAWN_CAUSES = getStringList("blocked-spawn-causes"),
-                IGNORED_PLAYERS = getStringList("ignored-players"),
                 ENTITIES_NEEDING_KILLER = getStringList("entities-needing-killer"),
-                LOOTING_IGNORED = getStringList("looting-ignored"),
-                PLAYER_HEAD_DEATH_MESSAGES = getStringList("player-head-death-messages");
+                LOOTING_IGNORED = getStringList("looting-ignored");
         public boolean NEEDS_KILLER = getBoolean("needs-killer"),
                 ENABLE_LOOTING = getBoolean("enable-looting"),
-                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs"),
-                ENABLE_PLAYER_DEATH_MESSAGES = getBoolean("enable-player-head-death-messages");
+                DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
 
+    }
+
+    public class PlayerDrops {
+        public List<String> PLAYER_HEAD_DEATH_MESSAGES = getStringList("player-head-death-messages"),
+                IGNORED_PLAYERS = getStringList("ignored-players");
+        public boolean ENABLE_PLAYER_DEATH_MESSAGES = getBoolean("enable-player-head-death-messages"),
+                ADJUST_PRICE_ACCORDING_TO_PRICE = getBoolean("adjust-price-according-to-balance"),
+                USE_VICTIM_BALANCE = getBoolean("use-victim-balance");
+        public double PERCENTAGE_TAKEN_OFF_VICTIM = getDouble("percentage-taken-off-victim"),
+                PERCENTAGE_OF_BALANCE_AS_PRICE = getDouble("percentage-of-balance-as-price");
     }
 
     public class SellingHeads {
@@ -399,6 +440,18 @@ public class MainConfig extends CMFile {
         public int CHECK_INTERVAL = getInteger("check-interval"),
                 RESET_INTERVAL = getInteger("reset-after-x-intervals"),
                 EFFECT_LENGTH = getInteger("effect-length");
+    }
+
+    public class Levels {
+        public boolean ENABLE_BOSS_BARS = getBoolean("add-boss-bars");
+        public String BOSS_BAR_COLOR = getString("boss-bar-color"),
+                BOSS_BAR_TITLE = getString("boss-bar-title");
+        public int BOSS_BAR_LIFETIME = getInteger("boss-bar-lifetime");
+    }
+
+    public class Localisation {
+        public String LOCALE = getString("locale");
+        public boolean SMART_LOCALE = getBoolean("smart-locale");
     }
 
     public class Updates {

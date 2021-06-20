@@ -3,7 +3,6 @@ package io.github.thatsmusic99.headsplus.util;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -37,13 +36,12 @@ public class HPUtils {
 
     public static void addBossBar(OfflinePlayer pl) {
         HPPlayer p = HPPlayer.getHPPlayer(pl);
-        ConfigurationSection config = HeadsPlus.getInstance().getConfiguration().getMechanics();
-        if (!config.getBoolean("boss-bar.enabled")) return;
+        if (!MainConfig.get().getLevels().ENABLE_BOSS_BARS) return;
         if (p.getNextLevel() == null) return;
         try {
             if (!bossBars.containsKey(p.getUuid())) {
-                String s = ChatColor.translateAlternateColorCodes('&', config.getString("boss-bar.title"));
-                BossBar bossBar = Bukkit.getServer().createBossBar(s, BarColor.valueOf(config.getString("boss-bar.color")), BarStyle.SEGMENTED_6);
+                String title = ChatColor.translateAlternateColorCodes('&', MainConfig.get().getLevels().BOSS_BAR_TITLE);
+                BossBar bossBar = Bukkit.getServer().createBossBar(title, BarColor.valueOf(MainConfig.get().getLevels().BOSS_BAR_COLOR), BarStyle.SEGMENTED_6);
                 if (pl.getPlayer() != null)
                     bossBar.addPlayer(pl.getPlayer());
                 double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
@@ -55,7 +53,7 @@ public class HPUtils {
                     bossBar.setVisible(false);
                     bossBar.removePlayer(pl.getPlayer());
                     bossBars.remove(pl.getPlayer().getUniqueId());
-                }, config.getLong("boss-bar.lifetime") * 20);
+                }, MainConfig.get().getLevels().BOSS_BAR_LIFETIME * 20L);
             } else {
                 double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
                 percentageProgress = 1 - percentageProgress;
@@ -86,9 +84,8 @@ public class HPUtils {
     }
 
     public static double calculateChance(double chance, double randChance, Player killer) {
-        ConfigurationSection mechanics = HeadsPlus.getInstance().getConfiguration().getMechanics();
         if (!MainConfig.get().getMobDrops().ENABLE_LOOTING) return chance;
-        ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
+        ConfigurationSection lootingThresholds = MainConfig.get().getConfig().getConfigurationSection("thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
         if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
@@ -163,7 +160,7 @@ public class HPUtils {
         HeadsPlus hp = HeadsPlus.get();
 
         try {
-            if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
+            if (MainConfig.get().getMobDrops().DISABLE_FOR_MYTHIC_MOBS) {
                 Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");
                 if (plugin != null && plugin.isEnabled()) {
                     return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
@@ -176,7 +173,7 @@ public class HPUtils {
 
     @Deprecated
     public static boolean runBlacklistTests(LivingEntity e) {
-        MainConfig c = HeadsPlus.getInstance().getConfiguration();
+       /* MainConfig c = HeadsPlus.get().getConfiguration();
         // Killer checks
         if (e.getKiller() == null) {
             if (c.getPerks().drops_needs_killer) {
@@ -214,7 +211,8 @@ public class HPUtils {
                     || c.getPerks().drops_ignore_players.contains(e.getName()));
         } else {
             return true;
-        }
+        } */
+        return true;
 
     }
 

@@ -51,7 +51,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
 
         addData("player", victim.getName());
         // Make sure head drops are enabled
-        if (!addData("enabled", hp.isDropsEnabled())) return;
+        if (!addData("enabled", MainConfig.get().getMainFeatures().MOB_DROPS)) return;
         // Make sure the entity isn't from MythicMobs
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
@@ -68,21 +68,21 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
             double lostprice = 0.0;
             double price = ConfigMobs.get().getPlayerPrice(victim.getName());
             Economy economy = HeadsPlus.get().getEconomy();
-            if (hp.getConfiguration().getPerks().pvp_player_balance_competition) {
+            if (MainConfig.get().getPlayerDrops().ADJUST_PRICE_ACCORDING_TO_PRICE) {
                 double playerPrice;
-                if (hp.getConfiguration().getPerks().use_killer_balance
+                if (!MainConfig.get().getPlayerDrops().USE_VICTIM_BALANCE
                         && killer != null
                         && economy.getBalance(killer) > 0.0) {
                     playerPrice = economy.getBalance(killer);
                 } else {
                     playerPrice = economy.getBalance(victim);
                 }
-                price = playerPrice * (hp.getConfiguration().getPerks().pvp_balance_for_head / 100);
-                lostprice = playerPrice * (hp.getConfiguration().getPerks().pvp_percentage_lost / 100);
+                price = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_OF_BALANCE_AS_PRICE / 100);
+                lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
             }
 
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo().withTexture(victim.getName())
-                    .withLore()
+                    .withLore();
 
             Head head = new EntityHead("PLAYER", Material.PLAYER_HEAD).withAmount(amount)
                     .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
@@ -90,7 +90,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
                     .withLore(hpch.getLore(victim.getName(), price))
                     .withPlayerName(victim.getName());
             Location location = victim.getLocation();
-            PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, head, location, amount);
+            PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, headInfo, location, amount);
             Bukkit.getPluginManager().callEvent(phdEvent);
             if (!phdEvent.isCancelled()) {
                 if (lostprice > 0.0) {

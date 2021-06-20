@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,7 +29,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Deprecated // Locale system is being redone
 public class HeadsPlusMessagesManager {
 
     private static YamlConfiguration config;
@@ -40,9 +38,9 @@ public class HeadsPlusMessagesManager {
 
     public HeadsPlusMessagesManager() {
         instance = this;
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
-        String locale = "en_us"; // TODO: Make config value
+        String locale = MainConfig.get().getLocalisation().LOCALE;
         locales = new HashMap<>();
         if (MainConfig.get().getBoolean("smart-locale")) {
             File langDir = new File(dest);
@@ -965,7 +963,7 @@ public class HeadsPlusMessagesManager {
     public String getString(String path, Player player) {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
-        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+        if (MainConfig.get().getLocalisation().SMART_LOCALE) {
             if (players.containsKey(player.getUniqueId()) && player.isOnline()) {
                 config = players.get(player.getUniqueId());
                 if (config == null) {
