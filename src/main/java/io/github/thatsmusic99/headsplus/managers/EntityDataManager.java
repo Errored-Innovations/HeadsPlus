@@ -19,7 +19,7 @@ public class EntityDataManager {
     public static final List<String> ableEntities = new ArrayList<>();
 
 
-    private static final LinkedHashMap<String, List<EntityHead>> storedHeads = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, List<HeadManager.HeadInfo>> storedHeads = new LinkedHashMap<>();
     private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
     public static void createEntityList() {
@@ -46,7 +46,7 @@ public class EntityDataManager {
         }.runTaskAsynchronously(HeadsPlus.getInstance());
     }
 
-    public static LinkedHashMap<String, List<EntityHead>> getStoredHeads() {
+    public static LinkedHashMap<String, List<HeadManager.HeadInfo>> getStoredHeads() {
         return storedHeads;
     }
 
@@ -139,54 +139,41 @@ public class EntityDataManager {
     private static void setupHeads() {
         for (String name : ableEntities) {
             try {
-                String fancyName;
-                switch (name) {
-                    case "WANDERING_TRADER":
-                    case "TRADER_LLAMA":
-                        fancyName = name.toLowerCase();
-                        break;
-                    default:
-                        fancyName = name.toLowerCase().replaceAll("_", "");
-                        break;
-                }
-                ConfigMobs headsCon = HeadsPlus.getInstance().getHeadsConfig();
-                for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
-                    List<EntityHead> heads = new ArrayList<>();
-                    for (String head : headsCon.getConfig().getStringList(name + ".name." + conditions)) {
-                        EntityHead headItem;
+                ConfigMobs headsCon = ConfigMobs.get();
+                for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(name)).getKeys(false)) {
+                    List<HeadManager.HeadInfo> heads = new ArrayList<>();
+                    for (String head : headsCon.getConfig().getConfigurationSection(name + "." + conditions).getKeys(false)) {
+                        HeadManager.HeadInfo headInfo;
+                        if (head.startsWith("HPM#")) {
+                            headInfo = MaskManager.get().getMaskInfo(head);
+                        } else {
+                            headInfo = HeadManager.get().getHeadInfo(head);
+                        }
+
                         if (head.equalsIgnoreCase("{mob-default}")) {
                             switch (name) {
                                 case "WITHER_SKELETON":
-                                    headItem = new EntityHead(name, Material.WITHER_SKELETON_SKULL);
+                                    headInfo.withMaterial(Material.WITHER_SKELETON_SKULL);
                                     break;
                                 case "ENDER_DRAGON":
-                                    headItem = new EntityHead(name, Material.DRAGON_HEAD);
+                                    headInfo.withMaterial(Material.DRAGON_HEAD);
                                     break;
                                 case "ZOMBIE":
-                                    headItem = new EntityHead(name, Material.ZOMBIE_HEAD);
+                                    headInfo.withMaterial(Material.ZOMBIE_HEAD);
                                     break;
                                 case "CREEPER":
-                                    headItem = new EntityHead(name, Material.CREEPER_HEAD);
+                                    headInfo.withMaterial(Material.CREEPER_HEAD);
                                     break;
                                 case "SKELETON":
-                                    headItem = new EntityHead(name, Material.SKELETON_SKULL);
-                                    break;
-                                default:
-                                    headItem = new EntityHead(name, Material.PLAYER_HEAD);
+                                    headInfo.withMaterial(Material.SKELETON_SKULL);
                                     break;
                             }
-                        } else {
-                            headItem = new EntityHead(name, Material.PLAYER_HEAD);
                         }
-                        headItem.withDisplayName(headsCon.getDisplayName(fancyName))
-                                .withPrice(headsCon.getPrice(fancyName))
-                                .withLore(headsCon.getLore(fancyName));
-                        if (head.startsWith("HP#")) {
-                            headItem.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(head));
-                        } else {
-                            headItem.withPlayerName(head);
-                        }
-                        heads.add(headItem);
+
+                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(name + "." + conditions, head));
+                        headInfo.setLore(ConfigMobs.get().getLore(name + "." + conditions)); // TODO
+
+                        heads.add(headInfo);
                         sellheadCache.putIfAbsent(name, headItem.getItemStack());
                     }
                     storedHeads.put(name + ";" + conditions, heads);

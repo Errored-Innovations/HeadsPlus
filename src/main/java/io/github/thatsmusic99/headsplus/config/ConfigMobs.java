@@ -17,12 +17,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ConfigMobs extends CMFile {
+
 	public final List<String> eHeads = new ArrayList<>(Arrays.asList("apple", "cake", "chest", "cactus", "melon", "pumpkin"));
 	public final List<String> ieHeads = new ArrayList<>(Arrays.asList("coconutB", "coconutG", "oaklog", "present1", "present2", "tnt", "tnt2", "arrowUp", "arrowDown", "arrowQuestion", "arrowLeft", "arrowRight", "arrowExclamation"));
+	private static ConfigMobs instance;
 
 	public ConfigMobs() {
 	    super(HeadsPlus.getInstance(), "mobs");
     }
+
+	public static ConfigMobs get() {
+		return instance;
+	}
 
 	@Override
 	public void loadDefaults() {
@@ -230,23 +236,37 @@ public class ConfigMobs extends CMFile {
     	addExample("player.default.price", "{default}");
         addExample("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
 
-        addExample("player.Thatsmusic99.display-name", "oi mate it's a bit rood to stab me innit?");
+        addExample("player.Thatsmusic99.lore", "oi mate it's a bit rood to stab me innit?");
     }
 
     public double getPrice(String type) {
 		return getDouble(type + ".price", getDouble("defaults.price"));
     }
 
-    public String getDisplayName(String type) {
-        if (getString(type + ".display-name", "").equals("{default}")) {
-            return ChatColor.translateAlternateColorCodes('&', getString("defaults.display-name", "").replaceAll("\\{type}", WordUtils.capitalize(type)));
-        } else {
-            return ChatColor.translateAlternateColorCodes('&', getString(type + ".display-name", "").replaceAll("\\{type}", WordUtils.capitalize(type)));
-        }
+    public String getPlayerDisplayName(String name) {
+		String displayName = getString("player." + name + ".display-name", "");
+		if (displayName.isEmpty()) {
+			displayName = getString("player.default.display-name", getString("defaults.display-name"));
+		}
+		return ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("\\{player}", name));
     }
 
-    public double getChance(String type) {
-		return getDouble(type + ".chance", getDouble("defaults.chance"));
+    public double getPlayerChance(String name) {
+		return getDouble("player." + name + ".chance", getDouble("player.default.chance",
+				getDouble("defaults.chance")));
+	}
+
+	public double getPlayerPrice(String name) {
+		return getDouble("player." + name + ".price", getDouble("player.default.price",
+				getDouble("defaults.price")));
+	}
+
+
+
+    public String getDisplayName()
+
+    public double getChance(String path) {
+		return getDouble(path + ".chance", getDouble("defaults.chance"));
 	}
 
     public List<String> getLore(String type) {

@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.util.paper;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,6 +34,19 @@ public class ActualPaperImpl implements PaperImpl {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return meta;
+        }, asyncExecutor).thenApplyAsync(sm -> sm, syncExecutor);
+    }
+
+    @Override
+    public CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture) {
+        return CompletableFuture.supplyAsync(() -> {
+            PlayerProfile profile = meta.getPlayerProfile();
+            if (profile == null) profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+            ProfileProperty property = new ProfileProperty("textures", texture);
+            profile.setProperty(property);
+            profile.complete();
+            meta.setPlayerProfile(profile);
             return meta;
         }, asyncExecutor).thenApplyAsync(sm -> sm, syncExecutor);
     }

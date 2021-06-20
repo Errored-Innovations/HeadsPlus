@@ -29,6 +29,10 @@ public class ProfileFetcher {
 
     public static GameProfile getProfile(ItemStack item) throws IllegalAccessException {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
+        return getProfile(meta);
+    }
+
+    public static GameProfile getProfile(SkullMeta meta) throws IllegalAccessException {
         Field profile;
         try {
             profile = meta.getClass().getDeclaredField("profile");

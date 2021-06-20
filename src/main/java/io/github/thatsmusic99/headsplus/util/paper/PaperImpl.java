@@ -6,4 +6,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface PaperImpl {
     CompletableFuture<SkullMeta> setProfile(SkullMeta meta, String name);
+
+    CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture);
 }

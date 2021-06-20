@@ -6,6 +6,8 @@ import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -85,7 +87,7 @@ public class HPUtils {
 
     public static double calculateChance(double chance, double randChance, Player killer) {
         ConfigurationSection mechanics = HeadsPlus.getInstance().getConfiguration().getMechanics();
-        if (!mechanics.getBoolean("allow-looting-enchantment")) return chance;
+        if (!MainConfig.get().getMobDrops().ENABLE_LOOTING) return chance;
         ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
@@ -113,8 +115,8 @@ public class HPUtils {
 
     public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
         Random random = new Random();
-        HashMap<String, List<EntityHead>> storedHeads = EntityDataManager.getStoredHeads();
-        List<EntityHead> heads = storedHeads.get(id + ";" + meta);
+        HashMap<String, List<HeadManager.HeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
+        List<HeadManager.HeadInfo> heads = storedHeads.get(id + ";" + meta);
         if (heads == null) {
             String[] possibleConditions = meta.split(",");
             for (String str : possibleConditions) {
@@ -128,12 +130,16 @@ public class HPUtils {
             throw new NullPointerException("Found no heads list for " + id + "!");
         }
         if (heads.isEmpty()) return;
-        EntityHead head = heads.get(random.nextInt(heads.size()));
-        head.withAmount(amount);
-        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.valueOf(id), amount);
+        HeadManager.HeadInfo info = heads.get(random.nextInt(heads.size()));
+
+        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            head.getItemStackFuture().thenAccept(itemStack -> location.getWorld().dropItem(location, itemStack));
+            info.buildHead().thenAccept(head -> {
+                head.setAmount(amount);
+                PersistenceManager.get().setSellType(head, "mobs_" + id);
+                location.getWorld().dropItem(location, head);
+            });
         }
     }
 

@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -55,7 +56,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
         if (!HPUtils.runBlacklistTests(event.getEntity())) return;
-        double fixedChance = addData("fixed-chance", hpch.getChance("player"));
+        double fixedChance = addData("fixed-chance", ConfigMobs.get().getPlayerChance(victim.getName()));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
         if (killer != null) {
@@ -65,7 +66,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         if (randomChance <= fixedChance) {
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
             double lostprice = 0.0;
-            double price = hpch.getPrice("player");
+            double price = ConfigMobs.get().getPlayerPrice(victim.getName());
             Economy economy = HeadsPlus.getInstance().getEconomy();
             if (hp.getConfiguration().getPerks().pvp_player_balance_competition) {
                 double playerPrice;
@@ -79,6 +80,10 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
                 price = playerPrice * (hp.getConfiguration().getPerks().pvp_balance_for_head / 100);
                 lostprice = playerPrice * (hp.getConfiguration().getPerks().pvp_percentage_lost / 100);
             }
+
+            HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo().withTexture(victim.getName())
+                    .withLore()
+
             Head head = new EntityHead("PLAYER", Material.PLAYER_HEAD).withAmount(amount)
                     .withDisplayName(ChatColor.RESET + hpch.getDisplayName("player").replace("{player}", victim.getName()))
                     .withPrice(price)

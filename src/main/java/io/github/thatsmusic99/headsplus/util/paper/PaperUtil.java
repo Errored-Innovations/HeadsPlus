@@ -1,5 +1,7 @@
 package io.github.thatsmusic99.headsplus.util.paper;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.papermc.lib.PaperLib;
@@ -34,6 +36,22 @@ public class PaperUtil implements PaperImpl {
             return CompletableFuture.completedFuture(ProfileFetcher.setProfile(meta, name));
         }
         return internalImpl.setProfile(meta, name);
+    }
+
+    public CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture) {
+        if (internalImpl == null) {
+            GameProfile profile;
+            try {
+                profile = ProfileFetcher.getProfile(meta);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return CompletableFuture.completedFuture(meta);
+            }
+            if (profile == null) return CompletableFuture.completedFuture(meta);
+            profile.getProperties().put("textures", new Property("texture", texture));
+            return CompletableFuture.completedFuture(ProfileFetcher.setProfile(meta, profile));
+        }
+        return internalImpl.setProfile(meta, texture);
     }
 
     public static PaperUtil get() {
