@@ -75,9 +75,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         Player player = (Player) e.getWhoClicked();
-        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder()
-                && hp.getConfiguration().getMechanics().getBoolean("plugin.mechanics.check-for-stolen-icons")
-                && player.getGameMode() == GameMode.CREATIVE) {
+        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder() && player.getGameMode() == GameMode.CREATIVE) {
             for (int i = 0; i < 46; i++) {
                 ItemStack item = player.getInventory().getItem(i);
                 if (item != null) {
