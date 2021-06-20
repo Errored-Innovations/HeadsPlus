@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -23,7 +24,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 	    Player player = e.getPlayer();
 	    addData("player", player.getName());
 		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
-		    if (addData("update-enabled", hp.getConfiguration().getMechanics().getBoolean("update.notify"))) {
+		    if (addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) {
                 if (addData("has-update", HeadsPlus.getUpdate() != null)) {
                     new FancyMessage().text(hpc.getString("update.update-found", player))
                     .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())

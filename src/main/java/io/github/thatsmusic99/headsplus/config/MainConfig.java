@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
@@ -66,12 +67,12 @@ public class MainConfig extends CMFile {
 
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
-        addDefault("blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")),
+        addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG")),
                 "Spawn causes that stop heads dropping from a given mob.\n" +
                         "In this example, mobs spawned using spawner eggs will not drop heads at all.");
         addDefault("ignored-players", new ArrayList<>());
         addDefault("needs-killer", false);
-        addDefault("entities-needing-killer", new ArrayList<>(Collections.singleton("player")));
+        addDefault("entities-needing-killer", Lists.newArrayList("player"));
         addDefault("enable-looting", true);
         addDefault("thresholds.common", 100);
         addDefault("thresholds.uncommon", 20);
@@ -80,9 +81,9 @@ public class MainConfig extends CMFile {
         addDefault("disable-for-mythic-mobs", true);
         addDefault("enable-player-head-death-messages", false);
         addDefault("player-head-death-messages",
-                new ArrayList<>(Arrays.asList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
+                Lists.newArrayList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
                         "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
-                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job.")));
+                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."));
 
         addSection("Selling Heads");
         addDefault("stop-placement-of-sellable-heads", false);
@@ -103,7 +104,7 @@ public class MainConfig extends CMFile {
         addDefault("crafting-list", new ArrayList<>());
         addDefault("masks-list", new ArrayList<>());
         addDefault("levels", new ArrayList<>());
-
+        addDefault("blocked-heads", new ArrayList<>());
 
         addSection("Updates");
         addDefault("check-for-updates", true);
@@ -111,6 +112,9 @@ public class MainConfig extends CMFile {
 
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
+        addDefault("smite-player", false, "This April Fool's feature genuinely got me a complaint.\n" +
+                "Basically, it strikes the player with lightning whenever a head is dropped. That is it.\n" +
+                "Someone genuinely complained about it.");
 
     }
 
@@ -333,6 +337,10 @@ public class MainConfig extends CMFile {
 
     public Masks getMasks() {
         return masks;
+    }
+
+    public Updates getUpdates() {
+        return updates;
     }
 
     public String fixBalanceStr(double balance) {
