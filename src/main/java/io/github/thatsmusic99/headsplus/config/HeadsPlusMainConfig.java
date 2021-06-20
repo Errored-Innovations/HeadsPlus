@@ -118,6 +118,7 @@ public class HeadsPlusMainConfig extends ConfigSettings {
         config.addDefault("plugin.mechanics.masks.reset-after-x-intervals", 20);
         config.addDefault("plugin.mechanics.masks.effect-length", 12000);
         config.addDefault("plugin.mechanics.sellhead-ids-case-sensitive", true);
+        config.addDefault("plugin.mechanics.check-for-stolen-icons", true);
         config.options().copyDefaults(true);
         save();
 

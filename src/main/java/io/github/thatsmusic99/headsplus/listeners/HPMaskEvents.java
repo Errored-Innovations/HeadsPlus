@@ -10,6 +10,7 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -74,7 +75,9 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     public void onEvent(InventoryClickEvent e) {
         HeadsPlus hp = HeadsPlus.getInstance();
         Player player = (Player) e.getWhoClicked();
-        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder()) {
+        if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder()
+                && hp.getConfiguration().getMechanics().getBoolean("plugin.mechanics.check-for-stolen-icons")
+                && player.getGameMode() == GameMode.CREATIVE) {
             for (int i = 0; i < 46; i++) {
                 ItemStack item = player.getInventory().getItem(i);
                 if (item != null) {
