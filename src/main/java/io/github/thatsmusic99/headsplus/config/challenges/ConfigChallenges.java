@@ -80,7 +80,7 @@ public class ConfigChallenges extends FeatureConfig {
                 String s = numberToRomanNumeral(section.min);
                 String e = t.replaceAll("_", " ");
                 addExample("challenges." + t + "-" + section.min + "-hunting.name", e + "-" + s + " Hunting");
-                addExample("challenges." + t + "-" + section.min + "-hunting.header", "&8[&c&l" + HeadsPlus.capitalize(e.toLowerCase()) + " Hunting " + s + "&8]");
+                addExample("challenges." + t + "-" + section.min + "-hunting.header", "&8[&c&l" + HeadsPlus.capitalize(e) + " Hunting " + s + "&8]");
                 addExample("challenges." + t + "-" + section.min + "-hunting.description", Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from", "&7killing " + t.toLowerCase().replaceAll("_", " ") + "(s)!"));
                 addExample("challenges." + t + "-" + section.min + "-hunting.type", "LEADERBOARD");
                 addExample("challenges." + t + "-" + section.min + "-hunting.min", section.min * multiplier * tempDif);
@@ -92,7 +92,7 @@ public class ConfigChallenges extends FeatureConfig {
                 addExample("challenges." + t + "-" + section.min + "-hunting.completed-icon", "default-completed");
 
                 addExample("challenges." + t + "-" + section.min + "-crafting.name", e + "-" + s + " Crafting");
-                addExample("challenges." + t + "-" + section.min + "-crafting.header", "&8[&a&l"  + HeadsPlus.capitalize(e.toLowerCase()) + " Crafting " + s + "&8]");
+                addExample("challenges." + t + "-" + section.min + "-crafting.header", "&8[&a&l"  + HeadsPlus.capitalize(e) + " Crafting " + s + "&8]");
                 addExample("challenges." + t + "-" + section.min + "-crafting.description", Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from", "&7crafting " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
                 addExample("challenges." + t + "-" + section.min + "-crafting.type", "CRAFTING");
                 addExample("challenges." + t + "-" + section.min + "-crafting.min", section.min * multiplier * tempDif);
@@ -104,7 +104,7 @@ public class ConfigChallenges extends FeatureConfig {
                 addExample("challenges." + t + "-" + section.min + "-crafting.completed-icon", "default-completed");
 
                 addExample("challenges." + t + "-" + section.min + "-selling.name", e + "-" + s + " Selling");
-                addExample("challenges." + t + "-" + section.min + "-selling.header", "&8[&e&l" + HeadsPlus.capitalize(e.toLowerCase()) + " Selling " + s + "&8]");
+                addExample("challenges." + t + "-" + section.min + "-selling.header", "&8[&e&l" + HeadsPlus.capitalize(e) + " Selling " + s + "&8]");
                 addExample("challenges." + t + "-" + section.min + "-selling.description", Arrays.asList("&7Sell a total of", "&7" + (section.min * multiplier * tempDif) + " " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
                 addExample("challenges." + t + "-" + section.min + "-selling.type", "SELLHEAD");
                 addExample("challenges." + t + "-" + section.min + "-selling.min", section.min * multiplier * tempDif);
