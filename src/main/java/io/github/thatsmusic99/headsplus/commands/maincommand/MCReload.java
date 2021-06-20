@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.ConfigSettings;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.command.Command;
@@ -36,15 +35,15 @@ public class MCReload implements IHeadsPlusCommand {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (CMFile cs : HeadsPlus.getInstance().getConfigs()) {
+                for (CMFile cs : HeadsPlus.get().getConfigs()) {
                     cs.reload();
                 }
                 HPPlayer.players.clear();
                 EntityDataManager.init();
-                HeadsPlus.getInstance().restartMessagesManager();
+                HeadsPlus.get().restartMessagesManager();
                 HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);
             }
-        }.runTaskLaterAsynchronously(HeadsPlus.getInstance(), 2);
+        }.runTaskLaterAsynchronously(HeadsPlus.get(), 2);
         return true;
     }
 

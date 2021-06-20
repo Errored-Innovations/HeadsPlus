@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -43,7 +42,7 @@ public class EntityDataManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(HeadsPlus.getInstance());
+        }.runTaskAsynchronously(HeadsPlus.get());
     }
 
     public static LinkedHashMap<String, List<HeadManager.HeadInfo>> getStoredHeads() {
@@ -180,7 +179,7 @@ public class EntityDataManager {
                 }
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
             } catch (Exception e) {
-                HeadsPlus.getInstance().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
+                HeadsPlus.get().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
             }
         }

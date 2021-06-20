@@ -38,7 +38,7 @@ public class HPPlayer {
 
     public HPPlayer(OfflinePlayer p) {
         if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         activeMask = new ArrayList<>();
         favouriteHeads = new ArrayList<>();
         pinnedChallenges = new ArrayList<>();
@@ -164,7 +164,7 @@ public class HPPlayer {
         } else {
             s = s.toLowerCase().replaceAll("_", "");
         }
-        ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+        ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
         List<PotionEffect> po = new ArrayList<>();
         for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
             String is = hpch.getConfig().getStringList(s + ".mask-effects").get(i).toUpperCase();
@@ -182,14 +182,14 @@ public class HPPlayer {
             try {
                 PotionEffectType type = PotionEffectType.getByName(is);
                 if (type == null) {
-                    HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
+                    HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
                     continue;
                 }
-                PotionEffect p = new PotionEffect(type, HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), amp);
+                PotionEffect p = new PotionEffect(type, HeadsPlus.get().getConfiguration().getMechanics().getInt("masks.effect-length"), amp);
                 ((Player) getPlayer()).addPotionEffect(p);
                 po.add(p);
             } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
+                HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
             }
         }
         activeMask = po;
@@ -200,7 +200,7 @@ public class HPPlayer {
         for (PotionEffect effect : activeMask) {
             Player player = (Player) getPlayer();
             player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(effect.getType(), HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), effect.getAmplifier()));
+            player.addPotionEffect(new PotionEffect(effect.getType(), HeadsPlus.get().getConfiguration().getMechanics().getInt("masks.effect-length"), effect.getAmplifier()));
         }
     }
 
@@ -263,11 +263,11 @@ public class HPPlayer {
     public void setLocale(String locale, boolean forced) {
         cachedLocale = locale;
         localeForced = forced;
-        HeadsPlus.getInstance().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
+        HeadsPlus.get().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
     }
 
     public void addCompleteChallenge(Challenge c) {
-        PlayerScores scores = HeadsPlus.getInstance().getScores();
+        PlayerScores scores = HeadsPlus.get().getScores();
         scores.completeChallenge(player.toString(), c);
         completeChallenges.add(c.getConfigName());
     }
@@ -281,8 +281,8 @@ public class HPPlayer {
     }
 
     public void setXp(int xp) {
-        HeadsPlus hp = HeadsPlus.getInstance();
-        PlayerScores scores = HeadsPlus.getInstance().getScores();
+        HeadsPlus hp = HeadsPlus.get();
+        PlayerScores scores = HeadsPlus.get().getScores();
         scores.setXp(player.toString(), xp);
         this.xp = xp;
             if (hp.usingLevels()) {
@@ -301,7 +301,7 @@ public class HPPlayer {
                                         HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
                                     }
                                 }
-                                HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
+                                HashMap<Integer, Level> levels = HeadsPlus.get().getLevels();
                                 scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
                                 if (level.isrEnabled()) {
                                     level.getReward().reward(player.getPlayer());
@@ -365,12 +365,12 @@ public class HPPlayer {
 
     public void addFavourite(String s) {
         favouriteHeads.add(s);
-        HeadsPlus.getInstance().getFavourites().writeData(getPlayer(), s);
+        HeadsPlus.get().getFavourites().writeData(getPlayer(), s);
     }
 
     public void removeFavourite(String s) {
         favouriteHeads.remove(s);
-        HeadsPlus.getInstance().getFavourites().removeHead(getPlayer(), s);
+        HeadsPlus.get().getFavourites().removeHead(getPlayer(), s);
     }
 
     public boolean hasChallengePinned(Challenge challenge) {
@@ -380,13 +380,13 @@ public class HPPlayer {
     public void addChallengePin(Challenge challenge) {
         String s = challenge.getConfigName();
         pinnedChallenges.add(s);
-        HeadsPlus.getInstance().getPinned().writeData(getPlayer(), s);
+        HeadsPlus.get().getPinned().writeData(getPlayer(), s);
     }
 
     public void removeChallengePin(Challenge challenge) {
         String s = challenge.getConfigName();
         pinnedChallenges.remove(s);
-        HeadsPlus.getInstance().getPinned().removeChallenge(getPlayer(), s);
+        HeadsPlus.get().getPinned().removeChallenge(getPlayer(), s);
     }
 
     public List<String> getPinnedChallenges() {

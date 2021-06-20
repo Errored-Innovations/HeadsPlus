@@ -19,7 +19,7 @@ public class HPPlayerMessageDeathEvent extends HeadsPlusListener<PlayerHeadDropE
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, this, EventPriority.MONITOR,
-                new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.getInstance(), true);
+                new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.get(), true);
     }
 
     @Override

@@ -73,8 +73,8 @@ public class HeadsPlus extends JavaPlugin {
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
 
-    public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), task);
-    public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.getInstance(), task);
+    public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), task);
+    public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.get(), task);
 
     @Override
     public void onLoad() {
@@ -221,7 +221,7 @@ public class HeadsPlus extends JavaPlugin {
         getLogger().info(HeadsPlusMessagesManager.get().getString("startup.plugin-disabled"));
     }
 
-    public static HeadsPlus getInstance() {
+    public static HeadsPlus get() {
         return instance;
 
     }
@@ -293,7 +293,6 @@ public class HeadsPlus extends JavaPlugin {
             if (!listener.shouldEnable()) continue;
             listener.init();
         }
-
     }
 
     private void registerCommands() {

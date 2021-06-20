@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Rabbit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ConfigMobs extends CMFile {
@@ -23,7 +21,7 @@ public class ConfigMobs extends CMFile {
 	private static ConfigMobs instance;
 
 	public ConfigMobs() {
-	    super(HeadsPlus.getInstance(), "mobs");
+	    super(HeadsPlus.get(), "mobs");
     }
 
 	public static ConfigMobs get() {
@@ -261,9 +259,9 @@ public class ConfigMobs extends CMFile {
 				getDouble("defaults.price")));
 	}
 
+    public String getDisplayName(String path) {
 
-
-    public String getDisplayName()
+	}
 
     public double getChance(String path) {
 		return getDouble(path + ".chance", getDouble("defaults.chance"));

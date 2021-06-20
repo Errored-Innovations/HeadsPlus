@@ -27,6 +27,6 @@ public class Mask extends BukkitRunnable {
 
     public void start() {
         // TODO
-        runTaskTimer(HeadsPlus.getInstance(), 20, 20);
+        runTaskTimer(HeadsPlus.get(), 20, 20);
     }
 }

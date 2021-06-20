@@ -74,7 +74,7 @@ public class Challenge extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ConfigInventories items = hp.getItems();
-        HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
+        HeadsPlusAPI api = HeadsPlus.get().getAPI();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(items.getConfig().getString("icons.challenge.display-name")
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));

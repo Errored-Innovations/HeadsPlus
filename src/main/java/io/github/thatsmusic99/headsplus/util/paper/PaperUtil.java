@@ -23,7 +23,7 @@ public class PaperUtil implements PaperImpl {
                 impl = new ActualPaperImpl();
             } catch (Exception e) {
                 impl = null;
-                HeadsPlus.getInstance().getLogger().log(Level.WARNING, "Failed to initialize Paper integration", e);
+                HeadsPlus.get().getLogger().log(Level.WARNING, "Failed to initialize Paper integration", e);
             }
         } else {
             impl = null;

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Deprecated
 public class NewMySQLAPI {
 
-    private static final Connection connection = HeadsPlus.getInstance().getConnection();
+    private static final Connection connection = HeadsPlus.get().getConnection();
 
     public static void createTable() {
         for (String str : Arrays.asList("headspluslb", "headsplussh", "headspluscraft")) {

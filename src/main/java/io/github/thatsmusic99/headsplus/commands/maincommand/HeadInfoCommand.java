@@ -92,13 +92,13 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
                         if (args[1].equalsIgnoreCase("add")) {
                             StringUtil.copyPartialMatches(args[4], potions, results);
                         } else if (args[1].equalsIgnoreCase("remove")) {
-                            StringUtil.copyPartialMatches(args[4], HeadsPlus.getInstance().getHeadsConfig()
+                            StringUtil.copyPartialMatches(args[4], HeadsPlus.get().getHeadsConfig()
                                     .getStringList(args[2].equalsIgnoreCase("WANDERING_TRADER")
                                             || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", "") + ".mask-effects"), results);
                         }
                     } else if (args[3].equalsIgnoreCase("lore") && args[1].equalsIgnoreCase("remove")) {
                         List<String> lore = new ArrayList<>();
-                        for (String str : HeadsPlus.getInstance().getHeadsConfig()
+                        for (String str : HeadsPlus.get().getHeadsConfig()
                                 .getLore(args[2].equalsIgnoreCase("WANDERING_TRADER")
                                         || args[2].equalsIgnoreCase("TRADER_LLAMA") ? args[2].toLowerCase() : args[2].toLowerCase().replace("_", ""))) {
                             lore.add(str.replaceAll("§", "&"));
@@ -118,7 +118,7 @@ public class HeadInfoCommand implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender sender) {
         try {
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             if (args.length > 2) {
                 String type = args[2].toLowerCase().replaceAll("_", "");
                 if (args[2].equalsIgnoreCase("WANDERING_TRADER") || args[2].equalsIgnoreCase("TRADER_LLAMA")) {

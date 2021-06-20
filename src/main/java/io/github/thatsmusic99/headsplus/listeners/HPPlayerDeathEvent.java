@@ -28,7 +28,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerDeathEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerDeathEvent.class, "PlayerDeathEvent", this), HeadsPlus.get());
         addPossibleData("player", "<Player>");
         addPossibleData("enabled", "true", "false");
         addPossibleData("is-mythic-mob", "true", "false");
@@ -67,7 +67,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
             double lostprice = 0.0;
             double price = ConfigMobs.get().getPlayerPrice(victim.getName());
-            Economy economy = HeadsPlus.getInstance().getEconomy();
+            Economy economy = HeadsPlus.get().getEconomy();
             if (hp.getConfiguration().getPerks().pvp_player_balance_competition) {
                 double playerPrice;
                 if (hp.getConfiguration().getPerks().use_killer_balance

@@ -18,7 +18,7 @@ public class HeadsSearch extends HeadsSection {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        ConfigCustomHeads hpch = HeadsPlus.get().getHeadsXConfig();
         String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
         for (String head : hpch.headsCache.keySet()) {

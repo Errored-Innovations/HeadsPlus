@@ -50,7 +50,7 @@ public class XPCommand implements IHeadsPlusCommand {
                         if (sender.hasPermission("headsplus.maincommand.xp.subtract")) {
                             if (args.length > 3) {
                                 int amount = HPUtils.isInt(args[3]);
-                                if (amount > player.getXp() && !HeadsPlus.getInstance().getConfiguration().getPerks().negative_xp) {
+                                if (amount > player.getXp() && !HeadsPlus.get().getConfiguration().getPerks().negative_xp) {
                                     hpc.sendMessage("commands.xp.negative-xp", sender);
                                     return true;
                                 }

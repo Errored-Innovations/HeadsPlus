@@ -35,7 +35,7 @@ public class HelpMenu implements IHeadsPlusCommand {
 	private void helpCmd(CommandSender cs, String cmdName) {
         if (cs.hasPermission("headsplus.maincommand")) {
             IHeadsPlusCommand pe = null;
-            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands().values()) {
+            for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
                 if (key.getClass().getAnnotation(CommandInfo.class).commandname().equalsIgnoreCase(cmdName)) {
                     pe = key;
                     break;
@@ -84,7 +84,7 @@ public class HelpMenu implements IHeadsPlusCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (args.length == 2) {
             List<String> commands = new ArrayList<>();
-            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands().values()) {
+            for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
                 if (sender.hasPermission(command.permission())) {
                     if (command.maincommand()) {

@@ -67,7 +67,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                 log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
             }
         } catch (Exception ex) {
-            HeadsPlus.getInstance().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
+            HeadsPlus.get().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
             e.printStackTrace();
             ex.printStackTrace();
         }
@@ -199,7 +199,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                                 sender.sendMessage(ChatColor.RED + "Transition failed! More information in console error.");
                                             }
                                         }
-                                    }.runTaskAsynchronously(HeadsPlus.getInstance());
+                                    }.runTaskAsynchronously(HeadsPlus.get());
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }

@@ -22,7 +22,7 @@ public class HPHeadInteractListener extends HeadsPlusListener<PlayerInteractEven
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerInteractEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.getInstance(), true);
+                new HeadsPlusEventExecutor(PlayerInteractEvent.class, "HPHeadInteractEvent", this), HeadsPlus.get(), true);
 
         int length = Action.values().length;
         String[] actions = new String[length];

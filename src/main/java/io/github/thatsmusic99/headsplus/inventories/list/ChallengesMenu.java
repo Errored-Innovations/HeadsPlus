@@ -36,7 +36,7 @@ public class ChallengesMenu extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> sections = new ArrayList<>();
-        for (ChallengeSection section : HeadsPlus.getInstance().getChallengeSections()) {
+        for (ChallengeSection section : HeadsPlus.get().getChallengeSections()) {
             io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection icon = new io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection(section);
             icon.initNameAndLore("challenge-section", player);
             sections.add(icon);

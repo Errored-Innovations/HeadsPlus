@@ -1,13 +1,10 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.config.ConfigSounds;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,7 +35,7 @@ public class SoundEvent<T> extends HeadsPlusListener<T> {
                 if (player == null) return;
                 player.playSound(player.getLocation(), s, vol, pitch);
             } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getLogger().warning("Could not find sound " + ConfigSounds.get().getString("sounds." + section + ".sound") + "! (Error code: 7)");
+                HeadsPlus.get().getLogger().warning("Could not find sound " + ConfigSounds.get().getString("sounds." + section + ".sound") + "! (Error code: 7)");
             }
         }
     }

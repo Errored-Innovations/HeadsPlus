@@ -8,7 +8,7 @@ public class ConfigSounds extends CMFile {
     private static ConfigSounds instance;
 
     public ConfigSounds() {
-        super(HeadsPlus.getInstance(), "sounds");
+        super(HeadsPlus.get(), "sounds");
         instance = this;
     }
 

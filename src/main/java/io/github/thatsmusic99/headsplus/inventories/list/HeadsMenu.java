@@ -45,7 +45,7 @@ public class HeadsMenu extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
-        ConfigCustomHeads headsConfig = HeadsPlus.getInstance().getHeadsXConfig();
+        ConfigCustomHeads headsConfig = HeadsPlus.get().getHeadsXConfig();
         for (String section : headsConfig.sections.keySet()) {
             ConfigurationSection configSec = headsConfig.getConfig().getConfigurationSection("sections." + section);
             ConfigurationSection itemSec = hpi.getConfigurationSection("icons.headsection");

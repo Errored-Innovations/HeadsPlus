@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
-    protected static HeadsPlus hp = HeadsPlus.getInstance();
+    protected static HeadsPlus hp = HeadsPlus.get();
     protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");

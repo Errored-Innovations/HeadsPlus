@@ -28,7 +28,7 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     public boolean onCommand(CommandSender cs, Command cmd, String l, String[] args) {
         try {
             HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-            if (HeadsPlus.getInstance().isUsingHeadDatabase()) {
+            if (HeadsPlus.get().isUsingHeadDatabase()) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.heads")) {

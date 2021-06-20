@@ -8,7 +8,7 @@ import java.util.Collections;
 public class ConfigMasks extends CMFile {
 
     public ConfigMasks() {
-        super(HeadsPlus.getInstance(), "masks");
+        super(HeadsPlus.get(), "masks");
     }
 
     @Override

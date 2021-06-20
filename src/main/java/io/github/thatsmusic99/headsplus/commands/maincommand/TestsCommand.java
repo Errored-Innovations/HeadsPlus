@@ -34,7 +34,7 @@ public class TestsCommand implements IHeadsPlusCommand {
                     int amount = HPUtils.isInt(args[2]);
                     String type = args[1].toLowerCase().replaceAll("_", "");
                     hpc.sendMessage("commands.tests.running-tests", sender);
-                    double chance = HeadsPlus.getInstance().getHeadsConfig().getConfig().getDouble(type + ".chance");
+                    double chance = HeadsPlus.get().getHeadsConfig().getConfig().getDouble(type + ".chance");
                     Random rand = new Random();
                     new BukkitRunnable() {
                         @Override
@@ -48,7 +48,7 @@ public class TestsCommand implements IHeadsPlusCommand {
                             }
                             hpc.sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
                         }
-                    }.runTaskAsynchronously(HeadsPlus.getInstance());
+                    }.runTaskAsynchronously(HeadsPlus.get());
                     return true;
 
                 } else {

@@ -22,7 +22,7 @@ public class HPPlayerCraftEvent extends HeadsPlusListener<InventoryClickEvent> {
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryClickEvent.class, "RecipeHandlingEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "RecipeHandlingEvent", this), HeadsPlus.get());
     }
 
     @Override

@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 public class PersistenceManager {
 
     private static PersistenceManager instance;
-    private static final NamespacedKey HEADSPLUS_STORAGE = new NamespacedKey(HeadsPlus.getInstance(), "storage");
-    private static final NamespacedKey HEADSPLUS_SELL_PRICE = new NamespacedKey(HeadsPlus.getInstance(), "sell_price");
-    private static final NamespacedKey HEADSPLUS_SELL_TYPE = new NamespacedKey(HeadsPlus.getInstance(), "sell_type");
-    private static final NamespacedKey HEADSPLUS_SELL_BOOLEAN = new NamespacedKey(HeadsPlus.getInstance(), "sell_boolean");
-    private static final NamespacedKey HEADSPLUS_INVENTORY_ICON = new NamespacedKey(HeadsPlus.getInstance(), "inventory_icon");
+    private static final NamespacedKey HEADSPLUS_STORAGE = new NamespacedKey(HeadsPlus.get(), "storage");
+    private static final NamespacedKey HEADSPLUS_SELL_PRICE = new NamespacedKey(HeadsPlus.get(), "sell_price");
+    private static final NamespacedKey HEADSPLUS_SELL_TYPE = new NamespacedKey(HeadsPlus.get(), "sell_type");
+    private static final NamespacedKey HEADSPLUS_SELL_BOOLEAN = new NamespacedKey(HeadsPlus.get(), "sell_boolean");
+    private static final NamespacedKey HEADSPLUS_INVENTORY_ICON = new NamespacedKey(HeadsPlus.get(), "inventory_icon");
 
     public PersistenceManager() {
         instance = this;

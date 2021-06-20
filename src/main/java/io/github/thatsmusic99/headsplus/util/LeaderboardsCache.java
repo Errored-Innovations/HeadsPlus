@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 public class LeaderboardsCache {
 
     private static final HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
-    private static final HeadsPlus hp = HeadsPlus.getInstance();
+    private static final HeadsPlus hp = HeadsPlus.get();
     private static final boolean enabled = hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards");
 
     public static void init(String type, LinkedHashMap<OfflinePlayer, Integer> contents) {
@@ -26,7 +26,7 @@ public class LeaderboardsCache {
             return cache.get(database + "_" + section);
         }
         if (!async && !realtime) {
-            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), () -> DataManager.getScores(database, section, false));
+            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> DataManager.getScores(database, section, false));
             return null;
         } else {
             return DataManager.getScores(database, section, false);

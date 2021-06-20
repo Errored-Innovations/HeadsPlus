@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class Icon {
 
-    protected static HeadsPlus hp = HeadsPlus.getInstance();
+    protected static HeadsPlus hp = HeadsPlus.get();
     protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     protected ItemStack item;
     private String id;

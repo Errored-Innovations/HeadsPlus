@@ -22,7 +22,7 @@ public class ConfigInteractions extends CMFile {
     private static ConfigInteractions instance;
 
     public ConfigInteractions() {
-        super(HeadsPlus.getInstance(), "interactions");
+        super(HeadsPlus.get(), "interactions");
         instance = this;
     }
 

@@ -36,7 +36,7 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        ConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        ConfigCustomHeads hpch = HeadsPlus.get().getHeadsXConfig();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));

@@ -39,7 +39,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
             if (args[0].matches("^[A-Za-z0-9_]+$")) {
                 if (args[0].length() > 2) {
                     if (args[0].length() < 17) {
-                        HeadsPlus hp = HeadsPlus.getInstance();
+                        HeadsPlus hp = HeadsPlus.get();
                         OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                         String uuid = p.getUniqueId().toString();
                         if (!hp.getServer().getOnlineMode()) {
@@ -62,9 +62,9 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
         } else {
             if (sender.hasPermission("headsplus.addhead.texture")) {
                 if (sender instanceof Conversable) {
-                    ConversationFactory factory = new ConversationFactory(HeadsPlus.getInstance());
+                    ConversationFactory factory = new ConversationFactory(HeadsPlus.get());
                     Conversation conversation = factory.withLocalEcho(false)
-                            .withModality(HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                            .withModality(HeadsPlus.get().getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
                             .withFirstPrompt(new DataListener(0, hpc.getString("commands.addhead.id", sender)))
                             .buildConversation((Conversable) sender);
                     conversation.addConversationAbandonedListener(event -> {
@@ -74,7 +74,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            ConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
+                            ConfigCustomHeads customHeads = HeadsPlus.get().getHeadsXConfig();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
                                 customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));

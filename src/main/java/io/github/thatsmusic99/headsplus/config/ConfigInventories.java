@@ -3,10 +3,7 @@ package io.github.thatsmusic99.headsplus.config;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
-import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.inventories.icons.content.*;
-import io.github.thatsmusic99.headsplus.inventories.icons.list.*;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -19,7 +16,7 @@ public class ConfigInventories extends CMFile {
     private static ConfigInventories instance;
 
     public ConfigInventories() {
-        super(HeadsPlus.getInstance(), "inventories");
+        super(HeadsPlus.get(), "inventories");
         instance = this;
     }
 
@@ -49,7 +46,7 @@ public class ConfigInventories extends CMFile {
                 new SellheadMenu(), new ChallengesPinnedInv())) {
             addDefault("inventories." + inv.getId() + ".title", inv.getDefaultTitle());
             if (getConfig().get("inventories." + inv.getId() + ".icons") instanceof List) {
-                HeadsPlus.getInstance().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");
+                HeadsPlus.get().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");
                 set("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
             }
             addDefault("inventories." + inv.getId() + ".icons", inv.getDefaultItems());

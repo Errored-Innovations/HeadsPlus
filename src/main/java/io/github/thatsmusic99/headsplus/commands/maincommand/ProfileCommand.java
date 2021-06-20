@@ -45,7 +45,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
     @Override
     public boolean fire(String[] args, CommandSender cs) {
         try {
-            HeadsPlus hp = HeadsPlus.getInstance();
+            HeadsPlus hp = HeadsPlus.get();
             OfflinePlayer p;
             if (args.length == 1) {
                 // TODO: better on a separate thread

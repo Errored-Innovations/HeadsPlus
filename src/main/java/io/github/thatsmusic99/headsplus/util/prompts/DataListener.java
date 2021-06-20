@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class DataListener extends StringPrompt {
     private static final List<String> types = Arrays.asList("id", "texture", "displayname", "price", "section");
-    private final Set<String> sections = HeadsPlus.getInstance().getHeadsXConfig().sections.keySet();
+    private final Set<String> sections = HeadsPlus.get().getHeadsXConfig().sections.keySet();
     private final String message;
     private final int type;
 
@@ -76,7 +76,7 @@ public class DataListener extends StringPrompt {
                 return new DataListener(type, messages.getString("commands.addhead." + currentType));
             }
         } else if (currentType.equalsIgnoreCase("id")) {
-            if (HeadsPlus.getInstance().getHeadsXConfig().headsCache.containsKey(s)) {
+            if (HeadsPlus.get().getHeadsXConfig().headsCache.containsKey(s)) {
                 user.sendRawMessage(messages.getString("commands.addhead.id-taken", (CommandSender) user).replaceAll("\\{id}", s));
                 return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
             }

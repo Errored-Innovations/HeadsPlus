@@ -33,7 +33,7 @@ public class ConfigCustomHeads extends CMFile {
     public static ConfigCustomHeads instance;
 
     public ConfigCustomHeads() {
-        super(HeadsPlus.getInstance(), "customheads");
+        super(HeadsPlus.get(), "customheads");
         instance = this;
     }
 
@@ -120,7 +120,7 @@ public class ConfigCustomHeads extends CMFile {
                 }
             }
         } catch (RuntimeException ex) {
-            HeadsPlus.getInstance().getLogger().log(Level.SEVERE, "Failed to init skull database", ex);
+            HeadsPlus.get().getLogger().log(Level.SEVERE, "Failed to init skull database", ex);
             sections.clear();
         }
     }
@@ -144,7 +144,7 @@ public class ConfigCustomHeads extends CMFile {
                     getBoolean("heads." + key + ".encode"),
                     getString("heads." + key + ".displayname"));
         } catch (ArrayIndexOutOfBoundsException ex) {
-            HeadsPlus.getInstance().getLogger().severe("An empty ID was found when fetching a head! Please check your customheads.yml configuration or send it to the developer.");
+            HeadsPlus.get().getLogger().severe("An empty ID was found when fetching a head! Please check your customheads.yml configuration or send it to the developer.");
             return null;
         }
     }
@@ -292,8 +292,8 @@ public class ConfigCustomHeads extends CMFile {
     int autosaveTask = -1;
 
     void delaySave() {
-        if (autosaveTask == -1 && HeadsPlus.getInstance().isEnabled()) {
-            autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), ()->{
+        if (autosaveTask == -1 && HeadsPlus.get().isEnabled()) {
+            autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.get(), ()->{
                 initiateSave();
                 autosaveTask = -1;
             }, 5 * 60).getTaskId();

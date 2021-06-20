@@ -31,7 +31,7 @@ import java.util.List;
 )
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlus hp = HeadsPlus.getInstance();
+    private final HeadsPlus hp = HeadsPlus.get();
     private final PaperUtil util = new PaperUtil();
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 

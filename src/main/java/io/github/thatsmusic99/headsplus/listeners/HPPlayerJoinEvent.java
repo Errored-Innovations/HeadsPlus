@@ -20,7 +20,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
 	public void onEvent(PlayerJoinEvent e) {
-	    HeadsPlus hp = HeadsPlus.getInstance();
+	    HeadsPlus hp = HeadsPlus.get();
 	    Player player = e.getPlayer();
 	    addData("player", player.getName());
 		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
@@ -33,7 +33,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
                 }
             }
         }
-		Bukkit.getScheduler().runTaskLater(HeadsPlus.getInstance(), () -> {
+		Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
 		    if (!player.isOnline())
 		        return;
             HPMaskEvents.checkMask(player, player.getInventory().getHelmet());
@@ -55,7 +55,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
         HPPlayer.getHPPlayer(player);
         if (!reloaded) {
             reloaded = true;
-            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), RecipeEnumUser::new);
+            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), RecipeEnumUser::new);
         }
 
 	}
@@ -64,7 +64,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerJoinEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(PlayerJoinEvent.class, "PlayerJoinEvent", this), HeadsPlus.get());
         addPossibleData("player", "<Player>");
         addPossibleData("has-update-permission", "true", "false");
         addPossibleData("update-enabled", "true", "false");

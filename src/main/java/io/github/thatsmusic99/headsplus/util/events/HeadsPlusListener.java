@@ -10,7 +10,7 @@ public abstract class HeadsPlusListener<T> implements Listener {
 
     private final HashMap<String, String> data = new HashMap<>();
     private final HashMap<String, String[]> possibleValues = new HashMap<>();
-    protected HeadsPlus hp = HeadsPlus.getInstance();
+    protected HeadsPlus hp = HeadsPlus.get();
 
     public abstract void onEvent(T event);
 

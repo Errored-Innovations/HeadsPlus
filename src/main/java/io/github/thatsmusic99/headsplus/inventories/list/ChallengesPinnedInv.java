@@ -39,7 +39,7 @@ public class ChallengesPinnedInv extends BaseInventory {
         HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
         List<Content> contents = new ArrayList<>();
         for (String challenge : hpPlayer.getPinnedChallenges()) {
-            contents.add(new Challenge(HeadsPlus.getInstance().getChallengeByName(challenge), player));
+            contents.add(new Challenge(HeadsPlus.get().getChallengeByName(challenge), player));
         }
         return contents;
     }

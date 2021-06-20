@@ -922,7 +922,7 @@ public class HeadsPlusMessagesManager {
             String s = m.group(1);
             string = string.replace("{msg_" + s + "}", getString(s, sender));
         }
-        if (sender instanceof Player && HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (sender instanceof Player && HeadsPlus.get().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             string = PlaceholderAPI.setPlaceholders((Player) sender, string);
         }
         string = string.replaceAll("\\{header}", config.getString("prefix"));
@@ -1007,7 +1007,7 @@ public class HeadsPlusMessagesManager {
             Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
             return String.valueOf(entityPlayer.getClass().getField("locale").get(entityPlayer));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
-            HeadsPlus.getInstance().getServer().getLogger().info("Whoops, have an error to report...");
+            HeadsPlus.get().getServer().getLogger().info("Whoops, have an error to report...");
             DebugFileCreator.createReport(new HeadsPlusException(e));
             e.printStackTrace();
         }
@@ -1020,26 +1020,26 @@ public class HeadsPlusMessagesManager {
 
     private YamlConfiguration performChecks(File file, String name) {
         if (file == null) {
-            file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
+            file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
         }
         YamlConfiguration config = new YamlConfiguration();
         try {
 
             config.load(file);
         } catch (InvalidConfigurationException ex) {
-            Logger logger = HeadsPlus.getInstance().getLogger();
+            Logger logger = HeadsPlus.get().getLogger();
             logger.severe("There is a configuration error in the plugin configuration files! Details below:");
             logger.severe(ex.getMessage());
             logger.severe("We have renamed the faulty configuration to " + name + "-errored.yml for you to inspect.");
-            file.renameTo(new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
+            file.renameTo(new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
             logger.severe("When you believe you have fixed the problems, change the file name back to " + name + ".yml and reload the configuration.");
             logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
             logger.severe("The default configuration will be loaded in response to this.");
-            InputStream is = HeadsPlus.getInstance().getResource(name + ".yml");
+            InputStream is = HeadsPlus.get().getResource(name + ".yml");
             try {
                 file.delete();
-                Files.copy(is, new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
-                file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
+                Files.copy(is, new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
+                file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
                 config.load(file);
             } catch (FileNotFoundException ignored) {
 
@@ -1063,7 +1063,7 @@ public class HeadsPlusMessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
-        if (sender instanceof Player && HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("use-tellraw")) {
+        if (sender instanceof Player && HeadsPlus.get().getConfiguration().getMechanics().getBoolean("use-tellraw")) {
             try {
                 new JSONParser().parse(str);
             } catch (ParseException e) {
@@ -1075,7 +1075,7 @@ public class HeadsPlusMessagesManager {
                 public void run() {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + sender.getName() + " " + result);
                 }
-            }.runTask(HeadsPlus.getInstance());
+            }.runTask(HeadsPlus.get());
         } else {
             sender.sendMessage(str);
         }

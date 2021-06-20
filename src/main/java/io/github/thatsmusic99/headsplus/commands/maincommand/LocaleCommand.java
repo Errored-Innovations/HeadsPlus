@@ -34,7 +34,7 @@ public class LocaleCommand implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+        if (HeadsPlus.get().getConfiguration().getConfig().getBoolean("smart-locale")) {
             if (args.length > 1) {
                 if (args[1].equalsIgnoreCase("refresh")) {
                     if (sender instanceof Player) {

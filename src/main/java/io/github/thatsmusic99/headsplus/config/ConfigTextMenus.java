@@ -28,7 +28,7 @@ public class ConfigTextMenus extends CMFile {
 
 
     public ConfigTextMenus() {
-        super(HeadsPlus.getInstance(), "textmenus");
+        super(HeadsPlus.get(), "textmenus");
     }
 
     @Override
@@ -104,14 +104,14 @@ public class ConfigTextMenus extends CMFile {
     }
 
     private static String translateColors(String s, CommandSender sender) {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s), sender));
     }
 
 
     private static String translateHeader(String s) {
-        return s.replaceAll("\\{default}", HeadsPlus.getInstance().getMenus().getConfig().getString("default-header"))
-                .replaceAll("\\{default-paged}", HeadsPlus.getInstance().getMenus().getConfig().getString("default-header-paged"));
+        return s.replaceAll("\\{default}", HeadsPlus.get().getMenus().getConfig().getString("default-header"))
+                .replaceAll("\\{default-paged}", HeadsPlus.get().getMenus().getConfig().getString("default-header-paged"));
     }
 
     public static class BlacklistTranslator {
@@ -119,7 +119,7 @@ public class ConfigTextMenus extends CMFile {
         public static String translate(CommandSender sender, String type, String type2, List<String> l, int page) {
 
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus h = HeadsPlus.get().getMenus();
             PagedLists<String> list = new PagedLists<>(l, h.getConfig().getInt(type + "." + type2 + ".lines-per-page"));
             if ((page > list.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
@@ -137,8 +137,8 @@ public class ConfigTextMenus extends CMFile {
     public static class ProfileTranslator {
         public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
-            HeadsPlusAPI api = HeadsPlus.getInstance().getAPI();
+            ConfigTextMenus h = HeadsPlus.get().getMenus();
+            HeadsPlusAPI api = HeadsPlus.get().getAPI();
             for (String str : h.getConfig().getStringList("profile.layout")) {
                 try {
                     String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
@@ -188,8 +188,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateNormal(String type, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigTextMenus h = HeadsPlus.get().getMenus();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             for (String str : h.getConfig().getStringList("head-info.normal-layout")) {
                 sb.append(translateColors(str.replaceAll("\\{header}", h.getConfig().getString("head-info.header"))
                 .replace("{type}", type)
@@ -201,12 +201,12 @@ public class ConfigTextMenus extends CMFile {
         }
 
         public static String translateNameInfo(String type, CommandSender sender, int page) {
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             if (hpch.getConfig().get(type + ".name") instanceof ConfigurationSection) {
                 return translateColored(sender, type, page);
             }
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
             PagedLists<String> heads = new PagedLists<>(hpch.getConfig().getStringList(type + ".name"),
                     ht.getConfig().getInt("head-info.name-info.default.lines-per-page"));
             if ((page > heads.getTotalPages()) || (0 >= page)) {
@@ -224,8 +224,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             List<Head> h = new ArrayList<>();
             for (String t : hpch.getConfig().getConfigurationSection(type + ".name").getKeys(false)) {
                 for (String r : hpch.getConfig().getStringList(type + ".name." + t)) {
@@ -249,8 +249,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateMaskInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             List<Mask> m = new ArrayList<>();
             for (int i = 0; i < hpch.getConfig().getStringList(type + ".mask-effects").size(); i++) {
                 String s = hpch.getConfig().getStringList(type + ".mask-effects").get(i);
@@ -279,8 +279,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateLoreInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
-            ConfigMobs hpch = HeadsPlus.getInstance().getHeadsConfig();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
+            ConfigMobs hpch = HeadsPlus.get().getHeadsConfig();
             PagedLists<String> lore = new PagedLists<>(hpch.getLore(type), ht.getConfig().getInt("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
@@ -299,8 +299,8 @@ public class ConfigTextMenus extends CMFile {
     public static class HelpMenuTranslator {
 
         public static void translateHelpMenu(CommandSender sender, int page) {
-            HeadsPlus hp = HeadsPlus.getInstance();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
+            HeadsPlus hp = HeadsPlus.get();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
             List<IHeadsPlusCommand> headPerms = new ArrayList<>();
             for (IHeadsPlusCommand key : hp.getCommands().values()) {
                 CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
@@ -334,7 +334,7 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateCommandHelp(IHeadsPlusCommand key, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus ht = HeadsPlus.getInstance().getMenus();
+            ConfigTextMenus ht = HeadsPlus.get().getMenus();
             for (String s : ht.getConfig().getStringList("help.command-help.layout")) {
                 if (!s.contains("{permission}") || sender.hasPermission("headsplus.help.viewperms")) {
                     if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
@@ -360,7 +360,7 @@ public class ConfigTextMenus extends CMFile {
             PagedHashmaps<OfflinePlayer, Integer> ph = null;
             HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
             try {
-                HeadsPlus hp = HeadsPlus.getInstance();
+                HeadsPlus hp = HeadsPlus.get();
                 StringBuilder sb = new StringBuilder();
                 ConfigTextMenus ht = hp.getMenus();
                 ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), ht.getConfig().getInt("leaderboard.lines-per-page"));
@@ -397,8 +397,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translate(CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            ConfigTextMenus h = HeadsPlus.getInstance().getMenus();
-            HeadsPlus hp = HeadsPlus.getInstance();
+            ConfigTextMenus h = HeadsPlus.get().getMenus();
+            HeadsPlus hp = HeadsPlus.get();
             for (String s : h.getConfig().getStringList("info.layout")) {
                 sb.append("\n").append(translateColors(s
                         .replaceAll("\\{version}", String.valueOf(hp.getVersion()))

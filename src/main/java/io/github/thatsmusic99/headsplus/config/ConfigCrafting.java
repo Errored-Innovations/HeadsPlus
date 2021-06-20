@@ -3,12 +3,8 @@ package io.github.thatsmusic99.headsplus.config;
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
-import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ConfigCrafting extends CMFile {
@@ -16,7 +12,7 @@ public class ConfigCrafting extends CMFile {
 	private static ConfigCrafting instance;
 
 	public ConfigCrafting() {
-		super(HeadsPlus.getInstance(), "crafting");
+		super(HeadsPlus.get(), "crafting");
 		instance = this;
     }
 

@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class ConfigAnimations extends CMFile {
 
     public ConfigAnimations() {
-        super(HeadsPlus.getInstance(), "animations");
+        super(HeadsPlus.get(), "animations");
     }
 
     @Override

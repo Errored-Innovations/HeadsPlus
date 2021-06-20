@@ -20,7 +20,7 @@ class UpdateChecker {
     private final static String descriptionURL = "https://api.spiget.org/v2/resources/40265/updates?size=1000";
 
     static Object[] getUpdate() {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         try {
             JSONArray versionsArray = getURLResults(versionURL);
             if (versionsArray != null) {

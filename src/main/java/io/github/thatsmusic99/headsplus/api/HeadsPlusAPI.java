@@ -23,7 +23,7 @@ import java.util.UUID;
 public class HeadsPlusAPI {
 
     // S
-    private final HeadsPlus hp = HeadsPlus.getInstance();
+    private final HeadsPlus hp = HeadsPlus.get();
 
     public ItemStack getHead(String option) {
         return ConfigCustomHeads.get().getSkull(option);

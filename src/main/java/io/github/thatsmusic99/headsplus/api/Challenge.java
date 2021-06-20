@@ -117,7 +117,7 @@ public class Challenge {
     }
 
     public boolean canComplete(Player p) throws SQLException {
-        HeadsPlusAPI hapi = HeadsPlus.getInstance().getAPI();
+        HeadsPlusAPI hapi = HeadsPlus.get().getAPI();
         if (getChallengeType() == HeadsPlusChallengeTypes.MISC) {
             return true;
         } else if (getChallengeType() == HeadsPlusChallengeTypes.CRAFTING) {
@@ -130,11 +130,11 @@ public class Challenge {
     }
 
     public boolean isComplete(Player p) {
-        return HeadsPlus.getInstance().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
+        return HeadsPlus.get().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
     }
 
     public void complete(Player p) {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);

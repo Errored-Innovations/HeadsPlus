@@ -36,7 +36,7 @@ public class ChallengesSection extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         String section = context.get("section");
         List<Content> content = new ArrayList<>();
-        for (Challenge challenge : HeadsPlus.getInstance().getSectionByName(section).getChallenges()) {
+        for (Challenge challenge : HeadsPlus.get().getSectionByName(section).getChallenges()) {
             io.github.thatsmusic99.headsplus.inventories.icons.content.Challenge icon = new io.github.thatsmusic99.headsplus.inventories.icons.content.Challenge(challenge, player);
             content.add(icon);
         }

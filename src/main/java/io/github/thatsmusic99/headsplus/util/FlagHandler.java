@@ -45,7 +45,7 @@ public class FlagHandler {
     }
 
     public static boolean isHandling() {
-        return handler != null && HeadsPlus.getInstance().canUseWG();
+        return handler != null && HeadsPlus.get().canUseWG();
     }
 
     public static boolean canDrop(Location location, EntityType type) {

@@ -51,9 +51,9 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     return false;
                 }
                 Player p = (Player) sender;
-                SelectorList blacklist = HeadsPlus.getInstance().getConfiguration().getHeadsBlacklist();
-                SelectorList whitelist = HeadsPlus.getInstance().getConfiguration().getHeadsWhitelist();
-                HeadsPlus.getInstance().saveConfig();
+                SelectorList blacklist = HeadsPlus.get().getConfiguration().getHeadsBlacklist();
+                SelectorList whitelist = HeadsPlus.get().getConfiguration().getHeadsWhitelist();
+                HeadsPlus.get().saveConfig();
                 List<String> bl = new ArrayList<>();
                 for (String str : blacklist.list) {
                     bl.add(str.toLowerCase());
@@ -138,7 +138,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.get().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });

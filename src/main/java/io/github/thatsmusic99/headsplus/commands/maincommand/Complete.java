@@ -36,7 +36,7 @@ public class Complete implements IHeadsPlusCommand {
     public boolean fire(String[] args, CommandSender sender) {
         try {
             if (args.length > 1) {
-                Challenge c = HeadsPlus.getInstance().getChallengeByName(args[1]);
+                Challenge c = HeadsPlus.get().getChallengeByName(args[1]);
                 if (c != null) {
                     if (args.length > 2) {
                         if (sender.hasPermission("headsplus.maincommand.complete.others")) {
@@ -44,7 +44,7 @@ public class Complete implements IHeadsPlusCommand {
                             if (player.isOnline()) {
                                 if (!c.isComplete(player.getPlayer())) {
                                     if (c.canComplete(player.getPlayer())) {
-                                        HeadsPlus.getInstance().getChallengeByName(args[1]).complete(player.getPlayer());
+                                        HeadsPlus.get().getChallengeByName(args[1]).complete(player.getPlayer());
                                     } else {
                                         hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
                                     }
@@ -64,7 +64,7 @@ public class Complete implements IHeadsPlusCommand {
                         Player p = (Player) sender;
                         if (!c.isComplete(p)) {
                             if (c.canComplete(p)) {
-                                HeadsPlus.getInstance().getChallengeByName(args[1]).complete((Player) sender);
+                                HeadsPlus.get().getChallengeByName(args[1]).complete((Player) sender);
                             } else {
                                 hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
                             }
@@ -94,7 +94,7 @@ public class Complete implements IHeadsPlusCommand {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             List<String> challenges = new ArrayList<>();
-            for (Challenge challenge : HeadsPlus.getInstance().getChallenges()) {
+            for (Challenge challenge : HeadsPlus.get().getChallenges()) {
                 challenges.add(challenge.getConfigName());
             }
             StringUtil.copyPartialMatches(args[1], challenges, results);

@@ -56,7 +56,7 @@ public interface IHeadsPlusCommand {
     }
 
     static List<String> getEntityConditions(String entity) {
-        Object section = HeadsPlus.getInstance().getHeadsConfig().getConfig().get(entity.toLowerCase().replaceAll("_", "") + ".name");
+        Object section = HeadsPlus.get().getHeadsConfig().getConfig().get(entity.toLowerCase().replaceAll("_", "") + ".name");
         return section instanceof ConfigurationSection ? new ArrayList<>(((ConfigurationSection) section).getKeys(false)) : new ArrayList<>();
     }
 }

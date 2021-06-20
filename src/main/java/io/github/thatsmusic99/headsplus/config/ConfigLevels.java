@@ -21,13 +21,13 @@ public class ConfigLevels extends CMFile {
     private int maxHierarchy = 0;
 
     public ConfigLevels() {
-        super(HeadsPlus.getInstance(), "levels");
+        super(HeadsPlus.get(), "levels");
         addDefLevels();
     }
 
     @Override
     public void postSave() {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         hp.getLevels().clear();
         //if (hp.usingLevels()) {
             try {

@@ -128,7 +128,7 @@ public class ConfigChallenges extends FeatureConfig {
 
     @Override
     public void postSave() {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         hp.getChallenges().clear();
         hp.getChallengeSections().clear();
         HashMap<String, Boolean> prepareOptions = new HashMap<>();
@@ -311,7 +311,7 @@ public class ConfigChallenges extends FeatureConfig {
         String s = getString("icons." + iconName + ".skull-name");
         if (s != null && !s.isEmpty() ) {
             if (s.startsWith("HP#")) {
-                icon = HeadsPlus.getInstance().getHeadsXConfig().getSkull(s);
+                icon = HeadsPlus.get().getHeadsXConfig().getSkull(s);
             } else {
                 SkullMeta sm = (SkullMeta) icon.getItemMeta();
                 sm = ProfileFetcher.setProfile(sm, s);

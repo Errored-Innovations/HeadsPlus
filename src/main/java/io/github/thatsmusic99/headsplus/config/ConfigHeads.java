@@ -11,7 +11,7 @@ public class ConfigHeads extends CMFile {
     private static ConfigHeads instance;
 
     public ConfigHeads() {
-        super(HeadsPlus.getInstance(), "heads");
+        super(HeadsPlus.get(), "heads");
         instance = this;
     }
 

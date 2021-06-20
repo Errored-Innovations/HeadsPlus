@@ -16,7 +16,7 @@ public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(BlockPlaceEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(BlockPlaceEvent.class, "BlockPlaceEvent", this), HeadsPlus.getInstance(), true);
+                new HeadsPlusEventExecutor(BlockPlaceEvent.class, "BlockPlaceEvent", this), HeadsPlus.get(), true);
         addPossibleData("stopping-heads", "true", "false");
         addPossibleData("is-a-skull", "true", "false");
         addPossibleData("can-bypass", "true", "false");

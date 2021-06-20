@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +34,7 @@ public class Head {
 
     public Head(String id, Material type) {
         this.itemStack = new ItemStack(type);
-        if (!HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+        if (!HeadsPlus.get().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
             id = id.toLowerCase();
         }
         this.id = id;

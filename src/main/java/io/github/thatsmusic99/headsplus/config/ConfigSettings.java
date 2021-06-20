@@ -33,7 +33,7 @@ public abstract class ConfigSettings {
 
     public void performFileChecks() {
         if (configF == null || !configF.exists()) {
-            configF = new File(HeadsPlus.getInstance().getDataFolder(), conName + ".yml");
+            configF = new File(HeadsPlus.get().getDataFolder(), conName + ".yml");
             try {
                 configF.createNewFile();
             } catch (IOException e) {
@@ -44,11 +44,11 @@ public abstract class ConfigSettings {
             config = new YamlConfiguration();
             config.load(configF);
         } catch (InvalidConfigurationException ex) {
-            Logger logger = HeadsPlus.getInstance().getLogger();
+            Logger logger = HeadsPlus.get().getLogger();
             logger.severe("There is a configuration error in the plugin configuration files! Details below:");
             logger.severe(ex.getMessage());
             logger.severe("We have renamed the faulty configuration to " + conName + "-errored.yml for you to inspect.");
-            configF.renameTo(new File(HeadsPlus.getInstance().getDataFolder(), conName + "-errored.yml"));
+            configF.renameTo(new File(HeadsPlus.get().getDataFolder(), conName + "-errored.yml"));
             logger.severe("When you believe you have fixed the problems, change the file name back to " + conName + ".yml and reload the configuration.");
             logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
             logger.severe("The default configuration will be loaded in response to this.");
@@ -64,8 +64,8 @@ public abstract class ConfigSettings {
         try {
             config.save(configF);
         } catch (IOException e) {
-            HeadsPlus.getInstance().getLogger().severe("Error thrown when saving the config. If there's a second error below, ignore me and look at that instead.");
-            if (HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
+            HeadsPlus.get().getLogger().severe("Error thrown when saving the config. If there's a second error below, ignore me and look at that instead.");
+            if (HeadsPlus.get().getConfiguration().getMechanics().getBoolean("debug.print-stacktraces-in-console")) {
                 e.printStackTrace();
             }
         }

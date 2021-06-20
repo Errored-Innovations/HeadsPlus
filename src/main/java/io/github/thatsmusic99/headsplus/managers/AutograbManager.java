@@ -45,7 +45,7 @@ public class AutograbManager {
             String json = sb.toString();
             JSONObject resp = (JSONObject) JSONValue.parse(json);
             if (resp == null || resp.isEmpty()) {
-                HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
+                HeadsPlus.get().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
                 if(callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
@@ -88,7 +88,7 @@ public class AutograbManager {
     }
 
     protected static void grabProfile(String id, int tries, CommandSender callback, boolean forceAdd, int delay) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.get(), () -> {
             BufferedReader reader = null;
             try {
                 if (id == null) return;
@@ -107,7 +107,7 @@ public class AutograbManager {
 
                 JSONObject resp = (JSONObject) JSONValue.parse(json);
                 if(resp == null || resp.isEmpty()) {
-                    HeadsPlus.getInstance().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
+                    HeadsPlus.get().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
                     if(callback != null) {
                         callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
                     }
@@ -141,10 +141,10 @@ public class AutograbManager {
                                         String name = resp.get("name").toString();
                                         if(!ConfigCustomHeads.get().allHeadsCache.contains(texUrl)) {
                                             ConfigCustomHeads.get().addHead(texUrl, true,
-                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.title").replace("{player}", name),
-                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.section"),
-                                                    HeadsPlus.getInstance().getConfig().getString("plugin.autograb.price"),
-                                                    forceAdd || HeadsPlus.getInstance().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
+                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.title").replace("{player}", name),
+                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.section"),
+                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.price"),
+                                                    forceAdd || HeadsPlus.get().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
                                             if(callback != null) {
                                                 HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", callback, "{player}", name);
                                             }
@@ -191,7 +191,7 @@ public class AutograbManager {
 
                 }
             }
-        }.runTask(HeadsPlus.getInstance());
+        }.runTask(HeadsPlus.get());
     }
 
     private static void addTexture(String info, boolean force, CommandSender sender, OfflinePlayer player) {
@@ -201,7 +201,7 @@ public class AutograbManager {
             if (textureJson.isEmpty()) return;
             JSONObject skinJSON = ((JSONObject)textureJson.get("SKIN"));
             String texture = String.valueOf(skinJSON.get("url"));
-            ConfigurationSection section = HeadsPlus.getInstance().getConfig().getConfigurationSection("plugin.autograb");
+            ConfigurationSection section = HeadsPlus.get().getConfig().getConfigurationSection("plugin.autograb");
             // If the head never existed
             if(!ConfigCustomHeads.get().allHeadsCache.contains(texture)) {
                 ConfigCustomHeads.get().addHead(texture, true,

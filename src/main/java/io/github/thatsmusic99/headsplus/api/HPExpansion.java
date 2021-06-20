@@ -74,11 +74,11 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("crafting")) {
-            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
+            return String.valueOf(HeadsPlus.get().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
         }
 
         if (identifier.startsWith("selling")) {
-            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
+            return String.valueOf(HeadsPlus.get().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
         }
 
         if (identifier.startsWith("top")) {

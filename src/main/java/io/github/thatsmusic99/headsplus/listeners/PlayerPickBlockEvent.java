@@ -51,7 +51,7 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryCreativeEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent", this), HeadsPlus.get());
 
         new PickBlockInventoryOpenListener().init();
         new PickBlockInventoryCloseListener().init();
@@ -74,7 +74,7 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(InventoryOpenEvent.class, this, EventPriority.NORMAL,
-                    new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent", this), HeadsPlus.getInstance(), true);
+                    new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent", this), HeadsPlus.get(), true);
 
         }
     }
@@ -89,7 +89,7 @@ public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEve
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, this, EventPriority.NORMAL,
-                    new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent", this), HeadsPlus.getInstance(), true);
+                    new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent", this), HeadsPlus.get(), true);
 
         }
     }

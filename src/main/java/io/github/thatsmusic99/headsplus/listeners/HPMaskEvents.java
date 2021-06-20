@@ -57,14 +57,14 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.getInstance());
+                new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.get());
 
         new MaskDamageListener().init();
         new MaskPlayerLeaveListener().init();
     }
 
     public static void checkMask(Player player, ItemStack item) {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         int period = MainConfig.get().getMasks().CHECK_INTERVAL;
         if (item == null || !(item.getItemMeta() instanceof SkullMeta)) return;
         String s = PersistenceManager.get().getSellType(item);
@@ -137,7 +137,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
             Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
                     this, EventPriority.NORMAL,
                     new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent", this),
-                    HeadsPlus.getInstance(), true);
+                    HeadsPlus.get(), true);
 
         }
     }
@@ -158,7 +158,7 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
             Bukkit.getPluginManager().registerEvent(PlayerQuitEvent.class,
                     this, EventPriority.MONITOR,
                     new HeadsPlusEventExecutor(PlayerQuitEvent.class, "PlayerQuitEvent", this),
-                    HeadsPlus.getInstance());
+                    HeadsPlus.get());
         }
     }
 }

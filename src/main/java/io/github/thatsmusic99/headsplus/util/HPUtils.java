@@ -51,7 +51,7 @@ public class HPUtils {
                 bossBar.setProgress(percentageProgress);
                 bossBar.setVisible(true);
                 bossBars.put(p.getUuid(), bossBar);
-                Bukkit.getScheduler().runTaskLater(HeadsPlus.getInstance(), () -> {
+                Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
                     bossBar.setVisible(false);
                     bossBar.removePlayer(pl.getPlayer());
                     bossBars.remove(pl.getPlayer().getUniqueId());
@@ -160,7 +160,7 @@ public class HPUtils {
     }
 
     public static boolean isMythicMob(Entity entity) {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
 
         try {
             if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {

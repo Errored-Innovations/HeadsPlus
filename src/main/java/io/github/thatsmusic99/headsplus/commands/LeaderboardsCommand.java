@@ -28,7 +28,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if (HeadsPlus.getInstance().getConfiguration().getPerks().leaderboards) {
+        if (HeadsPlus.get().getConfiguration().getPerks().leaderboards) {
             if (cs.hasPermission("headsplus.leaderboards")) {
                 new BukkitRunnable() {
                     @Override
@@ -77,7 +77,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                         }
                     }
 
-                }.runTaskAsynchronously(HeadsPlus.getInstance());
+                }.runTaskAsynchronously(HeadsPlus.get());
             }
         }
         return false;

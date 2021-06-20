@@ -23,7 +23,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
         try {
             if ((cmd.getName().equalsIgnoreCase("headsplus")) || (cmd.getName().equalsIgnoreCase("hp"))) {
                 if (args.length > 0) {
-                    IHeadsPlusCommand command = HeadsPlus.getInstance().getCommands().get(args[0].toLowerCase());
+                    IHeadsPlusCommand command = HeadsPlus.get().getCommands().get(args[0].toLowerCase());
                     if (command != null) {
                         CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
                         if (sender.hasPermission(c.permission())) {
@@ -73,7 +73,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
-            for (IHeadsPlusCommand key : HeadsPlus.getInstance().getCommands().values()) {
+            for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
                 if (cs.hasPermission(command.permission())) {
                     if (command.maincommand()) {
@@ -102,7 +102,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
-        for (IHeadsPlusCommand hpc : HeadsPlus.getInstance().getCommands().values()) {
+        for (IHeadsPlusCommand hpc : HeadsPlus.get().getCommands().values()) {
             CommandInfo c = hpc.getClass().getAnnotation(CommandInfo.class);
             if (c.commandname().equalsIgnoreCase(name)) {
                 if (c.maincommand()){

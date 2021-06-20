@@ -21,7 +21,7 @@ import java.util.Map;
 @Deprecated
 public class RecipeEnumUser {
 
-    private final HeadsPlus hp = HeadsPlus.getInstance();
+    private final HeadsPlus hp = HeadsPlus.get();
 	private final FileConfiguration crafting = hp.getCraftingConfig().getConfig();
 
 	public RecipeEnumUser() {
@@ -66,11 +66,11 @@ public class RecipeEnumUser {
 	    // If using a custom texture
         if (headId.startsWith("HP#")) {
             try {
-                head.withTexture(HeadsPlus.getInstance().getHeadsXConfig().getTextures(headId));
+                head.withTexture(HeadsPlus.get().getHeadsXConfig().getTextures(headId));
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
-                HeadsPlus.getInstance().getLogger().warning("Null texture: " + headId);
+                HeadsPlus.get().getLogger().warning("Null texture: " + headId);
                 return;
             }
         } else {
@@ -78,7 +78,7 @@ public class RecipeEnumUser {
         }
         if (headSec.getBoolean("shaped")) {
             List<String> ingredients = headSec.getStringList("ingredients");
-            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(HeadsPlus.getInstance(), "crafting_" + id), head.getItemStack());
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(HeadsPlus.get(), "crafting_" + id), head.getItemStack());
             int ch = 70;
             Map<String, Character> map = new HashMap<>();
             StringBuilder shapeBuilder = new StringBuilder();
@@ -126,7 +126,7 @@ public class RecipeEnumUser {
                         ingCount++;
                     }
                 } catch (NullPointerException e) {
-                    HeadsPlus.getInstance().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
+                    HeadsPlus.get().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
                 }
             }
             if (ingCount > 0) {
@@ -136,14 +136,14 @@ public class RecipeEnumUser {
                             public void run() {
                                 Bukkit.addRecipe(recipe);
                             }
-                    }.runTask(HeadsPlus.getInstance());
+                    }.runTask(HeadsPlus.get());
                 } catch (IllegalStateException ignored) {
                 }
             }
         } else {
             List<String> ingredients = headSec.getStringList("ingredients");
             int ingCount = 0;
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(HeadsPlus.getInstance(), "crafting_" + id), head.getItemStack());
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(HeadsPlus.get(), "crafting_" + id), head.getItemStack());
             for (String ingredient : ingredients) {
                 try {
                     ingCount++;
@@ -155,7 +155,7 @@ public class RecipeEnumUser {
                     }
 
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    HeadsPlus.getInstance().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
+                    HeadsPlus.get().getLogger().warning("Unknown material " + ingredient + " when crafting " + id + " head.");
                     ingCount--;
                 }
             }
@@ -169,7 +169,7 @@ public class RecipeEnumUser {
                         public void run() {
                             Bukkit.addRecipe(recipe);
                         }
-                    }.runTask(HeadsPlus.getInstance());
+                    }.runTask(HeadsPlus.get());
                 } catch (IllegalStateException ignored) {
                 }
             }

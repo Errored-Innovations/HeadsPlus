@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
@@ -27,7 +28,7 @@ public class DebugFileCreator {
 
     @Deprecated
     public String createReport(Exception e, String when) throws IOException {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         JSONArray array1 = new JSONArray();
         JSONObject o1 = new JSONObject();
         String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
@@ -148,7 +149,7 @@ public class DebugFileCreator {
     }
 
     public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         JSONArray infoArray = new JSONArray();
         JSONObject basicInfo = getBasicInfo();
         JSONObject headDetails = new JSONObject();
@@ -249,7 +250,7 @@ public class DebugFileCreator {
     }
 
     private static JSONObject getBasicInfo() {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         JSONObject basicInfo = new JSONObject();
         String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
         basicInfo.put("Date", date);
@@ -361,7 +362,7 @@ public class DebugFileCreator {
     }
 
     private static void createDebugFolder() {
-        File debugFolder = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "debug");
+        File debugFolder = new File(HeadsPlus.get().getDataFolder() + File.separator + "debug");
         if (!debugFolder.exists()) {
             debugFolder.mkdir();
         }
@@ -374,7 +375,7 @@ public class DebugFileCreator {
         createDebugFolder();
         for (int i = 0; true; i++) {
             String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
-            File report = new File(HeadsPlus.getInstance().getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            File report = new File(HeadsPlus.get().getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
             if (!report.exists()) {
                 return report;
             }

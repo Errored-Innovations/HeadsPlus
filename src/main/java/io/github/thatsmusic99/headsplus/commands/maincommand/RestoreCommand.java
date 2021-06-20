@@ -32,7 +32,7 @@ public class RestoreCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             try {
                 HeadsXEnums headToBeAdded = HeadsXEnums.valueOf(args[1].toUpperCase());
-                ConfigCustomHeads customHeadsConfig = HeadsPlus.getInstance().getHeadsXConfig();
+                ConfigCustomHeads customHeadsConfig = HeadsPlus.get().getHeadsXConfig();
                 customHeadsConfig.getConfig().set("heads." + headToBeAdded.name, null);
                 customHeadsConfig.addHead(headToBeAdded.texture,
                         true,
