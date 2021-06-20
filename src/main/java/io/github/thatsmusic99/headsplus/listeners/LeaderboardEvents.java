@@ -69,9 +69,8 @@ public class LeaderboardEvents implements Listener {
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
             for (String s : event.getEntityAmounts().keySet()) {
                 for (int i : event.getEntityAmounts().values()) {
-                    if (event.getEntityAmounts().get(s) == i) {
-                        Bukkit.getScheduler().runTaskAsynchronously(hp, () -> DataManager.addToTotal(event.getPlayer(), s, "headsplussh", i));
-                    }
+                    if (event.getEntityAmounts().get(s) != i) continue;
+                    Bukkit.getScheduler().runTaskAsynchronously(hp, () -> DataManager.addToTotal(event.getPlayer(), s, "headsplussh", i));
                 }
             }
         }

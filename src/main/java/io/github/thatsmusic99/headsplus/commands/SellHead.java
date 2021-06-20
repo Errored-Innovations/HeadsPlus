@@ -210,14 +210,13 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	    for (int slot : data.slots.keySet()) {
 	        ItemStack item = player.getInventory().getItem(slot);
 	        int limit = data.slots.get(slot);
-	        if (item != null) {
-	            if (item.getAmount() > limit && limit != -1) {
-	                item.setAmount(item.getAmount() - limit);
-	                break;
-                } else {
-                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
-                }
-            }
+	        if (item == null) return;
+	        if (item.getAmount() > limit && limit != -1) {
+	            item.setAmount(item.getAmount() - limit);
+	            break;
+	        } else {
+	            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+	        }
         }
     }
 
