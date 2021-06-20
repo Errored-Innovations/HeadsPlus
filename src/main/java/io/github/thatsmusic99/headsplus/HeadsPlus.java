@@ -17,7 +17,9 @@ import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabCompleteSellhead;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
@@ -92,13 +94,13 @@ public class HeadsPlus extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
-            EntityDataManager.createEntityList();
-
             instance = this;
             // Set up the NMS
             if (!checkVersion()) return;
             // Set up Vault connection
-            vaultEnabled = econ();
+            vaultEnabled = setupEconomy();
+            // Set up early managers
+            initiateEarlyManagers();
             // Create locale files
             createLocales();
 
@@ -228,7 +230,7 @@ public class HeadsPlus extends JavaPlugin {
 
     }
 
-    public boolean econ() {
+    public boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             getLogger().warning("Sellhead disabled due to Vault itself not being found. (Error code: 1)");
             return false;
@@ -268,6 +270,13 @@ public class HeadsPlus extends JavaPlugin {
                 getLogger().warning(ex.getCause().getMessage());
             }
         }
+    }
+
+    private void initiateEarlyManagers() {
+        EntityDataManager.createEntityList();
+        new HeadManager();
+        new PersistenceManager();
+        new SellableHeadsManager();
     }
 
     private void registerEvents() {
@@ -605,7 +614,6 @@ public class HeadsPlus extends JavaPlugin {
                     buffer.append(Character.toLowerCase(ch));
                 }
             }
-
             return buffer.toString();
         } else {
             return str;
