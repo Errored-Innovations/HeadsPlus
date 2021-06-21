@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class LeaderboardEvents implements Listener {
+public class LeaderboardListeners implements Listener {
 
-    public LeaderboardEvents() {
+    public LeaderboardListeners() {
 
         for (HeadsPlusListener<?> listener : Lists.newArrayList(new EntityDropHeadListener(),
                 new SellHeadListener(),

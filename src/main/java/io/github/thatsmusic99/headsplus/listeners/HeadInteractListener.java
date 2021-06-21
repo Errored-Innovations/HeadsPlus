@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.*;
 
-public class HPHeadInteractListener extends HeadsPlusListener<PlayerInteractEvent> {
+public class HeadInteractListener extends HeadsPlusListener<PlayerInteractEvent> {
 
     private final List<UUID> sent = new ArrayList<>();
 

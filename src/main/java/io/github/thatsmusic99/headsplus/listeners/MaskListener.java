@@ -24,7 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
+public class MaskListener extends HeadsPlusListener<InventoryClickEvent> {
 
     private static final HashMap<UUID, BukkitRunnable> maskMonitors = new HashMap<>();
 

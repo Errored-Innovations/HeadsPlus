@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
+public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 	
 	public static boolean reloaded = false;
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
@@ -36,7 +36,7 @@ public class HPPlayerJoinEvent extends HeadsPlusListener<PlayerJoinEvent> {
 		Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
 		    if (!player.isOnline())
 		        return;
-            HPMaskEvents.checkMask(player, player.getInventory().getHelmet());
+            MaskListener.checkMask(player, player.getInventory().getHelmet());
         }, 20);
 
         if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {

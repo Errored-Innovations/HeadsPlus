@@ -17,7 +17,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class HPPlayerCraftEvent extends HeadsPlusListener<InventoryClickEvent> {
+public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> {
 
     @Override
     public void init() {

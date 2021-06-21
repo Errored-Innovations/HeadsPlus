@@ -11,9 +11,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class HPItemCheckListener extends HeadsPlusListener<InventoryClickEvent> {
+public class ItemCheckListener extends HeadsPlusListener<InventoryClickEvent> {
 
-    @Override
+    @Override // TODO - move into a runnable
     public void onEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         for (int i = 0; i < 46; i++) {

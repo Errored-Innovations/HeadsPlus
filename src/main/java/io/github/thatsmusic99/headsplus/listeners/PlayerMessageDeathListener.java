@@ -14,7 +14,7 @@ import org.bukkit.event.EventPriority;
 import java.util.List;
 import java.util.Random;
 
-public class HPPlayerMessageDeathEvent extends HeadsPlusListener<PlayerHeadDropEvent> {
+public class PlayerMessageDeathListener extends HeadsPlusListener<PlayerHeadDropEvent> {
 
     @Override
     public void init() {

@@ -11,7 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class HPBlockPlaceEvent extends HeadsPlusListener<BlockPlaceEvent> {
+public class BlockPlaceListener extends HeadsPlusListener<BlockPlaceEvent> {
 
     @Override
     public void init() {

@@ -125,7 +125,7 @@ public class HeadsPlus extends JavaPlugin {
                 new HPExpansion(this).register();
                 getLogger().info("We've registered our PAPI placeholders!");
             }
-            HPPlayerJoinEvent.reloaded = false;
+            PlayerJoinListener.reloaded = false;
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));
@@ -280,31 +280,31 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerEvents() {
-        listeners.add(new HPHeadInteractListener());
-        listeners.add(new HPEntityDeathEvent());
-        listeners.add(new HPEntitySpawnEvent());
-        listeners.add(new HPBlockPlaceEvent());
-        listeners.add(new HPPlayerDeathEvent());
-        listeners.add(new HPItemCheckListener());
-        listeners.add(new HPMaskEvents());
-        listeners.add(new HPPlayerCraftEvent());
-        listeners.add(new HPPlayerJoinEvent());
-        listeners.add(new HPBlockPlaceEvent());
-        listeners.add(new PlayerPickBlockEvent());
-        listeners.add(new HPPlayerMessageDeathEvent());
-        listeners.add(new SoundEvent<SellHeadEvent>("on-sell-head"));
-        listeners.add(new SoundEvent<HeadPurchaseEvent>("on-buy-head"));
-        listeners.add(new SoundEvent<SectionChangeEvent>("on-change-section"));
-        listeners.add(new SoundEvent<EntityHeadDropEvent>("on-entity-head-drop"));
-        listeners.add(new SoundEvent<PlayerHeadDropEvent>("on-player-head-drop", "getDeadPlayer"));
-        listeners.add(new SoundEvent<LevelUpEvent>("on-level-up"));
-        listeners.add(new SoundEvent<HeadCraftEvent>("on-craft-head"));
+        listeners.add(new HeadInteractListener());
+        listeners.add(new EntityDeathListener());
+        listeners.add(new EntitySpawnListener());
+        listeners.add(new BlockPlaceListener());
+        listeners.add(new PlayerDeathListener());
+        listeners.add(new ItemCheckListener());
+        listeners.add(new MaskListener());
+        listeners.add(new PlayerCraftListener());
+        listeners.add(new PlayerJoinListener());
+        listeners.add(new BlockPlaceListener());
+        listeners.add(new PlayerPickBlockListener());
+        listeners.add(new PlayerMessageDeathListener());
+        listeners.add(new SoundListener<SellHeadEvent>("on-sell-head"));
+        listeners.add(new SoundListener<HeadPurchaseEvent>("on-buy-head"));
+        listeners.add(new SoundListener<SectionChangeEvent>("on-change-section"));
+        listeners.add(new SoundListener<EntityHeadDropEvent>("on-entity-head-drop"));
+        listeners.add(new SoundListener<PlayerHeadDropEvent>("on-player-head-drop", "getDeadPlayer"));
+        listeners.add(new SoundListener<LevelUpEvent>("on-level-up"));
+        listeners.add(new SoundListener<HeadCraftEvent>("on-craft-head"));
         initiateEvents();
     }
 
     public void initiateEvents() {
         HandlerList.unregisterAll(this);
-        new LeaderboardEvents();
+        new LeaderboardListeners();
         for (HeadsPlusListener<?> listener : listeners) {
             if (!listener.shouldEnable()) continue;
             listener.init();

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
+public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
     @Override
     public void onEvent(EntityDeathEvent event) {
@@ -39,7 +39,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         // TODO New blacklist checks go here
         if (!HPUtils.runBlacklistTests(event.getEntity())) return;
         //
-        if (addData("spawn-cause", HPEntitySpawnEvent.getReason(event.getEntity().getUniqueId())) != null) {
+        if (addData("spawn-cause", EntitySpawnListener.getReason(event.getEntity().getUniqueId())) != null) {
             if (MainConfig.get().getMobDrops().BLOCKED_SPAWN_CAUSES.contains(getData("spawn-cause"))) {
                 return;
             }

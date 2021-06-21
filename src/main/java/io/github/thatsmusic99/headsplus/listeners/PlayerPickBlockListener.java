@@ -22,7 +22,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class PlayerPickBlockEvent extends HeadsPlusListener<InventoryCreativeEvent> implements Listener {
+public class PlayerPickBlockListener extends HeadsPlusListener<InventoryCreativeEvent> implements Listener {
 
     HashSet<UUID> openInventories = new HashSet<>();
 

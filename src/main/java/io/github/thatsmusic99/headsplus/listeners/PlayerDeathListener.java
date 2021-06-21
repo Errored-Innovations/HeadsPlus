@@ -24,7 +24,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Random;
 
-public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
+public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
     @Override
     public void init() {

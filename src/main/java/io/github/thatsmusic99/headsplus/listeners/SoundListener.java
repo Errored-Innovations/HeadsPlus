@@ -9,17 +9,17 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class SoundEvent<T> extends HeadsPlusListener<T> {
+public class SoundListener<T> extends HeadsPlusListener<T> {
 
     private String section;
     private String playerAccessor;
 
-    public SoundEvent(String section) {
+    public SoundListener(String section) {
         this.section = section;
         this.playerAccessor = "getPlayer";
     }
 
-    public SoundEvent(String section, String playerAccessor) {
+    public SoundListener(String section, String playerAccessor) {
         this.section = section;
         this.playerAccessor = playerAccessor;
     }
