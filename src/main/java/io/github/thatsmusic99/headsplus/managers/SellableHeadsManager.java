@@ -1,5 +1,7 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+
 import java.util.HashMap;
 
 public class SellableHeadsManager {
@@ -13,5 +15,22 @@ public class SellableHeadsManager {
 
     public static SellableHeadsManager get() {
         return instance;
+    }
+
+    public void registerPrice(String key, double price) {
+        prices.put(getKey(key), price);
+    }
+
+    public double getPrice(String key) {
+        return prices.get(getKey(key));
+    }
+
+    public boolean isRegistered(String key) {
+        return prices.containsKey(getKey(key));
+    }
+
+    private String getKey(String str) {
+        if (MainConfig.get().getSellingHeads().CASE_INSENSITIVE) return str.toLowerCase();
+        return str;
     }
 }

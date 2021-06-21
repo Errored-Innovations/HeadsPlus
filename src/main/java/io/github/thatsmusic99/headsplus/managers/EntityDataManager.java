@@ -139,9 +139,13 @@ public class EntityDataManager {
         for (String name : ableEntities) {
             try {
                 ConfigMobs headsCon = ConfigMobs.get();
-                for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(name)).getKeys(false)) {
+                ConfigurationSection entitySection = headsCon.getConfig().getConfigurationSection(name);
+                if (entitySection == null) continue;
+                for (String conditions : entitySection.getKeys(false)) {
                     List<HeadManager.HeadInfo> heads = new ArrayList<>();
-                    for (String head : headsCon.getConfig().getConfigurationSection(name + "." + conditions).getKeys(false)) {
+                    ConfigurationSection conditionSection = entitySection.getConfigurationSection(conditions);
+                    if (conditionSection == null) continue;
+                    for (String head : conditionSection.getKeys(false)) {
                         HeadManager.HeadInfo headInfo;
                         if (head.startsWith("HPM#")) {
                             headInfo = MaskManager.get().getMaskInfo(head);
@@ -169,12 +173,14 @@ public class EntityDataManager {
                             }
                         }
 
-                        headInfo.withDisplayName(
-                                ConfigMobs.get().getDisplayName(name + "." + conditions + "." + head)
-                                        .replaceAll("\\{type}", HeadsPlus.capitalize(name)));
+                        String path = name + "." + conditions + "." + head;
+
+                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(path)
+                                .replaceAll("\\{type}", HeadsPlus.capitalize(name)));
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions)); // TODO
 
                         heads.add(headInfo);
+                        SellableHeadsManager.get().registerPrice("mobs_" + name, ConfigMobs.get().getPrice(path));
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }
@@ -182,6 +188,7 @@ public class EntityDataManager {
             } catch (Exception e) {
                 HeadsPlus.get().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
+                e.printStackTrace();
             }
         }
     }
