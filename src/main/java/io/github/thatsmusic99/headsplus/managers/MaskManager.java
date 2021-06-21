@@ -21,7 +21,7 @@ public class MaskManager {
 
     public MaskInfo getMaskInfo(String key) {
         if (key.startsWith("HPM#")) {
-            key = key.substring(3);
+            key = key.substring(4);
         }
         return (MaskInfo) masks.getOrDefault(key, new MaskInfo()).clone();
     }
