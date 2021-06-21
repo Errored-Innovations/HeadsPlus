@@ -271,7 +271,7 @@ public class ConfigMobs extends CMFile {
 		List<String> configLore = getStringList(type + "." + conditions + ".lore", getStringList("defaults.lore"));
 		for (String l : configLore) {
 			HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
-					new HPUtils.PlaceholderInfo("{type}", type, type != null),
+					new HPUtils.PlaceholderInfo("{type}", HeadsPlus.capitalize(type.replaceAll("_", "")), true),
 					new HPUtils.PlaceholderInfo("{price}", getPrice(type), HeadsPlus.get().isVaultEnabled()));
 		}
 		return lore;
