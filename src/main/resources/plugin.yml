@@ -66,6 +66,7 @@ permissions:
       headsplus.sellhead: true
       headsplus.sellhead.gui: true
       headsplus.help.viewperms: true
+      headsplus.drops: true
   headsplus.maincommand.*:
     description: Provides access to every subcommand in /hp.
     default: op
@@ -177,3 +178,6 @@ permissions:
   headsplus.maincommand.locale.other:
     default: false
     description: Allows you to change other player's plugin language.
+  headsplus.drops:
+    default: true
+    description: Allows players to kill mobs/players for head drops.
