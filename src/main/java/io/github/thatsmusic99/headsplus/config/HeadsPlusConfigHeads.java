@@ -335,7 +335,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 		for (String l : configLore) {
 			lore.add(ChatColor.translateAlternateColorCodes('&', l)
 					.replace("{type}", type)
-					.replace("{price}", String.valueOf(getPrice(type))));
+					.replace("{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(getPrice(type))));
 		}
 		return lore;
     }
@@ -351,7 +351,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 		for (String l : configLore) {
 			lore.add(ChatColor.translateAlternateColorCodes('&', l)
 					.replace("{type}", "Player")
-					.replace("{price}", String.valueOf(price))
+					.replace("{price}", HeadsPlus.getInstance().getConfiguration().fixBalanceStr(price))
 					.replace("{player}", name));
 		}
 		return lore;
