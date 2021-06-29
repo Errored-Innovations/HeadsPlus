@@ -502,7 +502,7 @@ public class NBTManager {
     private static Class<?> getNMSClass(String name, String version, String actualLoc) {
         try {
             return Class.forName("net.minecraft." + actualLoc + name);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NullPointerException e) {
             try {
                 return Class.forName("net.minecraft.server." + version + "." + name);
             } catch (ClassNotFoundException ex) {
