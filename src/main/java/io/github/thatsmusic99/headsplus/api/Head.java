@@ -21,8 +21,6 @@ import java.util.concurrent.CompletableFuture;
 @Deprecated
 public class Head {
 
-    private static final PaperUtil util = new PaperUtil();
-
     protected ItemStack itemStack;
     private String name;
     private final String id;
@@ -108,7 +106,7 @@ public class Head {
             return CompletableFuture.completedFuture(this.itemStack);
         }
         SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
-        return util.setProfile(sm, this.name).thenApply(newMeta -> {
+        return PaperUtil.get().setProfile(sm, this.name).thenApply(newMeta -> {
             itemStack.setItemMeta(newMeta);
             return itemStack;
         });

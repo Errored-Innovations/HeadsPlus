@@ -124,13 +124,13 @@ public class HeadManager {
             HeadsPlus.debug("Building a head.");
             if (player != null) {
                 HeadsPlus.debug("Setting a player skull.");
-                return new PaperUtil().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
+                return PaperUtil.get().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });
             } else if (texture != null) {
                 HeadsPlus.debug("Setting a texture. " + texture);
-                return new PaperUtil().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
+                return PaperUtil.get().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });

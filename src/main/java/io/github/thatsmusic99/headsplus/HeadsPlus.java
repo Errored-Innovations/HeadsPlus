@@ -448,7 +448,7 @@ public class HeadsPlus extends JavaPlugin {
     private void registerSubCommands() {
         commands.put("help", new HelpMenu());
         commands.put("info", new Info());
-        commands.put("reload", new MCReload());
+        commands.put("reload", new ReloadCommand());
         commands.put("profile", new ProfileCommand());
         commands.put("hpc", new ChallengeCommand());
         commands.put("addhead", new AddHead());

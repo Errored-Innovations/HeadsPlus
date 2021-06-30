@@ -31,7 +31,6 @@ import java.util.List;
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlus hp = HeadsPlus.get();
-    private final PaperUtil util = new PaperUtil();
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
@@ -49,7 +48,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
 	private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+        PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
