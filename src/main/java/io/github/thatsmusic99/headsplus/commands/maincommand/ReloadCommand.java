@@ -5,8 +5,12 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.MaskManager;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,11 +22,11 @@ import java.util.List;
 @CommandInfo(
         commandname = "reload",
         permission = "headsplus.maincommand.reload",
-        subcommand = "Reload",
+        subcommand = "reload",
         maincommand = true,
         usage = "/hp reload"
 )
-public class MCReload implements IHeadsPlusCommand {
+public class ReloadCommand implements IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
@@ -35,7 +39,10 @@ public class MCReload implements IHeadsPlusCommand {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (CMFile cs : HeadsPlus.get().getConfigs()) {
+                HeadManager.get().reset();
+                MaskManager.get().reset();
+                SellableHeadsManager.get().reset();
+                for (HPConfig cs : HeadsPlus.get().getConfigs()) {
                     cs.reload();
                 }
                 HPPlayer.players.clear();
