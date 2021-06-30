@@ -350,13 +350,18 @@ public class HeadsPlus extends JavaPlugin {
         }
 
         for (HPConfig file : configFiles) {
-            if (file instanceof MainConfig) file.load();
-            if (file instanceof FeatureConfig) {
-                if (((FeatureConfig) file).shouldLoad()) {
+            try {
+                if (file instanceof MainConfig) file.load();
+                if (file instanceof FeatureConfig) {
+                    if (((FeatureConfig) file).shouldLoad()) {
+                        file.load();
+                    }
+                } else {
                     file.load();
                 }
-            } else {
-                file.load();
+            } catch (Exception ex) {
+                getLogger().severe("Failed to load config " + file.getClass().getSimpleName() + "!");
+                ex.printStackTrace();
             }
         }
 
