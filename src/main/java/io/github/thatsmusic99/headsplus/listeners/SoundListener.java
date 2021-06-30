@@ -32,17 +32,16 @@ public class SoundListener<T extends Event> extends HeadsPlusListener<T> {
 
     @Override
     public void onEvent(T event) {
-        if (ConfigSounds.get().getBoolean("sounds." + section + ".enabled")) {
-            try {
-                Sound s = Sound.valueOf(ConfigSounds.get().getString("sounds." + section + ".sound"));
-                float vol = (float) ConfigSounds.get().getDouble("sounds." + section + ".volume");
-                float pitch = (float) ConfigSounds.get().getDouble("sounds." +section + ".pitch");
-                Player player = getPlayer(event);
-                if (player == null) return;
-                player.playSound(player.getLocation(), s, vol, pitch);
-            } catch (IllegalArgumentException ex) {
-                HeadsPlus.get().getLogger().warning("Could not find sound " + ConfigSounds.get().getString("sounds." + section + ".sound") + "! (Error code: 7)");
-            }
+        if (!ConfigSounds.get().getBoolean("sounds." + section + ".enabled")) return;
+        try {
+            Sound s = Sound.valueOf(ConfigSounds.get().getString("sounds." + section + ".sound"));
+            float vol = (float) ConfigSounds.get().getDouble("sounds." + section + ".volume");
+            float pitch = (float) ConfigSounds.get().getDouble("sounds." + section + ".pitch");
+            Player player = getPlayer(event);
+            if (player == null) return;
+            player.playSound(player.getLocation(), s, vol, pitch);
+        } catch (IllegalArgumentException ex) {
+            HeadsPlus.get().getLogger().warning("Could not find sound " + ConfigSounds.get().getString("sounds." + section + ".sound") + "! (Error code: 7)");
         }
     }
 

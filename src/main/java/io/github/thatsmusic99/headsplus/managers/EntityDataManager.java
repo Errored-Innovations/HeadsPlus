@@ -175,9 +175,11 @@ public class EntityDataManager {
                         }
 
                         String path = name + "." + conditions + "." + head;
+                        String displayName = ConfigMobs.get().getDisplayName(path);
+                        if (displayName != null) {
+                            headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name)));
+                        }
 
-                        headInfo.withDisplayName(ConfigMobs.get().getDisplayName(path)
-                                .replaceAll("\\{type}", HeadsPlus.capitalize(name)));
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions)); // TODO
 
                         heads.add(headInfo);

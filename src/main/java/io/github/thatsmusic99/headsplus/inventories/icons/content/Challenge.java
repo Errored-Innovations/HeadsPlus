@@ -74,10 +74,10 @@ public class Challenge extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getConfig().getString("icons.challenge.display-name")
+        meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));
         List<String> lore = new ArrayList<>();
-        for (String loreStr : ConfigInventories.get().getConfig().getStringList("icons.challenge.lore")) {
+        for (String loreStr : ConfigInventories.get().getStringList("icons.challenge.lore")) {
             if (loreStr.contains("{challenge-lore}")) {
                 for (String loreStr2 : challenge.getDescription()) {
                     lore.add(hpc.formatMsg(loreStr2, player));

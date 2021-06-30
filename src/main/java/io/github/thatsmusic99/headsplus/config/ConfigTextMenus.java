@@ -299,6 +299,7 @@ public class ConfigTextMenus extends HPConfig {
             if ((page > pl.getTotalPages()) || (0 >= page)) {
                 HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
+                sender.sendMessage(translateColors(instance.getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
                 for (IHeadsPlusCommand key : pl.getContentsInPage(page)) {
                     CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);

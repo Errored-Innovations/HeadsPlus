@@ -22,6 +22,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
@@ -65,11 +66,11 @@ public class ConfigCustomHeads extends HPConfig {
             set("current-version", cVersion);
             // Sections
             for (HeadsXSections h : HeadsXSections.values()) {
-                if (isNew() || h.d > currentVersion) {
-                    addDefault("sections." + h.let + ".display-name", h.dn);
-                    addDefault("sections." + h.let + ".texture", h.tx);
-                    addDefault("sections." + h.let + ".enabled", true);
-                    addDefault("sections." + h.let + ".permission", "headsplus.section." + h.let);
+                if (isNew() || h.version > currentVersion) {
+                    addDefault("sections." + h.id + ".display-name", h.displayName);
+                    addDefault("sections." + h.id + ".texture", h.texture);
+                    addDefault("sections." + h.id + ".enabled", true);
+                    addDefault("sections." + h.id + ".permission", "headsplus.section." + h.id);
                 }
             }
             // Heads
@@ -92,7 +93,7 @@ public class ConfigCustomHeads extends HPConfig {
         moveTo("options.default-price", "default-price");
         moveTo("options.price-per-world", "price-per-world");
         // May as well add these.
-        for (String key : getConfig().getConfigurationSection("sections").getKeys(false)) {
+        for (String key : getSection("sections").getKeys(false)) {
             addDefault("sections." + key + ".enabled", true);
             addDefault("sections." + key + ".permission", "headsplus.section." + key);
         }

@@ -433,7 +433,7 @@ public enum HeadsXEnums {
     HeadsXEnums(String displayName, String texture, String section, Double version) {
         this.name = name().toLowerCase();
         this.interactName = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', displayName));
-        this.displayName = "&8❰ " + displayName + " &8❱";
+        this.displayName = "&8\u2770 " + displayName + " &8\u2771"; // ❰ and ❱
         this.texture = texture;
         this.section = section;
         this.version = version;

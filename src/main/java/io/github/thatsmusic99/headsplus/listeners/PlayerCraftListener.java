@@ -58,28 +58,9 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
 	}
 
 	private int shift(InventoryClickEvent e) {
-	    int amount;
 	    if (!e.isShiftClick()) return 1;
-	    int a = 0;
-	    if (e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
-	        for (int i = 1; i <= 9; i++) {
-	            if (e.getInventory().getItem(i) != null) {
-	                a += e.getInventory().getItem(i).getAmount();
-	            }
-	        }
-	    } else {
-	        for (int i = 80; i <= 83; i++) {
-	            if (e.getInventory().getItem(i) != null) {
-	                a += e.getInventory().getItem(i).getAmount();
-	            }
-	        }
-	    }
-	    if (a % 2 == 0) {
-	        amount = a / 2;
-	    } else {
-	        amount = (a - 1) / 2;
-	    }
-        return amount;
+	    int slot = getSlot(e.getInventory().getType());
+        return e.getInventory().getItem(slot).getAmount();
     }
 
     private void fireEvent(InventoryClickEvent e) {

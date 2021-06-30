@@ -16,15 +16,15 @@ public enum HeadsXSections {
     HUMANS("humans", "&8[&6Humans&8]", "HP#villager_plains", 2.9),
     GEMS("gems", "&8[&bGems&8]", "HP#amethyst", 3.0);
 
-    public final String let;
-    public final String dn;
-    public final String tx;
-    public final double d;
+    public final String id;
+    public final String displayName;
+    public final String texture;
+    public final double version;
 
-    HeadsXSections(String l, String dn, String t, double d) {
-        this.let = l;
-        this.dn = dn;
-        this.tx = t;
-        this.d = d;
+    HeadsXSections(String id, String displayName, String texture, double version) {
+        this.id = id;
+        this.displayName = displayName;
+        this.texture = texture;
+        this.version = version;
     }
 }

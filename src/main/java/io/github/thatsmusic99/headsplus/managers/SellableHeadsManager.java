@@ -17,6 +17,10 @@ public class SellableHeadsManager {
         return instance;
     }
 
+    public void reset() {
+        prices.clear();
+    }
+
     public void registerPrice(String key, double price) {
         prices.put(getKey(key), price);
     }

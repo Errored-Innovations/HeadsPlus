@@ -101,8 +101,8 @@ public class MaskListener extends HeadsPlusListener<InventoryClickEvent> {
             currentInterval++;
             if (helmet == null
                     || helmet.getType() == Material.AIR
-                    || !PersistenceManager.get().getSellType(helmet).equals(type)
-                    || !player.isOnline()) {
+                    || !player.isOnline()
+                    || !PersistenceManager.get().getSellType(helmet).equals(type)) {
                 hpPlayer.clearMask();
                 maskMonitors.remove(player.getUniqueId());
                 cancel();

@@ -13,9 +13,7 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabCompleteSellhead;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
+import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
@@ -362,6 +360,7 @@ public class HeadsPlus extends JavaPlugin {
                 getLogger().severe("Failed to load config " + file.getClass().getSimpleName() + "!");
                 ex.printStackTrace();
             }
+
         }
 
         try {
@@ -383,6 +382,7 @@ public class HeadsPlus extends JavaPlugin {
             }.runTaskAsynchronously(this);
         }
         EntityDataManager.init();
+        new MaskManager();
     }
 
     public void restartMessagesManager() {
@@ -462,7 +462,6 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("myhead", new MyHead());
         commands.put("sellhead", new SellHead(this));
         commands.put("debug", new DebugPrint(this));
-        commands.put("headinfo", new HeadInfoCommand());
         commands.put("conjure", new Conjure());
         commands.put("complete", new Complete());
         commands.put("tests", new TestsCommand());
@@ -576,6 +575,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public static void debug(String message) {
+        if (MainConfig.get().getMiscellaneous() == null) return;
         if (MainConfig.get().getMiscellaneous().DEBUG) {
             get().getLogger().info(message);
         }

@@ -137,7 +137,7 @@ public class ConfigChallenges extends FeatureConfig {
         prepareOptions.put("rewards", getBoolean("challenges.options.prepare-rewards"));
         prepareOptions.put("icons", getBoolean("challenges.options.prepare-icons"));
         LinkedHashMap<String, ChallengeSection> sections = new LinkedHashMap<>();
-        for (String section : super.getSection("sections").getKeys(false)) {
+        for (String section : getSection("sections").getKeys(false)) {
             if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
             try {
                 sections.put(section, getChallengeSection(section));
@@ -311,14 +311,13 @@ public class ConfigChallenges extends FeatureConfig {
     private ItemStack getIcon(String iconName) {
         ItemStack icon = new ItemStack(HPUtils.notNull(Material.getMaterial(getString("icons." + iconName + ".material")), "Material for " + iconName + " does not exist!"), 1, (byte) getInteger("icons." + iconName + ".data-value"));
         String s = getString("icons." + iconName + ".skull-name");
-        if (s != null && !s.isEmpty() ) {
-            if (s.startsWith("HP#")) {
-                icon = ConfigCustomHeads.get().getSkull(s);
-            } else {
-                SkullMeta sm = (SkullMeta) icon.getItemMeta();
-                sm = ProfileFetcher.setProfile(sm, s);
-                icon.setItemMeta(sm);
-            }
+        if (s == null || s.isEmpty()) return icon;
+        if (s.startsWith("HP#")) {
+            icon = ConfigCustomHeads.get().getSkull(s);
+        } else {
+            SkullMeta sm = (SkullMeta) icon.getItemMeta();
+            sm = ProfileFetcher.setProfile(sm, s);
+            icon.setItemMeta(sm);
         }
         return icon;
     }

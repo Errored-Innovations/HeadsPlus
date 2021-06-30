@@ -15,6 +15,10 @@ public class MaskManager {
         return instance;
     }
 
+    public void reset() {
+        masks.clear();
+    }
+
     public void registerMask(String key, MaskInfo headInfo) {
         masks.put(key, headInfo);
     }

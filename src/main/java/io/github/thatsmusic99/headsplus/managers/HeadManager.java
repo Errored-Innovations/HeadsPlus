@@ -32,6 +32,10 @@ public class HeadManager {
         return instance;
     }
 
+    public void reset() {
+        heads.clear();
+    }
+
     public void registerHead(String key, HeadInfo headInfo) {
         heads.put(key, headInfo);
         HeadsPlus.debug("Registered head " + key + ".");
@@ -59,7 +63,8 @@ public class HeadManager {
             this.lore = new ArrayList<>();
         }
 
-        public HeadInfo withDisplayName(String name) {
+        public HeadInfo withDisplayName(@Nullable String name) {
+            if (name == null) return this;
             this.displayName = name;
             return this;
         }
@@ -111,7 +116,8 @@ public class HeadManager {
             return texture;
         }
 
-        public void setLore(@NotNull List<String> lore) {
+        public void setLore(@Nullable List<String> lore) {
+            if (lore == null) return;
             this.lore = lore;
         }
 

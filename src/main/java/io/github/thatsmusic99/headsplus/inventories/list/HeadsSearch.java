@@ -23,7 +23,7 @@ public class HeadsSearch extends HeadsSection {
         for (String head : ConfigCustomHeads.get().headsCache.keySet()) {
             final String name;
             try {
-                name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', ConfigCustomHeads.get().getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
+                name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', ConfigCustomHeads.get().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
             } catch (NullPointerException | IllegalArgumentException ex) {
                 if (!suppressWarnings) {
                     hp.getLogger().warning("Null display name for " + head + "! (Error code: 12)");
