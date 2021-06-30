@@ -50,6 +50,8 @@ public class MainConfig extends HPConfig {
                 "If it isn't null and HeadsPlus isn't picking it up, please contact the developer.");
         addDefault("mob-drops", true, "Whether or not mobs drop their heads when they die.\n" +
                 "To see the full settings for this, please look at the mobs.yml config file.");
+        addDefault("player-drops", true, "Whether or not players drop their heads when they die.\n" +
+                "To see the full settings for this too, please look at the mobs.yml config file.");
         addDefault("enable-crafting", true, "Whether or not players can craft heads.\n" +
                 "Whilst this option is set to true,");
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
@@ -75,14 +77,19 @@ public class MainConfig extends HPConfig {
         addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG"),
                 "Spawn causes that stop heads dropping from a given mob.\n" +
                         "In this example, mobs spawned using spawner eggs will not drop heads at all.");
-        addDefault("needs-killer", false);
-        addDefault("entities-needing-killer", Lists.newArrayList("player"));
-        addDefault("enable-looting", true);
+        addDefault("needs-killer", false, "Whether or not mob drops need a player killing them or not.");
+        addDefault("entities-needing-killer", Lists.newArrayList("player"),
+                "If the above option is disabled, list here the entities that DO need a killer to drop a head.\n" +
+                        "This is to prevent potential exploits with sellable heads.");
+        addDefault("enable-looting", true,
+                "Whether or not the looting enchantment should have an effect on how many heads are dropped.");
         addDefault("thresholds.common", 100);
         addDefault("thresholds.uncommon", 20);
         addDefault("thresholds.rare", 5);
-        addDefault("looting-ignored", new ArrayList<>());
-        addDefault("disable-for-mythic-mobs", true);
+        addDefault("looting-ignored", new ArrayList<>(),
+                "Mobs that will get ignored by the looting enchantment so their head drop count remains unchanged.");
+        addDefault("disable-for-mythic-mobs", true,
+                "Whether the plugin should ignore MythicMobs mobs or not.");
 
         addSection("Player Head Drops");
         addComment("Note - this is also further configured in the mobs.yml file.");
@@ -94,8 +101,10 @@ public class MainConfig extends HPConfig {
                         "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."));
         addDefault("adjust-price-according-to-balance", false);
         addDefault("use-victim-balance", true);
-        addDefault("percentage-taken-off-victim", 0.05);
-        addDefault("percentage-of-balance-as-price", 0.05);
+        addDefault("percentage-taken-off-victim", 5,
+                "The percentage of the victim's/killer's balance that is taken off the actual victim.\n" +
+                        "This is a value out of 100, so in the default option, 5% of the balance is taken.");
+        addDefault("percentage-of-balance-as-price", 5);
 
         addSection("Selling Heads");
         addDefault("stop-placement-of-sellable-heads", false);
@@ -112,7 +121,8 @@ public class MainConfig extends HPConfig {
                 "If this is disabled, all worlds in the lists below will not have the respected event occur in them.\n" +
                 "If this is enabled, on the other hand, any worlds not in the lists will not have the respected event occur in them.");
 
-        addDefault("mob-drops-list", new ArrayList<>(), "Worlds in which heads cannot drop from mobs...\n" +
+        addDefault("mob-drops-list", new ArrayList<>(),
+                "Worlds in which heads cannot drop from mobs...\n" +
                 "... Or worlds in which heads can only drop in if whitelist-worlds is enabled.");
         addDefault("crafting-list", new ArrayList<>());
         addDefault("masks-list", new ArrayList<>());
@@ -134,7 +144,8 @@ public class MainConfig extends HPConfig {
         addDefault("cache-duration", 300);
 
         addSection("Updates");
-        addDefault("check-for-updates", true);
+        addDefault("check-for-updates", true,
+                "Whether or not the plugin should check for new updates.");
         addDefault("notify-admins-about-updates", true);
 
         addSection("Localisation");
