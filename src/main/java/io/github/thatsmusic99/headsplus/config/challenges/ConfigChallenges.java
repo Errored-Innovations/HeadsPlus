@@ -21,7 +21,7 @@ import java.util.*;
 public class ConfigChallenges extends FeatureConfig {
 
     public ConfigChallenges() {
-        super("challenges");
+        super("challenges.yml");
     }
 
     @Override
