@@ -87,4 +87,16 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         }
         return false;
     }
+
+    private int getSlot(InventoryType type) {
+        switch (type) {
+            case CRAFTING:
+            case WORKBENCH:
+                return 0;
+            case FURNACE:
+            case SMITHING:
+                return 2;
+        }
+        return -1;
+    }
 }

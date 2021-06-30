@@ -43,7 +43,8 @@ public class ConfigHeads extends HPConfig {
             ConfigSection section = getSection("heads." + head);
             if (section == null) continue; // why?
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo()
-                    .withDisplayName(section.getString("display-name", ""))
+                    .withDisplayName(ChatColor.translateAlternateColorCodes('&',
+                            section.getString("display-name", "")))
                     .withTexture(section.getString("texture", ""));
             headInfo.setLore(section.getStringList("lore"));
             HeadManager.get().registerHead(head, headInfo);
