@@ -45,7 +45,7 @@ public class Stats extends Icon {
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
             HPUtils.parseLorePlaceholders(lore, hpc.formatMsg(loreStr, player),
                     new HPUtils.PlaceholderInfo("{head}", hpch.allHeadsCache.size(), true),
-                    new HPUtils.PlaceholderInfo("{balance}", hp.getEconomy().getBalance(player), hp.isVaultEnabled()),
+                    new HPUtils.PlaceholderInfo("{balance}", getBalance(player), hp.isVaultEnabled()),
                     new HPUtils.PlaceholderInfo("{sections}",  hpch.sections.size(), true),
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
@@ -53,5 +53,13 @@ public class Stats extends Icon {
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
+    }
+
+    private double getBalance(Player player) {
+        try {
+            return hp.getEconomy().getBalance(player);
+        } catch (NoClassDefFoundError ex) {
+            return 0.0;
+        }
     }
 }
