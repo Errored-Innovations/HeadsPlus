@@ -42,7 +42,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
     @Override
     public boolean shouldEnable() {
-        return MainConfig.get().getMainFeatures().MOB_DROPS;
+        return MainConfig.get().getMainFeatures().PLAYER_DROPS;
     }
 
     @Override
@@ -51,8 +51,6 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         Player killer = victim.getKiller();
 
         addData("player", victim.getName());
-        // Make sure head drops are enabled
-        if (!addData("enabled", MainConfig.get().getMainFeatures().MOB_DROPS)) return;
         // Make sure the entity isn't from MythicMobs
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;

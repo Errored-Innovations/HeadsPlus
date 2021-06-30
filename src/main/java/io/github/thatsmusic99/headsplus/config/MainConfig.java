@@ -433,6 +433,7 @@ public class MainConfig extends HPConfig {
     public class MainFeatures {
         public boolean SELL_HEADS = getBoolean("sell-heads"),
                 MOB_DROPS = getBoolean("mob-drops"),
+                PLAYER_DROPS = getBoolean("player-drops"),
                 ENABLE_CRAFTING = getBoolean("enable-crafting"),
                 HEADS_SELECTOR = getBoolean("heads-selector"),
                 CHALLENGES = getBoolean("challenges"),
