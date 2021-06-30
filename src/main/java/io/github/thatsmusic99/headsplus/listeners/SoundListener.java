@@ -2,26 +2,32 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigSounds;
+import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class SoundListener<T> extends HeadsPlusListener<T> {
+public class SoundListener<T extends Event> extends HeadsPlusListener<T> {
 
     private String section;
     private String playerAccessor;
+    private final Class<T> clazz;
 
-    public SoundListener(String section) {
-        this.section = section;
-        this.playerAccessor = "getPlayer";
+    public SoundListener(String section, Class<T> clazz) {
+        this(section, "getPlayer", clazz);
     }
 
-    public SoundListener(String section, String playerAccessor) {
+    public SoundListener(String section, String playerAccessor, Class<T> clazz) {
         this.section = section;
         this.playerAccessor = playerAccessor;
+        this.clazz = clazz;
     }
 
     @Override
@@ -52,6 +58,9 @@ public class SoundListener<T> extends HeadsPlusListener<T> {
 
     @Override
     public void init() {
+        Bukkit.getPluginManager().registerEvent(clazz,
+                this, EventPriority.NORMAL,
+                new HeadsPlusEventExecutor(clazz, clazz.getName(), this), HeadsPlus.get());
 
     }
 }
