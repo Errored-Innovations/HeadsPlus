@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainConfig extends CMFile {
+public class MainConfig extends HPConfig {
 
     Perks perks = new Perks();
     SelectorList whitelist_worlds = new SelectorList();
@@ -35,7 +36,7 @@ public class MainConfig extends CMFile {
     private static MainConfig instance;
 
     public MainConfig() {
-        super(HeadsPlus.get(), "config");
+        super("config.yml");
         instance = this;
     }
 
@@ -329,8 +330,8 @@ public class MainConfig extends CMFile {
     }
 
     @Deprecated
-    public ConfigurationSection getMechanics() {
-        return getConfig().getConfigurationSection("plugin.mechanics");
+    public ConfigSection getMechanics() {
+        return getSection("plugin.mechanics");
     }
 
     @Deprecated

@@ -1,15 +1,12 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ConfigAnimations extends CMFile {
+public class ConfigAnimations extends HPConfig {
 
     public ConfigAnimations() {
-        super(HeadsPlus.get(), "animations");
+        super("animations.yml");
     }
 
     @Override
@@ -17,7 +14,7 @@ public class ConfigAnimations extends CMFile {
         addComment("This is the config where you can make head animations come to life.\n" +
                 "For technical reasons, these will only work in inventories and masks.");
 
-        addLenientSection("animations");
+        makeSectionLenient("animations");
 
         addExample("animations.creeper.looping-mode", "loop-reverse", "");
         addExample("animations.creeper.pausing-period", 4);

@@ -3,9 +3,11 @@ package io.github.thatsmusic99.headsplus.config.customheads;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
@@ -25,7 +27,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 @Deprecated
-public class ConfigCustomHeads extends CMFile {
+public class ConfigCustomHeads extends HPConfig {
 
     private final double cVersion = 3.4;
     public final Map<String, List<String>> sections = new HashMap<>();
@@ -34,13 +36,8 @@ public class ConfigCustomHeads extends CMFile {
     public static ConfigCustomHeads instance;
 
     public ConfigCustomHeads() {
-        super(HeadsPlus.get(), "customheads");
+        super("customheads.yml");
         instance = this;
-    }
-
-    @Override
-    public void loadTitle() {
-        // Don't load any title
     }
 
     @Override
@@ -50,14 +47,14 @@ public class ConfigCustomHeads extends CMFile {
         addSection("Main Options");
         addDefault("update-heads", true, "Whether the plugin should add more heads included with updates.");
         addDefault("default-price", 10.00);
-        addLenientSection("price-per-world");
+        makeSectionLenient("price-per-world");
         addDefault("price-per-world.example-one", 15.00);
         addDefault("autograb", false, "Autograb is a feature that grabs ");
         addDefault("automatically-enable-grabbed-heads", true);
         addDefault("current-version", cVersion, "Please do not change this! This is used to track updates made.");
 
-        addLenientSection("sections");
-        addLenientSection("heads");
+        makeSectionLenient("sections");
+        makeSectionLenient("heads");
 
         boolean updateHeads = getBoolean("update-heads", true);
         double currentVersion = getDouble("current-version");
@@ -104,10 +101,10 @@ public class ConfigCustomHeads extends CMFile {
     @Override
     public void postSave() {
         sections.clear();
-        for (String cat : getConfig().getConfigurationSection("sections").getKeys(false)) {
+        for (String cat : getSection("sections").getKeys(false)) {
             sections.put(cat, new ArrayList<>());
         }
-        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        ConfigSection heads = getSection("heads");
         try {
             for (String head : heads.getKeys(false)) {
                 allHeadsCache.add(heads.getString(head + ".texture"));
@@ -205,7 +202,7 @@ public class ConfigCustomHeads extends CMFile {
     public String getTextures(String s) {
         String[] st = s.split("#");
         try {
-            return getConfig().getString("heads." + st[1] + ".texture");
+            return getString("heads." + st[1] + ".texture");
         } catch (Exception ex) {
             DebugPrint.createReport(ex, "Startup (customheads.yml)", false, null);
             return "";
@@ -226,20 +223,13 @@ public class ConfigCustomHeads extends CMFile {
         return is;
     }
 
-
-
-
-
-
-
-
     /**
      * Enable player head texture, if not enabled already
      * @param texture
      * @return true if the texture exists and was not previously enabled.
      */
     public boolean enableHead(String texture) {
-        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        ConfigSection heads = getSection("heads");
         for(String k : heads.getKeys(false)) {
             if(texture.equals(heads.getString(k + ".texture"))) {
                 if(!heads.getBoolean(k + ".database", true)) {
@@ -261,10 +251,10 @@ public class ConfigCustomHeads extends CMFile {
         // find a name that's open
         List l = sections.get(section);
         int i = l == null ? 0 : l.size() + 1;
-        ConfigurationSection heads = getConfig().getConfigurationSection("heads");
+        ConfigSection heads = getSection("heads");
         String key;
         while(heads.contains(key = section + "_" + i)) ++i;
-        ConfigurationSection head = heads.createSection(key);
+        ConfigSection head = heads.createConfigSection(key);
         if(!enable) {
             head.set("database", enable);
         }
@@ -286,7 +276,7 @@ public class ConfigCustomHeads extends CMFile {
 
     public void addHeadToCache(String id, String section) {
         headsCache.put(id, getSkull(id));
-        allHeadsCache.add(getConfig().getString("heads." + id + ".texture"));
+        allHeadsCache.add(getString("heads." + id + ".texture"));
         sections.get(section).add(id);
     }
 
@@ -295,7 +285,11 @@ public class ConfigCustomHeads extends CMFile {
     void delaySave() {
         if (autosaveTask == -1 && HeadsPlus.get().isEnabled()) {
             autosaveTask = Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.get(), ()->{
-                initiateSave();
+                try {
+                    save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 autosaveTask = -1;
             }, 5 * 60).getTaskId();
         }
@@ -304,7 +298,11 @@ public class ConfigCustomHeads extends CMFile {
     public void flushSave() {
         if (autosaveTask != -1) {
             Bukkit.getScheduler().cancelTask(autosaveTask);
-            initiateSave();
+            try {
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             autosaveTask = -1;
         }
     }

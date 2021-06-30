@@ -1,22 +1,20 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.ChatColor;
 
-public class ConfigHeads extends CMFile {
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class ConfigHeads extends HPConfig {
 
     private static ConfigHeads instance;
 
     public ConfigHeads() {
-        super(HeadsPlus.get(), "heads");
+        super("heads.yml");
         instance = this;
-    }
-
-    @Override
-    public void loadTitle() {
     }
 
     @Override
@@ -28,7 +26,7 @@ public class ConfigHeads extends CMFile {
         addDefault("update-heads", true, "Whether the plugin should add more heads included with updates.");
         addDefault("version", 3.5);
 
-        addLenientSection("heads");
+        makeSectionLenient("heads");
         if (isNew() || getDouble("version") < 3.5) {
             for (HeadsXEnums head : HeadsXEnums.values()) {
                 if (isNew() || head.version > getDouble("version")) {
@@ -37,13 +35,12 @@ public class ConfigHeads extends CMFile {
                 }
             }
         }
-
     }
 
     @Override
     public void postSave() {
-        for (String head : getConfig().getConfigurationSection("heads").getKeys(false)) {
-            ConfigurationSection section = getConfig().getConfigurationSection("heads." + head);
+        for (String head : getSection("heads").getKeys(false)) {
+            ConfigSection section = getSection("heads." + head);
             if (section == null) continue; // why?
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo()
                     .withDisplayName(section.getString("display-name", ""))

@@ -168,17 +168,17 @@ public class HPPlayer {
         ConfigMobs hpch = ConfigMobs.get();
         List<PotionEffect> po = new ArrayList<>();
         // TODO mask rework
-        for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
-            String is = hpch.getConfig().getStringList(s + ".mask-effects").get(i).toUpperCase();
+        for (int i = 0; i < hpch.getStringList(s + ".mask-effects").size(); i++) {
+            String is = hpch.getStringList(s + ".mask-effects").get(i).toUpperCase();
             if (is.equalsIgnoreCase("ignore-fall-damage")) {
                 ignoreFallDamage = true;
                 continue;
             }
             int amp;
             if (ignoreFallDamage) {
-                amp = hpch.getConfig().getIntegerList(s + ".mask-amplifiers").get(i - 1);
+                amp = (int) hpch.getList(s + ".mask-amplifiers").get(i - 1);
             } else {
-                amp = hpch.getConfig().getIntegerList(s + ".mask-amplifiers").get(i);
+                amp = (int) hpch.getList(s + ".mask-amplifiers").get(i);
             }
 
             try {

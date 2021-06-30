@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.HPExpansion;
@@ -8,8 +7,6 @@ import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
-import io.github.thatsmusic99.headsplus.commands.maincommand.lists.blacklist.*;
-import io.github.thatsmusic99.headsplus.commands.maincommand.lists.whitelist.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
@@ -28,6 +25,7 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -68,7 +66,7 @@ public class HeadsPlus extends JavaPlugin {
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
-    private List<CMFile> configFiles = new ArrayList<>();
+    private List<HPConfig> configFiles = new ArrayList<>();
     private Favourites favourites;
     private Pinned pinned;
     private PlayerScores scores;
@@ -277,6 +275,7 @@ public class HeadsPlus extends JavaPlugin {
         new HeadManager();
         new PersistenceManager();
         new SellableHeadsManager();
+        new PaperUtil();
     }
 
     private void registerEvents() {
@@ -292,13 +291,13 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new BlockPlaceListener());
         listeners.add(new PlayerPickBlockListener());
         listeners.add(new PlayerMessageDeathListener());
-        listeners.add(new SoundListener<SellHeadEvent>("on-sell-head"));
-        listeners.add(new SoundListener<HeadPurchaseEvent>("on-buy-head"));
-        listeners.add(new SoundListener<SectionChangeEvent>("on-change-section"));
-        listeners.add(new SoundListener<EntityHeadDropEvent>("on-entity-head-drop"));
-        listeners.add(new SoundListener<PlayerHeadDropEvent>("on-player-head-drop", "getDeadPlayer"));
-        listeners.add(new SoundListener<LevelUpEvent>("on-level-up"));
-        listeners.add(new SoundListener<HeadCraftEvent>("on-craft-head"));
+        listeners.add(new SoundListener<>("on-sell-head", SellHeadEvent.class));
+        listeners.add(new SoundListener<>("on-buy-head", HeadPurchaseEvent.class));
+        listeners.add(new SoundListener<>("on-change-section", SectionChangeEvent.class));
+        listeners.add(new SoundListener<>("on-entity-head-drop", EntityHeadDropEvent.class));
+        listeners.add(new SoundListener<>("on-player-head-drop", "getDeadPlayer", PlayerHeadDropEvent.class));
+        listeners.add(new SoundListener<>("on-level-up", LevelUpEvent.class));
+        listeners.add(new SoundListener<>("on-craft-head", HeadCraftEvent.class));
         initiateEvents();
     }
 
@@ -327,8 +326,6 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createInstances() {
-        new PersistenceManager();
-
         configFiles = new ArrayList<>();
         configFiles.add(new MainConfig());
         configFiles.add(new ConfigAnimations());
@@ -336,6 +333,7 @@ public class HeadsPlus extends JavaPlugin {
         configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
         configFiles.add(new ConfigHeads());
+        configFiles.add(new ConfigHeadsSelector());
         configFiles.add(new ConfigInteractions());
         configFiles.add(new ConfigInventories());
         configFiles.add(new ConfigLevels());
@@ -351,7 +349,7 @@ public class HeadsPlus extends JavaPlugin {
             return;
         }
 
-        for (CMFile file : configFiles) {
+        for (HPConfig file : configFiles) {
             if (file instanceof MainConfig) file.load();
             if (file instanceof FeatureConfig) {
                 if (((FeatureConfig) file).shouldLoad()) {
@@ -448,26 +446,10 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerSubCommands() {
-        commands.put("blacklistadd", new BlacklistAdd(this));
-        commands.put("blacklistdel", new BlacklistDelete(this));
-        commands.put("blacklistl", new BlacklistList(this));
-        commands.put("blacklist", new BlacklistToggle(this));
-        commands.put("blacklistwadd", new BlacklistwAdd(this));
-        commands.put("blacklistwdel", new BlacklistwDelete(this));
-        commands.put("blacklistwl", new BlacklistwList(this));
-        commands.put("blacklistw", new BlacklistwToggle(this));
         commands.put("help", new HelpMenu());
         commands.put("info", new Info());
         commands.put("reload", new MCReload());
         commands.put("profile", new ProfileCommand());
-        commands.put("whitelistadd", new WhitelistAdd(this));
-        commands.put("whitelistdel", new WhitelistDel(this));
-        commands.put("whitelistl", new WhitelistList(this));
-        commands.put("whitelist", new WhitelistToggle(this));
-        commands.put("whitelistwadd", new WhitelistwAdd(this));
-        commands.put("whitelistwdel", new WhitelistwDelete(this));
-        commands.put("whitelistwl", new WhitelistwList(this));
-        commands.put("whitelistw", new WhitelistwToggle(this));
         commands.put("hpc", new ChallengeCommand());
         commands.put("addhead", new AddHead());
         commands.put("head", new Head());
@@ -486,8 +468,6 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     // GETTERS
-
-
     public Favourites getFavourites() {
         return favourites;
     }
@@ -540,7 +520,7 @@ public class HeadsPlus extends JavaPlugin {
         return challengeSections;
     }
 
-    public List<CMFile> getConfigs() {
+    public List<HPConfig> getConfigs() {
         return configFiles;
     }
 
@@ -577,6 +557,7 @@ public class HeadsPlus extends JavaPlugin {
             pluginCommunications.put("CHRONOS", "GET THE HELL OUT OF MY ROOM I'M PLAYING MINECRAFT");
             pluginCommunications.put("SimplePets", "red looks kinda sus");
             pluginCommunications.put("AdvancedOreGenerator", "bro i'm dead");
+            pluginCommunications.put("ConfigurationMaster", "You almost forgot me... :(");
             getLogger().info("Avengers, assemble!");
 
             for (String plugin : pluginCommunications.keySet()) {

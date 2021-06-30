@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.IconClickEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
@@ -40,7 +41,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");
     private static final Pattern SECTION = Pattern.compile("\\{section}");
-    protected FileConfiguration hpi;
+    protected ConfigFile hpi;
     private Inventory inventory;
     protected PagedLists<Content> contents;
     private UUID uuid;
@@ -56,9 +57,9 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     public BaseInventory(Player player, HashMap<String, String> context) {
         // Decide whether warnings need to be suppressed
         suppressWarnings = MainConfig.get().getMiscellaneous().SUPPRESS_GUI_WARNINGS;
-        hpi = ConfigInventories.get().getConfig();
+        hpi = ConfigInventories.get();
         // Get the default icons
-        icons = new Icon[hpi.getInt("inventories." + getId() + ".size")];
+        icons = new Icon[hpi.getInteger("inventories." + getId() + ".size")];
         // Get the unique ID of the player, never store the player object
         uuid = player.getUniqueId();
         // Get the icon list
@@ -95,7 +96,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         title = PAGES.matcher(title).replaceAll(String.valueOf(totalPages));
         title = SECTION.matcher(title).replaceAll(context.get("section") != null ? context.get("section") : "None");
         inventory = Bukkit.createInventory(this,
-                hpi.getInt("inventories." + getId() + ".size"),
+                hpi.getInteger("inventories." + getId() + ".size"),
                 title);
         String items = hpi.getString("inventories." + getId() + ".icons");
         Iterator<Content> contentIt = contents.getContentsInPage(Integer.parseInt(currentPage)).iterator();

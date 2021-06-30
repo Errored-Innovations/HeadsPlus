@@ -25,7 +25,6 @@ public class CraftingManager {
     public void init() {
         clear();
         ConfigCrafting crafting = ConfigCrafting.get();
-        FileConfiguration actualConfig = crafting.getConfig();
     }
 
     public void clear() {

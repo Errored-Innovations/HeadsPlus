@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.util;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
@@ -85,7 +86,7 @@ public class HPUtils {
 
     public static double calculateChance(double chance, double randChance, Player killer) {
         if (!MainConfig.get().getMobDrops().ENABLE_LOOTING) return chance;
-        ConfigurationSection lootingThresholds = MainConfig.get().getConfig().getConfigurationSection("thresholds");
+        ConfigSection lootingThresholds = MainConfig.get().getSection("thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
         if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {

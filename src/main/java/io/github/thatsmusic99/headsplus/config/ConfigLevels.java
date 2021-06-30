@@ -10,7 +10,7 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 
 import java.util.HashMap;
 
-public class ConfigLevels extends CMFile {
+public class ConfigLevels extends FeatureConfig {
 
     private final HashMap<Integer, BaseLevel> levels = new HashMap<>();
 
@@ -22,7 +22,7 @@ public class ConfigLevels extends CMFile {
     private static ConfigLevels instance;
 
     public ConfigLevels() {
-        super(HeadsPlus.get(), "levels");
+        super("levels.yml");
         instance = this;
         addDefLevels();
     }
@@ -37,22 +37,22 @@ public class ConfigLevels extends CMFile {
         hp.getLevels().clear();
         //if (hp.usingLevels()) {
             try {
-                for (String s : getConfig().getConfigurationSection("levels").getKeys(false)) {
-                    String dn = HPUtils.notNull(getConfig().getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
-                    double av = getConfig().getDouble("levels." + s + ".added-version");
-                    int rxp = getConfig().getInt("levels." + s + ".required-xp");
-                    int h = getConfig().getInt("levels." + s + ".hierarchy");
-                    boolean e = getConfig().getBoolean("levels." + s + ".rewards.enabled", false);
+                for (String s : getSection("levels").getKeys(false)) {
+                    String dn = HPUtils.notNull(getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
+                    double av = getDouble("levels." + s + ".added-version");
+                    int rxp = getInteger("levels." + s + ".required-xp");
+                    int h = getInteger("levels." + s + ".hierarchy");
+                    boolean e = getBoolean("levels." + s + ".rewards.enabled", false);
                     HPChallengeRewardTypes reward;
                     try {
 
-                        reward = HPChallengeRewardTypes.valueOf(HPUtils.notNull(getConfig().getString("levels." + s + ".rewards.reward-type"), "There is no reward type for " + s + "!").toUpperCase());
+                        reward = HPChallengeRewardTypes.valueOf(HPUtils.notNull(getString("levels." + s + ".rewards.reward-type"), "There is no reward type for " + s + "!").toUpperCase());
                     } catch (Exception ex) {
                         throw new NullPointerException("The reward type for " + s + " is not valid!");
                     }
-                    Object rewardVal = HPUtils.notNull(getConfig().get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
-                    int items = getConfig().getInt("levels." + s + ".rewards.item-amount");
-                    String sender = getConfig().getString("levels." + s + ".rewards.command-sender");
+                    Object rewardVal = HPUtils.notNull(get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
+                    int items = getInteger("levels." + s + ".rewards.item-amount");
+                    String sender = getString("levels." + s + ".rewards.command-sender");
                     Reward reward1 = new Reward("", reward, rewardVal, items, sender, 0, false);
                     Level c = new Level(s, dn, rxp, av, e, reward1);
                     hp.getLevels().put(h, c);
@@ -136,5 +136,10 @@ public class ConfigLevels extends CMFile {
 
     public int getMaxHierarchy() {
         return maxHierarchy;
+    }
+
+    @Override
+    public boolean shouldLoad() {
+        return MainConfig.get().getMainFeatures().LEVELS;
     }
 }

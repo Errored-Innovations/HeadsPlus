@@ -1,5 +1,7 @@
 package io.github.thatsmusic99.headsplus.crafting;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
@@ -24,7 +26,7 @@ import java.util.Map;
 public class RecipeEnumUser {
 
     private final HeadsPlus hp = HeadsPlus.get();
-	private final FileConfiguration crafting = ConfigCrafting.get().getConfig();
+	private final ConfigFile crafting = ConfigCrafting.get();
 
 	public RecipeEnumUser() {
 	    addEnumToConfig();
@@ -34,7 +36,7 @@ public class RecipeEnumUser {
 	    for (String key : crafting.getKeys(false)) {
 	        if (!key.equalsIgnoreCase("base-item")) {
 	            if (key.equalsIgnoreCase("sheep")) {
-	                for (String key2 : crafting.getConfigurationSection("sheep").getKeys(false)) {
+	                for (String key2 : crafting.getSection("sheep").getKeys(false)) {
 	                    addRecipe("sheep." + key2);
 	                }
 	            } else {
@@ -45,7 +47,7 @@ public class RecipeEnumUser {
 	}
 
 	private void addRecipe(String id) {
-        ConfigurationSection headSec = crafting.getConfigurationSection(id);
+        ConfigSection headSec = crafting.getSection(id);
         if (headSec.getStringList("ingredients").isEmpty()) return;
 	    // Get the Central ID, firstly
 	    String headId = headSec.getString("head");
@@ -162,7 +164,7 @@ public class RecipeEnumUser {
                 }
             }
             if (crafting.getBoolean("base-item.use-base-item")) {
-                recipe.addIngredient(new ItemStack(Material.getMaterial(crafting.getString("base-item.material")), 1, (short) crafting.getInt("base-item.data")).getType());
+                recipe.addIngredient(new ItemStack(Material.getMaterial(crafting.getString("base-item.material")), 1, (short) crafting.getInteger("base-item.data")).getType());
             }
             if (ingCount > 0) {
                 try {

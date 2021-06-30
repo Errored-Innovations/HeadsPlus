@@ -57,7 +57,7 @@ public interface IHeadsPlusCommand {
     }
 
     static List<String> getEntityConditions(String entity) {
-        Object section = MainConfig.get().getConfig().get(entity);
+        Object section = MainConfig.get().get(entity);
         return section instanceof ConfigurationSection ? new ArrayList<>(((ConfigurationSection) section).getKeys(false)) : new ArrayList<>();
     }
 }

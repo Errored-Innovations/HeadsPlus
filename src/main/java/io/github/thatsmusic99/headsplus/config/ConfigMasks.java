@@ -5,10 +5,10 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 
 import java.util.Collections;
 
-public class ConfigMasks extends CMFile {
+public class ConfigMasks extends FeatureConfig {
 
     public ConfigMasks() {
-        super(HeadsPlus.get(), "masks");
+        super("masks.yml");
     }
 
     @Override
@@ -16,5 +16,10 @@ public class ConfigMasks extends CMFile {
         addExample("masks.creeper.when-wearing", "animation:creeper");
         addExample("masks.creeper.effects", Collections.singletonList("INVISIBILITY"));
 
+    }
+
+    @Override
+    public boolean shouldLoad() {
+        return MainConfig.get().getMainFeatures().MASKS;
     }
 }

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -10,17 +11,18 @@ import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Rabbit;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConfigMobs extends CMFile {
+public class ConfigMobs extends FeatureConfig {
 
 	private static ConfigMobs instance;
 
 	public ConfigMobs() {
-	    super(HeadsPlus.get(), "mobs");
+	    super("mobs.yml");
 	    instance = this;
     }
 
@@ -34,9 +36,8 @@ public class ConfigMobs extends CMFile {
 				"If you have trouble understanding how it works, please use the /hp config mobs command instead.");
 
 		addDefault("defaults.price", 10.0);
-		addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
-		addDefault("defaults.display-name", "{type} Head");
-		addDefault("defaults.interact-name", "{type}");
+		addExample("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
+		addExample("defaults.display-name", "{type} Head");
 		addDefault("defaults.chance", 5);
 		addHeads();
 		addPlayerHeads();
@@ -44,11 +45,11 @@ public class ConfigMobs extends CMFile {
 
 	@Override
 	public void moveToNew() {
-		for (String key : getConfig().getKeys(false)) {
-			if (!(getConfig().get(key) instanceof ConfigurationSection)) continue;
-			ConfigurationSection section = getConfig().getConfigurationSection(key);
+		for (String key : getKeys(false)) {
+			if (!(get(key) instanceof ConfigurationSection)) continue;
+			ConfigSection section = getSection(key);
 			if (section == null || !section.contains("interact-name") || !section.contains("name") || !(section.get("name") instanceof ConfigurationSection)) continue;
-			ConfigurationSection name = section.getConfigurationSection("name");
+			ConfigSection name = section.getSection("name");
 			if (name == null) continue;
 			for (String nameKey : name.getKeys(false)) {
 				if (!(name.get(nameKey) instanceof List)) continue;
@@ -65,7 +66,7 @@ public class ConfigMobs extends CMFile {
 		for (String head : Arrays.asList("brownCoconutHead", "greenCoconutHead", "oakLogHead", "present1Head",
 				"present2Head", "tntHead", "tnt2Head", "arrowUpHead", "arrowDownHead", "arrowRightHead", "arrowLeftHead",
 				"excalamationHead", "questionHead")) {
-			moveTo(head + "EN", "special.names." + getConfig().getString(head + "N") + ".name", ConfigInteractions.get());
+			moveTo(head + "EN", "special.names." + getString(head + "N") + ".name", ConfigInteractions.get());
 			set(head + "N", null);
 		}
 
@@ -226,8 +227,8 @@ public class ConfigMobs extends CMFile {
     }
 
     private void addPlayerHeads() {
-		addLenientSection("player");
-		getConfig().createSection("player.default");
+		makeSectionLenient("player");
+		createConfigSection("player.default");
     	addExample("player.default.chance", 100);
     	addExample("player.default.display-name", "{player}'s head");
     	addExample("player.default.price", "{default}");
@@ -258,17 +259,20 @@ public class ConfigMobs extends CMFile {
 				getDouble("defaults.price")));
 	}
 
+	@Nullable
     public String getDisplayName(String path) {
-		return getString(path + ".display-name", getString("defaults.display-name"));
+		return getString(path + ".display-name", getString("defaults.display-name", null));
 	}
 
     public double getChance(String path) {
 		return getDouble(path + ".chance", getDouble("defaults.chance"));
 	}
 
+	@Nullable
     public List<String> getLore(String type, String conditions) {
 		List<String> lore = new ArrayList<>();
-		List<String> configLore = getStringList(type + "." + conditions + ".lore", getStringList("defaults.lore"));
+		List<String> configLore = getList(type + "." + conditions + ".lore", getList("defaults.lore", null));
+		if (configLore == null) return null;
 		for (String l : configLore) {
 			HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
 					new HPUtils.PlaceholderInfo("{type}", HeadsPlus.capitalize(type.replaceAll("_", "")), true),
@@ -279,7 +283,7 @@ public class ConfigMobs extends CMFile {
 
     public List<String> getLore(String name, double price, String killerName) {
 		List<String> lore = new ArrayList<>();
-		List<String> configLore = getStringList("player.lore", getStringList("defaults.lore"));
+		List<String> configLore = getList("player.lore", getStringList("defaults.lore"));
 
 		for (String l : configLore) {
 			HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
@@ -293,12 +297,17 @@ public class ConfigMobs extends CMFile {
 
 	private void createExampleSection(String path) {
 		if (isNew()) {
-			getConfig().createSection(path);
+			createConfigSection(path);
 		}
 	}
 
 	private void addDefaultHead(String path, String head) {
-		addLenientSection(path);
+		makeSectionLenient(path);
 		createExampleSection(path + "." + head);
+	}
+
+	@Override
+	public boolean shouldLoad() {
+		return false;
 	}
 }

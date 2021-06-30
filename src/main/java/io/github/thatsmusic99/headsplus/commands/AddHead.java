@@ -20,6 +20,7 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,10 +79,13 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             ConfigCustomHeads customHeads = ConfigCustomHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
-                                customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));
+                                customHeads.addDefault("heads." + id + "." + key, context.getSessionData(key));
                             }
-                            customHeads.getConfig().options().copyDefaults(true);
-                            customHeads.save(true);
+                            try {
+                                customHeads.save();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
                             hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
                         }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,12 +18,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-public class ConfigInteractions extends CMFile {
+public class ConfigInteractions extends HPConfig {
 
     private static ConfigInteractions instance;
 
     public ConfigInteractions() {
-        super(HeadsPlus.get(), "interactions");
+        super("interactions.yml");
         instance = this;
     }
 
@@ -46,7 +47,7 @@ public class ConfigInteractions extends CMFile {
             addDefault("defaults.vowel-message", "{msg_event.head-mhf-interact-message-2}");
             addDefault("defaults.commands", Lists.newArrayList());
 
-            addLenientSection("special");
+            makeSectionLenient("special");
             addComment("special", "This is the section where you can specify unique interactions with heads.\n" +
                     "These can be specified with location, name and texture.\n" +
                     "Locations are placed at the highest priority and are formatted as 0x0y0zworld_name. (Replace the 0s with the coordinates you want and world_name with the world's name.)\n" +
@@ -100,7 +101,7 @@ public class ConfigInteractions extends CMFile {
         return CompletableFuture.supplyAsync(() -> {
             Location location = skull.getLocation();
             String locationStr = location.getBlockX() + "x" + location.getBlockY() + "y" + location.getBlockZ() + "z" + location.getWorld().getName();
-            if (getConfig().contains("special.locations." + locationStr)) {
+            if (contains("special.locations." + locationStr)) {
                 runCommands("special.locations." + locationStr, receiver);
                 return getMessage("special.locations." + locationStr, receiver, skull.getOwner());
             }
@@ -111,7 +112,7 @@ public class ConfigInteractions extends CMFile {
                 profileField.setAccessible(true);
                 GameProfile profile = (GameProfile) profileField.get(skull);
                 // Check to see if the config contains the head's name.
-                if (getConfig().contains("special.names." + profile.getName())) {
+                if (contains("special.names." + profile.getName())) {
                     runCommands("special.names." + profile.getName(), receiver);
                     return getMessage("special.names." + profile.getName(), receiver, profile.getName());
                 }
@@ -126,7 +127,7 @@ public class ConfigInteractions extends CMFile {
                 String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
 
                 for (String str : Arrays.asList(b64Texture, url, hash)) {
-                    if (getConfig().contains("special.textures." + str)) {
+                    if (contains("special.textures." + str)) {
                         runCommands("special.textures." + str, receiver);
                         return getMessage("special.textures." + str, receiver, profile.getName());
                     }
@@ -146,7 +147,7 @@ public class ConfigInteractions extends CMFile {
         Pattern defaultsPattern = Pattern.compile("\\{(.+)}");
         if (defaultsPattern.matcher(message).matches()) {
             String pointer = defaultsPattern.matcher(message).group(1);
-            if (getConfig().getConfigurationSection("defaults").getKeys(false).contains(pointer)) {
+            if (getSection("defaults").getKeys(false).contains(pointer)) {
                 message = getString("defaults." + pointer, getString("defaults.message"));
             }
         }
@@ -163,7 +164,7 @@ public class ConfigInteractions extends CMFile {
     }
 
     private void runCommands(String path, Player player) {
-        List<String> commands = getStringList(path + ".commands", Lists.newArrayList(getString(path + ".commands")));
+        List<String> commands = getList(path + ".commands", Lists.newArrayList(getString(path + ".commands")));
         if (commands == null) return;
 
         for (String command : commands) {

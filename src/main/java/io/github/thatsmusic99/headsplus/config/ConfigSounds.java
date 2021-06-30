@@ -1,14 +1,11 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-
-public class ConfigSounds extends CMFile {
+public class ConfigSounds extends HPConfig {
 
     private static ConfigSounds instance;
 
     public ConfigSounds() {
-        super(HeadsPlus.get(), "sounds");
+        super("sounds.yml");
         instance = this;
     }
 

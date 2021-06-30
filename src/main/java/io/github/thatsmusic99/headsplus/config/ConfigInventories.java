@@ -1,22 +1,21 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConfigInventories extends CMFile {
+public class ConfigInventories extends HPConfig {
 
     private static ConfigInventories instance;
 
     public ConfigInventories() {
-        super(HeadsPlus.get(), "inventories");
+        super("inventories.yml");
         instance = this;
     }
 
@@ -45,28 +44,28 @@ public class ConfigInventories extends CMFile {
                 new SellheadCategory(),
                 new SellheadMenu(), new ChallengesPinnedInv())) {
             addDefault("inventories." + inv.getId() + ".title", inv.getDefaultTitle());
-            if (getConfig().get("inventories." + inv.getId() + ".icons") instanceof List) {
+            if (get("inventories." + inv.getId() + ".icons") instanceof List) {
                 HeadsPlus.get().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");
                 set("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
             }
             addDefault("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
             addDefault("inventories." + inv.getId() + ".size", 54);
         }
-        if (getConfig().getDouble("version") < 0.1) {
-            ConfigurationSection section = getConfig().getConfigurationSection("inventories");
+        if (getDouble("version") < 0.1) {
+            ConfigSection section = getSection("inventories");
             if (section != null) {
                 for (String inventory : section.getKeys(false)) {
-                    String items = getConfig().getString("inventories." + inventory + ".icons");
+                    String items = getString("inventories." + inventory + ".icons");
                     if (inventory.equalsIgnoreCase("challenges-menu")) {
                         items = items.replaceAll("[S]", "C");
                         char[] chars = items.toCharArray();
                         chars[0] = 'P';
-                        getConfig().set("inventories." + inventory + ".icons", String.valueOf(chars));
+                        set("inventories." + inventory + ".icons", String.valueOf(chars));
                         continue;
                     } else if (inventory.equalsIgnoreCase("challenge-section")) {
                         char[] chars = items.toCharArray();
                         chars[0] = 'P';
-                        getConfig().set("inventories." + inventory + ".icons", String.valueOf(chars));
+                        set("inventories." + inventory + ".icons", String.valueOf(chars));
                         continue;
                     }
                     set("inventories." + inventory + ".icons", items.replaceAll("[HL]", "C"));

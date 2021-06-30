@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import org.bukkit.Material;
@@ -139,11 +140,11 @@ public class EntityDataManager {
         for (String name : ableEntities) {
             try {
                 ConfigMobs headsCon = ConfigMobs.get();
-                ConfigurationSection entitySection = headsCon.getConfig().getConfigurationSection(name);
+                ConfigSection entitySection = headsCon.getSection(name);
                 if (entitySection == null) continue;
                 for (String conditions : entitySection.getKeys(false)) {
                     List<HeadManager.HeadInfo> heads = new ArrayList<>();
-                    ConfigurationSection conditionSection = entitySection.getConfigurationSection(conditions);
+                    ConfigSection conditionSection = entitySection.getSection(conditions);
                     if (conditionSection == null) continue;
                     for (String head : conditionSection.getKeys(false)) {
                         HeadManager.HeadInfo headInfo;

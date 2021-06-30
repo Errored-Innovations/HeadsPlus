@@ -1,12 +1,10 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
@@ -23,13 +21,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ConfigTextMenus extends CMFile {
+public class ConfigTextMenus extends HPConfig {
 
     private static final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private static ConfigTextMenus instance;
 
     public ConfigTextMenus() {
-        super(HeadsPlus.get(), "textmenus");
+        super("textmenus.yml");
         instance = this;
     }
 
@@ -112,8 +110,8 @@ public class ConfigTextMenus extends CMFile {
 
 
     private static String translateHeader(String s) {
-        return s.replaceAll("\\{default}", instance.getConfig().getString("default-header"))
-                .replaceAll("\\{default-paged}", instance.getConfig().getString("default-header-paged"));
+        return s.replaceAll("\\{default}", instance.getString("default-header"))
+                .replaceAll("\\{default-paged}", instance.getString("default-header-paged"));
     }
 
     public static class BlacklistTranslator {
@@ -121,11 +119,11 @@ public class ConfigTextMenus extends CMFile {
         public static String translate(CommandSender sender, String type, String type2, List<String> l, int page) {
 
             StringBuilder sb = new StringBuilder();
-            PagedLists<String> list = new PagedLists<>(l, instance.getConfig().getInt(type + "." + type2 + ".lines-per-page"));
+            PagedLists<String> list = new PagedLists<>(l, instance.getInteger(type + "." + type2 + ".lines-per-page"));
             if ((page > list.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(instance.getConfig().getString(type + "." + type2 + ".header")
+            sb.append(translateColors(instance.getString(type + "." + type2 + ".header")
                     .replaceAll("\\{page}", String.valueOf(page))
             .replaceAll("\\{pages}", String.valueOf(list.getTotalPages())), sender)).append("\n");
             for (String str : list.getContentsInPage(page)) {
@@ -138,7 +136,7 @@ public class ConfigTextMenus extends CMFile {
     public static class ProfileTranslator {
         public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
             StringBuilder sb = new StringBuilder();
-            for (String str : instance.getConfig().getStringList("profile.layout")) {
+            for (String str : instance.getStringList("profile.layout")) {
                 try {
                     String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
                             .replaceAll("\\{xp}", String.valueOf(p.getXp()))
@@ -146,7 +144,7 @@ public class ConfigTextMenus extends CMFile {
                             .replaceAll("\\{hunter-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
                             .replaceAll("\\{sellhead-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
                             .replaceAll("\\{crafting-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
-                            .replace("{header}", instance.getConfig().getString("profile.header")), sender);
+                            .replace("{header}", instance.getString("profile.header")), sender);
                     if (stri.contains("{level}") || (stri.contains("{next-level}"))) {
                         stri = stri.replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', p.getLevel().getDisplayName()))
                                 .replaceAll("\\{next-level}", String.valueOf((p.getNextLevel() != null ? (p.getNextLevel().getRequiredXP() - p.getXp()) : 0)));
@@ -187,8 +185,8 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateNormal(String type, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            for (String str : instance.getConfig().getStringList("head-info.normal-layout")) {
-                sb.append(translateColors(str.replaceAll("\\{header}", instance.getConfig().getString("head-info.header"))
+            for (String str : instance.getStringList("head-info.normal-layout")) {
+                sb.append(translateColors(str.replaceAll("\\{header}", instance.getString("head-info.header"))
                 .replace("{type}", type)
                 .replace("{display-name}", ConfigMobs.get().getDisplayName(type))
                 .replaceAll("\\{price}", String.valueOf(ConfigMobs.get().getPrice(type)))
@@ -198,20 +196,20 @@ public class ConfigTextMenus extends CMFile {
         }
 
         public static String translateNameInfo(String type, CommandSender sender, int page) {
-            if (ConfigMobs.get().getConfig().get(type + ".name") instanceof ConfigurationSection) {
+            if (ConfigMobs.get().get(type + ".name") instanceof ConfigurationSection) {
                 return translateColored(sender, type, page);
             }
             StringBuilder sb = new StringBuilder();
-            PagedLists<String> heads = new PagedLists<>(ConfigMobs.get().getConfig().getStringList(type + ".name"),
-                    instance.getConfig().getInt("head-info.name-info.default.lines-per-page"));
+            PagedLists<String> heads = new PagedLists<>(ConfigMobs.get().getStringList(type + ".name"),
+                    instance.getInteger("head-info.name-info.default.lines-per-page"));
             if ((page > heads.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(instance.getConfig().getString("head-info.name-info.default.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getConfig().getString("head-info.name-info.default.first-line"), sender)
+            sb.append(translateColors(instance.getString("head-info.name-info.default.header"), sender)).append("\n");
+            sb.append(translateColors(instance.getString("head-info.name-info.default.first-line"), sender)
                     .replace("{type}", type));
             for (String name : heads.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getConfig().getString("head-info.name-info.default.for-each-line"), sender)
+                sb.append("\n").append(translateColors(instance.getString("head-info.name-info.default.for-each-line"), sender)
                         .replace("{name}", name));
             }
             return sb.toString();
@@ -220,20 +218,20 @@ public class ConfigTextMenus extends CMFile {
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             List<Head> h = new ArrayList<>();
-            for (String t : ConfigMobs.get().getConfig().getConfigurationSection(type + ".name").getKeys(false)) {
-                for (String r : ConfigMobs.get().getConfig().getStringList(type + ".name." + t)) {
+            for (String t : ConfigMobs.get().getSection(type + ".name").getKeys(false)) {
+                for (String r : ConfigMobs.get().getStringList(type + ".name." + t)) {
                     h.add(new Head(r, t));
                 }
             }
-            PagedLists<Head> hs = new PagedLists<>(h, instance.getConfig().getInt("head-info.name-info.colored.lines-per-page"));
+            PagedLists<Head> hs = new PagedLists<>(h, instance.getInteger("head-info.name-info.colored.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(instance.getConfig().getString("head-info.name-info.colored.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getConfig().getString("head-info.name-info.colored.first-line"), sender)
+            sb.append(translateColors(instance.getString("head-info.name-info.colored.header"), sender)).append("\n");
+            sb.append(translateColors(instance.getString("head-info.name-info.colored.first-line"), sender)
             .replace("{type}", type));
             for (Head head : hs.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getConfig().getString("head-info.name-info.colored.for-each-line"), sender)
+                sb.append("\n").append(translateColors(instance.getString("head-info.name-info.colored.for-each-line"), sender)
                 .replace("{name}", head.type)
                 .replaceAll("\\{color}", head.colour));
             }
@@ -243,25 +241,25 @@ public class ConfigTextMenus extends CMFile {
         public static String translateMaskInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             List<Mask> m = new ArrayList<>();
-            for (int i = 0; i < ConfigMobs.get().getConfig().getStringList(type + ".mask-effects").size(); i++) {
-                String s = ConfigMobs.get().getConfig().getStringList(type + ".mask-effects").get(i);
+            for (int i = 0; i < ConfigMobs.get().getStringList(type + ".mask-effects").size(); i++) {
+                String s = ConfigMobs.get().getStringList(type + ".mask-effects").get(i);
                 int a = 1;
                 try {
-                    a = ConfigMobs.get().getConfig().getIntegerList(type + ".mask-amplifiers").get(i);
+                    a = (int) ConfigMobs.get().getList(type + ".mask-amplifiers").get(i);
                 } catch (IndexOutOfBoundsException ignored) {
                 }
                 m.add(new Mask(type, a, s));
 
             }
-            PagedLists<Mask> hs = new PagedLists<>(m, instance.getConfig().getInt("head-info.mask-info.lines-per-page"));
+            PagedLists<Mask> hs = new PagedLists<>(m, instance.getInteger("head-info.mask-info.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(instance.getConfig().getString("head-info.mask-info.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getConfig().getString("head-info.mask-info.first-line"), sender)
+            sb.append(translateColors(instance.getString("head-info.mask-info.header"), sender)).append("\n");
+            sb.append(translateColors(instance.getString("head-info.mask-info.first-line"), sender)
                     .replaceAll("\\{type}", type));
             for (Mask mask : hs.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getConfig().getString("head-info.mask-info.for-each-line"), sender)
+                sb.append("\n").append(translateColors(instance.getString("head-info.mask-info.for-each-line"), sender)
                         .replaceAll("\\{effect}", mask.effect)
                         .replaceAll("\\{amplifier}", String.valueOf(mask.amplifier)));
             }
@@ -270,15 +268,15 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateLoreInfo(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
-            PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type, "default"), instance.getConfig().getInt("head-info.lore-info.lines-per-page"));
+            PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type, "default"), instance.getInteger("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
                 return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
-            sb.append(translateColors(instance.getConfig().getString("head-info.lore-info.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getConfig().getString("head-info.lore-info.first-line"), sender)
+            sb.append(translateColors(instance.getString("head-info.lore-info.header"), sender)).append("\n");
+            sb.append(translateColors(instance.getString("head-info.lore-info.first-line"), sender)
                     .replaceAll("\\{type}", type));
             for (String s : lore.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getConfig().getString("head-info.lore-info.for-each-line")
+                sb.append("\n").append(translateColors(instance.getString("head-info.lore-info.for-each-line")
                 .replace("{lore}", s), sender));
             }
             return sb.toString();
@@ -296,16 +294,15 @@ public class ConfigTextMenus extends CMFile {
                     headPerms.add(key);
                 }
             }
-            PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, instance.getConfig().getInt("help.lines-per-page"));
+            PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, instance.getInteger("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
                 HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
-                sender.sendMessage(translateColors(instance.getConfig().getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
                 for (IHeadsPlusCommand key : pl.getContentsInPage(page)) {
                     CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
-                    String help = translateColors(instance.getConfig().getString("help.for-each-line")
+                    String help = translateColors(instance.getString("help.for-each-line")
                             .replace("{usage}", c.usage())
                             .replace("{description}", key.getCmdDescription(sender)), sender);
                     TextComponent component = new TextComponent(help);
@@ -322,7 +319,7 @@ public class ConfigTextMenus extends CMFile {
 
         public static String translateCommandHelp(IHeadsPlusCommand key, CommandSender sender) {
             StringBuilder sb = new StringBuilder();
-            for (String s : instance.getConfig().getStringList("help.command-help.layout")) {
+            for (String s : instance.getStringList("help.command-help.layout")) {
                 if (!s.contains("{permission}") || sender.hasPermission("headsplus.help.viewperms")) {
                     if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
                         sb.append(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
@@ -331,7 +328,7 @@ public class ConfigTextMenus extends CMFile {
                         }
                     } else if (!s.contains("{further-usage}")){
                         CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
-                        sb.append("\n").append(translateColors(s.replaceAll("\\{header}", instance.getConfig().getString("help.command-help.header"))
+                        sb.append("\n").append(translateColors(s.replaceAll("\\{header}", instance.getString("help.command-help.header"))
                                 .replace("{description}", key.getCmdDescription(sender)).replaceAll("\\{usage}", c.usage()), sender)
                                 .replaceAll("\\{permission}", c.permission()));
                     }
@@ -349,8 +346,8 @@ public class ConfigTextMenus extends CMFile {
             try {
                 HeadsPlus hp = HeadsPlus.get();
                 StringBuilder sb = new StringBuilder();
-                ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), instance.getConfig().getInt("leaderboard.lines-per-page"));
-                sb.append(translateColors(instance.getConfig().getString("leaderboard.header")
+                ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), instance.getInteger("leaderboard.lines-per-page"));
+                sb.append(translateColors(instance.getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages())), sender));
@@ -359,7 +356,7 @@ public class ConfigTextMenus extends CMFile {
                 for (int i = 0; i < it.size(); i++) {
                     try {
                         int in = i + (ph.getContentsPerPage() * (ph.getCurrentPage() - 1));
-                        sb.append("\n").append(translateColors(instance.getConfig().getString("leaderboard.for-each-line")
+                        sb.append("\n").append(translateColors(instance.getString("leaderboard.for-each-line")
                                 .replaceAll("\\{pos}", String.valueOf(in + 1))
                                 .replace("{name}", ((OfflinePlayer)it.toArray()[i]).getName())
                                 .replaceAll("\\{score}", String.valueOf(it2.toArray()[i])), sender));
@@ -384,10 +381,10 @@ public class ConfigTextMenus extends CMFile {
         public static String translate(CommandSender sender) {
             StringBuilder sb = new StringBuilder();
             HeadsPlus hp = HeadsPlus.get();
-            for (String s : instance.getConfig().getStringList("info.layout")) {
+            for (String s : instance.getStringList("info.layout")) {
                 sb.append("\n").append(translateColors(s
                         .replaceAll("\\{version}", String.valueOf(hp.getVersion()))
-                        .replace("{header}", instance.getConfig().getString("info.header"))
+                        .replace("{header}", instance.getString("info.header"))
                         .replace("{author}", String.valueOf(hp.getAuthor()))
                         .replace("{locale}", MainConfig.get().getLocalisation().LOCALE)
                         .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167"), sender));

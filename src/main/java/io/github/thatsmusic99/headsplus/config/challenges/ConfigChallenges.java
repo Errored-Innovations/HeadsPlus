@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.config.challenges;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
@@ -12,7 +13,6 @@ import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -31,7 +31,7 @@ public class ConfigChallenges extends FeatureConfig {
         addDefault("options.prepare-rewards", true);
         addDefault("options.update-challenges", true);
 
-        addLenientSection("challenges");
+        makeSectionLenient("challenges");
 
         addExample("challenges.starter.name", "Starter");
         addExample("challenges.starter.header", "&8[&6&lStarter Challenge&8]");
@@ -45,7 +45,7 @@ public class ConfigChallenges extends FeatureConfig {
         addExample("challenges.starter.icon", "default");
         addExample("challenges.starter.completed-icon", "default-completed");
 
-        addLenientSection("rewards");
+        makeSectionLenient("rewards");
 
         addExample("rewards.default.type", "ECO");
         addExample("rewards.default.base-value", 50);
@@ -54,14 +54,14 @@ public class ConfigChallenges extends FeatureConfig {
         addExample("rewards.default.command-sender", "player");
         addExample("rewards.default.multiply-by-difficulty", true);
 
-        addLenientSection("icons");
+        makeSectionLenient("icons");
 
         addExample("icons.default.material", "RED_TERRACOTTA");
         addExample("icons.default-completed.material", "LIME_TERRACOTTA");
 
         int difficulty = 5;
 
-        addLenientSection("sections");
+        makeSectionLenient("sections");
 
         for (HeadsPlusChallengeDifficulty section : HeadsPlusChallengeDifficulty.values()) {
             addExample("sections." + section.name() + ".material", section.material);
@@ -129,6 +129,7 @@ public class ConfigChallenges extends FeatureConfig {
 
     @Override
     public void postSave() {
+        // TODO - run this all async and make Challenge.fromSection, Reward.fromSection, etc.
         HeadsPlus hp = HeadsPlus.get();
         hp.getChallenges().clear();
         hp.getChallengeSections().clear();
@@ -136,17 +137,17 @@ public class ConfigChallenges extends FeatureConfig {
         prepareOptions.put("rewards", getBoolean("challenges.options.prepare-rewards"));
         prepareOptions.put("icons", getBoolean("challenges.options.prepare-icons"));
         LinkedHashMap<String, ChallengeSection> sections = new LinkedHashMap<>();
-        for (String section : getConfig().getConfigurationSection("sections").getKeys(false)) {
+        for (String section : super.getSection("sections").getKeys(false)) {
             if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
             try {
-                sections.put(section, getSection(section));
+                sections.put(section, getChallengeSection(section));
             } catch (NullPointerException ex) {
                 hp.getLogger().warning(ex.getMessage());
             }
         }
         HashMap<String, Reward> rewards = new HashMap<>();
         if (prepareOptions.get("rewards")) {
-            for (String rewardName : getConfig().getConfigurationSection("rewards").getKeys(false)) {
+            for (String rewardName : getSection("rewards").getKeys(false)) {
                 try {
                     Reward reward = getReward(rewardName);
                     rewards.put(rewardName, reward);
@@ -157,7 +158,7 @@ public class ConfigChallenges extends FeatureConfig {
         }
         HashMap<String, ItemStack> icons = new HashMap<>();
         if (prepareOptions.get("icons")) {
-            for (String iconName : getConfig().getConfigurationSection("icons").getKeys(false)) {
+            for (String iconName : getSection("icons").getKeys(false)) {
                 try {
                     icons.put(iconName, getIcon(iconName));
                 } catch (NullPointerException ex) {
@@ -165,10 +166,10 @@ public class ConfigChallenges extends FeatureConfig {
                 }
             }
         }
-        for (String st : getConfig().getConfigurationSection("challenges").getKeys(false)) {
+        for (String st : getSection("challenges").getKeys(false)) {
             try {
                 if (st.equalsIgnoreCase("options")) continue;
-                ConfigurationSection challenge = HPUtils.notNull(getConfig().getConfigurationSection("challenges." + st), "Challenge section " + st + " seems to be null!");
+                ConfigSection challenge = HPUtils.notNull(getSection("challenges." + st), "Challenge section " + st + " seems to be null!");
                 String name = HPUtils.notNull(challenge.getString("name"), "Challenge name for " + st + " not found!");
                 String header = HPUtils.notNull(challenge.getString("header"), "Challenge header for " + st + " not found!");
                 List<String> desc = HPUtils.notNull(challenge.getStringList("description"), "Challenge description for " + st + " not found!");
@@ -178,9 +179,9 @@ public class ConfigChallenges extends FeatureConfig {
                 } catch (Exception ex) {
                     continue;
                 }
-                int min = challenge.getInt("min");
+                int min = challenge.getInteger("min");
                 String headType = HPUtils.notNull(challenge.getString("head-type"), "Head type for " + st + " not found!");
-                int difficulty = challenge.getInt("difficulty");
+                int difficulty = challenge.getInteger("difficulty");
                 Reward reward;
                 if (prepareOptions.get("rewards")) {
                     reward = rewards.get(challenge.getString("reward")).clone();
@@ -290,7 +291,7 @@ public class ConfigChallenges extends FeatureConfig {
     }
 
     private Reward getReward(String rewardName) {
-        ConfigurationSection reward = HPUtils.notNull(getConfig().getConfigurationSection("rewards." + rewardName), "Reward section for " + rewardName + " seems to be null!");
+        ConfigSection reward = HPUtils.notNull(getSection("rewards." + rewardName), "Reward section for " + rewardName + " seems to be null!");
         HPChallengeRewardTypes rewardType;
         try {
             rewardType = HPChallengeRewardTypes.valueOf(reward.getString("type").toUpperCase());
@@ -298,7 +299,7 @@ public class ConfigChallenges extends FeatureConfig {
             rewardType = HPChallengeRewardTypes.NONE;
         }
         Object rewardVal = HPUtils.notNull(reward.get("base-value"), "Value for " + rewardName + "'s reward missing!");
-        int items = reward.getInt("item-amount");
+        int items = reward.getInteger("item-amount");
         int xp = getInteger("rewards." + rewardName + ".base-xp");
         String sender = getString("rewards." + rewardName + ".command-sender");
         String rewardString = getString("rewards." + rewardName + ".reward-string");
@@ -322,7 +323,7 @@ public class ConfigChallenges extends FeatureConfig {
         return icon;
     }
 
-    private ChallengeSection getSection(String section) {
+    private ChallengeSection getChallengeSection(String section) {
         Material material = Material.valueOf(HPUtils.notNull(getString("sections." + section + ".material"), "Material for section " + section + " seems to not exist!").toUpperCase());
         int data = getInteger("sections." + section + ".material-data");
         String displayName = HPUtils.notNull(getString("sections." + section + ".display-name"), "Section " + section + " does not have a display name!");

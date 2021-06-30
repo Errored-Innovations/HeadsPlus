@@ -8,12 +8,12 @@ import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfigCrafting extends CMFile {
+public class ConfigCrafting extends FeatureConfig {
 
 	private static ConfigCrafting instance;
 
 	public ConfigCrafting() {
-		super(HeadsPlus.get(), "crafting");
+		super("crafting.yml");
 		instance = this;
     }
 
@@ -28,7 +28,7 @@ public class ConfigCrafting extends CMFile {
 		addDefault("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}", "&7Type &8» &c{type}"));
 		addDefault("defaults.sellable", true);
 
-		addLenientSection("recipes");
+		makeSectionLenient("recipes");
 		if (isNew()) {
 			for (RecipeEnums key : RecipeEnums.values()) {
 
@@ -120,4 +120,8 @@ public class ConfigCrafting extends CMFile {
 				.replaceAll("\\{type}", getString(key + ".display-type", getString("base-item.display-type")));
 	}
 
+	@Override
+	public boolean shouldLoad() {
+		return MainConfig.get().getMainFeatures().ENABLE_CRAFTING;
+	}
 }
