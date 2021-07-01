@@ -201,7 +201,7 @@ public class HeadsPlusConfigHeads extends ConfigSettings {
 					getConfig().addDefault(key + ".name.default", initSingleton("HP#" + key + "_mc"));
 					break;
                 case "witherskeleton":
-                	getConfig().addDefault(key + ".chance", 2.5);
+                	getConfig().addDefault(key + ".chance", 0);
                 	// Don't stop there
                 case "enderdragon":
 				case "zombie":
