@@ -76,14 +76,20 @@ public class HPMaskEvents extends HeadsPlusListener<InventoryClickEvent> {
         HeadsPlus hp = HeadsPlus.getInstance();
         Player player = (Player) e.getWhoClicked();
         if (hp.getNMSVersion().getOrder() > NMSIndex.v1_8_R3.getOrder() && player.getGameMode() == GameMode.CREATIVE) {
-            for (int i = 0; i < 46; i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null) {
-                    if (NBTManager.isIcon(item)) {
-                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
+            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.getInstance(), () -> {
+                for (int i = 0; i < 46; i++) {
+                    ItemStack item = player.getInventory().getItem(i);
+                    if (item != null) {
+                        if (NBTManager.isIcon(item)) {
+                            int finalI = i;
+                            Bukkit.getScheduler().runTask(HeadsPlus.getInstance(), () ->
+                                    player.getInventory().setItem(finalI, new ItemStack(Material.AIR)));
+
+                        }
                     }
                 }
-            }
+            });
+
         }
        
         ItemStack item;
