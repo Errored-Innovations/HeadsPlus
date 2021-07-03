@@ -223,6 +223,9 @@ public class HeadsPlusConfigCustomHeads extends ConfigSettings {
         NMSManager nms = HeadsPlus.getInstance().getNMS();
         ItemStack i = nms.getSkullMaterial(1);
         SkullMeta sm = (SkullMeta) i.getItemMeta();
+        if (displayName != null) {
+            sm.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        }
         GameProfile gm;
         if (encoded) {
             gm = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");

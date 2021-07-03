@@ -98,7 +98,6 @@ public class CustomHead extends Content {
             } else {
                 lore.add(hpc.formatMsg(str, player).replaceAll("\\{price}", String.valueOf(price)));
             }
-
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
