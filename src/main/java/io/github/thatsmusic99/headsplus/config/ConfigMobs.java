@@ -308,6 +308,6 @@ public class ConfigMobs extends FeatureConfig {
 
 	@Override
 	public boolean shouldLoad() {
-		return false;
+		return MainConfig.get().getMainFeatures().MOB_DROPS || MainConfig.get().getMainFeatures().PLAYER_DROPS;
 	}
 }
