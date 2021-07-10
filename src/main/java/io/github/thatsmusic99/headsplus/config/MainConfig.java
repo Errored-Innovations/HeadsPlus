@@ -163,6 +163,13 @@ public class MainConfig extends HPConfig {
         addDefault("suppress-gui-warnings", true);
         addDefault("allow-negative-xp", false);
         addDefault("suppress-messages-during-search", false);
+        addDefault("price-decimal-format", "#,###.##",
+                "The format in which prices should appear in messages, heads, wherever.\n" +
+                        "By default, this adds a comma for every 1000$ and rounds to two decimal points.\n" +
+                        "Please do not swap the notation for this as Java doesn't like that, see the option below.");
+        // TODO: depends on locale rather than config option
+        addDefault("swap-decimal-notation", false,
+                "If you decimal notation is different to the Western standard (i.e. uses , instead of . for decimal points) and want this in the plugin, turn on this option.");
 
     }
 
