@@ -16,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 HPPlayer.players.clear();
                 EntityDataManager.init();
                 HeadsPlus.get().restartMessagesManager();
+                HeadsPlus.get().initiateEvents();
                 HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);
             }
         }.runTaskLaterAsynchronously(HeadsPlus.get(), 2);
