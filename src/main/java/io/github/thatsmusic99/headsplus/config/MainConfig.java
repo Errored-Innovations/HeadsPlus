@@ -52,7 +52,7 @@ public class MainConfig extends HPConfig {
                 "To see the full settings for this, please look at the mobs.yml config file.");
         addDefault("player-drops", true, "Whether or not players drop their heads when they die.\n" +
                 "To see the full settings for this too, please look at the mobs.yml config file.");
-        addDefault("enable-crafting", true, "Whether or not players can craft heads.\n" +
+        addDefault("enable-crafting", false, "Whether or not players can craft heads.\n" +
                 "Whilst this option is set to true,");
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
                 "The permission for this is heasplus.heads.");
