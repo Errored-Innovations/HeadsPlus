@@ -324,7 +324,9 @@ public class HeadsPlus extends JavaPlugin {
 
     private void createInstances() {
         configFiles = new ArrayList<>();
-        configFiles.add(new MainConfig());
+        MainConfig config;
+        configFiles.add(config = new MainConfig());
+        config.load();
         configFiles.add(new ConfigAnimations());
         configFiles.add(new ConfigChallenges());
         configFiles.add(new ConfigCustomHeads());
@@ -348,7 +350,7 @@ public class HeadsPlus extends JavaPlugin {
 
         for (HPConfig file : configFiles) {
             try {
-                if (file instanceof MainConfig) file.load();
+                if (file instanceof MainConfig) continue;
                 if (file instanceof FeatureConfig) {
                     if (((FeatureConfig) file).shouldLoad()) {
                         file.load();
