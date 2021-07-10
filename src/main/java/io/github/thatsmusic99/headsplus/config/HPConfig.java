@@ -31,8 +31,12 @@ public abstract class HPConfig extends ConfigFile {
 
     public void postSave() {}
 
-    public void reload() {
-        load();
+    @Override
+    public void reload() throws IOException {
+        super.reload();
+        moveToNew();
+        save();
+        postSave();
     }
 
     protected static File getOrCreateFile(String name) {

@@ -342,7 +342,7 @@ public class MainConfig extends HPConfig {
 
     @Deprecated
     public ConfigSection getMechanics() {
-        return getSection("plugin.mechanics");
+        return getConfigSection("plugin.mechanics");
     }
 
     @Deprecated

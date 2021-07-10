@@ -43,7 +43,11 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 MaskManager.get().reset();
                 SellableHeadsManager.get().reset();
                 for (HPConfig cs : HeadsPlus.get().getConfigs()) {
-                    cs.reload();
+                    try {
+                        cs.reload();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 HPPlayer.players.clear();
                 EntityDataManager.init();

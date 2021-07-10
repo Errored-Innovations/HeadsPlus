@@ -47,8 +47,8 @@ public class HeadsMenu extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
         for (String section : ConfigCustomHeads.get().sections.keySet()) {
-            ConfigSection configSec = ConfigCustomHeads.get().getSection("sections." + section);
-            ConfigSection itemSec = hpi.getSection("icons.headsection");
+            ConfigSection configSec = ConfigCustomHeads.get().getConfigSection("sections." + section);
+            ConfigSection itemSec = hpi.getConfigSection("icons.headsection");
             ItemStack item;
             try {
                 item = ConfigCustomHeads.get().getSkull(configSec.getString("texture"));

@@ -116,8 +116,8 @@
 
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
-            <artifactId>ConfigurationMaster</artifactId>
-            <version>v2.0.0-ALPHA-1</version>
+            <artifactId>ConfigurationMaster-API</artifactId>
+            <version>v2.0.0-ALPHA-3</version>
         </dependency>
 
     </dependencies>

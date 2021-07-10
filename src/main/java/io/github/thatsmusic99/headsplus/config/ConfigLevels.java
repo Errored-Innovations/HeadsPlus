@@ -37,7 +37,7 @@ public class ConfigLevels extends FeatureConfig {
         hp.getLevels().clear();
         //if (hp.usingLevels()) {
             try {
-                for (String s : getSection("levels").getKeys(false)) {
+                for (String s : getConfigSection("levels").getKeys(false)) {
                     String dn = HPUtils.notNull(getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
                     double av = getDouble("levels." + s + ".added-version");
                     int rxp = getInteger("levels." + s + ".required-xp");

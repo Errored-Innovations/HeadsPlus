@@ -218,7 +218,7 @@ public class ConfigTextMenus extends HPConfig {
         public static String translateColored(CommandSender sender, String type, int page) {
             StringBuilder sb = new StringBuilder();
             List<Head> h = new ArrayList<>();
-            for (String t : ConfigMobs.get().getSection(type + ".name").getKeys(false)) {
+            for (String t : ConfigMobs.get().getConfigSection(type + ".name").getKeys(false)) {
                 for (String r : ConfigMobs.get().getStringList(type + ".name." + t)) {
                     h.add(new Head(r, t));
                 }

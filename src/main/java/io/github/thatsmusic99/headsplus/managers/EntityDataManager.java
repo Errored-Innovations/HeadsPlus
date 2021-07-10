@@ -140,11 +140,11 @@ public class EntityDataManager {
         for (String name : ableEntities) {
             try {
                 ConfigMobs headsCon = ConfigMobs.get();
-                ConfigSection entitySection = headsCon.getSection(name);
+                ConfigSection entitySection = headsCon.getConfigSection(name);
                 if (entitySection == null) continue;
                 for (String conditions : entitySection.getKeys(false)) {
                     List<HeadManager.HeadInfo> heads = new ArrayList<>();
-                    ConfigSection conditionSection = entitySection.getSection(conditions);
+                    ConfigSection conditionSection = entitySection.getConfigSection(conditions);
                     if (conditionSection == null) continue;
                     for (String head : conditionSection.getKeys(false)) {
                         HeadManager.HeadInfo headInfo;

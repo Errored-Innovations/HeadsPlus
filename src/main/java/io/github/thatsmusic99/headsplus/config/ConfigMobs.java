@@ -47,9 +47,9 @@ public class ConfigMobs extends FeatureConfig {
 	public void moveToNew() {
 		for (String key : getKeys(false)) {
 			if (!(get(key) instanceof ConfigurationSection)) continue;
-			ConfigSection section = getSection(key);
+			ConfigSection section = getConfigSection(key);
 			if (section == null || !section.contains("interact-name") || !section.contains("name") || !(section.get("name") instanceof ConfigurationSection)) continue;
-			ConfigSection name = section.getSection("name");
+			ConfigSection name = section.getConfigSection("name");
 			if (name == null) continue;
 			for (String nameKey : name.getKeys(false)) {
 				if (!(name.get(nameKey) instanceof List)) continue;

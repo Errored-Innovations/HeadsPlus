@@ -52,7 +52,7 @@ public class ConfigInventories extends HPConfig {
             addDefault("inventories." + inv.getId() + ".size", 54);
         }
         if (getDouble("version") < 0.1) {
-            ConfigSection section = getSection("inventories");
+            ConfigSection section = getConfigSection("inventories");
             if (section != null) {
                 for (String inventory : section.getKeys(false)) {
                     String items = getString("inventories." + inventory + ".icons");

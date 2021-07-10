@@ -39,8 +39,8 @@ public class ConfigHeads extends HPConfig {
 
     @Override
     public void postSave() {
-        for (String head : getSection("heads").getKeys(false)) {
-            ConfigSection section = getSection("heads." + head);
+        for (String head : getConfigSection("heads").getKeys(false)) {
+            ConfigSection section = getConfigSection("heads." + head);
             if (section == null) continue; // why?
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo()
                     .withDisplayName(ChatColor.translateAlternateColorCodes('&',

@@ -147,7 +147,7 @@ public class ConfigInteractions extends HPConfig {
         Pattern defaultsPattern = Pattern.compile("\\{(.+)}");
         if (defaultsPattern.matcher(message).matches()) {
             String pointer = defaultsPattern.matcher(message).group(1);
-            if (getSection("defaults").getKeys(false).contains(pointer)) {
+            if (getConfigSection("defaults").getKeys(false).contains(pointer)) {
                 message = getString("defaults." + pointer, getString("defaults.message"));
             }
         }

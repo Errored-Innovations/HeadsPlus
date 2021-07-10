@@ -36,7 +36,7 @@ public class RecipeEnumUser {
 	    for (String key : crafting.getKeys(false)) {
 	        if (!key.equalsIgnoreCase("base-item")) {
 	            if (key.equalsIgnoreCase("sheep")) {
-	                for (String key2 : crafting.getSection("sheep").getKeys(false)) {
+	                for (String key2 : crafting.getConfigSection("sheep").getKeys(false)) {
 	                    addRecipe("sheep." + key2);
 	                }
 	            } else {
@@ -47,7 +47,7 @@ public class RecipeEnumUser {
 	}
 
 	private void addRecipe(String id) {
-        ConfigSection headSec = crafting.getSection(id);
+        ConfigSection headSec = crafting.getConfigSection(id);
         if (headSec.getStringList("ingredients").isEmpty()) return;
 	    // Get the Central ID, firstly
 	    String headId = headSec.getString("head");

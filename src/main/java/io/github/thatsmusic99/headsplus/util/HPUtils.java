@@ -86,7 +86,7 @@ public class HPUtils {
 
     public static double calculateChance(double chance, double randChance, Player killer) {
         if (!MainConfig.get().getMobDrops().ENABLE_LOOTING) return chance;
-        ConfigSection lootingThresholds = MainConfig.get().getSection("thresholds");
+        ConfigSection lootingThresholds = MainConfig.get().getConfigSection("thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
         if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {

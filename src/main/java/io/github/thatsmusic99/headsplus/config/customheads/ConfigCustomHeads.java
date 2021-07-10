@@ -93,7 +93,7 @@ public class ConfigCustomHeads extends HPConfig {
         moveTo("options.default-price", "default-price");
         moveTo("options.price-per-world", "price-per-world");
         // May as well add these.
-        for (String key : getSection("sections").getKeys(false)) {
+        for (String key : getConfigSection("sections").getKeys(false)) {
             addDefault("sections." + key + ".enabled", true);
             addDefault("sections." + key + ".permission", "headsplus.section." + key);
         }
@@ -102,10 +102,10 @@ public class ConfigCustomHeads extends HPConfig {
     @Override
     public void postSave() {
         sections.clear();
-        for (String cat : getSection("sections").getKeys(false)) {
+        for (String cat : getConfigSection("sections").getKeys(false)) {
             sections.put(cat, new ArrayList<>());
         }
-        ConfigSection heads = getSection("heads");
+        ConfigSection heads = getConfigSection("heads");
         try {
             for (String head : heads.getKeys(false)) {
                 allHeadsCache.add(heads.getString(head + ".texture"));
@@ -230,7 +230,7 @@ public class ConfigCustomHeads extends HPConfig {
      * @return true if the texture exists and was not previously enabled.
      */
     public boolean enableHead(String texture) {
-        ConfigSection heads = getSection("heads");
+        ConfigSection heads = getConfigSection("heads");
         for(String k : heads.getKeys(false)) {
             if(texture.equals(heads.getString(k + ".texture"))) {
                 if(!heads.getBoolean(k + ".database", true)) {
@@ -252,7 +252,7 @@ public class ConfigCustomHeads extends HPConfig {
         // find a name that's open
         List l = sections.get(section);
         int i = l == null ? 0 : l.size() + 1;
-        ConfigSection heads = getSection("heads");
+        ConfigSection heads = getConfigSection("heads");
         String key;
         while(heads.contains(key = section + "_" + i)) ++i;
         ConfigSection head = heads.createConfigSection(key);
