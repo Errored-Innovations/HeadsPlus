@@ -65,12 +65,14 @@ public class MainConfig extends HPConfig {
         addDefault("block-pickup", true);
 
         addSection("MySQL");
-        addDefault("enable-mysql", false);
-        addDefault("mysql-host", "127.0.0.1");
-        addDefault("mysql-port", 3306);
-        addDefault("mysql-database", "database");
-        addDefault("mysql-username", "username");
-        addDefault("mysql-password", "password");
+        addDefault("enable-mysql", false,
+                "Whether or not the plugin should connect using MySQL.\n" +
+                        "When this option is set to false, it just uses the default SQLite storage.");
+        addDefault("mysql-host", "127.0.0.1", "The host of the MySQL database to be used.");
+        addDefault("mysql-port", 3306, "The port of the MySQL database. It's often 3306 by default.");
+        addDefault("mysql-database", "database", "The name of the database/schema to connect to.");
+        addDefault("mysql-username", "username", "The username used to access the database.");
+        addDefault("mysql-password", "password", "The password for the user specified above.");
 
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
