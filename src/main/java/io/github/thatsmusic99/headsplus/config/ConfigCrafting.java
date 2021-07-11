@@ -1,8 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
 import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
 
 import java.util.ArrayList;
@@ -23,18 +22,18 @@ public class ConfigCrafting extends FeatureConfig {
 
 	@Override
 	public void loadDefaults() {
-		addDefault("defaults.price", 10.0);
-		addDefault("defaults.display-name", "{type} head");
-		addDefault("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}", "&7Type &8» &c{type}"));
-		addDefault("defaults.sellable", true);
+		addComment("");
+		addDefault("defaults.price", 0.0);
+		addExample("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}"));
+		addDefault("defaults.sellable", false);
 
 		makeSectionLenient("recipes");
-		if (isNew()) {
-			for (RecipeEnums key : RecipeEnums.values()) {
-
-			}
+		for (CraftingDefaults defaultOption : CraftingDefaults.values()) {
+			String key = defaultOption.name().toLowerCase();
+			addExample("recipes." + key + ".recipe-type", defaultOption.getRecipeType().name());
+			addExample("recipes." + key + ".ingredients", defaultOption.getMaterials());
+			addExample("recipes." + key + ".result.head", defaultOption.getHead());
 		}
-
 
 	/*	addDefault("base-item.material", "PLAYER_HEAD");
 		addDefault("base-item.data", 0);
@@ -85,8 +84,6 @@ public class ConfigCrafting extends FeatureConfig {
 
 		} */
 	}
-
-
 
     public List<String> getLore(String key) {
 		List<String> lore = new ArrayList<>();

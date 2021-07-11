@@ -7,10 +7,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import io.github.thatsmusic99.headsplus.managers.MaskManager;
-import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
+import io.github.thatsmusic99.headsplus.managers.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,6 +49,7 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 }
                 HPPlayer.players.clear();
                 EntityDataManager.init();
+                CraftingManager.get().reload();
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
                 HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);

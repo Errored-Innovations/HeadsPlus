@@ -385,6 +385,8 @@ public class HeadsPlus extends JavaPlugin {
         }
         EntityDataManager.init();
         new MaskManager();
+        // TODO - preferably this would be async due to called Thread#join
+        new CraftingManager();
     }
 
     public void restartMessagesManager() {
