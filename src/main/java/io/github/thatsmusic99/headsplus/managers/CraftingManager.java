@@ -22,6 +22,7 @@ public class CraftingManager {
     public CraftingManager() {
         instance = this;
         recipes = new LinkedHashMap<>();
+        init();
     }
 
     public void reload() {
@@ -33,6 +34,8 @@ public class CraftingManager {
     public void init() {
         clear();
         ConfigCrafting crafting = ConfigCrafting.get();
+        // The crafting.yml file is empty/disabled
+        if (crafting.getConfigSection("recipes") == null) return;
         for (String key : crafting.getConfigSection("recipes").getKeys(false)) {
             ConfigSection section = crafting.getConfigSection("recipes." + key);
             if (section == null) continue;
