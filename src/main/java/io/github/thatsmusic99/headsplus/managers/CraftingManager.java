@@ -146,7 +146,7 @@ public class CraftingManager {
                 throw new IllegalStateException("Unexpected value: " + recipeType);
         }
         recipes.put(namespacedKey, recipe);
-        Bukkit.addRecipe(recipe);
+        Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> Bukkit.addRecipe(recipe));
     }
 
     public static CraftingManager get() {
