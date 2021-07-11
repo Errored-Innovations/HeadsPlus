@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
-import io.github.thatsmusic99.configurationmaster.CMFile;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;

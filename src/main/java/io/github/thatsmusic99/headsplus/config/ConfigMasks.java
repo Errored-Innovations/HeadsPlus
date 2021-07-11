@@ -1,8 +1,5 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-
 import java.util.Collections;
 
 public class ConfigMasks extends FeatureConfig {

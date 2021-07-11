@@ -3,8 +3,6 @@ package io.github.thatsmusic99.headsplus.config;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.thatsmusic99.configurationmaster.CMFile;
-import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
