@@ -295,7 +295,7 @@ public class ConfigMobs extends FeatureConfig {
 	}
 
 	private void createExampleSection(String path) {
-		if (isNew()) {
+		if (isNew() || contains(path)) {
 			createConfigSection(path);
 		}
 	}
