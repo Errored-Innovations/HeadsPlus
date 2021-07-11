@@ -41,7 +41,7 @@
                     <artifactSet>
                         <includes>
                             <include>io.papermc:paperlib</include>
-                            <include>com.github.thatsmusic99:ConfigurationMaster</include>
+                            <include>com.github.thatsmusic99:ConfigurationMaster-API</include>
                         </includes>
                     </artifactSet>
                 </configuration>
