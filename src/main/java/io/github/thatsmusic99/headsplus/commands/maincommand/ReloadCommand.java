@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.*;
@@ -41,6 +42,14 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 SellableHeadsManager.get().reset();
                 for (HPConfig cs : HeadsPlus.get().getConfigs()) {
                     try {
+                        if (cs instanceof FeatureConfig) {
+                            FeatureConfig featureConfig = (FeatureConfig) cs;
+                            if (!featureConfig.shouldLoad()) continue;
+                            if (!featureConfig.isLoaded()) {
+                                featureConfig.load();
+                                continue;
+                            }
+                        }
                         cs.reload();
                     } catch (IOException e) {
                         e.printStackTrace();

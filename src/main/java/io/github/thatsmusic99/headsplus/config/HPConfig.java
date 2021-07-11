@@ -23,6 +23,9 @@ public abstract class HPConfig extends ConfigFile {
             return;
         }
         postSave();
+        if (this instanceof FeatureConfig) {
+            ((FeatureConfig) this).setLoaded(true);
+        }
     }
 
     public abstract void loadDefaults();
