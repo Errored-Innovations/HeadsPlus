@@ -115,6 +115,10 @@ public class CraftingManager {
                     }
                 }
                 tempRecipe.shape(rows);
+                for (RecipeChoice choice : map.keySet()) {
+                    if (tempRecipe.getChoiceMap().containsValue(choice)) continue;
+                    tempRecipe.setIngredient(map.get(choice), choice);
+                }
                 recipe = tempRecipe;
                 break;
             case SHAPELESS:
