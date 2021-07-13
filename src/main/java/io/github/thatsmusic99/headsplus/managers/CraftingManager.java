@@ -58,8 +58,10 @@ public class CraftingManager {
 
     public void addRecipe(String key, ConfigSection section) {
         // Get the recipe type
-        RecipeType recipeType = RecipeType.getRecipe(section.getString("recipe-type").toUpperCase());
-        HPUtils.notNull(recipeType, "Recipe type " + section.getString("recipe-type") + " does not exist!");
+        String recipeTypeStr = section.getString("recipe-type");
+        HPUtils.notNull(recipeTypeStr, "There is no recipe type for " + key + "!");
+        RecipeType recipeType = RecipeType.getRecipe(recipeTypeStr.toUpperCase());
+        HPUtils.notNull(recipeType, "Recipe type " + recipeTypeStr + " (recipe: " + key + ") does not exist!");
         // Get the ingredients
         List<RecipeChoice> choices = new ArrayList<>();
         for (String ingredientStr : section.getStringList("ingredients")) {
