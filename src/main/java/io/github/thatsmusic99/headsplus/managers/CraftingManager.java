@@ -96,18 +96,22 @@ public class CraftingManager {
                 // Honestly, why can't I just drop materials in a hashmap and boom recipe made? wtf, minecraft!?
                 int startChar = 50;
                 ShapedRecipe tempRecipe = new ShapedRecipe(namespacedKey, item);
-                HashMap<Character, RecipeChoice> map = new HashMap<>();
+                HashMap<RecipeChoice, Character> map = new HashMap<>();
                 String[] rows = new String[dimensions];
                 for (int i = 0; i < dimensions; i++) {
                     for (int j = 0; j < dimensions; j++) {
+                        int usedChar;
                         RecipeChoice choice = choices.get(i * dimensions + j);
-                        if (!map.containsValue(choice)) {
-                            map.put((char) ++startChar, choice);
+                        if (!map.containsKey(choice)) {
+                            map.put(choice, (char) ++startChar);
+                            usedChar = startChar;
+                        } else {
+                            usedChar = (int) map.get(choice);
                         }
                         if (rows[i] == null) {
                             rows[i] = "";
                         }
-                        rows[i] += (char) startChar;
+                        rows[i] += (char) usedChar;
                     }
                 }
                 tempRecipe.shape(rows);
