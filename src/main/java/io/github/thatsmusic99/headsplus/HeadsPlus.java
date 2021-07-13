@@ -128,6 +128,7 @@ public class HeadsPlus extends JavaPlugin {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        new CraftingManager();
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
                             getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
@@ -382,8 +383,6 @@ public class HeadsPlus extends JavaPlugin {
         }
         EntityDataManager.init();
         new MaskManager();
-        // TODO - preferably this would be async due to calling Thread#join
-        new CraftingManager();
     }
 
     public void restartMessagesManager() {
