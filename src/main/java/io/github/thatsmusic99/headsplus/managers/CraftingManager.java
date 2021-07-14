@@ -68,7 +68,7 @@ public class CraftingManager {
             // If it's a HP head and if the recipe allows such ingredients
             if (ingredientStr.startsWith("HP#")) {
                 if (!recipeType.allowsHeads())
-                    throw new IllegalArgumentException("Recipe type " + recipeType.name() + " does not support head ingredients!");
+                    throw new IllegalArgumentException("Recipe type " + recipeType.name() + " (" + key + ") does not support head ingredients!");
                 choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).buildHead().join()));
             } else {
                 Material material = HPUtils.notNull(Material.getMaterial(ingredientStr),
@@ -93,7 +93,7 @@ public class CraftingManager {
                 break;
             case SHAPED:
                 if (!VALID_RECIPE_SIZES.contains(choices.size()))
-                    throw new IllegalArgumentException("Recipe size must be 1, 4 or 9 for shaped recipes, not " + choices.size() + "!");
+                    throw new IllegalArgumentException("Recipe size must be 1, 4 or 9 for shaped recipes (" + key + "), not " + choices.size() + "!");
                 int dimensions = (int) Math.sqrt(choices.size());
                 // Honestly, why can't I just drop materials in a hashmap and boom recipe made? wtf, minecraft!?
                 int startChar = 50;
@@ -144,7 +144,7 @@ public class CraftingManager {
                 recipe = new MerchantRecipe(item, 5);
                 break;
             case SMITHING:
-                if (choices.size() != 2) throw new IllegalArgumentException("A smithing recipe needs 2 ingredients!");
+                if (choices.size() != 2) throw new IllegalArgumentException("A smithing recipe (" + key + ") needs 2 ingredients!");
                 recipe = new SmithingRecipe(namespacedKey, item, choices.get(0), choices.get(1));
                 break;
             case STONECUTTING:
@@ -153,7 +153,7 @@ public class CraftingManager {
                 break;
             default:
                 // I GOT ALL NINE RECIPE TYPES WHAT THE HELL ARE YOU ON ABOUT??
-                throw new IllegalStateException("Unexpected value: " + recipeType);
+                throw new IllegalStateException("Unexpected value (" + key + "): " + recipeType);
         }
         recipes.put(namespacedKey, recipe);
         Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> Bukkit.addRecipe(recipe));
