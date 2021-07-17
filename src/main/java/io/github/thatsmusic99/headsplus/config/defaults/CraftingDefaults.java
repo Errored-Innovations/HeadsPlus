@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.util.RecipeType;
 
 public enum CraftingDefaults {
 
+    // TODO: moar?
     LAVA_BUCKET(RecipeType.SHAPELESS, "HP#lava_bucket", "SKELETON_SKULL", "LAVA_BUCKET"),
     WATER_BUCKET(RecipeType.SHAPELESS, "HP#water_bucket", "SKELETON_SKULL", "WATER_BUCKET"),
     BUCKET(RecipeType.SHAPELESS, "HP#bucket", "SKELETON_SKULL", "BUCKET"),
