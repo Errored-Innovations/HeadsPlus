@@ -19,7 +19,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     @Override
     public boolean shouldLoad() {
-        return false;
+        return MainConfig.get().getMainFeatures().HEADS_SELECTOR;
     }
 
     public static ConfigHeadsSelector get() {
