@@ -28,17 +28,15 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     @Override
     public void loadDefaults() {
+        double version = getDouble("version", 0.0);
+        if (isNew()) version = 0.0;
         addComment("This is where you can configure where the heads selector (/heads)");
 
-        addDefault("autograb", false);
-        addDefault("automatically-enable-grabbed-heads", true);
-        addDefault("autograb-section", "players");
-        addDefault("allow-favourite-heads", true, "Allow players to right click heads to add them as a favourite.");
         addDefault("version", 3.5);
         makeSectionLenient("heads");
-        if (isNew() || getDouble("version") < 3.5) {
+        if (version < 3.5) {
             for (HeadsXSections section : HeadsXSections.values()) {
-                if (isNew() || section.version > getDouble("version")) {
+                if (section.version > version) {
                     addDefault("sections." + section.id + ".texture", section.texture);
                     addDefault("sections." + section.id + ".display-name", section.displayName);
                     addDefault("sections." + section.id + ".permission", "headsplus.section." + section.id);
@@ -46,7 +44,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
                 }
             }
             for (HeadsXEnums head : HeadsXEnums.values()) {
-                if (isNew() || head.version > getDouble("version")) {
+                if (head.version > version) {
                     addDefault("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
                 }
             }
@@ -55,7 +53,6 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     @Override
     public void postSave() {
-        super.postSave();
     }
 
     public static class SectionInfo {
