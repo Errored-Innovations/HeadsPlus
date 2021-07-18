@@ -20,8 +20,11 @@ import java.util.*;
 
 public class ConfigChallenges extends FeatureConfig {
 
+    private static ConfigChallenges instance;
+
     public ConfigChallenges() {
         super("challenges.yml");
+        instance = this;
     }
 
     @Override
@@ -30,6 +33,25 @@ public class ConfigChallenges extends FeatureConfig {
         addDefault("options.prepare-icons", true);
         addDefault("options.prepare-rewards", true);
         addDefault("options.update-challenges", true);
+
+        makeSectionLenient("rewards");
+        addComment("rewards", "Rewards are able to be provided to a player when completing a challenge.\n" +
+                "You are able to easily add them using the /hp settings rewards command if you are unsure on how to configure this.");
+        addExample("rewards.default.type", "ECO", "The type of reward to use.\n" +
+                "Valid types include ECO, ADD_GROUP, REMOVE_GROUP, GIVE_ITEM AND RUN_COMMAND.\n" +
+                "GIVE_ITEM requires an additional config section called \"item\" with properties \"material\" and \"amount\".");
+        addExample("rewards.default.base-value", 50);
+        addExample("rewards.default.base-xp", 20);
+        addExample("rewards.default.multiply-by-difficulty", true);
+
+        makeSectionLenient("icons");
+
+        addExample("icons.default.material", "RED_TERRACOTTA");
+        addExample("icons.default-completed.material", "LIME_TERRACOTTA");
+
+        int difficulty = 5;
+
+        makeSectionLenient("sections");
 
         makeSectionLenient("challenges");
 
@@ -44,24 +66,6 @@ public class ConfigChallenges extends FeatureConfig {
         addExample("challenges.starter.difficulty", 1);
         addExample("challenges.starter.icon", "default");
         addExample("challenges.starter.completed-icon", "default-completed");
-
-        makeSectionLenient("rewards");
-
-        addExample("rewards.default.type", "ECO");
-        addExample("rewards.default.base-value", 50);
-        addExample("rewards.default.base-xp", 20);
-        addExample("rewards.default.item-amount", 0);
-        addExample("rewards.default.command-sender", "player");
-        addExample("rewards.default.multiply-by-difficulty", true);
-
-        makeSectionLenient("icons");
-
-        addExample("icons.default.material", "RED_TERRACOTTA");
-        addExample("icons.default-completed.material", "LIME_TERRACOTTA");
-
-        int difficulty = 5;
-
-        makeSectionLenient("sections");
 
         for (HeadsPlusChallengeDifficulty section : HeadsPlusChallengeDifficulty.values()) {
             addExample("sections." + section.name() + ".material", section.material);
@@ -117,6 +121,10 @@ public class ConfigChallenges extends FeatureConfig {
             }
             difficulty += 5;
         }
+    }
+
+    public static ConfigChallenges get() {
+        return instance;
     }
 
     @Override
@@ -313,6 +321,7 @@ public class ConfigChallenges extends FeatureConfig {
         String s = getString("icons." + iconName + ".skull-name");
         if (s == null || s.isEmpty()) return icon;
         if (s.startsWith("HP#")) {
+            // TODO - fetch from heads.yml and make async, should reduce startup times
             icon = ConfigCustomHeads.get().getSkull(s);
         } else {
             SkullMeta sm = (SkullMeta) icon.getItemMeta();
