@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
@@ -37,16 +38,18 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        ConfigCustomHeads hpch = ConfigCustomHeads.get();
+        ConfigHeadsSelector hpch = ConfigHeadsSelector.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
             HPUtils.parseLorePlaceholders(lore, hpc.formatMsg(loreStr, player),
-                    new HPUtils.PlaceholderInfo("{head}", hpch.allHeadsCache.size(), true),
+                    new HPUtils.PlaceholderInfo("{head}",
+                            manager.getSection() != null ? hpch.getSections().get(manager.getSection()).getHeads().size() :
+                                    hpch.getTotalHeads(), true),
                     new HPUtils.PlaceholderInfo("{balance}", getBalance(player), hp.isVaultEnabled()),
-                    new HPUtils.PlaceholderInfo("{sections}",  hpch.sections.size(), true),
+                    new HPUtils.PlaceholderInfo("{sections}",  hpch.getSections().size(), true),
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
 

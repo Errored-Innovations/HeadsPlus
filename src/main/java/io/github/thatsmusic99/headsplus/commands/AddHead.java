@@ -1,11 +1,14 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -76,17 +79,22 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            ConfigCustomHeads customHeads = ConfigCustomHeads.get();
+                            // TODO - should be heads.yml
+                            ConfigHeads selector = ConfigHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
-                                customHeads.addDefault("heads." + id + "." + key, context.getSessionData(key));
+                                selector.forceExample("heads." + id + "." + key, context.getSessionData(key));
                             }
                             try {
-                                customHeads.save();
+                                selector.save();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
+                            HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo();
+                            HeadManager.get().registerHead(id, headInfo
+                                    .withDisplayName((String) context.getSessionData("display-name"))
+                                    .withTexture((String) context.getSessionData("texture")));
+
                             hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
                         }
                     });

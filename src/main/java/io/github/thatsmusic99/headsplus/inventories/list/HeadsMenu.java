@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
@@ -46,7 +47,8 @@ public class HeadsMenu extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
-        for (String section : ConfigCustomHeads.get().sections.keySet()) {
+        ConfigHeadsSelector selector = ConfigHeadsSelector.get();
+        for (String section : selector.getSections().keySet()) {
             ConfigSection configSec = ConfigCustomHeads.get().getConfigSection("sections." + section);
             ConfigSection itemSec = hpi.getConfigSection("icons.headsection");
             ItemStack item;

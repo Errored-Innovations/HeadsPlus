@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class HeadsPlusAPI {
 
     public static ItemStack getHead(String option) {
-        return ConfigCustomHeads.get().getSkull(option);
+        return HeadManager.get().getHeadInfo(option).buildHead().join();
     }
 
     public static boolean isSellable(ItemStack is) {

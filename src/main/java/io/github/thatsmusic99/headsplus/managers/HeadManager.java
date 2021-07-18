@@ -41,6 +41,13 @@ public class HeadManager {
         HeadsPlus.debug("Registered head " + key + ".");
     }
 
+    public boolean contains(String key) {
+        if (key.startsWith("HP#")) {
+            key = key.substring(3);
+        }
+        return heads.containsKey(key);
+    }
+
     public HeadInfo getHeadInfo(String key) {
         if (key.startsWith("HP#")) {
             key = key.substring(3);
