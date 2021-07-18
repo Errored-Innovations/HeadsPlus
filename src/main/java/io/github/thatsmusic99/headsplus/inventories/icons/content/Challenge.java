@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
@@ -24,7 +23,7 @@ public class Challenge extends Content {
     public Challenge(io.github.thatsmusic99.headsplus.api.Challenge challenge, Player player) {
         super(challenge.isComplete(player) ? challenge.getCompleteIcon().clone() : challenge.getIcon().clone());
         this.challenge = challenge;
-        initReward(player);
+        this.reward = challenge.getReward().getRewardString(player);
         initNameAndLore("challenge", player);
     }
 
@@ -112,24 +111,5 @@ public class Challenge extends Content {
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
-    }
-
-    private void initReward(Player player) {
-        reward = challenge.getReward().getRewardString();
-        String value = challenge.getRewardValue().toString();
-        if (reward == null) {
-            HPChallengeRewardTypes type = challenge.getRewardType();
-            if (type == HPChallengeRewardTypes.ECO) {
-                reward = hpc.getString("inventory.icon.reward.currency", player).replace("{amount}", value);
-            } else if (type == HPChallengeRewardTypes.GIVE_ITEM) {
-                reward = hpc.getString("inventory.icon.reward.item-give", player)
-                        .replace("{amount}", String.valueOf(challenge.getRewardItemAmount()))
-                        .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " ")));
-            } else if (type == HPChallengeRewardTypes.ADD_GROUP) {
-                reward = hpc.getString("inventory.icon.reward.group-add", player).replace("{group}", value);
-            } else if (type == HPChallengeRewardTypes.REMOVE_GROUP) {
-                reward = hpc.getString("inventory.icon.reward.group-remove", player).replace("{group}", value);
-            }
-        }
     }
 }

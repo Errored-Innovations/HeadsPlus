@@ -57,14 +57,6 @@ public class Challenge {
         return requiredHeadAmount;
     }
 
-    public HPChallengeRewardTypes getRewardType() {
-        return reward.getType();
-    }
-
-    public int getRewardItemAmount() {
-        return reward.getItem().getAmount();
-    }
-
     public List<String> getDescription() {
         return description;
     }
@@ -75,21 +67,6 @@ public class Challenge {
 
     public ItemStack getCompleteIcon() {
         return completeIcon;
-    }
-
-    public Object getRewardValue() {
-        switch (reward.getType()) {
-            case GIVE_ITEM:
-                return reward.getItem();
-            case RUN_COMMAND:
-                return reward.getCommands();
-            case ADD_GROUP:
-            case REMOVE_GROUP:
-                return reward.getGroup();
-            case ECO:
-                return reward.getMoney();
-        }
-        return null;
     }
 
     public int getDifficulty() {
@@ -137,37 +114,18 @@ public class Challenge {
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
 
-        StringBuilder sb2 = new StringBuilder();
-        HPChallengeRewardTypes re = reward.getType();
-        if (re != HPChallengeRewardTypes.RUN_COMMAND) {
-            String value = String.valueOf(getRewardValue());
-            String rewardString = reward.getRewardString();
-            if (rewardString != null) {
-                sb2.append(rewardString);
-            } else if (re == HPChallengeRewardTypes.ECO) {
-                sb2.append(hpc.getString("inventory.icon.reward.currency", p).replace("{amount}", value));
-            } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
-                sb2.append(hpc.getString("inventory.icon.reward.item-give", p)
-                        .replace("{amount}", String.valueOf(getRewardItemAmount()))
-                        .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " "))));
-            } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
-                sb2.append(hpc.getString("inventory.icon.reward.group-add", p).replace("{group}", value));
-            } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
-                sb2.append(hpc.getString("inventory.icon.reward.group-remove", p).replace("{group}", value));
-            }
-        }
-
         player.addXp(getGainedXP());
-        reward.reward(p);
+        reward.rewardPlayer(p);
         if (MainConfig.get().getChallenges().BROADCAST_CHALLENGE_COMPLETE) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
+
         String message = HeadsPlusMessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
-            hpc.sendMessage(str.replace("{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
+            hpc.sendMessage(str.replace("{reward}", reward.getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
         }
     }
 }

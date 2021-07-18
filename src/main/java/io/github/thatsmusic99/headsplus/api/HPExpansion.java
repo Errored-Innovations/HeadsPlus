@@ -172,26 +172,8 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "type":
                     return challenge.getHeadType();
                 case "reward":
-                    if (challenge.getReward().getRewardString() != null) {
-                        return challenge.getReward().getRewardString();
-                    } else {
-                        String reward = "";
-                        HPChallengeRewardTypes type = challenge.getRewardType();
-                        HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-                        String value = challenge.getRewardValue().toString();
-                        if (type == HPChallengeRewardTypes.ECO) {
-                            reward = hpc.getString("inventory.icon.reward.currency").replace("{amount}", value);
-                        } else if (type == HPChallengeRewardTypes.GIVE_ITEM) {
-                            reward = hpc.getString("inventory.icon.reward.item-give")
-                                    .replace("{amount}", String.valueOf(challenge.getRewardItemAmount()))
-                                    .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " ")));
-                        } else if (type == HPChallengeRewardTypes.ADD_GROUP) {
-                            reward = hpc.getString("inventory.icon.reward.group-add").replace("{group}", value);
-                        } else if (type == HPChallengeRewardTypes.REMOVE_GROUP) {
-                            reward = hpc.getString("inventory.icon.reward.group-remove").replace("{group}", value);
-                        }
-                        return reward;
-                    }
+                    if (player.getPlayer() == null) return null;
+                    return challenge.getReward().getRewardString(player.getPlayer());
                 case "completed":
                     return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player.getPlayer()) : "";
                 case "xp":
