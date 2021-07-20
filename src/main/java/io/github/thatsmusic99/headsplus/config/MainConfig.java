@@ -174,9 +174,9 @@ public class MainConfig extends HPConfig {
 
      @Override
      public void moveToNew() {
-        moveTo("plugin.autograb.enabled", "autograb", ConfigCustomHeads.get());
-        moveTo("plugin.autograb.add-as-enabled", "automatically-enable-grabbed-heads", ConfigCustomHeads.get());
-
+        // TODO - maybe not?
+        //moveTo("plugin.autograb.enabled", "autograb", ConfigCustomHeads.get());
+        //moveTo("plugin.autograb.add-as-enabled", "automatically-enable-grabbed-heads", ConfigCustomHeads.get());
      }
     /*
     protected void loadS() {
