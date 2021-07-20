@@ -90,6 +90,7 @@ public class HeadsPlus extends JavaPlugin {
             if (!checkVersion()) return;
             // Set up Vault connection
             vaultEnabled = setupEconomy();
+            if (vaultEnabled) setupPermissions();
             // Set up early managers
             initiateEarlyManagers();
             // Create locale files
