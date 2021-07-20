@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class ConfigHeadsSelector extends FeatureConfig {
 
     private static ConfigHeadsSelector instance;
     private HashMap<String, SectionInfo> sections = new LinkedHashMap<>();
+    private HashMap<String, BuyableHeadInfo> buyableHeads = new LinkedHashMap<>();
     private int totalHeads = 0;
 
     public ConfigHeadsSelector() {
@@ -85,8 +86,9 @@ public class ConfigHeadsSelector extends FeatureConfig {
             // Get the head info itself
             if (!HeadManager.get().contains(key)) continue;
             // TODO - lore
-            HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(key)
-                    .withDisplayName(section.getString("display-name", null));
+            BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key));
+            headInfo.withDisplayName(section.getString("display-name", null));
+            buyableHeads.put(key, headInfo);
             sectionInfo.addHead(headInfo);
             totalHeads++;
         }
@@ -94,6 +96,18 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     public HashMap<String, SectionInfo> getSections() {
         return sections;
+    }
+
+    public SectionInfo getSection(String name) {
+        return sections.get(name);
+    }
+
+    public HashMap<String, BuyableHeadInfo> getBuyableHeads() {
+        return buyableHeads;
+    }
+
+    public BuyableHeadInfo getBuyableHead(String id) {
+        return buyableHeads.get(id);
     }
 
     public int getTotalHeads() {
@@ -105,7 +119,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
         private String displayName = null;
         private String permission;
         private final String id;
-        private final List<HeadManager.HeadInfo> heads;
+        private final List<BuyableHeadInfo> heads;
 
         public SectionInfo(String id) {
             this.id = id;
@@ -128,7 +142,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             return this;
         }
 
-        public void addHead(HeadManager.HeadInfo head) {
+        public void addHead(BuyableHeadInfo head) {
             heads.add(head);
         }
 
@@ -140,7 +154,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             return id;
         }
 
-        public List<HeadManager.HeadInfo> getHeads() {
+        public List<BuyableHeadInfo> getHeads() {
             return heads;
         }
 
@@ -165,6 +179,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
         private double price;
 
         public BuyableHeadInfo(HeadManager.HeadInfo info) {
+            super(info.getId());
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial())
                     .withTexture(info.getTexture());
