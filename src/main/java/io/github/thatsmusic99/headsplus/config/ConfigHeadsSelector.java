@@ -73,7 +73,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             sections.put(key, new SectionInfo(key)
                     .withDisplayName(section.getString("display-name", null))
                     .withPermission(section.getString("permission"))
-                    .withTexture("texture"));
+                    .withTexture(section.getString("texture")));
         }
         // Setting up heads
         for (String key : getConfigSection("heads").getKeys(false)) {
