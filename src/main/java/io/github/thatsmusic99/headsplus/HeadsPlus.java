@@ -1,7 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.api.HPExpansion;
 import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.events.*;
@@ -58,8 +56,6 @@ public class HeadsPlus extends JavaPlugin {
     private Connection connection;
     private boolean con = false;
     // Other management stuff
-    private final List<Challenge> challenges = new ArrayList<>();
-    private final List<ChallengeSection> challengeSections = new ArrayList<>();
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
@@ -527,38 +523,12 @@ public class HeadsPlus extends JavaPlugin {
         return author;
     }
 
-    public List<Challenge> getChallenges() {
-        return challenges;
-    }
-
-    public List<ChallengeSection> getChallengeSections() {
-        return challengeSections;
-    }
-
     public List<HPConfig> getConfigs() {
         return configFiles;
     }
 
     public static Object[] getUpdate() {
         return update;
-    }
-
-    public Challenge getChallengeByName(String name) {
-        for (Challenge c : getChallenges()) {
-            if (c.getConfigName().equalsIgnoreCase(name)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    public ChallengeSection getSectionByName(String name) {
-        for (ChallengeSection s : getChallengeSections()) {
-            if (s.getName().equalsIgnoreCase(name)) {
-                return s;
-            }
-        }
-        return null;
     }
 
     public Pinned getPinned() {
