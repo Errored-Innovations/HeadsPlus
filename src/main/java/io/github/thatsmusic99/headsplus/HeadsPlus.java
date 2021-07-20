@@ -120,6 +120,10 @@ public class HeadsPlus extends JavaPlugin {
                 new HPExpansion(this).register();
                 getLogger().info("We've registered our PAPI placeholders!");
             }
+
+            // Initiates later managers
+            initiateAsyncManagers();
+
             PlayerJoinListener.reloaded = false;
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
@@ -128,7 +132,6 @@ public class HeadsPlus extends JavaPlugin {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        new CraftingManager();
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
                             getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
@@ -241,6 +244,7 @@ public class HeadsPlus extends JavaPlugin {
         return econ != null;
     }
 
+    @Deprecated
     private void openConnection() throws SQLException, ClassNotFoundException {
         if (connection != null && !connection.isClosed()) {
             return;
@@ -274,6 +278,14 @@ public class HeadsPlus extends JavaPlugin {
         new PersistenceManager();
         new SellableHeadsManager();
         new PaperUtil();
+    }
+
+    private void initiateAsyncManagers() {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            new RewardsManager();
+            new ChallengeManager();
+            new CraftingManager();
+        });
     }
 
     private void registerEvents() {
