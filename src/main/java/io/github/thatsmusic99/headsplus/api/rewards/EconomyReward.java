@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api.rewards;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.entity.Player;
@@ -22,10 +23,15 @@ public class EconomyReward extends Reward {
     }
 
     @Override
-    public void rewardPlayer(Player player) {
+    public void rewardPlayer(Challenge challenge, Player player) {
+        super.rewardPlayer(challenge, player);
         if (!HeadsPlus.get().isVaultEnabled()) return;
         if (!HeadsPlus.get().getEconomy().isEnabled()) return;
-        HeadsPlus.get().getEconomy().depositPlayer(player, money);
+        int difficulty = 1;
+        if (isUsingMultiplier()) {
+            difficulty = challenge.getDifficulty();
+        }
+        HeadsPlus.get().getEconomy().depositPlayer(player, money * difficulty);
     }
 
     @Override

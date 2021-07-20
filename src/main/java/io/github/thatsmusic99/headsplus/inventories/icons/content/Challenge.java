@@ -2,16 +2,12 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
-import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +55,6 @@ public class Challenge extends Content {
                 event.getInventory().setItem(event.getSlot(), item);
             }
         }catch (NullPointerException ignored) {
-        } catch (SQLException ex) {
-            DebugPrint.createReport(ex, "Completing challenge", false, player);
         }
         return false;
     }
@@ -101,7 +95,7 @@ public class Challenge extends Content {
                     str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
                             .replaceAll("\\{heads}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
                                     challenge.getHeadType(),
-                                    challenge.getChallengeType().getDatabase())))
+                                    challenge.getDatabaseType())))
                             .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
                     lore.add(str);
                 }

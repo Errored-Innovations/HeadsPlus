@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
+import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.apache.commons.lang.WordUtils;
@@ -148,7 +149,7 @@ public class HPExpansion extends PlaceholderExpansion {
             for (int i = 1; i < args.length - 1; i++) {
                 name.append(args[i]);
             }
-            Challenge challenge = hp.getChallengeByName(name.toString());
+            Challenge challenge = ChallengeManager.get().getChallengeByName(name.toString());
             if (challenge == null) return null;
             switch (args[args.length - 1].toLowerCase()) {
                 case "header":
@@ -166,7 +167,7 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "progress":
                     return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
                                 challenge.getHeadType(),
-                                challenge.getChallengeType().getDatabase()));
+                                challenge.getDatabaseType()));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":

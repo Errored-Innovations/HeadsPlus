@@ -52,7 +52,8 @@ public class ConfigLevels extends FeatureConfig {
                     Object rewardVal = HPUtils.notNull(get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
                     int items = getInteger("levels." + s + ".rewards.item-amount");
                     String sender = getString("levels." + s + ".rewards.command-sender");
-                    Reward reward1 = new Reward("", reward, rewardVal, items, sender, 0, false);
+                    // TODO - take to RewardsManager
+                    Reward reward1 = Reward.fromConfigSection(s, getConfigSection("levels." + s + ".rewards"));
                     Level c = new Level(s, dn, rxp, av, e, reward1);
                     hp.getLevels().put(h, c);
                     if (h > maxHierarchy) {

@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.api.rewards;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,8 +22,8 @@ public class RunCommandReward extends Reward {
     }
 
     @Override
-    public void rewardPlayer(Player player) {
-        super.rewardPlayer(player);
+    public void rewardPlayer(Challenge challenge, Player player) {
+        super.rewardPlayer(challenge, player);
         for (String command : commands) {
             if (command.startsWith("player>")) {
                 Bukkit.dispatchCommand(player, command.substring(8).replaceAll("\\{player}", player.getName()));

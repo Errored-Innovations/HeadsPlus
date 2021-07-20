@@ -306,7 +306,7 @@ public class HPPlayer {
                             HashMap<Integer, Level> levels = HeadsPlus.get().getLevels();
                             scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
                             if (level.isrEnabled()) {
-                                level.getReward().rewardPlayer(player.getPlayer());
+                                level.getReward().rewardPlayer(null, player.getPlayer()); // TODO
                             }
                             for (int i = 1; i < ConfigLevels.get().getMaxHierarchy(); i++) {
                                 if (levels.get(i) == level) {

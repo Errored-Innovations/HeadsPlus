@@ -58,6 +58,7 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 HPPlayer.players.clear();
                 EntityDataManager.init();
                 CraftingManager.get().reload();
+                ChallengeManager.get().reload();
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
                 HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);

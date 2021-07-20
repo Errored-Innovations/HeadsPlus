@@ -1,22 +1,12 @@
 package io.github.thatsmusic99.headsplus.config.challenges;
 
-import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.ChallengeSection;
-import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
-import io.github.thatsmusic99.headsplus.util.HPUtils;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ConfigChallenges extends FeatureConfig {
 
@@ -135,91 +125,6 @@ public class ConfigChallenges extends FeatureConfig {
 
     }
 
-    @Override
-    public void postSave() {
-        // TODO - run this all async and make Challenge.fromSection, Reward.fromSection, etc.
-        HeadsPlus hp = HeadsPlus.get();
-        hp.getChallenges().clear();
-        hp.getChallengeSections().clear();
-        HashMap<String, Boolean> prepareOptions = new HashMap<>();
-        prepareOptions.put("rewards", getBoolean("challenges.options.prepare-rewards"));
-        prepareOptions.put("icons", getBoolean("challenges.options.prepare-icons"));
-        LinkedHashMap<String, ChallengeSection> sections = new LinkedHashMap<>();
-        for (String section : getConfigSection("sections").getKeys(false)) {
-            if (section.equalsIgnoreCase("current-version") || section.equalsIgnoreCase("options")) continue;
-            try {
-                sections.put(section, getChallengeSection(section));
-            } catch (NullPointerException ex) {
-                hp.getLogger().warning(ex.getMessage());
-            }
-        }
-        HashMap<String, Reward> rewards = new HashMap<>();
-        if (prepareOptions.get("rewards")) {
-            for (String rewardName : getConfigSection("rewards").getKeys(false)) {
-                try {
-                    Reward reward = getReward(rewardName);
-                    rewards.put(rewardName, reward);
-                } catch (NullPointerException ex) {
-                    hp.getLogger().warning("Error when creating reward: " + ex.getMessage());
-                }
-            }
-        }
-        HashMap<String, ItemStack> icons = new HashMap<>();
-        if (prepareOptions.get("icons")) {
-            for (String iconName : getConfigSection("icons").getKeys(false)) {
-                try {
-                    icons.put(iconName, getIcon(iconName));
-                } catch (NullPointerException ex) {
-                    hp.getLogger().warning(ex.getMessage());
-                }
-            }
-        }
-        for (String st : getConfigSection("challenges").getKeys(false)) {
-            try {
-                if (st.equalsIgnoreCase("options")) continue;
-                ConfigSection challenge = HPUtils.notNull(getConfigSection("challenges." + st), "Challenge section " + st + " seems to be null!");
-                String name = HPUtils.notNull(challenge.getString("name"), "Challenge name for " + st + " not found!");
-                String header = HPUtils.notNull(challenge.getString("header"), "Challenge header for " + st + " not found!");
-                List<String> desc = HPUtils.notNull(challenge.getStringList("description"), "Challenge description for " + st + " not found!");
-                HeadsPlusChallengeTypes type;
-                try {
-                    type = HeadsPlusChallengeTypes.valueOf(challenge.getString("type").toUpperCase());
-                } catch (Exception ex) {
-                    continue;
-                }
-                int min = challenge.getInteger("min");
-                String headType = HPUtils.notNull(challenge.getString("head-type"), "Head type for " + st + " not found!");
-                int difficulty = challenge.getInteger("difficulty");
-                Reward reward;
-                if (prepareOptions.get("rewards")) {
-                    reward = rewards.get(challenge.getString("reward")).clone();
-                } else {
-                    reward = getReward(challenge.getString("reward"));
-                }
-                Validate.notNull(reward, "Reward for " + st + " is invalid!");
-                String iconName = challenge.getString("icon");
-                ItemStack icon;
-                String completeIconName = getString("challenges." + st + ".completed-icon");
-                ItemStack completedIcon;
-                if (prepareOptions.get("icons")) {
-                    icon = icons.get(iconName);
-                    completedIcon = icons.get(completeIconName);
-                } else {
-                    icon = getIcon(iconName);
-                    completedIcon = getIcon(completeIconName);
-                }
-                Validate.notNull(icon, "Icon for " + st + " not found!");
-                Validate.notNull(completedIcon, "Completed icon for " + st + " not found!");
-                Challenge c = new Challenge(st, name, header, desc, min, type, headType, reward, difficulty, icon, completedIcon);
-                hp.getChallenges().add(c);
-                sections.get(challenge.getString("section")).addChallenge(c);
-            } catch (NullPointerException ex) {
-                hp.getLogger().warning(ex.getMessage());
-            }
-        }
-        hp.getChallengeSections().addAll(sections.values());
-    }
-
     private String numberToRomanNumeral(int in) {
         String no = String.valueOf(in);
         int length = no.length();
@@ -280,7 +185,7 @@ public class ConfigChallenges extends FeatureConfig {
                             fullNumber.append("C");
                         }
                     }
-                    numeral.insert(0, fullNumber.toString());
+                    numeral.insert(0, fullNumber);
                     break;
                 case '9':
                     if (pos == 0) {
@@ -296,47 +201,6 @@ public class ConfigChallenges extends FeatureConfig {
             pos++;
         }
         return numeral.toString();
-    }
-
-    private Reward getReward(String rewardName) {
-        ConfigSection reward = HPUtils.notNull(getConfigSection("rewards." + rewardName), "Reward section for " + rewardName + " seems to be null!");
-        HPChallengeRewardTypes rewardType;
-        try {
-            rewardType = HPChallengeRewardTypes.valueOf(reward.getString("type").toUpperCase());
-        } catch (Exception e) {
-            rewardType = HPChallengeRewardTypes.NONE;
-        }
-        Object rewardVal = HPUtils.notNull(reward.get("base-value"), "Value for " + rewardName + "'s reward missing!");
-        int items = reward.getInteger("item-amount");
-        int xp = getInteger("rewards." + rewardName + ".base-xp");
-        String sender = getString("rewards." + rewardName + ".command-sender");
-        String rewardString = getString("rewards." + rewardName + ".reward-string");
-        boolean multiply = getBoolean("rewards." + rewardName + ".multiply-by-difficulty");
-
-        return new Reward(rewardName, rewardType, rewardVal, items, sender, xp, multiply, rewardString);
-    }
-
-    private ItemStack getIcon(String iconName) {
-        ItemStack icon = new ItemStack(HPUtils.notNull(Material.getMaterial(getString("icons." + iconName + ".material")), "Material for " + iconName + " does not exist!"), 1, (byte) getInteger("icons." + iconName + ".data-value"));
-        String s = getString("icons." + iconName + ".skull-name");
-        if (s == null || s.isEmpty()) return icon;
-        if (s.startsWith("HP#")) {
-            // TODO - fetch from heads.yml and make async, should reduce startup times
-            icon = ConfigCustomHeads.get().getSkull(s);
-        } else {
-            SkullMeta sm = (SkullMeta) icon.getItemMeta();
-            sm = ProfileFetcher.setProfile(sm, s);
-            icon.setItemMeta(sm);
-        }
-        return icon;
-    }
-
-    private ChallengeSection getChallengeSection(String section) {
-        Material material = Material.valueOf(HPUtils.notNull(getString("sections." + section + ".material"), "Material for section " + section + " seems to not exist!").toUpperCase());
-        int data = getInteger("sections." + section + ".material-data");
-        String displayName = HPUtils.notNull(getString("sections." + section + ".display-name"), "Section " + section + " does not have a display name!");
-        List<String> lore = HPUtils.notNull(getStringList("sections." + section + ".lore"), "Section " + section + " does not have a lore option! This can cause problems!");
-        return new ChallengeSection(material, (byte) data, displayName, lore, section);
     }
 
     @Override

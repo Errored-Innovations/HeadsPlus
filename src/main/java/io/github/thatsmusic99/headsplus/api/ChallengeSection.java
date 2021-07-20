@@ -10,24 +10,18 @@ public class ChallengeSection {
 
     private final List<Challenge> challenges = new ArrayList<>();
     private final Material material;
-    private final byte materialData;
     private final String displayName;
     private final String name;
     private final List<String> lore;
 
-    public ChallengeSection(Material mat, byte data, String displayName, List<String> lore, String name) {
+    public ChallengeSection(Material mat, String displayName, List<String> lore, String name) {
         this.material = mat;
-        this.materialData = data;
         this.displayName = displayName;
         this.name = name;
         this.lore = new ArrayList<>();
         for (String str : lore) {
             this.lore.add(ChatColor.translateAlternateColorCodes('&', str));
         }
-    }
-
-    public byte getMaterialData() {
-        return materialData;
     }
 
     public List<Challenge> getChallenges() {

@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ChallengesSection extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         String section = context.get("section");
         List<Content> content = new ArrayList<>();
-        for (Challenge challenge : HeadsPlus.get().getSectionByName(section).getChallenges()) {
+        for (Challenge challenge : ChallengeManager.get().getSectionByName(section).getChallenges()) {
             io.github.thatsmusic99.headsplus.inventories.icons.content.Challenge icon = new io.github.thatsmusic99.headsplus.inventories.icons.content.Challenge(challenge, player);
             content.add(icon);
         }

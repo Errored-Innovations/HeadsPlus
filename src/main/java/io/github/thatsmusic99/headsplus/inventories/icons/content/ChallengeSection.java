@@ -19,7 +19,7 @@ public class ChallengeSection extends Content {
     private io.github.thatsmusic99.headsplus.api.ChallengeSection section;
 
     public ChallengeSection(io.github.thatsmusic99.headsplus.api.ChallengeSection section) {
-        super(new ItemStack(section.getMaterial(), 1, section.getMaterialData()));
+        super(new ItemStack(section.getMaterial()));
         this.section = section;
     }
 

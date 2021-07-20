@@ -8,6 +8,7 @@ public abstract class Reward {
 
     private int xp;
     private String message;
+    private boolean useMultiplier;
 
     public Reward(int xp) {
         this.xp = xp;
@@ -16,30 +17,48 @@ public abstract class Reward {
     public static Reward fromConfigSection(String id, ConfigSection section) {
         String type = section.getString("type");
         if (type == null) throw new IllegalStateException("There is no reward type for " + id + "!");
+
+        Reward reward;
         switch (type.toLowerCase()) {
             case "eco":
-                return EconomyReward.fromConfigSection(id, section);
+                reward = EconomyReward.fromConfigSection(id, section);
+                break;
             case "give_item":
-                return ItemReward.fromConfigSection(id, section);
+                reward = ItemReward.fromConfigSection(id, section);
+                break;
             case "add_group":
-                return AddGroupReward.fromConfigSection(id, section);
+                reward = AddGroupReward.fromConfigSection(id, section);
+                break;
             case "remove_group":
-                return RemoveGroupReward.fromConfigSection(id, section);
+                reward = RemoveGroupReward.fromConfigSection(id, section);
+                break;
             case "run_command":
-                return RunCommandReward.fromConfigSection(id, section);
+                reward = RunCommandReward.fromConfigSection(id, section);
+                break;
             default:
                 throw new IllegalStateException("No such reward type " + type + " for " + id + "!");
-
         }
+
+        String customMessage = section.getString("reward-string");
+        if (customMessage != null) {
+            reward.message = customMessage;
+        }
+
+        reward.useMultiplier = section.getBoolean("multiply-by-difficulty");
+        return reward;
     }
 
-    public void rewardPlayer(Player player) {
-        HPPlayer.getHPPlayer(player).addXp(xp);
+    public void rewardPlayer(Challenge challenge, Player player) {
+        HPPlayer.getHPPlayer(player).addXp(useMultiplier ? xp * challenge.getDifficulty() : xp);
     }
 
     public String getRewardString(Player player) {
         if (message != null) return message;
         return getDefaultRewardString(player);
+    }
+
+    public boolean isUsingMultiplier() {
+        return useMultiplier;
     }
 
     public abstract String getDefaultRewardString(Player player);

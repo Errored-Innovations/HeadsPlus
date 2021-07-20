@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api.rewards;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -31,11 +32,16 @@ public class ItemReward extends Reward {
     }
 
     @Override
-    public void rewardPlayer(Player player) {
-        super.rewardPlayer(player);
+    public void rewardPlayer(Challenge challenge, Player player) {
+        super.rewardPlayer(challenge, player);
         if (player.getInventory().firstEmpty() == -1) {
             player.getWorld().dropItem(player.getLocation(), item);
             return;
+        }
+        ItemStack item = this.item;
+        if (isUsingMultiplier()) {
+            item = this.item.clone();
+            item.setAmount(this.item.getAmount() * challenge.getDifficulty());
         }
         player.getInventory().addItem(item);
     }

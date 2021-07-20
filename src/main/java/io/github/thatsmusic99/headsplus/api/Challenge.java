@@ -1,10 +1,16 @@
 package io.github.thatsmusic99.headsplus.api;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.challenges.CraftingChallenge;
+import io.github.thatsmusic99.headsplus.api.challenges.MiscChallenge;
+import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
+import io.github.thatsmusic99.headsplus.api.challenges.SellheadChallenge;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
+import io.github.thatsmusic99.headsplus.managers.RewardsManager;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,45 +18,62 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
-public class Challenge {
+public abstract class Challenge {
 
     private final String configName;
     private final String mainName;
     private final String header;
     private final List<String> description;
     private final int requiredHeadAmount;
-    private final HeadsPlusChallengeTypes challengeType;
-    private final Reward reward;
+    private final String reward;
     private final int difficulty;
     private final ItemStack icon;
     private final ItemStack completeIcon;
     private final String headType;
 
-    public Challenge(String configName, String mainName, String header, List<String> description, int requiredHeadAmount, HeadsPlusChallengeTypes challengeType, String headType, Reward reward, int difficulty, ItemStack icon, ItemStack completeIcon) {
-        this.configName = configName;
-        this.mainName = mainName;
-        this.header = header;
-        this.description = description;
-        this.requiredHeadAmount = requiredHeadAmount;
-        this.challengeType = challengeType;
-        this.headType = headType;
-        this.reward = reward;
-        if (reward.isMultiply() && reward.getType() == HPChallengeRewardTypes.ECO) {
-            reward.setMoney(reward.getMoney() * difficulty);
-            reward.setXp(reward.getXp() * difficulty);
+    public Challenge(String key, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
+        this.configName = key;
+        this.mainName = Objects.requireNonNull(section.getString("name"), "Challenge name for " + key + " not found!");
+        this.header = Objects.requireNonNull(section.getString("header"), "Challenge header for " + key + " not found!");
+        this.description = section.getStringList("description");
+        if (!section.contains("min")) throw new NullPointerException("Minimum head count (min) for " + key + " not found!");
+        this.requiredHeadAmount = section.getInteger("min");
+        this.headType = Objects.requireNonNull(section.getString("head-type"), "Challenge head type for " + key + " not found!");
+        String reward = section.getString("reward");
+        if (reward == null) throw new NullPointerException("No reward found for challenge " + key + "!");
+        if (!(reward.startsWith("levels_") || reward.startsWith("challenges_"))) {
+            reward = "challenges_" + reward;
         }
-        this.difficulty = difficulty;
+        if (!RewardsManager.get().contains(reward))
+            throw new NullPointerException("Reward ID " + reward + " was not found for challenge " + key + "!");
+        this.reward = reward;
+        this.difficulty = section.getInteger("difficulty", 1);
         this.icon = icon;
         this.completeIcon = completeIcon;
     }
 
-    public String getConfigName() {
-        return configName;
+    public static Challenge fromConfigSection(String id, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
+        String type = section.getString("type");
+        if (type == null) throw new NullPointerException("No type found for challenge " + id + "!");
+        switch (type.toUpperCase()) {
+            case "LEADERBOARD":
+            case "MOBKILL":
+                return new MobKillChallenge(id, section, icon, completeIcon);
+            case "CRAFTING":
+                return new CraftingChallenge(id, section, icon, completeIcon);
+            case "SELLHEAD":
+                return new SellheadChallenge(id, section, icon, completeIcon);
+            case "MISC":
+                return new MiscChallenge(id, section, icon, completeIcon);
+            default:
+                throw new IllegalArgumentException("No such challenge type " + type + " for " + id + "!");
+        }
     }
 
-    public HeadsPlusChallengeTypes getChallengeType() {
-        return challengeType;
+    public String getConfigName() {
+        return configName;
     }
 
     public int getRequiredHeadAmount() {
@@ -82,7 +105,7 @@ public class Challenge {
     }
 
     public Reward getReward() {
-        return reward;
+        return RewardsManager.get().getReward(reward);
     }
 
     public String getHeadType() {
@@ -90,20 +113,14 @@ public class Challenge {
     }
 
     public int getGainedXP() {
-        return reward.getXp();
+        return getReward().getXp();
     }
 
-    public boolean canComplete(Player p) throws SQLException {
-        if (getChallengeType() == HeadsPlusChallengeTypes.MISC) {
-            return true;
-        } else if (getChallengeType() == HeadsPlusChallengeTypes.CRAFTING) {
-            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluscraft") >= getRequiredHeadAmount();
-        } else if (getChallengeType() == HeadsPlusChallengeTypes.LEADERBOARD) {
-            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluslb") >= getRequiredHeadAmount();
-        } else {
-            return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headsplussh") >= getRequiredHeadAmount();
-        }
+    public boolean canComplete(Player p) {
+        return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), getDatabaseType()) >= getRequiredHeadAmount();
     }
+
+    public abstract String getDatabaseType();
 
     public boolean isComplete(Player p) {
         return HeadsPlus.get().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
@@ -115,7 +132,7 @@ public class Challenge {
         player.addCompleteChallenge(this);
 
         player.addXp(getGainedXP());
-        reward.rewardPlayer(p);
+        getReward().rewardPlayer(this, p);
         if (MainConfig.get().getChallenges().BROADCAST_CHALLENGE_COMPLETE) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
@@ -125,7 +142,7 @@ public class Challenge {
         String message = HeadsPlusMessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
-            hpc.sendMessage(str.replace("{reward}", reward.getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
+            hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
         }
     }
 }
