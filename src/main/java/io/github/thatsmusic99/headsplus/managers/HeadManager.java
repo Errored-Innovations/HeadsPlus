@@ -50,7 +50,7 @@ public class HeadManager {
         if (key.startsWith("HP#")) {
             key = key.substring(3);
         }
-        return heads.getOrDefault(key, new HeadInfo()).clone();
+        return heads.getOrDefault(key, new HeadInfo(null)).clone();
     }
 
     public static class HeadInfo implements Cloneable {
@@ -62,8 +62,10 @@ public class HeadManager {
         private String texture;
         private String player;
         private Material material;
+        private String id;
 
-        public HeadInfo() {
+        public HeadInfo(String id) {
+            this.id = id;
             this.material = Material.PLAYER_HEAD;
             this.lore = new ArrayList<>();
         }
@@ -121,6 +123,10 @@ public class HeadManager {
             return texture;
         }
 
+        public String getId() {
+            return id;
+        }
+
         public void setLore(@Nullable List<String> lore) {
             if (lore == null) return;
             this.lore = lore;
@@ -133,14 +139,14 @@ public class HeadManager {
             meta.setLore(lore);
             if (material != Material.PLAYER_HEAD) return CompletableFuture.completedFuture(head);
             HeadsPlus.debug("Building a head.");
-            if (player != null) {
-                HeadsPlus.debug("Setting a player skull.");
+            if (player != null && !player.isEmpty()) {
+                HeadsPlus.debug("Setting a player skull. (" + player + ")");
                 return PaperUtil.get().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });
             } else if (texture != null) {
-                HeadsPlus.debug("Setting a texture. " + texture);
+                HeadsPlus.debug("Setting a texture. (" + texture + ")");
                 return PaperUtil.get().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
@@ -177,7 +183,7 @@ public class HeadManager {
              } catch (CloneNotSupportedException e) {
                  e.printStackTrace();
              }
-             return new HeadInfo();
+             return new HeadInfo(null);
          }
     }
 
