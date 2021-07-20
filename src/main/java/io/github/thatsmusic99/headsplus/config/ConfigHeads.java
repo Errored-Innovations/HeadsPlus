@@ -5,9 +5,6 @@ import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.ChatColor;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public class ConfigHeads extends HPConfig {
 
     private static ConfigHeads instance;

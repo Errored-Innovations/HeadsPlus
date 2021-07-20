@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import com.google.common.collect.Lists;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;

@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
-import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;

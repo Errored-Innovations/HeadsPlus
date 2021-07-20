@@ -1,8 +1,5 @@
 package io.github.thatsmusic99.headsplus.config.challenges;
 
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-
 public enum HeadsPlusChallengeDifficulty {
     
     EASY("easy", "&8[&a&lEasy&8]", "GREEN_TERRACOTTA", 20, 1, 1),

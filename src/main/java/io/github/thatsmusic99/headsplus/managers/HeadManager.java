@@ -1,8 +1,6 @@
 package io.github.thatsmusic99.headsplus.managers;
 
 import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Material;

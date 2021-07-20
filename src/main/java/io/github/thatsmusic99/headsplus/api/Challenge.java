@@ -8,15 +8,11 @@ import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.SellheadChallenge;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
 import io.github.thatsmusic99.headsplus.managers.RewardsManager;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 

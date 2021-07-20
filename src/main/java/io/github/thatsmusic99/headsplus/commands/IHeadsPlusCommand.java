@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Bukkit;

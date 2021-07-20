@@ -1,13 +1,11 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHeadSection;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;

@@ -16,7 +16,6 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;

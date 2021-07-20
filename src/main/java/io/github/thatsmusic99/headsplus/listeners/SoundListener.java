@@ -9,7 +9,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

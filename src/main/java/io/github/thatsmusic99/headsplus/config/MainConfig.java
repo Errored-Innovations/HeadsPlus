@@ -2,9 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;

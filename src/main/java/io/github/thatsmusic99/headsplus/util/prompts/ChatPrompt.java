@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

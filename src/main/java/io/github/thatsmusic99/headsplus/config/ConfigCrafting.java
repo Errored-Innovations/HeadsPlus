@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
-import io.github.thatsmusic99.headsplus.crafting.RecipeEnums;
 
 import java.util.ArrayList;
 import java.util.List;

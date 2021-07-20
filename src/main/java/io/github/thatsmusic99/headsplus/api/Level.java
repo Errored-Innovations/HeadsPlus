@@ -1,16 +1,5 @@
 package io.github.thatsmusic99.headsplus.api;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.logging.Logger;
-
 public class Level extends BaseLevel {
 
     private final String configName;

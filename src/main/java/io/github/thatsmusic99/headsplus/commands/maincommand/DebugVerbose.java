@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.DebugManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;

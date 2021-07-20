@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.api.events;
 
-import io.github.thatsmusic99.headsplus.api.Head;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

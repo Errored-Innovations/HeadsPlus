@@ -3,11 +3,9 @@ package io.github.thatsmusic99.headsplus.api;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;

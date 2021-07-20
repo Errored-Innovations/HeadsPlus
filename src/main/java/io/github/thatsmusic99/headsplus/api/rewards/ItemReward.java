@@ -5,8 +5,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.util.HPUtils;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

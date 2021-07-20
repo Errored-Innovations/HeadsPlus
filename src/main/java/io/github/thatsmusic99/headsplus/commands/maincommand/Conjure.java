@@ -1,18 +1,15 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 

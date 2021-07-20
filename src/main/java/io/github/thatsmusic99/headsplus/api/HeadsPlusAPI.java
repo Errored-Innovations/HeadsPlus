@@ -2,8 +2,6 @@ package io.github.thatsmusic99.headsplus.api;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -17,7 +15,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;

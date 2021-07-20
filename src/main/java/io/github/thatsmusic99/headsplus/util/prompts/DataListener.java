@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.util.CachedValues;

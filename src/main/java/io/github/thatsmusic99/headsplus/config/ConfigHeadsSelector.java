@@ -8,7 +8,6 @@ import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
