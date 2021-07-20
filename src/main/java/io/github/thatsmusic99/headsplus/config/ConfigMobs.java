@@ -294,12 +294,6 @@ public class ConfigMobs extends FeatureConfig {
 		return lore;
 	}
 
-	private void createExampleSection(String path) {
-		if (isNew() || contains(path)) {
-			createConfigSection(path);
-		}
-	}
-
 	private void addDefaultHead(String path, String head) {
 		makeSectionLenient(path);
 		createExampleSection(path + "." + head);
