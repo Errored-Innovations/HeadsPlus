@@ -1,6 +1,11 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MaskManager {
 
@@ -32,15 +37,46 @@ public class MaskManager {
 
     public static class MaskInfo extends HeadManager.HeadInfo {
 
+        protected Runnable runnable;
+
         public MaskInfo() {
-            super();
+            super(null);
         }
 
         public MaskInfo(HeadManager.HeadInfo info) {
+            super(info.getId());
             withDisplayName(info.getDisplayName());
             setLore(info.getLore());
             withTexture(info.getPlayer() == null ? info.getTexture() : info.getPlayer());
             withMaterial(info.getMaterial());
+        }
+
+        // TODO - should probably be abstract
+        public void run(Player player) {
+        }
+    }
+
+    public static class PotionMask extends MaskInfo {
+
+        private List<PotionEffect> effects;
+
+        public PotionMask() {
+            this.effects = new ArrayList<>();
+        }
+
+        public PotionMask withEffects(List<PotionEffect> effects) {
+            this.effects = effects;
+            return this;
+        }
+
+        public PotionMask addEffect(PotionEffect effect) {
+            this.effects.add(effect);
+            return this;
+        }
+
+        @Override
+        public void run(Player player) {
+
         }
     }
 }
