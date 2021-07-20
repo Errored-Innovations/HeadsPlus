@@ -42,7 +42,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     private static final Pattern SECTION = Pattern.compile("\\{section}");
     protected ConfigFile hpi;
     private Inventory inventory;
-    protected PagedLists<Content> contents;
+    protected volatile PagedLists<Content> contents;
     private UUID uuid;
     private Icon[] icons;
     protected boolean suppressWarnings;
@@ -65,10 +65,10 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         String items = hpi.getString("inventories." + getId() + ".icons");
         // Count the amount of contents that will appear in
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
-        contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
         new BukkitRunnable() {
             @Override
             public void run() {
+                contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
                 build(context, player);
                 new BukkitRunnable() {
                     @Override

@@ -40,18 +40,37 @@ public class PaperUtil implements PaperImpl {
 
     public CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture) {
         if (internalImpl == null) {
+            forceSetProfileTexture(meta, texture);
+            return CompletableFuture.completedFuture(meta);
+        }
+        return internalImpl.setProfileTexture(meta, texture);
+    }
+
+    @Override
+    public void forceSetProfile(SkullMeta meta, String name) {
+        if (internalImpl == null) {
+            ProfileFetcher.setProfile(meta, name);
+            return;
+        }
+        internalImpl.forceSetProfile(meta, name);
+    }
+
+    @Override
+    public void forceSetProfileTexture(SkullMeta meta, String texture) {
+        if (internalImpl == null) {
             GameProfile profile;
             try {
                 profile = ProfileFetcher.getProfile(meta);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                return CompletableFuture.completedFuture(meta);
+                return;
             }
-            if (profile == null) return CompletableFuture.completedFuture(meta);
+            if (profile == null) return;
             profile.getProperties().put("textures", new Property("texture", texture));
-            return CompletableFuture.completedFuture(ProfileFetcher.setProfile(meta, profile));
+            ProfileFetcher.setProfile(meta, profile);
+            return;
         }
-        return internalImpl.setProfileTexture(meta, texture);
+        internalImpl.forceSetProfileTexture(meta, texture);
     }
 
     public static PaperUtil get() {

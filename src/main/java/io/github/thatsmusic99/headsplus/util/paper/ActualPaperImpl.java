@@ -19,22 +19,7 @@ public class ActualPaperImpl implements PaperImpl {
     @Override
     public CompletableFuture<SkullMeta> setProfile(SkullMeta meta, String name) {
         return CompletableFuture.supplyAsync(() -> {
-            HeadsPlus.debug("Setting the head name using Paper. Also, you're stupid lmfao");
-            UUID uuid;
-            Player player = Bukkit.getPlayer(name);
-            if (player != null) {
-                uuid = player.getUniqueId();
-            } else {
-                uuid = UUID.nameUUIDFromBytes(name.getBytes());
-            }
-
-            try {
-                PlayerProfile profile = Bukkit.getServer().createProfile(uuid, name);
-                profile.complete();
-                meta.setPlayerProfile(profile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            forceSetProfile(meta, name);
             return meta;
         }, asyncExecutor).thenApplyAsync(sm -> sm, syncExecutor);
     }
@@ -42,12 +27,37 @@ public class ActualPaperImpl implements PaperImpl {
     @Override
     public CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture) {
         return CompletableFuture.supplyAsync(() -> {
-            HeadsPlus.debug("Setting the head texture using Paper.");
-            PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
-            profile.setProperty(new ProfileProperty("textures", texture));
-            profile.complete();
-            meta.setPlayerProfile(profile);
+            forceSetProfileTexture(meta, texture);
             return meta;
         }, asyncExecutor).thenApplyAsync(sm -> sm, syncExecutor);
+    }
+
+    @Override
+    public void forceSetProfile(SkullMeta meta, String name) {
+        HeadsPlus.debug("Setting the head name using Paper.");
+        UUID uuid;
+        Player player = Bukkit.getPlayer(name);
+        if (player != null) {
+            uuid = player.getUniqueId();
+        } else {
+            uuid = UUID.nameUUIDFromBytes(name.getBytes());
+        }
+
+        try {
+            PlayerProfile profile = Bukkit.getServer().createProfile(uuid, name);
+            profile.complete();
+            meta.setPlayerProfile(profile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void forceSetProfileTexture(SkullMeta meta, String texture) {
+        HeadsPlus.debug("Setting the head texture using Paper.");
+        PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+        profile.setProperty(new ProfileProperty("textures", texture));
+        profile.complete();
+        meta.setPlayerProfile(profile);
     }
 }

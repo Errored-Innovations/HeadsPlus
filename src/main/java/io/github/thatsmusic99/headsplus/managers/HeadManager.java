@@ -151,6 +151,25 @@ public class HeadManager {
             return CompletableFuture.completedFuture(head);
         }
 
+        public ItemStack forceBuildHead() {
+            ItemStack head = new ItemStack(material);
+            ItemMeta meta = head.getItemMeta();
+            meta.setDisplayName(displayName);
+            meta.setLore(lore);
+            if (material != Material.PLAYER_HEAD) return head;
+            HeadsPlus.debug("Building a head.");
+            if (player != null && !player.isEmpty()) {
+                HeadsPlus.debug("Setting a player skull. (" + player + ")");
+                PaperUtil.get().forceSetProfile((SkullMeta) meta, player);
+            } else if (texture != null) {
+                HeadsPlus.debug("Setting a texture. (" + texture + ")");
+                PaperUtil.get().forceSetProfileTexture((SkullMeta) meta, texture);
+            }
+            HeadsPlus.debug("Setting the metadata now...");
+            head.setItemMeta(meta);
+            return head;
+        }
+
          @Override
          public HeadInfo clone() {
              try {

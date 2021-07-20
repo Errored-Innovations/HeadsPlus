@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
@@ -25,11 +26,10 @@ public class CustomHead extends Content {
     private double price = 0;
     private String id;
 
-    public CustomHead(String id) {
-        // TODO - should force async?
-        super(HeadManager.get().getHeadInfo(id).buildHead().join());
-        this.price = ConfigCustomHeads.get().getPrice(id);
-        this.id = id;
+    public CustomHead(ConfigHeadsSelector.BuyableHeadInfo headInfo) {
+        super(headInfo.forceBuildHead());
+        this.price = 0.0; // TODO - set price
+        this.id = headInfo.getId();
     }
 
     public CustomHead() {}

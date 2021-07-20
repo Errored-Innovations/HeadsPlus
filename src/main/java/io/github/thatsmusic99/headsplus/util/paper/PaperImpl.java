@@ -8,4 +8,8 @@ public interface PaperImpl {
     CompletableFuture<SkullMeta> setProfile(SkullMeta meta, String name);
 
     CompletableFuture<SkullMeta> setProfileTexture(SkullMeta meta, String texture);
+
+    void forceSetProfile(SkullMeta meta, String name);
+
+    void forceSetProfileTexture(SkullMeta meta, String texture);
 }
