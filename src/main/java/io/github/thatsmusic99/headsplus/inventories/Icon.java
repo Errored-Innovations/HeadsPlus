@@ -37,7 +37,9 @@ public abstract class Icon {
     }
 
     public Icon(Player player) {
-
+        initItem(getId());
+        initNameAndLore(getId(), player);
+        PersistenceManager.get().makeIcon(item);
     }
 
     public Icon() {
