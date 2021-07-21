@@ -126,81 +126,19 @@ public class ConfigChallenges extends FeatureConfig {
     }
 
     private String numberToRomanNumeral(int in) {
-        String no = String.valueOf(in);
-        int length = no.length();
-        StringBuilder numeral = new StringBuilder();
-        int pos = 0;
-        for (int i = length - 1; i > -1; i--) {
-            int amount;
-            int num = Integer.parseInt(String.valueOf(no.charAt(i)));
-            switch (no.charAt(i)) {
-                case '0':
-                    break;
-                case '1':
-                case '2':
-                case '3':
-                    amount = num;
-                    if (pos == 0) {
-                        for (int j = 0; j < amount; j++) {
-                            numeral.insert(0, "I");
-                        }
-                    } else if (pos == 1) {
-                        for (int j = 0; j < amount; j++) {
-                            numeral.insert(0, "X");
-                        }
-                    } else {
-                        for (int j = 0; j < amount; j++) {
-                            numeral.insert(0, "C");
-                        }
-                    }
-                    break;
-                case '4':
-                    if (pos == 0) {
-                        numeral.insert(0, "IV");
-                    } else if (pos == 1) {
-                        numeral.insert(0, "XL");
-                    } else {
-                        numeral.insert(0, "CD");
-                    }
-                    break;
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                    amount = num % 5;
-                    StringBuilder fullNumber;
-                    if (pos == 0) {
-                        fullNumber = new StringBuilder("V");
-                        for (int j = 0; j < amount; j++) {
-                            fullNumber.append("I");
-                        }
-                    } else if (pos == 1) {
-                        fullNumber = new StringBuilder("L");
-                        for (int j = 0; j < amount; j++) {
-                            fullNumber.append("X");
-                        }
-                    } else {
-                        fullNumber = new StringBuilder("D");
-                        for (int j = 0; j < amount; j++) {
-                            fullNumber.append("C");
-                        }
-                    }
-                    numeral.insert(0, fullNumber);
-                    break;
-                case '9':
-                    if (pos == 0) {
-                        numeral.insert(0, "IX");
-                    } else if (pos == 1) {
-                        numeral.insert(0, "XC");
-                    } else {
-                        numeral.insert(0, "CI");
-                    }
-                    break;
-
-            }
-            pos++;
+        switch (in) {
+            case 1: return "I";
+            case 2: return "II";
+            case 3: return "III";
+            case 4: return "IV";
+            case 5: return "V";
+            case 6: return "VI";
+            case 7: return "VII";
+            case 8: return "VIII";
+            case 9: return "IX";
+            case 10: return "X";
+            default: return "";
         }
-        return numeral.toString();
     }
 
     @Override
