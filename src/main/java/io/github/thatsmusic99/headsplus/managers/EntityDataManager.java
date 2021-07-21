@@ -1,28 +1,14 @@
-package io.github.thatsmusic99.headsplus.util;
+package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/util/EntityDataManager.java
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
-import org.bukkit.configuration.ConfigurationSection;
-=======
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import org.bukkit.Material;
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/managers/EntityDataManager.java
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/util/EntityDataManager.java
-import java.util.Arrays;
-=======
-import java.util.Collections;
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/managers/EntityDataManager.java
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class EntityDataManager {
 
@@ -105,8 +91,6 @@ public class EntityDataManager {
     private static final LinkedHashMap<String, List<HeadManager.HeadInfo>> storedHeads = new LinkedHashMap<>();
     private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
 
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/util/EntityDataManager.java
-=======
     public static void createEntityList() {
         for (EntityType type : EntityType.values()) {
             // who decided that an armor stand is alive?
@@ -115,7 +99,6 @@ public class EntityDataManager {
         Collections.sort(ableEntities);
     }
 
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/managers/EntityDataManager.java
     public static void init() {
         new BukkitRunnable() {
             @Override
@@ -224,42 +207,6 @@ public class EntityDataManager {
     private static void setupHeads() {
         for (String name : ableEntities) {
             try {
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/util/EntityDataManager.java
-                String fancyName;
-                switch (name) {
-                    case "WANDERING_TRADER":
-                    case "TRADER_LLAMA":
-                        fancyName = name.toLowerCase();
-                        break;
-                    default:
-                        fancyName = name.toLowerCase().replaceAll("_", "");
-                        break;
-                }
-                HeadsPlusConfigHeads headsCon = HeadsPlus.getInstance().getHeadsConfig();
-                for (String conditions : ((ConfigurationSection) headsCon.getConfig().get(fancyName + ".name")).getKeys(false)) {
-                    List<EntityHead> heads = new ArrayList<>();
-                    for (String head : headsCon.getConfig().getStringList(fancyName + ".name." + conditions)) {
-                        EntityHead headItem;
-                        if (head.equalsIgnoreCase("{mob-default}")) {
-                            switch (fancyName) {
-                                case "witherskeleton":
-                                    headItem = new EntityHead(name, 1);
-                                    break;
-                                case "enderdragon":
-                                    headItem = new EntityHead(name, 5);
-                                    break;
-                                case "zombie":
-                                    headItem = new EntityHead(name, 2);
-                                    break;
-                                case "creeper":
-                                    headItem = new EntityHead(name, 4);
-                                    break;
-                                case "skeleton":
-                                    headItem = new EntityHead(name, 0);
-                                    break;
-                                default:
-                                    headItem = new EntityHead(name);
-=======
                 ConfigMobs headsCon = ConfigMobs.get();
                 ConfigSection entitySection = headsCon.getConfigSection(name);
                 if (entitySection == null) continue;
@@ -291,7 +238,6 @@ public class EntityDataManager {
                                     break;
                                 case "SKELETON":
                                     headInfo.withMaterial(Material.SKELETON_SKULL);
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/managers/EntityDataManager.java
                                     break;
                             }
                         }

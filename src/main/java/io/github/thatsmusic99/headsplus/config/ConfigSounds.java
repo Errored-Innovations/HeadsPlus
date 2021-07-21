@@ -1,14 +1,5 @@
 package io.github.thatsmusic99.headsplus.config;
 
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusConfigSounds.java
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-
-public class HeadsPlusConfigSounds extends ConfigSettings {
-
-    public HeadsPlusConfigSounds() {
-        this.conName = "sounds";
-        enable();
-=======
 public class ConfigSounds extends HPConfig {
 
     private static ConfigSounds instance;
@@ -16,24 +7,15 @@ public class ConfigSounds extends HPConfig {
     public ConfigSounds() {
         super("sounds.yml");
         instance = this;
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/ConfigSounds.java
     }
 
     @Override
-    protected void load() {
-        super.load();
+    public void loadDefaults() {
         for (Defaults d : Defaults.values()) {
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusConfigSounds.java
-            getConfig().addDefault("sounds." + d.name + ".sound", HeadsPlus.getInstance().getNMS().getEXPSound().name());
-            getConfig().addDefault("sounds." + d.name + ".volume", 1.0f);
-            getConfig().addDefault("sounds." + d.name + ".pitch", 1.0f);
-            getConfig().addDefault("sounds." + d.name + ".enabled", d.enabled);
-=======
             addDefault("sounds." + d.name + ".sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
             addDefault("sounds." + d.name + ".volume", 1.0f);
             addDefault("sounds." + d.name + ".pitch", 1.0f);
             addDefault("sounds." + d.name + ".enabled", d.enabled);
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/ConfigSounds.java
         }
     }
 

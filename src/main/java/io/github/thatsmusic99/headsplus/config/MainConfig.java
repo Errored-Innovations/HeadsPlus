@@ -1,71 +1,15 @@
 package io.github.thatsmusic99.headsplus.config;
 
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-import org.bukkit.configuration.ConfigurationSection;
-=======
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-public class HeadsPlusMainConfig extends ConfigSettings {
-=======
 public class MainConfig extends HPConfig {
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
 
-    Perks perks = new Perks();
-    SelectorList whitelist_worlds = new SelectorList();
-    SelectorList blacklist_worlds = new SelectorList();
-    SelectorList whitelist_heads = new SelectorList();
-    SelectorList blacklist_heads = new SelectorList();
-
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-    public HeadsPlusMainConfig() {
-        this.conName = "config";
-        enable();
-    }
-
-    @Override
-    protected void load() {
-
-        if (config.get("blacklistOn") instanceof Boolean) {
-            configF.delete();
-            reloadC();
-        }
-        config.options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
-        config.addDefault("locale", "en_us");
-        config.addDefault("smart-locale", false);
-        config.addDefault("blacklist.default.enabled", true);
-        config.addDefault("blacklist.world.enabled", true);
-        config.addDefault("whitelist.default.enabled", false);
-        config.addDefault("whitelist.world.enabled", false);
-        config.addDefault("blacklist.default.list", new ArrayList<>());
-        config.addDefault("blacklist.world.list", new ArrayList<>());
-        config.addDefault("whitelist.default.list", new ArrayList<>());
-        config.addDefault("whitelist.world.list", new ArrayList<>());
-        config.addDefault("mysql.host", "localhost");
-        config.addDefault("mysql.port", "3306");
-        config.addDefault("mysql.database", "db");
-        config.addDefault("mysql.username", "username");
-        config.addDefault("mysql.password", "password");
-        config.addDefault("mysql.enabled", false);
-        config.addDefault("theme-colours.1", "DARK_BLUE");
-        config.addDefault("theme-colours.2", "GOLD");
-        config.addDefault("theme-colours.3", "GRAY");
-        config.addDefault("theme-colours.4", "DARK_AQUA");
-        config.addDefault("plugin.larger-menus", false);
-        config.addDefault("plugin.autograb.enabled", false);
-        config.addDefault("plugin.autograb.add-as-enabled", true);
-        config.addDefault("plugin.autograb.section", "players");
-        config.addDefault("plugin.autograb.title", "&8[&6{player}&8]");
-        config.addDefault("plugin.autograb.price", "default");
-        config.addDefault("plugin.perks.interact.middle-click-head", true);
-=======
     private MainFeatures mainFeatures;
     private MySQL mySQL;
     private MobDrops mobDrops;
@@ -405,41 +349,10 @@ public class MainConfig extends HPConfig {
     @Deprecated
     public ConfigSection getMechanics() {
         return getConfigSection("plugin.mechanics");
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
     }
 
-    @Deprecated
-    public Perks getPerks() {
-        return perks;
-    }
-
-    @Deprecated
-    public SelectorList getWorldBlacklist() {
-        return blacklist_worlds;
-    }
-
-    @Deprecated
-    public SelectorList getWorldWhitelist() {
-        return whitelist_worlds;
-    }
-
-    @Deprecated
-    public SelectorList getHeadsBlacklist() {
-        return blacklist_heads;
-    }
-
-    @Deprecated
-    public SelectorList getHeadsWhitelist() {
-        return whitelist_heads;
-    }
-
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-    public ConfigurationSection getMySQL() {
-        return config.getConfigurationSection("mysql");
-=======
     public MainFeatures getMainFeatures() {
         return mainFeatures;
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
     }
 
     public MySQL getMySQL() {
@@ -496,9 +409,6 @@ public class MainConfig extends HPConfig {
         }
 
     }
-
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-=======
 
     public class MainFeatures {
         public boolean SELL_HEADS = getBoolean("sell-heads"),
@@ -590,23 +500,5 @@ public class MainConfig extends HPConfig {
                 SMITE_PLAYER = getBoolean("smite-player"),
                 SUPPRESS_GUI_WARNINGS = getBoolean("suppress-gui-warnings"),
                 SUPPRESS_MESSAGES_DURING_SEARCH = getBoolean("suppress-messages-during-search");
-    }
-
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
-    public static class Perks {
-
-        public final List<String> drops_entities_requiring_killer = new ArrayList<>();
-        public final List<String> drops_ignore_players = new ArrayList<>();
-        public boolean drops_needs_killer, ascii, middle_click_in, click_in;
-        public boolean sell_heads, drop_heads, craft_heads, disable_crafting, heads_selector, challenges, leaderboards, levels, player_death_messages, smite_on_head, mask_powerups;
-        public final List<String> death_messages = new ArrayList<>();
-        public boolean pvp_player_balance_competition, negative_xp, use_killer_balance;
-        public double pvp_percentage_lost, pvp_balance_for_head;
-    }
-
-    public static class SelectorList {
-
-        public boolean enabled;
-        public final List<String> list = new ArrayList<>();
     }
 }

@@ -25,7 +25,7 @@ import java.util.Set;
 )
 public class LocaleCommand implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager messages = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager messages = HeadsPlusMessagesManager.get();
     private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
 
     @Override
