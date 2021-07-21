@@ -33,54 +33,45 @@ public class Complete implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (args.length > 1) {
-            Challenge c = ChallengeManager.get().getChallengeByName(args[1]);
-            if (c != null) {
-                if (args.length > 2) {
-                    if (sender.hasPermission("headsplus.maincommand.complete.others")) {
-                        OfflinePlayer player = Bukkit.getOfflinePlayer(args[2]);
-                        if (player.isOnline()) {
-                            if (!c.isComplete(player.getPlayer())) {
-                                if (c.canComplete(player.getPlayer())) {
-                                    c.complete(player.getPlayer());
-                                } else {
-                                    hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
-                                }
-                            } else {
-                                hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
-                            }
-                        } else {
-                            hpc.sendMessage("commands.errors.player-offline", sender);
-                            return false;
-                        }
-                    } else {
-                        hpc.sendMessage("commands.errors.no-perm", sender);
-                    }
-                    return true;
-
-                } else if (sender instanceof Player) {
-                    Player p = (Player) sender;
-                    if (!c.isComplete(p)) {
-                        if (c.canComplete(p)) {
-                            c.complete((Player) sender);
-                        } else {
-                            hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
-                        }
-                    } else {
-                        hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
-                    }
-
-                } else {
-                    hpc.sendMessage("commands.errors.not-a-player", sender);
-                }
-                return true;
-            } else {
-                hpc.sendMessage("commands.challenges.no-such-challenge", sender);
-            }
-        } else {
+        if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
+            return false;
         }
-        return false;
+        Challenge c = ChallengeManager.get().getChallengeByName(args[1]);
+        if (c == null) {
+            hpc.sendMessage("commands.challenges.no-such-challenge", sender);
+            return false;
+        }
+        Player player;
+        if (args.length > 2) {
+            if (!sender.hasPermission("headsplus.maincommand.complete.others")) {
+                hpc.sendMessage("commands.errors.no-perm", sender);
+                return false;
+            }
+            // TODO - not on main thread, dumbass!
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
+            if (!offlinePlayer.isOnline() || offlinePlayer.getPlayer() == null) {
+                hpc.sendMessage("commands.errors.player-offline", sender);
+                return false;
+            }
+            player = offlinePlayer.getPlayer();
+
+        } else if (sender instanceof Player) {
+            player = (Player) sender;
+        } else {
+            hpc.sendMessage("commands.errors.not-a-player", sender);
+            return false;
+        }
+        if (c.isComplete(player)) {
+            hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
+            return true;
+        }
+        if (c.canComplete(player)) {
+            c.complete(player);
+        } else {
+            hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
+        }
+        return true;
     }
 
     @Override

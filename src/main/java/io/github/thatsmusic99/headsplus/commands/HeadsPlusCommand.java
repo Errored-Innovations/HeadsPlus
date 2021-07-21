@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,49 +20,46 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         try {
-            if ((cmd.getName().equalsIgnoreCase("headsplus")) || (cmd.getName().equalsIgnoreCase("hp"))) {
-                if (args.length > 0) {
-                    IHeadsPlusCommand command = HeadsPlus.get().getCommands().get(args[0].toLowerCase());
-                    if (command != null) {
-                        CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
-                        if (sender.hasPermission(c.permission())) {
-                            if (c.maincommand()) {
-                                try {
-                                    if (command.fire(args, sender)) {
-                                        return true;
-                                    } else {
-                                        sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + c.usage());
-                                        if (command.advancedUsages().length != 0) {
-                                            sender.sendMessage(ChatColor.DARK_RED + "Further usages:");
-                                            for (String s : command.advancedUsages()) {
-                                                sender.sendMessage(ChatColor.RED + s);
-                                            }
-                                        }
-                                    }
-                                } catch (NumberFormatException numberEx) {
-                                    hpc.sendMessage("commands.errors.invalid-input-int", sender);
-                                } catch (Exception ex) {
-                                    DebugPrint.createReport(ex, "Subcommand (" + c.commandname() + ")", true, sender);
-                                }
-
-                            } else {
-                                new HelpMenu().fire(args, sender);
-                            }
-                        } else {
-                            hpc.sendMessage("commands.errors.no-perm", sender);
-                        }
-                    } else {
-                        new HelpMenu().fire(args, sender);
-                    }
-                } else {
-                    new HelpMenu().fire(args, sender);
-                }
-
+            if (args.length == 0) {
+                // TODO - don't create multiple instances
+                new HelpMenu().fire(args, sender);
+                return true;
+            }
+            IHeadsPlusCommand command = HeadsPlus.get().getCommands().get(args[0].toLowerCase());
+            if (command == null) {
+                new HelpMenu().fire(args, sender);
+                return true;
+            }
+            CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
+            if (!sender.hasPermission(c.permission())) {
+                hpc.sendMessage("commands.errors.no-perm", sender);
+                return true;
             }
 
-            return false;
+            if (!c.maincommand()) {
+                new HelpMenu().fire(args, sender);
+                return true;
+            }
+            try {
+                if (command.fire(args, sender)) {
+                    return true;
+                }
+                // TODO - should be a translatable
+                sender.sendMessage(ChatColor.DARK_RED + "Usage: " + ChatColor.RED + c.usage());
+                if (command.advancedUsages().length == 0) return true;
+                sender.sendMessage(ChatColor.DARK_RED + "Further usages:");
+                for (String s : command.advancedUsages()) {
+                    sender.sendMessage(ChatColor.RED + s);
+                }
+
+            } catch (NumberFormatException numberEx) {
+                hpc.sendMessage("commands.errors.invalid-input-int", sender);
+            } catch (Exception ex) {
+                DebugPrint.createReport(ex, "Subcommand (" + c.commandname() + ")", true, sender);
+            }
+            return true;
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (headsplus)", true, sender);
         }
@@ -69,7 +67,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 	}
 
     @Override
-    public List<String> onTabComplete(CommandSender cs, Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, String s, String[] args) {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
@@ -102,14 +100,6 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
-        for (IHeadsPlusCommand hpc : HeadsPlus.get().getCommands().values()) {
-            CommandInfo c = hpc.getClass().getAnnotation(CommandInfo.class);
-            if (c.commandname().equalsIgnoreCase(name)) {
-                if (c.maincommand()){
-                    return hpc;
-                }
-            }
-        }
-        return null;
+	    return HeadsPlus.get().getCommands().get(name);
     }
 }

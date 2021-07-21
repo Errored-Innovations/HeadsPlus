@@ -565,27 +565,23 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     public static String capitalize(String str) {
-        if (str != null && str.length() != 0) {
-            int strLen = str.length();
-            StringBuilder buffer = new StringBuilder(strLen);
-            boolean capitalizeNext = true;
-
-            for(int i = 0; i < strLen; ++i) {
-                char ch = str.charAt(i);
-                if (Character.isWhitespace(ch)) {
-                    buffer.append(ch);
-                    capitalizeNext = true;
-                } else if (capitalizeNext) {
-                    buffer.append(Character.toTitleCase(ch));
-                    capitalizeNext = false;
-                } else {
-                    buffer.append(Character.toLowerCase(ch));
-                }
+        if (str == null || str.length() == 0) return str;
+        int strLen = str.length();
+        StringBuilder buffer = new StringBuilder(strLen);
+        boolean capitalizeNext = true;
+        for(int i = 0; i < strLen; ++i) {
+            char ch = str.charAt(i);
+            if (Character.isWhitespace(ch)) {
+                buffer.append(ch);
+                capitalizeNext = true;
+            } else if (capitalizeNext) {
+                buffer.append(Character.toTitleCase(ch));
+                capitalizeNext = false;
+            } else {
+                buffer.append(Character.toLowerCase(ch));
             }
-            return buffer.toString();
-        } else {
-            return str;
         }
+        return buffer.toString();
     }
 
     private void checkDates() {
