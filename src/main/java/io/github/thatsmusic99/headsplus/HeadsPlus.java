@@ -102,7 +102,7 @@ public class HeadsPlus extends JavaPlugin {
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
             if (!isEnabled()) return;
-
+            new HeadsPlusMessagesManager();
             // Registers plugin events
             registerEvents();
 
