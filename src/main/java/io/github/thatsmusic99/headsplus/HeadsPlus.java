@@ -121,7 +121,6 @@ public class HeadsPlus extends JavaPlugin {
             // Initiates later managers
             initiateAsyncManagers();
 
-            PlayerJoinListener.reloaded = false;
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));

@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.crafting.RecipeEnumUser;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -15,8 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
-	
-	public static boolean reloaded = false;
+
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
 	public void onEvent(PlayerJoinEvent e) {
@@ -53,10 +51,6 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
         }
 
         HPPlayer.getHPPlayer(player);
-        if (!reloaded) {
-            reloaded = true;
-            Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), RecipeEnumUser::new);
-        }
 
 	}
 
