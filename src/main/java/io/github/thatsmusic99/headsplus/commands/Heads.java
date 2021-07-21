@@ -24,7 +24,6 @@ import java.util.List;
 )
 public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
-
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String l, String[] args) {
         try {

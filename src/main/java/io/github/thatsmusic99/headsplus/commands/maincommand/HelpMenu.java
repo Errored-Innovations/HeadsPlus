@@ -4,7 +4,6 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,11 +23,10 @@ import java.util.List;
 )
 public class HelpMenu implements IHeadsPlusCommand {
 
-    // I
-
 	private void helpNoArgs(CommandSender sender) {
         ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, 1);
 	}
+
 	private void helpNo(CommandSender sender, String str) {
         ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, Integer.parseInt(str));
 	}

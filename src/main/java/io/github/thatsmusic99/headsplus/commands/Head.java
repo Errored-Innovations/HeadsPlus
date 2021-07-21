@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
@@ -28,7 +27,6 @@ import java.util.List;
         descriptionPath = "descriptions.head")
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlus hp = HeadsPlus.get();
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");

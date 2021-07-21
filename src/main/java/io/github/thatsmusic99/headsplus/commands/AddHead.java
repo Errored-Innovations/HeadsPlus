@@ -42,6 +42,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (args[0].length() > 2) {
                     if (args[0].length() < 17) {
                         HeadsPlus hp = HeadsPlus.get();
+                        // TODO - not on the main thread
                         OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                         String uuid = p.getUniqueId().toString();
                         if (!hp.getServer().getOnlineMode()) {
