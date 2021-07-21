@@ -32,22 +32,22 @@ public class HelpMenu implements IHeadsPlusCommand {
 	}
 
 	private void helpCmd(CommandSender cs, String cmdName) {
-        if (cs.hasPermission("headsplus.maincommand")) {
-            IHeadsPlusCommand pe = null;
-            for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
-                if (key.getClass().getAnnotation(CommandInfo.class).commandname().equalsIgnoreCase(cmdName)) {
-                    pe = key;
-                    break;
-                }
-            }
-            if (pe != null) {
-                cs.sendMessage(ConfigTextMenus.HelpMenuTranslator.translateCommandHelp(pe, cs));
-            } else {
-                helpNoArgs(cs);
+        if (!cs.hasPermission("headsplus.maincommand")) return;
+
+        IHeadsPlusCommand pe = null;
+        for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
+            if (key.getClass().getAnnotation(CommandInfo.class).commandname().equalsIgnoreCase(cmdName)) {
+                pe = key;
+                break;
             }
         }
-    }
 
+        if (pe != null) {
+            cs.sendMessage(ConfigTextMenus.HelpMenuTranslator.translateCommandHelp(pe, cs));
+        } else {
+            helpNoArgs(cs);
+        }
+    }
 
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {
@@ -81,11 +81,9 @@ public class HelpMenu implements IHeadsPlusCommand {
             List<String> commands = new ArrayList<>();
             for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
-                if (sender.hasPermission(command.permission())) {
-                    if (command.maincommand()) {
-                        commands.add(command.subcommand());
-                    }
-                }
+                if (!sender.hasPermission(command.permission())) continue;
+                if (!command.maincommand()) continue;
+                commands.add(command.subcommand());
             }
             List<String> results = new ArrayList<>();
             StringUtil.copyPartialMatches(args[1], commands, results);

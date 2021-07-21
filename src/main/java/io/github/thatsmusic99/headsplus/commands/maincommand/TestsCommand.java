@@ -29,41 +29,33 @@ public class TestsCommand implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (args.length > 1) {
-            if (EntityDataManager.ableEntities.contains(args[1].toUpperCase())) {
-                if (args.length > 2) {
-                    int amount = HPUtils.isInt(args[2]);
-                    String type = args[1].toLowerCase().replaceAll("_", "");
-                    HeadsPlusMessagesManager.get().sendMessage("commands.tests.running-tests", sender);
-                    double chance = ConfigMobs.get().getDouble(type + ".chance");
-                    Random rand = new Random();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            int successes = 0;
-                            for (int in = 0; in < amount; in++) {
-                                double result = rand.nextDouble() * 100;
-                                if (result <= chance) {
-                                    successes++;
-                                }
-                            }
-                            HeadsPlusMessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
-                        }
-                    }.runTaskAsynchronously(HeadsPlus.get());
-                    return true;
-
-                } else {
-                    HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
-                }
-            } else {
-                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
-            }
-        } else {
+        if (args.length < 3) {
             HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
+            return true;
         }
-
-
-        return false;
+        if (!EntityDataManager.ableEntities.contains(args[1].toUpperCase())) {
+            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
+            return true;
+        }
+        int amount = HPUtils.isInt(args[2]);
+        String type = args[1].toLowerCase().replaceAll("_", "");
+        HeadsPlusMessagesManager.get().sendMessage("commands.tests.running-tests", sender);
+        double chance = ConfigMobs.get().getDouble(type + ".chance");
+        Random rand = new Random();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                int successes = 0;
+                for (int in = 0; in < amount; in++) {
+                    double result = rand.nextDouble() * 100;
+                    if (result <= chance) {
+                        successes++;
+                    }
+                }
+                HeadsPlusMessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+            }
+        }.runTaskAsynchronously(HeadsPlus.get());
+        return true;
     }
 
     @Override

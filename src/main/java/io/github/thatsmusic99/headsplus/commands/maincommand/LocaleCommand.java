@@ -31,55 +31,56 @@ public class LocaleCommand implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (MainConfig.get().getLocalisation().SMART_LOCALE) {
-            if (args.length > 1) {
-                if (args[1].equalsIgnoreCase("refresh")) {
-                    if (sender instanceof Player) {
-                        messages.setPlayerLocale((Player) sender);
-                        messages.sendMessage("commands.locale.changed-locale", sender);
-                        return true;
-                    } else {
-                        messages.sendMessage("commands.errors.not-a-player", sender);
-                    }
-                } else {
-                    if (sender.hasPermission("headsplus.maincommand.locale.change")) {
-                        String str = args[1].split("_")[0];
-                        if (languages.contains(str)) {
-                            if (args.length > 2) {
-                                Player player = Bukkit.getPlayer(args[2]);
-                                if (sender.hasPermission("headsplus.maincommand.locale.others")) {
-                                    if (player != null && player.isOnline()) {
-                                        messages.setPlayerLocale(player, str);
-                                        messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
-                                        return true;
-                                    } else {
-                                        messages.sendMessage("commands.errors.player-offline", sender);
-                                    }
-                                } else {
-                                    messages.sendMessage("commands.errors.no-perm", sender);
-                                }
-
-                            } else {
-                                if (sender instanceof Player) {
-                                    messages.setPlayerLocale((Player) sender, str);
-                                    messages.sendMessage("commands.locale.changed-locale", sender);
-                                    return true;
-                                } else {
-                                    messages.sendMessage("commands.errors.not-a-player", sender);
-                                }
-                            }
-                        } else {
-                            messages.sendMessage("commands.locale.invalid-lang", sender, "{languages}", Arrays.toString(languages.toArray()));
-                        }
-                    } else {
-                        messages.sendMessage("commands.errors.no-perm", sender);
-                    }
-                }
+        // TODO - disable subcommands if feature is disabled like with events?
+        if (!MainConfig.get().getLocalisation().SMART_LOCALE) {
+            messages.sendMessage("commands.errors.disabled", sender);
+            return true;
+        }
+        if (args.length < 2) {
+            messages.sendMessage("commands.errors.invalid-args", sender);
+            return true;
+        }
+        if (args[1].equalsIgnoreCase("refresh")) {
+            if (sender instanceof Player) {
+                messages.setPlayerLocale((Player) sender);
+                messages.sendMessage("commands.locale.changed-locale", sender);
+                return true;
             } else {
-                messages.sendMessage("commands.errors.invalid-args", sender);
+                messages.sendMessage("commands.errors.not-a-player", sender);
             }
         } else {
-            messages.sendMessage("commands.errors.disabled", sender);
+            if (!sender.hasPermission("headsplus.maincommand.locale.change")) {
+                messages.sendMessage("commands.errors.no-perm", sender);
+                return true;
+            }
+            String str = args[1].split("_")[0];
+            if (!languages.contains(str)) {
+                messages.sendMessage("commands.locale.invalid-lang", sender,
+                        "{languages}", Arrays.toString(languages.toArray()));
+                return true;
+            }
+            if (args.length > 2) {
+                Player player = Bukkit.getPlayer(args[2]);
+                if (!sender.hasPermission("headsplus.maincommand.locale.others")) {
+                    messages.sendMessage("commands.errors.no-perm", sender);
+                    return true;
+                }
+                if (player != null && player.isOnline()) {
+                    messages.setPlayerLocale(player, str);
+                    messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
+                    return true;
+                } else {
+                    messages.sendMessage("commands.errors.player-offline", sender);
+                }
+            } else {
+                if (sender instanceof Player) {
+                    messages.setPlayerLocale((Player) sender, str);
+                    messages.sendMessage("commands.locale.changed-locale", sender);
+                    return true;
+                } else {
+                    messages.sendMessage("commands.errors.not-a-player", sender);
+                }
+            }
         }
         return false;
     }
