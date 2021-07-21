@@ -4,13 +4,13 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
+@Deprecated // Going to be reformatted for SQL
 public class DataManager {
 
-    private static final HeadsPlus hp = HeadsPlus.getInstance();
+    private static final HeadsPlus hp = HeadsPlus.get();
 
     public static LinkedHashMap<OfflinePlayer, Integer> getScores(String database, String section, boolean transfer) {
         if (hp.isConnectedToMySQLDatabase() && !transfer) {

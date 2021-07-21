@@ -4,8 +4,9 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,28 +30,28 @@ public class ProfileCommand implements IHeadsPlusCommand {
     private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
         try {
             HPPlayer pl = HPPlayer.getHPPlayer(p);
-            return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl, sender);
+            return ConfigTextMenus.ProfileTranslator.translate(pl, sender);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
-            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data", sender);
+            return HeadsPlusMessagesManager.get().getString("commands.errors.no-data", sender);
         }
     }
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.profile", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.profile", sender);
     }
 
     @Override
     public boolean fire(String[] args, CommandSender cs) {
         try {
-            HeadsPlus hp = HeadsPlus.getInstance();
+            HeadsPlus hp = HeadsPlus.get();
             OfflinePlayer p;
-            NMSManager nms = hp.getNMS();
             if (args.length == 1) {
-                p = nms.getOfflinePlayer(cs.getName());
+                // TODO: better on a separate thread
+                p = Bukkit.getOfflinePlayer(cs.getName());
             } else {
-                p = nms.getOfflinePlayer(args[1]);
+                p = Bukkit.getOfflinePlayer(args[1]);
             }
             if (cs instanceof Player) {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
@@ -59,13 +60,13 @@ public class ProfileCommand implements IHeadsPlusCommand {
                     if (cs.hasPermission("headsplus.maincommand.profile.others")) {
                         cs.sendMessage(prof(p, cs));
                     } else {
-                        hp.getMessagesConfig().sendMessage("commands.errors.no-perm", cs);
+                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
                     }
                 }
             } else {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
                     // Not a player
-                    cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
+                    cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
                 } else {
                     cs.sendMessage(prof(p, cs));
                 }

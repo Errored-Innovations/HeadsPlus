@@ -1,9 +1,9 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class LocaleCommand implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+        if (MainConfig.get().getLocalisation().SMART_LOCALE) {
             if (args.length > 1) {
                 if (args[1].equalsIgnoreCase("refresh")) {
                     if (sender instanceof Player) {

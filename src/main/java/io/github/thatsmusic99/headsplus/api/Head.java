@@ -2,8 +2,8 @@ package io.github.thatsmusic99.headsplus.api;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
@@ -12,34 +12,31 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated
 public class Head {
-
-    private static final PaperUtil util = new PaperUtil();
 
     protected ItemStack itemStack;
     private String name;
     private final String id;
     private double price; // Pretty much central anyways
-    private int data;
+    private Material type;
 
     public Head(String id) {
-        this(id, 3);
-        data = 3;
+        this(id, Material.PLAYER_HEAD);
     }
 
-    public Head(String id, int data) {
-        this.itemStack = HeadsPlus.getInstance().getNMS().getSkull(data);
-        if (!HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive")) {
+    public Head(String id, Material type) {
+        this.itemStack = new ItemStack(type);
+        if (MainConfig.get().getSellingHeads().CASE_INSENSITIVE) {
             id = id.toLowerCase();
         }
         this.id = id;
-        this.data = data;
+        this.type = type;
     }
 
     public Head withDisplayName(String name) {
@@ -88,8 +85,8 @@ public class Head {
     public Head withPrice(double price) {
         this.price = price;
         itemStack.setType(Material.DIAMOND);
-        itemStack = NBTManager.setPrice(itemStack, price);
-        itemStack.setType(HeadsPlus.getInstance().getNMS().getSkull(data).getType());
+        PersistenceManager.get().setSellPrice(itemStack, price);
+        itemStack.setType(type);
         return this;
     }
 
@@ -108,7 +105,7 @@ public class Head {
             return CompletableFuture.completedFuture(this.itemStack);
         }
         SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
-        return util.setProfile(sm, this.name).thenApply(newMeta -> {
+        return PaperUtil.get().setProfile(sm, this.name).thenApply(newMeta -> {
             itemStack.setItemMeta(newMeta);
             return itemStack;
         });
@@ -121,9 +118,5 @@ public class Head {
     public Head withAmount(int amount) {
         itemStack.setAmount(amount);
         return this;
-    }
-
-    public int getData() {
-        return data;
     }
 }

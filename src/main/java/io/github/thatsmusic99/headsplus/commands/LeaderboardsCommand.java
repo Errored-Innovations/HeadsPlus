@@ -1,14 +1,13 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,68 +26,59 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if (HeadsPlus.getInstance().getConfiguration().getPerks().leaderboards) {
-            if (cs.hasPermission("headsplus.leaderboards")) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-
-                        if (args.length > 0) {
-                            try {
-                                switch (args[0].toLowerCase()) {
-                                    case "hunting":
-                                    case "selling":
-                                    case "crafting":
-                                        if (args.length > 1) {
-                                            if (SellHead.getRegisteredIDs().contains(args[1])
-                                                    || args[1].equalsIgnoreCase("total")) {
-                                                if (args.length > 2) {
-                                                    if (CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                                                        try {
-                                                            cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
-                                                            return;
-                                                        } catch (IllegalArgumentException ignored) {
-                                                        }
-                                                    }
-                                                }
-                                                cs.sendMessage(getLeaderboard(cs, args[1], 1, args[0].toLowerCase()));
-                                                return;
-                                            }
-                                            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                                                cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
-                                                return;
-                                            }
-                                        }
-                                        cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
-                                        return;
-                                    default:
-                                        if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                                            cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
-                                            return;
-                                        }
-                                        cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
-                                }
-                            } catch (Exception e) {
-                                DebugPrint.createReport(e, "Command (leaderboard)", true, cs);
-                            }
-                        } else {
-                            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
+        if (!MainConfig.get().getMainFeatures().LEADERBOARDS) {
+            return true;
+        }
+        if (!cs.hasPermission("headsplus.leaderboards")) {
+            return true;
+        }
+        if (args.length == 0) {
+            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
+            return true;
+        }
+        switch (args[0].toLowerCase()) {
+            case "hunting":
+            case "selling":
+            case "crafting":
+                if (args.length > 1) {
+                    // TODO - can't work
+                    if (!(SellHead.getRegisteredIDs().contains(args[1])
+                            && args[1].equalsIgnoreCase("total"))
+                            && CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
+                        return true;
+                    }
+                    if (args.length > 2 && CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
+                        try {
+                            cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
+                            return true;
+                        } catch (IllegalArgumentException ignored) {
                         }
                     }
-
-                }.runTaskAsynchronously(HeadsPlus.getInstance());
-            }
+                    if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
+                        return true;
+                    }
+                }
+                cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
+                return true;
+            default:
+                if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                    cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
+                    return true;
+                }
+                cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
         }
         return false;
     }
 
     private String getLeaderboard(CommandSender sender, String sec, int page, String part) {
-        return HeadsPlusConfigTextMenu.LeaderBoardTranslator.translate(sender, sec, part, page);
+        return ConfigTextMenus.LeaderBoardTranslator.translate(sender, sec, part, page);
     }
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hplb", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hplb", sender);
     }
 
     @Override

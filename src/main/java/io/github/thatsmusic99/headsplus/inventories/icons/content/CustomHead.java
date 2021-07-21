@@ -2,9 +2,12 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -21,10 +24,10 @@ public class CustomHead extends Content {
     private double price = 0;
     private String id;
 
-    public CustomHead(String id) {
-        super(hp.getHeadsXConfig().getSkull(id));
-        this.price = hp.getHeadsXConfig().getPrice(id);
-        this.id = id;
+    public CustomHead(ConfigHeadsSelector.BuyableHeadInfo headInfo) {
+        super(headInfo.forceBuildHead());
+        this.price = 0.0; // TODO - set price
+        this.id = headInfo.getId();
     }
 
     public CustomHead() {}
@@ -40,7 +43,7 @@ public class CustomHead extends Content {
             double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
-                    && hp.econ()
+                    && hp.isVaultEnabled()
                     && (ef = hp.getEconomy()) != null
                     && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
                 hpc.sendMessage("commands.heads.not-enough-money", player); // K.O
@@ -52,7 +55,9 @@ public class CustomHead extends Content {
                 if(price > 0.0 && ef != null) {
                     EconomyResponse er = ef.withdrawPlayer(player, price);
                     if(er.transactionSuccess()) {
-                        hpc.sendMessage("commands.heads.buy-success", player, "{price}", hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(ef.getBalance(player)));
+                        hpc.sendMessage("commands.heads.buy-success", player,
+                                "{price}", MainConfig.get().fixBalanceStr(price),
+                                "{balance}", MainConfig.get().fixBalanceStr(ef.getBalance(player)));
                     } else {
                         hpc.sendMessage(hpc.getString("commands.errors.cmd-fail", player) + ": " + er.errorMessage, player, false);
                         return false;
@@ -65,7 +70,7 @@ public class CustomHead extends Content {
                 ItemMeta meta = item.getItemMeta();
                 meta.setLore(new ArrayList<>());
                 item.setItemMeta(meta);
-                item = NBTManager.removeIconNBT(item);
+                PersistenceManager.get().removeIcon(item);
                 player.getInventory().addItem(item);
             }
         } else {
@@ -90,7 +95,7 @@ public class CustomHead extends Content {
     public void initNameAndLore(String id, Player player) {
         // We only really need to add the lore here
         List<String> lore = new ArrayList<>();
-        for (String str : hpi.getStringList("icons.head.lore")) {
+        for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
             if (str.contains("{favourite}") || str.contains("{msg_inventory.icon.head.favourite}")) {
                 if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
                     lore.add(hpc.getString("inventory.icon.head.favourite", player));
@@ -102,15 +107,5 @@ public class CustomHead extends Content {
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
         item.setItemMeta(im);
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{head-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"};
     }
 }

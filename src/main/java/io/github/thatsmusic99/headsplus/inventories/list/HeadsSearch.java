@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.ChatColor;
@@ -18,22 +17,21 @@ public class HeadsSearch extends HeadsSection {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
         String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
-        for (String head : hpch.headsCache.keySet()) {
+        for (ConfigHeadsSelector.BuyableHeadInfo headInfo : ConfigHeadsSelector.get().getBuyableHeads().values()) {
             final String name;
             try {
-                name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', hpch.getConfig().getString("heads." + head + ".displayname"))).toLowerCase().replaceAll("[^a-z]", "");
+                name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', headInfo.getDisplayName())).toLowerCase().replaceAll("[^a-z]", "");
             } catch (NullPointerException | IllegalArgumentException ex) {
                 if (!suppressWarnings) {
-                    hp.getLogger().warning("Null display name for " + head + "! (Error code: 12)");
+                    hp.getLogger().warning("Null display name for " + headInfo.getId() + "! (Error code: 12)");
                 }
                 continue;
             }
             if (name.contains(search)) {
-                CustomHead head1 = new CustomHead(head);
-                head1.initNameAndLore(head, player);
+                CustomHead head1 = new CustomHead(headInfo);
+                head1.initNameAndLore(headInfo.getId(), player);
                 contents.add(head1);
             }
         }

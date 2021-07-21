@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class PlayerScores implements JSONFile {
 
     private JSONObject json = new JSONObject();
@@ -37,36 +38,27 @@ public class PlayerScores implements JSONFile {
     }
 
     @Override
-    public void setJSON(JSONObject s) {
-        json = s;
+    public void setJSON(JSONObject jsonObject) {
+        json = jsonObject;
     }
 
     public void completeChallenge(String uuid, Challenge c) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
         List<String> challenges = getCompletedChallenges(uuid);
         challenges.add(c.getConfigName());
-        o1.put("completed-challenges", challenges);
-        json.put(uuid, o1);
+        jsonPlayer.put("completed-challenges", challenges);
+        json.put(uuid, jsonPlayer);
     }
 
     public String getLocale(String uuid) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        return String.valueOf(o1.get("locale"));
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        return String.valueOf(jsonPlayer.get("locale"));
     }
 
     public void setLocale(String uuid, String locale, boolean auto) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        o1.put("locale", locale + ":" + auto);
-        json.put(uuid, o1);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        jsonPlayer.put("locale", locale + ":" + auto);
+        json.put(uuid, jsonPlayer);
     }
 
     public void addXp(String uuid, int xp) {
@@ -83,171 +75,128 @@ public class PlayerScores implements JSONFile {
     }
 
     public void setXp(String uuid, int xp) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        o1.put("xp", xp);
-        json.put(uuid, o1);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        jsonPlayer.put("xp", xp);
+        json.put(uuid, jsonPlayer);
     }
 
     public int getXp(String uuid) {
         try {
-            JSONObject o1 = (JSONObject) json.get(uuid);
-            if (o1 == null) {
-                o1 = new JSONObject();
-            }
-            return getInt(o1, "xp");
+            JSONObject jsonPlayer = getJsonPlayer(uuid);
+            return getInt(jsonPlayer, "xp");
         } catch (NullPointerException ex) {
             setXp(uuid, 0);
             return getInt((JSONObject) json.get(uuid), "xp");
         }
-
     }
 
     public void setLevel(String uuid, String level) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        o1.put("level", level);
-        json.put(uuid, o1);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        jsonPlayer.put("level", level);
+        json.put(uuid, jsonPlayer);
     }
 
     public String getLevel(String uuid) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
+        JSONObject jsonObject = (JSONObject) json.get(uuid);
+        if (jsonObject == null) {
+            jsonObject = new JSONObject();
         }
-        return (o1.get("level") == null ? "" : (String) o1.get("level"));
+        return (jsonObject.get("level") == null ? "" : (String) jsonObject.get("level"));
     }
 
     public void setCompletedChallenges(String uuid, List<String> ch) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        o1.put("completed-challenges", ch);
-        json.put(uuid, o1);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        jsonPlayer.put("completed-challenges", ch);
+        json.put(uuid, jsonPlayer);
     }
 
     public List<String> getCompletedChallenges(String uuid) {
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        return (o1.get("completed-challenges") == null ? new ArrayList<>() : (List<String>) o1.get("completed-challenges"));
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        return (jsonPlayer.get("completed-challenges") == null ? new ArrayList<>() : (List<String>) jsonPlayer.get("completed-challenges"));
     }
 
     public int getPlayerTotal(String uuid, String type, String db) {
-        String s = "";
-        switch (db) {
+        String dataType = getLeaderboardType(db);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        JSONObject jsonData = getJsonData(jsonPlayer, dataType);
+        int total = 0;
+        if (jsonData.get(type) != null) {
+            total = getInt(jsonData, type);
+        }
+        return total;
+    }
+
+    public void addPlayerTotal(String uuid, String type, String db, int amountToAdd) {
+        String dataType = getLeaderboardType(db);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        JSONObject jsonData = getJsonData(jsonPlayer, dataType);
+        int typeTotal = 0;
+        if (jsonData.get(type) != null) {
+            typeTotal = getInt(jsonData, type);
+        }
+        typeTotal += amountToAdd;
+        int total = 0;
+        if (jsonData.get("total") != null) {
+            total = getInt(jsonData, "total");
+        }
+        total += amountToAdd;
+        jsonData.put("total", total);
+        jsonData.put(type, typeTotal);
+        jsonPlayer.put(dataType, jsonData);
+        json.put(uuid, jsonPlayer);
+    }
+
+    public void setPlayerTotal(String uuid, String type, String db, int newTotal) {
+        String dataType = getLeaderboardType(db);
+        JSONObject jsonPlayer = getJsonPlayer(uuid);
+        JSONObject jsonData = getJsonData(jsonPlayer, dataType);
+        jsonData.put(type, newTotal);
+        jsonPlayer.put(dataType, jsonData);
+        json.put(uuid, jsonPlayer);
+    }
+
+    private int getInt(JSONObject jsonObject, String id) {
+        try {
+            return Math.toIntExact((long) jsonObject.get(id));
+        } catch (ClassCastException a) {
+            return (int) jsonObject.get(id);
+        }
+    }
+
+    private JSONObject getJsonPlayer(String uuid) {
+        JSONObject jsonPlayer = (JSONObject) json.get(uuid);
+        if (jsonPlayer == null) {
+            jsonPlayer = new JSONObject();
+        }
+        return jsonPlayer;
+    }
+
+    private JSONObject getJsonData(JSONObject jsonPlayer, String dataType) {
+        JSONObject jsonData = (JSONObject) jsonPlayer.get(dataType);
+        if (jsonData == null) {
+            jsonData = new JSONObject();
+        }
+        return jsonData;
+    }
+
+
+    //TODO change this class to work with enums
+    public enum LeaderboardType {
+        HUNTING, SELLHEAD, CRAFTING
+    }
+    private String getLeaderboardType(String string) {
+        switch (string) {
             case "headspluslb":
             case "hunting":
-                s = "hunting";
-                break;
+                return  "hunting";
             case "headsplussh":
             case "selling":
-                s = "sellhead";
-                break;
+                return "sellhead";
             case "headspluscraft":
             case "crafting":
-                s = "crafting";
-                break;
-        }
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        JSONObject o2 = (JSONObject) o1.get(s);
-        if (o2 == null) {
-            o2 = new JSONObject();
-        }
-        Object o = o2.get(type);
-        int i = 0;
-        if (o != null) {
-            i = getInt(o2, type);
-        }
-        return i;
-    }
-
-    public void addPlayerTotal(String uuid, String type, String db, int amount) {
-        String s;
-        switch (db) {
-            case "headspluslb":
-                s = "hunting";
-                break;
-            case "headsplussh":
-                s = "sellhead";
-                break;
-            case "headspluscraft":
-                s = "crafting";
-                break;
+                return "crafting";
             default:
-                s = db;
-                break;
-        }
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        JSONObject o2 = (JSONObject) o1.get(s);
-        if (o2 == null) {
-            o2 = new JSONObject();
-        }
-        Object o = o2.get(type);
-        int i = 0;
-        if (o != null) {
-            i = getInt(o2, type);
-        }
-
-        i += amount;
-        Object o3 = o2.get("total");
-        int j = 0;
-        if (o3 != null) {
-            j = getInt(o2, "total");
-        }
-        j += amount;
-        o2.put("total", j);
-        o2.put(type, i);
-        o1.put(s, o2);
-        json.put(uuid, o1);
-    }
-
-    public void setPlayerTotal(String uuid, String type, String db, int no) {
-        String s;
-        switch (db) {
-            case "headspluslb":
-                s = "hunting";
-                break;
-            case "headsplussh":
-                s = "sellhead";
-                break;
-            case "headspluscraft":
-                s = "crafting";
-                break;
-            default:
-                s = db;
-                break;
-        }
-        JSONObject o1 = (JSONObject) json.get(uuid);
-        if (o1 == null) {
-            o1 = new JSONObject();
-        }
-        JSONObject o2 = (JSONObject) o1.get(s);
-        if (o2 == null) {
-            o2 = new JSONObject();
-        }
-        o2.put(type, no);
-        o1.put(s, o2);
-        json.put(uuid, o1);
-    }
-
-    private int getInt(JSONObject o, String s) {
-        try {
-            return Math.toIntExact((long) o.get(s));
-        } catch (ClassCastException a) {
-            return (int) o.get(s);
+                return "";
         }
     }
 }

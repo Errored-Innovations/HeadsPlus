@@ -45,23 +45,4 @@ public class Menu extends Icon {
         return "menu";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "NETHER_STAR";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.menu}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

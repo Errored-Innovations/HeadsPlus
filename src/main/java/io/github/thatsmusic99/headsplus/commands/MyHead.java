@@ -1,13 +1,12 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,8 +28,7 @@ import java.util.List;
 )
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-    private final PaperUtil util = new PaperUtil();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
@@ -51,9 +49,9 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                     return false;
                 }
                 Player p = (Player) sender;
-                SelectorList blacklist = HeadsPlus.getInstance().getConfiguration().getHeadsBlacklist();
-                SelectorList whitelist = HeadsPlus.getInstance().getConfiguration().getHeadsWhitelist();
-                HeadsPlus.getInstance().saveConfig();
+                /*SelectorList blacklist = HeadsPlus.get().getConfiguration().getHeadsBlacklist();
+                SelectorList whitelist = HeadsPlus.get().getConfiguration().getHeadsWhitelist();
+                HeadsPlus.get().saveConfig();
                 List<String> bl = new ArrayList<>();
                 for (String str : blacklist.list) {
                     bl.add(str.toLowerCase());
@@ -126,7 +124,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                         giveHead(p, sender.getName());
                         return true;
                     }
-                }
+                } */
+                giveHead(p, sender.getName());
             }
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (myhead)", true, sender);
@@ -136,10 +135,9 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     private void giveHead(Player p, String n) {
-        NMSManager nms = HeadsPlus.getInstance().getNMS();
-        ItemStack skull = nms.getSkullMaterial(1);
-        util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', HeadsPlus.getInstance().getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ConfigMobs.get().getPlayerDisplayName(n)));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });
@@ -147,7 +145,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.myhead", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.myhead", sender);
     }
 
     @Override

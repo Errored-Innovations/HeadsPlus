@@ -2,10 +2,10 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
@@ -70,15 +70,15 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("hunting")) {
-            return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "hunting"));
         }
 
         if (identifier.startsWith("crafting")) {
-            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "crafting"));
         }
 
         if (identifier.startsWith("selling")) {
-            return String.valueOf(HeadsPlus.getInstance().getAPI().getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
+            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, getFixedString(identifier, true), "selling"));
         }
 
         if (identifier.startsWith("top")) {
@@ -98,7 +98,7 @@ public class HPExpansion extends PlaceholderExpansion {
             String option = args[length - 1];
             try {
                 LinkedHashMap<OfflinePlayer, Integer> list;
-                if (hp.getConfiguration().getMechanics().getBoolean("leaderboards.cache-boards")) {
+                if (MainConfig.get().getLeaderboards().CACHE_LEADERBOARDS) {
                     list = LeaderboardsCache.getType(entity, category, false, false);
                     if (list == null) {
                         list = LeaderboardsCache.getType(entity, category, true, true);
@@ -147,7 +147,7 @@ public class HPExpansion extends PlaceholderExpansion {
             for (int i = 1; i < args.length - 1; i++) {
                 name.append(args[i]);
             }
-            Challenge challenge = hp.getChallengeByName(name.toString());
+            Challenge challenge = ChallengeManager.get().getChallengeByName(name.toString());
             if (challenge == null) return null;
             switch (args[args.length - 1].toLowerCase()) {
                 case "header":
@@ -163,36 +163,18 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "min-heads":
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
-                    return String.valueOf(hp.getAPI().getPlayerInLeaderboards(player,
+                    return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
                                 challenge.getHeadType(),
-                                challenge.getChallengeType().getDatabase()));
+                                challenge.getDatabaseType()));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":
                     return challenge.getHeadType();
                 case "reward":
-                    if (challenge.getReward().getRewardString() != null) {
-                        return challenge.getReward().getRewardString();
-                    } else {
-                        String reward = "";
-                        HPChallengeRewardTypes type = challenge.getRewardType();
-                        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-                        String value = challenge.getRewardValue().toString();
-                        if (type == HPChallengeRewardTypes.ECO) {
-                            reward = hpc.getString("inventory.icon.reward.currency").replace("{amount}", value);
-                        } else if (type == HPChallengeRewardTypes.GIVE_ITEM) {
-                            reward = hpc.getString("inventory.icon.reward.item-give")
-                                    .replace("{amount}", String.valueOf(challenge.getRewardItemAmount()))
-                                    .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " ")));
-                        } else if (type == HPChallengeRewardTypes.ADD_GROUP) {
-                            reward = hpc.getString("inventory.icon.reward.group-add").replace("{group}", value);
-                        } else if (type == HPChallengeRewardTypes.REMOVE_GROUP) {
-                            reward = hpc.getString("inventory.icon.reward.group-remove").replace("{group}", value);
-                        }
-                        return reward;
-                    }
+                    if (player.getPlayer() == null) return null;
+                    return challenge.getReward().getRewardString(player.getPlayer());
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? hp.getMessagesConfig().getString("command.challenges.challenge-completed", player) : "";
+                    return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }

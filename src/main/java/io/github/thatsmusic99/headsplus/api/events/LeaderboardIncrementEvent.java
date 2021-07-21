@@ -7,7 +7,6 @@ import org.bukkit.event.HandlerList;
 
 public class LeaderboardIncrementEvent extends Event implements Cancellable{
 
-    // T
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private final Player player;

@@ -1,16 +1,15 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +26,7 @@ import java.util.List;
 public class Conjure implements IHeadsPlusCommand {
 
     // F
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public String getCmdDescription(CommandSender cs) {
@@ -66,9 +65,13 @@ public class Conjure implements IHeadsPlusCommand {
                     type = args[5];
                 }
                 try {
-                    ItemStack i = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index).getItemStack();
-                    i.setAmount(amount);
-                    p.getInventory().addItem(i);
+                    HeadManager.HeadInfo info = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index);
+                    int finalAmount = amount;
+                    Player finalPlayer = p;
+                    info.buildHead().thenAccept(item -> {
+                        item.setAmount(finalAmount);
+                        finalPlayer.getInventory().addItem(item);
+                    });
                     return true;
                 } catch (NullPointerException ex) {
                     hpc.sendMessage("commands.errors.invalid-args", sender);

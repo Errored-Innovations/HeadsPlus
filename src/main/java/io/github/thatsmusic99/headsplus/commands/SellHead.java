@@ -4,11 +4,12 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.nms.NMSIndex;
-import io.github.thatsmusic99.headsplus.reflection.NBTManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.util.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -34,7 +35,7 @@ import java.util.UUID;
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
-	private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+	private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 	private static final List<String> headIds = new ArrayList<>();
 	private final int[] slots;
 	private final HeadsPlus hp;
@@ -42,17 +43,13 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
 	public SellHead(HeadsPlus hp) {
 	    headIds.clear();
-	    useCases = HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("sellhead-ids-case-sensitive");
+	    useCases = MainConfig.get().getSellingHeads().CASE_INSENSITIVE;
 	    for (String entity : EntityDataManager.ableEntities) {
 	        registerHeadID(entity);
         }
 	    registerHeadID("PLAYER");
-	    if (hp.getNMSVersion().getOrder() > 3) {
-	        slots = new int[45];
-	        slots[44] = 45; // off-hand slot
-        } else {
-	        slots = new int[44];
-        }
+	    slots = new int[45];
+	    slots[44] = 45; // off-hand slot
 	    for (int i = 0; i < 44; i++) {
             slots[i] = i;
         }
@@ -62,56 +59,54 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		try {
-
-		    if (hp.canSellHeads()) {
-		        if (sender instanceof Player) {
-		            Player player = (Player) sender;
-		            if (args.length == 0) {
-		                // Open the GUI
-		                if (hp.getConfiguration().getMechanics().getBoolean("sellhead-gui") && player.hasPermission("headsplus.sellhead.gui")) {
-                            HashMap<String, String> context = new HashMap<>();
-                            context.put("section", "mobs");
-                            InventoryManager.getManager(player).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
-                            return true;
-                        } else {
-		                    // Get the item in the player's hand
-		                    ItemStack item = checkHand(player);
-		                    // If the item exists and is sellable,
-		                    if (item != null && NBTManager.isSellable(item)) {
-		                        // Get the ID
-		                        String id = NBTManager.getType(item);
-		                        if (isRegistered(id)) {
-		                            double price = NBTManager.getPrice(item) * item.getAmount();
-		                            SellData data = new SellData(player);
-		                            data.addID(id, item.getAmount());
-		                            data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
-                                    pay(player, data, price);
-                                }
-                            }
-                        }
-                    } else {
-                        String fixedId = args[0];
-		                if (fixedId.equalsIgnoreCase("all")) {
-		                    getValidHeads(player, null, -1);
-                        } else if (isRegistered(fixedId)) {
-
-                            int limit = -1;
-                            if (args.length > 1) {
-                                limit = HPUtils.isInt(args[1]);
-                            }
-                            getValidHeads(player, fixedId, limit);
-                        } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                            getValidHeads(player, null, Integer.parseInt(args[0]));
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                    }
-                } else {
-                    hpc.sendMessage("commands.errors.not-a-player", sender);
-                }
-            } else {
+		    if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
                 hpc.sendMessage("commands.errors.disabled", sender);
+                return true;
             }
+		    if (!(sender instanceof Player)) {
+                hpc.sendMessage("commands.errors.not-a-player", sender);
+                return true;
+            }
+		    Player player = (Player) sender;
+		    if (args.length == 0) {
+		        // Open the GUI
+                if (MainConfig.get().getSellingHeads().USE_GUI && player.hasPermission("headsplus.sellhead.gui")) {
+                    HashMap<String, String> context = new HashMap<>();
+                    context.put("section", "mobs");
+                    InventoryManager.getManager(player).open(InventoryManager.InventoryType.SELLHEAD_CATEGORY, context);
+                    return true;
+                } else {
+                    // Get the item in the player's hand
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    // If the item exists and is sellable,
+                    if (!PersistenceManager.get().isSellable(item)) return true;
+                    // Get the ID
+                    String id = PersistenceManager.get().getSellType(item);
+                    if (!SellableHeadsManager.get().isRegistered(id)) return true;
+                    double price = SellableHeadsManager.get().getPrice(id) * item.getAmount();
+                    SellData data = new SellData(player);
+                    data.addID(id, item.getAmount());
+                    data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
+                    pay(player, data, price);
+                }
+		    } else {
+                String fixedId = args[0];
+                if (fixedId.equalsIgnoreCase("all")) {
+                    getValidHeads(player, null, -1);
+                } else if (isRegistered(fixedId)) {
+
+                    int limit = -1;
+                    if (args.length > 1) {
+                        limit = HPUtils.isInt(args[1]);
+                    }
+                    getValidHeads(player, fixedId, limit);
+                } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                    getValidHeads(player, null, Integer.parseInt(args[0]));
+                } else {
+                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                }
+            }
+
         } catch (NumberFormatException e) {
             hpc.sendMessage("commands.errors.invalid-input-int", sender);
         } catch (Exception e) {
@@ -126,26 +121,25 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
-            if (item != null && NBTManager.isSellable(item)) {
-                String id = NBTManager.getType(item);
-                if (fixedId != null) {
-                    if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
-                } else if (!isRegistered(id)){
-                    continue;
-                }
-                double headPrice = NBTManager.getPrice(item);
-                if (limit <= item.getAmount() && limit != -1) {
-                    data.addSlot(slot, limit);
-                    data.addID(id, limit);
-                    price += headPrice * limit;
-                    break;
-                } else {
-                    data.addSlot(slot, item.getAmount());
-                    data.addID(id, item.getAmount());
-                    price += headPrice * item.getAmount();
-                    if (limit != -1) {
-                        limit -= item.getAmount();
-                    }
+            if (item == null || !PersistenceManager.get().isSellable(item)) continue;
+            String id = PersistenceManager.get().getSellType(item);
+            if (fixedId != null) {
+                if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
+            } else if (!SellableHeadsManager.get().isRegistered(id)){
+                continue;
+            }
+            double headPrice = SellableHeadsManager.get().getPrice(id);
+            if (limit <= item.getAmount() && limit != -1) {
+                data.addSlot(slot, limit);
+                data.addID(id, limit);
+                price += headPrice * limit;
+                break;
+            } else {
+                data.addSlot(slot, item.getAmount());
+                data.addID(id, item.getAmount());
+                price += headPrice * item.getAmount();
+                if (limit != -1) {
+                    limit -= item.getAmount();
                 }
             }
         }
@@ -156,24 +150,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         }
     }
 
-    private int getHeadSlot() {
-        NMSIndex nms = HeadsPlus.getInstance().getNMSVersion();
-        if (nms.getOrder() == 9 || nms.getOrder() == 10) {
-            return 39;
-        } else {
-            return 5;
-        }
-    }
-
-	@SuppressWarnings("deprecation")
-    private static ItemStack checkHand(Player p) {
-		if (Bukkit.getVersion().contains("1.8")) {
-			return p.getInventory().getItemInHand();
-		} else {
-			return p.getInventory().getItemInMainHand();
-		}
-	}
-
 	private void pay(Player player, SellData data, double price) {
         double balance = hp.getEconomy().getBalance(player);
         SellHeadEvent event = new SellHeadEvent(price, player, balance, balance + price, data.ids);
@@ -181,11 +157,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         if (!event.isCancelled()) {
             EconomyResponse response = hp.getEconomy().depositPlayer(player, price);
             if (response.transactionSuccess()) {
-                if (price > 0) {
-                    removeItems(player, data);
-                    hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", hp.getConfiguration().fixBalanceStr(price), "{balance}", hp.getConfiguration().fixBalanceStr(balance + price));
-
-                }
+                if (price == 0) return;
+                removeItems(player, data);
+                hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", MainConfig.get().fixBalanceStr(price), "{balance}", MainConfig.get().fixBalanceStr(balance + price));
             } else {
                hpc.sendMessage("commands.errors.cmd-fail", player);
             }
@@ -228,17 +202,17 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	    for (int slot : data.slots.keySet()) {
 	        ItemStack item = player.getInventory().getItem(slot);
 	        int limit = data.slots.get(slot);
-	        if (item != null) {
-	            if (item.getAmount() > limit && limit != -1) {
-	                item.setAmount(item.getAmount() - limit);
-	                break;
-                } else {
-                    player.getInventory().setItem(slot, new ItemStack(Material.AIR));
-                }
-            }
+	        if (item == null) return;
+	        if (item.getAmount() > limit && limit != -1) {
+	            item.setAmount(item.getAmount() - limit);
+	            break;
+	        } else {
+	            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+	        }
         }
     }
 
+    @Deprecated
     public static void registerHeadID(String name) {
 	    if (!useCases) {
 	        name = name.toLowerCase();
@@ -248,10 +222,12 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         }
     }
 
+    @Deprecated
     public static List<String> getRegisteredIDs() {
 	    return headIds;
     }
 
+    @Deprecated
     public static boolean isRegistered(String name) {
 	    if (!useCases) {
 	        name = name.toLowerCase();
@@ -261,7 +237,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.sellhead", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.sellhead", sender);
     }
 
     @Override

@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
+import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
@@ -16,7 +20,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,18 +30,18 @@ public class DebugFileCreator {
 
     @Deprecated
     public String createReport(Exception e, String when) throws IOException {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
         JSONArray array1 = new JSONArray();
         JSONObject o1 = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
+        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
         o1.put("Date", date);
         o1.put("Special message", getErrorHeader());
         try {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getNMSVersion());
-            o1.put("Has Vault hooked", hp.econ());
+            o1.put("NMS version", Bukkit.getVersion());
+            o1.put("Has Vault hooked", hp.isVaultEnabled());
             o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
+            o1.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 
         }
@@ -46,19 +49,19 @@ public class DebugFileCreator {
         o1.put("Server version", Bukkit.getVersion());
         JSONObject o3 = new JSONObject();
         try {
-            o3.put("Autograb enabled", hp.getConfiguration().getConfig().getBoolean("plugin.autograb.enabled"));
-            o3.put("Droppable heads enabled", hp.isDropsEnabled());
-            o3.put("Sellable heads enabled", hp.getConfiguration().getPerks().sell_heads);
-            o3.put("Uses heads selector", hp.isUsingHeadDatabase());
-            o3.put("Uses leaderboards", hp.isUsingLeaderboards());
-            o3.put("Stops placement of sellable heads", hp.isStoppingPlaceableHeads());
+            o3.put("Autograb enabled", ConfigHeadsSelector.get().getBoolean("autograb"));
+            o3.put("Droppable heads enabled", MainConfig.get().getMainFeatures().MOB_DROPS);
+            o3.put("Sellable heads enabled", MainConfig.get().getMainFeatures().SELL_HEADS);
+            o3.put("Uses heads selector", MainConfig.get().getMainFeatures().HEADS_SELECTOR);
+            o3.put("Uses leaderboards", MainConfig.get().getMainFeatures().LEADERBOARDS);
+            o3.put("Stops placement of sellable heads", MainConfig.get().getSellingHeads().STOP_PLACEMENT);
             o3.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o3.put("Player death messages", hp.isDeathMessagesEnabled());
-            o3.put("Total challenges", hp.getChallenges().size());
+            o3.put("Player death messages", MainConfig.get().getPlayerDrops().ENABLE_PLAYER_DEATH_MESSAGES);
+            o3.put("Total challenges", ChallengeManager.get().getChallenges().size());
             o3.put("Total levels", hp.getLevels().size());
-            o3.put("Masks enabled", hp.getConfiguration().getPerks().mask_powerups);
-            o3.put("Allows looting enchantment", hp.getConfiguration().getMechanics().getBoolean("allow-looting-enchantment"));
-            o3.put("Levels enabled", hp.usingLevels());
+            o3.put("Masks enabled", MainConfig.get().getMainFeatures().MASKS);
+            o3.put("Allows looting enchantment", MainConfig.get().getMobDrops().ENABLE_LOOTING);
+            o3.put("Levels enabled", MainConfig.get().getMainFeatures().LEVELS);
         } catch (NullPointerException ignored) {
 
         }
@@ -94,10 +97,7 @@ public class DebugFileCreator {
         boolean cancelled = false;
         File fr = null;
         for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + "/debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
+            createDebugFolder();
             File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
             if (!f.exists()) {
                 f.createNewFile();
@@ -115,15 +115,15 @@ public class DebugFileCreator {
         return fr.getName();
     }
 
-    public static String createReport(HeadsPlusException e) {
+    public static String createReport(HeadsPlusException exception) {
         JSONObject json = getBasicInfo();
-        if (e != null) {
+        if (exception != null) {
             JSONObject errorInfo = new JSONObject();
-            for (String str : e.getExceptionInfo().keySet()) {
-                errorInfo.put(str, e.getExceptionInfo().get(str));
+            for (String str : exception.getExceptionInfo().keySet()) {
+                errorInfo.put(str, exception.getExceptionInfo().get(str));
             }
             JSONArray array = new JSONArray();
-            array.addAll(Arrays.asList(getStackTrace(e.getOriginalException()).split("\r\n\t")));
+            array.addAll(Arrays.asList(getStackTrace(exception.getOriginalException()).split("\r\n\t")));
             errorInfo.put("Exception", array);
             json.put("Error Information", errorInfo);
         }
@@ -136,210 +136,138 @@ public class DebugFileCreator {
     }
 
     private static String save(JSONObject json) throws IOException {
-        HeadsPlus hp = HeadsPlus.getInstance();
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        String str = gson.toJson(json);
-        OutputStreamWriter fw;
-        boolean cancelled = false;
-        File fr = null;
-        for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + File.separator + "debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
-            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-            File f = new File(hp.getDataFolder() + File.separator + "debug" + File.separator, date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
-            if (!f.exists()) {
-                fr = f;
-                cancelled = true;
-            }
-        }
-        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        String jsonString = gson.toJson(json);
+        OutputStreamWriter writer;
+        File fileReport = getReportFile();
+        writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            fw.write(str.replace("\u0026", "&"));
+            writer.write(jsonString.replace("\u0026", "&"));
         } finally {
-            fw.flush();
-            fw.close();
+            writer.flush();
+            writer.close();
         }
-        return fr.getName();
+        return fileReport.getName();
     }
 
-
     public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
-        HeadsPlus hp = HeadsPlus.getInstance();
-        JSONArray array1 = new JSONArray();
-        JSONObject o1 = getBasicInfo();
-        JSONObject o2 = new JSONObject();
-        o2.put("Amount", s.getAmount());
-        o2.put("Durability", s.getDurability());
-        o2.put("Display name", s.getItemMeta().getDisplayName());
+        HeadsPlus hp = HeadsPlus.get();
+        JSONArray infoArray = new JSONArray();
+        JSONObject basicInfo = getBasicInfo();
+        JSONObject headDetails = new JSONObject();
+        headDetails.put("Amount", s.getAmount());
+        headDetails.put("Display name", s.getItemMeta().getDisplayName());
         try {
-            JSONArray ee = new JSONArray();
-            ee.addAll(s.getItemMeta().getLore());
-            o2.put("Lore", ee);
+            JSONArray lore = new JSONArray();
+            lore.addAll(s.getItemMeta().getLore());
+            headDetails.put("Lore", lore);
         } catch (NullPointerException ignored) {
         }
         try {
-            o2.put("Owning Player", hp.getNMS().getSkullOwnerName((SkullMeta) s.getItemMeta()));
+            headDetails.put("Owning Player", ((SkullMeta) s.getItemMeta()).getOwningPlayer());
         } catch (NullPointerException ignored) {
         }
         try {
             GameProfile gm = ProfileFetcher.getProfile(s);
-            o2.put("Texture", gm.getProperties().get("textures").iterator().next().getValue());
+            headDetails.put("Texture", gm.getProperties().get("textures").iterator().next().getValue());
         } catch (NullPointerException ignored) {
 
         }
 
-        o2.put("Can be sold", hp.getAPI().isSellable(s));
-        o2.put("Skull Type", hp.getAPI().getSkullType(s));
-        o1.put("Head details", o2);
+        headDetails.put("Can be sold", PersistenceManager.get().isSellable(s));
+        headDetails.put("Skull Type", PersistenceManager.get().getSellType(s));
+        basicInfo.put("Head details", headDetails);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        array1.add(o1);
-        String str = gson.toJson(array1);
-        OutputStreamWriter fw;
-        boolean cancelled = false;
-        File fr = null;
-        for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + File.separator + "debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
-            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-            File f = new File(hp.getDataFolder() + File.separator + "debug" + File.separator, date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
-            if (!f.exists()) {
-                fr = f;
-                cancelled = true;
-            }
-        }
-        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        infoArray.add(basicInfo);
+        String jsonString = gson.toJson(infoArray);
+        OutputStreamWriter writer;
+        File fileReport = getReportFile();
+        writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            fw.write(str.replace("\u0026", "&"));
+            writer.write(jsonString.replace("\u0026", "&"));
         } finally {
-            fw.flush();
-            fw.close();
+            writer.flush();
+            writer.close();
         }
-        return fr.getName();
+        return fileReport.getName();
     }
 
     public String createPlayerReport(HPPlayer player) throws IOException {
-        JSONArray array1 = new JSONArray();
-        HeadsPlus hp = HeadsPlus.getInstance();
-        JSONObject o1 = getBasicInfo();
-        JSONObject o2 = new JSONObject();
-        o2.put("Name", player.getPlayer().getName());
-        o2.put("UUID", player.getPlayer().getUniqueId());
-        o2.put("Banned", player.getPlayer().isBanned());
-        o2.put("Online", player.getPlayer().isOnline());
-        o2.put("XP", player.getXp());
-        o2.put("Completed challenges", player.getCompleteChallenges());
-        o2.put("Level", player.getLevel());
-        o2.put("Next level", player.getNextLevel());
-        JSONObject o3 = new JSONObject();
+        JSONArray infoArray = new JSONArray();
+        JSONObject basicInfo = getBasicInfo();
+        JSONObject playerInfo = new JSONObject();
+        playerInfo.put("Name", player.getPlayer().getName());
+        playerInfo.put("UUID", player.getPlayer().getUniqueId());
+        playerInfo.put("Banned", player.getPlayer().isBanned());
+        playerInfo.put("Online", player.getPlayer().isOnline());
+        playerInfo.put("XP", player.getXp());
+        playerInfo.put("Completed challenges", player.getCompleteChallenges());
+        playerInfo.put("Level", player.getLevel());
+        playerInfo.put("Next level", player.getNextLevel());
+        JSONObject maskInfo = new JSONObject();
         String type = player.getActiveMaskType();
         JSONArray a = new JSONArray();
         for (PotionEffect p : player.getActiveMasks()) {
             a.add(p.getType().getName());
         }
-        o3.put(type, a);
-        o2.put("Masks", o3);
-        o1.put("Server version", Bukkit.getVersion());
-        o1.put("Player details", o2);
+        maskInfo.put(type, a);
+        playerInfo.put("Masks", maskInfo);
+        basicInfo.put("Server version", Bukkit.getVersion());
+        basicInfo.put("Player details", playerInfo);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        array1.add(o1);
-        String str = gson.toJson(array1);
-        OutputStreamWriter fw;
-        boolean cancelled = false;
-        File fr = null;
-
-        for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + "/debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
-            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
-            if (!f.exists()) {
-                fr = f;
-                cancelled = true;
-            }
-        }
-        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        infoArray.add(basicInfo);
+        String str = gson.toJson(infoArray);
+        OutputStreamWriter writer;
+        File fileReport = getReportFile();
+        writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            fw.write(str.replace("\u0026", "&"));
+            writer.write(str.replace("\u0026", "&"));
         } finally {
-            fw.flush();
-            fw.close();
+            writer.flush();
+            writer.close();
         }
-        return fr.getName();
+        return fileReport.getName();
     }
 
     public String createItemReport(ItemStack item) throws IOException {
-        JSONArray array1 = new JSONArray();
-        HeadsPlus hp = HeadsPlus.getInstance();
-        JSONObject o1 = getBasicInfo();
-        JSONObject o2 = new JSONObject();
-        o2.put("material", item.getType());
-        o2.put("amount", item.getAmount());
-        JSONObject o3 = new JSONObject();
-        for (String key : hp.getNMS().getNBTTags(item).keySet()) {
-            o3.put(key, hp.getNMS().getNBTTags(item).get(key));
-        }
-        o2.put("NBT Tags", o3);
-        o1.put("Item details", o2);
+        JSONArray infoArray = new JSONArray();
+        JSONObject basicInfo = getBasicInfo();
+        JSONObject itemInfo = new JSONObject();
+        itemInfo.put("material", item.getType());
+        itemInfo.put("amount", item.getAmount());
+        basicInfo.put("Item details", itemInfo);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        array1.add(o1);
-        String str = gson.toJson(array1);
-        OutputStreamWriter fw;
-        boolean cancelled = false;
-        File fr = null;
-
-        for (int i = 0; !cancelled; i++) {
-            File f2 = new File(hp.getDataFolder() + "/debug");
-            if (!f2.exists()) {
-                f2.mkdir();
-            }
-            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
-            if (!f.exists()) {
-                fr = f;
-                cancelled = true;
-            }
-        }
-        fw = new OutputStreamWriter(new FileOutputStream(fr));
+        infoArray.add(basicInfo);
+        String jsonString = gson.toJson(infoArray);
+        OutputStreamWriter writer;
+        File fileReport = getReportFile();
+        writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            fw.write(str.replace("\u0026", "&"));
+            writer.write(jsonString.replace("\u0026", "&"));
         } finally {
-            fw.flush();
-            fw.close();
+            writer.flush();
+            writer.close();
         }
-        return fr.getName();
+        return fileReport.getName();
     }
 
     private static JSONObject getBasicInfo() {
-        HeadsPlus hp = HeadsPlus.getInstance();
-        JSONObject o1 = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (System.currentTimeMillis()));
-        o1.put("Date", date);
-        o1.put("Special message", getErrorHeader());
+        HeadsPlus hp = HeadsPlus.get();
+        JSONObject basicInfo = new JSONObject();
+        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
+        basicInfo.put("Date", date);
+        basicInfo.put("Special message", getErrorHeader());
         try {
-            o1.put("HeadsPlus version", hp.getDescription().getVersion());
-            o1.put("NMS version", hp.getNMS().getClass().getSimpleName());
-            o1.put("Has Vault hooked", hp.econ());
-            o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
-            o1.put("Locale", hp.getConfiguration().getConfig().getString("locale"));
+            basicInfo.put("HeadsPlus version", hp.getDescription().getVersion());
+            basicInfo.put("Has Vault hooked", hp.isVaultEnabled());
+            basicInfo.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
+            basicInfo.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 
         }
-        JSONArray plugins = new JSONArray();
-        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
-            try {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
-            } catch (Exception | NoSuchMethodError e) {
-                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
-            }
-        }
-        o1.put("Other Plugins", plugins);
-        return o1;
+        JSONArray plugins = getPluginArray();
+        basicInfo.put("Other Plugins", plugins);
+        return basicInfo;
     }
 
     private static String getErrorHeader() {
@@ -409,15 +337,50 @@ public class DebugFileCreator {
                 "mitsukenaide boku no koto wo mitsumenaide\n" +
                 "dareka ga egaita sekai no naka de anata wo kizutsuketaku wa nai yo\n" +
                 "oboeteite boku no koto wo azayaka na mama");
+        msgs.add("Something's looking sus.");
+        msgs.add("We're halfway thereeeeeee OwO Notices a bug there!");
         int random = new Random().nextInt(msgs.size());
         return msgs.get(random);
     }
 
     // From the ExceptionUtils in Apache Commons Language 3 library which got f*king removed ;-;
-    private static String getStackTrace(Throwable var0) {
-        StringWriter var1 = new StringWriter();
-        PrintWriter var2 = new PrintWriter(var1, true);
-        var0.printStackTrace(var2);
-        return var1.getBuffer().toString();
+    private static String getStackTrace(Throwable throwable) {
+        StringWriter writer = new StringWriter();
+        PrintWriter printer = new PrintWriter(writer, true);
+        throwable.printStackTrace(printer);
+        return writer.getBuffer().toString();
+    }
+
+    private static JSONArray getPluginArray() {
+        JSONArray plugins = new JSONArray();
+        for (Plugin plugin : Bukkit.getServer().getPluginManager().getPlugins()) {
+            try {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion() + " (" + plugin.getDescription().getAPIVersion() + ")");
+            } catch (Exception | NoSuchMethodError e) {
+                plugins.add(plugin.getName() + "-" + plugin.getDescription().getVersion());
+            }
+        }
+        return plugins;
+    }
+
+    private static void createDebugFolder() {
+        File debugFolder = new File(HeadsPlus.get().getDataFolder() + File.separator + "debug");
+        if (!debugFolder.exists()) {
+            debugFolder.mkdir();
+        }
+    }
+
+    /**
+     * @return Unique file name in case of multiple reports in short amount of time
+     */
+    private static File getReportFile() {
+        createDebugFolder();
+        for (int i = 0; true; i++) {
+            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
+            File report = new File(HeadsPlus.get().getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            if (!report.exists()) {
+                return report;
+            }
+        }
     }
 }

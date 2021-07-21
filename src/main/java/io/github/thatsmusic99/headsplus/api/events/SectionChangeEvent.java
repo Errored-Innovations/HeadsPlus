@@ -7,7 +7,6 @@ import org.bukkit.event.HandlerList;
 
 public class SectionChangeEvent extends Event implements Cancellable {
 
-    // E
     private final Player player;
     private final String newSection;
     private final String oldSection;

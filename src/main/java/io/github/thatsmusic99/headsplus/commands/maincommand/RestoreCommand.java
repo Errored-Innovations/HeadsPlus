@@ -1,10 +1,10 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsXEnums;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -23,7 +23,7 @@ import java.util.List;
 public class RestoreCommand implements IHeadsPlusCommand {
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.restore", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.restore", sender);
     }
 
     @Override
@@ -31,22 +31,22 @@ public class RestoreCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             try {
                 HeadsXEnums headToBeAdded = HeadsXEnums.valueOf(args[1].toUpperCase());
-                HeadsPlusConfigCustomHeads customHeadsConfig = HeadsPlus.getInstance().getHeadsXConfig();
-                customHeadsConfig.getConfig().set("heads." + headToBeAdded.name, null);
-                customHeadsConfig.addHead(headToBeAdded.tex,
+                // TODO - should be heads.yml
+                ConfigCustomHeads.get().set("heads." + headToBeAdded.name, null);
+                ConfigCustomHeads.get().addHead(headToBeAdded.texture,
                         true,
-                        headToBeAdded.dn,
-                        headToBeAdded.sec,
+                        headToBeAdded.displayName,
+                        headToBeAdded.section,
                         "default",
                         true);
-                HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.restore.restored-head", sender, "{head}", args[1]);
+                HeadsPlusMessagesManager.get().sendMessage("commands.restore.restored-head", sender, "{head}", args[1]);
                 return true;
             } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.restore.invalid-head", sender, "{head}", args[1]);
+                HeadsPlusMessagesManager.get().sendMessage("commands.restore.invalid-head", sender, "{head}", args[1]);
                 return true;
             }
         } else {
-            HeadsPlus.getInstance().getMessagesConfig().sendMessage("commands.errors.invalid-args", sender);
+            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return false;
         }
     }

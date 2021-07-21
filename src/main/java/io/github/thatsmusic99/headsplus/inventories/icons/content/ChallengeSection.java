@@ -18,7 +18,7 @@ public class ChallengeSection extends Content {
     private io.github.thatsmusic99.headsplus.api.ChallengeSection section;
 
     public ChallengeSection(io.github.thatsmusic99.headsplus.api.ChallengeSection section) {
-        super(new ItemStack(section.getMaterial(), 1, section.getMaterialData()));
+        super(new ItemStack(section.getMaterial()));
         this.section = section;
     }
 
@@ -62,13 +62,4 @@ public class ChallengeSection extends Content {
         item.setItemMeta(meta);
     }
 
-    @Override
-    public String getDefaultDisplayName() {
-        return "{section-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{section-lore}", "{msg_inventory.icon.challenge.count}"};
-    }
 }

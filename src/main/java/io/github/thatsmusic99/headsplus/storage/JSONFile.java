@@ -10,15 +10,16 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 
+@Deprecated
 public interface JSONFile {
 
     String getName();
 
     default void create() throws IOException {
 
-        File f = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "storage" + File.separator + getName() + ".json");
+        File f = new File(HeadsPlus.get().getDataFolder() + File.separator + "storage" + File.separator + getName() + ".json");
         if (!f.exists()) {
-            new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "storage").mkdirs();
+            new File(HeadsPlus.get().getDataFolder() + File.separator + "storage").mkdirs();
             f.createNewFile();
             JSONObject o = new JSONObject();
             Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create(); // Allows the file to look pretty
@@ -34,7 +35,7 @@ public interface JSONFile {
     }
 
     default void read() throws IOException {
-        File f = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "storage" + File.separator + getName() + ".json");
+        File f = new File(HeadsPlus.get().getDataFolder() + File.separator + "storage" + File.separator + getName() + ".json");
         try {
             setJSON((JSONObject) new JSONParser().parse(new InputStreamReader(new FileInputStream(f))));
         }  catch (ParseException e) {
@@ -46,7 +47,7 @@ public interface JSONFile {
     void writeData(OfflinePlayer p, Object... values);
 
     default void save() throws IOException {
-        File f = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "storage");
+        File f = new File(HeadsPlus.get().getDataFolder() + File.separator + "storage");
         if (!f.exists()) {
             f.mkdirs();
         }

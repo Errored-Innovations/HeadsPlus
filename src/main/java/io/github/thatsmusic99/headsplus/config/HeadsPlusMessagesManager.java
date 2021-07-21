@@ -35,14 +35,15 @@ public class HeadsPlusMessagesManager {
     private static YamlConfiguration config;
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<UUID, YamlConfiguration> players;
+    private static HeadsPlusMessagesManager instance;
 
     public HeadsPlusMessagesManager() {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        instance = this;
+        HeadsPlus hp = HeadsPlus.get();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
-        HeadsPlusMainConfig mainConfig = hp.getConfiguration();
-        String locale = mainConfig.getConfig().getString("locale");
-        if (mainConfig.getConfig().getBoolean("smart-locale")) {
-            locales = new HashMap<>();
+        String locale = MainConfig.get().getLocalisation().LOCALE;
+        locales = new HashMap<>();
+        if (MainConfig.get().getBoolean("smart-locale")) {
             File langDir = new File(dest);
             for (File f : Objects.requireNonNull(langDir.listFiles())) {
                 locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
@@ -902,6 +903,10 @@ public class HeadsPlusMessagesManager {
         }
     }
 
+    public static HeadsPlusMessagesManager get() {
+        return instance;
+    }
+
     public String getString(String path) {
         String str = config.getString(path);
         if (str == null) return "";
@@ -922,6 +927,13 @@ public class HeadsPlusMessagesManager {
             String s = m.group(1);
             string = string.replace("{msg_" + s + "}", getString(s, sender));
         }
+        if (sender instanceof Player && HeadsPlus.get().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            string = PlaceholderAPI.setPlaceholders((Player) sender, string);
+        }
+        string = string.replaceAll("\\{header}", config.getString("prefix"));
+        string = string.replaceAll("''", "'");
+        string = string.replaceAll("^'", "");
+        string = string.replaceAll("'$", "");
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
@@ -962,7 +974,7 @@ public class HeadsPlusMessagesManager {
     public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
-        if (HeadsPlus.getInstance().getConfiguration().getConfig().getBoolean("smart-locale")) {
+        if (MainConfig.get().getLocalisation().SMART_LOCALE) {
             if (players.containsKey(player.getUniqueId()) && player.isOnline()) {
                 config = players.get(player.getUniqueId());
                 if (config == null) {
@@ -981,7 +993,7 @@ public class HeadsPlusMessagesManager {
             formatMsg(str, player.getPlayer());
         }
 
-        if (HeadsPlus.getInstance().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (HeadsPlus.get().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             str = PlaceholderAPI.setPlaceholders(player, str);
         }
         str = ChatColor.translateAlternateColorCodes('&', str);
@@ -1016,7 +1028,7 @@ public class HeadsPlusMessagesManager {
             Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
             return String.valueOf(entityPlayer.getClass().getField("locale").get(entityPlayer));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
-            HeadsPlus.getInstance().getServer().getLogger().info("Whoops, have an error to report...");
+            HeadsPlus.get().getServer().getLogger().info("Whoops, have an error to report...");
             DebugFileCreator.createReport(new HeadsPlusException(e));
             e.printStackTrace();
         }
@@ -1029,26 +1041,26 @@ public class HeadsPlusMessagesManager {
 
     private YamlConfiguration performChecks(File file, String name) {
         if (file == null) {
-            file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
+            file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
         }
         YamlConfiguration config = new YamlConfiguration();
         try {
 
             config.load(file);
         } catch (InvalidConfigurationException ex) {
-            Logger logger = HeadsPlus.getInstance().getLogger();
+            Logger logger = HeadsPlus.get().getLogger();
             logger.severe("There is a configuration error in the plugin configuration files! Details below:");
             logger.severe(ex.getMessage());
             logger.severe("We have renamed the faulty configuration to " + name + "-errored.yml for you to inspect.");
-            file.renameTo(new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
+            file.renameTo(new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
             logger.severe("When you believe you have fixed the problems, change the file name back to " + name + ".yml and reload the configuration.");
             logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
             logger.severe("The default configuration will be loaded in response to this.");
-            InputStream is = HeadsPlus.getInstance().getResource(name + ".yml");
+            InputStream is = HeadsPlus.get().getResource(name + ".yml");
             try {
                 file.delete();
-                Files.copy(is, new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
-                file = new File(HeadsPlus.getInstance().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
+                Files.copy(is, new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
+                file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
                 config.load(file);
             } catch (FileNotFoundException ignored) {
 
@@ -1072,7 +1084,7 @@ public class HeadsPlusMessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
-        if (sender instanceof Player && HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("use-tellraw")) {
+        if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
             try {
                 new JSONParser().parse(str);
             } catch (ParseException e) {
@@ -1084,7 +1096,7 @@ public class HeadsPlusMessagesManager {
                 public void run() {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + sender.getName() + " " + result);
                 }
-            }.runTask(HeadsPlus.getInstance());
+            }.runTask(HeadsPlus.get());
         } else {
             sender.sendMessage(str);
         }

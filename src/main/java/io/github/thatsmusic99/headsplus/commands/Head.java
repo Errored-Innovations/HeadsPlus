@@ -2,12 +2,12 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig.SelectorList;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,9 +28,8 @@ import java.util.List;
 )
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlus hp = HeadsPlus.getInstance();
-    private final HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-    private final PaperUtil util = new PaperUtil();
+    private final HeadsPlus hp = HeadsPlus.get();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
 
@@ -46,9 +45,9 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     }
 
 	private void giveHead(Player p, String n) {
-        ItemStack skull = hp.getNMS().getSkullMaterial(1);
-        util.setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', hp.getHeadsConfig().getConfig().getString("player.display-name").replaceAll("\\{player}", n)));
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+            meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });
@@ -56,7 +55,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
 	private void giveH(String[] args, CommandSender sender, Player p) {
         Player p2 = sender instanceof Player ? (Player) sender : null;
-	    SelectorList blacklist = hp.getConfiguration().getHeadsBlacklist();
+	   /* SelectorList blacklist = hp.getConfiguration().getHeadsBlacklist();
         SelectorList whitelist = hp.getConfiguration().getHeadsWhitelist();
         List<String> bl = new ArrayList<>();
         for (String str : blacklist.list) {
@@ -117,6 +116,8 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 giveHead(p, args[0]);
             }
         }
+	    */
+        giveHead(p, args[0]);
     }
 
     @Override
@@ -132,12 +133,12 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	                if (sender.hasPermission("headsplus.head.others")) {
                         if (sender instanceof BlockCommandSender && startsWithSelector(args[0]) && startsWithSelector(args[1])) {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:execute as " + args[1] + " run head " + args[0] + " " + args[1]);
-                        } else if (hp.getNMS().getPlayer(args[1]) != null) {
+                        } else if (Bukkit.getPlayer(args[1]) != null) {
                             if (CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
                                 String[] s = new String[2];
                                 s[0] = args[0];
                                 s[1] = args[1];
-                                giveH(s, sender, hp.getNMS().getPlayer(args[1]));
+                                giveH(s, sender, Bukkit.getPlayer(args[1]));
                                 return true;
                             } else {
                                 hpc.sendMessage("commands.head.invalid-args", sender);
