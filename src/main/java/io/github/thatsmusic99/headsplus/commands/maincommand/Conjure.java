@@ -29,67 +29,54 @@ public class Conjure implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
-        if (args.length > 1) {
-            Player p = null;
-            String entity = args[1].toUpperCase();
-            if (EntityDataManager.ableEntities.contains(entity)) {
-                int amount = 1;
-                if (args.length > 2) {
-                    amount = HPUtils.isInt(args[2]);
-                }
-                int index = 0;
-                String type = "default";
-                if (args.length > 3) {
-                    if (Bukkit.getPlayer(args[3]) != null && Bukkit.getPlayer(args[3]).isOnline()) {
-                        p = Bukkit.getPlayer(args[3]);
-                    }
-                }
-                if (p == null) {
-                    if (sender instanceof Player) {
-                        p = (Player) sender;
-                    } else {
-                        hpc.sendMessage("commands.errors.not-a-player", sender);
-                        return false;
-                    }
-                }
-                if (args.length > 4) {
-                    index = HPUtils.isInt(args[4]);
-                }
-                if (args.length > 5) {
-                    type = args[5];
-                }
-                try {
-                    HeadManager.HeadInfo info = EntityDataManager.getStoredHeads().get(entity + ";" + type).get(index);
-                    int finalAmount = amount;
-                    Player finalPlayer = p;
-                    info.buildHead().thenAccept(item -> {
-                        item.setAmount(finalAmount);
-                        finalPlayer.getInventory().addItem(item);
-                    });
-                    return true;
-                } catch (NullPointerException ex) {
-                    hpc.sendMessage("commands.errors.invalid-args", sender);
-                } catch (IndexOutOfBoundsException e) {
-                    hpc.sendMessage("commands.errors.invalid-pg-no", sender);
-                }
-            } else {
-                hpc.sendMessage("commands.errors.invalid-args", sender);
+        // Check argument number
+        if (args.length < 2) {
+            hpc.sendMessage("commands.errors.invalid-args", sender);
+            return false;
+        }
+        Player p = null;
+        if (!HeadManager.get().contains(args[1])) {
+            hpc.sendMessage("commands.errors.invalid-args", sender);
+            return false;
+        }
+        int amount = 1;
+        if (args.length > 2) {
+            amount = HPUtils.isInt(args[2]);
+        }
+        if (args.length > 3) {
+            if (Bukkit.getPlayer(args[3]) != null && Bukkit.getPlayer(args[3]).isOnline()) {
+                p = Bukkit.getPlayer(args[3]);
             }
-        } else {
+        }
+        if (p == null) {
+            if (sender instanceof Player) {
+                p = (Player) sender;
+            } else {
+                hpc.sendMessage("commands.errors.not-a-player", sender);
+                return false;
+            }
+        }
+        try {
+            HeadManager.HeadInfo info = HeadManager.get().getHeadInfo(args[1]);
+            int finalAmount = amount;
+            Player finalPlayer = p;
+            info.buildHead().thenAccept(item -> {
+                item.setAmount(finalAmount);
+                finalPlayer.getInventory().addItem(item);
+            });
+            return true;
+        } catch (NullPointerException ex) { // TODO - still needed?
             hpc.sendMessage("commands.errors.invalid-args", sender);
         }
-
         return false;
     }
 
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
+            StringUtil.copyPartialMatches(args[1], HeadManager.get().getKeys(), results);
         } else if (args.length == 4) {
             StringUtil.copyPartialMatches(args[3], IHeadsPlusCommand.getPlayers(sender), results);
-        } else if (args.length == 6) {
-            StringUtil.copyPartialMatches(args[5], IHeadsPlusCommand.getEntityConditions(args[1]), results);
         }
         return results;
     }
