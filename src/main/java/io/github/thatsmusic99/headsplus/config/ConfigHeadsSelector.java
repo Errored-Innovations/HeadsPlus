@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -169,7 +170,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             if (displayName == null) return item;
             ItemMeta meta = item.getItemMeta();
             if (meta == null) return item;
-            meta.setDisplayName(displayName);
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
             item.setItemMeta(meta);
             return item;
         }
