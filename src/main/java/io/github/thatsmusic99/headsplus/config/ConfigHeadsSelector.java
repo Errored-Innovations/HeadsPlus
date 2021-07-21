@@ -18,8 +18,8 @@ import java.util.List;
 public class ConfigHeadsSelector extends FeatureConfig {
 
     private static ConfigHeadsSelector instance;
-    private HashMap<String, SectionInfo> sections = new LinkedHashMap<>();
-    private HashMap<String, BuyableHeadInfo> buyableHeads = new LinkedHashMap<>();
+    private final HashMap<String, SectionInfo> sections = new LinkedHashMap<>();
+    private final HashMap<String, BuyableHeadInfo> buyableHeads = new LinkedHashMap<>();
     private int totalHeads = 0;
 
     public ConfigHeadsSelector() {

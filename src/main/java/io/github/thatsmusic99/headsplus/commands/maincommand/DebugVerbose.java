@@ -63,7 +63,7 @@ public class DebugVerbose {
                         builder.append(currentArgs[i]).append(",");
                     }
                     for (String key : event.getPossibleData(arg)) {
-                        possibleSelections.add(builder.toString() + arg + "=" + key + ",");
+                        possibleSelections.add(builder + arg + "=" + key + ",");
                     }
                 } else {
                     for (int i = 0; i < modifyingArg; i++) {
