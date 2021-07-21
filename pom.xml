@@ -136,7 +136,7 @@
         </repository>
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
             <id>sk89q-repo</id>
@@ -149,7 +149,7 @@
         </repository>
         <repository>
             <id>pluginwiki-repo</id>
-            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>mojang-authlib</id>
