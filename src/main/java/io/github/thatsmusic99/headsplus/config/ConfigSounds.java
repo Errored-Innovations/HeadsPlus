@@ -9,6 +9,10 @@ public class ConfigSounds extends HPConfig {
         instance = this;
     }
 
+    public static ConfigSounds get() {
+        return instance;
+    }
+
     @Override
     public void loadDefaults() {
         for (Defaults d : Defaults.values()) {
@@ -17,10 +21,6 @@ public class ConfigSounds extends HPConfig {
             addDefault("sounds." + d.name + ".pitch", 1.0f);
             addDefault("sounds." + d.name + ".enabled", d.enabled);
         }
-    }
-
-    public static ConfigSounds get() {
-        return instance;
     }
 
     private enum Defaults {

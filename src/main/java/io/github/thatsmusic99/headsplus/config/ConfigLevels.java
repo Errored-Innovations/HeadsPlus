@@ -34,7 +34,7 @@ public class ConfigLevels extends FeatureConfig {
     public void postSave() {
         HeadsPlus hp = HeadsPlus.get();
         hp.getLevels().clear();
-        //if (hp.usingLevels()) {
+        if (MainConfig.get().getMainFeatures().LEVELS) {
             try {
                 for (String s : getConfigSection("levels").getKeys(false)) {
                     String dn = HPUtils.notNull(getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
@@ -63,14 +63,14 @@ public class ConfigLevels extends FeatureConfig {
             } catch (NullPointerException ex) {
                 hp.getLogger().warning(ex.getMessage());
             }
-        //}
+        }
     }
 
     @Override
     public void loadDefaults() {
         double version = 0.3;
         double current = getDouble("version");
-        if (isNew() || current < version) {
+        if (current < version) {
             set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
@@ -79,10 +79,10 @@ public class ConfigLevels extends FeatureConfig {
                     set("levels." + l.getConfigName() + ".hierachy", null);
                 }
                 if (l.getAddedVersion() > current) {
-                    addExample("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-                    addExample("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-                    addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    addExample("levels." + l.getConfigName() + ".hierarchy", i);
+                    addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
+                    addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
+                    addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
+                    addDefault("levels." + l.getConfigName() + ".hierarchy", i);
                     addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
                     addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
                     addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
@@ -92,6 +92,7 @@ public class ConfigLevels extends FeatureConfig {
 
             }
         }
+
     }
 
     private void addDefLevels() {

@@ -96,9 +96,9 @@ public class HeadsPlus extends JavaPlugin {
             // Create locale files
             createLocales();
 
+
             // Build plugin instances
             createInstances();
-            new HeadsPlusMessagesManager();
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
             if (!isEnabled()) return;
@@ -126,6 +126,7 @@ public class HeadsPlus extends JavaPlugin {
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));
              // if (getConfiguration().getMechanics().getBoolean("update.check")) {
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -253,6 +254,7 @@ public class HeadsPlus extends JavaPlugin {
             }
             Class.forName("com.mysql.jdbc.Driver");
             try {
+
                 connection = DriverManager.getConnection(
                         "jdbc:mysql://" + MainConfig.get().getMySQL().MYSQL_HOST + ":" +
                                 MainConfig.get().getMySQL().MYSQL_PORT + "/" +
@@ -390,13 +392,13 @@ public class HeadsPlus extends JavaPlugin {
                 }
             }.runTaskAsynchronously(this);
         }
+
         EntityDataManager.init();
         new MaskManager();
     }
 
     public void restartMessagesManager() {
         createLocales();
-        new HeadsPlusMessagesManager();
     }
 
     private boolean setupPermissions() {

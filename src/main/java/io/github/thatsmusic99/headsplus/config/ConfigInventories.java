@@ -43,6 +43,7 @@ public class ConfigInventories extends HPConfig {
                 new HeadsSection(),
                 new SellheadCategory(),
                 new SellheadMenu(), new ChallengesPinnedInv())) {
+
             addDefault("inventories." + inv.getId() + ".title", inv.getDefaultTitle());
             if (get("inventories." + inv.getId() + ".icons") instanceof List) {
                 HeadsPlus.get().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");

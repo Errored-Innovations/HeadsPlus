@@ -50,7 +50,6 @@ public class Stats extends Icon {
                     new HPUtils.PlaceholderInfo("{sections}",  hpch.getSections().size(), true),
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
-
         }
         meta.setLore(lore);
         item.setItemMeta(meta);

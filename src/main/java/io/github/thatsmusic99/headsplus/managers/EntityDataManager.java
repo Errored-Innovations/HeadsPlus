@@ -8,14 +8,84 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class EntityDataManager {
 
-    public static final List<String> ableEntities = new ArrayList<>();
+    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList(
+            "AXOLOTL",
+            "BAT",
+            "BLAZE",
+            "BEE",
+            "CAT",
+            "CAVE_SPIDER",
+            "CHICKEN",
+            "COD",
+            "COW",
+            "CREEPER",
+            "DOLPHIN",
+            "DONKEY",
+            "DROWNED",
+            "ELDER_GUARDIAN",
+            "ENDER_DRAGON",
+            "ENDERMAN",
+            "ENDERMITE",
+            "EVOKER",
+            "FOX",
+            "GHAST",
+            "GIANT",
+            "GLOW_SQUID",
+            "GOAT",
+            "GUARDIAN",
+            "HOGLIN",
+            "HORSE",
+            "HUSK",
+            "IRON_GOLEM",
+            "LLAMA",
+            "MAGMA_CUBE",
+            "MULE",
+            "MUSHROOM_COW",
+            "OCELOT",
+            "PANDA",
+            "PARROT",
+            "PHANTOM",
+            "PIG",
+            "PIGLIN",
+            "PIGLIN_BRUTE",
+            "PIG_ZOMBIE",
+            "PILLAGER",
+            "POLAR_BEAR",
+            "PUFFERFISH",
+            "RABBIT",
+            "RAVAGER",
+            "SALMON",
+            "SHEEP",
+            "SHULKER",
+            "SILVERFISH",
+            "SKELETON",
+            "SKELETON_HORSE",
+            "SLIME",
+            "SNOWMAN",
+            "SPIDER",
+            "SQUID",
+            "STRAY",
+            "STRIDER",
+            "TRADER_LLAMA",
+            "TROPICAL_FISH",
+            "TURTLE",
+            "VEX",
+            "VILLAGER",
+            "VINDICATOR",
+            "WANDERING_TRADER",
+            "WITCH",
+            "WITHER",
+            "WITHER_SKELETON",
+            "WOLF",
+            "ZOGLIN",
+            "ZOMBIE",
+            "ZOMBIE_HORSE",
+            "ZOMBIE_VILLAGER",
+            "ZOMBIFIED_PIGLIN"));
 
 
     private static final LinkedHashMap<String, List<HeadManager.HeadInfo>> storedHeads = new LinkedHashMap<>();
@@ -34,7 +104,6 @@ public class EntityDataManager {
             @Override
             public void run() {
                 try {
-
                     storedHeads.clear();
                     sellheadCache.clear();
                     setupHeads();

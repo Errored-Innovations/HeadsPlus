@@ -19,11 +19,9 @@ import java.util.List;
 @CommandInfo(commandname = "xp", permission = "headsplus.maincommand.xp", subcommand = "XP", usage = "/hp xp <Player Name> [View|Add|Subtract|Reset] [Amount]", maincommand = true)
 public class XPCommand implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.hp.xp", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.hp.xp", sender);
     }
 
     @Override
@@ -37,13 +35,13 @@ public class XPCommand implements IHeadsPlusCommand {
                             if (args.length > 3) {
                                 int amount = HPUtils.isInt(args[3]);
                                 player.addXp(amount);
-                                hpc.sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
+                                HeadsPlusMessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
                                 return true;
                             } else {
-                                hpc.sendMessage("commands.errors.invalid-args", sender);
+                                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
                             }
                         } else {
-                            hpc.sendMessage("commands.errors.no-perm", sender);
+                            HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                         }
                         break;
                     case "subtract":
@@ -51,33 +49,33 @@ public class XPCommand implements IHeadsPlusCommand {
                             if (args.length > 3) {
                                 int amount = HPUtils.isInt(args[3]);
                                 if (amount > player.getXp() && !MainConfig.get().getMiscellaneous().ALLOW_NEGATIVE_XP) {
-                                    hpc.sendMessage("commands.xp.negative-xp", sender);
+                                    HeadsPlusMessagesManager.get().sendMessage("commands.xp.negative-xp", sender);
                                     return true;
                                 }
                                 player.removeXp(amount);
-                                hpc.sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
+                                HeadsPlusMessagesManager.get().sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()), "{amount}", args[3]);
                             } else {
-                                hpc.sendMessage("commands.errors.invalid-args", sender);
+                                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
                             }
                         } else {
-                            hpc.sendMessage("commands.errors.no-perm", sender);
+                            HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                         }
                         break;
                     case "reset":
                         if (sender.hasPermission("headsplus.maincommand.reset")) {
                             player.setXp(0);
-                            hpc.sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
+                            HeadsPlusMessagesManager.get().sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
                         } else {
-                            hpc.sendMessage("commands.errors.no-perm", sender);
+                            HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                         }
                         break;
                     case "view":
                         if (sender.hasPermission("headsplus.maincommand.xp.view")) {
-                            hpc.sendMessage("commands.xp.current-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()));
+                            HeadsPlusMessagesManager.get().sendMessage("commands.xp.current-xp", sender, "{player}", args[1], "{xp}", String.valueOf(player.getXp()));
                         }
                         break;
                     default:
-                        hpc.sendMessage("commands.errors.invalid-args", sender);
+                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
                         break;
                 }
             }

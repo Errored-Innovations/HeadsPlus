@@ -20,11 +20,9 @@ import java.util.Random;
 @CommandInfo(commandname = "tests", permission = "headsplus.maincommand.tests", subcommand = "Tests", usage = "/hp tests <Entity type> <Amount>", maincommand = true)
 public class TestsCommand implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-
     @Override
     public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.tests", sender);
+        return HeadsPlusMessagesManager.get().getString("descriptions.tests", sender);
     }
 
     @Override
@@ -34,7 +32,7 @@ public class TestsCommand implements IHeadsPlusCommand {
                 if (args.length > 2) {
                     int amount = HPUtils.isInt(args[2]);
                     String type = args[1].toLowerCase().replaceAll("_", "");
-                    hpc.sendMessage("commands.tests.running-tests", sender);
+                    HeadsPlusMessagesManager.get().sendMessage("commands.tests.running-tests", sender);
                     double chance = ConfigMobs.get().getDouble(type + ".chance");
                     Random rand = new Random();
                     new BukkitRunnable() {
@@ -47,19 +45,19 @@ public class TestsCommand implements IHeadsPlusCommand {
                                     successes++;
                                 }
                             }
-                            hpc.sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+                            HeadsPlusMessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
                         }
                     }.runTaskAsynchronously(HeadsPlus.get());
                     return true;
 
                 } else {
-                    hpc.sendMessage("commands.errors.invalid-args", sender);
+                    HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
                 }
             } else {
-                hpc.sendMessage("commands.errors.invalid-args", sender);
+                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             }
         } else {
-            hpc.sendMessage("commands.errors.invalid-args", sender);
+            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
         }
 
 

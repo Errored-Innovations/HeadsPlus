@@ -66,7 +66,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
             } else {
                 if (cs.getName().equalsIgnoreCase(p.getName())) {
                     // Not a player
-                    HeadsPlusMessagesManager.get().sendMessage("commands.profile.cant-view-data", cs);
+                    cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
                 } else {
                     cs.sendMessage(prof(p, cs));
                 }

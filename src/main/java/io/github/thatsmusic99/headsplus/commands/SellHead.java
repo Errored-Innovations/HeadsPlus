@@ -43,7 +43,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
 	public SellHead(HeadsPlus hp) {
 	    headIds.clear();
-	    useCases = MainConfig.get().getBoolean("case-sensitive-names");
+	    useCases = MainConfig.get().getSellingHeads().CASE_INSENSITIVE;
 	    for (String entity : EntityDataManager.ableEntities) {
 	        registerHeadID(entity);
         }

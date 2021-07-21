@@ -10,12 +10,6 @@ import java.util.List;
 
 public class MainConfig extends HPConfig {
 
-    Perks perks = new Perks();
-    SelectorList whitelist_worlds = new SelectorList();
-    SelectorList blacklist_worlds = new SelectorList();
-    SelectorList whitelist_heads = new SelectorList();
-    SelectorList blacklist_heads = new SelectorList();
-
     private MainFeatures mainFeatures;
     private MySQL mySQL;
     private MobDrops mobDrops;
@@ -206,6 +200,7 @@ public class MainConfig extends HPConfig {
         getConfig().addDefault("plugin.autograb.title", "&8[&6{player}&8]");
         getConfig().addDefault("plugin.autograb.price", "default");
         getConfig().addDefault("plugin.perks.interact.middle-click-head", true);
+>>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
         config.addDefault("plugin.perks.interact.click-head", true);
         config.addDefault("plugin.perks.xp.allow-negative", false);
         config.addDefault("plugin.perks.ascii-art", true);
@@ -276,15 +271,15 @@ public class MainConfig extends HPConfig {
         whitelist_heads.list.clear();
         blacklist_heads.list.clear();
 
-        ConfigurationSection l = getConfig().getConfigurationSection("blacklist.world");
+        ConfigurationSection l = config.getConfigurationSection("blacklist.world");
         blacklist_worlds.list.addAll(l.getStringList("list"));
         blacklist_worlds.enabled = l.getBoolean("enabled");
 
-        l = getConfig().getConfigurationSection("whitelist.world");
+        l = config.getConfigurationSection("whitelist.world");
         whitelist_worlds.list.addAll(l.getStringList("list"));
         whitelist_worlds.enabled = l.getBoolean("enabled");
 
-        l = getConfig().getConfigurationSection("blacklist.default");
+        l = config.getConfigurationSection("blacklist.default");
         blacklist_heads.list.addAll(l.getStringList("list"));
         blacklist_heads.enabled = l.getBoolean("enabled");
 
@@ -323,6 +318,12 @@ public class MainConfig extends HPConfig {
         perks.middle_click_in = p.getBoolean("interact.middle-click-head");
         perks.click_in = p.getBoolean("interact.click-head");
         perks.negative_xp = p.getBoolean("xp.allow-negative");
+<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
+    }
+
+    public ConfigurationSection getMechanics() {
+        return config.getConfigurationSection("plugin.mechanics");
+=======
     } */
 
     @Override
@@ -348,31 +349,6 @@ public class MainConfig extends HPConfig {
     @Deprecated
     public ConfigSection getMechanics() {
         return getConfigSection("plugin.mechanics");
-    }
-
-    @Deprecated
-    public Perks getPerks() {
-        return perks;
-    }
-
-    @Deprecated
-    public SelectorList getWorldBlacklist() {
-        return blacklist_worlds;
-    }
-
-    @Deprecated
-    public SelectorList getWorldWhitelist() {
-        return whitelist_worlds;
-    }
-
-    @Deprecated
-    public SelectorList getHeadsBlacklist() {
-        return blacklist_heads;
-    }
-
-    @Deprecated
-    public SelectorList getHeadsWhitelist() {
-        return whitelist_heads;
     }
 
     public MainFeatures getMainFeatures() {
@@ -433,7 +409,6 @@ public class MainConfig extends HPConfig {
         }
 
     }
-
 
     public class MainFeatures {
         public boolean SELL_HEADS = getBoolean("sell-heads"),
@@ -525,22 +500,5 @@ public class MainConfig extends HPConfig {
                 SMITE_PLAYER = getBoolean("smite-player"),
                 SUPPRESS_GUI_WARNINGS = getBoolean("suppress-gui-warnings"),
                 SUPPRESS_MESSAGES_DURING_SEARCH = getBoolean("suppress-messages-during-search");
-    }
-
-    public static class Perks {
-
-        public final List<String> drops_entities_requiring_killer = new ArrayList<>();
-        public final List<String> drops_ignore_players = new ArrayList<>();
-        public boolean drops_needs_killer, ascii, middle_click_in, click_in;
-        public boolean sell_heads, drop_heads, craft_heads, disable_crafting, heads_selector, challenges, leaderboards, levels, player_death_messages, smite_on_head, mask_powerups;
-        public final List<String> death_messages = new ArrayList<>();
-        public boolean pvp_player_balance_competition, negative_xp, use_killer_balance;
-        public double pvp_percentage_lost, pvp_balance_for_head;
-    }
-
-    public static class SelectorList {
-
-        public boolean enabled;
-        public final List<String> list = new ArrayList<>();
     }
 }
