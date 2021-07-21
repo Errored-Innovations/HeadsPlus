@@ -17,7 +17,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "heads",
         permission = "headsplus.heads",
-        subcommand = "Heads",
         maincommand = false,
         usage = "/heads",
         descriptionPath = "descriptions.heads"

@@ -20,7 +20,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "reload",
         permission = "headsplus.maincommand.reload",
-        subcommand = "reload",
         maincommand = true,
         usage = "/hp reload",
         descriptionPath = "descriptions.hp.reload"

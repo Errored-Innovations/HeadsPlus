@@ -19,7 +19,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "xp",
         permission = "headsplus.maincommand.xp",
-        subcommand = "XP",
         usage = "/hp xp <Player Name> [View|Add|Subtract|Reset] [Amount]",
         maincommand = true,
         descriptionPath = "descriptions.hp.xp"

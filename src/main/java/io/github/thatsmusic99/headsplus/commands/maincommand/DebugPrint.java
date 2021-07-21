@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 @CommandInfo(
         commandname = "debug",
         permission = "headsplus.maincommand.debug",
-        subcommand = "Debug",
         maincommand = true,
         usage = "/hp debug <dump|head|player|clearim|item|delete|save|transfer> <Player IGN>|<Database>",
         descriptionPath = "descriptions.hp.debug"

@@ -21,7 +21,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "head",
         permission = "headsplus.head",
-        subcommand = "Head",
         maincommand = false,
         usage = "/head <IGN> [Player]",
         descriptionPath = "descriptions.head")

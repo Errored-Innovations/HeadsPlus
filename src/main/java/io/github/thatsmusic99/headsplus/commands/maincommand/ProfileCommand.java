@@ -21,7 +21,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "profile",
         permission = "headsplus.maincommand.profile",
-        subcommand = "Profile",
         maincommand = true,
         usage = "/hp profile [Player]",
         descriptionPath = "descriptions.hp.profile"

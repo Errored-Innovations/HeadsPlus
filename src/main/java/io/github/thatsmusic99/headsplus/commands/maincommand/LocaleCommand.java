@@ -19,7 +19,6 @@ import java.util.Set;
 @CommandInfo(
         commandname = "locale",
         permission = "headsplus.maincommand.locale",
-        subcommand = "Locale",
         maincommand = true,
         usage = "/hp locale <Locale|Refresh> [Player]",
         descriptionPath = "descriptions.hp.locale"

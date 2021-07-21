@@ -17,7 +17,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "hpc",
         permission = "headsplus.challenges",
-        subcommand = "Hpc",
         maincommand = false,
         usage = "/hpc",
         descriptionPath = "descriptions.hpc")

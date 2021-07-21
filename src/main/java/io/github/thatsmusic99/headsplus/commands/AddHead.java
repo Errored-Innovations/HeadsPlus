@@ -27,7 +27,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "addhead",
         permission = "headsplus.addhead",
-        subcommand = "addhead",
         maincommand = false,
         usage = "/addhead [player]",
         descriptionPath = "descriptions.addhead")

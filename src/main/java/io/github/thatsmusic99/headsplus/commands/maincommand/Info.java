@@ -13,7 +13,6 @@ import java.util.List;
 @CommandInfo(
 		commandname = "info",
 		permission = "headsplus.maincommand.info",
-		subcommand = "Info",
 		maincommand = true,
 		usage = "/hp info",
 		descriptionPath = "descriptions.hp.info"

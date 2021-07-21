@@ -16,7 +16,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "help",
         permission = "headsplus.maincommand",
-        subcommand = "Help",
         maincommand = true,
         usage = "/hp <help|Page No.> [Page No.]",
         descriptionPath = "descriptions.hp.help"
@@ -83,7 +82,7 @@ public class HelpMenu implements IHeadsPlusCommand {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
                 if (!sender.hasPermission(command.permission())) continue;
                 if (!command.maincommand()) continue;
-                commands.add(command.subcommand());
+                commands.add(command.commandname());
             }
             List<String> results = new ArrayList<>();
             StringUtil.copyPartialMatches(args[1], commands, results);

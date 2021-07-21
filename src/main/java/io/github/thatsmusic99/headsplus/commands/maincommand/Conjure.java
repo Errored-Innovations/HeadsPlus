@@ -18,7 +18,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "conjure",
         permission = "headsplus.maincommand.conjure",
-        subcommand = "Conjure",
         maincommand = true,
         usage = "/hp conjure <Head ID> [Amount] [Player]",
         descriptionPath = "descriptions.hp.conjure"

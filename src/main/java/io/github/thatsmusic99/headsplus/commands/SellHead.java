@@ -29,7 +29,6 @@ import java.util.UUID;
 @CommandInfo(
         commandname = "sellhead",
         permission = "headsplus.sellhead",
-        subcommand = "sellead",
         maincommand = false,
         usage = "/sellhead [All|Head ID] [#]",
         descriptionPath = "descriptions.sellhead"

@@ -20,7 +20,6 @@ import java.util.Random;
 @CommandInfo(
         commandname = "tests",
         permission = "headsplus.maincommand.tests",
-        subcommand = "Tests",
         usage = "/hp tests <Entity type> <Amount>",
         maincommand = true,
         descriptionPath = "descriptions.tests"

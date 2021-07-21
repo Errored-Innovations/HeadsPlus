@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CommandInfo(
-        commandname = "complete", permission = "headsplus.maincommand.complete", subcommand = "complete", usage = "/hp complete <Challenge name> [Player]", descriptionPath = "descriptions.hp.complete", maincommand = true)
+        commandname = "complete", permission = "headsplus.maincommand.complete", usage = "/hp complete <Challenge name> [Player]", descriptionPath = "descriptions.hp.complete", maincommand = true)
 public class Complete implements IHeadsPlusCommand {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();

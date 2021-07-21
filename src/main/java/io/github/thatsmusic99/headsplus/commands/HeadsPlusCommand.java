@@ -75,7 +75,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
                 CommandInfo command = key.getClass().getAnnotation(CommandInfo.class);
                 if (cs.hasPermission(command.permission())) {
                     if (command.maincommand()) {
-                        c.add(command.subcommand());
+                        c.add(command.commandname());
                     }
                 }
             }

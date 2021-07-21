@@ -16,7 +16,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "restore",
         permission = "headsplus.maincommand.restore",
-        subcommand = "restore",
         maincommand = true,
         usage = "/hp restore <Head Name>",
         descriptionPath = "descriptions.hp.restore"

@@ -18,7 +18,6 @@ import java.util.List;
 @CommandInfo(
         commandname = "hplb",
         permission = "headsplus.leaderboards",
-        subcommand = "Hplb",
         maincommand = false,
         usage = "/hplb [Hunting|Selling|Crafting|Page No.] [ID|Page No.] [Page No.] ",
         descriptionPath = "descriptions.hplb")
