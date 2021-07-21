@@ -21,6 +21,7 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 	    HeadsPlus hp = HeadsPlus.get();
 	    Player player = e.getPlayer();
 	    addData("player", player.getName());
+	    // TODO - you know what it is!
 		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
 		    if (addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) {
                 if (addData("has-update", HeadsPlus.getUpdate() != null)) {

@@ -471,7 +471,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("hplb", new LeaderboardsCommand());
         commands.put("myhead", new MyHead());
         commands.put("sellhead", new SellHead(this));
-        commands.put("debug", new DebugPrint(this));
+        commands.put("debug", new DebugPrint());
         commands.put("conjure", new Conjure());
         commands.put("complete", new Complete());
         commands.put("tests", new TestsCommand());

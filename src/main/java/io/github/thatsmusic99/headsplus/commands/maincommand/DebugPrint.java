@@ -42,17 +42,11 @@ import java.util.logging.Logger;
 @Deprecated // Also needs a cleanup
 public class DebugPrint implements IHeadsPlusCommand {
 
-    private static HeadsPlus hp;
-    private static HeadsPlusMessagesManager hpc;
-
-    public DebugPrint(HeadsPlus hp) {
-        DebugPrint.hp = hp;
-        hpc = HeadsPlusMessagesManager.get();
-    }
+    private static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
         try {
-            Logger log = hp.getLogger();
+            Logger log = HeadsPlus.get().getLogger();
             e.printStackTrace();
             if (command && sender != null) {
                 hpc.sendMessage("commands.errors.cmd-fail", sender);
@@ -71,10 +65,6 @@ public class DebugPrint implements IHeadsPlusCommand {
             e.printStackTrace();
             ex.printStackTrace();
         }
-    }
-
-    public DebugPrint() {
-
     }
 
     @Override
@@ -130,7 +120,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                         if (args.length > 2) {
                             HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
                             if (pl != null) {
-                                hp.getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
+                                // TODO - no no not on the main thread
+                                HeadsPlus.get().getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
                                 sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
                             } else {
                                 hpc.sendMessage("commands.profile.no-data", sender);
@@ -141,12 +132,12 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "save":
                         try {
-                            hp.getFavourites().save();
+                            HeadsPlus.get().getFavourites().save();
                         } catch (IOException e) {
                             DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
                         }
                         try {
-                            hp.getScores().save();
+                            HeadsPlus.get().getScores().save();
                         } catch (IOException e) {
                             DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
                         }
@@ -154,7 +145,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "transfer":
                         if (args.length > 2) {
-                            if (hp.isConnectedToMySQLDatabase()) {
+                            if (HeadsPlus.get().isConnectedToMySQLDatabase()) {
                                 if (args[2].equalsIgnoreCase("database")) {
                                     sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
                                     new BukkitRunnable() {
