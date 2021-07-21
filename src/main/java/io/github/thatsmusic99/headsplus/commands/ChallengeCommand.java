@@ -19,8 +19,8 @@ import java.util.List;
         permission = "headsplus.challenges",
         subcommand = "Hpc",
         maincommand = false,
-        usage = "/hpc"
-)
+        usage = "/hpc",
+        descriptionPath = "descriptions.hpc")
 public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
@@ -46,11 +46,6 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
             DebugPrint.createReport(e, "Command (Challenges/HPC)", true, cs);
         }
         return true;
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hpc", sender);
     }
 
     @Override

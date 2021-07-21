@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class HeadManager {
@@ -51,6 +48,10 @@ public class HeadManager {
             key = key.substring(3);
         }
         return heads.getOrDefault(key, new HeadInfo(null)).clone();
+    }
+
+    public Set<String> getKeys() {
+        return heads.keySet();
     }
 
     public static class HeadInfo implements Cloneable {

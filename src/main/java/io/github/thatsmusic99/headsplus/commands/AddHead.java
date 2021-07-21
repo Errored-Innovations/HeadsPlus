@@ -29,8 +29,8 @@ import java.util.List;
         permission = "headsplus.addhead",
         subcommand = "addhead",
         maincommand = false,
-        usage = "/addhead [player]"
-)
+        usage = "/addhead [player]",
+        descriptionPath = "descriptions.addhead")
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
@@ -102,11 +102,6 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
             }
         }
         return true;
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.addhead", sender);
     }
 
     @Override

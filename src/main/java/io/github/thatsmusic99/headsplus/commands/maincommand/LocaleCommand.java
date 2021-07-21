@@ -21,17 +21,13 @@ import java.util.Set;
         permission = "headsplus.maincommand.locale",
         subcommand = "Locale",
         maincommand = true,
-        usage = "/hp locale <Locale|Refresh> [Player]"
+        usage = "/hp locale <Locale|Refresh> [Player]",
+        descriptionPath = "descriptions.hp.locale"
 )
 public class LocaleCommand implements IHeadsPlusCommand {
 
     private final HeadsPlusMessagesManager messages = HeadsPlusMessagesManager.get();
     private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return messages.getString("descriptions.hp.locale", sender);
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {

@@ -20,8 +20,8 @@ import java.util.List;
         permission = "headsplus.leaderboards",
         subcommand = "Hplb",
         maincommand = false,
-        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [ID|Page No.] [Page No.] "
-)
+        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [ID|Page No.] [Page No.] ",
+        descriptionPath = "descriptions.hplb")
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     @Override
@@ -74,11 +74,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
     private String getLeaderboard(CommandSender sender, String sec, int page, String part) {
         return ConfigTextMenus.LeaderBoardTranslator.translate(sender, sec, part, page);
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hplb", sender);
     }
 
     @Override

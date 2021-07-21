@@ -24,8 +24,8 @@ import java.util.List;
         permission = "headsplus.head",
         subcommand = "Head",
         maincommand = false,
-        usage = "/head <IGN> [Player]"
-)
+        usage = "/head <IGN> [Player]",
+        descriptionPath = "descriptions.head")
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final HeadsPlus hp = HeadsPlus.get();
@@ -118,11 +118,6 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
         }
 	    */
         giveHead(p, args[0]);
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.head", sender);
     }
 
     @Override

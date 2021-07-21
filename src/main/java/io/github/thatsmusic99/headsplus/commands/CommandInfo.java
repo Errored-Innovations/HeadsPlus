@@ -12,6 +12,7 @@ public @interface CommandInfo {
     String permission();
     String subcommand();
     String usage();
+    String descriptionPath();
     boolean maincommand();
 
 }

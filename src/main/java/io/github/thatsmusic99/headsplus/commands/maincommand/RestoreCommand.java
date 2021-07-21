@@ -18,13 +18,10 @@ import java.util.List;
         permission = "headsplus.maincommand.restore",
         subcommand = "restore",
         maincommand = true,
-        usage = "/hp restore <Head Name>"
+        usage = "/hp restore <Head Name>",
+        descriptionPath = "descriptions.hp.restore"
 )
 public class RestoreCommand implements IHeadsPlusCommand {
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.restore", sender);
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {

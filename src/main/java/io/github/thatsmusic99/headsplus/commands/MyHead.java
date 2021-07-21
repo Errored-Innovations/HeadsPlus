@@ -24,8 +24,8 @@ import java.util.List;
         permission = "headsplus.myhead",
         subcommand = "Myhead",
         maincommand = false,
-        usage = "/myhead"
-)
+        usage = "/myhead",
+        descriptionPath = "descriptions.myhead")
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
@@ -141,11 +141,6 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.myhead", sender);
     }
 
     @Override

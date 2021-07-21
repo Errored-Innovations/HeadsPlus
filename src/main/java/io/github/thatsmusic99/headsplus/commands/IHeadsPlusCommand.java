@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Bukkit;
@@ -15,7 +16,10 @@ import java.util.List;
 
 public interface IHeadsPlusCommand {
 
-    String getCmdDescription(CommandSender sender);
+    default String getCmdDescription(CommandSender sender) {
+        CommandInfo command = getClass().getAnnotation(CommandInfo.class);
+        return HeadsPlusMessagesManager.get().getString(command.descriptionPath(), sender);
+    }
 
     boolean fire(String[] args, CommandSender sender);
 

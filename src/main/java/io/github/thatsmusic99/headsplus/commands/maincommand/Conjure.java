@@ -21,17 +21,13 @@ import java.util.List;
         permission = "headsplus.maincommand.conjure",
         subcommand = "Conjure",
         maincommand = true,
-        usage = "/hp conjure <Entity> [Amount] [Player] [Index] [Colour]"
+        usage = "/hp conjure <Head ID> [Amount] [Player]",
+        descriptionPath = "descriptions.hp.conjure"
 )
 public class Conjure implements IHeadsPlusCommand {
 
     // F
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-
-    @Override
-    public String getCmdDescription(CommandSender cs) {
-        return hpc.getString("descriptions.hp.conjure", cs);
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {

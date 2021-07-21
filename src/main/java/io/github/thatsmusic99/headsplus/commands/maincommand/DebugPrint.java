@@ -37,7 +37,8 @@ import java.util.logging.Logger;
         permission = "headsplus.maincommand.debug",
         subcommand = "Debug",
         maincommand = true,
-        usage = "/hp debug <dump|head|player|clearim|item|delete|save|transfer> <Player IGN>|<Database>"
+        usage = "/hp debug <dump|head|player|clearim|item|delete|save|transfer> <Player IGN>|<Database>",
+        descriptionPath = "descriptions.hp.debug"
 )
 @Deprecated // Also needs a cleanup
 public class DebugPrint implements IHeadsPlusCommand {
@@ -75,11 +76,6 @@ public class DebugPrint implements IHeadsPlusCommand {
 
     public DebugPrint() {
 
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.hp.debug", sender);
     }
 
     @Override

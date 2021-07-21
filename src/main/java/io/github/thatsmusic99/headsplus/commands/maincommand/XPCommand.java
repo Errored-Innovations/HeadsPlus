@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@CommandInfo(commandname = "xp", permission = "headsplus.maincommand.xp", subcommand = "XP", usage = "/hp xp <Player Name> [View|Add|Subtract|Reset] [Amount]", maincommand = true)
+@CommandInfo(
+        commandname = "xp",
+        permission = "headsplus.maincommand.xp",
+        subcommand = "XP",
+        usage = "/hp xp <Player Name> [View|Add|Subtract|Reset] [Amount]",
+        maincommand = true,
+        descriptionPath = "descriptions.hp.xp"
+)
 public class XPCommand implements IHeadsPlusCommand {
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.xp", sender);
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {

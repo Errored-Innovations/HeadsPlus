@@ -23,7 +23,8 @@ import java.util.List;
         permission = "headsplus.maincommand.profile",
         subcommand = "Profile",
         maincommand = true,
-        usage = "/hp profile [Player]"
+        usage = "/hp profile [Player]",
+        descriptionPath = "descriptions.hp.profile"
 )
 public class ProfileCommand implements IHeadsPlusCommand {
 
@@ -35,11 +36,6 @@ public class ProfileCommand implements IHeadsPlusCommand {
             ex.printStackTrace();
             return HeadsPlusMessagesManager.get().getString("commands.errors.no-data", sender);
         }
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.profile", sender);
     }
 
     @Override

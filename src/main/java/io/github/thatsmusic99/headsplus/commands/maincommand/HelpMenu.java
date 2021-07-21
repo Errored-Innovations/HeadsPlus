@@ -19,7 +19,8 @@ import java.util.List;
         permission = "headsplus.maincommand",
         subcommand = "Help",
         maincommand = true,
-        usage = "/hp <help|Page No.> [Page No.]"
+        usage = "/hp <help|Page No.> [Page No.]",
+        descriptionPath = "descriptions.hp.help"
 )
 public class HelpMenu implements IHeadsPlusCommand {
 
@@ -49,10 +50,6 @@ public class HelpMenu implements IHeadsPlusCommand {
         }
     }
 
-	@Override
-	public String getCmdDescription(CommandSender cs) {
-		return HeadsPlusMessagesManager.get().getString("descriptions.hp.help", cs);
-	}
 
 	@Override
 	public boolean fire(String[] args, CommandSender sender) {

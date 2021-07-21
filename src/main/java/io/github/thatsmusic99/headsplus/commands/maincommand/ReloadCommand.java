@@ -22,14 +22,10 @@ import java.util.List;
         permission = "headsplus.maincommand.reload",
         subcommand = "reload",
         maincommand = true,
-        usage = "/hp reload"
+        usage = "/hp reload",
+        descriptionPath = "descriptions.hp.reload"
 )
 public class ReloadCommand implements IHeadsPlusCommand {
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.hp.reload");
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {

@@ -19,7 +19,8 @@ import java.util.List;
         permission = "headsplus.heads",
         subcommand = "Heads",
         maincommand = false,
-        usage = "/heads"
+        usage = "/heads",
+        descriptionPath = "descriptions.heads"
 )
 public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
@@ -47,11 +48,6 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
             DebugPrint.createReport(e, "Command (heads)", true, cs);
         }
         return false;
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.heads", sender);
     }
 
     @Override

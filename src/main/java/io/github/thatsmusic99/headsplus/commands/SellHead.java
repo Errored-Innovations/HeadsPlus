@@ -31,7 +31,8 @@ import java.util.UUID;
         permission = "headsplus.sellhead",
         subcommand = "sellead",
         maincommand = false,
-        usage = "/sellhead [All|Head ID] [#]"
+        usage = "/sellhead [All|Head ID] [#]",
+        descriptionPath = "descriptions.sellhead"
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
@@ -233,11 +234,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	        name = name.toLowerCase();
         }
 	    return headIds.contains(name);
-    }
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.sellhead", sender);
     }
 
     @Override

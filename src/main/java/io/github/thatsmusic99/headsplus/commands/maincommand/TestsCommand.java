@@ -17,13 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@CommandInfo(commandname = "tests", permission = "headsplus.maincommand.tests", subcommand = "Tests", usage = "/hp tests <Entity type> <Amount>", maincommand = true)
+@CommandInfo(
+        commandname = "tests",
+        permission = "headsplus.maincommand.tests",
+        subcommand = "Tests",
+        usage = "/hp tests <Entity type> <Amount>",
+        maincommand = true,
+        descriptionPath = "descriptions.tests"
+)
 public class TestsCommand implements IHeadsPlusCommand {
-
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlusMessagesManager.get().getString("descriptions.tests", sender);
-    }
 
     @Override
     public boolean fire(String[] args, CommandSender sender) {
