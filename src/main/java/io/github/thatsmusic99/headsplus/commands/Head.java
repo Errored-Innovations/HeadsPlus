@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 @CommandInfo(
@@ -158,10 +156,6 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 	                    if (CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
 	                        giveH(args, sender, p);
 	                        return true;
-	                    } else if (args[0].startsWith("http")) {
-                            String texture = new String(Base64.getEncoder().encode(String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", args[0]).getBytes()));
-                            p.getInventory().addItem(new HeadsPlusAPI().createSkull(texture, ":)"));
-                            return true;
 	                    }
 	                } else {
 	                    hpc.sendMessage("commands.errors.not-a-player", sender);

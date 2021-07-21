@@ -174,7 +174,7 @@ public class HPExpansion extends PlaceholderExpansion {
                     if (player.getPlayer() == null) return null;
                     return challenge.getReward().getRewardString(player.getPlayer());
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player.getPlayer()) : "";
+                    return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }

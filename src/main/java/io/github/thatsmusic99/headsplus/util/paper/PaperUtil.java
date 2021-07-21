@@ -16,8 +16,8 @@ public class PaperUtil implements PaperImpl {
     private static PaperUtil instance;
 
     public PaperUtil() {
-        PaperImpl impl;
         instance = this;
+        PaperImpl impl;
         if (PaperLib.isPaper()) {
             try {
                 impl = new ActualPaperImpl();

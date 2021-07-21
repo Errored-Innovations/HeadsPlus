@@ -6,7 +6,7 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>6.11.7</version>
+    <version>6.11.8</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
@@ -113,13 +113,11 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>
             <version>v2.0.0-BETA-1</version>
         </dependency>
-
     </dependencies>
 
     <!-- Repositories -->

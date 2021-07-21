@@ -37,9 +37,7 @@ public abstract class Icon {
     }
 
     public Icon(Player player) {
-        initItem(getId());
-        initNameAndLore(getId(), player);
-        PersistenceManager.get().makeIcon(item);
+
     }
 
     public Icon() {
@@ -48,9 +46,7 @@ public abstract class Icon {
 
     protected void initItem(String id) {
         try {
-            item = new ItemStack(Material.valueOf(ConfigInventories.get().getString("icons." + id + ".material")),
-                    1,
-                    (byte) ConfigInventories.get().getInteger("icons." + id + ".data-value"));
+            item = new ItemStack(Material.valueOf(ConfigInventories.get().getString("icons." + id + ".material")));
 
         } catch (NullPointerException ex) {
             hp.getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists! (Error code: 8)");

@@ -193,6 +193,8 @@ public class HPUtils {
                     return false;
                 }
             }
+        } else if (!e.getKiller().hasPermission("headsplus.drops")) {
+            return false;
         }
         // Whitelist checks
         if (c.getWorldWhitelist().enabled) {

@@ -35,7 +35,6 @@ public class Challenge extends Content {
                     if (challenge.canComplete(player)) {
                         challenge.complete(player);
                         item.setType(challenge.getCompleteIcon().getType());
-                        item.setDurability(challenge.getCompleteIcon().getDurability());
                         initNameAndLore("challenge", player);
                         event.getInventory().setItem(event.getSlot(), item);
                     } else {

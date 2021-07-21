@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -48,6 +49,8 @@ public class HeadsPlusMessagesManager {
                 locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
             }
             players = new HashMap<>();
+        } else {
+            locales = new HashMap<>();
         }
         // Main config for non-player entities such as console
         try {
@@ -900,6 +903,10 @@ public class HeadsPlusMessagesManager {
         }
     }
 
+    public static HeadsPlusMessagesManager get() {
+        return instance;
+    }
+
     public String getString(String path) {
         String str = config.getString(path);
         if (str == null) return "";
@@ -957,10 +964,14 @@ public class HeadsPlusMessagesManager {
     }
 
     public String getString(String path, CommandSender cs) {
-        return cs instanceof Player ? getString(path, (Player) cs) : getString(path);
+        return cs instanceof Player ? getString(path, (OfflinePlayer) cs) : getString(path);
     }
 
     public String getString(String path, Player player) {
+        return getString(path, (CommandSender) player);
+    }
+
+    public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
         YamlConfiguration config = HeadsPlusMessagesManager.config;
         if (MainConfig.get().getLocalisation().SMART_LOCALE) {
@@ -974,7 +985,19 @@ public class HeadsPlusMessagesManager {
         }
         String str = config.getString(path);
         if (str == null) return "";
-        return formatMsg(str, player.getPlayer());
+        str = str.replaceAll("\\{header}", config.getString("prefix"));
+        str = str.replaceAll("''", "'");
+        str = str.replaceAll("^'", "");
+        str = str.replaceAll("'$", "");
+        if (player.isOnline()) {
+            formatMsg(str, player.getPlayer());
+        }
+
+        if (HeadsPlus.get().getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            str = PlaceholderAPI.setPlaceholders(player, str);
+        }
+        str = ChatColor.translateAlternateColorCodes('&', str);
+        return str;
     }
 
     public void setPlayerLocale(Player player) {
@@ -1077,9 +1100,5 @@ public class HeadsPlusMessagesManager {
         } else {
             sender.sendMessage(str);
         }
-    }
-
-    public static HeadsPlusMessagesManager get() {
-        return instance;
     }
 }
