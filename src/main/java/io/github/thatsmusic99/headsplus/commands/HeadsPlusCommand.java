@@ -100,6 +100,6 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
-	    return HeadsPlus.get().getCommands().get(name);
+	    return HeadsPlus.get().getCommands().get(name.toLowerCase());
     }
 }
