@@ -6,7 +6,7 @@ import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
-import io.github.thatsmusic99.headsplus.util.DataManager;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

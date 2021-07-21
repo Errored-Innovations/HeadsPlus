@@ -5,7 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.util.DataManager;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -18,7 +18,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 

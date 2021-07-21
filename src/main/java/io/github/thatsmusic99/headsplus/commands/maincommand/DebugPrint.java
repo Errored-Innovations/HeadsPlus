@@ -11,7 +11,7 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.util.DataManager;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;

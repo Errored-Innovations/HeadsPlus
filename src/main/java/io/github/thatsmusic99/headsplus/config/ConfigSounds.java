@@ -9,6 +9,10 @@ public class ConfigSounds extends HPConfig {
         instance = this;
     }
 
+    public static ConfigSounds get() {
+        return instance;
+    }
+
     @Override
     public void loadDefaults() {
         for (Defaults d : Defaults.values()) {

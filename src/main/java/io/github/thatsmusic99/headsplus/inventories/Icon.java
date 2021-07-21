@@ -36,6 +36,10 @@ public abstract class Icon {
         PersistenceManager.get().makeIcon(item);
     }
 
+    public Icon(Player player) {
+
+    }
+
     public Icon() {
 
     }

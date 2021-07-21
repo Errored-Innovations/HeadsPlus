@@ -24,7 +24,7 @@ import java.util.List;
         maincommand = true)
 public class Complete implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
     public String getCmdDescription(CommandSender sender) {

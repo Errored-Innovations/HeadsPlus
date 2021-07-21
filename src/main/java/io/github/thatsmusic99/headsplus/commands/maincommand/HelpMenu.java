@@ -3,7 +3,8 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,10 +26,10 @@ public class HelpMenu implements IHeadsPlusCommand {
     // I
 
 	private void helpNoArgs(CommandSender sender) {
-        HeadsPlusConfigTextMenu.HelpMenuTranslator.translateHelpMenu(sender, 1);
+        ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, 1);
 	}
 	private void helpNo(CommandSender sender, String str) {
-        HeadsPlusConfigTextMenu.HelpMenuTranslator.translateHelpMenu(sender, Integer.parseInt(str));
+        ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, Integer.parseInt(str));
 	}
 
 	private void helpCmd(CommandSender cs, String cmdName) {
@@ -41,7 +42,7 @@ public class HelpMenu implements IHeadsPlusCommand {
                 }
             }
             if (pe != null) {
-                cs.sendMessage(HeadsPlusConfigTextMenu.HelpMenuTranslator.translateCommandHelp(pe, cs));
+                cs.sendMessage(ConfigTextMenus.HelpMenuTranslator.translateCommandHelp(pe, cs));
             } else {
                 helpNoArgs(cs);
             }
@@ -50,7 +51,7 @@ public class HelpMenu implements IHeadsPlusCommand {
 
 	@Override
 	public String getCmdDescription(CommandSender cs) {
-		return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.help", cs);
+		return HeadsPlusMessagesManager.get().getString("descriptions.hp.help", cs);
 	}
 
 	@Override

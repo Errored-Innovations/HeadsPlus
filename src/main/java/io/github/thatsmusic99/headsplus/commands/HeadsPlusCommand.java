@@ -17,7 +17,7 @@ import java.util.List;
 
 public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         try {

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.util;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 

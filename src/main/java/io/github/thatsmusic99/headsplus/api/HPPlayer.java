@@ -65,13 +65,13 @@ public class HPPlayer {
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
                 cachedLocale = loc.split(":")[0];
                 localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                hp.getMessagesConfig().setPlayerLocale(player, cachedLocale,  false);
+                HeadsPlusMessagesManager.get().setPlayerLocale(player, cachedLocale,  false);
             } else {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        hp.getMessagesConfig().setPlayerLocale(player);
-                        cachedLocale = hp.getMessagesConfig().getSetLocale(player);
+                        HeadsPlusMessagesManager.get().setPlayerLocale(player);
+                        cachedLocale = HeadsPlusMessagesManager.get().getSetLocale(player);
                         localeForced = false;
                         scores.setLocale(player.toString(), cachedLocale, false);
                     }
