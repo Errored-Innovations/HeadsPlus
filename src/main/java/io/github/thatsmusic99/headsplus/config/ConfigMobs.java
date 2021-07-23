@@ -281,7 +281,7 @@ public class ConfigMobs extends FeatureConfig {
 		return lore;
     }
 
-    public List<String> getLore(String name, double price, String killerName) {
+    public List<String> getPlayerLore(String name, double price, String killerName) {
 		List<String> lore = new ArrayList<>();
 		List<String> configLore = getList("player.lore", getStringList("defaults.lore"));
 
