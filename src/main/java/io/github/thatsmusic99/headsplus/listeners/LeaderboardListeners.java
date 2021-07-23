@@ -111,7 +111,7 @@ public class LeaderboardListeners implements Listener {
 
         @Override
         public boolean shouldEnable() {
-            return MainConfig.get().getMainFeatures().MOB_DROPS;
+            return MainConfig.get().getMainFeatures().PLAYER_DROPS;
         }
     }
 
