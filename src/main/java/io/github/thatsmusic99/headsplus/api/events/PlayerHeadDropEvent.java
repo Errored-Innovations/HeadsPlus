@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerHeadDropEvent extends EntityHeadDropEvent {
 
@@ -17,6 +18,7 @@ public class PlayerHeadDropEvent extends EntityHeadDropEvent {
         this.deadPlayer = deadPlayer;
     }
 
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }
