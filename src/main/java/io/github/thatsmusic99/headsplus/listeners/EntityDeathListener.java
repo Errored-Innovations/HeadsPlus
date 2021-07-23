@@ -64,18 +64,13 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(EntityDeathEvent.class, "EntityDeathEvent", this), HeadsPlus.get(), true);
 
-        int length = EntityDataManager.ableEntities.size();
-        String[] entities = new String[length];
-        for (int i = 0; i < length; i++) {
-            entities[i] = EntityDataManager.ableEntities.get(i);
-        }
-        addPossibleData("entity-type", entities);
+        addPossibleData("entity-type", EntityDataManager.ableEntities.toArray(new String[]{}));
 
         for (String key : Arrays.asList("enabled", "is-mythic-mob", "not-wg-restricted")) {
             addPossibleData(key, "true", "false");
         }
 
-        length = CreatureSpawnEvent.SpawnReason.values().length;
+        int length = CreatureSpawnEvent.SpawnReason.values().length;
         String[] reasons = new String[length];
         for (int i = 0; i < length; i++) {
             reasons[i] = CreatureSpawnEvent.SpawnReason.values()[i].name();
