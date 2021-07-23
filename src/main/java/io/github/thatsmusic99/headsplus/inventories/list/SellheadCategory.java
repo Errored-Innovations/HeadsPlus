@@ -38,7 +38,7 @@ public class SellheadCategory extends BaseInventory {
         switch (context.get("section")) { // ignore
             case "mobs":
                 for (String str : EntityDataManager.getSellheadCache().keySet()) {
-                    contents.add(new SellheadHead(EntityDataManager.getSellheadCache().get(str), str));
+                    contents.add(new SellheadHead(EntityDataManager.getSellheadCache().get(str), "mobs_" + str));
                 }
                 break;
             case "mining": // Guess what

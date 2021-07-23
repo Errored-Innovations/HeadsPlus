@@ -1,8 +1,10 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class SellableHeadsManager {
 
@@ -22,7 +24,12 @@ public class SellableHeadsManager {
     }
 
     public void registerPrice(String key, double price) {
+        HeadsPlus.debug("Registering " + key + " price of " + price + "!");
         prices.put(getKey(key), price);
+    }
+
+    public Set<String> getKeys() {
+        return prices.keySet();
     }
 
     public double getPrice(String key) {
