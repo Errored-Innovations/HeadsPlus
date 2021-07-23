@@ -1,11 +1,9 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -38,9 +36,9 @@ public class HeadsSection extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
-        for (ConfigHeadsSelector.BuyableHeadInfo head : ConfigHeadsSelector.get().getSection(context.get("section")).getHeads()) {
-            CustomHead head1 = new CustomHead(head);
-            head1.initNameAndLore(head.getId(), player);
+        for (String key : ConfigHeadsSelector.get().getSection(context.get("section")).getHeads().keySet()) {
+            CustomHead head1 = new CustomHead(key);
+            head1.initNameAndLore(key, player);
             contents.add(head1);
         }
         return contents;

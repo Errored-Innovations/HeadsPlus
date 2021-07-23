@@ -19,19 +19,20 @@ public class HeadsSearch extends HeadsSection {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         String search = context.get("search").toLowerCase();
         List<Content> contents = new ArrayList<>();
-        for (ConfigHeadsSelector.BuyableHeadInfo headInfo : ConfigHeadsSelector.get().getBuyableHeads().values()) {
+        for (String headName : ConfigHeadsSelector.get().getBuyableHeads().keySet()) {
+            ConfigHeadsSelector.BuyableHeadInfo headInfo = ConfigHeadsSelector.get().getBuyableHead(headName);
             final String name;
             try {
                 name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', headInfo.getDisplayName())).toLowerCase().replaceAll("[^a-z]", "");
             } catch (NullPointerException | IllegalArgumentException ex) {
                 if (!suppressWarnings) {
-                    hp.getLogger().warning("Null display name for " + headInfo.getId() + "! (Error code: 12)");
+                    hp.getLogger().warning("Null display name for " + headName + "! (Error code: 12)");
                 }
                 continue;
             }
             if (name.contains(search)) {
-                CustomHead head1 = new CustomHead(headInfo);
-                head1.initNameAndLore(headInfo.getId(), player);
+                CustomHead head1 = new CustomHead(headName);
+                head1.initNameAndLore(headName, player);
                 contents.add(head1);
             }
         }
