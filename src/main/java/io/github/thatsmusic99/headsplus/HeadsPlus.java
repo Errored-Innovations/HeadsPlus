@@ -10,7 +10,6 @@ import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
-import io.github.thatsmusic99.headsplus.listeners.tabcompleting.TabCompleteSellhead;
 import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.storage.Favourites;
 import io.github.thatsmusic99.headsplus.storage.Pinned;
@@ -327,8 +326,8 @@ public class HeadsPlus extends JavaPlugin {
         getCommand("heads").setExecutor(new Heads());
         getCommand("hplb").setExecutor(new LeaderboardsCommand());
         getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
-        getCommand("sellhead").setExecutor(new SellHead(this));
-        getCommand("sellhead").setTabCompleter(new TabCompleteSellhead());
+        getCommand("sellhead").setExecutor(new SellHead());
+        getCommand("sellhead").setTabCompleter(new SellHead());
         getCommand("hpc").setExecutor(new ChallengeCommand());
         getCommand("addhead").setExecutor(new AddHead());
     }
@@ -470,7 +469,7 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("heads", new Heads());
         commands.put("hplb", new LeaderboardsCommand());
         commands.put("myhead", new MyHead());
-        commands.put("sellhead", new SellHead(this));
+        commands.put("sellhead", new SellHead());
         commands.put("debug", new DebugPrint());
         commands.put("conjure", new Conjure());
         commands.put("complete", new Complete());

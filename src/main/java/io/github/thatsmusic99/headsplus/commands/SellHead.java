@@ -17,8 +17,10 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,15 +35,14 @@ import java.util.UUID;
         usage = "/sellhead [All|Head ID] [#]",
         descriptionPath = "descriptions.sellhead"
 )
-public class SellHead implements CommandExecutor, IHeadsPlusCommand {
+public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
 	private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 	private static final List<String> headIds = new ArrayList<>();
 	private final int[] slots;
-	private final HeadsPlus hp;
-	private static boolean useCases;
+    private static boolean useCases;
 
-	public SellHead(HeadsPlus hp) {
+	public SellHead() {
 	    headIds.clear();
 	    useCases = MainConfig.get().getSellingHeads().CASE_INSENSITIVE;
 	    for (String entity : EntityDataManager.ableEntities) {
@@ -53,7 +54,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	    for (int i = 0; i < 44; i++) {
             slots[i] = i;
         }
-	    this.hp = hp;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
                 String fixedId = args[0];
                 if (fixedId.equalsIgnoreCase("all")) {
                     getValidHeads(player, null, -1);
-                } else if (isRegistered(fixedId)) {
+                } else if (SellableHeadsManager.get().isRegistered(fixedId)) {
 
                     int limit = -1;
                     if (args.length > 1) {
@@ -122,13 +122,20 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
             if (item == null || !PersistenceManager.get().isSellable(item)) continue;
+            double headPrice;
             String id = PersistenceManager.get().getSellType(item);
             if (fixedId != null) {
                 if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
-            } else if (!SellableHeadsManager.get().isRegistered(id)){
+            }
+
+            if (PersistenceManager.get().hasSellPrice(item)) {
+                headPrice = PersistenceManager.get().getSellPrice(item);
+            } else if (SellableHeadsManager.get().isRegistered(id)) {
+                headPrice = SellableHeadsManager.get().getPrice(id);
+            } else {
                 continue;
             }
-            double headPrice = SellableHeadsManager.get().getPrice(id);
+
             if (limit <= item.getAmount() && limit != -1) {
                 data.addSlot(slot, limit);
                 data.addID(id, limit);
@@ -151,11 +158,11 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
 	private void pay(Player player, SellData data, double price) {
-        double balance = hp.getEconomy().getBalance(player);
+        double balance = HeadsPlus.get().getEconomy().getBalance(player);
         SellHeadEvent event = new SellHeadEvent(price, player, balance, balance + price, data.ids);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            EconomyResponse response = hp.getEconomy().depositPlayer(player, price);
+            EconomyResponse response = HeadsPlus.get().getEconomy().depositPlayer(player, price);
             if (response.transactionSuccess()) {
                 if (price == 0) return;
                 removeItems(player, data);
@@ -196,7 +203,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 	        slots.put(slot, amount);
         }
     }
-
 
     private void removeItems(Player player, SellData data) {
 	    for (int slot : data.slots.keySet()) {
