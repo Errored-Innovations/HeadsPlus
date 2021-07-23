@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -39,36 +40,37 @@ public class ProfileCommand implements IHeadsPlusCommand {
 
     @Override
     public boolean fire(String[] args, CommandSender cs) {
-        try {
-            OfflinePlayer p;
-            if (args.length == 1) {
-                // TODO: better on a separate thread
-                p = Bukkit.getOfflinePlayer(cs.getName());
-            } else {
-                p = Bukkit.getOfflinePlayer(args[1]);
-            }
-            if (cs instanceof Player) {
-                if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    cs.sendMessage(prof(p, cs));
-                } else {
-                    if (cs.hasPermission("headsplus.maincommand.profile.others")) {
-                        cs.sendMessage(prof(p, cs));
-                    } else {
-                        HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
-                    }
-                }
-            } else {
-                if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    // Not a player
-                    cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
-                } else {
-                    cs.sendMessage(prof(p, cs));
-                }
-            }
-        } catch (SQLException e) {
-            DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
+        String name = cs.getName();
+        if (args.length != 1) {
+            name = args[1];
         }
 
+        HPUtils.getOfflinePlayer(name).thenAccept(player -> {
+            try {
+                if (cs instanceof Player) {
+                    if (cs.getName().equalsIgnoreCase(player.getName())) {
+                        cs.sendMessage(prof(player, cs));
+                    } else {
+                        if (cs.hasPermission("headsplus.maincommand.profile.others")) {
+                            cs.sendMessage(prof(player, cs));
+                        } else {
+                            HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
+                        }
+                    }
+                } else {
+                    if (cs.getName().equalsIgnoreCase(player.getName())) {
+                        // Not a player
+                        cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
+                    } else {
+                        cs.sendMessage(prof(player, cs));
+                    }
+                }
+            } catch (SQLException e) {
+                DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
+            }
+        });
+        return true;
+    }
 
     @Override
     public boolean shouldEnable() {
