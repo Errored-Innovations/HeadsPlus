@@ -45,7 +45,7 @@ public class ActualPaperImpl implements PaperImpl {
 
         try {
             PlayerProfile profile = Bukkit.getServer().createProfile(uuid, name);
-            profile.complete();
+            profile.complete(true, true);
             meta.setPlayerProfile(profile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class ActualPaperImpl implements PaperImpl {
         HeadsPlus.debug("Setting the head texture using Paper.");
         PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
         profile.setProperty(new ProfileProperty("textures", texture));
-        profile.complete();
+        profile.complete(true, true);
         meta.setPlayerProfile(profile);
     }
 }
