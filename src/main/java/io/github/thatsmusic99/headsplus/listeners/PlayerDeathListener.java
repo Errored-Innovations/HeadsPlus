@@ -57,7 +57,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
         if (killer != null) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
-            addData("killer", event.getEntity().getKiller().getName());
+            addData("killer", killer.getName());
         }
         if (randomChance > fixedChance) return;
         int amount = addData("amount", HPUtils.getAmount(fixedChance));
@@ -96,7 +96,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         headInfo.buildHead().thenAccept(item -> {
             item.setAmount(amount);
             PersistenceManager.get().setSellable(item, true);
-            PersistenceManager.get().setSellType(item, "mobs_player");
+            PersistenceManager.get().setSellType(item, "mobs_PLAYER");
             PersistenceManager.get().setSellPrice(item, finalPrice);
             location.getWorld().dropItem(location, item);
         });

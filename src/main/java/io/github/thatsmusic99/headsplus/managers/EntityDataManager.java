@@ -264,6 +264,9 @@ public class EntityDataManager {
                 e.printStackTrace();
             }
         }
+
+        SellableHeadsManager.get().registerPrice("mobs_PLAYER",
+                ConfigMobs.get().getDouble("player.default.price", ConfigMobs.get().getDouble("defaults.price")));
     }
 
     public static LinkedHashMap<String, ItemStack> getSellheadCache() {
