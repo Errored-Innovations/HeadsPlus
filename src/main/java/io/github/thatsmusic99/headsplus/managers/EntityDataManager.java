@@ -1,5 +1,7 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
@@ -12,89 +14,19 @@ import java.util.*;
 
 public class EntityDataManager {
 
-    public static final List<String> ableEntities = new ArrayList<>(Arrays.asList(
-            "AXOLOTL",
-            "BAT",
-            "BLAZE",
-            "BEE",
-            "CAT",
-            "CAVE_SPIDER",
-            "CHICKEN",
-            "COD",
-            "COW",
-            "CREEPER",
-            "DOLPHIN",
-            "DONKEY",
-            "DROWNED",
-            "ELDER_GUARDIAN",
-            "ENDER_DRAGON",
-            "ENDERMAN",
-            "ENDERMITE",
-            "EVOKER",
-            "FOX",
-            "GHAST",
-            "GIANT",
-            "GLOW_SQUID",
-            "GOAT",
-            "GUARDIAN",
-            "HOGLIN",
-            "HORSE",
-            "HUSK",
-            "IRON_GOLEM",
-            "LLAMA",
-            "MAGMA_CUBE",
-            "MULE",
-            "MUSHROOM_COW",
-            "OCELOT",
-            "PANDA",
-            "PARROT",
-            "PHANTOM",
-            "PIG",
-            "PIGLIN",
-            "PIGLIN_BRUTE",
-            "PIG_ZOMBIE",
-            "PILLAGER",
-            "POLAR_BEAR",
-            "PUFFERFISH",
-            "RABBIT",
-            "RAVAGER",
-            "SALMON",
-            "SHEEP",
-            "SHULKER",
-            "SILVERFISH",
-            "SKELETON",
-            "SKELETON_HORSE",
-            "SLIME",
-            "SNOWMAN",
-            "SPIDER",
-            "SQUID",
-            "STRAY",
-            "STRIDER",
-            "TRADER_LLAMA",
-            "TROPICAL_FISH",
-            "TURTLE",
-            "VEX",
-            "VILLAGER",
-            "VINDICATOR",
-            "WANDERING_TRADER",
-            "WITCH",
-            "WITHER",
-            "WITHER_SKELETON",
-            "WOLF",
-            "ZOGLIN",
-            "ZOMBIE",
-            "ZOMBIE_HORSE",
-            "ZOMBIE_VILLAGER",
-            "ZOMBIFIED_PIGLIN"));
+    public static final List<String> ableEntities = new ArrayList<>();
 
 
-    private static final LinkedHashMap<String, List<HeadManager.HeadInfo>> storedHeads = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, List<DroppedHeadInfo>> storedHeads = new LinkedHashMap<>();
     private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
+    private static final HashSet<String> NOT_ALIVE = Sets.newHashSet("PLAYER", "ARMOR_STAND");
 
     public static void createEntityList() {
         for (EntityType type : EntityType.values()) {
+            if (!type.isAlive()) continue;
+
             // who decided that an armor stand is alive?
-            if (type.isAlive() && !type.name().equals("ARMOR_STAND")) ableEntities.add(type.name());
+            if (!NOT_ALIVE.contains(type.name())) ableEntities.add(type.name());
         }
         Collections.sort(ableEntities);
     }
