@@ -177,7 +177,7 @@ public class EntityDataManager {
                         String path = name + "." + conditions + "." + head;
                         String displayName = ConfigMobs.get().getDisplayName(path);
                         if (displayName != null) {
-                            headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name)));
+                            headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name.replaceAll("_", " "))));
                         }
 
                         headInfo.withXP(path);
