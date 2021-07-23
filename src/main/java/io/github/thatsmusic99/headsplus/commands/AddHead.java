@@ -6,9 +6,8 @@ import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,16 +40,16 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (args[0].length() > 2) {
                     if (args[0].length() < 17) {
                         HeadsPlus hp = HeadsPlus.get();
-                        // TODO - not on the main thread
-                        OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-                        String uuid = p.getUniqueId().toString();
-                        if (!hp.getServer().getOnlineMode()) {
-                            hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                            uuid = AutograbManager.grabUUID(p.getName(), 3, null);
-                        }
-                        if (AutograbManager.grabProfile(uuid, sender, true)) {
-                            hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", p.getName());
-                        }
+                        HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
+                            String uuid = player.getUniqueId().toString();
+                            if (!hp.getServer().getOnlineMode()) {
+                                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                                uuid = AutograbManager.grabUUID(player.getName(), 3, null);
+                            }
+                            if (AutograbManager.grabProfile(uuid, sender, true)) {
+                                hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", player.getName());
+                            }
+                        });
                         return true;
                     } else {
                         hpc.sendMessage("commands.head.head-too-long", sender);

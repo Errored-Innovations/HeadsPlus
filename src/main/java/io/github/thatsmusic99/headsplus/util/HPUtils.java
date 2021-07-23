@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 
 public class HPUtils {
@@ -225,6 +226,11 @@ public class HPUtils {
         } */
         return true;
 
+    }
+
+    public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
+        return CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name), HeadsPlus.async)
+                .thenApplyAsync(player -> player, HeadsPlus.sync);
     }
 
     public enum SkillType {
