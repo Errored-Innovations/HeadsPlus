@@ -85,6 +85,11 @@ public class LocaleCommand implements IHeadsPlusCommand {
     }
 
     @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getLocalisation().SMART_LOCALE;
+    }
+
+    @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {

@@ -54,6 +54,11 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().HEADS_SELECTOR;
+    }
+
+    @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         return new ArrayList<>();
     }

@@ -66,6 +66,11 @@ public class ReloadCommand implements IHeadsPlusCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean shouldEnable() {
+        return true;
+    }
 }
 
 

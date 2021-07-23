@@ -53,6 +53,11 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().CHALLENGES;
+    }
+
+    @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         return new ArrayList<>();
     }

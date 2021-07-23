@@ -26,6 +26,11 @@ public class Info implements IHeadsPlusCommand {
 	}
 
 	@Override
+	public boolean shouldEnable() {
+		return true;
+	}
+
+	@Override
 	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 		return new ArrayList<>();
 	}

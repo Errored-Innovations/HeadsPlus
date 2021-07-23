@@ -70,6 +70,8 @@ public class ProfileCommand implements IHeadsPlusCommand {
         }
 
 
+    @Override
+    public boolean shouldEnable() {
         return true;
     }
 

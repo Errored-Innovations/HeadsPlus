@@ -27,6 +27,8 @@ public interface IHeadsPlusCommand {
         return new String[0];
     }
 
+    boolean shouldEnable();
+
     List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args);
 
     static List<String> getPlayers(CommandSender sender) {
