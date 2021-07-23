@@ -47,7 +47,7 @@ public class HeadManager {
         if (key.startsWith("HP#")) {
             key = key.substring(3);
         }
-        return heads.getOrDefault(key, new HeadInfo(null)).clone();
+        return heads.getOrDefault(key, new HeadInfo()).clone();
     }
 
     public Set<String> getKeys() {
@@ -63,10 +63,8 @@ public class HeadManager {
         private String texture;
         private String player;
         private Material material;
-        private String id;
 
-        public HeadInfo(String id) {
-            this.id = id;
+        public HeadInfo() {
             this.material = Material.PLAYER_HEAD;
             this.lore = new ArrayList<>();
         }
@@ -122,10 +120,6 @@ public class HeadManager {
 
         public String getTexture() {
             return texture;
-        }
-
-        public String getId() {
-            return id;
         }
 
         public void setLore(@Nullable List<String> lore) {
@@ -184,7 +178,7 @@ public class HeadManager {
              } catch (CloneNotSupportedException e) {
                  e.printStackTrace();
              }
-             return new HeadInfo(null);
+             return new HeadInfo();
          }
     }
 

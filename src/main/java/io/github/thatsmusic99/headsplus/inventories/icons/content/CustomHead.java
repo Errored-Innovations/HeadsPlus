@@ -24,10 +24,10 @@ public class CustomHead extends Content {
     private double price = 0;
     private String id;
 
-    public CustomHead(ConfigHeadsSelector.BuyableHeadInfo headInfo) {
-        super(headInfo.forceBuildHead());
+    public CustomHead(String id) {
+        super(ConfigHeadsSelector.get().getBuyableHead(id).forceBuildHead());
         this.price = 0.0; // TODO - set price
-        this.id = headInfo.getId();
+        this.id = id;
     }
 
     public CustomHead() {}

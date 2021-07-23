@@ -90,7 +90,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key));
             headInfo.withDisplayName(section.getString("display-name", null));
             buyableHeads.put(key, headInfo);
-            sectionInfo.addHead(headInfo);
+            sectionInfo.addHead(key, headInfo);
             totalHeads++;
         }
     }
@@ -120,12 +120,12 @@ public class ConfigHeadsSelector extends FeatureConfig {
         private String displayName = null;
         private String permission;
         private final String id;
-        private final List<BuyableHeadInfo> heads;
+        private final HashMap<String, BuyableHeadInfo> heads;
 
         public SectionInfo(String id) {
             this.id = id;
             this.permission = "headsplus.section." + id;
-            this.heads = new ArrayList<>();
+            this.heads = new HashMap<>();
         }
 
         public SectionInfo withPermission(String permission) {
@@ -143,8 +143,8 @@ public class ConfigHeadsSelector extends FeatureConfig {
             return this;
         }
 
-        public void addHead(BuyableHeadInfo head) {
-            heads.add(head);
+        public void addHead(String id, BuyableHeadInfo head) {
+            heads.put(id, head);
         }
 
         public String getPermission() {
@@ -155,7 +155,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             return id;
         }
 
-        public List<BuyableHeadInfo> getHeads() {
+        public HashMap<String, BuyableHeadInfo> getHeads() {
             return heads;
         }
 
@@ -180,7 +180,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
         private double price;
 
         public BuyableHeadInfo(HeadManager.HeadInfo info) {
-            super(info.getId());
+            super();
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial())
                     .withTexture(info.getTexture());

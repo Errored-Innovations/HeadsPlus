@@ -40,11 +40,11 @@ public class MaskManager {
         protected Runnable runnable;
 
         public MaskInfo() {
-            super(null);
+            super();
         }
 
         public MaskInfo(HeadManager.HeadInfo info) {
-            super(info.getId());
+            super();
             withDisplayName(info.getDisplayName());
             setLore(info.getLore());
             withTexture(info.getPlayer() == null ? info.getTexture() : info.getPlayer());
