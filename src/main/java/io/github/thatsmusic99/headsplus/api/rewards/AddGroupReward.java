@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class AddGroupReward extends Reward {
 
-    private String group;
+    private final String group;
 
     public AddGroupReward(String group, int xp) {
         super(xp);
@@ -18,7 +18,9 @@ public class AddGroupReward extends Reward {
     }
 
     public static AddGroupReward fromConfigSection(String id, ConfigSection section) {
-        return null; // TODO
+        if (!section.contains("base-value"))
+            throw new IllegalStateException("Reward type ADD_GROUP for reward " + id + " must have a base-value option!");
+        return new AddGroupReward(section.getString("base-value"), section.getInteger("base-xp"));
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class RemoveGroupReward extends Reward {
 
-    private String group;
+    private final String group;
 
     public RemoveGroupReward(String group, int xp) {
         super(xp);
@@ -18,7 +18,9 @@ public class RemoveGroupReward extends Reward {
     }
 
     public static RemoveGroupReward fromConfigSection(String id, ConfigSection section) {
-        return null;
+        if (!section.contains("base-value"))
+            throw new IllegalStateException("Reward type REMOVE_GROUP for reward " + id + " must have a base-value option!");
+        return new RemoveGroupReward(section.getString("base-value"), section.getInteger("base-xp"));
     }
 
     @Override
