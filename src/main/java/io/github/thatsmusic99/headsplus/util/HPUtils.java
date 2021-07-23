@@ -112,8 +112,8 @@ public class HPUtils {
 
     public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
         Random random = new Random();
-        HashMap<String, List<HeadManager.HeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
-        List<HeadManager.HeadInfo> heads = storedHeads.get(id + ";" + meta);
+        HashMap<String, List<EntityDataManager.DroppedHeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
+        List<EntityDataManager.DroppedHeadInfo> heads = storedHeads.get(id + ";" + meta);
         if (heads == null) {
             String[] possibleConditions = meta.split(",");
             for (String str : possibleConditions) {
@@ -127,7 +127,7 @@ public class HPUtils {
             throw new NullPointerException("Found no heads list for " + id + "!");
         }
         if (heads.isEmpty()) return;
-        HeadManager.HeadInfo info = heads.get(random.nextInt(heads.size()));
+        EntityDataManager.DroppedHeadInfo info = heads.get(random.nextInt(heads.size()));
 
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);

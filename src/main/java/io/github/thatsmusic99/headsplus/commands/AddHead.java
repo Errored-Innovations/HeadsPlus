@@ -87,7 +87,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo(id);
+                            HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo();
                             HeadManager.get().registerHead(id, headInfo
                                     .withDisplayName((String) context.getSessionData("display-name"))
                                     .withTexture((String) context.getSessionData("texture")));

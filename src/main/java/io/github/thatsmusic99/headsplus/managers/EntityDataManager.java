@@ -114,7 +114,7 @@ public class EntityDataManager {
         }.runTaskAsynchronously(HeadsPlus.get());
     }
 
-    public static LinkedHashMap<String, List<HeadManager.HeadInfo>> getStoredHeads() {
+    public static LinkedHashMap<String, List<DroppedHeadInfo>> getStoredHeads() {
         return storedHeads;
     }
 
@@ -211,15 +211,15 @@ public class EntityDataManager {
                 ConfigSection entitySection = headsCon.getConfigSection(name);
                 if (entitySection == null) continue;
                 for (String conditions : entitySection.getKeys(false)) {
-                    List<HeadManager.HeadInfo> heads = new ArrayList<>();
+                    List<DroppedHeadInfo> heads = new ArrayList<>();
                     ConfigSection conditionSection = entitySection.getConfigSection(conditions);
                     if (conditionSection == null) continue;
                     for (String head : conditionSection.getKeys(false)) {
-                        HeadManager.HeadInfo headInfo;
+                        DroppedHeadInfo headInfo;
                         if (head.startsWith("HPM#")) {
-                            headInfo = MaskManager.get().getMaskInfo(head);
+                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head));
                         } else {
-                            headInfo = HeadManager.get().getHeadInfo(head);
+                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head));
                         }
 
                         if (head.equalsIgnoreCase("{mob-default}")) {
@@ -266,5 +266,29 @@ public class EntityDataManager {
 
     public static LinkedHashMap<String, ItemStack> getSellheadCache() {
         return sellheadCache;
+    }
+
+    public static class DroppedHeadInfo extends MaskManager.MaskInfo {
+
+        private int xp;
+
+        public DroppedHeadInfo(HeadManager.HeadInfo info) {
+            super();
+            this.withDisplayName(info.getDisplayName())
+                    .withMaterial(info.getMaterial());
+            if (info.getTexture() != null) withTexture(info.getTexture());
+            setLore(info.getLore());
+            xp = ConfigMobs.get().getInteger("defaults.xp");
+        }
+
+        public DroppedHeadInfo withXP(String path) {
+            if (!ConfigMobs.get().contains(path + ".xp")) return this;
+            xp = ConfigMobs.get().getInteger(path + ".xp");
+            return this;
+        }
+
+        public int getXp() {
+            return xp;
+        }
     }
 }

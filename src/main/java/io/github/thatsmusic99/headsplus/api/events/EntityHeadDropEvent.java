@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.api.events;
 
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -12,13 +13,13 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private HeadManager.HeadInfo head;
+    private EntityDataManager.DroppedHeadInfo head;
     private Player player;
     private EntityType entityType;
     private Location location;
     private final int amount;
 
-    public EntityHeadDropEvent(Player killer, HeadManager.HeadInfo head, Location location, EntityType entityType, int amount) {
+    public EntityHeadDropEvent(Player killer, EntityDataManager.DroppedHeadInfo head, Location location, EntityType entityType, int amount) {
         this.player = killer;
         this.head = head;
         this.location = location;
@@ -41,7 +42,7 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public HeadManager.HeadInfo getHeadInfo() {
+    public EntityDataManager.DroppedHeadInfo getHeadInfo() {
         return head;
     }
 
@@ -73,7 +74,7 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    public void setHeadInfo(HeadManager.HeadInfo skull) {
+    public void setHeadInfo(EntityDataManager.DroppedHeadInfo skull) {
         this.head = skull;
     }
 
