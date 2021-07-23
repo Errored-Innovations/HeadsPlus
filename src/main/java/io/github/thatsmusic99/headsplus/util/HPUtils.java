@@ -134,6 +134,7 @@ public class HPUtils {
         if (!event.isCancelled()) {
             info.buildHead().thenAccept(head -> {
                 head.setAmount(amount);
+                PersistenceManager.get().setSellable(head, true);
                 PersistenceManager.get().setSellType(head, "mobs_" + id);
                 location.getWorld().dropItem(location, head);
             });

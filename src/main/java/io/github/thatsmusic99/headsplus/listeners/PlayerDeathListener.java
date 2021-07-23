@@ -93,6 +93,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         double finalPrice = price;
         headInfo.buildHead().thenAccept(item -> {
             item.setAmount(amount);
+            PersistenceManager.get().setSellable(item, true);
             PersistenceManager.get().setSellType(item, "mobs_player");
             PersistenceManager.get().setSellPrice(item, finalPrice);
             location.getWorld().dropItem(location, item);
