@@ -10,7 +10,7 @@ public class ConfigMasks extends FeatureConfig {
 
     @Override
     public void loadDefaults() {
-        addExample("masks.creeper.when-wearing", "animation:creeper");
+        addExample("masks.creeper.when-wearing.animation.frames", new String[]{""});
         addExample("masks.creeper.effects", Collections.singletonList("INVISIBILITY"));
 
     }

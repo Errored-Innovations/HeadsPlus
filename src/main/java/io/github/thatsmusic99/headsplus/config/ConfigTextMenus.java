@@ -31,6 +31,8 @@ public class ConfigTextMenus extends HPConfig {
         instance = this;
     }
 
+    // TODO - make an interface that all translators override?
+
     @Override
     public void loadDefaults() {
         addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");

@@ -119,6 +119,7 @@ public class MainConfig extends HPConfig {
         addDefault("crafting-list", new ArrayList<>());
         addDefault("masks-list", new ArrayList<>());
         addDefault("levels", new ArrayList<>());
+        addDefault("stats-collection", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
 
         addSection("Challenges");
@@ -463,6 +464,10 @@ public class MainConfig extends HPConfig {
         public int CHECK_INTERVAL = getInteger("check-interval"),
                 RESET_INTERVAL = getInteger("reset-after-x-intervals"),
                 EFFECT_LENGTH = getInteger("effect-length");
+    }
+
+    public class Restrictions {
+        public boolean USE_WHITELIST = getBoolean("whitelist-worlds");
     }
 
     public class Challenges {
