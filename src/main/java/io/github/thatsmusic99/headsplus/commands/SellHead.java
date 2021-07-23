@@ -247,6 +247,13 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 1) {
+            List<String> headIdList = new ArrayList<>(SellableHeadsManager.get().getKeys());
+            headIdList.add("all");
+            List<String> suggestions = new ArrayList<>();
+            StringUtil.copyPartialMatches(args[0], headIdList, suggestions);
+            return suggestions;
+        }
         return new ArrayList<>();
     }
 }
