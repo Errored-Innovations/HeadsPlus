@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -39,10 +40,10 @@ public class Stats extends Icon {
         ConfigHeadsSelector hpch = ConfigHeadsSelector.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+        meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
-            HPUtils.parseLorePlaceholders(lore, hpc.formatMsg(loreStr, player),
+            HPUtils.parseLorePlaceholders(lore, HeadsPlusMessagesManager.get().formatMsg(loreStr, player),
                     new HPUtils.PlaceholderInfo("{head}",
                             manager.getSection() != null ? hpch.getSections().get(manager.getSection()).getHeads().size() :
                                     hpch.getTotalHeads(), true),

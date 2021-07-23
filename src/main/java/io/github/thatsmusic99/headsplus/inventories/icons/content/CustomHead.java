@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
@@ -37,7 +38,7 @@ public class CustomHead extends Content {
         ItemStack item = event.getCurrentItem().clone();
         if (event.isLeftClick()) { // Check if we're giving the head
             if (player.getInventory().firstEmpty() == -1) { // Check if there is a free space
-                hpc.sendMessage("commands.head.full-inv", player);
+                HeadsPlusMessagesManager.get().sendMessage("commands.head.full-inv", player);
                 return false;
             }
             double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
@@ -46,7 +47,7 @@ public class CustomHead extends Content {
                     && hp.isVaultEnabled()
                     && (ef = hp.getEconomy()) != null
                     && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
-                hpc.sendMessage("commands.heads.not-enough-money", player); // K.O
+                HeadsPlusMessagesManager.get().sendMessage("commands.heads.not-enough-money", player); // K.O
                 return false;
             }
             HeadPurchaseEvent purchaseEvent = new HeadPurchaseEvent(player, item);
@@ -55,11 +56,12 @@ public class CustomHead extends Content {
                 if(price > 0.0 && ef != null) {
                     EconomyResponse er = ef.withdrawPlayer(player, price);
                     if(er.transactionSuccess()) {
-                        hpc.sendMessage("commands.heads.buy-success", player,
+                        HeadsPlusMessagesManager.get().sendMessage("commands.heads.buy-success", player,
                                 "{price}", MainConfig.get().fixBalanceStr(price),
                                 "{balance}", MainConfig.get().fixBalanceStr(ef.getBalance(player)));
                     } else {
-                        hpc.sendMessage(hpc.getString("commands.errors.cmd-fail", player) + ": " + er.errorMessage, player, false);
+                        HeadsPlusMessagesManager.get().sendMessage(
+                                HeadsPlusMessagesManager.get().getString("commands.errors.cmd-fail", player) + ": " + er.errorMessage, player, false);
                         return false;
                     }
                 }
@@ -98,10 +100,10 @@ public class CustomHead extends Content {
         for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
             if (str.contains("{favourite}") || str.contains("{msg_inventory.icon.head.favourite}")) {
                 if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
-                    lore.add(hpc.getString("inventory.icon.head.favourite", player));
+                    lore.add(HeadsPlusMessagesManager.get().getString("inventory.icon.head.favourite", player));
                 }
             } else {
-                lore.add(hpc.formatMsg(str, player).replaceAll("\\{price}", String.valueOf(price)));
+                lore.add(HeadsPlusMessagesManager.get().formatMsg(str, player).replaceAll("\\{price}", String.valueOf(price)));
             }
         }
         ItemMeta im = item.getItemMeta();

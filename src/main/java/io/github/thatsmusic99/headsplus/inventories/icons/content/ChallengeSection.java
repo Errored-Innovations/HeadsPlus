@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import org.bukkit.Bukkit;
@@ -47,16 +48,16 @@ public class ChallengeSection extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons.challenges-section.display-name")
+        meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges-section.display-name")
                 .replaceAll("\\{section-name}", section.getDisplayName()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons.challenges-section.lore")) {
             if (loreStr.contains("{section-lore}")) {
                 for (String loreStr2 : section.getLore()) {
-                    lore.add(hpc.formatMsg(loreStr2, player));
+                    lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
-                lore.add(hpc.formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
+                lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
             }
         }
         meta.setLore(lore);

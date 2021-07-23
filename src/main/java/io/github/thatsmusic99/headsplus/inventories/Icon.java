@@ -16,7 +16,6 @@ import java.util.List;
 public abstract class Icon {
 
     protected static HeadsPlus hp = HeadsPlus.get();
-    protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     protected ItemStack item;
     private String id;
 
@@ -68,10 +67,10 @@ public abstract class Icon {
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         try {
-            meta.setDisplayName(hpc.formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+            meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
             List<String> lore = new ArrayList<>();
             for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
-                lore.add(hpc.formatMsg(loreStr, player));
+                lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr, player));
             }
             meta.setLore(lore);
         } catch (NullPointerException ex) {
