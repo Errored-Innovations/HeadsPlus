@@ -38,6 +38,7 @@ public class ConfigMobs extends FeatureConfig {
 		addExample("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
 		addExample("defaults.display-name", "{type} Head");
 		addDefault("defaults.chance", 5);
+		addDefault("defaults.xp", 10);
 		addHeads();
 		addPlayerHeads();
 	}

@@ -248,6 +248,8 @@ public class EntityDataManager {
                             headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name)));
                         }
 
+                        headInfo.withXP(path);
+
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions)); // TODO
 
                         heads.add(headInfo);
