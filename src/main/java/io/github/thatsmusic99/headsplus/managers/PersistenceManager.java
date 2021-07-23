@@ -52,6 +52,10 @@ public class PersistenceManager {
         return ifNull(getValue(item, HEADSPLUS_SELL_PRICE, PersistentDataType.DOUBLE), 0.0);
     }
 
+    public boolean hasSellPrice(ItemStack item) {
+        return getValue(item, HEADSPLUS_SELL_PRICE, PersistentDataType.DOUBLE) != null;
+    }
+
     public void makeIcon(ItemStack item) {
         setValue(item, HEADSPLUS_INVENTORY_ICON, PersistentDataType.BYTE, (byte) 1);
     }
