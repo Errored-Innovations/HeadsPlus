@@ -38,7 +38,7 @@ public class ChallengesPinnedInv extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
         List<Content> contents = new ArrayList<>();
-        for (String challenge : hpPlayer.getPinnedChallenges()) {
+        for (String challenge : hpPlayer.getPinnedChallenges().join()) {
             contents.add(new Challenge(ChallengeManager.get().getChallengeByName(challenge), player));
         }
         return contents;

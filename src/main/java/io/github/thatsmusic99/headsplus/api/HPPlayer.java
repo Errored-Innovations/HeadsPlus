@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
+import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class HPPlayer {
 
@@ -33,7 +35,7 @@ public class HPPlayer {
     private List<PotionEffect> activeMask;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private List<String> favouriteHeads;
-    private List<String> pinnedChallenges;
+    private volatile List<String> pinnedChallenges;
     private boolean ignoreFallDamage;
     private String cachedLocale;
     private boolean localeForced;
@@ -43,7 +45,7 @@ public class HPPlayer {
         HeadsPlus hp = HeadsPlus.get();
         activeMask = new ArrayList<>();
         favouriteHeads = new ArrayList<>();
-        pinnedChallenges = new ArrayList<>();
+        PinnedChallengeManager.get().getPinnedChallenges(p.getUniqueId()).thenAccept(list -> pinnedChallenges = list);
         ignoreFallDamage = false;
         this.player = p.getUniqueId();
         try {
@@ -288,24 +290,26 @@ public class HPPlayer {
         HeadsPlus.get().getFavourites().removeHead(getPlayer(), s);
     }
 
+    public CompletableFuture<List<String>> getPinnedChallenges() {
+        if (pinnedChallenges != null) return CompletableFuture.completedFuture(pinnedChallenges);
+        return PinnedChallengeManager.get().getPinnedChallenges(player).thenApply(list -> {
+            pinnedChallenges = list;
+            return pinnedChallenges;
+        });
+    }
+
     public boolean hasChallengePinned(Challenge challenge) {
         return pinnedChallenges.contains(challenge.getConfigName());
     }
 
-    public void addChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.add(s);
-        HeadsPlus.get().getPinned().writeData(getPlayer(), s);
+    public CompletableFuture<Void> addChallengePin(Challenge challenge) {
+        pinnedChallenges.add(challenge.getConfigName());
+        return PinnedChallengeManager.get().addChallenge(player, challenge.getConfigName());
     }
 
-    public void removeChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.remove(s);
-        HeadsPlus.get().getPinned().removeChallenge(getPlayer(), s);
-    }
-
-    public List<String> getPinnedChallenges() {
-        return pinnedChallenges;
+    public CompletableFuture<Void> removeChallengePin(Challenge challenge) {
+        pinnedChallenges.remove(challenge.getConfigName());
+        return PinnedChallengeManager.get().removeChallenge(player, challenge.getConfigName());
     }
 
     public boolean isIgnoringFallDamage() {

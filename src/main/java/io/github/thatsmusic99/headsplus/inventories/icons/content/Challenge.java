@@ -1,10 +1,12 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -47,12 +49,16 @@ public class Challenge extends Content {
             } else {
                 HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
                 if (hpPlayer.hasChallengePinned(challenge)) {
-                    hpPlayer.removeChallengePin(challenge);
+                    hpPlayer.removeChallengePin(challenge).thenAcceptAsync(why -> {
+                        initNameAndLore("challenge", player);
+                        event.getInventory().setItem(event.getSlot(), item);
+                    }, HeadsPlus.sync);
                 } else {
-                    hpPlayer.addChallengePin(challenge);
+                    hpPlayer.addChallengePin(challenge).thenAcceptAsync(why -> {
+                        initNameAndLore("challenge", player);
+                        event.getInventory().setItem(event.getSlot(), item);
+                    }, HeadsPlus.sync);
                 }
-                initNameAndLore("challenge", player);
-                event.getInventory().setItem(event.getSlot(), item);
             }
         }catch (NullPointerException ignored) {
         }
@@ -76,6 +82,16 @@ public class Challenge extends Content {
                     lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
+                HPUtils.parseLorePlaceholders(lore, loreStr,
+                        new HPUtils.PlaceholderInfo("{completed}",
+                                HeadsPlusMessagesManager.get().getString("commands.challenges.challenge-completed", player),
+                                challenge.isComplete(player)),
+                        new HPUtils.PlaceholderInfo("{pinned}",
+                                HeadsPlusMessagesManager.get().getString("inventory.icon.challenge.pinned", player),
+                                HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)),
+                        new HPUtils.PlaceholderInfo("{reward}", reward, true),
+                        new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true));
+                // TODO
                 if (loreStr.contains("{completed}")) {
                     if (challenge.isComplete(player)) {
                         lore.add(HeadsPlusMessagesManager.get().getString("commands.challenges.challenge-completed", player));
