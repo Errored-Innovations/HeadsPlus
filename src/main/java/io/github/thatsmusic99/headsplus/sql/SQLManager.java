@@ -10,14 +10,13 @@ public abstract class SQLManager {
     protected static String tablePrefix;
     protected static volatile boolean usingSqlite;
 
-    public SQLManager() {
+    public static void setupPrefix() {
         // TODO - table prefix
         tablePrefix = "headsplus";
         if (!tablePrefix.matches("^[_A-Za-z0-9]+$")) {
             HeadsPlus.get().getLogger().warning("Table prefix " + tablePrefix + " is not alphanumeric. Using headsplus...");
             tablePrefix = "headsplus";
         }
-        createTable();
     }
 
     private Connection loadSqlite() {
