@@ -46,13 +46,19 @@ public class MainConfig extends HPConfig {
                 "Whilst this option is set to true,");
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
                 "The permission for this is heasplus.heads.");
-        addDefault("challenges", true, "Whether players should be able to complete challenges or not.");
+        addDefault("challenges", true, "Whether players should be able to complete challenges or not.\n" +
+                "The command to access challenges is /hpc, with the permission headsplus.challenges.");
 
-        addDefault("leaderboards", true);
-        addDefault("levels", true);
-        addDefault("masks", true);
-        addDefault("interactions", true);
-        addDefault("block-pickup", true);
+        addDefault("leaderboards", true, "Whether or not people can view leaderboards for the plugin that list up the players with the most heads collected" +
+                  " from mob drops and crafting.\nThe command to access this is /hplb, with the permission headsplus.leaderboards"); // TODO maybe lol
+        addDefault("levels", true, "Whether or not HeadsPlus Levels should be enabled or not.\n" +
+                  "HeadsPlus Levels are cosmetic levels which players can reach through gaining XP. XP can be gained by getting/crafting heads and completing challenges.\n" +
+                  "To configure this further, use the levels.yml file.");
+        addDefault("masks", true, "Whether or not masks should be enabled or not.\nMasks are heads which can be worn and apply a special effect upon the person who wears it." +
+                  "\nHowever, it does require extensive configuration, which is best done using /hp settings.");
+        addDefault("interactions", true, "Whether or not the plugin should respond to interactions with a given head." +
+                   "\nThis can be configured further using interactions.yml.");
+        addDefault("block-pickup", true, "Whether or not creative mode players are able to retreive heads using the pick block button.");
 
         addSection("MySQL");
         addDefault("enable-mysql", false,
