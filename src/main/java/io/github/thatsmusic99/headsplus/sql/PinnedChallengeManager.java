@@ -1,7 +1,15 @@
 package io.github.thatsmusic99.headsplus.sql;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +52,24 @@ public class PinnedChallengeManager extends SQLManager {
 
     @Override
     public void transferOldData() {
-
+        // Checks to see if the storage folder exists
+        File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
+        if (!storageFolder.exists() || !storageFolder.isDirectory()) return;
+        // Checks to see if the actual file exists
+        File pinnedChallenges = new File(storageFolder, "pinned-challenges.json");
+        if (!pinnedChallenges.exists()) return;
+        try (FileInputStream file = new FileInputStream(pinnedChallenges)) {
+            // Parse the JSON
+            JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader(file));
+            for (Object obj : json.keySet()) {
+                String uuid = (String) obj;
+                JSONArray challenges = (JSONArray) json.get(uuid);
+                challenges.forEach(challenge -> addChallenge(UUID.fromString(uuid), (String) challenge));
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        pinnedChallenges.delete();
     }
 
     public CompletableFuture<List<String>> getPinnedChallenges(UUID uuid) {
