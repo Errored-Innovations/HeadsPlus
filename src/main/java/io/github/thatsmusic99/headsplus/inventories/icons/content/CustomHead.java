@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.HeadPurchaseEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
@@ -78,12 +79,16 @@ public class CustomHead extends Content {
         } else {
             HPPlayer hpp = HPPlayer.getHPPlayer(player);
             if (hpp.hasHeadFavourited(id)) {
-                hpp.removeFavourite(id);
+                hpp.removeFavourite(id).thenAcceptAsync(what -> {
+                    initNameAndLore(id, player);
+                    event.getInventory().setItem(event.getSlot(), this.item);
+                }, HeadsPlus.sync);
             } else {
-                hpp.addFavourite(id);
+                hpp.addFavourite(id).thenAcceptAsync(why -> {
+                    initNameAndLore(id, player);
+                    event.getInventory().setItem(event.getSlot(), this.item);
+                }, HeadsPlus.sync);
             }
-            initNameAndLore(id, player);
-            event.getInventory().setItem(event.getSlot(), this.item);
         }
         return false;
     }

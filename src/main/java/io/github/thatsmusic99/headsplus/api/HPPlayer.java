@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigLevels;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
 import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public class HPPlayer {
     private String currentMask;
     private List<PotionEffect> activeMask;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private List<String> favouriteHeads;
+    private volatile List<String> favouriteHeads;
     private volatile List<String> pinnedChallenges;
     private boolean ignoreFallDamage;
     private String cachedLocale;
@@ -45,6 +46,7 @@ public class HPPlayer {
         activeMask = new ArrayList<>();
         favouriteHeads = new ArrayList<>();
         PinnedChallengeManager.get().getPinnedChallenges(p.getUniqueId()).thenAccept(list -> pinnedChallenges = list);
+        FavouriteHeadsSQLManager.get().getFavouriteHeads(p.getUniqueId()).thenAccept(list -> favouriteHeads = list);
         ignoreFallDamage = false;
         this.player = p.getUniqueId();
         try {
@@ -367,14 +369,14 @@ public class HPPlayer {
         return favouriteHeads.contains(s);
     }
 
-    public void addFavourite(String s) {
+    public CompletableFuture<Void> addFavourite(String s) {
         favouriteHeads.add(s);
-        HeadsPlus.get().getFavourites().writeData(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().addHead(player, s);
     }
 
-    public void removeFavourite(String s) {
+    public CompletableFuture<Void> removeFavourite(String s) {
         favouriteHeads.remove(s);
-        HeadsPlus.get().getFavourites().removeHead(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().removeHead(player, s);
     }
 
     public CompletableFuture<List<String>> getPinnedChallenges() {
@@ -403,7 +405,11 @@ public class HPPlayer {
         return ignoreFallDamage;
     }
 
-    public List<String> getFavouriteHeads() {
-        return favouriteHeads;
+    public CompletableFuture<List<String>> getFavouriteHeads() {
+        if (favouriteHeads != null) return CompletableFuture.completedFuture(favouriteHeads);
+        return FavouriteHeadsSQLManager.get().getFavouriteHeads(player).thenApply(heads -> {
+            favouriteHeads = heads;
+            return favouriteHeads;
+        });
     }
 }

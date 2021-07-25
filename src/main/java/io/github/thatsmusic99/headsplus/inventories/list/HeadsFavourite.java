@@ -36,7 +36,7 @@ public class HeadsFavourite extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
         List<Content> contents = new ArrayList<>();
-        for (String head : hpPlayer.getFavouriteHeads()) {
+        for (String head : hpPlayer.getFavouriteHeads().join()) {
             CustomHead head1 = new CustomHead(head);
             head1.initNameAndLore(head, player);
             contents.add(head1);
