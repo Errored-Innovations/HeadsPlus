@@ -4,6 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigLevels;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 
 import java.util.HashMap;
 import java.util.List;
