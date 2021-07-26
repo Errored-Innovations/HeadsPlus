@@ -61,7 +61,7 @@ public class LevelsManager {
 		if (!(levelSection.get("rewards") instanceof ConfigSection)) {
 		    rewardKey = levelSection.getString("rewards");
 		}
-		Reward reward = Reward.getReward(rewardKey);
+		Reward reward = RewardManager.getReward(rewardKey);
 		Level level = new Level(levelKey, displayName, xp, 0.0, reward != null, reward);
 		// Now set the order stuff properly
 		int hierarchy = levelSection.getInteger("hierarchy");
