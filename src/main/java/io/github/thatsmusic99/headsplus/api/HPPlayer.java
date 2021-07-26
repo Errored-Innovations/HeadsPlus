@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigLevels;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,9 +26,9 @@ public class HPPlayer {
 
     private UUID player;
     private int xp;
-    private Level level = null;
+    private String level = null;
     private List<String> completeChallenges;
-    private Level nextLevel = null;
+    private String nextLevel = null;
     private String currentMask;
     private List<PotionEffect> activeMask;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
@@ -82,53 +83,8 @@ public class HPPlayer {
             localeForced = false;
         }
         if (MainConfig.get().getMainFeatures().LEVELS) {
-            if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
-                for (int i = ConfigLevels.get().getMaxHierarchy(); i > 0; i--) {
-                    try {
-                        if (levels.get(i) != null && levels.get(i).getRequiredXP() <= xp) {
-                            level = levels.get(i);
-
-                            scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
-                            try {
-                                for (int j = i + 1; j < ConfigLevels.get().getMaxHierarchy(); j++) {
-                                    if (levels.get(j) != null) {
-                                        nextLevel = levels.get(j);
-                                        break;
-                                    }
-                                }
-                            } catch (IndexOutOfBoundsException e) { // End of levels
-                                nextLevel = null;
-                            }
-                            break;
-                        }
-                    } catch (NullPointerException ignored) { // Continue
-                    }
-
-                }
-            } else {
-                String configLevel = scores.getLevel(p.getUniqueId().toString());
-                for (int i = ConfigLevels.get().getMaxHierarchy(); i > 0; i--) {
-                    try {
-                        if (levels.get(i) != null && levels.get(i).getConfigName().equals(configLevel)) {
-                            level = levels.get(i);
-                            try {
-                                for (int j = i + 1; j < ConfigLevels.get().getMaxHierarchy(); j++) {
-                                    if (levels.get(j) != null) {
-                                        nextLevel = levels.get(j);
-                                        break;
-                                    }
-                                }
-                            } catch (IndexOutOfBoundsException e) { // End of levels
-                                nextLevel = null;
-                            }
-                            break;
-                        }
-                    } catch (NullPointerException ignored) {
-
-                    }
-
-                }
-            }
+	    level = scores.getLevel(player.toString());
+	    nextLevel = LevelsManager.get().getNextLevel(level).getConfigName();                
         }
         this.completeChallenges = sc;
         players.put(p.getUniqueId(), this);
@@ -218,11 +174,11 @@ public class HPPlayer {
     }
 
     public Level getLevel() {
-        return level;
+        return LevelsManager.get().getLevel(level);
     }
 
     public Level getNextLevel() {
-        return nextLevel;
+        return LevelsManager.get().getLevel(nextLevel);
     }
 
     public List<String> getCompleteChallenges() {
@@ -291,59 +247,39 @@ public class HPPlayer {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    while (nextLevel != null && nextLevel.getRequiredXP() <= getXp()) {
-                        LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), level, nextLevel);
+	            Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
+                        LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevelLocal);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             level = nextLevel;
+			    nextLevel = LevelsManager.get().getNextLevel(level).getConfigName(); // TODO null check
                             Player player = (Player) getPlayer();
                             if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
                                 final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
                                 for (Player p : Bukkit.getOnlinePlayers()) {
-                                    HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
+                                    HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', nextLevelLocal.getDisplayName()));
                                 }
                             }
-                            HashMap<Integer, Level> levels = HeadsPlus.get().getLevels();
-                            scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
-                            if (level.isrEnabled()) {
-                                level.getReward().rewardPlayer(null, player.getPlayer()); // TODO
-                            }
-                            for (int i = 1; i < ConfigLevels.get().getMaxHierarchy(); i++) {
-                                if (levels.get(i) == level) {
-                                    try {
-                                        level = levels.get(i);
-                                        boolean found = false;
-                                        for (int j = i + 1; j < ConfigLevels.get().getMaxHierarchy(); j++) {
-                                            if (levels.get(j) != null) {
-                                                nextLevel = levels.get(j);
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                        if (!found) {
-                                            nextLevel = null;
-                                        } else {
-                                            break;
-                                        }
-                                    } catch (IndexOutOfBoundsException e) { // End of levels
-                                        nextLevel = null;
-                                    }
-                                }
+                            scores.setLevel(player.getUniqueId().toString(), nextLevelLocal.getConfigName());
+                            if (nextLevelLocal.isrEnabled()) {
+                                nextLevelLocal.getReward().rewardPlayer(null, player.getPlayer()); // TODO
                             }
                         }
                     }
                 }
             }.runTask(hp);
-            if (level == null || level.getRequiredXP() > getXp()) {
+            if (level == null || getLevel().getRequiredXP() > getXp()) {
+		    // TODO wtf
                 HashMap<Integer, Level> levels = hp.getLevels();
                 for (int i = 1; i < ConfigLevels.get().getMaxHierarchy(); i++) {
                     if (levels.get(i) != null && levels.get(i).getRequiredXP() <= getXp()) {
                         try {
-                            level = levels.get(i);
+                            level = levels.get(i).getConfigName();
                             boolean found = false;
                             for (int j = i + 1; j < ConfigLevels.get().getMaxHierarchy(); j++) {
                                 if (levels.get(i) != null) {
-                                    nextLevel = levels.get(i + 1);
+                                    nextLevel = levels.get(i + 1).getConfigName();
                                     found = true;
                                     break;
                                 }
@@ -356,7 +292,7 @@ public class HPPlayer {
                     }
                 }
                 level = null;
-                nextLevel = levels.get(1);
+                nextLevel = levels.get(1).getConfigName();
             }
         }
     }
