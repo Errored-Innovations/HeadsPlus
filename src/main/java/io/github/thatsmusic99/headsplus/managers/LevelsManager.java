@@ -38,7 +38,7 @@ public class LevelsManager {
     public Level getNextLevel(String key) {
         int order = levelOrder.indexOf(key) + 1;
 	if (order == levelOrder.size()) return null;
-	return levelOrder.get(order);
+	return getLevel(order);
     }
 
     private void init() {
