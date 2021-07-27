@@ -63,11 +63,16 @@ public class LevelsManager {
 		int xp = levelSection.getInteger("required-xp");
 		// Get the reward
 		String rewardKey = "levels_" + levelKey;
+		Reward reward;
 		if (!(levelSection.get("rewards") instanceof ConfigSection)) {
 		    rewardKey = levelSection.getString("rewards");
+		    reward = RewardsManager.get().getReward(rewardKey);
+		} else if (!levelSection.getBoolean("rewards.enabled")) {
+                    reward = null;
+		} else {
+                    reward = RewardsManager.get().getReward(rewardKey);
 		}
-		Reward reward = RewardsManager.get().getReward(rewardKey);
-		Level level = new Level(levelKey, displayName, xp, 0.0, reward != null, reward);
+		Level level = new Level(levelKey, displayName, xp, reward);
 		// Now set the order stuff properly
 		int hierarchy = levelSection.getInteger("hierarchy");
 		if (hierarchy == 0) return; // TODO do properly
