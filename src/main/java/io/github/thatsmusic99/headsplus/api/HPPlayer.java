@@ -56,7 +56,6 @@ public class HPPlayer {
         } catch (NullPointerException ignored) {
         }
         PlayerScores scores = hp.getScores();
-        HashMap<Integer, Level> levels = hp.getLevels();
         this.xp = scores.getXp(p.getUniqueId().toString());
         List<String> sc = new ArrayList<>();
         sc.addAll(scores.getCompletedChallenges(p.getUniqueId().toString()));
@@ -271,28 +270,6 @@ public class HPPlayer {
             }.runTask(hp);
             if (level == null || getLevel().getRequiredXP() > getXp()) {
 		    // TODO wtf
-                HashMap<Integer, Level> levels = hp.getLevels();
-                for (int i = 1; i < ConfigLevels.get().getMaxHierarchy(); i++) {
-                    if (levels.get(i) != null && levels.get(i).getRequiredXP() <= getXp()) {
-                        try {
-                            level = levels.get(i).getConfigName();
-                            boolean found = false;
-                            for (int j = i + 1; j < ConfigLevels.get().getMaxHierarchy(); j++) {
-                                if (levels.get(i) != null) {
-                                    nextLevel = levels.get(i + 1).getConfigName();
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found) nextLevel = null;
-                            return;
-                        } catch (IndexOutOfBoundsException e) { // End of levels
-                            nextLevel = null;
-                        }
-                    }
-                }
-                level = null;
-                nextLevel = levels.get(1).getConfigName();
             }
         }
     }

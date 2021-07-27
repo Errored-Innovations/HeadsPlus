@@ -57,7 +57,6 @@ public class HeadsPlus extends JavaPlugin {
     // Other management stuff
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
-    private final HashMap<Integer, Level> levels = new HashMap<>();
     private List<HPConfig> configFiles = new ArrayList<>();
     private Favourites favourites;
     private Pinned pinned;
@@ -502,10 +501,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public Connection getConnection() {
         return connection;
-    }
-
-    public HashMap<Integer, Level> getLevels() {
-        return levels;
     }
 
     public Economy getEconomy() {
