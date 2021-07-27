@@ -29,43 +29,7 @@ public class ConfigLevels extends FeatureConfig {
     public static ConfigLevels get() {
         return instance;
     }
-
-    @Override
-    public void postSave() {
-        HeadsPlus hp = HeadsPlus.get();
-        hp.getLevels().clear();
-        if (MainConfig.get().getMainFeatures().LEVELS) {
-            try {
-                for (String s : getConfigSection("levels").getKeys(false)) {
-                    String dn = HPUtils.notNull(getString("levels." + s + ".display-name"), "There is no display name for level " + s + "!");
-                    double av = getDouble("levels." + s + ".added-version");
-                    int rxp = getInteger("levels." + s + ".required-xp");
-                    int h = getInteger("levels." + s + ".hierarchy");
-                    boolean e = getBoolean("levels." + s + ".rewards.enabled", false);
-                    HPChallengeRewardTypes reward;
-                    try {
-
-                        reward = HPChallengeRewardTypes.valueOf(HPUtils.notNull(getString("levels." + s + ".rewards.reward-type"), "There is no reward type for " + s + "!").toUpperCase());
-                    } catch (Exception ex) {
-                        throw new NullPointerException("The reward type for " + s + " is not valid!");
-                    }
-                    Object rewardVal = HPUtils.notNull(get("levels." + s + ".rewards.reward-value"), "The reward value for level " + s + " is null!");
-                    int items = getInteger("levels." + s + ".rewards.item-amount");
-                    String sender = getString("levels." + s + ".rewards.command-sender");
-                    // TODO - take to RewardsManager
-                    Reward reward1 = Reward.fromConfigSection(s, getConfigSection("levels." + s + ".rewards"));
-                    Level c = new Level(s, dn, rxp, av, e, reward1);
-                    hp.getLevels().put(h, c);
-                    if (h > maxHierarchy) {
-                        maxHierarchy = h;
-                    }
-                }
-            } catch (NullPointerException ex) {
-                hp.getLogger().warning(ex.getMessage());
-            }
-        }
-    }
-
+                        
     @Override
     public void loadDefaults() {
         double version = 0.3;
