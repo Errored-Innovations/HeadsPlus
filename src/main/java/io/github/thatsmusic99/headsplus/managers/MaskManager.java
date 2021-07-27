@@ -1,16 +1,28 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.config.ConfigMasks;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.util.FlagHandler;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class MaskManager {
 
     private final HashMap<String, MaskInfo> masks = new HashMap<>();
     private static MaskManager instance;
+    private final HashSet<BukkitRunnable> runningTasks = new HashSet<>();
 
     public MaskManager() {
         instance = this;
@@ -20,8 +32,15 @@ public class MaskManager {
         return instance;
     }
 
+    public void reload() {
+        reset();
+        init();
+    }
+
     public void reset() {
         masks.clear();
+	runningTasks.forEach(run -> run.cancel());
+	runningTasks.clear();
     }
 
     public void registerMask(String key, MaskInfo headInfo) {
@@ -33,6 +52,36 @@ public class MaskManager {
             key = key.substring(4);
         }
         return (MaskInfo) masks.getOrDefault(key, new MaskInfo()).clone();
+    }
+
+    public void init() {
+        ConfigMasks masksConfig = ConfigMasks.get();
+	// Get the config section
+	ConfigSection masksSection = masksConfig.getConfigSection("masks");
+	if (masksSection == null) return;
+	// Get each mask
+	for (String key : masksSection.getKeys(false)) {
+	    try {
+                ConfigSection maskSection = masksSection.getConfigSection(key);
+	        if (maskSection == null) continue;
+	        //
+		MaskInfo info;
+		String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"), "No idle texture for " + key + " found!");
+		HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
+		String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
+		switch (type.toLowerCase()) {
+                    case "potion": // TODO effects
+			info = new PotionMask(key, headInfo);
+			break;
+		    default:
+			throw new IllegalArgumentException("Mask type " + type + " for " + key + " does not exist!");
+		}
+
+		registerMask(key, info);
+	    } catch (NullPointerException | IllegalArgumentException ex) {
+                HeadsPlus.get().getLogger().warning(ex.getMessage());
+	    } 
+	}
     }
 
     public static class MaskInfo extends HeadManager.HeadInfo {
@@ -56,12 +105,15 @@ public class MaskManager {
         }
     }
 
-    public static class PotionMask extends MaskInfo {
+    public class PotionMask extends MaskInfo {
 
         private List<PotionEffect> effects;
+        private String id;
 
-        public PotionMask() {
+        public PotionMask(String id, HeadManager.HeadInfo info) {
+            super(info);
             this.effects = new ArrayList<>();
+	    this.id = id;
         }
 
         public PotionMask withEffects(List<PotionEffect> effects) {
@@ -76,7 +128,39 @@ public class MaskManager {
 
         @Override
         public void run(Player player) {
+	    BukkitRunnable runnable = new BukkitRunnable() {
+ 
+                @Override
+                public void run() {
 
+                    if (player == null || !player.isOnline()) {
+	     	        cancel();
+		        return;
+		    }
+		    // Get the helmet
+		    ItemStack helmet = player.getInventory().getHelmet();
+		    if (helmet == null || PersistenceManager.get().getMaskType(helmet) != id) {
+                        cancel();
+		        return;
+		    }
+		    if (HeadsPlus.get().canUseWG() && !FlagHandler.canUseMasks(player)) {
+                        cancel();
+		        return;
+		    }
+
+		    for (PotionEffect effect : effects) {
+                        effect.apply(player);
+		    }
+		}
+
+		@Override
+		public void cancel() {
+                    super.cancel();
+		    runningTasks.remove(this);
+		}
+	    };
+	    runnable.runTaskTimer(HeadsPlus.get(), 1, MainConfig.get().getMasks().CHECK_INTERVAL);
+	    runningTasks.add(runnable);
         }
     }
 }
