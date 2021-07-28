@@ -19,6 +19,7 @@ public class MainConfig extends HPConfig {
     private PlayerDrops playerDrops;
     private SellingHeads sellingHeads;
     private Masks masks;
+    private Autograbber autograbber;
     private Challenges challenges;
     private Levels levels;
     private Leaderboards leaderboards;
@@ -131,6 +132,14 @@ public class MainConfig extends HPConfig {
         addDefault("levels", new ArrayList<>());
         addDefault("stats-collection", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
+
+	addSection("Autograbber");
+	addDefault("enable-autograb", false, "Enables the autograbber feature.\n" +
+			"This grabs the texture of a player's head when they join and add it to the local head storage cache for HeadsPlus.");
+	addDefault("add-grabbed-heads-to-selector", true, "Whether or not player heads fetched through the autograbber should be put in the /heads selector.");
+	addDefault("autograb-section", "players", "The section in the /heads selector that grabbed heads get placed in if the option above is enabled.");
+	addDefault("autograb-display-name", "&8[&6{player}&8]", "The display name given to the head when it is autograbbed.");
+	addDefault("autograb-price", "default", "The default price set for autograbbed heads. Use \"default\" to use the default price used for all heads.");
 
         addSection("Challenges");
         addDefault("broadcast-challenge-complete", true);
@@ -245,6 +254,12 @@ public class MainConfig extends HPConfig {
 	moveTo("plugin.mechanics.masks.reset-after-x-intervals", "reset-after-x-intervals");
 	moveTo("plugin.mechanics.masks.effect-length", "effect-length");
 
+	// Autograb Options
+	moveTo("plugin.autograb.enabled", "enable-autograb");
+	moveTo("plugin.autograb.add-as-enabled", "add-grabbed-heads-to-selector");
+	moveTo("plugin.autograb.section", "autograb-section");
+	moveTo("plugin.autograb.title", "autograb-display-name");
+	moveTo("plugin.autograb.price", "autograb-price");
 	// TODO - figure out restrictions
 	
 	// Challenge Options
@@ -443,6 +458,7 @@ public class MainConfig extends HPConfig {
         playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
         masks = new Masks();
+	autograbber = new Autograbber();
         challenges = new Challenges();
         levels = new Levels();
         leaderboards = new Leaderboards();
@@ -506,6 +522,10 @@ public class MainConfig extends HPConfig {
 
     public Masks getMasks() {
         return masks;
+    }
+
+    public Autograbber getAutograbber() {
+        return autograbber;
     }
 
     public Challenges getChallenges() {
@@ -600,6 +620,13 @@ public class MainConfig extends HPConfig {
 
     public class Restrictions {
         public boolean USE_WHITELIST = getBoolean("whitelist-worlds");
+    }
+
+    public class Autograbber {
+        public boolean ENABLE_AUTOGRABBER = getBoolean("enable-autograb"),
+	        ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
+	public String SECTION = getString("autograb-section"),
+	        DISPLAY_NAME = getString("autograb-display-name");
     }
 
     public class Challenges {
