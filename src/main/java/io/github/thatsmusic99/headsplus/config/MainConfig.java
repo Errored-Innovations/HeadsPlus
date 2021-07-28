@@ -22,6 +22,7 @@ public class MainConfig extends HPConfig {
     private Localisation localisation;
     private Updates updates;
     private Miscellaneous miscellaneous;
+    private List<String> defaults;
 
     private static MainConfig instance;
 
@@ -152,6 +153,24 @@ public class MainConfig extends HPConfig {
         addDefault("smart-locale", false);
         addDefault("use-tellraw", true);
 
+	addSection("Permissions");
+	addDefault("default-permissions", Lists.newArrayList("headsplus.craft.*", 
+				"headsplus.challenges",
+			        "headsplus.drops.*",	
+				"headsplus.head",
+				"headsplus.heads",
+				"headsplus.leaderboards",
+				"headsplus.maincommand", 
+				"headsplus.maincommand.info",
+				"headsplus.maincommand.profile",
+				"headsplus.myhead",
+				"headsplus.sellhead",
+				"headsplus.sellhead.gui"), 
+			"The list of permissions users should have by default.\n" +
+			"It is not recommended to rely on this alone, but use this with a permissions plugin like LuckPerms.\n" +
+			"If you want to set up permissions purely from scratch, turn this into an empty list:\n" +
+			"default-permissions:[]")
+
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
         addDefault("smite-player", false, "This April Fool's feature genuinely got me a complaint.\n" +
@@ -167,7 +186,6 @@ public class MainConfig extends HPConfig {
         // TODO: depends on locale rather than config option
         addDefault("swap-decimal-notation", false,
                 "If you decimal notation is different to the Western standard (i.e. uses , instead of . for decimal points) and want this in the plugin, turn on this option.");
-
     }
 
      @Override
@@ -347,6 +365,30 @@ public class MainConfig extends HPConfig {
         localisation = new Localisation();
         updates = new Updates();
         miscellaneous = new Miscellaneous();
+
+	// Default permissions handling
+	List<String> permissions = getStringList("default-permissions-list");
+	// If there's no defaults already set up, just create a new list
+	// Otherwise, if this is a reload, reset the permissions set
+	if (defaults == null) {
+            defaults = new ArrayList<>();
+	} else {
+            for (String defaultPerm : defaults) {
+                Permission permObj = Bukkit.getPluginManager().getPermission(defaultPerm);
+		permObj.setDefault(PermissionDefault.OP);
+	    }
+	}
+	// Then set up the actual permissions
+	for (String perm : permissions) {
+            if (!perm.startsWith("headsplus")) continue;
+	    Permission permission = Bukkit.getPluginManager().getPermission(perm);
+	    if (permission == null) {
+                permission = new Permission(perm);
+		Bukkit.getPluginManager().addPermission(permission);
+	    }
+	    permission.setDefault(PermissionDefault.TRUE);
+	    defaults.add(perm);
+	}
     }
 
     public static MainConfig get() {
