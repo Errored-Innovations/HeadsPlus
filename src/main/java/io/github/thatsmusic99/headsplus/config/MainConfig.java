@@ -169,7 +169,7 @@ public class MainConfig extends HPConfig {
 			"The list of permissions users should have by default.\n" +
 			"It is not recommended to rely on this alone, but use this with a permissions plugin like LuckPerms.\n" +
 			"If you want to set up permissions purely from scratch, turn this into an empty list:\n" +
-			"default-permissions:[]")
+			"default-permissions:[]");
 
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
