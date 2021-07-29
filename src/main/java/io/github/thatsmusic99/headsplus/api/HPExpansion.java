@@ -53,8 +53,8 @@ public class HPExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String identifier){
         HPPlayer pl = HPPlayer.getHPPlayer(player);
         if (pl == null) {
-            pl = new HPPlayer(player);
-        }
+            pl = new HPPlayer(player.getUniqueId());
+	}
         // %example_placeholder1%
         if(identifier.equals("xp")){
             return String.valueOf(pl.getXp());
