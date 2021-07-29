@@ -6,6 +6,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
@@ -21,6 +22,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
@@ -113,7 +115,7 @@ public class ConfigCustomHeads extends HPConfig {
     public void postSave() {
         File customHeads = new File(HeadsPlus.get().getDataFolder(), "customheads.yml");
 	if (!customHeads.exists()) return;
-	customHeads.renameTo("customheads-backup.yml");
+	customHeads.renameTo(new File(HeadsPlus.get().getDataFolder(), "customheads-backup.yml"));
     }
 
     public static ConfigCustomHeads get() {
