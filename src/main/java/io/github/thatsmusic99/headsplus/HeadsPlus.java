@@ -338,7 +338,7 @@ public class HeadsPlus extends JavaPlugin {
         config.load();
         configFiles.add(new ConfigAnimations());
         configFiles.add(new ConfigChallenges());
-        configFiles.add(new ConfigCustomHeads());
+	if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
         configFiles.add(new ConfigHeads());
         configFiles.add(new ConfigHeadsSelector());
