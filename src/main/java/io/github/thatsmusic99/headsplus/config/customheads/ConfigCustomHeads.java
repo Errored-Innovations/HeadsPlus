@@ -86,40 +86,34 @@ public class ConfigCustomHeads extends HPConfig {
 
     @Override
     public void moveToNew() {
+	
         moveTo("options.update-heads", "update-heads", ConfigHeads.get());
-        moveTo("options.version", "current-version", ConfigHeads.get());
+        moveTo("options.version", "version", ConfigHeads.get());
         moveTo("options.default-price", "default-price");
         moveTo("options.price-per-world", "price-per-world");
-        // May as well add these.
-        for (String key : getConfigSection("sections").getKeys(false)) {
-            addDefault("sections." + key + ".enabled", true);
-            addDefault("sections." + key + ".permission", "headsplus.section." + key);
-        }
+	// For each head 
+	for (String key : getConfigSection("heads").getKeys(false)) {
+            moveTo("heads." + key + ".displayname", "heads." + key + ".display-name", ConfigHeads.get());
+	    moveTo("heads." + key + ".texture", "heads." + key + ".texture", ConfigHeads.get());
+	    if (get("heads." + key + ".price") instanceof Double) {
+                moveTo("heads." + key + ".price", "heads.HP#" + key + ".price", ConfigHeadsSelector.get());
+	    }
+	    moveTo("heads." + key + ".section", "heads.HP#" + key + ".section", ConfigHeadsSelector.get());
+	}
+	// For each section
+	for (String key : getConfigSection("sections").getKeys(false)) {
+            moveTo("sections." + key + ".texture", "sections." + key + ".texture", ConfigHeadsSelector.get());
+	    moveTo("sections." + key + ".display-name", "sections." + key + ".display-name", ConfigHeadsSelector.get());
+	    ConfigHeadsSelector.get().addDefault("sections." + key + ".enabled", true);
+	    ConfigHeadsSelector.get().addDefault("sections." + key + ".permission", "headsplus.section." + key);
+	}
     }
 
     @Override
     public void postSave() {
-        sections.clear();
-        for (String cat : getConfigSection("sections").getKeys(false)) {
-            sections.put(cat, new ArrayList<>());
-        }
-        ConfigSection heads = getConfigSection("heads");
-        try {
-            for (String head : heads.getKeys(false)) {
-                allHeadsCache.add(heads.getString(head + ".texture"));
-                if (heads.getBoolean(head + ".database", true)) {
-                    final String sec = heads.getString(head + ".section");
-                    List<String> list = sections.get(sec);
-                    if (list != null) {
-                        list.add(head);
-                        headsCache.put(head, getSkull(head));
-                    }
-                }
-            }
-        } catch (RuntimeException ex) {
-            HeadsPlus.get().getLogger().log(Level.SEVERE, "Failed to init skull database", ex);
-            sections.clear();
-        }
+        File customHeads = new File(HeadsPlus.get().getDataFolder(), "customheads.yml");
+	if (!customHeads.exists()) return;
+	customHeads.renameTo("customheads-backup.yml");
     }
 
     public static ConfigCustomHeads get() {
