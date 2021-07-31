@@ -30,7 +30,7 @@ public class PlayerSQLManager extends SQLManager {
                         "CREATE TABLE IF NOT EXISTS headsplus_players " +
                         "(id INTEGER PRIMARY KEY " + getStupidAutoIncrementThing() + ", "+
                         "uuid VARCHAR(256) NOT NULL, " +
-                        "name VARCHAR(256) NOT NULL, " +
+                        "username VARCHAR(32) NOT NULL, " +
                         "xp BIGINT NOT NULL," +
                         "level INT NOT NULL," +
                         "last_joined BIGINT NOT NULL)"
@@ -85,14 +85,14 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setString(2, uuid.toString());
                 ResultSet results = statement.executeQuery();
                 if (!results.next()) {
-                    insertPlayer(uuid, name, 0, 0, System.currentTimeMillis());
+                    insertPlayer(uuid, name, 0, 0, System.currentTimeMillis()).join();
                     return;
                 }
 
                 if (!results.getString("username").equals(name)) {
-                    updateUsername(uuid, name);
+                    updateUsername(uuid, name).join();
                 } else if (!results.getString("uuid").equals(uuid.toString())) {
-                    updateUUID(uuid, name);
+                    updateUUID(uuid, name).join();
                 }
             } catch (SQLException exception) {
                 exception.printStackTrace();
