@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
@@ -58,7 +59,7 @@ public class DebugFileCreator {
             o3.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             o3.put("Player death messages", MainConfig.get().getPlayerDrops().ENABLE_PLAYER_DEATH_MESSAGES);
             o3.put("Total challenges", ChallengeManager.get().getChallenges().size());
-            o3.put("Total levels", hp.getLevels().size());
+            o3.put("Total levels", LevelsManager.get().getLevels().size());
             o3.put("Masks enabled", MainConfig.get().getMainFeatures().MASKS);
             o3.put("Allows looting enchantment", MainConfig.get().getMobDrops().ENABLE_LOOTING);
             o3.put("Levels enabled", MainConfig.get().getMainFeatures().LEVELS);

@@ -55,7 +55,6 @@ public class HeadsPlus extends JavaPlugin {
     // Other management stuff
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
-    private final HashMap<Integer, Level> levels = new HashMap<>();
     private List<HPConfig> configFiles = new ArrayList<>();
     private PlayerScores scores;
     private boolean canUseWG = false;
@@ -315,7 +314,7 @@ public class HeadsPlus extends JavaPlugin {
         config.load();
         configFiles.add(new ConfigAnimations());
         configFiles.add(new ConfigChallenges());
-        configFiles.add(new ConfigCustomHeads());
+	if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
         configFiles.add(new ConfigHeads());
         configFiles.add(new ConfigHeadsSelector());
@@ -473,10 +472,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public Connection getConnection() {
         return connection;
-    }
-
-    public HashMap<Integer, Level> getLevels() {
-        return levels;
     }
 
     public Economy getEconomy() {

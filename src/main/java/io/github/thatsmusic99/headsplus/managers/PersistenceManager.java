@@ -18,7 +18,7 @@ public class PersistenceManager {
     private static final NamespacedKey HEADSPLUS_SELL_TYPE = new NamespacedKey(HeadsPlus.get(), "sell_type");
     private static final NamespacedKey HEADSPLUS_SELL_BOOLEAN = new NamespacedKey(HeadsPlus.get(), "sell_boolean");
     private static final NamespacedKey HEADSPLUS_INVENTORY_ICON = new NamespacedKey(HeadsPlus.get(), "inventory_icon");
-
+    private static final NamespacedKey HEADSPLUS_MASK = new NamespacedKey(HeadsPlus.get(), "mask_identifier");
     public PersistenceManager() {
         instance = this;
     }
@@ -66,6 +66,18 @@ public class PersistenceManager {
 
     public void removeIcon(ItemStack item) {
         setValue(item, HEADSPLUS_INVENTORY_ICON, PersistentDataType.BYTE, (byte) 0);
+    }
+
+    public void setMaskType(ItemStack item, String type) {
+        setValue(item, HEADSPLUS_MASK, PersistentDataType.STRING, type);
+    }
+
+    public String getMaskType(ItemStack item) {
+        return getValue(item, HEADSPLUS_MASK, PersistentDataType.STRING);
+    }
+
+    public boolean isAMask(ItemStack item) {
+        return getMaskType(item) != null;
     }
 
     @NotNull

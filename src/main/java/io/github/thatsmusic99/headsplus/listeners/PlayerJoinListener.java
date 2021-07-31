@@ -37,8 +37,8 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 		        return;
             MaskListener.checkMask(player, player.getInventory().getHelmet());
         }, 20);
-
-        if(hp.getConfig().getBoolean("plugin.autograb.enabled")) {
+		
+        if (MainConfig.get().getAutograbber().ENABLE_AUTOGRABBER) {
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
                 String uuid = AutograbManager.grabUUID(player.getName(), 3, null);

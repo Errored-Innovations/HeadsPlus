@@ -2,6 +2,9 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import org.bukkit.Bukkit;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -16,12 +19,14 @@ public class MainConfig extends HPConfig {
     private PlayerDrops playerDrops;
     private SellingHeads sellingHeads;
     private Masks masks;
+    private Autograbber autograbber;
     private Challenges challenges;
     private Levels levels;
     private Leaderboards leaderboards;
     private Localisation localisation;
     private Updates updates;
     private Miscellaneous miscellaneous;
+    private List<String> defaults;
 
     private static MainConfig instance;
 
@@ -46,13 +51,19 @@ public class MainConfig extends HPConfig {
                 "Whilst this option is set to true,");
         addDefault("heads-selector", true, "Whether to allow people to use /heads or not.\n" +
                 "The permission for this is heasplus.heads.");
-        addDefault("challenges", true, "Whether players should be able to complete challenges or not.");
+        addDefault("challenges", true, "Whether players should be able to complete challenges or not.\n" +
+                "The command to access challenges is /hpc, with the permission headsplus.challenges.");
 
-        addDefault("leaderboards", true);
-        addDefault("levels", true);
-        addDefault("masks", true);
-        addDefault("interactions", true);
-        addDefault("block-pickup", true);
+        addDefault("leaderboards", true, "Whether or not people can view leaderboards for the plugin that list up the players with the most heads collected" +
+                  " from mob drops and crafting.\nThe command to access this is /hplb, with the permission headsplus.leaderboards"); // TODO maybe lol
+        addDefault("levels", true, "Whether or not HeadsPlus Levels should be enabled or not.\n" +
+                  "HeadsPlus Levels are cosmetic levels which players can reach through gaining XP. XP can be gained by getting/crafting heads and completing challenges.\n" +
+                  "To configure this further, use the levels.yml file.");
+        addDefault("masks", true, "Whether or not masks should be enabled or not.\nMasks are heads which can be worn and apply a special effect upon the person who wears it." +
+                  "\nHowever, it does require extensive configuration, which is best done using /hp settings.");
+        addDefault("interactions", true, "Whether or not the plugin should respond to interactions with a given head." +
+                   "\nThis can be configured further using interactions.yml.");
+        addDefault("block-pickup", true, "Whether or not creative mode players are able to retreive heads using the pick block button.");
 
         addSection("MySQL");
         addDefault("enable-mysql", false,
@@ -92,7 +103,7 @@ public class MainConfig extends HPConfig {
                         "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
                         "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."));
         addDefault("adjust-price-according-to-balance", false);
-        addDefault("use-victim-balance", true);
+        addDefault("use-killer-balance", false);
         addDefault("percentage-taken-off-victim", 5,
                 "The percentage of the victim's/killer's balance that is taken off the actual victim.\n" +
                         "This is a value out of 100, so in the default option, 5% of the balance is taken.");
@@ -122,6 +133,14 @@ public class MainConfig extends HPConfig {
         addDefault("stats-collection", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
 
+	addSection("Autograbber");
+	addDefault("enable-autograb", false, "Enables the autograbber feature.\n" +
+			"This grabs the texture of a player's head when they join and add it to the local head storage cache for HeadsPlus.");
+	addDefault("add-grabbed-heads-to-selector", true, "Whether or not player heads fetched through the autograbber should be put in the /heads selector.");
+	addDefault("autograb-section", "players", "The section in the /heads selector that grabbed heads get placed in if the option above is enabled.");
+	addDefault("autograb-display-name", "&8[&6{player}&8]", "The display name given to the head when it is autograbbed.");
+	addDefault("autograb-price", "default", "The default price set for autograbbed heads. Use \"default\" to use the default price used for all heads.");
+
         addSection("Challenges");
         addDefault("broadcast-challenge-complete", true);
 
@@ -146,6 +165,24 @@ public class MainConfig extends HPConfig {
         addDefault("smart-locale", false);
         addDefault("use-tellraw", true);
 
+	addSection("Permissions");
+	addDefault("default-permissions", Lists.newArrayList("headsplus.craft.*", 
+				"headsplus.challenges",
+			        "headsplus.drops.*",	
+				"headsplus.head",
+				"headsplus.heads",
+				"headsplus.leaderboards",
+				"headsplus.maincommand", 
+				"headsplus.maincommand.info",
+				"headsplus.maincommand.profile",
+				"headsplus.myhead",
+				"headsplus.sellhead",
+				"headsplus.sellhead.gui"), 
+			"The list of permissions users should have by default.\n" +
+			"It is not recommended to rely on this alone, but use this with a permissions plugin like LuckPerms.\n" +
+			"If you want to set up permissions purely from scratch, turn this into an empty list:\n" +
+			"default-permissions:[]");
+
         addSection("Miscellaneous");
         addDefault("debug", false, "Enables the debugging verbose in the console.");
         addDefault("smite-player", false, "This April Fool's feature genuinely got me a complaint.\n" +
@@ -161,11 +198,97 @@ public class MainConfig extends HPConfig {
         // TODO: depends on locale rather than config option
         addDefault("swap-decimal-notation", false,
                 "If you decimal notation is different to the Western standard (i.e. uses , instead of . for decimal points) and want this in the plugin, turn on this option.");
-
     }
 
      @Override
      public void moveToNew() {
+	// Main Features
+	moveTo("plugin.perks.sell-heads", "sell-heads");
+	boolean b = getBoolean("plugin.perks.drop-heads", getBoolean("player-drops"));
+	moveTo("plugin.perks.drop-heads", "mob-drops");
+	set("player-drops", b);
+	moveTo("plugin.perks.craft-heads", "enable-crafting");
+	moveTo("plugin.perks.heads-selector", "heads-selector");
+	moveTo("plugin.perks.challenges", "challenges");
+	moveTo("plugin.perks.leaderboards", "leaderboards");
+	moveTo("plugin.perks.levels", "levels");
+	moveTo("plugin.perks.mask-powerups", "masks");
+	moveTo("plugin.perks.interact.click-head", "interactions");
+	moveTo("plugin.perks.interact.middle-click-head", "block-pickup");
+	
+	// MySQL Options
+	moveTo("mysql.enabled", "enable-mysql");
+	moveTo("mysql.host", "mysql-host");
+	moveTo("mysql.port", "mysql-port");
+	moveTo("mysql.database", "mysql-database");
+	moveTo("mysql.username", "mysql-username");
+	moveTo("mysql.password", "mysql-password");
+
+	// Mob Drops Options
+	moveTo("plugin.mechanics.blocked-spawn-causes", "blocked-spawn-causes");
+	moveTo("plugin.perks.drops.needs-killer", "needs-killer");
+	moveTo("plugin.perks.drops.entities-requiring-killer", "entities-needing-killer");
+	moveTo("plugin.mechanics.allow-looting-enchantment", "enable-looting");
+	moveTo("plugin.mechanics.looting.thresholds.common", "thresholds.common");
+	moveTo("plugin.mechanics.looting.thresholds.uncommon", "thresholds.uncommon");
+	moveTo("plugin.mechanics.looting.thresholds.rare", "thresholds.rare");
+	moveTo("plugin.mechanics.looting.ignored-entities", "looting-ignored");
+	moveTo("plugin.mechanics.mythicmobs.no-hp-drops", "disable-for-mythic-mobs");
+
+	// Player Drops Options
+	moveTo("plugin.perks.drops.ignore-players", "ignored-players");
+	moveTo("plugin.perks.player-death-messages", "enable-player-head-death-messages");
+	moveTo("plugin.perks.death-messages", "player-head-death-messages");
+	moveTo("plugin.perks.pvp.player-balance-competition", "adjust-price-according-to-balance");
+	moveTo("plugin.perks.pvp.use-killer-balance", "use-killer-balance");
+	moveTo("plugin.perks.pvp.percentage-lost", "percentage-taken-off-victim");
+	moveTo("plugin.perks.pvp.percentage-balance-for-head", "percentage-of-balance-as-price");
+
+	// Sellhead Options
+	moveTo("plugin.mechanics.stop-placement-of-sellable-heads", "stop-placement-of-sellable-heads");
+	moveTo("plugin.mechanics.sellhead-gui", "use-sellhead-gui");
+	moveTo("plugin.mechanics.sellhead-ids-case-sensitive", "case-sensitive-names");
+
+	// Mask Options
+	moveTo("plugin.mechanics.masks.check-interval", "check-interval");
+	moveTo("plugin.mechanics.masks.reset-after-x-intervals", "reset-after-x-intervals");
+	moveTo("plugin.mechanics.masks.effect-length", "effect-length");
+
+	// Autograb Options
+	moveTo("plugin.autograb.enabled", "enable-autograb");
+	moveTo("plugin.autograb.add-as-enabled", "add-grabbed-heads-to-selector");
+	moveTo("plugin.autograb.section", "autograb-section");
+	moveTo("plugin.autograb.title", "autograb-display-name");
+	moveTo("plugin.autograb.price", "autograb-price");
+	// TODO - figure out restrictions
+	
+	// Challenge Options
+	moveTo("plugin.mechanics.broadcasts.challenge-complete", "broadcast-challenge-complete");
+
+	// Level Options
+	moveTo("plugin.mechanics.boss-bar.enabled", "add-boss-bars");
+	moveTo("plugin.mechanics.boss-bar.color", "boss-bar-color");
+	moveTo("plugin.mechanics.boss-bar.title", "boss-bar-title");
+	moveTo("plugin.mechanics.boss-bar.lifetime", "boss-bar-lifetime");
+	moveTo("plugin.mechanics.broadcasts.level-up", "broadcast-level-up");
+
+	// Leaderboard Options
+	moveTo("plugin.mechanics.leaderboards.cache-boards", "cache-leaderboards");
+	moveTo("plugin.mechanics.leaderboards.cache-lifetime-seconds", "cache-duration");
+
+	// Update Options
+	moveTo("plugin.mechanics.update.check", "check-for-updates");
+	moveTo("plugin.mechanics.update.notify", "notify-admins-about-updates");
+
+	// Localisation Options
+	moveTo("plugin.mechanics.use-tellraw", "use-tellraw");
+
+	// Misc Options
+	addDefault("plugin.perks.smite-player-if-they-get-a-head", "smite-player");
+	addDefault("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
+	addDefault("plugin.perks.xp.allow-negative", "allow-negative-xp");
+	addDefault("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
+
         // TODO - maybe not?
         //moveTo("plugin.autograb.enabled", "autograb", ConfigCustomHeads.get());
         //moveTo("plugin.autograb.add-as-enabled", "automatically-enable-grabbed-heads", ConfigCustomHeads.get());
@@ -335,12 +458,37 @@ public class MainConfig extends HPConfig {
         playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
         masks = new Masks();
+	autograbber = new Autograbber();
         challenges = new Challenges();
         levels = new Levels();
         leaderboards = new Leaderboards();
         localisation = new Localisation();
         updates = new Updates();
         miscellaneous = new Miscellaneous();
+
+	// Default permissions handling
+	List<String> permissions = getStringList("default-permissions-list");
+	// If there's no defaults already set up, just create a new list
+	// Otherwise, if this is a reload, reset the permissions set
+	if (defaults == null) {
+            defaults = new ArrayList<>();
+	} else {
+            for (String defaultPerm : defaults) {
+                Permission permObj = Bukkit.getPluginManager().getPermission(defaultPerm);
+		permObj.setDefault(PermissionDefault.OP);
+	    }
+	}
+	// Then set up the actual permissions
+	for (String perm : permissions) {
+            if (!perm.startsWith("headsplus")) continue;
+	    Permission permission = Bukkit.getPluginManager().getPermission(perm);
+	    if (permission == null) {
+                permission = new Permission(perm);
+		Bukkit.getPluginManager().addPermission(permission);
+	    }
+	    permission.setDefault(PermissionDefault.TRUE);
+	    defaults.add(perm);
+	}
     }
 
     public static MainConfig get() {
@@ -374,6 +522,10 @@ public class MainConfig extends HPConfig {
 
     public Masks getMasks() {
         return masks;
+    }
+
+    public Autograbber getAutograbber() {
+        return autograbber;
     }
 
     public Challenges getChallenges() {
@@ -468,6 +620,13 @@ public class MainConfig extends HPConfig {
 
     public class Restrictions {
         public boolean USE_WHITELIST = getBoolean("whitelist-worlds");
+    }
+
+    public class Autograbber {
+        public boolean ENABLE_AUTOGRABBER = getBoolean("enable-autograb"),
+	        ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
+	public String SECTION = getString("autograb-section"),
+	        DISPLAY_NAME = getString("autograb-display-name");
     }
 
     public class Challenges {

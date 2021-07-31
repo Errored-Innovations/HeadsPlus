@@ -58,8 +58,6 @@ public class MaskListener extends HeadsPlusListener<InventoryClickEvent> {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
                 this, EventPriority.NORMAL,
                 new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.get());
-
-        new MaskDamageListener().init();
         new MaskPlayerLeaveListener().init();
     }
 
@@ -116,29 +114,6 @@ public class MaskListener extends HeadsPlusListener<InventoryClickEvent> {
                 hpPlayer.refreshMasks();
                 currentInterval = 0;
             }
-        }
-    }
-
-    private static class MaskDamageListener extends HeadsPlusListener<EntityDamageEvent> {
-
-        @Override
-        public void onEvent(EntityDamageEvent event) {
-            if (!(event.getEntity() instanceof Player)) return;
-            Player player = (Player) event.getEntity();
-            if (Bukkit.getPlayer(player.getUniqueId()) == null) return; // Citizens NPC
-            HPPlayer pl = HPPlayer.getHPPlayer(player);
-            if (pl.isIgnoringFallDamage() && event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) {
-                event.setCancelled(true);
-            }
-        }
-
-        @Override
-        public void init() {
-            Bukkit.getPluginManager().registerEvent(EntityDamageEvent.class,
-                    this, EventPriority.NORMAL,
-                    new HeadsPlusEventExecutor(EntityDamageEvent.class, "EntityDamageEvent", this),
-                    HeadsPlus.get(), true);
-
         }
     }
 

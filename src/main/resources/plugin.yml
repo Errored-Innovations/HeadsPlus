@@ -118,17 +118,17 @@ permissions:
       headsplus.maincommand.headinfo.add: true
       headsplus.maincommand.headinfo.remove: true
       headsplus.maincommand.headinfo.set: true
-  headsplus.craft:
-    default: true
+  headsplus.craft.*:
+    default: op
     description: Allows players to craft heads.
   headsplus.challenges:
-    default: true
+    default: op
     description: Allows players to use /hpc.
   headsplus.leaderboards:
-    default: true
+    default: op
     description: Allows players to use /hplb.
   headsplus.maincommand:
-    default: true
+    default: op
     description: Allows players to use /hp or /headsplus.
   headsplus.notify:
     default: op
@@ -137,31 +137,31 @@ permissions:
     default: op
     description: Allows players to use /addhead.
   headsplus.heads:
-    default: true
+    default: op
     description: Allows players to use /heads.
   headsplus.sellhead:
-    default: true
+    default: op
     description: Allows players to use /sellhead.
   headsplus.myhead:
-    default: true
+    default: op
     description: Allows players to use /myhead.
   headsplus.maincommand.info:
-    default: true
+    default: op
     description: Allows players to use /hp info.
   headsplus.maincommand.profile:
-    default: true
+    default: op
     description: Allows players to use /hp profile (only to view their own profile).
   headsplus.bypass.cost:
     default: false
     description: Bypass the cost for purchasing all heads
   headsplus.sellhead.gui:
-    default: true
+    default: op
     description: Allows you to access the sellhead GUI.
   headsplus.death.ignore:
     default: false
     description: Allows you to not receive a death message when a player drops their head.
   headsplus.head:
-    default: true
+    default: op
     description: Allows you to use the /head command.
   headsplus.head.others:
     default: op
@@ -178,6 +178,6 @@ permissions:
   headsplus.maincommand.locale.other:
     default: false
     description: Allows you to change other player's plugin language.
-  headsplus.drops:
-    default: true
+  headsplus.drops.*:
+    default: op
     description: Allows players to kill mobs/players for head drops.
