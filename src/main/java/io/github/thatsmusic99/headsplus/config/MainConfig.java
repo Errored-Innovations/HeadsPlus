@@ -150,6 +150,7 @@ public class MainConfig extends HPConfig {
         addDefault("boss-bar-title", "&c&lXP to next HP level");
         addDefault("boss-bar-lifetime", 5);
         addDefault("broadcast-level-up", true);
+        addDefault("multiple-level-ups", false);
 
         addSection("Leaderboards");
         addDefault("cache-leaderboards", true);
@@ -631,7 +632,8 @@ public class MainConfig extends HPConfig {
 
     public class Levels {
         public boolean ENABLE_BOSS_BARS = getBoolean("add-boss-bars"),
-                BROADCAST_LEVEL_UP = getBoolean("broadcast-level-up");
+                BROADCAST_LEVEL_UP = getBoolean("broadcast-level-up"),
+                MULTIPLE_LEVEL_UPS = getBoolean("multiple-level-ups");
         public String BOSS_BAR_COLOR = getString("boss-bar-color"),
                 BOSS_BAR_TITLE = getString("boss-bar-title");
         public int BOSS_BAR_LIFETIME = getInteger("boss-bar-lifetime");

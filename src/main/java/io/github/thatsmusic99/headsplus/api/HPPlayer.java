@@ -146,29 +146,35 @@ public class HPPlayer {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-	            Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
-		    // TODO - multiple or just a single level up? Config option is needed
+                    Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    // TODO - multiple or just a single level up? Config option is needed
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
-                        LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevelLocal);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (event.isCancelled()) return;
-                        level = nextLevel;
-                        nextLevel = nextLevelLocal.getConfigName();
-                        Player player = (Player) getPlayer();
-                        if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
-                            final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
-                            for (Player p : Bukkit.getOnlinePlayers()) {
-                                HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', nextLevelLocal.getDisplayName()));
-                            }
-                        }
-                        if (nextLevelLocal.isrEnabled()) {
-                            nextLevelLocal.getReward().rewardPlayer(null, player.getPlayer()); // TODO
-                        }
-                        PlayerSQLManager.get().setLevel(player.getUniqueId(), level);
+                        nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
+                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp();
                     }
+                    if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp();
                 }
             }.runTask(hp);    
         }
+    }
+
+    private boolean initLevelUp() {
+        Level nextLevel = LevelsManager.get().getLevel(this.nextLevel);
+        LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevel);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return false;
+        Player player = (Player) getPlayer();
+        if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
+            final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}",
+                        ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
+            }
+        }
+        if (nextLevel.isrEnabled()) {
+            nextLevel.getReward().rewardPlayer(null, player.getPlayer()); // TODO
+        }
+        return true;
     }
 
     public boolean hasHeadFavourited(String s) {
