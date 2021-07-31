@@ -31,8 +31,6 @@ public class HPPlayer {
     private String level = null;
     private List<String> completeChallenges;
     private String nextLevel = null;
-    private String currentMask;
-    private List<PotionEffect> activeMask;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private volatile List<String> favouriteHeads;
     private volatile List<String> pinnedChallenges;
@@ -42,7 +40,6 @@ public class HPPlayer {
     // TODO - make sure this is never called on the main server thread.
     public HPPlayer(UUID uuid) {
         HeadsPlus hp = HeadsPlus.get();
-        activeMask = new ArrayList<>();
         pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid).join();
         favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid).join();
         int levelIndex = PlayerSQLManager.get().getLevel(uuid).join();
@@ -80,74 +77,6 @@ public class HPPlayer {
         players.put(uuid, this);
     }
 
-    public void clearMask() {
-        try {
-            currentMask = "";
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-            activeMask.clear();
-        } catch (NullPointerException ignored) { // When the mask messes up
-
-        }
-    }
-
-    public void tempClearMasks() {
-        try {
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-        } catch (NullPointerException ignored) {
-        }
-    }
-
-    public void addMask(String s) {
-        if (s.equalsIgnoreCase("WANDERING_TRADER") || s.equalsIgnoreCase("TRADER_LLAMA")) {
-            s = s.toLowerCase();
-        } else {
-            s = s.toLowerCase().replaceAll("_", "");
-        }
-        ConfigMobs hpch = ConfigMobs.get();
-        List<PotionEffect> po = new ArrayList<>();
-        // TODO mask rework
-        for (int i = 0; i < hpch.getStringList(s + ".mask-effects").size(); i++) {
-            String is = hpch.getStringList(s + ".mask-effects").get(i).toUpperCase();
-            int amp = (int) hpch.getList(s + ".mask-amplifiers").get(i);
-            
-            try {
-                PotionEffectType type = PotionEffectType.getByName(is);
-                if (type == null) {
-                    HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
-                    continue;
-                }
-                PotionEffect p = new PotionEffect(type, MainConfig.get().getMasks().EFFECT_LENGTH, amp);
-                ((Player) getPlayer()).addPotionEffect(p);
-                po.add(p);
-            } catch (IllegalArgumentException ex) {
-                HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
-            }
-        }
-        activeMask = po;
-        currentMask = s;
-    }
-
-    public void refreshMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(effect.getType(), MainConfig.get().getMasks().EFFECT_LENGTH, effect.getAmplifier()));
-        }
-    }
-
-    public void clearAllMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-        }
-    }
-
     public long getXp() {
         return xp;
     }
@@ -175,14 +104,6 @@ public class HPPlayer {
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
         UUID uuid = p.getUniqueId();
         return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(uuid);
-    }
-
-    public List<PotionEffect> getActiveMasks() {
-        return activeMask;
-    }
-
-    public String getActiveMaskType() {
-        return currentMask;
     }
 
     public String getLocale() {

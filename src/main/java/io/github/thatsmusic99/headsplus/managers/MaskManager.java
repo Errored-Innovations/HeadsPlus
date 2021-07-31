@@ -1,22 +1,16 @@
 package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMasks;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.Bukkit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 public class MaskManager {
 
@@ -39,7 +33,7 @@ public class MaskManager {
 
     public void reset() {
         masks.clear();
-	runningTasks.forEach(run -> run.cancel());
+	runningTasks.forEach(BukkitRunnable::cancel);
 	runningTasks.clear();
     }
 
@@ -52,6 +46,13 @@ public class MaskManager {
             key = key.substring(4);
         }
         return (MaskInfo) masks.getOrDefault(key, new MaskInfo()).clone();
+    }
+
+    public boolean isMaskRegistered(String key) {
+        if (key.startsWith("HPM#")) {
+            key = key.substring(4);
+        }
+        return masks.containsKey(key);
     }
 
     public void init() {

@@ -205,14 +205,6 @@ public class DebugFileCreator {
         playerInfo.put("Completed challenges", player.getCompleteChallenges());
         playerInfo.put("Level", player.getLevel());
         playerInfo.put("Next level", player.getNextLevel());
-        JSONObject maskInfo = new JSONObject();
-        String type = player.getActiveMaskType();
-        JSONArray a = new JSONArray();
-        for (PotionEffect p : player.getActiveMasks()) {
-            a.add(p.getType().getName());
-        }
-        maskInfo.put(type, a);
-        playerInfo.put("Masks", maskInfo);
         basicInfo.put("Server version", Bukkit.getVersion());
         basicInfo.put("Player details", playerInfo);
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
