@@ -44,20 +44,11 @@ public class HPPlayer {
         if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
         HeadsPlus hp = HeadsPlus.get();
         activeMask = new ArrayList<>();
-        favouriteHeads = new ArrayList<>();
         PinnedChallengeManager.get().getPinnedChallenges(p.getUniqueId()).thenAccept(list -> pinnedChallenges = list);
         FavouriteHeadsSQLManager.get().getFavouriteHeads(p.getUniqueId()).thenAccept(list -> favouriteHeads = list);
         ignoreFallDamage = false;
         this.player = p.getUniqueId();
-        try {
-            for (Object o : (JSONArray) hp.getFavourites().getJSON().get(p.getUniqueId().toString())) {
-                favouriteHeads.add(String.valueOf(o));
-            }
-            for (Object o : (JSONArray) hp.getPinned().getJSON().get(player.toString())) {
-                pinnedChallenges.add(String.valueOf(o));
-            }
-        } catch (NullPointerException ignored) {
-        }
+
         PlayerScores scores = hp.getScores();
         HashMap<Integer, Level> levels = hp.getLevels();
         this.xp = scores.getXp(p.getUniqueId().toString());

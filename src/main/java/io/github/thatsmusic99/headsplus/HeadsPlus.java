@@ -11,8 +11,6 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.managers.*;
-import io.github.thatsmusic99.headsplus.storage.Favourites;
-import io.github.thatsmusic99.headsplus.storage.Pinned;
 import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
@@ -59,8 +57,6 @@ public class HeadsPlus extends JavaPlugin {
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
     private final HashMap<Integer, Level> levels = new HashMap<>();
     private List<HPConfig> configFiles = new ArrayList<>();
-    private Favourites favourites;
-    private Pinned pinned;
     private PlayerScores scores;
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
@@ -196,24 +192,9 @@ public class HeadsPlus extends JavaPlugin {
 
 		}
         try {
-            favourites.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving favourites)", false, null);
-        }  catch (NullPointerException ignored) {
-
-        }
-        try {
             scores.save();
         } catch (IOException e) {
             DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
-        } catch (NullPointerException ignored) {
-
-        }
-
-        try {
-            pinned.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving pinned challenges)", false, null);
         } catch (NullPointerException ignored) {
 
         }
@@ -369,7 +350,6 @@ public class HeadsPlus extends JavaPlugin {
                 getLogger().severe("Failed to load config " + file.getClass().getSimpleName() + "!");
                 ex.printStackTrace();
             }
-
         }
 
         try {
@@ -406,15 +386,9 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void setupJSON() throws IOException {
-        favourites = new Favourites();
-        favourites.create();
-        favourites.read();
         scores = new PlayerScores();
         scores.create();
         scores.read();
-        pinned = new Pinned();
-        pinned.create();
-        pinned.read();
     }
 
     private void createLocales() {
@@ -480,10 +454,6 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     // GETTERS
-    public Favourites getFavourites() {
-        return favourites;
-    }
-
     public PlayerScores getScores() {
         return scores;
     }
@@ -530,10 +500,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public static Object[] getUpdate() {
         return update;
-    }
-
-    public Pinned getPinned() {
-        return pinned;
     }
 
     public void checkForMutuals() {
