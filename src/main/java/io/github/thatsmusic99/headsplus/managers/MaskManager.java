@@ -56,32 +56,32 @@ public class MaskManager {
 
     public void init() {
         ConfigMasks masksConfig = ConfigMasks.get();
-	// Get the config section
-	ConfigSection masksSection = masksConfig.getConfigSection("masks");
-	if (masksSection == null) return;
-	// Get each mask
-	for (String key : masksSection.getKeys(false)) {
-	    try {
+        // Get the config section
+        ConfigSection masksSection = masksConfig.getConfigSection("masks");
+        if (masksSection == null) return;
+        // Get each mask
+        for (String key : masksSection.getKeys(false)) {
+            try {
                 ConfigSection maskSection = masksSection.getConfigSection(key);
-	        if (maskSection == null) continue;
-	        //
-		MaskInfo info;
-		String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"), "No idle texture for " + key + " found!");
-		HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
-		String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
-		switch (type.toLowerCase()) {
+                if (maskSection == null) continue;
+                //
+                MaskInfo info;
+                String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"), "No idle texture for " + key + " found!");
+                HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
+                String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
+                switch (type.toLowerCase()) {
                     case "potion": // TODO effects
-			info = new PotionMask(key, headInfo);
-			break;
-		    default:
-			throw new IllegalArgumentException("Mask type " + type + " for " + key + " does not exist!");
-		}
+                        info = new PotionMask(key, headInfo);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Mask type " + type + " for " + key + " does not exist!");
+                }
 
-		registerMask(key, info);
-	    } catch (NullPointerException | IllegalArgumentException ex) {
+                registerMask(key, info);
+            } catch (NullPointerException | IllegalArgumentException ex) {
                 HeadsPlus.get().getLogger().warning(ex.getMessage());
-	    } 
-	}
+            }
+        }
     }
 
     public static class MaskInfo extends HeadManager.HeadInfo {
@@ -113,7 +113,7 @@ public class MaskManager {
         public PotionMask(String id, HeadManager.HeadInfo info) {
             super(info);
             this.effects = new ArrayList<>();
-	    this.id = id;
+	        this.id = id;
         }
 
         public PotionMask withEffects(List<PotionEffect> effects) {
@@ -128,39 +128,37 @@ public class MaskManager {
 
         @Override
         public void run(Player player) {
-	    BukkitRunnable runnable = new BukkitRunnable() {
- 
+            BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
-
                     if (player == null || !player.isOnline()) {
-	     	        cancel();
-		        return;
-		    }
-		    // Get the helmet
-		    ItemStack helmet = player.getInventory().getHelmet();
-		    if (helmet == null || PersistenceManager.get().getMaskType(helmet) != id) {
                         cancel();
-		        return;
-		    }
-		    if (HeadsPlus.get().canUseWG() && !FlagHandler.canUseMasks(player)) {
+                        return;
+                    }
+                    // Get the helmet
+                    ItemStack helmet = player.getInventory().getHelmet();
+                    if (helmet == null || !PersistenceManager.get().getMaskType(helmet).equals(id)) {
                         cancel();
-		        return;
-		    }
+                        return;
+                    }
+                    if (HeadsPlus.get().canUseWG() && !FlagHandler.canUseMasks(player)) {
+                        cancel();
+                        return;
+                    }
 
-		    for (PotionEffect effect : effects) {
+                    for (PotionEffect effect : effects) {
                         effect.apply(player);
-		    }
-		}
+                    }
+                }
 
-		@Override
-		public void cancel() {
+                @Override
+                public void cancel() {
                     super.cancel();
-		    runningTasks.remove(this);
-		}
-	    };
-	    runnable.runTaskTimer(HeadsPlus.get(), 1, MainConfig.get().getMasks().CHECK_INTERVAL);
-	    runningTasks.add(runnable);
+                    runningTasks.remove(this);
+                }
+            };
+            runnable.runTaskTimer(HeadsPlus.get(), 1, MainConfig.get().getMasks().CHECK_INTERVAL);
+            runningTasks.add(runnable);
         }
     }
 }

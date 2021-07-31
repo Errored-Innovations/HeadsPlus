@@ -133,13 +133,13 @@ public class MainConfig extends HPConfig {
         addDefault("stats-collection", new ArrayList<>());
         addDefault("blocked-heads", new ArrayList<>());
 
-	addSection("Autograbber");
-	addDefault("enable-autograb", false, "Enables the autograbber feature.\n" +
-			"This grabs the texture of a player's head when they join and add it to the local head storage cache for HeadsPlus.");
-	addDefault("add-grabbed-heads-to-selector", true, "Whether or not player heads fetched through the autograbber should be put in the /heads selector.");
-	addDefault("autograb-section", "players", "The section in the /heads selector that grabbed heads get placed in if the option above is enabled.");
-	addDefault("autograb-display-name", "&8[&6{player}&8]", "The display name given to the head when it is autograbbed.");
-	addDefault("autograb-price", "default", "The default price set for autograbbed heads. Use \"default\" to use the default price used for all heads.");
+        addSection("Autograbber");
+        addDefault("enable-autograb", false, "Enables the autograbber feature.\n" +
+                "This grabs the texture of a player's head when they join and add it to the local head storage cache for HeadsPlus.");
+        addDefault("add-grabbed-heads-to-selector", true, "Whether or not player heads fetched through the autograbber should be put in the /heads selector.");
+        addDefault("autograb-section", "players", "The section in the /heads selector that grabbed heads get placed in if the option above is enabled.");
+        addDefault("autograb-display-name", "&8[&6{player}&8]", "The display name given to the head when it is autograbbed.");
+        addDefault("autograb-price", "default", "The default price set for autograbbed heads. Use \"default\" to use the default price used for all heads.");
 
         addSection("Challenges");
         addDefault("broadcast-challenge-complete", true);
@@ -202,96 +202,92 @@ public class MainConfig extends HPConfig {
 
      @Override
      public void moveToNew() {
-	// Main Features
-	moveTo("plugin.perks.sell-heads", "sell-heads");
-	boolean b = getBoolean("plugin.perks.drop-heads", getBoolean("player-drops"));
-	moveTo("plugin.perks.drop-heads", "mob-drops");
-	set("player-drops", b);
-	moveTo("plugin.perks.craft-heads", "enable-crafting");
-	moveTo("plugin.perks.heads-selector", "heads-selector");
-	moveTo("plugin.perks.challenges", "challenges");
-	moveTo("plugin.perks.leaderboards", "leaderboards");
-	moveTo("plugin.perks.levels", "levels");
-	moveTo("plugin.perks.mask-powerups", "masks");
-	moveTo("plugin.perks.interact.click-head", "interactions");
-	moveTo("plugin.perks.interact.middle-click-head", "block-pickup");
-	
-	// MySQL Options
-	moveTo("mysql.enabled", "enable-mysql");
-	moveTo("mysql.host", "mysql-host");
-	moveTo("mysql.port", "mysql-port");
-	moveTo("mysql.database", "mysql-database");
-	moveTo("mysql.username", "mysql-username");
-	moveTo("mysql.password", "mysql-password");
+         // Main Features
+         moveTo("plugin.perks.sell-heads", "sell-heads");
+         boolean b = getBoolean("plugin.perks.drop-heads", getBoolean("player-drops"));
+         moveTo("plugin.perks.drop-heads", "mob-drops");
+         set("player-drops", b);
+         moveTo("plugin.perks.craft-heads", "enable-crafting");
+         moveTo("plugin.perks.heads-selector", "heads-selector");
+         moveTo("plugin.perks.challenges", "challenges");
+         moveTo("plugin.perks.leaderboards", "leaderboards");
+         moveTo("plugin.perks.levels", "levels");
+         moveTo("plugin.perks.mask-powerups", "masks");
+         moveTo("plugin.perks.interact.click-head", "interactions");
+         moveTo("plugin.perks.interact.middle-click-head", "block-pickup");
 
-	// Mob Drops Options
-	moveTo("plugin.mechanics.blocked-spawn-causes", "blocked-spawn-causes");
-	moveTo("plugin.perks.drops.needs-killer", "needs-killer");
-	moveTo("plugin.perks.drops.entities-requiring-killer", "entities-needing-killer");
-	moveTo("plugin.mechanics.allow-looting-enchantment", "enable-looting");
-	moveTo("plugin.mechanics.looting.thresholds.common", "thresholds.common");
-	moveTo("plugin.mechanics.looting.thresholds.uncommon", "thresholds.uncommon");
-	moveTo("plugin.mechanics.looting.thresholds.rare", "thresholds.rare");
-	moveTo("plugin.mechanics.looting.ignored-entities", "looting-ignored");
-	moveTo("plugin.mechanics.mythicmobs.no-hp-drops", "disable-for-mythic-mobs");
+         // MySQL Options
+         moveTo("mysql.enabled", "enable-mysql");
+         moveTo("mysql.host", "mysql-host");
+         moveTo("mysql.port", "mysql-port");
+         moveTo("mysql.database", "mysql-database");
+         moveTo("mysql.username", "mysql-username");
+         moveTo("mysql.password", "mysql-password");
 
-	// Player Drops Options
-	moveTo("plugin.perks.drops.ignore-players", "ignored-players");
-	moveTo("plugin.perks.player-death-messages", "enable-player-head-death-messages");
-	moveTo("plugin.perks.death-messages", "player-head-death-messages");
-	moveTo("plugin.perks.pvp.player-balance-competition", "adjust-price-according-to-balance");
-	moveTo("plugin.perks.pvp.use-killer-balance", "use-killer-balance");
-	moveTo("plugin.perks.pvp.percentage-lost", "percentage-taken-off-victim");
-	moveTo("plugin.perks.pvp.percentage-balance-for-head", "percentage-of-balance-as-price");
+         // Mob Drops Options
+         moveTo("plugin.mechanics.blocked-spawn-causes", "blocked-spawn-causes");
+         moveTo("plugin.perks.drops.needs-killer", "needs-killer");
+         moveTo("plugin.perks.drops.entities-requiring-killer", "entities-needing-killer");
+         moveTo("plugin.mechanics.allow-looting-enchantment", "enable-looting");
+         moveTo("plugin.mechanics.looting.thresholds.common", "thresholds.common");
+         moveTo("plugin.mechanics.looting.thresholds.uncommon", "thresholds.uncommon");
+         moveTo("plugin.mechanics.looting.thresholds.rare", "thresholds.rare");
+         moveTo("plugin.mechanics.looting.ignored-entities", "looting-ignored");
+         moveTo("plugin.mechanics.mythicmobs.no-hp-drops", "disable-for-mythic-mobs");
 
-	// Sellhead Options
-	moveTo("plugin.mechanics.stop-placement-of-sellable-heads", "stop-placement-of-sellable-heads");
-	moveTo("plugin.mechanics.sellhead-gui", "use-sellhead-gui");
-	moveTo("plugin.mechanics.sellhead-ids-case-sensitive", "case-sensitive-names");
+         // Player Drops Options
+         moveTo("plugin.perks.drops.ignore-players", "ignored-players");
+         moveTo("plugin.perks.player-death-messages", "enable-player-head-death-messages");
+         moveTo("plugin.perks.death-messages", "player-head-death-messages");
+         moveTo("plugin.perks.pvp.player-balance-competition", "adjust-price-according-to-balance");
+         moveTo("plugin.perks.pvp.use-killer-balance", "use-killer-balance");
+         moveTo("plugin.perks.pvp.percentage-lost", "percentage-taken-off-victim");
+         moveTo("plugin.perks.pvp.percentage-balance-for-head", "percentage-of-balance-as-price");
 
-	// Mask Options
-	moveTo("plugin.mechanics.masks.check-interval", "check-interval");
-	moveTo("plugin.mechanics.masks.reset-after-x-intervals", "reset-after-x-intervals");
-	moveTo("plugin.mechanics.masks.effect-length", "effect-length");
+         // Sellhead Options
+         moveTo("plugin.mechanics.stop-placement-of-sellable-heads", "stop-placement-of-sellable-heads");
+         moveTo("plugin.mechanics.sellhead-gui", "use-sellhead-gui");
+         moveTo("plugin.mechanics.sellhead-ids-case-sensitive", "case-sensitive-names");
 
-	// Autograb Options
-	moveTo("plugin.autograb.enabled", "enable-autograb");
-	moveTo("plugin.autograb.add-as-enabled", "add-grabbed-heads-to-selector");
-	moveTo("plugin.autograb.section", "autograb-section");
-	moveTo("plugin.autograb.title", "autograb-display-name");
-	moveTo("plugin.autograb.price", "autograb-price");
-	// TODO - figure out restrictions
-	
-	// Challenge Options
-	moveTo("plugin.mechanics.broadcasts.challenge-complete", "broadcast-challenge-complete");
+         // Mask Options
+         moveTo("plugin.mechanics.masks.check-interval", "check-interval");
+         moveTo("plugin.mechanics.masks.reset-after-x-intervals", "reset-after-x-intervals");
+         moveTo("plugin.mechanics.masks.effect-length", "effect-length");
 
-	// Level Options
-	moveTo("plugin.mechanics.boss-bar.enabled", "add-boss-bars");
-	moveTo("plugin.mechanics.boss-bar.color", "boss-bar-color");
-	moveTo("plugin.mechanics.boss-bar.title", "boss-bar-title");
-	moveTo("plugin.mechanics.boss-bar.lifetime", "boss-bar-lifetime");
-	moveTo("plugin.mechanics.broadcasts.level-up", "broadcast-level-up");
+         // Autograb Options
+         moveTo("plugin.autograb.enabled", "enable-autograb");
+         moveTo("plugin.autograb.add-as-enabled", "add-grabbed-heads-to-selector");
+         moveTo("plugin.autograb.section", "autograb-section");
+         moveTo("plugin.autograb.title", "autograb-display-name");
+         moveTo("plugin.autograb.price", "autograb-price");
+         // TODO - figure out restrictions
 
-	// Leaderboard Options
-	moveTo("plugin.mechanics.leaderboards.cache-boards", "cache-leaderboards");
-	moveTo("plugin.mechanics.leaderboards.cache-lifetime-seconds", "cache-duration");
+         // Challenge Options
+         moveTo("plugin.mechanics.broadcasts.challenge-complete", "broadcast-challenge-complete");
 
-	// Update Options
-	moveTo("plugin.mechanics.update.check", "check-for-updates");
-	moveTo("plugin.mechanics.update.notify", "notify-admins-about-updates");
+         // Level Options
+         moveTo("plugin.mechanics.boss-bar.enabled", "add-boss-bars");
+         moveTo("plugin.mechanics.boss-bar.color", "boss-bar-color");
+         moveTo("plugin.mechanics.boss-bar.title", "boss-bar-title");
+         moveTo("plugin.mechanics.boss-bar.lifetime", "boss-bar-lifetime");
+         moveTo("plugin.mechanics.broadcasts.level-up", "broadcast-level-up");
 
-	// Localisation Options
-	moveTo("plugin.mechanics.use-tellraw", "use-tellraw");
+         // Leaderboard Options
+         moveTo("plugin.mechanics.leaderboards.cache-boards", "cache-leaderboards");
+         moveTo("plugin.mechanics.leaderboards.cache-lifetime-seconds", "cache-duration");
 
-	// Misc Options
-	addDefault("plugin.perks.smite-player-if-they-get-a-head", "smite-player");
-	addDefault("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
-	addDefault("plugin.perks.xp.allow-negative", "allow-negative-xp");
-	addDefault("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
+         // Update Options
+         moveTo("plugin.mechanics.update.check", "check-for-updates");
+         moveTo("plugin.mechanics.update.notify", "notify-admins-about-updates");
 
-        // TODO - maybe not?
-        //moveTo("plugin.autograb.enabled", "autograb", ConfigCustomHeads.get());
-        //moveTo("plugin.autograb.add-as-enabled", "automatically-enable-grabbed-heads", ConfigCustomHeads.get());
+         // Localisation Options
+         moveTo("plugin.mechanics.use-tellraw", "use-tellraw");
+
+         // Misc Options
+         addDefault("plugin.perks.smite-player-if-they-get-a-head", "smite-player");
+         addDefault("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
+         addDefault("plugin.perks.xp.allow-negative", "allow-negative-xp");
+         addDefault("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
      }
     /*
     protected void loadS() {
