@@ -69,12 +69,10 @@ public class HeadsPlus extends JavaPlugin {
     public void onLoad() {
         instance = this;
         Plugin wg = getServer().getPluginManager().getPlugin("WorldGuard");
-        if (wg != null && getServer().getPluginManager().getPlugin("WorldEdit") != null) {
-            if (wg.getDescription().getVersion().startsWith("7")) {
-                canUseWG = true;
-                new FlagHandler();
-            }
-        }
+        if (wg == null || getServer().getPluginManager().getPlugin("WorldEdit") == null) return;
+        if (!wg.getDescription().getVersion().startsWith("7")) return;
+        canUseWG = true;
+        new FlagHandler();
     }
 
     @Override
@@ -181,15 +179,12 @@ public class HeadsPlus extends JavaPlugin {
     public void onDisable() {
         if (!fullyEnabled) return;
 		// close any open interfaces
-		for(UUID p : InventoryManager.storedInventories.keySet()) {
+		for (UUID p : InventoryManager.storedInventories.keySet()) {
 		    Player player = Bukkit.getPlayer(p);
-		    if (player != null) {
-                final InventoryManager im = InventoryManager.getManager(player);
-                if(im.getInventory() != null) {
-                    player.closeInventory();
-                }
-            }
-
+		    if (player == null) continue;
+		    final InventoryManager im = InventoryManager.getManager(player);
+		    if (im.getInventory() == null) continue;
+		    player.closeInventory();
 		}
         try {
             scores.save();
@@ -393,19 +388,25 @@ public class HeadsPlus extends JavaPlugin {
 
     private void createLocales() {
         List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn", "zh_tw"));
-        File dir = new File(getDataFolder() + File.separator + "locale");
+        File dir = new File(getDataFolder(), "locale");
         if (!dir.exists()) {
-            dir.mkdirs();
+            if (!dir.mkdirs()) {
+                getLogger().warning("Failed to make the locale directory! Please check your file permissions.");
+                return;
+            }
         }
         for (String locale : locales) {
             File conf = new File(dir + File.separator + locale + ".yml");
-            if (!conf.exists()) {
-                InputStream is = getResource(locale + ".yml");
-                try {
-                    Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (conf.exists()) continue;
+            InputStream is = getResource(locale + ".yml");
+            if (is == null) {
+                getLogger().warning("Locale resource file " + locale + ".yml was not found, please report this to the developer!");
+                continue;
+            }
+            try {
+                Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
