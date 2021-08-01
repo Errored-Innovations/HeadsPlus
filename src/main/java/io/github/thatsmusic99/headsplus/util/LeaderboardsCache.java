@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+@Deprecated
 public class LeaderboardsCache {
 
     private static final HashMap<String, LinkedHashMap<OfflinePlayer, Integer>> cache = new HashMap<>();
