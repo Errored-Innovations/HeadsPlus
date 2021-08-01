@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HPPlayer {
 
-    private UUID player;
+    private final UUID uuid;
     private long xp;
     private String level = null;
     private List<String> completeChallenges;
@@ -48,7 +48,6 @@ public class HPPlayer {
             this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1); // TODO - IOBE check
         }
         xp = PlayerSQLManager.get().getXP(uuid).join();
-        this.player = uuid;
         PlayerScores scores = hp.getScores();
         List<String> sc = new ArrayList<>();
         sc.addAll(scores.getCompletedChallenges(uuid.toString()));
@@ -74,6 +73,7 @@ public class HPPlayer {
             localeForced = false;
         }
         this.completeChallenges = sc;
+        this.uuid = uuid;
         players.put(uuid, this);
     }
 
@@ -94,11 +94,11 @@ public class HPPlayer {
     }
 
     public OfflinePlayer getPlayer() {
-        return Bukkit.getOfflinePlayer(player);
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     public UUID getUuid() {
-        return player;
+        return uuid;
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
@@ -140,7 +140,7 @@ public class HPPlayer {
 
     public void setXp(long xp) {
         HeadsPlus hp = HeadsPlus.get();
-        PlayerSQLManager.get().setXP(player, xp);
+        PlayerSQLManager.get().setXP(uuid, xp);
         this.xp = xp;
         if (MainConfig.get().getMainFeatures().LEVELS) {
             new BukkitRunnable() {
@@ -183,12 +183,12 @@ public class HPPlayer {
 
     public CompletableFuture<Void> addFavourite(String s) {
         favouriteHeads.add(s);
-        return FavouriteHeadsSQLManager.get().addHead(player, s);
+        return FavouriteHeadsSQLManager.get().addHead(uuid, s);
     }
 
     public CompletableFuture<Void> removeFavourite(String s) {
         favouriteHeads.remove(s);
-        return FavouriteHeadsSQLManager.get().removeHead(player, s);
+        return FavouriteHeadsSQLManager.get().removeHead(uuid, s);
     }
 
     public CompletableFuture<List<String>> getPinnedChallenges() {
@@ -205,19 +205,15 @@ public class HPPlayer {
 
     public CompletableFuture<Void> addChallengePin(Challenge challenge) {
         pinnedChallenges.add(challenge.getConfigName());
-        return PinnedChallengeManager.get().addChallenge(player, challenge.getConfigName());
+        return PinnedChallengeManager.get().addChallenge(uuid, challenge.getConfigName());
     }
 
     public CompletableFuture<Void> removeChallengePin(Challenge challenge) {
         pinnedChallenges.remove(challenge.getConfigName());
-        return PinnedChallengeManager.get().removeChallenge(player, challenge.getConfigName());
+        return PinnedChallengeManager.get().removeChallenge(uuid, challenge.getConfigName());
     }
 
-    public CompletableFuture<List<String>> getFavouriteHeads() {
-        if (favouriteHeads != null) return CompletableFuture.completedFuture(favouriteHeads);
-        return FavouriteHeadsSQLManager.get().getFavouriteHeads(player).thenApply(heads -> {
-            favouriteHeads = heads;
-            return favouriteHeads;
-        });
+    public List<String> getFavouriteHeads() {
+        return favouriteHeads;
     }
 }
