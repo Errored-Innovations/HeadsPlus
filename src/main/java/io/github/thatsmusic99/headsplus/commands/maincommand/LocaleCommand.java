@@ -29,7 +29,7 @@ public class LocaleCommand implements IHeadsPlusCommand {
     private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         // TODO - disable subcommands if feature is disabled like with events?
         if (!MainConfig.get().getLocalisation().SMART_LOCALE) {
             messages.sendMessage("commands.errors.disabled", sender);

@@ -39,7 +39,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender cs) {
+    public boolean onCommand(CommandSender cs, @NotNull Command command, @NotNull String label, String[] args) {
         String name = cs.getName();
         if (args.length != 1) {
             name = args[1];

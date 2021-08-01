@@ -48,11 +48,6 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
-    }
-
-    @Override
     public boolean shouldEnable() {
         return MainConfig.get().getMainFeatures().CHALLENGES;
     }

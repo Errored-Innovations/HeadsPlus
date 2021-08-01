@@ -27,7 +27,7 @@ import java.util.List;
 public class ReloadCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         HeadsPlusMessagesManager.get().sendMessage("commands.reload.reloading-message", sender);
         new BukkitRunnable() {
             @Override

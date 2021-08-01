@@ -14,22 +14,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IHeadsPlusCommand {
+public interface IHeadsPlusCommand extends CommandExecutor, TabCompleter {
 
     default String getCmdDescription(CommandSender sender) {
         CommandInfo command = getClass().getAnnotation(CommandInfo.class);
         return HeadsPlusMessagesManager.get().getString(command.descriptionPath(), sender);
     }
 
-    boolean fire(String[] args, CommandSender sender);
-
     default String[] advancedUsages() {
         return new String[0];
     }
 
     boolean shouldEnable();
-
-    List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args);
 
     static List<String> getPlayers(CommandSender sender) {
         List<String> p = new ArrayList<>();

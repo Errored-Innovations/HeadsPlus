@@ -24,7 +24,7 @@ public class Complete implements IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
             return false;

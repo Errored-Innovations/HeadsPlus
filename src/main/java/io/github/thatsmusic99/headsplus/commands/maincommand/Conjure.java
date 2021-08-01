@@ -27,7 +27,7 @@ public class Conjure implements IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         // Check argument number
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);

@@ -68,7 +68,7 @@ public class DebugPrint implements IHeadsPlusCommand {
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         try {
             if (args.length < 2) {
                 hpc.sendMessage("commands.errors.invalid-args", sender);

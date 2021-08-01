@@ -37,9 +37,6 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
         return false;
     }
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        return fire(args, sender);
-    }
 
 	private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
@@ -90,6 +87,8 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     }
                 } else {
                     hpc.sendMessage("commands.head.whitelist-head", p2);
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
                 }
             } else {
                 if (wl.contains(head)) {
@@ -117,8 +116,6 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
         giveHead(p, args[0]);
     }
 
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
 	    try {
 	        if (sender.hasPermission("headsplus.head")) {
 	            if (args.length > 1) {

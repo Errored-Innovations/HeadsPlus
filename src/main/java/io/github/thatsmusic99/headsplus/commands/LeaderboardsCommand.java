@@ -76,11 +76,6 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
-    }
-
-    @Override
     public boolean shouldEnable() {
         return true;
     }

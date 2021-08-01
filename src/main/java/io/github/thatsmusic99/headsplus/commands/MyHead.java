@@ -30,7 +30,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String l, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String l, @NotNull String[] args) {
         try {
             if (sender.hasPermission("headsplus.myhead")) {
                 if (sender instanceof BlockCommandSender) {
@@ -140,11 +140,6 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
     }
 
     @Override

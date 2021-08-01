@@ -27,7 +27,7 @@ import java.util.Random;
 public class TestsCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length < 3) {
             HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return true;

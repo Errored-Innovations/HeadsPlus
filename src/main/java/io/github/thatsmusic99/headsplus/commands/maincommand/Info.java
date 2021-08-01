@@ -20,7 +20,7 @@ import java.util.List;
 public class Info implements IHeadsPlusCommand {
 
 	@Override
-	public boolean fire(String[] args, CommandSender sender) {
+	public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 		sender.sendMessage(ConfigTextMenus.InfoTranslator.translate(sender));
 		return true;
 	}

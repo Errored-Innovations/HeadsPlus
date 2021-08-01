@@ -57,7 +57,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 		try {
 		    if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
                 hpc.sendMessage("commands.errors.disabled", sender);
@@ -239,11 +239,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
 	        name = name.toLowerCase();
         }
 	    return headIds.contains(name);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
     }
 
     @Override

@@ -26,7 +26,6 @@ import java.util.List;
 public class XPCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
         if (args.length > 1) {
             HPPlayer player = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[1]));
             if (args.length > 2) {
@@ -80,6 +79,7 @@ public class XPCommand implements IHeadsPlusCommand {
                         break;
                 }
             }
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         }
 
         return false;

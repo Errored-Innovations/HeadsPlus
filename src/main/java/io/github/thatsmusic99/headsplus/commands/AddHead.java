@@ -104,11 +104,6 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
-    }
-
-    @Override
     public boolean shouldEnable() {
         return true;
     }
