@@ -120,12 +120,10 @@ public class LeaderboardListeners implements Listener {
         @Override
         public void onEvent(HeadCraftEvent event) {
             HPPlayer.getHPPlayer(event.getPlayer()).addXp(0 * event.getHeadsCrafted());
-            if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getEntityType() == null) return;
-            if (!(event.getEntityType().equalsIgnoreCase("invalid") || event.getEntityType().isEmpty())) {
-                Bukkit.getScheduler().runTaskAsynchronously(hp, () -> {
-                    DataManager.addToTotal(event.getPlayer(), event.getEntityType(), "headspluscraft", event.getHeadsCrafted());
-                });
-            }
+            if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
+            if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
+            StatisticsSQLManager.get().addToTotal(event.getPlayer().getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING,
+                    event.getType(), "", event.getHeadsCrafted());
         }
 
         @Override

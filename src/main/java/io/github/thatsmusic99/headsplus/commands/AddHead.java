@@ -35,31 +35,31 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(args.length > 0) {
-            if (args[0].matches("^[A-Za-z0-9_]+$")) {
-                if (args[0].length() > 2) {
-                    if (args[0].length() < 17) {
-                        HeadsPlus hp = HeadsPlus.get();
-                        HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
-                            String uuid = player.getUniqueId().toString();
-                            if (!hp.getServer().getOnlineMode()) {
-                                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                                uuid = AutograbManager.grabUUID(player.getName(), 3, null);
-                            }
-                            if (AutograbManager.grabProfile(uuid, sender, true)) {
-                                hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", player.getName());
-                            }
-                        });
-                        return true;
-                    } else {
-                        hpc.sendMessage("commands.head.head-too-long", sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.head.head-too-short", sender);
-                }
-            } else {
+        if (args.length > 0) {
+            if (!args[0].matches("^[A-Za-z0-9_]+$")) {
                 hpc.sendMessage("commands.head.alpha-names", sender);
+                return true;
             }
+            if (args[0].length() < 3) {
+                hpc.sendMessage("commands.head.head-too-short", sender);
+                return true;
+            }
+            if (args[0].length() > 16) {
+                hpc.sendMessage("commands.head.head-too-long", sender);
+                return true;
+            }
+            HeadsPlus hp = HeadsPlus.get();
+            HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
+                String uuid = player.getUniqueId().toString();
+                if (!hp.getServer().getOnlineMode()) {
+                    hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                    uuid = AutograbManager.grabUUID(player.getName(), 3, null);
+                }
+                if (AutograbManager.grabProfile(uuid, sender, true)) {
+                    hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", player.getName());
+                }
+            });
+            return true;
         } else {
             if (sender.hasPermission("headsplus.addhead.texture")) {
                 if (sender instanceof Conversable) {

@@ -55,19 +55,14 @@ public class Conjure implements IHeadsPlusCommand {
                 return false;
             }
         }
-        try {
-            HeadManager.HeadInfo info = HeadManager.get().getHeadInfo(args[1]);
-            int finalAmount = amount;
-            Player finalPlayer = p;
-            info.buildHead().thenAccept(item -> {
-                item.setAmount(finalAmount);
-                finalPlayer.getInventory().addItem(item);
-            });
-            return true;
-        } catch (NullPointerException ex) { // TODO - still needed?
-            hpc.sendMessage("commands.errors.invalid-args", sender);
-        }
-        return false;
+        HeadManager.HeadInfo info = HeadManager.get().getHeadInfo(args[1]);
+        int finalAmount = amount;
+        Player finalPlayer = p;
+        info.buildHead().thenAccept(item -> {
+            item.setAmount(finalAmount);
+            finalPlayer.getInventory().addItem(item);
+        });
+        return true;
     }
 
     @Override

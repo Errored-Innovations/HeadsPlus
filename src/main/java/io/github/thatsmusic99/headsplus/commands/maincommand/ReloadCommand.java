@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;

@@ -39,48 +39,55 @@ public class LocaleCommand implements IHeadsPlusCommand {
             messages.sendMessage("commands.errors.invalid-args", sender);
             return true;
         }
+        if (!sender.hasPermission("headsplus.maincommand.locale.change")) {
+            messages.sendMessage("commands.errors.no-perm", sender);
+            return true;
+        }
         if (args[1].equalsIgnoreCase("refresh")) {
+            Player player;
+            if (args.length > 2) {
+                player = Bukkit.getPlayer(args[1]);
+            } else if (sender instanceof Player) {
+                player = (Player) sender;
+            } else {
+                messages.sendMessage("commands.errors.not-a-player", sender);
+                return true;
+            }
+            if (player == null || !player.isOnline()) {
+                messages.sendMessage("commands.errors.player-offline", sender);
+                return true;
+            }
+            messages.setPlayerLocale(player, player.getLocale());
+        }
+        String str = args[1].split("_")[0];
+        if (!languages.contains(str)) {
+            messages.sendMessage("commands.locale.invalid-lang", sender,
+                    "{languages}", Arrays.toString(languages.toArray()));
+            return true;
+        }
+        if (args.length > 2) {
+            Player player = Bukkit.getPlayer(args[2]);
+            if (!sender.hasPermission("headsplus.maincommand.locale.others")) {
+                messages.sendMessage("commands.errors.no-perm", sender);
+                return true;
+            }
+            if (player != null && player.isOnline()) {
+                messages.setPlayerLocale(player, str, true);
+                messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
+                return true;
+            } else {
+                messages.sendMessage("commands.errors.player-offline", sender);
+            }
+        } else {
             if (sender instanceof Player) {
-                messages.setPlayerLocale((Player) sender);
+                messages.setPlayerLocale((Player) sender, str, true);
                 messages.sendMessage("commands.locale.changed-locale", sender);
                 return true;
             } else {
                 messages.sendMessage("commands.errors.not-a-player", sender);
             }
-        } else {
-            if (!sender.hasPermission("headsplus.maincommand.locale.change")) {
-                messages.sendMessage("commands.errors.no-perm", sender);
-                return true;
-            }
-            String str = args[1].split("_")[0];
-            if (!languages.contains(str)) {
-                messages.sendMessage("commands.locale.invalid-lang", sender,
-                        "{languages}", Arrays.toString(languages.toArray()));
-                return true;
-            }
-            if (args.length > 2) {
-                Player player = Bukkit.getPlayer(args[2]);
-                if (!sender.hasPermission("headsplus.maincommand.locale.others")) {
-                    messages.sendMessage("commands.errors.no-perm", sender);
-                    return true;
-                }
-                if (player != null && player.isOnline()) {
-                    messages.setPlayerLocale(player, str);
-                    messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
-                    return true;
-                } else {
-                    messages.sendMessage("commands.errors.player-offline", sender);
-                }
-            } else {
-                if (sender instanceof Player) {
-                    messages.setPlayerLocale((Player) sender, str);
-                    messages.sendMessage("commands.locale.changed-locale", sender);
-                    return true;
-                } else {
-                    messages.sendMessage("commands.errors.not-a-player", sender);
-                }
-            }
         }
+
         return false;
     }
 

@@ -33,8 +33,8 @@ public class MaskManager {
 
     public void reset() {
         masks.clear();
-	runningTasks.forEach(BukkitRunnable::cancel);
-	runningTasks.clear();
+        runningTasks.forEach(BukkitRunnable::cancel);
+        runningTasks.clear();
     }
 
     public void registerMask(String key, MaskInfo headInfo) {
