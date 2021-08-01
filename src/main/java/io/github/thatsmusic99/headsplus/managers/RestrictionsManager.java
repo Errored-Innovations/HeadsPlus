@@ -2,32 +2,36 @@ package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 
 public class RestrictionsManager {
 
-    private HashMap<ActionType, List<String>> deniedOptions;
-    private boolean useWhitelist;
-
-    public RestrictionsManager() {
-        deniedOptions = new HashMap<>();
-        useWhitelist = MainConfig.get().getBoolean("whitelist-worlds");
-
+    public static boolean canUse(String key, ActionType type) {
+        return MainConfig.get().getStringList(type.path).contains(key)
+                ^ !MainConfig.get().getBoolean("whitelist-worlds");
     }
 
-    public void init() {
-
+    public static void addRestriction(String key, ActionType type) {
+        List<String> list = MainConfig.get().getStringList(type.path);
+        list.add(key);
+        MainConfig.get().set(type.path, list);
+        try {
+            MainConfig.get().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private enum ActionType {
-        CRAFTING(""),
-        LEVELS(""),
-        MASKS(""),
-        MOBS(""),
-        STATS("");
+    public enum ActionType {
+        CRAFTING("crafting-list"),
+        HEADS("blocked-heads"),
+        XP_GAINS("xp-gain"),
+        MASKS("masks-list"),
+        MOBS("mob-drops-list"),
+        STATS("stats-collection");
 
-        private String path;
+        private final String path;
 
         ActionType(String path) {
             this.path = path;

@@ -125,13 +125,16 @@ public class MainConfig extends HPConfig {
                 "If this is enabled, on the other hand, any worlds not in the lists will not have the respected event occur in them.");
 
         addDefault("mob-drops-list", new ArrayList<>(),
-                "Worlds in which heads cannot drop from mobs...\n" +
-                "... Or worlds in which heads can only drop in if whitelist-worlds is enabled.");
-        addDefault("crafting-list", new ArrayList<>());
-        addDefault("masks-list", new ArrayList<>());
-        addDefault("levels", new ArrayList<>());
-        addDefault("stats-collection", new ArrayList<>());
-        addDefault("blocked-heads", new ArrayList<>());
+                "Worlds in which heads cannot drop from mobs.\n" +
+                "If whitelist-worlds is enabled, worlds specified below *will* drop mob heads.");
+        addDefault("crafting-list", new ArrayList<>(),
+                "Worlds in which players cannot craft heads. The heads will still appear, but the player cannot pick them up.");
+        addDefault("masks-list", new ArrayList<>(), "Worlds in which masks cannot be effective.");
+        addDefault("xp-gain", new ArrayList<>(), "Worlds in which players cannot gain XP.");
+        addDefault("stats-collection", new ArrayList<>(), "Worlds in which players cannot have their HP statistics increased.");
+        addDefault("blocked-heads", new ArrayList<>(), "Heads which players cannot access using /head.\n" +
+                "For example, if a player tries to do /head Thatsmusic99 but the name is included in this list, they cannot access the head.\n" +
+                "All additions made to this list must be in lowercase only!");
 
         addSection("Autograbber");
         addDefault("enable-autograb", false, "Enables the autograbber feature.\n" +

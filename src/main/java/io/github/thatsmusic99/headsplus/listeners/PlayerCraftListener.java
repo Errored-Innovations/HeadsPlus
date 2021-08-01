@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -41,7 +42,8 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         if (!(e.getCurrentItem().getItemMeta() instanceof SkullMeta)) return;
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         if (type == null || type.isEmpty()) return;
-        if (!player.hasPermission("headsplus.craft")) {
+        if (!player.hasPermission("headsplus.craft")
+                || !RestrictionsManager.canUse(e.getWhoClicked().getWorld().getName(), RestrictionsManager.ActionType.CRAFTING)) {
             e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
             e.setCancelled(true);
             return;

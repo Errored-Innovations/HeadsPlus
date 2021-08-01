@@ -4,16 +4,14 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
-import org.bukkit.entity.Cat;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.TropicalFish;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -36,8 +34,8 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
         if (!addData("not-wg-restricted", !hp.canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
-        // TODO New blacklist checks go here
-        if (!HPUtils.runBlacklistTests(event.getEntity())) return;
+
+        if (!shouldDropHead(event.getEntity())) return;
         //
         if (addData("spawn-cause", EntitySpawnListener.getReason(event.getEntity().getUniqueId())) != null) {
             if (MainConfig.get().getMobDrops().BLOCKED_SPAWN_CAUSES.contains(getData("spawn-cause"))) {
@@ -56,6 +54,20 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
             int amount = addData("amount", HPUtils.getAmount(fixedChance));
             HPUtils.dropHead(entity, meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
         }
+    }
+
+    private boolean shouldDropHead(LivingEntity entity) {
+        String entityName = entity.getType().name();
+        // Check world restrictions
+        if (!RestrictionsManager.canUse(entity.getWorld().getName(), RestrictionsManager.ActionType.MOBS)) return false;
+        //
+        if (entity.getKiller() == null) {
+            if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;
+            if (MainConfig.get().getMobDrops().ENTITIES_NEEDING_KILLER.contains(entityName)) return false;
+        } else {
+            if (!entity.getKiller().hasPermission("headsplus.drops." + entityName.toLowerCase())) return false;
+        }
+        return true;
     }
 
     @Override
