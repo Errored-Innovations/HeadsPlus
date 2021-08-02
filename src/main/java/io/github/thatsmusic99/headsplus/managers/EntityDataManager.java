@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.managers;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
@@ -149,9 +148,9 @@ public class EntityDataManager {
                     for (String head : conditionSection.getKeys(false)) {
                         DroppedHeadInfo headInfo;
                         if (head.startsWith("HPM#")) {
-                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head));
+                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head), head);
                         } else {
-                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head));
+                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head), head);
                         }
 
                         if (head.equalsIgnoreCase("{mob-default}")) {
@@ -208,9 +207,11 @@ public class EntityDataManager {
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {
 
         private int xp;
+        private String id;
 
-        public DroppedHeadInfo(HeadManager.HeadInfo info) {
+        public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
+            this.id = id;
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
@@ -226,6 +227,10 @@ public class EntityDataManager {
 
         public int getXp() {
             return xp;
+        }
+
+        public String getId() {
+            return id;
         }
     }
 }

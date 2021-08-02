@@ -79,7 +79,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         }
 
         // TODO - lore
-        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo());
+        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo(), "player");
         headInfo.withTexture(victim.getName())
                 .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null : killer.getName()));

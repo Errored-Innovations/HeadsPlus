@@ -317,6 +317,7 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void setupPermissions() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return;
         }
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
