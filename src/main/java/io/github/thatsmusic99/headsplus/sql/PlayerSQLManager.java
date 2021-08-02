@@ -88,20 +88,22 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setString(2, uuid.toString());
                 ResultSet results = statement.executeQuery();
                 if (!results.next()) {
+                    connection.close();
                     insertPlayer(uuid, name, 0, 0, System.currentTimeMillis()).join();
                     return;
                 }
 
                 if (!results.getString("username").equals(name)) {
+                    connection.close();
                     updateUsername(uuid, name).join();
                 } else if (!results.getString("uuid").equals(uuid.toString())) {
+                    connection.close();
                     updateUUID(uuid, name).join();
                 }
-
-		updateJoinTimestamp(uuid, System.currentTimeMillis()).join();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
+            updateJoinTimestamp(uuid, System.currentTimeMillis()).join();
         }, HeadsPlus.async);
     }
 
