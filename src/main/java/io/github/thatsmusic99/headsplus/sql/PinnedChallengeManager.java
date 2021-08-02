@@ -76,9 +76,8 @@ public class PinnedChallengeManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT challenge FROM headsplus_pinned_challenges WHERE headsplus_players.uuid = ? " +
-                                "AND headsplus_players.id = user_id");
-                statement.setString(1, uuid.toString());
+                        "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
+                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 ResultSet set = statement.executeQuery();
                 List<String> challenges = new ArrayList<>();
                 while (set.next()) {

@@ -83,7 +83,7 @@ public class PlayerSQLManager extends SQLManager {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT uuid, name FROM headsplus_players WHERE username = ? OR uuid = ?");
+                        "SELECT uuid, username FROM headsplus_players WHERE username = ? OR uuid = ?");
                 statement.setString(1, name);
                 statement.setString(2, uuid.toString());
                 ResultSet results = statement.executeQuery();

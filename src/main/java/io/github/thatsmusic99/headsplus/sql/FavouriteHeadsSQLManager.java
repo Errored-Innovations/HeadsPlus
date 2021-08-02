@@ -104,9 +104,8 @@ public class FavouriteHeadsSQLManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT head FROM headsplus_fav_heads WHERE headsplus_players.uuid = ? " +
-                                "AND headsplus_players.id = user_id");
-                statement.setString(1, uuid.toString());
+                        "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
+                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 ResultSet set = statement.executeQuery();
                 List<String> heads = new ArrayList<>();
                 while (set.next()) {
