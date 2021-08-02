@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
@@ -22,17 +21,7 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 	    HeadsPlus hp = HeadsPlus.get();
 	    Player player = e.getPlayer();
 	    addData("player", player.getName());
-	    // TODO - you know what it is!
-		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
-		    if (addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) {
-                if (addData("has-update", HeadsPlus.getUpdate() != null)) {
-                    new FancyMessage().text(hpc.getString("update.update-found", player))
-                    .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
-							+ "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
-							+ "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
-                }
-            }
-        }
+
 		Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
 		    if (!player.isOnline())
 		        return;
@@ -54,6 +43,14 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 
         PlayerSQLManager.get().checkPlayer(player.getUniqueId(), player.getName())
                 .thenAccept(ok -> PlayerSQLManager.get().loadPlayer(player.getUniqueId()));
+
+        if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) return;
+        if (!addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) return;
+        if (addData("has-update", HeadsPlus.getUpdate() == null)) return;
+        new FancyMessage().text(hpc.getString("update.update-found", player))
+                .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
+                        + "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
+                        + "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
 
 	}
 
