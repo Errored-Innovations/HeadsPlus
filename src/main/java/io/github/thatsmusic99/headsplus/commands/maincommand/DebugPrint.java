@@ -21,14 +21,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -116,83 +114,6 @@ public class DebugPrint implements IHeadsPlusCommand {
                             hpc.sendMessage("commands.errors.not-a-player", sender);
                         }
                         break;
-                    case "delete":
-                        if (args.length > 2) {
-                            HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
-                            if (pl != null) {
-                                // TODO - no no not on the main thread
-                                HeadsPlus.get().getScores().deletePlayer(Bukkit.getOfflinePlayer(args[2]).getPlayer());
-                                sender.sendMessage(ChatColor.GREEN + "Player data for " + args[2] + " cleared.");
-                            } else {
-                                hpc.sendMessage("commands.profile.no-data", sender);
-                            }
-                        } else {
-                            hpc.sendMessage("commands.errors.invalid-args", sender);
-                        }
-                        break;
-                    case "save":
-                        try {
-                            HeadsPlus.get().getFavourites().save();
-                        } catch (IOException e) {
-                            DebugPrint.createReport(e, "Debug (saving favourites)", false, sender);
-                        }
-                        try {
-                            HeadsPlus.get().getScores().save();
-                        } catch (IOException e) {
-                            DebugPrint.createReport(e, "Debug (saving scores)", false, sender);
-                        }
-                        sender.sendMessage(ChatColor.GREEN + "Data has been saved.");
-                        break;
-                    case "transfer":
-                        if (args.length > 2) {
-                            if (HeadsPlus.get().isConnectedToMySQLDatabase()) {
-                                if (args[2].equalsIgnoreCase("database")) {
-                                    sender.sendMessage(ChatColor.GREEN + "Starting transition to database...");
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                for (String section : EntityDataManager.ableEntities) {
-
-                                                    LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
-                                                    }
-                                                    hashmap = DataManager.getScores(section, "headsplussh", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
-                                                    }
-                                                    hashmap = DataManager.getScores(section, "headspluscraft", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
-                                                    }
-                                                }
-                                                LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
-                                                }
-                                                hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
-                                                }
-                                                hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
-                                                }
-                                                sender.sendMessage(ChatColor.GREEN + "Transition successful.");
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                sender.sendMessage(ChatColor.RED + "Transition failed! More information in console error.");
-                                            }
-                                        }
-                                    }.runTaskAsynchronously(HeadsPlus.get());
-                                } else {
-                                    hpc.sendMessage("commands.errors.invalid-args", sender);
-                                }
-                            } else {
-                                sender.sendMessage(ChatColor.RED + "Please ensure you have MySQL enabled.");
-                            }
-                        }
                     case "fix":
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
