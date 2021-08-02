@@ -20,6 +20,7 @@ public class HPExpansion extends PlaceholderExpansion {
     private final HeadsPlus hp;
     // regex hell 2.0
     private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_(player|score)\b");
+    private final Pattern STATISTIC_PATTERN = Pattern.compile("\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?_+");
 
     public HPExpansion(HeadsPlus headsPlus) {
         hp = headsPlus;
@@ -61,22 +62,6 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if(identifier.equals("completed_challenges_total")){
             return String.valueOf(CacheManager.get().getTotalChallengesComplete(player));
-        }
-
-        if (identifier.equals("level")) {
-            return CacheManager.get().getLevel(player);
-        }
-
-        if (identifier.startsWith("hunting")) {
-            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, identifier.split("_")[1], "hunting"));
-        }
-
-        if (identifier.startsWith("crafting")) {
-            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, identifier.split("_")[1], "crafting"));
-        }
-
-        if (identifier.startsWith("selling")) {
-            return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player, identifier.split("_")[1], "selling"));
         }
 
         if (identifier.startsWith("top")) {
@@ -161,9 +146,7 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "min-heads":
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
-                    return String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
-                                challenge.getHeadType(),
-                                challenge.getDatabaseType()));
+                    return String.valueOf(CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId())));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":
@@ -175,6 +158,36 @@ public class HPExpansion extends PlaceholderExpansion {
                     return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
+            }
+        }
+
+        Matcher matcher = STATISTIC_PATTERN.matcher(identifier);
+        if (matcher.matches()) {
+            // Get the category
+            String categoryStr = matcher.group(1);
+            StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
+            if (category == null) return "-1";
+            // Get the extra metadata
+            String[] metadata = matcher.group(2).split(",");
+            List<String> actualMetadata = new ArrayList<>();
+            String head = null;
+            for (String str : metadata) {
+                if (str.startsWith("HP#")) head = str;
+                else actualMetadata.add(str);
+            }
+            String metadataStr = String.join(",", actualMetadata);
+            if (head == null) {
+                if (metadataStr.isEmpty()) {
+                    return String.valueOf(CacheManager.get().getStat(player, category));
+                } else {
+                    return String.valueOf(CacheManager.get().getStatMeta(player, category, metadataStr));
+                }
+            } else {
+                if (metadataStr.isEmpty()) {
+                    return String.valueOf(CacheManager.get().getStat(player, category, head));
+                } else {
+                    return String.valueOf(CacheManager.get().getStat(player, category, head, metadataStr));
+                }
             }
         }
         return null;

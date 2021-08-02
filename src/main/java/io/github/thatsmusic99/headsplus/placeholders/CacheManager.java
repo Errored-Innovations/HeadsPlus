@@ -99,6 +99,32 @@ public class CacheManager {
         return getEntries(type.name() + "_" + head + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata));
     }
 
+    public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type) {
+        return getStat(player.getName() + "_" + type.name(), StatisticsSQLManager.get().getStat(player.getUniqueId(), type));
+    }
+
+    public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head) {
+        return getStat(String.join("_", player.getName(), type.name(), head),
+                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head));
+    }
+
+    public int getStatMeta(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String metadata) {
+        return getStat(String.join("_", player.getName(), type.name(), metadata),
+                StatisticsSQLManager.get().getStatMeta(player.getUniqueId(), type, metadata));
+    }
+
+    public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head, String metadata) {
+        return getStat(String.join("_", player.getName(), type.name(), head, metadata),
+                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, metadata));
+    }
+
+    public int getStat(String id, CompletableFuture<Integer> ugh) {
+        updateCaches("stats_" + id, id, cachedStats, ugh);
+        if (cachedStats.containsKey(id)) return cachedStats.get(id);
+        ugh.thenApply(num -> cachedStats.put(id, num));
+        return -1;
+    }
+
     private List<StatisticsSQLManager.LeaderboardEntry> getEntries(String id, CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>> ree) {
         updateCaches("leaderboards_" + id, id, cachedEntries, ree);
         //
