@@ -131,7 +131,6 @@ public class ConfigCustomHeads extends HPConfig {
         try {
             final String key = s.contains("#") ? s.split("#")[1] : s;
             ItemStack is = headsCache.get(s);
-            // todo? allow loading texture directly from parameter if matches base64 pattern?
             return is != null ? is.clone() : getSkullFromTexture(
                     getString("heads." + key + ".texture"),
                     getBoolean("heads." + key + ".encode"),

@@ -75,7 +75,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            // TODO - should be heads.yml
+                            
                             ConfigHeads selector = ConfigHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;

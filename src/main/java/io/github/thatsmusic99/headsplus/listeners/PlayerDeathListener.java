@@ -78,7 +78,6 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
         }
 
-        // TODO - lore
         EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo(), "player");
         headInfo.withTexture(victim.getName())
                 .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));

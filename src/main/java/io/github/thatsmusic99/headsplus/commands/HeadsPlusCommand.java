@@ -22,7 +22,6 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         try {
             if (args.length == 0) {
-                // TODO - don't create multiple instances
                 HeadsPlus.get().getCommands().get("help").onCommand(sender, cmd, label, args);
                 return true;
             }

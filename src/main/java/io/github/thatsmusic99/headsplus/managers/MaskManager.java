@@ -114,7 +114,6 @@ public class MaskManager {
             withMaterial(info.getMaterial());
         }
 
-        // TODO - should probably be abstract
         public void run(Player player) {
         }
     }

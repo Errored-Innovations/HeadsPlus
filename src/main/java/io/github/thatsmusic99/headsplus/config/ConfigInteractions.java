@@ -26,7 +26,6 @@ public class ConfigInteractions extends HPConfig {
     }
 
     /*
-    TODO Set up new interactions configuration.
     Sections include:
     Default message
     Per-player message
