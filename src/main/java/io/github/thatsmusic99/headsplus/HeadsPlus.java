@@ -100,6 +100,7 @@ public class HeadsPlus extends JavaPlugin {
             // Hooks PlaceholderAPI
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
+                new CacheManager();
                 getLogger().info("We've registered our PAPI placeholders!");
             }
 
@@ -276,7 +277,7 @@ public class HeadsPlus extends JavaPlugin {
         config.load();
         configFiles.add(new ConfigAnimations());
         configFiles.add(new ConfigChallenges());
-	if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
+        if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
         configFiles.add(new ConfigHeads());
         configFiles.add(new ConfigHeadsSelector());

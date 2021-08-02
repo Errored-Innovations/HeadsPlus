@@ -176,10 +176,11 @@ public class MainConfig extends HPConfig {
         addDefault("smart-locale", false);
         addDefault("use-tellraw", true);
 
-	addSection("Permissions");
-	addDefault("default-permissions", Lists.newArrayList("headsplus.craft.*", 
-				"headsplus.challenges",
-			        "headsplus.drops.*",	
+        addSection("Permissions");
+        addDefault("default-permissions", Lists.newArrayList("headsplus.craft.*",
+                "headsplus.challenges",
+                "headsplus.drops.*",
+				"headsplus.drops.player.*",
 				"headsplus.head",
 				"headsplus.heads",
 				"headsplus.leaderboards",
@@ -465,7 +466,7 @@ public class MainConfig extends HPConfig {
         playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
         masks = new Masks();
-	autograbber = new Autograbber();
+        autograbber = new Autograbber();
         challenges = new Challenges();
         levels = new Levels();
         leaderboards = new Leaderboards();
@@ -473,29 +474,29 @@ public class MainConfig extends HPConfig {
         updates = new Updates();
         miscellaneous = new Miscellaneous();
 
-	// Default permissions handling
-	List<String> permissions = getStringList("default-permissions-list");
-	// If there's no defaults already set up, just create a new list
-	// Otherwise, if this is a reload, reset the permissions set
-	if (defaults == null) {
+        // Default permissions handling
+        List<String> permissions = getStringList("default-permissions-list");
+        // If there's no defaults already set up, just create a new list
+        // Otherwise, if this is a reload, reset the permissions set
+        if (defaults == null) {
             defaults = new ArrayList<>();
-	} else {
+        } else {
             for (String defaultPerm : defaults) {
                 Permission permObj = Bukkit.getPluginManager().getPermission(defaultPerm);
-		permObj.setDefault(PermissionDefault.OP);
-	    }
-	}
-	// Then set up the actual permissions
-	for (String perm : permissions) {
+                permObj.setDefault(PermissionDefault.OP);
+            }
+        }
+        // Then set up the actual permissions
+        for (String perm : permissions) {
             if (!perm.startsWith("headsplus")) continue;
-	    Permission permission = Bukkit.getPluginManager().getPermission(perm);
-	    if (permission == null) {
+            Permission permission = Bukkit.getPluginManager().getPermission(perm);
+            if (permission == null) {
                 permission = new Permission(perm);
-		Bukkit.getPluginManager().addPermission(permission);
-	    }
-	    permission.setDefault(PermissionDefault.TRUE);
-	    defaults.add(perm);
-	}
+                Bukkit.getPluginManager().addPermission(permission);
+            }
+            permission.setDefault(PermissionDefault.TRUE);
+            defaults.add(perm);
+        }
     }
 
     public static MainConfig get() {

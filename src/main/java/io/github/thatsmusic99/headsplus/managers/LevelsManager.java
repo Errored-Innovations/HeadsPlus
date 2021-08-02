@@ -18,9 +18,10 @@ public class LevelsManager {
     private static LevelsManager instance;
 
     public LevelsManager() {
-	instance = this;
+    	instance = this;
         levels = new HashMap<>();
-	levelOrder = new ArrayList<>();
+        levelOrder = new ArrayList<>();
+        init();
     }
 
     public static LevelsManager get() {
