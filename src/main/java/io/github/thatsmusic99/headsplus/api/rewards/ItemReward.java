@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemReward extends Reward {
 
-    private ItemStack item;
+    private final ItemStack item;
 
     public ItemReward(Material material, int amount, int xp) {
         super(xp);
@@ -19,7 +19,12 @@ public class ItemReward extends Reward {
     }
 
     public static ItemReward fromConfigSection(String id, ConfigSection section) {
-        return null; // TODO
+        String materialStr = section.getString("material");
+        if (materialStr == null)
+            throw new IllegalStateException("Reward type GIVE_ITEM " + id + " must have a material option!");
+        Material material = Material.getMaterial(materialStr);
+        int amount = section.getInteger("amount", 1);
+        return new ItemReward(material, amount, section.getInteger("base-xp"));
     }
 
     @Override
