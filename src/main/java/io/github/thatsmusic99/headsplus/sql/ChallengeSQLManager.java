@@ -13,6 +13,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class ChallengeSQLManager extends SQLManager {
 
+    private static ChallengeSQLManager instance;
+
+    public ChallengeSQLManager() {
+        instance = this;
+        createTable();
+    }
+
+    public static ChallengeSQLManager get() {
+        return instance;
+    }
+
     @Override
     public void createTable() {
         CompletableFuture.runAsync(() -> {

@@ -13,6 +13,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class StatisticsSQLManager extends SQLManager {
 
+    private static StatisticsSQLManager instance;
+
+    public StatisticsSQLManager() {
+        instance = this;
+        createTable();
+    }
+
+    public static StatisticsSQLManager get() {
+        return instance;
+    }
+
     @Override
     public void createTable() {
         CompletableFuture.runAsync(() -> {
