@@ -77,6 +77,12 @@ public class MainConfig extends HPConfig {
 
         addSection("Mob Drops");
         addComment("Configure this further in the mobs.yml config file.");
+        addDefault("default-drop-chance", 5, "The default drop chance of mob heads.\n" +
+                "Per-head drop chance can be configured in the mobs.yml file.");
+        addDefault("default-head-price", 10.0, "The default price that mob heads can be sold at.\n" +
+                "Per-head price can be configured in the mobs.yml file.");
+        addDefault("default-xp-gained", 10, "The default amount of XP (plugin) gained when receiving a dropped head.\n" +
+                "Per-head XP gained can be configured in the mobs.yml file.");
         addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG"),
                 "Spawn causes that stop heads dropping from a given mob.\n" +
                         "In this example, mobs spawned using spawner eggs will not drop heads at all.");
@@ -95,7 +101,8 @@ public class MainConfig extends HPConfig {
                 "Whether the plugin should ignore MythicMobs mobs or not.");
 
         addSection("Player Head Drops");
-        addComment("Note - this is also further configured in the mobs.yml file.");
+        addDefault("default-player-drop-chance", 100, "The default chance that a player head will drop when killed.");
+        addDefault("default-player-head-price", 10.0, "The default price of a player head when it is dropped.");
         addDefault("ignored-players", new ArrayList<>());
         addDefault("enable-player-head-death-messages", false);
         addDefault("player-head-death-messages",
@@ -593,6 +600,9 @@ public class MainConfig extends HPConfig {
         public boolean NEEDS_KILLER = getBoolean("needs-killer"),
                 ENABLE_LOOTING = getBoolean("enable-looting"),
                 DISABLE_FOR_MYTHIC_MOBS = getBoolean("disable-for-mythic-mobs");
+        public double DEFAULT_DROP_CHANCE = getDouble("default-drop-chance"),
+                DEFAULT_PRICE = getDouble("default-head-price");
+        public long DEFAULT_XP_GAINED = getLong("default-xp-gained");
 
     }
 
