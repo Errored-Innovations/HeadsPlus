@@ -381,6 +381,32 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().warning("Paper fixes these stalls for versions 1.16.5 and below. It also provides API that Spigot does not, which HP will rely on fully soon.");
             getLogger().warning("The vast majority of plugins will still work with Paper, and HP certainly will.");
         }
+        // death to the dodgy forks and hybrids
+        for (DangerousServer server : Arrays.asList(
+                new DangerousServer("Yatopia", "dev.tr7wz.yatopia.events.GameProfileLookupEvent",
+                        "!!! YOU ARE USING YATOPIA. !!!",
+                        "This is considered an unstable server type that mindlessly implements patches with no full testing.",
+                        "It is even abandoned now and not recommended for use whatsoever.",
+                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                new DangerousServer("SugarcaneMC", "org.sugarcane.sugarcane.events.GameProfileLookupEvent",
+                        "!!! YOU ARE USING SUGARCANE. !!!",
+                        "Sugarcane is a fork that is following Yatopia's steps in making itself unstable through implementing patches not written themselves.",
+                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                new DangerousServer("Mohist", "com.mohistmc.Mohist",
+                        "!!! YOU ARE USING MOHIST. !!!",
+                        "HeadsPlus is not made to work with Forge-Bukkit hybrid server types.",
+                        "Generally, Mohist is not recommended for use either see why here: https://essentialsx.net/do-not-use-mohist.html",
+                        "To prevent possible problems arising from this, HeadsPlus will now disable."))) {
+            try {
+                Class.forName(server.clazz);
+                for (String message : server.message) getLogger().severe(message);
+                setEnabled(false);
+                return false;
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
         return true;
     }
 
@@ -504,5 +530,19 @@ public class HeadsPlus extends JavaPlugin {
 
     public boolean canUseWG() {
         return canUseWG;
+    }
+
+    private static class DangerousServer {
+
+        private final String name;
+        private final String[] message;
+        private final String clazz;
+
+        public DangerousServer(String name, String clazz, String... message) {
+            this.name = name;
+            this.message = message;
+            this.clazz = clazz;
+        }
+
     }
 }
