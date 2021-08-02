@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
+import io.github.thatsmusic99.headsplus.config.ConfigHeads;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
@@ -27,14 +28,9 @@ public class RestoreCommand implements IHeadsPlusCommand {
         if (args.length > 1) {
             try {
                 HeadsXEnums headToBeAdded = HeadsXEnums.valueOf(args[1].toUpperCase());
-                // TODO - should be heads.yml
-                ConfigCustomHeads.get().set("heads." + headToBeAdded.name, null);
-                ConfigCustomHeads.get().addHead(headToBeAdded.texture,
-                        true,
-                        headToBeAdded.displayName,
-                        headToBeAdded.section,
-                        "default",
-                        true);
+                ConfigHeads.get().set("heads." + headToBeAdded.name, null);
+                ConfigHeads.get().set("heads." + headToBeAdded.name + ".display-name", headToBeAdded.displayName);
+                ConfigHeads.get().set("heads." + headToBeAdded.name + ".texture", headToBeAdded.texture);
                 HeadsPlusMessagesManager.get().sendMessage("commands.restore.restored-head", sender, "{head}", args[1]);
                 return true;
             } catch (IllegalArgumentException ex) {
