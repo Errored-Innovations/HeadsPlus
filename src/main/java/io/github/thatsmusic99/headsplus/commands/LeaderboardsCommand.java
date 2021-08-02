@@ -84,7 +84,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "selling", "crafting"), results);
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting"), results);
         } else if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], SellHead.getRegisteredIDs(), results);
         }

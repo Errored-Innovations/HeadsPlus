@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
-import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.DataManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -20,7 +19,6 @@ public class LeaderboardListeners implements Listener {
     public LeaderboardListeners() {
 
         for (HeadsPlusListener<?> listener : Lists.newArrayList(new EntityDropHeadListener(),
-                new SellHeadListener(),
                 new PlayerHeadListener(),
                 new HeadCraftListener())) {
             if (listener.shouldEnable()) {
@@ -55,34 +53,6 @@ public class LeaderboardListeners implements Listener {
         @Override
         public boolean shouldEnable() {
             return MainConfig.get().getMainFeatures().MOB_DROPS;
-        }
-    }
-
-    private static class SellHeadListener extends HeadsPlusListener<SellHeadEvent> {
-
-        @Override
-        public void onEvent(SellHeadEvent event) {
-            for (int is : event.getEntityAmounts().values()) {
-                HPPlayer.getHPPlayer(event.getPlayer()).addXp(0 * is);
-            }
-            if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
-            for (String s : event.getEntityAmounts().keySet()) {
-                for (int i : event.getEntityAmounts().values()) {
-                    if (event.getEntityAmounts().get(s) != i) continue;
-                    Bukkit.getScheduler().runTaskAsynchronously(hp, () -> DataManager.addToTotal(event.getPlayer(), s, "headsplussh", i));
-                }
-            }
-        }
-
-        @Override
-        public void init() {
-            Bukkit.getPluginManager().registerEvent(SellHeadEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(SellHeadEvent.class, "SellHeadEvent", this), hp, true);
-        }
-
-        @Override
-        public boolean shouldEnable() {
-            return MainConfig.get().getMainFeatures().SELL_HEADS;
         }
     }
 
