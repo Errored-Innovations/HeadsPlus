@@ -2,23 +2,19 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
+import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
+import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
 import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
-import io.github.thatsmusic99.headsplus.storage.PlayerScores;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -29,28 +25,24 @@ public class HPPlayer {
     private final UUID uuid;
     private long xp;
     private String level = null;
-    private List<String> completeChallenges;
     private String nextLevel = null;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private volatile List<String> favouriteHeads;
-    private volatile List<String> pinnedChallenges;
-    private String cachedLocale;
-    private boolean localeForced;
+    private final List<String> favouriteHeads;
+    private final List<String> pinnedChallenges;
+    private final List<String> completeChallenges;
 
     // TODO - make sure this is never called on the main server thread.
     public HPPlayer(UUID uuid) {
-        HeadsPlus hp = HeadsPlus.get();
         pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid).join();
         favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid).join();
+        completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid).join();
         int levelIndex = PlayerSQLManager.get().getLevel(uuid).join();
-        if (levelIndex > -1 && levelIndex < LevelsManager.get().getLevels().size()) {
+        int max = LevelsManager.get().getLevels().size();
+        if (levelIndex > -1 && levelIndex < max) {
             this.level = LevelsManager.get().getLevels().get(levelIndex);
-            this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1); // TODO - IOBE check
+            if (levelIndex + 1 < max) this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1);
         }
         xp = PlayerSQLManager.get().getXP(uuid).join();
-        PlayerScores scores = hp.getScores();
-        List<String> sc = new ArrayList<>();
-        sc.addAll(scores.getCompletedChallenges(uuid.toString()));
         if (MainConfig.get().getLocalisation().SMART_LOCALE && getPlayer().isOnline()) {
             String loc = scores.getLocale(uuid.toString());
             if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
@@ -72,7 +64,6 @@ public class HPPlayer {
             cachedLocale = "";
             localeForced = false;
         }
-        this.completeChallenges = sc;
         this.uuid = uuid;
         players.put(uuid, this);
     }
@@ -102,9 +93,6 @@ public class HPPlayer {
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        UUID uuid = p.getUniqueId();
-        return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(uuid);
-    }
 
     public String getLocale() {
         return cachedLocale;
@@ -122,12 +110,12 @@ public class HPPlayer {
         cachedLocale = locale;
         localeForced = forced;
         HeadsPlus.get().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
+        return players.get(p.getUniqueId());
     }
 
-    public void addCompleteChallenge(Challenge c) {
-        PlayerScores scores = HeadsPlus.get().getScores();
-        scores.completeChallenge(player.toString(), c);
+    public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
         completeChallenges.add(c.getConfigName());
+        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName());
     }
 
     public void addXp(long xp) {
@@ -147,7 +135,6 @@ public class HPPlayer {
                 @Override
                 public void run() {
                     Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
-                    // TODO - multiple or just a single level up? Config option is needed
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
                         nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
                         if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp();
@@ -158,11 +145,13 @@ public class HPPlayer {
         }
     }
 
-    private boolean initLevelUp() {
+    private void initLevelUp() {
         Level nextLevel = LevelsManager.get().getLevel(this.nextLevel);
         LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevel);
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) return false;
+        if (event.isCancelled()) return;
+        this.level = this.nextLevel;
+        this.nextLevel = LevelsManager.get().getNextLevel(this.level).getConfigName();
         Player player = (Player) getPlayer();
         if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
             final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
@@ -174,7 +163,7 @@ public class HPPlayer {
         if (nextLevel.isrEnabled()) {
             nextLevel.getReward().rewardPlayer(null, player.getPlayer()); // TODO
         }
-        return true;
+        PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
 
     public boolean hasHeadFavourited(String s) {
@@ -191,12 +180,8 @@ public class HPPlayer {
         return FavouriteHeadsSQLManager.get().removeHead(uuid, s);
     }
 
-    public CompletableFuture<List<String>> getPinnedChallenges() {
-        if (pinnedChallenges != null) return CompletableFuture.completedFuture(pinnedChallenges);
-        return PinnedChallengeManager.get().getPinnedChallenges(player).thenApply(list -> {
-            pinnedChallenges = list;
-            return pinnedChallenges;
-        });
+    public List<String> getPinnedChallenges() {
+        return pinnedChallenges;
     }
 
     public boolean hasChallengePinned(Challenge challenge) {

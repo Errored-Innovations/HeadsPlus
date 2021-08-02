@@ -6,7 +6,7 @@ import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
+import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
@@ -33,14 +33,15 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(EntityHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player).addXp(event.getHeadInfo().getXp() * event.getAmount());
+           // HPPlayer.getHPPlayer(player).addXp(event.getHeadInfo().getXp() * event.getAmount());
             if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                 }
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
-            Bukkit.getScheduler().runTaskAsynchronously(hp, () -> DataManager.addToTotal(player, event.getEntityType().name(), "headspluslb", event.getAmount()));
+            StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
+                    event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount());
         }
 
         @Override
@@ -69,7 +70,8 @@ public class LeaderboardListeners implements Listener {
                 }
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
-            Bukkit.getScheduler().runTaskAsynchronously(hp, () -> DataManager.addToTotal(player, "player", "headspluslb", event.getAmount()));
+            StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
+                    event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount());
 
         }
 

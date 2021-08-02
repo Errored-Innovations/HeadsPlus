@@ -58,11 +58,10 @@ public class Complete implements IHeadsPlusCommand {
             hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
             return true;
         }
-        if (c.canComplete(player)) {
-            c.complete(player);
-        } else {
-            hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
-        }
+        c.canComplete(player).thenApply(result -> {
+            if (result) c.complete(player); else hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
+            return true;
+        });
         return true;
     }
 

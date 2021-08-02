@@ -49,7 +49,6 @@ public class ReloadCommand implements IHeadsPlusCommand {
                         e.printStackTrace();
                     }
                 }
-                HPPlayer.players.clear();
                 EntityDataManager.init();
                 CraftingManager.get().reload();
                 ChallengeManager.get().reload();

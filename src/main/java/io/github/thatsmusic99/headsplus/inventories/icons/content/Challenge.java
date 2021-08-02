@@ -2,10 +2,10 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -35,14 +35,16 @@ public class Challenge extends Content {
         try {
             if (event.isLeftClick()) {
                 if (!challenge.isComplete(player)) {
-                    if (challenge.canComplete(player)) {
-                        challenge.complete(player);
-                        item.setType(challenge.getCompleteIcon().getType());
-                        initNameAndLore("challenge", player);
-                        event.getInventory().setItem(event.getSlot(), item);
-                    } else {
-                        HeadsPlusMessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
-                    }
+                    challenge.canComplete(player).thenAcceptAsync(result -> {
+                        if (result) {
+                            challenge.complete(player);
+                            item.setType(challenge.getCompleteIcon().getType());
+                            initNameAndLore("challenge", player);
+                            event.getInventory().setItem(event.getSlot(), item);
+                        } else {
+                            HeadsPlusMessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
+                        }
+                    }, HeadsPlus.sync);
                 } else {
                     HeadsPlusMessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
                 }
@@ -110,9 +112,9 @@ public class Challenge extends Content {
 
                     }
                     str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
-                            .replaceAll("\\{heads}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
-                                    challenge.getHeadType(),
-                                    challenge.getDatabaseType())))
+                            .replaceAll("\\{heads}", String.valueOf(
+                                    // TODO - use supplier, not this
+                                    CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId()))))
                             .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
                     lore.add(str);
                 }

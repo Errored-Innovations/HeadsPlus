@@ -1,11 +1,9 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.challenges.CraftingChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MiscChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
-import io.github.thatsmusic99.headsplus.api.challenges.SellheadChallenge;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.RewardsManager;
@@ -15,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class Challenge {
 
@@ -59,8 +59,6 @@ public abstract class Challenge {
                 return new MobKillChallenge(id, section, icon, completeIcon);
             case "CRAFTING":
                 return new CraftingChallenge(id, section, icon, completeIcon);
-            case "SELLHEAD":
-                return new SellheadChallenge(id, section, icon, completeIcon);
             case "MISC":
                 return new MiscChallenge(id, section, icon, completeIcon);
             default:
@@ -112,14 +110,14 @@ public abstract class Challenge {
         return getReward().getXp();
     }
 
-    public boolean canComplete(Player p) {
-        return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), getDatabaseType()) >= getRequiredHeadAmount();
-    }
+    public abstract CompletableFuture<Boolean> canComplete(Player p);
 
-    public abstract String getDatabaseType();
+    public abstract String getCacheID();
+
+    public abstract CompletableFuture<Integer> getStatFuture(UUID uuid);
 
     public boolean isComplete(Player p) {
-        return HeadsPlus.get().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
+        return HPPlayer.getHPPlayer(p).getCompleteChallenges().contains(getConfigName());
     }
 
     public void complete(Player p) {

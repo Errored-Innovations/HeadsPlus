@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -41,7 +40,6 @@ public class DebugFileCreator {
             o1.put("HeadsPlus version", hp.getDescription().getVersion());
             o1.put("NMS version", Bukkit.getVersion());
             o1.put("Has Vault hooked", hp.isVaultEnabled());
-            o1.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             o1.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 
@@ -56,7 +54,6 @@ public class DebugFileCreator {
             o3.put("Uses heads selector", MainConfig.get().getMainFeatures().HEADS_SELECTOR);
             o3.put("Uses leaderboards", MainConfig.get().getMainFeatures().LEADERBOARDS);
             o3.put("Stops placement of sellable heads", MainConfig.get().getSellingHeads().STOP_PLACEMENT);
-            o3.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             o3.put("Player death messages", MainConfig.get().getPlayerDrops().ENABLE_PLAYER_DEATH_MESSAGES);
             o3.put("Total challenges", ChallengeManager.get().getChallenges().size());
             o3.put("Total levels", LevelsManager.get().getLevels().size());
@@ -253,7 +250,6 @@ public class DebugFileCreator {
         try {
             basicInfo.put("HeadsPlus version", hp.getDescription().getVersion());
             basicInfo.put("Has Vault hooked", hp.isVaultEnabled());
-            basicInfo.put("MySQL is enabled", hp.isConnectedToMySQLDatabase());
             basicInfo.put("Locale", MainConfig.get().getLocalisation().LOCALE);
         } catch (NullPointerException ignored) {
 

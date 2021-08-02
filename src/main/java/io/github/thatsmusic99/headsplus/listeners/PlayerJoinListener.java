@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
@@ -51,7 +52,8 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
             }
         }
 
-        HPPlayer.getHPPlayer(player);
+        PlayerSQLManager.get().checkPlayer(player.getUniqueId(), player.getName())
+                .thenAccept(ok -> PlayerSQLManager.get().loadPlayer(player.getUniqueId()));
 
 	}
 

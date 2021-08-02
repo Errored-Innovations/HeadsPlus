@@ -85,7 +85,7 @@ public class HeadCraftEvent extends Event implements Cancellable {
         this.headsCrafted = headsCrafted;
     }
 
-    public String getEntityType() {
+    public String getType() {
         return entityType;
     }
 }

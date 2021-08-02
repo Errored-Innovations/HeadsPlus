@@ -1,7 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import io.github.thatsmusic99.headsplus.api.HPExpansion;
-import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
@@ -11,10 +9,11 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.managers.*;
-import io.github.thatsmusic99.headsplus.storage.PlayerScores;
+import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
+import io.github.thatsmusic99.headsplus.placeholders.HPExpansion;
+import io.github.thatsmusic99.headsplus.sql.*;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
-import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
@@ -34,9 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.Executor;
 
@@ -50,13 +46,10 @@ public class HeadsPlus extends JavaPlugin {
     private Economy econ = null;
     private Permission perms;
     private static Object[] update = null;
-    private Connection connection;
-    private boolean con = false;
     // Other management stuff
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
     private List<HPConfig> configFiles = new ArrayList<>();
-    private PlayerScores scores;
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
     private boolean vaultEnabled = false;
@@ -185,13 +178,6 @@ public class HeadsPlus extends JavaPlugin {
 		    if (im.getInventory() == null) continue;
 		    player.closeInventory();
 		}
-        try {
-            scores.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
-        } catch (NullPointerException ignored) {
-
-        }
         getLogger().info(HeadsPlusMessagesManager.get().getString("startup.plugin-disabled"));
     }
 
@@ -211,37 +197,7 @@ public class HeadsPlus extends JavaPlugin {
             return false;
         }
         econ = rsp.getProvider();
-
-        return econ != null;
-    }
-
-    @Deprecated
-    private void openConnection() throws SQLException, ClassNotFoundException {
-        if (connection != null && !connection.isClosed()) {
-            return;
-        }
-
-        synchronized (this) {
-            if (connection != null && !connection.isClosed()) {
-                return;
-            }
-            Class.forName("com.mysql.jdbc.Driver");
-            try {
-
-                connection = DriverManager.getConnection(
-                        "jdbc:mysql://" + MainConfig.get().getMySQL().MYSQL_HOST + ":" +
-                                MainConfig.get().getMySQL().MYSQL_PORT + "/" +
-                                MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
-                        MainConfig.get().getMySQL().MYSQL_USERNAME,
-                        MainConfig.get().getMySQL().MYSQL_PASSWORD);
-                NewMySQLAPI.createTable();
-                con = true;
-            } catch (SQLException ex) {
-                getLogger().warning("MySQL could not be enabled due to a problem connecting. Details to follow... (Error code: 3)");
-                getLogger().warning(ex.getMessage() + " (MySQL Error code: " + ex.getErrorCode() + ")");
-                getLogger().warning(ex.getCause().getMessage());
-            }
-        }
+        return true;
     }
 
     private void initiateEarlyManagers() {
@@ -346,25 +302,6 @@ public class HeadsPlus extends JavaPlugin {
             }
         }
 
-        try {
-            setupJSON();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    try {
-                        openConnection();
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.runTaskAsynchronously(this);
-        }
-
         EntityDataManager.init();
         new MaskManager();
     }
@@ -373,16 +310,14 @@ public class HeadsPlus extends JavaPlugin {
         createLocales();
     }
 
-    private boolean setupPermissions() {
+    private void setupPermissions() {
+            return;
+        }
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        if (rsp == null) {
+            return;
+        }
         perms = rsp.getProvider();
-        return perms != null;
-    }
-
-    private void setupJSON() throws IOException {
-        scores = new PlayerScores();
-        scores.create();
-        scores.read();
     }
 
     private void createLocales() {
@@ -453,25 +388,12 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("restore", new RestoreCommand());
     }
 
-    // GETTERS
-    public PlayerScores getScores() {
-        return scores;
-    }
-
     public String getVersion() {
         return version;
     }
 
-    public boolean isConnectedToMySQLDatabase() {
-        return con;
-    }
-
     public boolean isVaultEnabled() {
         return vaultEnabled;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public Economy getEconomy() {

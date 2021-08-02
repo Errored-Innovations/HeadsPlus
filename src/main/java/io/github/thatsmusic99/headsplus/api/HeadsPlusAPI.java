@@ -6,8 +6,6 @@ import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
-import io.github.thatsmusic99.headsplus.util.LeaderboardsCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +13,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,18 +55,6 @@ public class HeadsPlusAPI {
 
     public static String getSkullType(ItemStack is) {
         return PersistenceManager.get().getSellType(is);
-    }
-
-    public static int getPlayerInLeaderboards(OfflinePlayer p, String section, String database) {
-        try {
-            return DataManager.getPlayerScore(p, database, section);
-        } catch (NullPointerException ex) {
-            return -1;
-        }
-    }
-
-    public static LinkedHashMap<OfflinePlayer, Integer> getScores(String section, String database) {
-        return LeaderboardsCache.getType(section, database, false, true);
     }
 
     public static List<Challenge> getChallenges() {

@@ -1,12 +1,10 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,16 +24,6 @@ import java.util.List;
 )
 public class ProfileCommand implements IHeadsPlusCommand {
 
-    private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
-        try {
-            HPPlayer pl = HPPlayer.getHPPlayer(p);
-            return ConfigTextMenus.ProfileTranslator.translate(pl, sender);
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-            return HeadsPlusMessagesManager.get().getString("commands.errors.no-data", sender);
-        }
-    }
-
     @Override
     public boolean onCommand(CommandSender cs, @NotNull Command command, @NotNull String label, String[] args) {
         String name = cs.getName();
@@ -47,10 +35,10 @@ public class ProfileCommand implements IHeadsPlusCommand {
             try {
                 if (cs instanceof Player) {
                     if (cs.getName().equalsIgnoreCase(player.getName())) {
-                        cs.sendMessage(prof(player, cs));
+                        ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     } else {
                         if (cs.hasPermission("headsplus.maincommand.profile.others")) {
-                            cs.sendMessage(prof(player, cs));
+                            ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                         } else {
                             HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
                         }
@@ -60,7 +48,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
                         // Not a player
                         cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
                     } else {
-                        cs.sendMessage(prof(player, cs));
+                        ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     }
                 }
             } catch (SQLException e) {
