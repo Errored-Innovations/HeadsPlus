@@ -4,10 +4,12 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMasks;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -71,8 +73,19 @@ public class MaskManager {
                 HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
                 String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
                 switch (type.toLowerCase()) {
-                    case "potion": // TODO effects
+                    case "potion":
                         info = new PotionMask(key, headInfo);
+                        for (String effectStr : masksSection.getStringList("effects")) {
+                            String[] content = effectStr.split(":");
+                            PotionEffectType effectType = PotionEffectType.getByName(content[0]);
+                            if (effectType == null)
+                                throw new IllegalArgumentException("Mask effect " + content[0] + " is not an existing potion effect! (Mask: " + key + ")");
+                            int amplifier = 1;
+                            if (content.length > 1 && CachedValues.MATCH_PAGE.matcher(content[1]).matches())
+                                amplifier = Integer.getInteger(content[1]);
+                            PotionEffect effect = new PotionEffect(effectType, MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
+                            ((PotionMask) info).addEffect(effect);
+                        }
                         break;
                     default:
                         throw new IllegalArgumentException("Mask type " + type + " for " + key + " does not exist!");
