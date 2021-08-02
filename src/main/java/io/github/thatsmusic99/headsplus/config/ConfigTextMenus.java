@@ -1,12 +1,14 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
+import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
-import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
+import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -19,7 +21,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ConfigTextMenus extends HPConfig {
 
@@ -75,7 +80,6 @@ public class ConfigTextMenus extends HPConfig {
                 "&cXP &8» &7{xp}",
                 "&c{msg_textmenus.profile.completed-challenges} &8» &7{completed-challenges}",
                 "&c{msg_textmenus.profile.total-heads-dropped} &8» &7{hunter-counter}",
-                "&c{msg_textmenus.profile.total-heads-sold} &8» &7{sellhead-counter}",
                 "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
                 "&c{msg_textmenus.profile.current-level} &8» &7{level}",
                 "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
@@ -136,28 +140,31 @@ public class ConfigTextMenus extends HPConfig {
     }
 
     public static class ProfileTranslator {
-        public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
-            StringBuilder sb = new StringBuilder();
-            for (String str : instance.getStringList("profile.layout")) {
-                try {
-                    String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
-                            .replaceAll("\\{xp}", String.valueOf(p.getXp()))
-                            .replaceAll("\\{completed-challenges}", String.valueOf(p.getCompleteChallenges().size()))
-                            .replaceAll("\\{hunter-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
-                            .replaceAll("\\{sellhead-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
-                            .replaceAll("\\{crafting-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
-                            .replace("{header}", instance.getString("profile.header")), sender);
-                    if (stri.contains("{level}") || (stri.contains("{next-level}"))) {
-                        stri = stri.replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', p.getLevel().getDisplayName()))
-                                .replaceAll("\\{next-level}", String.valueOf((p.getNextLevel() != null ? (p.getNextLevel().getRequiredXP() - p.getXp()) : 0)));
-                    }
-                    sb.append(stri).append("\n");
 
-                } catch (NullPointerException ignored) {
+        public static CompletableFuture<String> translate(OfflinePlayer player, CommandSender sender) throws SQLException {
+            return CompletableFuture.supplyAsync(() -> {
+                List<String> profile = new ArrayList<>();
+                int levelPos = PlayerSQLManager.get().getLevelSync(player.getName());
+                Level level = null;
+                if (levelPos > -1 && levelPos < LevelsManager.get().getLevels().size())
+                    level = LevelsManager.get().getLevel(levelPos);
+                Level nextLevel = null;
+                if (level != null) nextLevel = LevelsManager.get().getNextLevel(level.getConfigName());
+                long xp = PlayerSQLManager.get().getXPSync(player.getName());
 
+                for (String str : instance.getStringList("profile.layout")) {
+                    HPUtils.parseLorePlaceholders(profile, translateColors(str, sender),
+                            new HPUtils.PlaceholderInfo("{xp}", xp, true),
+                            new HPUtils.PlaceholderInfo("{completed-challenges}", ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()), true),
+                            new HPUtils.PlaceholderInfo("{hunter-counter}", StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING), true),
+                            new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
+                            new HPUtils.PlaceholderInfo("{crafting-counter}", StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING), true),
+                            new HPUtils.PlaceholderInfo("{header}", instance.getString("profile.header"), true),
+                            new HPUtils.PlaceholderInfo("{level}", translateColors(level == null ? "" : level.getDisplayName(), sender), level != null),
+                            new HPUtils.PlaceholderInfo("{next-level}", nextLevel != null ? (nextLevel.getRequiredXP() - xp) : 0, true));
                 }
-            }
-            return sb.toString();
+                return String.join("\n", profile);
+            }, HeadsPlus.async);
         }
     }
 
@@ -343,32 +350,30 @@ public class ConfigTextMenus extends HPConfig {
 
     public static class LeaderBoardTranslator {
 
-        public static String translate(CommandSender sender, String section, String database, int page) {
-            PagedHashmaps<OfflinePlayer, Integer> ph = null;
+        public static String translate(CommandSender sender, String section, List<StatisticsSQLManager.LeaderboardEntry> entries, int page) {
+            PagedLists<StatisticsSQLManager.LeaderboardEntry> ph;
             HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
             try {
                 HeadsPlus hp = HeadsPlus.get();
                 StringBuilder sb = new StringBuilder();
-                ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), instance.getInteger("leaderboard.lines-per-page"));
+                ph = new PagedLists<>(entries, instance.getInteger("leaderboard.lines-per-page"));
                 sb.append(translateColors(instance.getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages())), sender));
-                Set<OfflinePlayer> it = ph.getContentsInPage(page).keySet();
-                Collection<Integer> it2 = ph.getContentsInPage(page).values();
-                for (int i = 0; i < it.size(); i++) {
+                int index = ph.getContentsPerPage() * (page - 1);
+                for (StatisticsSQLManager.LeaderboardEntry entry : ph.getContentsInPage(page)) {
                     try {
-                        int in = i + (ph.getContentsPerPage() * (ph.getCurrentPage() - 1));
                         sb.append("\n").append(translateColors(instance.getString("leaderboard.for-each-line")
-                                .replaceAll("\\{pos}", String.valueOf(in + 1))
-                                .replace("{name}", ((OfflinePlayer)it.toArray()[i]).getName())
-                                .replaceAll("\\{score}", String.valueOf(it2.toArray()[i])), sender));
+                                .replaceAll("\\{pos}", String.valueOf(index++))
+                                .replace("{name}", entry.getPlayer())
+                                .replaceAll("\\{score}", String.valueOf(entry.getSum())), sender));
                     } catch (NullPointerException ignored) {
                     }
                 }
                 return sb.toString();
             } catch (IllegalArgumentException ex) {
-                if (ph.getHs().size() > 0) {
+                if (entries.size() > 0) {
                     return hpc.getString("commands.errors.invalid-pg-no", sender);
                 } else {
                     return hpc.getString("commands.errors.no-data-lb", sender);
