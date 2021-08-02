@@ -76,7 +76,10 @@ public class LevelsManager {
 				Level level = new Level(levelKey, displayName, xp, reward);
 				// Now set the order stuff properly
 				int hierarchy = levelSection.getInteger("hierarchy");
-				if (hierarchy == 0) return; // TODO do properly
+				if (hierarchy < 1) {
+					HeadsPlus.get().getLogger().warning("Cannot have a hierarchy below 1 for level " + levelKey + "!");
+					return;
+				}
 				levelOrder.add(hierarchy - 1, levelKey);
 				levels.put(levelKey, level);
 			} catch (NullPointerException ex) {
