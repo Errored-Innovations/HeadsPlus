@@ -226,6 +226,7 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new MaskListener());
         listeners.add(new PlayerCraftListener());
         listeners.add(new PlayerJoinListener());
+        listeners.add(new PlayerLocaleListener());
         listeners.add(new BlockPlaceListener());
         listeners.add(new PlayerPickBlockListener());
         listeners.add(new PlayerMessageDeathListener());

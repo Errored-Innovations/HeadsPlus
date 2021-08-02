@@ -43,27 +43,6 @@ public class HPPlayer {
             if (levelIndex + 1 < max) this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1);
         }
         xp = PlayerSQLManager.get().getXP(uuid).join();
-        if (MainConfig.get().getLocalisation().SMART_LOCALE && getPlayer().isOnline()) {
-            String loc = scores.getLocale(uuid.toString());
-            if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
-                cachedLocale = loc.split(":")[0];
-                localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                HeadsPlusMessagesManager.get().setPlayerLocale((Player) getPlayer(), cachedLocale,  false);
-            } else {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        HeadsPlusMessagesManager.get().setPlayerLocale((Player) getPlayer());
-                        cachedLocale = HeadsPlusMessagesManager.get().getSetLocale((Player) getPlayer());
-                        localeForced = false;
-                        scores.setLocale(uuid.toString(), cachedLocale, false);
-                    }
-                }.runTaskLaterAsynchronously(hp, 100);
-            }
-        } else {
-            cachedLocale = "";
-            localeForced = false;
-        }
         this.uuid = uuid;
         players.put(uuid, this);
     }
@@ -93,23 +72,6 @@ public class HPPlayer {
     }
 
     public static HPPlayer getHPPlayer(OfflinePlayer p) {
-
-    public String getLocale() {
-        return cachedLocale;
-    }
-
-    public boolean isLocaleForced() {
-        return localeForced;
-    }
-
-    public void setLocale(String locale) {
-        setLocale(locale, true);
-    }
-
-    public void setLocale(String locale, boolean forced) {
-        cachedLocale = locale;
-        localeForced = forced;
-        HeadsPlus.get().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
         return players.get(p.getUniqueId());
     }
 

@@ -35,6 +35,7 @@ public class PlayerSQLManager extends SQLManager {
                         "username VARCHAR(32) NOT NULL, " +
                         "xp BIGINT NOT NULL," +
                         "level INT NOT NULL," +
+                        "locale VARCHAR(16)," +
                         "last_joined BIGINT NOT NULL)"
                 );
 
