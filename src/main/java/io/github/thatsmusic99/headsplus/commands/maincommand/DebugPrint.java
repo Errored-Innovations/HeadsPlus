@@ -4,19 +4,16 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.commands.SellHead;
 import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -118,7 +115,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
                             if (args.length > 2) {
-                                if (SellHead.getRegisteredIDs().contains(args[2])) {
+                                if (SellableHeadsManager.get().isRegistered(args[2])) {
                                     int slot = player.getInventory().getHeldItemSlot();
                                     // lmao who needs getItemInMainHand
                                     ItemStack item = player.getInventory().getItem(slot);
@@ -167,7 +164,7 @@ public class DebugPrint implements IHeadsPlusCommand {
             } else if (args.length > 2) {
                 switch (args[1].toLowerCase()) {
                     case "fix":
-                        StringUtil.copyPartialMatches(args[2], SellHead.getRegisteredIDs(), results);
+                        StringUtil.copyPartialMatches(args[2], SellableHeadsManager.get().getKeys(), results);
                         break;
                     case "verbose":
                         results = DebugVerbose.onTabComplete(sender, args);

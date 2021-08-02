@@ -49,13 +49,14 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
             return;
         }
 
-        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+        if (HeadsPlus.get().canUseWG()) {
             if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
                 e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
                 e.setCancelled(true);
                 return;
             }
         }
+
         fireEvent(e);
 	}
 
