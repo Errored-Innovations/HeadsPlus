@@ -92,33 +92,13 @@ public class Challenge extends Content {
                                 HeadsPlusMessagesManager.get().getString("inventory.icon.challenge.pinned", player),
                                 HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)),
                         new HPUtils.PlaceholderInfo("{reward}", reward, true),
-                        new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true));
-                // TODO
-                if (loreStr.contains("{completed}")) {
-                    if (challenge.isComplete(player)) {
-                        lore.add(HeadsPlusMessagesManager.get().getString("commands.challenges.challenge-completed", player));
-                    }
-                } else if (loreStr.contains("{pinned}")) {
-                    if (HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)) {
-                        lore.add(HeadsPlusMessagesManager.get().getString("inventory.icon.challenge.pinned", player));
-                    }
-                } else {
-                    String str = HeadsPlusMessagesManager.get().formatMsg(
-                            HeadsPlusMessagesManager.get().completed(loreStr, player, challenge), player);
-                    try {
-                        str = str.replace("{reward}", reward)
-                                .replace("{challenge-reward}", reward);
-                    } catch (NullPointerException ignored) {
-
-                    }
-                    str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
-                            .replaceAll("\\{heads}", String.valueOf(
-                                    // TODO - use supplier, not this
-                                    CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId()))))
-                            .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
-                    lore.add(str);
-                }
-
+                        new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true),
+                        new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),
+                        new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
+                        new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
+                        new HPUtils.PlaceholderInfo("{heads}",
+                                // TODO - use supplier, not this
+                                CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId())), true));
             }
 
         }
