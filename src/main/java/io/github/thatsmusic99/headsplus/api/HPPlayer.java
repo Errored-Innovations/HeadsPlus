@@ -42,6 +42,9 @@ public class HPPlayer {
             this.level = LevelsManager.get().getLevels().get(levelIndex);
             if (levelIndex + 1 < max) this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1);
         }
+        PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
+                result.ifPresent(str ->
+                        HeadsPlusMessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
         xp = PlayerSQLManager.get().getXP(uuid).join();
         this.uuid = uuid;
         players.put(uuid, this);

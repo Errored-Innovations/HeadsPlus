@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -268,6 +269,22 @@ public class PlayerSQLManager extends SQLManager {
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
+        }, HeadsPlus.async);
+    }
+
+    public CompletableFuture<Optional<String>> getLocale(UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = implementConnection()) {
+                PreparedStatement statement = connection.prepareStatement("SELECT locale FROM headsplus_players WHERE uuid = ?");
+                statement.setString(1, uuid.toString());
+
+                ResultSet set = statement.executeQuery();
+                if (!set.next()) return Optional.empty();
+                return Optional.of(set.getString("level"));
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+            return Optional.empty();
         }, HeadsPlus.async);
     }
 
