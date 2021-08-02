@@ -97,17 +97,6 @@ public class ConfigChallenges extends FeatureConfig {
                 addExample("challenges." + t + "-" + section.min + "-crafting.icon", "default");
                 addExample("challenges." + t + "-" + section.min + "-crafting.completed-icon", "default-completed");
 
-                addExample("challenges." + t + "-" + section.min + "-selling.name", e + "-" + s + " Selling");
-                addExample("challenges." + t + "-" + section.min + "-selling.header", "&8[&e&l" + HeadsPlus.capitalize(e) + " Selling " + s + "&8]");
-                addExample("challenges." + t + "-" + section.min + "-selling.description", Arrays.asList("&7Sell a total of", "&7" + (section.min * multiplier * tempDif) + " " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
-                addExample("challenges." + t + "-" + section.min + "-selling.type", "SELLHEAD");
-                addExample("challenges." + t + "-" + section.min + "-selling.min", section.min * multiplier * tempDif);
-                addExample("challenges." + t + "-" + section.min + "-selling.reward", "default");
-                addExample("challenges." + t + "-" + section.min + "-selling.head-type", t);
-                addExample("challenges." + t + "-" + section.min + "-selling.section", section.name());
-                addExample("challenges." + t + "-" + section.min + "-selling.difficulty", section.min);
-                addDefault("challenges." + t + "-" + section.min + "-selling.icon", "default");
-                addDefault("challenges." + t + "-" + section.min + "-selling.completed-icon", "default-completed");
             }
             difficulty += 5;
         }
@@ -123,6 +112,11 @@ public class ConfigChallenges extends FeatureConfig {
         moveTo("challenges.options.prepare-icons", "options.prepare-icons");
         moveTo("challenges.options.prepare-rewards", "options.prepare-rewards");
 
+        for (String key : getConfigSection("challenges").getKeys(false)) {
+            if (getString("challenges." + key + ".type", "").equalsIgnoreCase("SELLING")) {
+                set("challenges." + key, null);
+            }
+        }
     }
 
     private String numberToRomanNumeral(int in) {
