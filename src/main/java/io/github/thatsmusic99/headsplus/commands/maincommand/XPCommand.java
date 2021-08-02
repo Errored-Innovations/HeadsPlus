@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
@@ -42,10 +43,9 @@ public class XPCommand implements IHeadsPlusCommand {
                     return false;
                 }
                 int amount = HPUtils.isInt(args[3]);
-                // TODO fix
-                PlayerSQLManager.get().addXP(args[1], amount)
-                        .thenAccept(rood ->
-                                HeadsPlusMessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}", String.valueOf(amount), "{amount}", args[3]));
+                PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
+                        HeadsPlusMessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
+                                String.valueOf(PlayerSQLManager.get().getLevelSync(args[1]) + amount), "{amount}", args[3]), HeadsPlus.async);
                 return true;
             case "subtract":
                 if (!sender.hasPermission("headsplus.maincommand.xp.subtract")) {
