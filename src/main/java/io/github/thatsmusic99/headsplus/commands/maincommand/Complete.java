@@ -40,14 +40,11 @@ public class Complete implements IHeadsPlusCommand {
                 hpc.sendMessage("commands.errors.no-perm", sender);
                 return false;
             }
-            // TODO - not on main thread, dumbass!
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
-            if (!offlinePlayer.isOnline() || offlinePlayer.getPlayer() == null) {
+            player = Bukkit.getPlayer(args[2]);
+            if (player == null || !player.isOnline()) {
                 hpc.sendMessage("commands.errors.player-offline", sender);
                 return false;
             }
-            player = offlinePlayer.getPlayer();
-
         } else if (sender instanceof Player) {
             player = (Player) sender;
         } else {
