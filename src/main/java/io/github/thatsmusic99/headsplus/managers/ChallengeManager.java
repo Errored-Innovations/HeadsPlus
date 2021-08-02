@@ -91,7 +91,14 @@ public class ChallengeManager {
                     item.setItemMeta(meta);
                 }
             }
-            // TODO lore
+            List<String> lore = section.getStringList("lore");
+            if (!lore.isEmpty()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
+            }
             icons.put(key, item);
             HeadsPlus.debug("Registered icon " + key + ".");
         } catch (NullPointerException ex) {

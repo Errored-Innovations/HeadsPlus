@@ -10,10 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class ConfigHeadsSelector extends FeatureConfig {
 
@@ -86,9 +84,9 @@ public class ConfigHeadsSelector extends FeatureConfig {
             SectionInfo sectionInfo = sections.get(section.getString("section"));
             // Get the head info itself
             if (!HeadManager.get().contains(key)) continue;
-            // TODO - lore
             BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key));
             headInfo.withDisplayName(section.getString("display-name", null));
+            headInfo.setLore(section.getList("lore", null));
             buyableHeads.put(key, headInfo);
             sectionInfo.addHead(key, headInfo);
             totalHeads++;
