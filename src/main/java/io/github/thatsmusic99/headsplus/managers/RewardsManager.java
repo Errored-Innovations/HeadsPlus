@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigLevels;
 import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
@@ -36,10 +37,14 @@ public class RewardsManager {
         // If challenges are enabled and use rewards
         if (rewards != null) {
             for (String key : rewards.getKeys(false)) {
-                ConfigSection rewardSection = rewards.getConfigSection(key);
-                if (rewardSection == null) continue;
-                Reward reward = Reward.fromConfigSection(key, rewardSection);
-                this.rewards.put("challenges_" + key, reward);
+                try {
+                    ConfigSection rewardSection = rewards.getConfigSection(key);
+                    if (rewardSection == null) continue;
+                    Reward reward = Reward.fromConfigSection(key, rewardSection);
+                    this.rewards.put("challenges_" + key, reward);
+                } catch (IllegalStateException ex) {
+                    HeadsPlus.get().getLogger().warning(ex.getMessage());
+                }
             }
         }
         ConfigLevels levels = ConfigLevels.get();
