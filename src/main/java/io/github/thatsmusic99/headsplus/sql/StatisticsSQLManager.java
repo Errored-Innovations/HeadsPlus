@@ -299,7 +299,7 @@ public class StatisticsSQLManager extends SQLManager {
     private void addToTotalSync(UUID uuid, CollectionType type, String head, String metadata, int amount) {
         try (Connection connection = implementConnection()) {
             // Check if the entry has been added
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT amount FROM headsplus_stats WHERE " +
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
                     "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
             int id = PlayerSQLManager.get().getUserID(uuid);
             checkStatement.setInt(1, id);
@@ -311,14 +311,14 @@ public class StatisticsSQLManager extends SQLManager {
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type, head, metadata, amount) VALUES (?, ?, ?, ?, ?)");
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type, head, metadata, count) VALUES (?, ?, ?, ?, ?)");
                 updateStatement.setInt(1, id);
                 updateStatement.setString(2, type.name());
                 updateStatement.setString(3, head);
                 updateStatement.setString(4, metadata);
                 updateStatement.setInt(5, amount);
             } else {
-                updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET amount = amount + ? WHERE " +
+                updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET count = count + ? WHERE " +
                         "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
                 updateStatement.setInt(1, amount);
                 updateStatement.setInt(2, id);
