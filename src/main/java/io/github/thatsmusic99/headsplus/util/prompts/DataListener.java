@@ -1,7 +1,8 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
@@ -13,18 +14,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class DataListener extends StringPrompt {
     private static final List<String> types = Arrays.asList("id", "texture", "displayname", "price", "section");
-    private final Set<String> sections = ConfigCustomHeads.get().sections.keySet();
     private final String message;
     private final int type;
 
     public DataListener(int id, String message) {
         this.type = id;
         if (id == 4) {
-            message = message.replaceAll("\\{sections}", Arrays.toString(sections.toArray()));
+            message = message.replaceAll("\\{sections}", Arrays.toString(ConfigHeadsSelector.get().getSections().keySet().toArray()));
         }
         this.message = message;
     }
@@ -76,12 +75,12 @@ public class DataListener extends StringPrompt {
                 return new DataListener(type, messages.getString("commands.addhead." + currentType));
             }
         } else if (currentType.equalsIgnoreCase("id")) {
-            if (ConfigCustomHeads.get().headsCache.containsKey(s)) {
+            if (HeadManager.get().contains(s)) {
                 user.sendRawMessage(messages.getString("commands.addhead.id-taken", (CommandSender) user).replaceAll("\\{id}", s));
                 return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
             }
         } else if (currentType.equalsIgnoreCase("section")) {
-            if (!sections.contains(s)) {
+            if (!ConfigHeadsSelector.get().getSections().containsKey(s)) {
                 user.sendRawMessage(messages.getString("commands.errors.invalid-args", (CommandSender) user));
                 return new DataListener(type, messages.getString("commands.addhead." + currentType));
             }
