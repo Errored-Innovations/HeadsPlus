@@ -184,15 +184,13 @@ public class AutograbManager {
             public void run() {
                 final String[] playerInfo = new String[1];
                 try {
-                    // TODO - replacement
-                    // what replacement? lol
                     playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
                     addTexture(playerInfo[0], force, sender, player);
                 } catch (NoSuchElementException exception) {
 
                 }
             }
-        }.runTask(HeadsPlus.get());
+        }.runTaskAsynchronously(HeadsPlus.get());
     }
 
     private static void addTexture(String info, boolean force, CommandSender sender, OfflinePlayer player) {
