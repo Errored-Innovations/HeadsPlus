@@ -302,7 +302,7 @@ public class PlayerSQLManager extends SQLManager {
 
                 ResultSet set = statement.executeQuery();
                 if (!set.next()) return Optional.empty();
-                return Optional.of(set.getString("level"));
+                return Optional.of(set.getString("locale"));
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
