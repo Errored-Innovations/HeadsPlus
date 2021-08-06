@@ -513,6 +513,7 @@ public class MainConfig extends HPConfig {
         } else {
             for (String defaultPerm : defaults) {
                 Permission permObj = Bukkit.getPluginManager().getPermission(defaultPerm);
+                if (permObj == null) continue;
                 permObj.setDefault(PermissionDefault.OP);
             }
         }
@@ -590,14 +591,9 @@ public class MainConfig extends HPConfig {
     }
 
     public String fixBalanceStr(double balance) {
-        if (getMechanics().getBoolean("round-balance-to-2-d-p")) {
-            DecimalFormat format = new DecimalFormat("#.##");
-            format.setRoundingMode(RoundingMode.CEILING);
-            return format.format(balance);
-        } else {
-            return String.valueOf(balance);
-        }
-
+        DecimalFormat format = new DecimalFormat(getString("price-decimal-format", "#,###.##"));
+        format.setRoundingMode(RoundingMode.CEILING);
+        return format.format(balance);
     }
 
     public class MainFeatures {
@@ -663,6 +659,7 @@ public class MainConfig extends HPConfig {
                 ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
         public String SECTION = getString("autograb-section"),
                 DISPLAY_NAME = getString("autograb-display-name");
+        public double PRICE = getDouble("autograb-price", -1);
     }
 
     public class Challenges {
