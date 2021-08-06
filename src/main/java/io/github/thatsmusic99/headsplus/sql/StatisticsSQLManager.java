@@ -93,10 +93,10 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                                "WHERE user_id = ? AND collection_type = ? AND metadata = ?");
+                                "WHERE user_id = ? AND collection_type = ? AND metadata LIKE ?");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, type.name());
-                statement.setString(3, metadata);
+                statement.setString(3, "%" + metadata + "%");
 
                 ResultSet set = statement.executeQuery();
                 if (!set.next()) return -1;
@@ -113,11 +113,11 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                                "WHERE user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
+                                "WHERE user_id = ? AND collection_type = ? AND head = ? AND metadata LIKE ?");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, type.name());
                 statement.setString(3, head);
-                statement.setString(4, metadata);
+                statement.setString(4, "%" + metadata + "%");
 
                 ResultSet set = statement.executeQuery();
                 if (!set.next()) return -1;
@@ -215,10 +215,10 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND metadata = ? ORDER BY total DESC");
+                                " WHERE collection_type = ? AND metadata LIKE ? ORDER BY total DESC");
 
                 statement.setString(1, type.name());
-                statement.setString(2, metadata);
+                statement.setString(2,  "%" + metadata + "%");
 
                 ResultSet set = statement.executeQuery();
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
@@ -238,11 +238,11 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND head = ? AND metadata = ? ORDER BY total DESC");
+                                " WHERE collection_type = ? AND head = ? AND metadata LIKE ? ORDER BY total DESC");
 
                 statement.setString(1, type.name());
                 statement.setString(2, head);
-                statement.setString(3, metadata);
+                statement.setString(3, "%" + metadata + "%");
 
                 ResultSet set = statement.executeQuery();
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
