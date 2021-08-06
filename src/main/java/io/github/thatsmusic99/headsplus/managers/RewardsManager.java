@@ -50,7 +50,35 @@ public class RewardsManager {
         ConfigLevels levels = ConfigLevels.get();
         rewards = levels.getConfigSection("rewards");
         // If levels are enabled and use rewards
-        // TODO
+        if (rewards != null) {
+            for (String key : rewards.getKeys(false)) {
+                try {
+                    ConfigSection rewardSection = rewards.getConfigSection(key);
+                    if (rewardSection == null) continue;
+                    if (!rewardSection.getBoolean("enabled", true)) continue;
+                    Reward reward = Reward.fromConfigSection(key, rewardSection);
+                    this.rewards.put("levels_" + key, reward);
+                } catch (IllegalStateException ex) {
+                    HeadsPlus.get().getLogger().warning(ex.getMessage());
+                }
+            }
+        }
+        // Use inbuilt level rewards
+        rewards = levels.getConfigSection("levels");
+        if (rewards != null) {
+            for (String key : rewards.getKeys(false)) {
+                try {
+                    ConfigSection levelSection = rewards.getConfigSection(key);
+                    if (levelSection == null) continue;
+                    ConfigSection rewardSection = levelSection.getConfigSection("rewards");
+                    if (rewardSection == null) continue;
+                    if (!rewardSection.getBoolean("enabled", true)) continue;
+                    Reward reward = Reward.fromConfigSection(key, rewardSection);
+                    this.rewards.put("levels_" + key, reward);
+                } catch (IllegalStateException ex) {
+                    HeadsPlus.get().getLogger().warning(ex.getMessage());
+                }
+            }
+        }
     }
-
 }
