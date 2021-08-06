@@ -513,11 +513,6 @@ public class MainConfig extends HPConfig {
         return instance;
     }
 
-    @Deprecated
-    public ConfigSection getMechanics() {
-        return getConfigSection("plugin.mechanics");
-    }
-
     public MainFeatures getMainFeatures() {
         return mainFeatures;
     }
@@ -643,10 +638,6 @@ public class MainConfig extends HPConfig {
                 EFFECT_LENGTH = getInteger("effect-length");
     }
 
-    public class Restrictions {
-        public boolean USE_WHITELIST = getBoolean("whitelist-worlds");
-    }
-
     public class Autograbber {
         public boolean ENABLE_AUTOGRABBER = getBoolean("enable-autograb"),
 	        ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
@@ -668,7 +659,6 @@ public class MainConfig extends HPConfig {
     }
 
     public class Leaderboards {
-        public boolean CACHE_LEADERBOARDS = getBoolean("cache-leaderboards");
         public int CACHE_DURATION = getInteger("cache-duration");
     }
 

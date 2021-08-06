@@ -6,7 +6,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
@@ -19,7 +18,6 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -181,67 +179,15 @@ public class HPUtils {
         }
     }
 
-    @Deprecated
-    public static boolean runBlacklistTests(LivingEntity e) {
-       /* MainConfig c = HeadsPlus.get().getConfiguration();
-        // Killer checks
-        if (e.getKiller() == null) {
-            if (c.getPerks().drops_needs_killer) {
-                return false;
-            } else if (c.getPerks().drops_entities_requiring_killer.contains(e.getName().replaceAll("_", "").toLowerCase())) {
-                return false;
-            } else if (e instanceof Player) {
-                if (c.getPerks().drops_entities_requiring_killer.contains("player")) {
-                    return false;
-                }
-            }
-        } else if (!e.getKiller().hasPermission("headsplus.drops")) {
-            return false;
-        }
-        // Whitelist checks
-        if (c.getWorldWhitelist().enabled) {
-            if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        // Blacklist checks
-        if (c.getWorldBlacklist().enabled) {
-            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (e instanceof Player) {
-            return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
-                    || c.getPerks().drops_ignore_players.contains(e.getName()));
-        } else {
-            return true;
-        } */
-        return true;
-
-    }
-
     public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
         return CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name), HeadsPlus.async)
                 .thenApplyAsync(player -> player, HeadsPlus.sync);
     }
 
-    public enum SkillType {
-        HUNTING,
-        CRAFTING
-    }
-
     public static class PlaceholderInfo {
-        private String placeholder;
-        private String replacement;
-        private boolean requirement;
+        private final String placeholder;
+        private final String replacement;
+        private final boolean requirement;
 
         public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
             this.placeholder = placeholder;
