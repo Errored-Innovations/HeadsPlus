@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public class HeadManager {
 
     private final HashMap<String, HeadInfo> heads = new HashMap<>();
+    private final HashMap<String, String> textures = new HashMap<>();
     private static HeadManager instance;
 
     public HeadManager() {
@@ -33,6 +34,9 @@ public class HeadManager {
 
     public void registerHead(String key, HeadInfo headInfo) {
         heads.put(key, headInfo);
+        if (headInfo.texture != null) {
+            textures.put(headInfo.texture, key);
+        }
         HeadsPlus.debug("Registered head " + key + ".");
     }
 
@@ -52,6 +56,14 @@ public class HeadManager {
 
     public Set<String> getKeys() {
         return heads.keySet();
+    }
+
+    public Set<String> getAddedTextures() {
+        return textures.keySet();
+    }
+
+    public String getId(String texture) {
+        return textures.get(texture);
     }
 
     public static class HeadInfo implements Cloneable {
