@@ -1,6 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +15,7 @@ public interface IHeadsPlusCommand extends CommandExecutor, TabCompleter {
 
     default String getCmdDescription(CommandSender sender) {
         CommandInfo command = getClass().getAnnotation(CommandInfo.class);
-        return HeadsPlusMessagesManager.get().getString(command.descriptionPath(), sender);
+        return MessagesManager.get().getString(command.descriptionPath(), sender);
     }
 
     default String[] advancedUsages() {

@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
 	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.get();

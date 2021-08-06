@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
@@ -29,7 +29,7 @@ import java.util.List;
         descriptionPath = "descriptions.head")
 public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
 	private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);

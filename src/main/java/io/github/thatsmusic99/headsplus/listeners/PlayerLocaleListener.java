@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -13,7 +13,7 @@ public class PlayerLocaleListener extends HeadsPlusListener<PlayerLocaleChangeEv
 
     @Override
     public void onEvent(PlayerLocaleChangeEvent event) {
-        HeadsPlusMessagesManager.get().setPlayerLocale(event.getPlayer(), event.getLocale());
+        MessagesManager.get().setPlayerLocale(event.getPlayer(), event.getLocale());
     }
 
     @Override

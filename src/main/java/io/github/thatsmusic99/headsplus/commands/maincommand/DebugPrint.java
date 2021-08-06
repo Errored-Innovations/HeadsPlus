@@ -6,7 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 @Deprecated // Also needs a cleanup
 public class DebugPrint implements IHeadsPlusCommand {
 
-    private static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private static MessagesManager hpc = MessagesManager.get();
 
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
         try {

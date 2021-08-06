@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -40,13 +40,13 @@ public class ProfileCommand implements IHeadsPlusCommand {
                         if (cs.hasPermission("headsplus.maincommand.profile.others")) {
                             ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                         } else {
-                            HeadsPlusMessagesManager.get().sendMessage("commands.errors.no-perm", cs);
+                            MessagesManager.get().sendMessage("commands.errors.no-perm", cs);
                         }
                     }
                 } else {
                     if (cs.getName().equalsIgnoreCase(player.getName())) {
                         // Not a player
-                        cs.sendMessage(HeadsPlusMessagesManager.get().getString("commands.profile.cant-view-data"));
+                        cs.sendMessage(MessagesManager.get().getString("commands.profile.cant-view-data"));
                     } else {
                         ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     }

@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -36,7 +36,7 @@ import java.util.UUID;
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-	private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+	private final MessagesManager hpc = MessagesManager.get();
 	private final int[] slots;
 
 	public SellHead() {

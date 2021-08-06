@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.challenges.CraftingChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MiscChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.RewardsManager;
 import org.bukkit.Bukkit;
@@ -123,7 +123,7 @@ public abstract class Challenge {
     }
 
     public void complete(Player p) {
-        HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+        MessagesManager hpc = MessagesManager.get();
         HPPlayer player = HPPlayer.getHPPlayer(p);
         player.addCompleteChallenge(this);
 
@@ -134,7 +134,7 @@ public abstract class Challenge {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
-        String message = HeadsPlusMessagesManager.get().getString("commands.challenges.reward-string", p);
+        String message = MessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
             hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);

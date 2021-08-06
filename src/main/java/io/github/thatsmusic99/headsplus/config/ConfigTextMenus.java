@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ConfigTextMenus extends HPConfig {
 
-    private static final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private static final MessagesManager hpc = MessagesManager.get();
     private static ConfigTextMenus instance;
 
     public ConfigTextMenus() {
@@ -127,7 +127,7 @@ public class ConfigTextMenus extends HPConfig {
             StringBuilder sb = new StringBuilder();
             PagedLists<String> list = new PagedLists<>(l, instance.getInteger(type + "." + type2 + ".lines-per-page"));
             if ((page > list.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
+                return MessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(instance.getString(type + "." + type2 + ".header")
                     .replaceAll("\\{page}", String.valueOf(page))
@@ -212,7 +212,7 @@ public class ConfigTextMenus extends HPConfig {
             PagedLists<String> heads = new PagedLists<>(ConfigMobs.get().getStringList(type + ".name"),
                     instance.getInteger("head-info.name-info.default.lines-per-page"));
             if ((page > heads.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
+                return MessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(instance.getString("head-info.name-info.default.header"), sender)).append("\n");
             sb.append(translateColors(instance.getString("head-info.name-info.default.first-line"), sender)
@@ -234,7 +234,7 @@ public class ConfigTextMenus extends HPConfig {
             }
             PagedLists<Head> hs = new PagedLists<>(h, instance.getInteger("head-info.name-info.colored.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
+                return MessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(instance.getString("head-info.name-info.colored.header"), sender)).append("\n");
             sb.append(translateColors(instance.getString("head-info.name-info.colored.first-line"), sender)
@@ -262,7 +262,7 @@ public class ConfigTextMenus extends HPConfig {
             }
             PagedLists<Mask> hs = new PagedLists<>(m, instance.getInteger("head-info.mask-info.lines-per-page"));
             if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
+                return MessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(instance.getString("head-info.mask-info.header"), sender)).append("\n");
             sb.append(translateColors(instance.getString("head-info.mask-info.first-line"), sender)
@@ -279,7 +279,7 @@ public class ConfigTextMenus extends HPConfig {
             StringBuilder sb = new StringBuilder();
             PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type, "default"), instance.getInteger("head-info.lore-info.lines-per-page"));
             if ((page > lore.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
+                return MessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
             }
             sb.append(translateColors(instance.getString("head-info.lore-info.header"), sender)).append("\n");
             sb.append(translateColors(instance.getString("head-info.lore-info.first-line"), sender)
@@ -306,7 +306,7 @@ public class ConfigTextMenus extends HPConfig {
             PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, instance.getInteger("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
+                MessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
                 sender.sendMessage(translateColors(instance.getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
@@ -352,7 +352,7 @@ public class ConfigTextMenus extends HPConfig {
 
         public static String translate(CommandSender sender, String section, List<StatisticsSQLManager.LeaderboardEntry> entries, int page) {
             PagedLists<StatisticsSQLManager.LeaderboardEntry> ph;
-            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+            MessagesManager hpc = MessagesManager.get();
             try {
                 HeadsPlus hp = HeadsPlus.get();
                 StringBuilder sb = new StringBuilder();

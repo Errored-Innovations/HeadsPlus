@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -91,7 +91,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         if (phdEvent.isCancelled()) return;
         if (lostprice > 0.0) {
             economy.withdrawPlayer(victim, lostprice);
-            HeadsPlusMessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
+            MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
         }
         double finalPrice = price;
         headInfo.buildHead().thenAccept(item -> {

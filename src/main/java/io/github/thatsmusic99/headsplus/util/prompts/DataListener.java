@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.CommandSender;
@@ -38,7 +38,7 @@ public class DataListener extends StringPrompt {
     @Override
     public Prompt acceptInput(@NotNull ConversationContext context, @Nullable String s) {
         assert s != null;
-        HeadsPlusMessagesManager messages = HeadsPlusMessagesManager.get();
+        MessagesManager messages = MessagesManager.get();
         Conversable user = context.getForWhom();
         if (s.equalsIgnoreCase("cancel")) {
             user.sendRawMessage(messages.getString("commands.addhead.cancelled", (CommandSender) user));

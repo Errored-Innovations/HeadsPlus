@@ -28,14 +28,14 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HeadsPlusMessagesManager {
+public class MessagesManager {
 
     private static YamlConfiguration config;
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<UUID, YamlConfiguration> players;
-    private static HeadsPlusMessagesManager instance;
+    private static MessagesManager instance;
 
-    public HeadsPlusMessagesManager() {
+    public MessagesManager() {
         instance = this;
         HeadsPlus hp = HeadsPlus.get();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
@@ -901,7 +901,7 @@ public class HeadsPlusMessagesManager {
         }
     }
 
-    public static HeadsPlusMessagesManager get() {
+    public static MessagesManager get() {
         return instance;
     }
 
@@ -971,12 +971,12 @@ public class HeadsPlusMessagesManager {
 
     public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
-        YamlConfiguration config = HeadsPlusMessagesManager.config;
+        YamlConfiguration config = MessagesManager.config;
         if (MainConfig.get().getLocalisation().SMART_LOCALE) {
             if (players.containsKey(player.getUniqueId()) && player.isOnline()) {
                 config = players.get(player.getUniqueId());
                 if (config == null) {
-                    config = HeadsPlusMessagesManager.config;
+                    config = MessagesManager.config;
                 }
             }
         }

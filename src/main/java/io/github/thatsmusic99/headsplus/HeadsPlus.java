@@ -88,7 +88,7 @@ public class HeadsPlus extends JavaPlugin {
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
             if (!isEnabled()) return;
-            new HeadsPlusMessagesManager();
+            new MessagesManager();
             // Registers plugin events
             registerEvents();
 
@@ -118,12 +118,12 @@ public class HeadsPlus extends JavaPlugin {
                     public void run() {
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
-                            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                                    + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
+                                    + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
                             getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
                         } else {
-                            getLogger().info(HeadsPlusMessagesManager.get().getString("update.plugin-up-to-date"));
+                            getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
                         }
                         checkDates();
 
@@ -137,7 +137,7 @@ public class HeadsPlus extends JavaPlugin {
                 }.runTaskLater(this, 20);
 
            // }
-            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("startup.plugin-enabled"));
+            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
            // if (getConfiguration().getPerks().ascii) {
                 getServer().getConsoleSender().sendMessage("                                                               §f\n" +
                         "§c    __  __               __     §9____  __                   §e_____§r\n" +
@@ -180,7 +180,7 @@ public class HeadsPlus extends JavaPlugin {
 		    if (im.getInventory() == null) continue;
 		    player.closeInventory();
 		}
-        getLogger().info(HeadsPlusMessagesManager.get().getString("startup.plugin-disabled"));
+        getLogger().info(MessagesManager.get().getString("startup.plugin-disabled"));
     }
 
     public static HeadsPlus get() {

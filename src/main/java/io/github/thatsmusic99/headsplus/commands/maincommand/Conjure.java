@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
@@ -24,7 +24,7 @@ import java.util.List;
 )
 public class Conjure implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {

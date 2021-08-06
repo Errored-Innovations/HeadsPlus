@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -31,7 +31,7 @@ import java.util.List;
         descriptionPath = "descriptions.addhead")
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {

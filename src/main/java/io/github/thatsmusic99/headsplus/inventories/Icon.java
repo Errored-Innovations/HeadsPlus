@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.inventories;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -67,10 +67,10 @@ public abstract class Icon {
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         try {
-            meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+            meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
             List<String> lore = new ArrayList<>();
             for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
-                lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr, player));
+                lore.add(MessagesManager.get().formatMsg(loreStr, player));
             }
             meta.setLore(lore);
         } catch (NullPointerException ex) {

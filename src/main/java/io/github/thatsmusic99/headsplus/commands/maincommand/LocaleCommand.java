@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -25,8 +25,8 @@ import java.util.Set;
 )
 public class LocaleCommand implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager messages = HeadsPlusMessagesManager.get();
-    private final Set<String> languages = HeadsPlusMessagesManager.getLocales().keySet();
+    private final MessagesManager messages = MessagesManager.get();
+    private final Set<String> languages = MessagesManager.getLocales().keySet();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -100,7 +100,7 @@ public class LocaleCommand implements IHeadsPlusCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            Set<String> locales = HeadsPlusMessagesManager.getLocales().keySet();
+            Set<String> locales = MessagesManager.getLocales().keySet();
             locales.add("refresh");
             StringUtil.copyPartialMatches(args[1], locales, results);
         } else if (args.length == 3) {

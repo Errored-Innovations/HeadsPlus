@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.placeholders;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -158,7 +158,7 @@ public class HPExpansion extends PlaceholderExpansion {
                     if (player.getPlayer() == null) return null;
                     return challenge.getReward().getRewardString(player.getPlayer());
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? HeadsPlusMessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
+                    return challenge.isComplete(player.getPlayer()) ? MessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }

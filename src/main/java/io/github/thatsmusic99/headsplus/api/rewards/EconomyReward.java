@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import org.bukkit.entity.Player;
 
 public class EconomyReward extends Reward {
@@ -36,7 +36,7 @@ public class EconomyReward extends Reward {
 
     @Override
     public String getDefaultRewardString(Player player) {
-        return HeadsPlusMessagesManager.get().getString("inventory.icon.reward.currency", player)
+        return MessagesManager.get().getString("inventory.icon.reward.currency", player)
                 .replace("{amount}", String.valueOf(money));
     }
 }

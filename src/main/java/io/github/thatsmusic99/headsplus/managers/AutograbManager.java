@@ -4,7 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
@@ -192,7 +192,7 @@ public class AutograbManager {
                 headInfo = HeadManager.get().getHeadInfo(id);
 
             } else if (sender != null) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-already-added", sender, "{player}", name);
+                MessagesManager.get().sendMessage("commands.addhead.head-already-added", sender, "{player}", name);
                 return;
             } else {
                 return;
@@ -217,7 +217,7 @@ public class AutograbManager {
                 ConfigHeadsSelector.get().save();
             }
             if (sender != null) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);
+                MessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);
             }
 
         } catch (IOException e) {

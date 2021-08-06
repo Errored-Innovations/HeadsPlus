@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.inventories.icons.content;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
@@ -41,11 +41,11 @@ public class Challenge extends Content {
                             initNameAndLore("challenge", player);
                             event.getInventory().setItem(event.getSlot(), item);
                         } else {
-                            HeadsPlusMessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
+                            MessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
                         }
                     }, HeadsPlus.sync);
                 } else {
-                    HeadsPlusMessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
+                    MessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
                 }
             } else {
                 HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
@@ -74,21 +74,21 @@ public class Challenge extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons.challenge.lore")) {
             if (loreStr.contains("{challenge-lore}")) {
                 for (String loreStr2 : challenge.getDescription()) {
-                    lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr2, player));
+                    lore.add(MessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
                 HPUtils.parseLorePlaceholders(lore, loreStr,
                         new HPUtils.PlaceholderInfo("{completed}",
-                                HeadsPlusMessagesManager.get().getString("commands.challenges.challenge-completed", player),
+                                MessagesManager.get().getString("commands.challenges.challenge-completed", player),
                                 challenge.isComplete(player)),
                         new HPUtils.PlaceholderInfo("{pinned}",
-                                HeadsPlusMessagesManager.get().getString("inventory.icon.challenge.pinned", player),
+                                MessagesManager.get().getString("inventory.icon.challenge.pinned", player),
                                 HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)),
                         new HPUtils.PlaceholderInfo("{reward}", reward, true),
                         new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true),

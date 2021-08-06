@@ -4,7 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
@@ -29,16 +29,16 @@ public class TestsCommand implements IHeadsPlusCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length < 3) {
-            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
+            MessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return true;
         }
         if (!EntityDataManager.ableEntities.contains(args[1].toUpperCase())) {
-            HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
+            MessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return true;
         }
         int amount = HPUtils.isInt(args[2]);
         String type = args[1].toLowerCase().replaceAll("_", "");
-        HeadsPlusMessagesManager.get().sendMessage("commands.tests.running-tests", sender);
+        MessagesManager.get().sendMessage("commands.tests.running-tests", sender);
         double chance = ConfigMobs.get().getDouble(type + ".chance");
         Random rand = new Random();
         new BukkitRunnable() {
@@ -51,7 +51,7 @@ public class TestsCommand implements IHeadsPlusCommand {
                         successes++;
                     }
                 }
-                HeadsPlusMessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+                MessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
             }
         }.runTaskAsynchronously(HeadsPlus.get());
         return true;

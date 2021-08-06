@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.IconClickEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
     protected static HeadsPlus hp = HeadsPlus.get();
-    protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    protected static MessagesManager hpc = MessagesManager.get();
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");
     private static final Pattern SECTION = Pattern.compile("\\{section}");

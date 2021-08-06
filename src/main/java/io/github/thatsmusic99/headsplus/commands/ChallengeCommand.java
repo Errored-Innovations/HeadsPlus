@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
@@ -25,7 +25,7 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     @Override
     public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
         try {
-            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+            MessagesManager hpc = MessagesManager.get();
             if (MainConfig.get().getMainFeatures().CHALLENGES) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;

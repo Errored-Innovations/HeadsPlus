@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ import java.util.List;
         descriptionPath = "descriptions.myhead")
 public class MyHead implements CommandExecutor, IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String l, @NotNull String[] args) {

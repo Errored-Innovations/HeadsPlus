@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ public class AddGroupReward extends Reward {
 
     @Override
     public String getDefaultRewardString(Player player) {
-        return HeadsPlusMessagesManager.get().getString("inventory.icon.reward.group-add", player)
+        return MessagesManager.get().getString("inventory.icon.reward.group-add", player)
                 .replace("{group}", group);
     }
 }

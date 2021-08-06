@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
@@ -44,7 +44,7 @@ public class HPPlayer {
         }
         PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
                 result.ifPresent(str ->
-                        HeadsPlusMessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
+                        MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
         xp = PlayerSQLManager.get().getXP(uuid).join();
         this.uuid = uuid;
         players.put(uuid, this);
@@ -121,7 +121,7 @@ public class HPPlayer {
         if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
             final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
             for (Player p : Bukkit.getOnlinePlayers()) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}",
+                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}",
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
         }

@@ -158,7 +158,7 @@ public class ConfigInteractions extends HPConfig {
             message = message.replaceAll("\\{name}", name);
         }
 
-        return HeadsPlusMessagesManager.get().formatMsg(message, player);
+        return MessagesManager.get().formatMsg(message, player);
     }
 
     private void runCommands(String path, Player player) {
