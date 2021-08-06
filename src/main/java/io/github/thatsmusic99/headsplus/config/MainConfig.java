@@ -135,6 +135,7 @@ public class MainConfig extends HPConfig {
         addDefault("mob-drops-list", new ArrayList<>(),
                 "Worlds in which heads cannot drop from mobs.\n" +
                 "If whitelist-worlds is enabled, worlds specified below *will* drop mob heads.");
+        addDefault("player-drops-list", new ArrayList<>(), "Worlds in which heads cannot drop from players.");
         addDefault("crafting-list", new ArrayList<>(),
                 "Worlds in which players cannot craft heads. The heads will still appear, but the player cannot pick them up.");
         addDefault("masks-list", new ArrayList<>(), "Worlds in which masks cannot be effective.");

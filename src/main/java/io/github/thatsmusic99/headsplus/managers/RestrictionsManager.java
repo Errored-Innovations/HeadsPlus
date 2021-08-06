@@ -29,6 +29,7 @@ public class RestrictionsManager {
         XP_GAINS("xp-gain"),
         MASKS("masks-list"),
         MOBS("mob-drops-list"),
+        PLAYERS("player-drops-list"),
         STATS("stats-collection");
 
         private final String path;

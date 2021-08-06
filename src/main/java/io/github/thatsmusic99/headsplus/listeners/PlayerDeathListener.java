@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -100,5 +101,19 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             PersistenceManager.get().setSellPrice(item, finalPrice);
             location.getWorld().dropItem(location, item);
         });
+    }
+
+    private boolean shouldDropHead(Player player) {
+        // Check world restrictions
+        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.MOBS)) return false;
+        // Check killer restrictions
+        if (player.getKiller() == null) {
+            if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;
+            if (MainConfig.get().getMobDrops().ENTITIES_NEEDING_KILLER.contains("player")) return false;
+        } else {
+            if (!player.getKiller().hasPermission("headsplus.drops.player")) return false;
+        }
+        // Check ignored players restriction
+        return !MainConfig.get().getPlayerDrops().IGNORED_PLAYERS.contains(player.getName());
     }
 }
