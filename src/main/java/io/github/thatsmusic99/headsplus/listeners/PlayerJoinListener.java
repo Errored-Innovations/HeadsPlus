@@ -44,6 +44,7 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
         if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) return;
         if (!addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) return;
         if (addData("has-update", HeadsPlus.getUpdate() == null)) return;
+        if (!addData("notify-admins", MainConfig.get().getUpdates().NOTIFY_ADMINS)) return;
         new FancyMessage().text(hpc.getString("update.update-found", player))
                 .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
                         + "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
