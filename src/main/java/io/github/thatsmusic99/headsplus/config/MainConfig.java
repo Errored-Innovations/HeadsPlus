@@ -640,9 +640,9 @@ public class MainConfig extends HPConfig {
 
     public class Autograbber {
         public boolean ENABLE_AUTOGRABBER = getBoolean("enable-autograb"),
-	        ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
-	public String SECTION = getString("autograb-section"),
-	        DISPLAY_NAME = getString("autograb-display-name");
+                ADD_GRABBED_HEADS = getBoolean("add-grabbed-heads-to-selector");
+        public String SECTION = getString("autograb-section"),
+                DISPLAY_NAME = getString("autograb-display-name");
     }
 
     public class Challenges {
