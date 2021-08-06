@@ -26,6 +26,7 @@ public class PinnedChallengeManager extends SQLManager {
     public PinnedChallengeManager() {
         instance = this;
         createTable();
+        transferOldData();
     }
 
     public static PinnedChallengeManager get() {

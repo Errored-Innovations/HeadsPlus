@@ -1,7 +1,15 @@
 package io.github.thatsmusic99.headsplus.sql;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +26,7 @@ public class StatisticsSQLManager extends SQLManager {
     public StatisticsSQLManager() {
         instance = this;
         createTable();
+        transferOldData();
     }
 
     public static StatisticsSQLManager get() {
@@ -46,7 +55,42 @@ public class StatisticsSQLManager extends SQLManager {
 
     @Override
     public void transferOldData() {
+        File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
+        if (!storageFolder.exists()) return;
+        File playerInfo = new File(storageFolder, "playerinfo.json");
+        if (!playerInfo.exists()) return;
+        try (FileReader reader = new FileReader(playerInfo)) {
+            JSONObject core = (JSONObject) new JSONParser().parse(reader);
+            for (Object uuidObj : core.keySet()) {
+                JSONObject playerObj = (JSONObject) core.get(uuidObj);
+                UUID uuid = UUID.fromString((String) uuidObj);
 
+                JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
+                for (Object mobObj : huntingObj.keySet()) {
+                    ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                    String head = "";
+                    if (defaultSection.getKeys(false).size() != 0) {
+                        head = defaultSection.getKeys(false).get(0);
+                    }
+                    int total = (int) huntingObj.get(mobObj);
+                    addToTotalSync(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total);
+                }
+
+                JSONObject craftingObj = (JSONObject) playerObj.get("crafting");
+                for (Object mobObj : craftingObj.keySet()) {
+                    ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                    String head = "";
+                    if (defaultSection.getKeys(false).size() != 0) {
+                        head = defaultSection.getKeys(false).get(0);
+                    }
+                    int total = (int) craftingObj.get(mobObj);
+                    addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException ignored) {}
+        playerInfo.renameTo(new File(storageFolder, "playerinfo-backup.json"));
     }
 
     public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type) {
@@ -258,42 +302,44 @@ public class StatisticsSQLManager extends SQLManager {
     }
 
     public CompletableFuture<Void> addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                // Check if the entry has been added
-                PreparedStatement checkStatement = connection.prepareStatement("SELECT amount FROM headsplus_stats WHERE " +
+        return CompletableFuture.runAsync(() -> addToTotalSync(uuid, type, head, metadata, amount), HeadsPlus.async);
+    }
+
+    private void addToTotalSync(UUID uuid, CollectionType type, String head, String metadata, int amount) {
+        try (Connection connection = implementConnection()) {
+            // Check if the entry has been added
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT amount FROM headsplus_stats WHERE " +
+                    "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
+            int id = PlayerSQLManager.get().getUserID(uuid);
+            checkStatement.setInt(1, id);
+            checkStatement.setString(2, type.name());
+            checkStatement.setString(3, head);
+            checkStatement.setString(4, metadata);
+
+            ResultSet set = checkStatement.executeQuery();
+            // Then use the statement appropriate
+            PreparedStatement updateStatement;
+            if (!set.next()) {
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type, head, metadata, amount) VALUES (?, ?, ?, ?, ?)");
+                updateStatement.setInt(1, id);
+                updateStatement.setString(2, type.name());
+                updateStatement.setString(3, head);
+                updateStatement.setString(4, metadata);
+                updateStatement.setInt(5, amount);
+            } else {
+                updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET amount = amount + ? WHERE " +
                         "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
-                int id = PlayerSQLManager.get().getUserID(uuid);
-                checkStatement.setInt(1, id);
-                checkStatement.setString(2, type.name());
-                checkStatement.setString(3, head);
-                checkStatement.setString(4, metadata);
-
-                ResultSet set = checkStatement.executeQuery();
-                // Then use the statement appropriate
-                PreparedStatement updateStatement;
-                if (!set.next()) {
-                    updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type, head, metadata, amount) VALUES (?, ?, ?, ?, ?)");
-                    updateStatement.setInt(1, id);
-                    updateStatement.setString(2, type.name());
-                    updateStatement.setString(3, head);
-                    updateStatement.setString(4, metadata);
-                    updateStatement.setInt(5, amount);
-                } else {
-                    updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET amount = amount + ? WHERE " +
-                            "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
-                    updateStatement.setInt(1, amount);
-                    updateStatement.setInt(2, id);
-                    updateStatement.setString(3, type.name());
-                    updateStatement.setString(4, head);
-                    updateStatement.setString(5, metadata);
-                }
-
-                updateStatement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+                updateStatement.setInt(1, amount);
+                updateStatement.setInt(2, id);
+                updateStatement.setString(3, type.name());
+                updateStatement.setString(4, head);
+                updateStatement.setString(5, metadata);
             }
-        }, HeadsPlus.async);
+
+            updateStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public enum CollectionType {

@@ -1,9 +1,17 @@
 package io.github.thatsmusic99.headsplus.sql;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +26,7 @@ public class PlayerSQLManager extends SQLManager {
 
     public PlayerSQLManager() {
         createTable();
+        transferOldData();
         instance = this;
     }
 
@@ -50,6 +59,31 @@ public class PlayerSQLManager extends SQLManager {
     @Override
     public void transferOldData() {
         // TODO
+        File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
+        if (!storageFolder.exists()) return;
+        File playerInfo = new File(storageFolder, "playerinfo.json");
+        if (!playerInfo.exists()) return;
+        try (FileReader reader = new FileReader(playerInfo)) {
+            JSONObject core = (JSONObject) new JSONParser().parse(reader);
+            for (Object uuidObj : core.keySet()) {
+                JSONObject playerObj = (JSONObject) core.get(uuidObj);
+                long xp = (long) playerObj.get("xp");
+                String levelStr = (String) playerObj.get("level");
+                int levelIndex = LevelsManager.get().getLevels().indexOf(levelStr);
+                if (levelIndex == -1) levelIndex = 0;
+
+                UUID uuid = UUID.fromString((String) uuidObj);
+                OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+                insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex, player.getLastLogin());
+                String rawLocale = (String) playerObj.get("locale");
+                if (rawLocale == null) continue;
+                String[] parts = rawLocale.split(":");
+                if (parts.length == 1) continue;
+                if (parts[1].equals("true")) setLocale(player.getName(), parts[0]).join();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException ignored) {}
     }
 
     private CompletableFuture<Void> updateUsername(UUID uuid, String newName) {
@@ -90,7 +124,7 @@ public class PlayerSQLManager extends SQLManager {
                 ResultSet results = statement.executeQuery();
                 if (!results.next()) {
                     connection.close();
-                    insertPlayer(uuid, name, 0, 0, System.currentTimeMillis()).join();
+                    insertPlayer(uuid, name, 0, 0, System.currentTimeMillis());
                     return;
                 }
 
@@ -129,22 +163,20 @@ public class PlayerSQLManager extends SQLManager {
         }, HeadsPlus.async);
     }
 
-    private CompletableFuture<Void> insertPlayer(UUID uuid, String name, long xp, int level, long timestamp) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO headsplus_players (uuid, username, xp, level, last_joined) VALUES (?, ?, ?, ?, ?)");
-                statement.setString(1, uuid.toString());
-                statement.setString(2, name);
-                statement.setLong(3, xp);
-                statement.setInt(4, level);
-                statement.setLong(5, timestamp);
+    private void insertPlayer(UUID uuid, String name, long xp, int level, long timestamp) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO headsplus_players (uuid, username, xp, level, last_joined) VALUES (?, ?, ?, ?, ?)");
+            statement.setString(1, uuid.toString());
+            statement.setString(2, name);
+            statement.setLong(3, xp);
+            statement.setInt(4, level);
+            statement.setLong(5, timestamp);
 
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public CompletableFuture<Void> setXP(UUID uuid, long xp) {

@@ -215,10 +215,10 @@ public class HeadsPlus extends JavaPlugin {
             new RewardsManager();
             new ChallengeManager();
             new CraftingManager();
+            new PlayerSQLManager();
             new ChallengeSQLManager();
             new FavouriteHeadsSQLManager();
             new PinnedChallengeManager();
-            new PlayerSQLManager();
             new StatisticsSQLManager();
         });
     }

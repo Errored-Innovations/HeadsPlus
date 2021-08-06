@@ -1,7 +1,13 @@
 package io.github.thatsmusic99.headsplus.sql;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +24,7 @@ public class ChallengeSQLManager extends SQLManager {
     public ChallengeSQLManager() {
         instance = this;
         createTable();
+        transferOldData();
     }
 
     public static ChallengeSQLManager get() {
@@ -46,7 +53,23 @@ public class ChallengeSQLManager extends SQLManager {
 
     @Override
     public void transferOldData() {
+        File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
+        if (!storageFolder.exists()) return;
+        File playerInfo = new File(storageFolder, "playerinfo.json");
+        if (!playerInfo.exists()) return;
+        try (FileReader reader = new FileReader(playerInfo)) {
+            JSONObject core = (JSONObject) new JSONParser().parse(reader);
+            for (Object uuidObj : core.keySet()) {
+                JSONObject playerObj = (JSONObject) core.get(uuidObj);
+                UUID uuid = UUID.fromString((String) uuidObj);
 
+                List<String> completedChallenges = (List<String>) playerObj.get("completed-challenges");
+                if (completedChallenges == null) continue;
+                completedChallenges.forEach(challenge -> completeChallengeSync(uuid, challenge));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException ignored) {}
     }
 
     public CompletableFuture<Integer> getTotalChallengesComplete(UUID uuid) {
