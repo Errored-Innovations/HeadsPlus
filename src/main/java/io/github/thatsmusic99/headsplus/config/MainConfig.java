@@ -304,10 +304,10 @@ public class MainConfig extends HPConfig {
          moveTo("plugin.mechanics.use-tellraw", "use-tellraw");
 
          // Misc Options
-         addDefault("plugin.perks.smite-player-if-they-get-a-head", "smite-player");
-         addDefault("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
-         addDefault("plugin.perks.xp.allow-negative", "allow-negative-xp");
-         addDefault("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
+         moveTo("plugin.perks.smite-player-if-they-get-a-head", "smite-player");
+         moveTo("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
+         moveTo("plugin.perks.xp.allow-negative", "allow-negative-xp");
+         moveTo("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
      }
     /*
     protected void loadS() {
