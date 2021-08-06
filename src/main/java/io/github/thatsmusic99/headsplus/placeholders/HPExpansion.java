@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.placeholders;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
@@ -56,11 +55,15 @@ public class HPExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier){
 
-        if(identifier.equals("xp")){
+        if (identifier.equals("xp")) {
             return String.valueOf(CacheManager.get().getXP(player));
         }
 
-        if(identifier.equals("completed_challenges_total")){
+        if (identifier.equals("level")) {
+            return CacheManager.get().getLevel(player);
+        }
+
+        if (identifier.equals("completed_challenges_total")) {
             return String.valueOf(CacheManager.get().getTotalChallengesComplete(player));
         }
 
