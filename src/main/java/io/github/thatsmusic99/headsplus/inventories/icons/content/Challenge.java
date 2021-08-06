@@ -95,7 +95,7 @@ public class Challenge extends Content {
                         new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
-                        new HPUtils.PlaceholderInfo("{heads}", challenge.getStatSync(player.getUniqueId()), true));
+                        new HPUtils.PlaceholderInfo("{heads}", () -> String.valueOf(challenge.getStatSync(player.getUniqueId())), true));
             }
         }
         meta.setLore(lore);

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 public class HPUtils {
@@ -175,7 +176,7 @@ public class HPUtils {
         for (PlaceholderInfo placeholder : placeholders) {
             if (!message.contains(placeholder.placeholder)) continue;
             if (!placeholder.requirement) continue;
-            lore.add(message.replace(placeholder.placeholder, placeholder.replacement));
+            lore.add(message.replace(placeholder.placeholder, placeholder.replacement.get()));
         }
     }
 
@@ -186,12 +187,18 @@ public class HPUtils {
 
     public static class PlaceholderInfo {
         private final String placeholder;
-        private final String replacement;
+        private final Supplier<String> replacement;
         private final boolean requirement;
 
         public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
             this.placeholder = placeholder;
-            this.replacement = String.valueOf(replacement);
+            this.replacement = () -> String.valueOf(replacement);
+            this.requirement = requirement;
+        }
+
+        public PlaceholderInfo(String placeholder, Supplier<String> replacement, boolean requirement) {
+            this.placeholder = placeholder;
+            this.replacement = replacement;
             this.requirement = requirement;
         }
     }

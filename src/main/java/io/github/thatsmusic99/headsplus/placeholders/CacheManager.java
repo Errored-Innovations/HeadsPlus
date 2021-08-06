@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class CacheManager {
 
@@ -47,8 +48,8 @@ public class CacheManager {
         // Check cache
         if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getXp();
         UUID uuid = player.getUniqueId();
-        // TODO - check if CF runs or not, preferably it doesn't
-        updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, PlayerSQLManager.get().getXP(uuid));
+        // Update caches, use supplier to avoid running SQL query
+        updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, () -> PlayerSQLManager.get().getXP(uuid));
         if (cachedXP.containsKey(uuid.toString())) return cachedXP.get(uuid.toString());
         PlayerSQLManager.get().getXP(player.getUniqueId()).thenApply(xp -> cachedXP.put(uuid.toString(), xp));
         return -1;
@@ -58,7 +59,7 @@ public class CacheManager {
         // Check HPPlayer cache, ez
         if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
         UUID uuid = player.getUniqueId();
-        updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels, PlayerSQLManager.get().getLevel(uuid));
+        updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels, () -> PlayerSQLManager.get().getLevel(uuid));
         int i = -1;
         if (cachedLevels.containsKey(uuid.toString())) {
             i = cachedLevels.get(uuid.toString());
@@ -75,7 +76,7 @@ public class CacheManager {
         UUID uuid = player.getUniqueId();
         // Update the caches
         updateCaches("challenges_" + player.getName(), uuid.toString(), cachedChallengeTotal,
-                ChallengeSQLManager.get().getTotalChallengesComplete(uuid));
+                () -> ChallengeSQLManager.get().getTotalChallengesComplete(uuid));
         //
         if (cachedChallengeTotal.containsKey(uuid.toString())) return cachedChallengeTotal.get(uuid.toString());
         ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId()).thenAccept(total ->
@@ -119,21 +120,21 @@ public class CacheManager {
     }
 
     public int getStat(String id, CompletableFuture<Integer> ugh) {
-        updateCaches("stats_" + id, id, cachedStats, ugh);
+        updateCaches("stats_" + id, id, cachedStats, () -> ugh);
         if (cachedStats.containsKey(id)) return cachedStats.get(id);
         ugh.thenApply(num -> cachedStats.put(id, num));
         return -1;
     }
 
     private List<StatisticsSQLManager.LeaderboardEntry> getEntries(String id, CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>> ree) {
-        updateCaches("leaderboards_" + id, id, cachedEntries, ree);
+        updateCaches("leaderboards_" + id, id, cachedEntries, () -> ree);
         //
         if (cachedEntries.containsKey(id)) return cachedEntries.get(id);
         ree.thenApply(list -> cachedEntries.put(id, list));
         return new ArrayList<>();
     }
 
-    private <T> void updateCaches(String key, String id, HashMap<String, T> hashMap, CompletableFuture<T> runnable) {
+    private <T> void updateCaches(String key, String id, HashMap<String, T> hashMap, Supplier<CompletableFuture<T>> runnable) {
         int duration = MainConfig.get().getLeaderboards().CACHE_DURATION;
         if (cachedRequests.containsKey(key)) {
             cachedRequests.get(key).cancel();
@@ -147,7 +148,7 @@ public class CacheManager {
                     hashMap.remove(id);
                     return;
                 }
-                hashMap.put(id, runnable.join());
+                hashMap.put(id, runnable.get().join());
             }
         }.runTaskTimer(HeadsPlus.get(), duration, duration));
     }
