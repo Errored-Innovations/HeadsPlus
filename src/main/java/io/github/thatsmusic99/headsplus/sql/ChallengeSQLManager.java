@@ -33,6 +33,7 @@ public class ChallengeSQLManager extends SQLManager {
                                 "(user_id INT NOT NULL," +
                                 "challenge VARCHAR(256) NOT NULL," +
                                 "count INT NOT NULL," +
+                                "last_completion_time BIGINT NOT NULL," +
                                 "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
                 );
 
@@ -83,12 +84,13 @@ public class ChallengeSQLManager extends SQLManager {
             ResultSet set = checkStatement.executeQuery();
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_challenges (user_id, challenge, count) VALUES (?, ?, 1)");
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_challenges (last_completion_time, user_id, challenge, count) VALUES (?, ?, ?, 1)");
             } else {
-                updateStatement = connection.prepareStatement("UPDATE headsplus_challenges SET count = count + 1 WHERE user_id = ? AND challenge = ?");
+                updateStatement = connection.prepareStatement("UPDATE headsplus_challenges SET count = count + 1, last_completion_time = ? WHERE user_id = ? AND challenge = ?");
             }
-            updateStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-            updateStatement.setString(2, challenge);
+            updateStatement.setLong(1, System.currentTimeMillis());
+            updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid));
+            updateStatement.setString(3, challenge);
 
             updateStatement.executeUpdate();
         } catch (SQLException exception) {
