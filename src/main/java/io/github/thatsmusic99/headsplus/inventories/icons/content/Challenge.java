@@ -48,7 +48,7 @@ public class Challenge extends Content {
                     MessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
                 }
             } else {
-                HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
+                HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
                 if (hpPlayer.hasChallengePinned(challenge)) {
                     hpPlayer.removeChallengePin(challenge).thenAcceptAsync(why -> {
                         initNameAndLore("challenge", player);
@@ -89,7 +89,7 @@ public class Challenge extends Content {
                                 challenge.isComplete(player)),
                         new HPUtils.PlaceholderInfo("{pinned}",
                                 MessagesManager.get().getString("inventory.icon.challenge.pinned", player),
-                                HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)),
+                                HPPlayer.getHPPlayer(player.getUniqueId()).hasChallengePinned(challenge)),
                         new HPUtils.PlaceholderInfo("{reward}", reward, true),
                         new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true),
                         new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),

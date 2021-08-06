@@ -80,7 +80,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "player":
                         if (args.length > 2) {
-                            HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]));
+                            HPPlayer pl = HPPlayer.getHPPlayer(Bukkit.getOfflinePlayer(args[2]).getUniqueId());
                             if (pl != null) {
                                 report = new DebugFileCreator().createPlayerReport(pl);
                                 sender.sendMessage(ChatColor.GREEN + "Report name: " + report);

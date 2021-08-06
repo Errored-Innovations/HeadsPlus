@@ -78,7 +78,7 @@ public class ChallengeManager {
             ItemStack item;
             String material = Objects.requireNonNull(section.getString("material"), "Material for icon " + key + " is null!");
             if (material.startsWith("HP#")) {
-                item = HeadManager.get().getHeadInfo(material).buildHead().join();
+                item = HeadManager.get().getHeadInfo(material).forceBuildHead();
             } else {
                 Material actualMaterial = Objects.requireNonNull(Material.getMaterial(material.toUpperCase()), "Material " + material.toUpperCase() + " does not exist!");
                 item = new ItemStack(actualMaterial);

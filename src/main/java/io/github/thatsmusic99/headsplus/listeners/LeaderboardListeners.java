@@ -63,7 +63,7 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(PlayerHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player).addXp(0 * event.getAmount());
+            HPPlayer.getHPPlayer(player.getUniqueId()).addXp(0 * event.getAmount());
             if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
@@ -91,7 +91,7 @@ public class LeaderboardListeners implements Listener {
 
         @Override
         public void onEvent(HeadCraftEvent event) {
-            HPPlayer.getHPPlayer(event.getPlayer()).addXp(0 * event.getHeadsCrafted());
+            HPPlayer.getHPPlayer(event.getPlayer().getUniqueId()).addXp(0 * event.getHeadsCrafted());
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
             StatisticsSQLManager.get().addToTotal(event.getPlayer().getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING,

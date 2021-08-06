@@ -939,7 +939,7 @@ public class MessagesManager {
         Pattern pat = Pattern.compile("\\{msg_inventory\\.icon\\.head\\.favourite}");
         Matcher m = pat.matcher(string);
         while (m.find()) {
-            if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
+            if (HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)) {
                 string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", (CommandSender) player));
             } else {
                 string = string.replace("{msg_inventory.icon.head.favourite}", "");

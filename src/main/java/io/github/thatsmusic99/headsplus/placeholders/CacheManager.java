@@ -45,7 +45,7 @@ public class CacheManager {
 
     public long getXP(OfflinePlayer player) {
         // Check cache
-        if (HPPlayer.getHPPlayer(player) != null) return HPPlayer.getHPPlayer(player).getXp();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getXp();
         UUID uuid = player.getUniqueId();
         // TODO - check if CF runs or not, preferably it doesn't
         updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, PlayerSQLManager.get().getXP(uuid));
@@ -56,7 +56,7 @@ public class CacheManager {
 
     public String getLevel(OfflinePlayer player) {
         // Check HPPlayer cache, ez
-        if (HPPlayer.getHPPlayer(player) != null) return HPPlayer.getHPPlayer(player).getLevel().getDisplayName();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
         UUID uuid = player.getUniqueId();
         updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels, PlayerSQLManager.get().getLevel(uuid));
         int i = -1;
@@ -71,7 +71,7 @@ public class CacheManager {
     }
 
     public int getTotalChallengesComplete(OfflinePlayer player) {
-        if (HPPlayer.getHPPlayer(player) != null) return HPPlayer.getHPPlayer(player).getCompleteChallenges().size();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getCompleteChallenges().size();
         UUID uuid = player.getUniqueId();
         // Update the caches
         updateCaches("challenges_" + player.getName(), uuid.toString(), cachedChallengeTotal,

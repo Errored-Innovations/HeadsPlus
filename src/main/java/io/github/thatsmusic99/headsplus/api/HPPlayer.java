@@ -33,10 +33,10 @@ public class HPPlayer {
 
     // TODO - make sure this is never called on the main server thread.
     public HPPlayer(UUID uuid) {
-        pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid).join();
-        favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid).join();
-        completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid).join();
-        int levelIndex = PlayerSQLManager.get().getLevel(uuid).join();
+        pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid);
+        favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid);
+        completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid);
+        int levelIndex = PlayerSQLManager.get().getLevelSync(uuid);
         int max = LevelsManager.get().getLevels().size();
         if (levelIndex > -1 && levelIndex < max) {
             this.level = LevelsManager.get().getLevels().get(levelIndex);
@@ -45,7 +45,7 @@ public class HPPlayer {
         PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
                 result.ifPresent(str ->
                         MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
-        xp = PlayerSQLManager.get().getXP(uuid).join();
+        xp = PlayerSQLManager.get().getXPSync(uuid);
         this.uuid = uuid;
         players.put(uuid, this);
     }
@@ -74,8 +74,8 @@ public class HPPlayer {
         return uuid;
     }
 
-    public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        return players.get(p.getUniqueId());
+    public static HPPlayer getHPPlayer(UUID uuid) {
+        return players.get(uuid);
     }
 
     public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
@@ -126,7 +126,7 @@ public class HPPlayer {
             }
         }
         if (nextLevel.isrEnabled()) {
-            nextLevel.getReward().rewardPlayer(null, player.getPlayer()); // TODO
+            nextLevel.getReward().rewardPlayer(null, player); // TODO
         }
         PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }

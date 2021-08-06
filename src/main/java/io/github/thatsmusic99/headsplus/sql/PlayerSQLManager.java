@@ -194,19 +194,7 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     public CompletableFuture<Long> getXP(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT xp FROM headsplus_players WHERE uuid = ?");
-                statement.setString(1, uuid.toString());
-
-                ResultSet set = statement.executeQuery();
-                if (!set.next()) return (long) -1;
-                return set.getLong("xp");
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-            return (long) -1;
-        }, HeadsPlus.async);
+        return CompletableFuture.supplyAsync(() -> getXPSync(uuid), HeadsPlus.async);
     }
 
     public CompletableFuture<Void> setLevel(UUID uuid, String level) {
@@ -225,19 +213,7 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     public CompletableFuture<Integer> getLevel(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT level FROM headsplus_players WHERE uuid = ?");
-                statement.setString(1, uuid.toString());
-
-                ResultSet set = statement.executeQuery();
-                if (!set.next()) return 0;
-                return set.getInt("level");
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-            return 0;
-        }, HeadsPlus.async);
+        return CompletableFuture.supplyAsync(() -> getLevelSync(uuid), HeadsPlus.async);
     }
 
     private CompletableFuture<Void> updateJoinTimestamp(UUID uuid, long timestamp) {
@@ -262,6 +238,20 @@ public class PlayerSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT level FROM headsplus_players WHERE username = ?");
             statement.setString(1, username);
+
+            ResultSet set = statement.executeQuery();
+            if (!set.next()) return 0;
+            return set.getInt("level");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getLevelSync(UUID uuid) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT level FROM headsplus_players WHERE uuid = ?");
+            statement.setString(1, uuid.toString());
 
             ResultSet set = statement.executeQuery();
             if (!set.next()) return 0;
@@ -338,6 +328,20 @@ public class PlayerSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT xp FROM headsplus_players WHERE username = ?");
             statement.setString(1, username);
+
+            ResultSet set = statement.executeQuery();
+            if (!set.next()) return -1;
+            return set.getLong("xp");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return -1;
+    }
+
+    public long getXPSync(UUID uuid) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT xp FROM headsplus_players WHERE uuid = ?");
+            statement.setString(1, uuid.toString());
 
             ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;

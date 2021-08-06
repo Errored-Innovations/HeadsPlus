@@ -49,7 +49,7 @@ public abstract class Reward {
     }
 
     public void rewardPlayer(Challenge challenge, Player player) {
-        HPPlayer.getHPPlayer(player).addXp(useMultiplier ? xp * challenge.getDifficulty() : xp);
+        HPPlayer.getHPPlayer(player.getUniqueId()).addXp(useMultiplier ? xp * challenge.getDifficulty() : xp);
     }
 
     public String getRewardString(Player player) {

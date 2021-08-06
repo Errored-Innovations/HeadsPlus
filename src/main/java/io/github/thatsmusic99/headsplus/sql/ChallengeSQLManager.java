@@ -80,10 +80,6 @@ public class ChallengeSQLManager extends SQLManager {
         return CompletableFuture.runAsync(() -> completeChallengeSync(uuid, challenge), HeadsPlus.async);
     }
 
-    public CompletableFuture<List<String>> getCompleteChallenges(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> getCompleteChallengesSync(uuid), HeadsPlus.async);
-    }
-
     public int getTotalChallengesCompleteSync(UUID uuid) {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT SUM(count) FROM headsplus_challenges WHERE user_id = ?");
@@ -121,7 +117,7 @@ public class ChallengeSQLManager extends SQLManager {
         }
     }
 
-    private List<String> getCompleteChallengesSync(UUID uuid) {
+    public List<String> getCompleteChallenges(UUID uuid) {
         List<String> challenges = new ArrayList<>();
         try (Connection connection = implementConnection()) {
             PreparedStatement checkStatement = connection.prepareStatement("SELECT challenge FROM headsplus_challenges WHERE user_id = ?");

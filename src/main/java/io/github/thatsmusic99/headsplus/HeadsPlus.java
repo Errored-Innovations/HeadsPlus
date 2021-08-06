@@ -214,6 +214,7 @@ public class HeadsPlus extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             new RewardsManager();
             new ChallengeManager();
+            new LevelsManager();
             new CraftingManager();
             new PlayerSQLManager();
             new ChallengeSQLManager();

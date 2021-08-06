@@ -100,22 +100,20 @@ public class FavouriteHeadsSQLManager extends SQLManager {
         }, HeadsPlus.async);
     }
 
-    public CompletableFuture<List<String>> getFavouriteHeads(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                ResultSet set = statement.executeQuery();
-                List<String> heads = new ArrayList<>();
-                while (set.next()) {
-                    heads.add(set.getString("head"));
-                }
-                return heads;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+    public List<String> getFavouriteHeads(UUID uuid) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            ResultSet set = statement.executeQuery();
+            List<String> heads = new ArrayList<>();
+            while (set.next()) {
+                heads.add(set.getString("head"));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return heads;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

@@ -34,7 +34,7 @@ public class HeadsFavourite extends BaseInventory {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
+        HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
         List<Content> contents = new ArrayList<>();
         for (String head : hpPlayer.getFavouriteHeads()) {
             CustomHead head1 = new CustomHead(head);

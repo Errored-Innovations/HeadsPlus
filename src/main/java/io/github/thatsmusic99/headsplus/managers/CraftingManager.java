@@ -75,7 +75,7 @@ public class CraftingManager {
             if (ingredientStr.startsWith("HP#")) {
                 if (!recipeType.allowsHeads())
                     throw new IllegalArgumentException("Recipe type " + recipeType.name() + " (" + key + ") does not support head ingredients!");
-                choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).buildHead().join()));
+                choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).forceBuildHead()));
             } else {
                 Material material = HPUtils.notNull(Material.getMaterial(ingredientStr),
                         "Material " + ingredientStr + " was not found!");
@@ -88,7 +88,7 @@ public class CraftingManager {
         // Get the head itself
         HeadManager.HeadInfo resultHead = HeadManager.get().getHeadInfo(resultSection.getString("head", ""));
         // Build the resulting item/wait for it
-        ItemStack item = resultHead.buildHead().join();
+        ItemStack item = resultHead.forceBuildHead();
         //
         Recipe recipe;
         NamespacedKey namespacedKey = new NamespacedKey(HeadsPlus.get(), "crafting_" + key);

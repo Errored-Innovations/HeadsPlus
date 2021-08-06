@@ -73,23 +73,21 @@ public class PinnedChallengeManager extends SQLManager {
         pinnedChallenges.delete();
     }
 
-    public CompletableFuture<List<String>> getPinnedChallenges(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                ResultSet set = statement.executeQuery();
-                List<String> challenges = new ArrayList<>();
-                while (set.next()) {
-                    challenges.add(set.getString("challenge"));
-                }
-                return challenges;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+    public List<String> getPinnedChallenges(UUID uuid) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            ResultSet set = statement.executeQuery();
+            List<String> challenges = new ArrayList<>();
+            while (set.next()) {
+                challenges.add(set.getString("challenge"));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return challenges;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     public CompletableFuture<Void> addChallenge(UUID uuid, String challenge) {

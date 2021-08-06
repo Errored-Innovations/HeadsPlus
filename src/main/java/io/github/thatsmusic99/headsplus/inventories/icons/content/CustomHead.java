@@ -79,7 +79,7 @@ public class CustomHead extends Content {
                 player.getInventory().addItem(item);
             }
         } else {
-            HPPlayer hpp = HPPlayer.getHPPlayer(player);
+            HPPlayer hpp = HPPlayer.getHPPlayer(player.getUniqueId());
             if (hpp.hasHeadFavourited(id)) {
                 hpp.removeFavourite(id).thenAcceptAsync(what -> {
                     initNameAndLore(id, player);
@@ -108,10 +108,10 @@ public class CustomHead extends Content {
             HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(str, player),
                     new HPUtils.PlaceholderInfo("{favourite}",
                             MessagesManager.get().getString("inventory.icon.head.favourite", player),
-                            HPPlayer.getHPPlayer(player).hasHeadFavourited(id)),
+                            HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)),
                     new HPUtils.PlaceholderInfo("{msg_inventory.icon.head.favourite}",
                             MessagesManager.get().getString("inventory.icon.head.favourite", player),
-                            HPPlayer.getHPPlayer(player).hasHeadFavourited(id)),
+                            HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)),
                     new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
         }
         ItemMeta im = item.getItemMeta();

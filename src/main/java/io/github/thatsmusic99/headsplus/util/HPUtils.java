@@ -34,7 +34,7 @@ public class HPUtils {
     private static final HashMap<UUID, BossBar> bossBars = new HashMap<>();
 
     public static void addBossBar(OfflinePlayer pl) {
-        HPPlayer p = HPPlayer.getHPPlayer(pl);
+        HPPlayer p = HPPlayer.getHPPlayer(pl.getUniqueId());
         if (!MainConfig.get().getLevels().ENABLE_BOSS_BARS) return;
         if (p.getNextLevel() == null) return;
         try {
