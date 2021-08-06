@@ -281,7 +281,27 @@ public class MainConfig extends HPConfig {
          moveTo("plugin.autograb.section", "autograb-section");
          moveTo("plugin.autograb.title", "autograb-display-name");
          moveTo("plugin.autograb.price", "autograb-price");
-         // TODO - figure out restrictions
+
+         // Rererestreeeeeeeeeeeeeeecshuns maybe?
+         boolean whitelist = false;
+         if (getBoolean("whitelist.default.enabled")) {
+             moveTo("whitelist.default.list", "blocked-heads");
+             set("whitelist-worlds", whitelist = true);
+         } else if (getBoolean("blacklist.default.enabled")) {
+             moveTo("blacklist.default.list", "blocked-heads");
+         }
+
+         List<String> worlds = new ArrayList<>();
+         if (whitelist && getBoolean("whitelist.worlds.enabled")) {
+             worlds = getStringList("whitelist.worlds.list");
+         } else if (!whitelist && getBoolean("blacklist.worlds.enabled")) {
+             worlds = getStringList("blacklist.worlds.list");
+         }
+         if (!worlds.isEmpty()) {
+             set("mobs-drops-list", worlds);
+             set("player-drops-list", worlds);
+             set("crafting-list", worlds);
+         }
 
          // Challenge Options
          moveTo("plugin.mechanics.broadcasts.challenge-complete", "broadcast-challenge-complete");
