@@ -18,6 +18,7 @@ public class CraftingManager {
     private final HashMap<NamespacedKey, Recipe> recipes;
     private static CraftingManager instance;
     private static final HashSet<Integer> VALID_RECIPE_SIZES = Sets.newHashSet(1, 4, 9);
+    private final HashSet<String> registeredKeys = new HashSet<>();
 
     public CraftingManager() {
         instance = this;
@@ -29,6 +30,10 @@ public class CraftingManager {
         clear();
         // innit
         init();
+    }
+
+    public boolean isRegistered(String recipeKey) {
+        return registeredKeys.contains(recipeKey);
     }
 
     public void init() {
@@ -54,6 +59,7 @@ public class CraftingManager {
             Bukkit.removeRecipe(key);
         }
         recipes.clear();
+        registeredKeys.clear();
     }
 
     public void addRecipe(String key, ConfigSection section) {
@@ -156,6 +162,7 @@ public class CraftingManager {
                 throw new IllegalStateException("Unexpected value (" + key + "): " + recipeType);
         }
         recipes.put(namespacedKey, recipe);
+        registeredKeys.add(key);
         Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> Bukkit.addRecipe(recipe));
     }
 
