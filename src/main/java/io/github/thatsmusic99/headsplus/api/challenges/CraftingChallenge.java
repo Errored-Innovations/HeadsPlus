@@ -17,8 +17,7 @@ public class CraftingChallenge extends Challenge {
 
     @Override
     public CompletableFuture<Boolean> canComplete(Player p) {
-        return StatisticsSQLManager.get().getStat(p.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING, getHeadType())
-                .thenApply(total -> total >= getRequiredHeadAmount());
+        return getStatFuture(p.getUniqueId()).thenApply(total -> total >= getRequiredHeadAmount());
     }
 
     @Override
@@ -31,6 +30,12 @@ public class CraftingChallenge extends Challenge {
     public CompletableFuture<Integer> getStatFuture(UUID uuid) {
         if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING);
         return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING, getHeadType());
+    }
+
+    @Override
+    public int getStatSync(UUID uuid) {
+        if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING);
+        return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING, getHeadType());
     }
 
 }

@@ -116,6 +116,8 @@ public abstract class Challenge {
 
     public abstract CompletableFuture<Integer> getStatFuture(UUID uuid);
 
+    public abstract int getStatSync(UUID uuid);
+
     public boolean isComplete(Player p) {
         return HPPlayer.getHPPlayer(p).getCompleteChallenges().contains(getConfigName());
     }

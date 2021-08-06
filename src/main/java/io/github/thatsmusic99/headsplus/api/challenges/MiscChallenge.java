@@ -29,4 +29,9 @@ public class MiscChallenge extends Challenge {
         return CompletableFuture.completedFuture(0);
     }
 
+    @Override
+    public int getStatSync(UUID uuid) {
+        return 0;
+    }
+
 }

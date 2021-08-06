@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
-import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -96,11 +95,8 @@ public class Challenge extends Content {
                         new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
-                        new HPUtils.PlaceholderInfo("{heads}",
-                                // TODO - use supplier, not this
-                                CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId())), true));
+                        new HPUtils.PlaceholderInfo("{heads}", challenge.getStatSync(player.getUniqueId()), true));
             }
-
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
