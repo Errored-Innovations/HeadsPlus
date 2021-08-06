@@ -24,6 +24,7 @@ public class MainConfig extends HPConfig {
     private Levels levels;
     private Leaderboards leaderboards;
     private Localisation localisation;
+    private HeadsSelector headsSelector;
     private Updates updates;
     private Miscellaneous miscellaneous;
     private List<String> defaults;
@@ -175,6 +176,13 @@ public class MainConfig extends HPConfig {
         addDefault("locale", "en_us");
         addDefault("smart-locale", false);
         addDefault("use-tellraw", true);
+
+        addSection("Heads Selector");
+        addDefault("default-selector-head-price", 10.0,
+                "The default price the heads in the heads selector can be sold at.");
+        addComment("per-world-prices", "Defines the price of heads by default in a given world.");
+        createConfigSection("per-world-prices");
+        addExample("per-world-prices.cool-world", 15.0);
 
         addSection("Permissions");
         addDefault("default-permissions", Lists.newArrayList("headsplus.craft.*",
@@ -471,6 +479,7 @@ public class MainConfig extends HPConfig {
         levels = new Levels();
         leaderboards = new Leaderboards();
         localisation = new Localisation();
+        headsSelector = new HeadsSelector();
         updates = new Updates();
         miscellaneous = new Miscellaneous();
 
@@ -550,6 +559,10 @@ public class MainConfig extends HPConfig {
 
     public Localisation getLocalisation() {
         return localisation;
+    }
+
+    public HeadsSelector getHeadsSelector() {
+        return headsSelector;
     }
 
     public Updates getUpdates() {
@@ -662,6 +675,11 @@ public class MainConfig extends HPConfig {
         public String LOCALE = getString("locale");
         public boolean SMART_LOCALE = getBoolean("smart-locale"),
                 USE_TELLRAW = getBoolean("use-tellraw");
+    }
+
+    public class HeadsSelector {
+        public double DEFAULT_PRICE = getDouble("default-selector-head-price");
+        public ConfigSection PER_WORLD_PRICES = getConfigSection("per-world-prices");
     }
 
     public class Updates {

@@ -10,9 +10,11 @@ import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +30,7 @@ public class CustomHead extends Content {
 
     public CustomHead(String id) {
         super(ConfigHeadsSelector.get().getBuyableHead(id).forceBuildHead());
-        this.price = 0.0; // TODO - set price
+        this.price = ConfigHeadsSelector.get().getBuyableHead(id).getPrice(); // TODO - set price
         this.id = id;
     }
 
@@ -103,16 +105,24 @@ public class CustomHead extends Content {
         // We only really need to add the lore here
         List<String> lore = new ArrayList<>();
         for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
-            if (str.contains("{favourite}") || str.contains("{msg_inventory.icon.head.favourite}")) {
-                if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
-                    lore.add(HeadsPlusMessagesManager.get().getString("inventory.icon.head.favourite", player));
-                }
-            } else {
-                lore.add(HeadsPlusMessagesManager.get().formatMsg(str, player).replaceAll("\\{price}", String.valueOf(price)));
-            }
+            HPUtils.parseLorePlaceholders(lore, HeadsPlusMessagesManager.get().formatMsg(str, player),
+                    new HPUtils.PlaceholderInfo("{favourite}",
+                            HeadsPlusMessagesManager.get().getString("inventory.icon.head.favourite", player),
+                            HPPlayer.getHPPlayer(player).hasHeadFavourited(id)),
+                    new HPUtils.PlaceholderInfo("{msg_inventory.icon.head.favourite}",
+                            HeadsPlusMessagesManager.get().getString("inventory.icon.head.favourite", player),
+                            HPPlayer.getHPPlayer(player).hasHeadFavourited(id)),
+                    new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
         item.setItemMeta(im);
     }
+
+    private double determinePrice(World world) {
+        if (price != -1) return price;
+        return MainConfig.get().getHeadsSelector().PER_WORLD_PRICES.getDouble(world.getName(),
+                MainConfig.get().getHeadsSelector().DEFAULT_PRICE);
+    }
+
 }
