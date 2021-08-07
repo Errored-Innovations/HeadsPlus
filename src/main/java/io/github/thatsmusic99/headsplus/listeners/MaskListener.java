@@ -54,6 +54,7 @@ public class MaskListener extends HeadsPlusListener<InventoryClickEvent> {
     public static void checkMask(Player player, ItemStack item) {
         if (item == null || !(item.getItemMeta() instanceof SkullMeta)) return;
         String mask = PersistenceManager.get().getMaskType(item);
+        if (mask == null) return;
         if (!MaskManager.get().isMaskRegistered(mask)) return;
         MaskManager.MaskInfo maskInfo = MaskManager.get().getMaskInfo(mask);
         maskInfo.run(player);
