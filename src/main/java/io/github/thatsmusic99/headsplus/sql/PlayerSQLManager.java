@@ -36,29 +36,26 @@ public class PlayerSQLManager extends SQLManager {
 
     @Override
     public void createTable() {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS headsplus_players " +
-                        "(id INTEGER PRIMARY KEY " + getStupidAutoIncrementThing() + ", "+
-                        "uuid VARCHAR(256) NOT NULL, " +
-                        "username VARCHAR(32) NOT NULL, " +
-                        "xp BIGINT NOT NULL," +
-                        "level INT NOT NULL," +
-                        "locale VARCHAR(16)," +
-                        "last_joined BIGINT NOT NULL)"
-                );
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS headsplus_players " +
+                    "(id INTEGER PRIMARY KEY " + getStupidAutoIncrementThing() + ", " +
+                    "uuid VARCHAR(256) NOT NULL, " +
+                    "username VARCHAR(32) NOT NULL, " +
+                    "xp BIGINT NOT NULL," +
+                    "level INT NOT NULL," +
+                    "locale VARCHAR(16)," +
+                    "last_joined BIGINT NOT NULL)"
+            );
 
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
     public void transferOldData() {
-        // TODO
         File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
         if (!storageFolder.exists()) return;
         File playerInfo = new File(storageFolder, "playerinfo.json");

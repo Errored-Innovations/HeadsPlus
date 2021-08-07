@@ -113,7 +113,7 @@ public class ConfigChallenges extends FeatureConfig {
         moveTo("challenges.options.prepare-rewards", "options.prepare-rewards");
 
         for (String key : getConfigSection("challenges").getKeys(false)) {
-            if (getString("challenges." + key + ".type", "").equalsIgnoreCase("SELLING")) {
+            if (getString("challenges." + key + ".type", "").equalsIgnoreCase("SELLHEAD")) {
                 set("challenges." + key, null);
             }
         }

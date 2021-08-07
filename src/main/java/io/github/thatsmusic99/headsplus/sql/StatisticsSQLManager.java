@@ -35,22 +35,20 @@ public class StatisticsSQLManager extends SQLManager {
 
     @Override
     public void createTable() {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS headsplus_stats " +
-                                "(user_id INT NOT NULL," +
-                                "collection_type VARCHAR(32) NOT NULL," +
-                                "head VARCHAR(256) NOT NULL," +
-                                "metadata VARCHAR(256) NOT NULL," +
-                                "count INT NOT NULL)"
-                );
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS headsplus_stats " +
+                            "(user_id INT NOT NULL," +
+                            "collection_type VARCHAR(32) NOT NULL," +
+                            "head VARCHAR(256) NOT NULL," +
+                            "metadata VARCHAR(256) NOT NULL," +
+                            "count INT NOT NULL)"
+            );
 
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
@@ -66,25 +64,29 @@ public class StatisticsSQLManager extends SQLManager {
                 UUID uuid = UUID.fromString((String) uuidObj);
 
                 JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
-                for (Object mobObj : huntingObj.keySet()) {
-                    ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
-                    String head = "";
-                    if (defaultSection.getKeys(false).size() != 0) {
-                        head = defaultSection.getKeys(false).get(0);
+                if (huntingObj != null) {
+                    for (Object mobObj : huntingObj.keySet()) {
+                        ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                        String head = "";
+                        if (defaultSection.getKeys(false).size() != 0) {
+                            head = defaultSection.getKeys(false).get(0);
+                        }
+                        int total = (int) huntingObj.get(mobObj);
+                        addToTotalSync(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total);
                     }
-                    int total = (int) huntingObj.get(mobObj);
-                    addToTotalSync(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total);
                 }
 
                 JSONObject craftingObj = (JSONObject) playerObj.get("crafting");
-                for (Object mobObj : craftingObj.keySet()) {
-                    ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
-                    String head = "";
-                    if (defaultSection.getKeys(false).size() != 0) {
-                        head = defaultSection.getKeys(false).get(0);
+                if (craftingObj != null) {
+                    for (Object mobObj : craftingObj.keySet()) {
+                        ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                        String head = "";
+                        if (defaultSection.getKeys(false).size() != 0) {
+                            head = defaultSection.getKeys(false).get(0);
+                        }
+                        int total = (int) craftingObj.get(mobObj);
+                        addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
                     }
-                    int total = (int) craftingObj.get(mobObj);
-                    addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
                 }
             }
         } catch (IOException e) {

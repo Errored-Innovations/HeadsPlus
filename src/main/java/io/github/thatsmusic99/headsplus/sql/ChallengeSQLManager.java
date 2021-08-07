@@ -33,22 +33,20 @@ public class ChallengeSQLManager extends SQLManager {
 
     @Override
     public void createTable() {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS headsplus_challenges " +
-                                "(user_id INT NOT NULL," +
-                                "challenge VARCHAR(256) NOT NULL," +
-                                "count INT NOT NULL," +
-                                "last_completion_time BIGINT NOT NULL," +
-                                "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
-                );
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS headsplus_challenges " +
+                            "(user_id INT NOT NULL," +
+                            "challenge VARCHAR(256) NOT NULL," +
+                            "count INT NOT NULL," +
+                            "last_completion_time BIGINT NOT NULL," +
+                            "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
+            );
 
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override

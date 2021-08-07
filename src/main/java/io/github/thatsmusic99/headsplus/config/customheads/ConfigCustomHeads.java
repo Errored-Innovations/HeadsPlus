@@ -30,20 +30,25 @@ public class ConfigCustomHeads extends HPConfig {
         moveTo("options.default-price", "default-selector-head-price", MainConfig.get());
         moveTo("options.price-per-world", "per-world-prices", MainConfig.get());
         // For each head
-        for (String key : getConfigSection("heads").getKeys(false)) {
-            moveTo("heads." + key + ".displayname", "heads." + key + ".display-name", ConfigHeads.get());
-            moveTo("heads." + key + ".texture", "heads." + key + ".texture", ConfigHeads.get());
-            if (get("heads." + key + ".price") instanceof Double) {
-                moveTo("heads." + key + ".price", "heads.HP#" + key + ".price", ConfigHeadsSelector.get());
+        if (contains("heads")) {
+            for (String key : getConfigSection("heads").getKeys(false)) {
+                moveTo("heads." + key + ".displayname", "heads." + key + ".display-name", ConfigHeads.get());
+                moveTo("heads." + key + ".texture", "heads." + key + ".texture", ConfigHeads.get());
+                if (get("heads." + key + ".price") instanceof Double) {
+                    moveTo("heads." + key + ".price", "heads.HP#" + key + ".price", ConfigHeadsSelector.get());
+                }
+                moveTo("heads." + key + ".section", "heads.HP#" + key + ".section", ConfigHeadsSelector.get());
             }
-            moveTo("heads." + key + ".section", "heads.HP#" + key + ".section", ConfigHeadsSelector.get());
         }
+
         // For each section
-        for (String key : getConfigSection("sections").getKeys(false)) {
-            moveTo("sections." + key + ".texture", "sections." + key + ".texture", ConfigHeadsSelector.get());
-            moveTo("sections." + key + ".display-name", "sections." + key + ".display-name", ConfigHeadsSelector.get());
-            ConfigHeadsSelector.get().addDefault("sections." + key + ".enabled", true);
-            ConfigHeadsSelector.get().addDefault("sections." + key + ".permission", "headsplus.section." + key);
+        if (contains("sections")) {
+            for (String key : getConfigSection("sections").getKeys(false)) {
+                moveTo("sections." + key + ".texture", "sections." + key + ".texture", ConfigHeadsSelector.get());
+                moveTo("sections." + key + ".display-name", "sections." + key + ".display-name", ConfigHeadsSelector.get());
+                ConfigHeadsSelector.get().addDefault("sections." + key + ".enabled", true);
+                ConfigHeadsSelector.get().addDefault("sections." + key + ".permission", "headsplus.section." + key);
+            }
         }
     }
 

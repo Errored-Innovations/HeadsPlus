@@ -35,20 +35,17 @@ public class PinnedChallengeManager extends SQLManager {
 
     @Override
     public void createTable() {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
-                        "CREATE TABLE IF NOT EXISTS headsplus_pinned_challenges " +
-                                "(user_id INT NOT NULL," +
-                                "challenge VARCHAR(256) NOT NULL," +
-                                "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
-                );
-
-                statement.executeUpdate();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS headsplus_pinned_challenges " +
+                            "(user_id INT NOT NULL," +
+                            "challenge VARCHAR(256) NOT NULL," +
+                            "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
+            );
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
