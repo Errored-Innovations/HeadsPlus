@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class MaskManager {
 
@@ -22,6 +23,7 @@ public class MaskManager {
 
     public MaskManager() {
         instance = this;
+        init();
     }
 
     public static MaskManager get() {
@@ -100,14 +102,15 @@ public class MaskManager {
 
     public static class MaskInfo extends HeadManager.HeadInfo {
 
-        protected Runnable runnable;
+        protected String id;
 
         public MaskInfo() {
             super();
         }
 
-        public MaskInfo(HeadManager.HeadInfo info) {
+        public MaskInfo(HeadManager.HeadInfo info, String id) {
             super();
+            this.id = id;
             withDisplayName(info.getDisplayName());
             setLore(info.getLore());
             withTexture(info.getPlayer() == null ? info.getTexture() : info.getPlayer());
@@ -121,12 +124,10 @@ public class MaskManager {
     public class PotionMask extends MaskInfo {
 
         private List<PotionEffect> effects;
-        private String id;
 
         public PotionMask(String id, HeadManager.HeadInfo info) {
-            super(info);
+            super(info, id);
             this.effects = new ArrayList<>();
-	        this.id = id;
         }
 
         public PotionMask withEffects(List<PotionEffect> effects) {

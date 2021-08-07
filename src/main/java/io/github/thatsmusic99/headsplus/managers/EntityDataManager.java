@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class EntityDataManager {
 
@@ -208,6 +209,7 @@ public class EntityDataManager {
 
         private int xp;
         private String id;
+        private MaskManager.MaskInfo info;
 
         public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
@@ -217,6 +219,9 @@ public class EntityDataManager {
             if (info.getTexture() != null) withTexture(info.getTexture());
             setLore(info.getLore());
             xp = ConfigMobs.get().getInteger("defaults.xp");
+            if (info instanceof MaskManager.MaskInfo) {
+                this.info = (MaskManager.MaskInfo) info;
+            }
         }
 
         public DroppedHeadInfo withXP(String path) {
@@ -231,6 +236,20 @@ public class EntityDataManager {
 
         public String getId() {
             return id;
+        }
+
+        @Override
+        public CompletableFuture<ItemStack> buildHead() {
+            return super.buildHead().thenApply(item -> {
+                if (info == null) return item;
+                PersistenceManager.get().setMaskType(item, info.id);
+                return item;
+            });
+        }
+
+        @Override
+        public void run(Player player) {
+            if (info != null) info.run(player);
         }
     }
 }
