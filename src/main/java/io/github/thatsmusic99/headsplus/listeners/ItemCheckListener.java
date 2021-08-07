@@ -28,7 +28,7 @@ public class ItemCheckListener extends HeadsPlusListener<InventoryClickEvent> {
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
-                this, EventPriority.NORMAL,
+                this, EventPriority.MONITOR,
                 new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.get());
 
     }

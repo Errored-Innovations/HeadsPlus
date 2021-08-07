@@ -144,9 +144,9 @@ public class HPUtils {
 
     public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {
         for (PlaceholderInfo placeholder : placeholders) {
-            if (!message.contains(placeholder.placeholder)) continue;
             if (!placeholder.requirement) continue;
-            lore.add(message.replace(placeholder.placeholder, placeholder.replacement.get()));
+            if (!message.contains(placeholder.placeholder)) continue;
+            lore.add(message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get())));
         }
     }
 
@@ -157,16 +157,16 @@ public class HPUtils {
 
     public static class PlaceholderInfo {
         private final String placeholder;
-        private final Supplier<String> replacement;
+        private final Supplier<Object> replacement;
         private final boolean requirement;
 
         public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
             this.placeholder = placeholder;
-            this.replacement = () -> String.valueOf(replacement);
+            this.replacement = () -> replacement;
             this.requirement = requirement;
         }
 
-        public PlaceholderInfo(String placeholder, Supplier<String> replacement, boolean requirement) {
+        public PlaceholderInfo(String placeholder, Supplier<Object> replacement, boolean requirement) {
             this.placeholder = placeholder;
             this.replacement = replacement;
             this.requirement = requirement;

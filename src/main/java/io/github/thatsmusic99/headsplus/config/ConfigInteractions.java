@@ -133,8 +133,8 @@ public class ConfigInteractions extends HPConfig {
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            runCommands("default", receiver);
-            return getMessage("default", receiver, skull.getOwner());
+            runCommands("defaults", receiver);
+            return getMessage("defaults", receiver, skull.getOwner());
         }, HeadsPlus.async).thenApplyAsync(msg -> msg, HeadsPlus.sync);
     }
 

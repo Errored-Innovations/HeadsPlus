@@ -51,7 +51,7 @@ public class ProfileCommand implements IHeadsPlusCommand {
                         ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     }
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
             }
         });

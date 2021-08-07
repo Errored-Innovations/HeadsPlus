@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public abstract class Reward {
 
-    private int xp;
+    private final int xp;
     private String message;
     private boolean useMultiplier;
 
