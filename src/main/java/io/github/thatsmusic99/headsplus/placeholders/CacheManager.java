@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.placeholders;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
+import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
@@ -67,8 +68,9 @@ public class CacheManager {
             PlayerSQLManager.get().getLevel(player.getUniqueId()).thenApply(level -> cachedLevels.put(uuid.toString(), level));
         }
         if (i == -1) return null;
-        // TODO - checks, checks, checks
-        return LevelsManager.get().getLevel(i).getDisplayName();
+        Level level = LevelsManager.get().getLevel(i);
+        if (level == null) return null;
+        return level.getDisplayName();
     }
 
     public int getTotalChallengesComplete(OfflinePlayer player) {
