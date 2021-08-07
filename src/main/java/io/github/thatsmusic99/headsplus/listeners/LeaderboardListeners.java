@@ -33,7 +33,7 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(EntityHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-           // HPPlayer.getHPPlayer(player).addXp(event.getHeadInfo().getXp() * event.getAmount());
+            HPPlayer.getHPPlayer(player.getUniqueId()).addXp((long) event.getHeadInfo().getXp() * event.getAmount());
             if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
