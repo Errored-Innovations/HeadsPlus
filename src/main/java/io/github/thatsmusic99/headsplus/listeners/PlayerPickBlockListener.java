@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerPickBlockListener extends HeadsPlusListener<InventoryCreativeEvent> implements Listener {
 
-    HashSet<UUID> openInventories = new HashSet<>();
+    final HashSet<UUID> openInventories = new HashSet<>();
 
     public void onEvent(InventoryCreativeEvent event) {
         if (event.getAction() == InventoryAction.PLACE_ALL // this is weird, but ok

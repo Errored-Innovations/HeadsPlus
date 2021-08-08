@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,6 +121,7 @@ final class MessagePart implements JsonRepresentedObject, ConfigurationSerializa
 		}
 	}
 
+	@NotNull
 	public Map<String, Object> serialize() {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("text", text);

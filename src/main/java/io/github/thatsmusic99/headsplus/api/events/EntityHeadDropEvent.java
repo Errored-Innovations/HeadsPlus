@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.api.events;
 
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -82,20 +81,5 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
 
     public int getAmount() {
         return amount;
-    }
-
-    @Override
-    public String getEventName() {
-        return super.getEventName();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

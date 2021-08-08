@@ -16,19 +16,18 @@ public class ItemCheckListener extends HeadsPlusListener<InventoryClickEvent> {
     @Override
     public void onEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        for (int i = 0; i < 46; i++) {
-            ItemStack item = player.getInventory().getItem(i);
-            if (item == null) continue;
-            if (PersistenceManager.get().isIcon(item)) {
-                player.getInventory().setItem(i, new ItemStack(Material.AIR));
+        Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> {
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            if (PersistenceManager.get().isIcon(offhand)) {
+                player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
             }
-        }
+        });
     }
 
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryClickEvent.class,
-                this, EventPriority.NORMAL,
+                this, EventPriority.HIGHEST,
                 new HeadsPlusEventExecutor(InventoryClickEvent.class, "InventoryClickEvent", this), HeadsPlus.get());
 
     }

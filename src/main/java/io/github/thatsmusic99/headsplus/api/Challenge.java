@@ -1,12 +1,10 @@
 package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.challenges.CraftingChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MiscChallenge;
 import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
-import io.github.thatsmusic99.headsplus.api.challenges.SellheadChallenge;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.RewardsManager;
 import org.bukkit.Bukkit;
@@ -15,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class Challenge {
 
@@ -59,8 +59,6 @@ public abstract class Challenge {
                 return new MobKillChallenge(id, section, icon, completeIcon);
             case "CRAFTING":
                 return new CraftingChallenge(id, section, icon, completeIcon);
-            case "SELLHEAD":
-                return new SellheadChallenge(id, section, icon, completeIcon);
             case "MISC":
                 return new MiscChallenge(id, section, icon, completeIcon);
             default:
@@ -112,19 +110,21 @@ public abstract class Challenge {
         return getReward().getXp();
     }
 
-    public boolean canComplete(Player p) {
-        return HeadsPlusAPI.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), getDatabaseType()) >= getRequiredHeadAmount();
-    }
+    public abstract CompletableFuture<Boolean> canComplete(Player p);
 
-    public abstract String getDatabaseType();
+    public abstract String getCacheID();
+
+    public abstract CompletableFuture<Integer> getStatFuture(UUID uuid);
+
+    public abstract int getStatSync(UUID uuid);
 
     public boolean isComplete(Player p) {
-        return HeadsPlus.get().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
+        return HPPlayer.getHPPlayer(p.getUniqueId()).getCompleteChallenges().contains(getConfigName());
     }
 
     public void complete(Player p) {
-        HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-        HPPlayer player = HPPlayer.getHPPlayer(p);
+        MessagesManager hpc = MessagesManager.get();
+        HPPlayer player = HPPlayer.getHPPlayer(p.getUniqueId());
         player.addCompleteChallenge(this);
 
         player.addXp(getGainedXP());
@@ -134,7 +134,7 @@ public abstract class Challenge {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
-        String message = HeadsPlusMessagesManager.get().getString("commands.challenges.reward-string", p);
+        String message = MessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
             hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);

@@ -2,7 +2,7 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
@@ -24,10 +24,10 @@ import java.util.List;
 )
 public class Conjure implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         // Check argument number
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
@@ -55,19 +55,14 @@ public class Conjure implements IHeadsPlusCommand {
                 return false;
             }
         }
-        try {
-            HeadManager.HeadInfo info = HeadManager.get().getHeadInfo(args[1]);
-            int finalAmount = amount;
-            Player finalPlayer = p;
-            info.buildHead().thenAccept(item -> {
-                item.setAmount(finalAmount);
-                finalPlayer.getInventory().addItem(item);
-            });
-            return true;
-        } catch (NullPointerException ex) { // TODO - still needed?
-            hpc.sendMessage("commands.errors.invalid-args", sender);
-        }
-        return false;
+        HeadManager.HeadInfo info = HeadManager.get().getHeadInfo(args[1]);
+        int finalAmount = amount;
+        Player finalPlayer = p;
+        info.buildHead().thenAccept(item -> {
+            item.setAmount(finalAmount);
+            finalPlayer.getInventory().addItem(item);
+        });
+        return true;
     }
 
     @Override

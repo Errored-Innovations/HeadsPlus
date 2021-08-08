@@ -3,23 +3,16 @@ package io.github.thatsmusic99.headsplus.util;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 public class HPUtils {
@@ -36,7 +30,7 @@ public class HPUtils {
     private static final HashMap<UUID, BossBar> bossBars = new HashMap<>();
 
     public static void addBossBar(OfflinePlayer pl) {
-        HPPlayer p = HPPlayer.getHPPlayer(pl);
+        HPPlayer p = HPPlayer.getHPPlayer(pl.getUniqueId());
         if (!MainConfig.get().getLevels().ENABLE_BOSS_BARS) return;
         if (p.getNextLevel() == null) return;
         try {
@@ -111,36 +105,6 @@ public class HPUtils {
         return chance;
     }
 
-    public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
-        Random random = new Random();
-        HashMap<String, List<EntityDataManager.DroppedHeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
-        List<EntityDataManager.DroppedHeadInfo> heads = storedHeads.get(id + ";" + meta);
-        if (heads == null) {
-            String[] possibleConditions = meta.split(",");
-            for (String str : possibleConditions) {
-                if ((heads = storedHeads.get(id + ";" + str)) != null) break;
-            }
-            if (heads == null) {
-                heads = storedHeads.get(id + ";default");
-            }
-        }
-        if (heads == null) {
-            throw new NullPointerException("Found no heads list for " + id + "!");
-        }
-        if (heads.isEmpty()) return;
-        EntityDataManager.DroppedHeadInfo info = heads.get(random.nextInt(heads.size()));
-
-        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            info.buildHead().thenAccept(head -> {
-                head.setAmount(amount);
-                PersistenceManager.get().setSellable(head, true);
-                PersistenceManager.get().setSellType(head, "mobs_" + id);
-                location.getWorld().dropItem(location, head);
-            });
-        }
-    }
 
     public static int getAmount(double fixedChance) {
         if (fixedChance <= 100) return 1;
@@ -175,57 +139,10 @@ public class HPUtils {
 
     public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {
         for (PlaceholderInfo placeholder : placeholders) {
-            if (!message.contains(placeholder.placeholder)) continue;
             if (!placeholder.requirement) continue;
-            lore.add(message.replace(placeholder.placeholder, placeholder.replacement));
+            if (!message.contains(placeholder.placeholder)) continue;
+            lore.add(message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get())));
         }
-    }
-
-    @Deprecated
-    public static boolean runBlacklistTests(LivingEntity e) {
-       /* MainConfig c = HeadsPlus.get().getConfiguration();
-        // Killer checks
-        if (e.getKiller() == null) {
-            if (c.getPerks().drops_needs_killer) {
-                return false;
-            } else if (c.getPerks().drops_entities_requiring_killer.contains(e.getName().replaceAll("_", "").toLowerCase())) {
-                return false;
-            } else if (e instanceof Player) {
-                if (c.getPerks().drops_entities_requiring_killer.contains("player")) {
-                    return false;
-                }
-            }
-        } else if (!e.getKiller().hasPermission("headsplus.drops")) {
-            return false;
-        }
-        // Whitelist checks
-        if (c.getWorldWhitelist().enabled) {
-            if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        // Blacklist checks
-        if (c.getWorldBlacklist().enabled) {
-            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (e instanceof Player) {
-            return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
-                    || c.getPerks().drops_ignore_players.contains(e.getName()));
-        } else {
-            return true;
-        } */
-        return true;
-
     }
 
     public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
@@ -233,19 +150,20 @@ public class HPUtils {
                 .thenApplyAsync(player -> player, HeadsPlus.sync);
     }
 
-    public enum SkillType {
-        HUNTING,
-        CRAFTING
-    }
-
     public static class PlaceholderInfo {
-        private String placeholder;
-        private String replacement;
-        private boolean requirement;
+        private final String placeholder;
+        private final Supplier<Object> replacement;
+        private final boolean requirement;
 
         public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
             this.placeholder = placeholder;
-            this.replacement = String.valueOf(replacement);
+            this.replacement = () -> replacement;
+            this.requirement = requirement;
+        }
+
+        public PlaceholderInfo(String placeholder, Supplier<Object> replacement, boolean requirement) {
+            this.placeholder = placeholder;
+            this.replacement = replacement;
             this.requirement = requirement;
         }
     }

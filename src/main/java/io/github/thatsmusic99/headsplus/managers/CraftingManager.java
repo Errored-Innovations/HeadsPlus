@@ -15,9 +15,10 @@ import java.util.*;
 
 public class CraftingManager {
 
-    private HashMap<NamespacedKey, Recipe> recipes;
+    private final HashMap<NamespacedKey, Recipe> recipes;
     private static CraftingManager instance;
     private static final HashSet<Integer> VALID_RECIPE_SIZES = Sets.newHashSet(1, 4, 9);
+    private final HashSet<String> registeredKeys = new HashSet<>();
 
     public CraftingManager() {
         instance = this;
@@ -29,6 +30,10 @@ public class CraftingManager {
         clear();
         // innit
         init();
+    }
+
+    public boolean isRegistered(String recipeKey) {
+        return registeredKeys.contains(recipeKey);
     }
 
     public void init() {
@@ -54,6 +59,7 @@ public class CraftingManager {
             Bukkit.removeRecipe(key);
         }
         recipes.clear();
+        registeredKeys.clear();
     }
 
     public void addRecipe(String key, ConfigSection section) {
@@ -69,7 +75,7 @@ public class CraftingManager {
             if (ingredientStr.startsWith("HP#")) {
                 if (!recipeType.allowsHeads())
                     throw new IllegalArgumentException("Recipe type " + recipeType.name() + " (" + key + ") does not support head ingredients!");
-                choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).buildHead().join()));
+                choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).forceBuildHead()));
             } else {
                 Material material = HPUtils.notNull(Material.getMaterial(ingredientStr),
                         "Material " + ingredientStr + " was not found!");
@@ -80,16 +86,15 @@ public class CraftingManager {
         ConfigSection resultSection = section.getConfigSection("result");
         HPUtils.notNull(resultSection, "Recipe " + key + " does not have a result section!");
         // Get the head itself
-        HeadManager.HeadInfo resultHead = HeadManager.get().getHeadInfo(resultSection.getString("head"));
+        HeadManager.HeadInfo resultHead = HeadManager.get().getHeadInfo(resultSection.getString("head", ""));
         // Build the resulting item/wait for it
-        ItemStack item = resultHead.buildHead().join();
+        ItemStack item = resultHead.forceBuildHead();
         //
         Recipe recipe;
         NamespacedKey namespacedKey = new NamespacedKey(HeadsPlus.get(), "crafting_" + key);
         switch (recipeType) {
             case FURNACE:
-                // TODO - make EXP and cooking time configurable
-                recipe = new FurnaceRecipe(namespacedKey, item, choices.get(0), 0.1f, 200);
+                recipe = new FurnaceRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
                 break;
             case SHAPED:
                 if (!VALID_RECIPE_SIZES.contains(choices.size()))
@@ -130,32 +135,34 @@ public class CraftingManager {
                 }
                 break;
             case SMOKING:
-                recipe = new SmokingRecipe(namespacedKey, item, choices.get(0), 0.1f, 200);
+                recipe = new SmokingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
                 break;
             case BLASTING:
-                recipe = new BlastingRecipe(namespacedKey, item, choices.get(0), 0.1f, 200);
+                recipe = new BlastingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
                 break;
             case CAMPFIRE:
-                recipe = new CampfireRecipe(namespacedKey, item, choices.get(0), 0.1f, 200);
+                recipe = new CampfireRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
                 break;
             case MERCHANT:
                 // why does this not require a namespaced key lmao
-                // TODO - configure max uses, EXP reward, villager experience, price multiplier and whether to ignore discounts
-                recipe = new MerchantRecipe(item, 5);
+                recipe = new MerchantRecipe(item, 0, section.getInteger("max-uses", 5),
+                        section.contains("experience"), section.getInteger("experience", 0), section.getFloat("price-multiplier"),
+                        section.getBoolean("ignore-discounts"));
                 break;
             case SMITHING:
                 if (choices.size() != 2) throw new IllegalArgumentException("A smithing recipe (" + key + ") needs 2 ingredients!");
                 recipe = new SmithingRecipe(namespacedKey, item, choices.get(0), choices.get(1));
                 break;
             case STONECUTTING:
-                // TODO - configure groups
                 recipe = new StonecuttingRecipe(namespacedKey, item, choices.get(0));
+                if (section.contains("group")) ((StonecuttingRecipe) recipe).setGroup(section.getString("group", ""));
                 break;
             default:
                 // I GOT ALL NINE RECIPE TYPES WHAT THE HELL ARE YOU ON ABOUT??
                 throw new IllegalStateException("Unexpected value (" + key + "): " + recipeType);
         }
         recipes.put(namespacedKey, recipe);
+        registeredKeys.add(key);
         Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> Bukkit.addRecipe(recipe));
     }
 

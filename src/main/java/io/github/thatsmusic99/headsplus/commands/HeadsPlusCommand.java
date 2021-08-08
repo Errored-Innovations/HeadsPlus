@@ -2,8 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.commands.maincommand.HelpMenu;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,18 +17,17 @@ import java.util.List;
 
 public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         try {
             if (args.length == 0) {
-                // TODO - don't create multiple instances
-                new HelpMenu().fire(args, sender);
+                HeadsPlus.get().getCommands().get("help").onCommand(sender, cmd, label, args);
                 return true;
             }
             IHeadsPlusCommand command = HeadsPlus.get().getCommands().get(args[0].toLowerCase());
             if (command == null) {
-                new HelpMenu().fire(args, sender);
+                HeadsPlus.get().getCommands().get("help").onCommand(sender, cmd, label, args);
                 return true;
             }
             CommandInfo c = command.getClass().getAnnotation(CommandInfo.class);
@@ -39,11 +37,11 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
             }
 
             if (!c.maincommand()) {
-                new HelpMenu().fire(args, sender);
+                HeadsPlus.get().getCommands().get("help").onCommand(sender, cmd, label, args);
                 return true;
             }
             try {
-                if (command.fire(args, sender)) {
+                if (command.onCommand(sender, cmd, label, args)) {
                     return true;
                 }
                 // TODO - should be a translatable
@@ -67,7 +65,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 	}
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String s, String[] args) {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();

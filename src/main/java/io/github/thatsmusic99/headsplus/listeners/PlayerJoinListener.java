@@ -1,10 +1,10 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import mkremins.fanciful.FancyMessage;
@@ -15,23 +15,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
 	public void onEvent(PlayerJoinEvent e) {
 	    HeadsPlus hp = HeadsPlus.get();
 	    Player player = e.getPlayer();
 	    addData("player", player.getName());
-	    // TODO - you know what it is!
-		if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) {
-		    if (addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) {
-                if (addData("has-update", HeadsPlus.getUpdate() != null)) {
-                    new FancyMessage().text(hpc.getString("update.update-found", player))
-                    .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
-							+ "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
-							+ "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
-                }
-            }
-        }
+
 		Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
 		    if (!player.isOnline())
 		        return;
@@ -42,16 +32,23 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
                 String uuid = AutograbManager.grabUUID(player.getName(), 3, null);
-                //TODO sync post request?
-                // This actually runs async, the grabTexture doesn't though (see the actual methods)
                 AutograbManager.grabProfile(uuid);
             } else {
-                // here too?
                 AutograbManager.grabTexture(player, false, null);
             }
         }
 
-        HPPlayer.getHPPlayer(player);
+        PlayerSQLManager.get().checkPlayer(player.getUniqueId(), player.getName())
+                .thenAccept(ok -> PlayerSQLManager.get().loadPlayer(player.getUniqueId()));
+
+        if (!addData("has-update-permission", player.hasPermission("headsplus.notify"))) return;
+        if (!addData("update-enabled", MainConfig.get().getUpdates().CHECK_FOR_UPDATES)) return;
+        if (addData("has-update", HeadsPlus.getUpdate() == null)) return;
+        if (!addData("notify-admins", MainConfig.get().getUpdates().NOTIFY_ADMINS)) return;
+        new FancyMessage().text(hpc.getString("update.update-found", player))
+                .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
+                        + "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
+                        + "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
 
 	}
 

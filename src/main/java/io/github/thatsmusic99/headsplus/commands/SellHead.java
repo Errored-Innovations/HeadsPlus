@@ -3,10 +3,9 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -37,18 +36,10 @@ import java.util.UUID;
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-	private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
-	private static final List<String> headIds = new ArrayList<>();
+	private final MessagesManager hpc = MessagesManager.get();
 	private final int[] slots;
-    private static boolean useCases;
 
 	public SellHead() {
-	    headIds.clear();
-	    useCases = MainConfig.get().getSellingHeads().CASE_INSENSITIVE;
-	    for (String entity : EntityDataManager.ableEntities) {
-	        registerHeadID(entity);
-        }
-	    registerHeadID("PLAYER");
 	    slots = new int[45];
 	    slots[44] = 45; // off-hand slot
 	    for (int i = 0; i < 44; i++) {
@@ -57,7 +48,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 		try {
 		    if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
                 hpc.sendMessage("commands.errors.disabled", sender);
@@ -125,7 +116,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
             double headPrice;
             String id = PersistenceManager.get().getSellType(item);
             if (fixedId != null) {
-                if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
+                if (!fixedId.equals(id) ||
+                        (!MainConfig.get().getSellingHeads().CASE_INSENSITIVE && fixedId.equalsIgnoreCase(id))) continue;
             }
 
             if (PersistenceManager.get().hasSellPrice(item)) {
@@ -216,34 +208,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
 	            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
 	        }
         }
-    }
-
-    @Deprecated
-    public static void registerHeadID(String name) {
-	    if (!useCases) {
-	        name = name.toLowerCase();
-        }
-	    if (!headIds.contains(name)) {
-            headIds.add(name);
-        }
-    }
-
-    @Deprecated
-    public static List<String> getRegisteredIDs() {
-	    return headIds;
-    }
-
-    @Deprecated
-    public static boolean isRegistered(String name) {
-	    if (!useCases) {
-	        name = name.toLowerCase();
-        }
-	    return headIds.contains(name);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
     }
 
     @Override

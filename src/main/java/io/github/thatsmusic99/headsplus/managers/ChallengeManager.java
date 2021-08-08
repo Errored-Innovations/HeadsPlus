@@ -78,7 +78,7 @@ public class ChallengeManager {
             ItemStack item;
             String material = Objects.requireNonNull(section.getString("material"), "Material for icon " + key + " is null!");
             if (material.startsWith("HP#")) {
-                item = HeadManager.get().getHeadInfo(material).buildHead().join();
+                item = HeadManager.get().getHeadInfo(material).forceBuildHead();
             } else {
                 Material actualMaterial = Objects.requireNonNull(Material.getMaterial(material.toUpperCase()), "Material " + material.toUpperCase() + " does not exist!");
                 item = new ItemStack(actualMaterial);
@@ -91,7 +91,14 @@ public class ChallengeManager {
                     item.setItemMeta(meta);
                 }
             }
-            // TODO lore
+            List<String> lore = section.getStringList("lore");
+            if (!lore.isEmpty()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta != null) {
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
+            }
             icons.put(key, item);
             HeadsPlus.debug("Registered icon " + key + ".");
         } catch (NullPointerException ex) {

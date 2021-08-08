@@ -26,7 +26,6 @@ public class ConfigInteractions extends HPConfig {
     }
 
     /*
-    TODO Set up new interactions configuration.
     Sections include:
     Default message
     Per-player message
@@ -119,6 +118,7 @@ public class ConfigInteractions extends HPConfig {
                 // We'll get all three forms of this: the b64 texture, the URL and the hash.
                 // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
                 // EXCITING STUFF
+                // update: fuck you microsoft
                 Property texturesProp = profile.getProperties().get("textures").iterator().next();
                 String b64Texture = texturesProp.getValue();
                 String url = new String(Base64.getDecoder().decode(b64Texture.getBytes()));
@@ -133,8 +133,8 @@ public class ConfigInteractions extends HPConfig {
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            runCommands("default", receiver);
-            return getMessage("default", receiver, skull.getOwner());
+            runCommands("defaults", receiver);
+            return getMessage("defaults", receiver, skull.getOwner());
         }, HeadsPlus.async).thenApplyAsync(msg -> msg, HeadsPlus.sync);
     }
 
@@ -158,7 +158,7 @@ public class ConfigInteractions extends HPConfig {
             message = message.replaceAll("\\{name}", name);
         }
 
-        return HeadsPlusMessagesManager.get().formatMsg(message, player);
+        return MessagesManager.get().formatMsg(message, player);
     }
 
     private void runCommands(String path, Player player) {

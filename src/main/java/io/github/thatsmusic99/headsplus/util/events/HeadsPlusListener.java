@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.util.events;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;
@@ -10,7 +9,6 @@ public abstract class HeadsPlusListener<T> implements Listener {
 
     private final HashMap<String, String> data = new HashMap<>();
     private final HashMap<String, String[]> possibleValues = new HashMap<>();
-    protected HeadsPlus hp = HeadsPlus.get();
 
     public abstract void onEvent(T event);
 

@@ -2,173 +2,54 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.ConfigLevels;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
-import io.github.thatsmusic99.headsplus.storage.PlayerScores;
+import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
+import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
+import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class HPPlayer {
 
-    private UUID player;
-    private int xp;
-    private String level = null;
-    private List<String> completeChallenges;
-    private String nextLevel = null;
-    private String currentMask;
-    private List<PotionEffect> activeMask;
-    public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private List<String> favouriteHeads;
-    private List<String> pinnedChallenges;
-    private boolean ignoreFallDamage;
-    private String cachedLocale;
-    private boolean localeForced;
+    private final UUID uuid;
+    private long xp;
+    private int level;
+    private int nextLevel = -1;
+    public static final HashMap<UUID, HPPlayer> players = new HashMap<>();
+    private final List<String> favouriteHeads;
+    private final List<String> pinnedChallenges;
+    private final List<String> completeChallenges;
 
-    public HPPlayer(OfflinePlayer p) {
-        if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
-        HeadsPlus hp = HeadsPlus.get();
-        activeMask = new ArrayList<>();
-        favouriteHeads = new ArrayList<>();
-        pinnedChallenges = new ArrayList<>();
-        ignoreFallDamage = false;
-        this.player = p.getUniqueId();
-        try {
-            for (Object o : (JSONArray) hp.getFavourites().getJSON().get(p.getUniqueId().toString())) {
-                favouriteHeads.add(String.valueOf(o));
-            }
-            for (Object o : (JSONArray) hp.getPinned().getJSON().get(player.toString())) {
-                pinnedChallenges.add(String.valueOf(o));
-            }
-        } catch (NullPointerException ignored) {
+    // TODO - make sure this is never called on the main server thread.
+    public HPPlayer(UUID uuid) {
+        pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid);
+        favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid);
+        completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid);
+        level = PlayerSQLManager.get().getLevelSync(uuid);
+        int max = LevelsManager.get().getLevels().size();
+        if (level > -1 && level + 1 < max) {
+            this.nextLevel = level + 1;
         }
-        PlayerScores scores = hp.getScores();
-        this.xp = scores.getXp(p.getUniqueId().toString());
-        List<String> sc = new ArrayList<>();
-        sc.addAll(scores.getCompletedChallenges(p.getUniqueId().toString()));
-        if (MainConfig.get().getLocalisation().SMART_LOCALE && p.isOnline()) {
-            Player player = p.getPlayer();
-            String loc = scores.getLocale(p.getUniqueId().toString());
-            if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
-                cachedLocale = loc.split(":")[0];
-                localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                HeadsPlusMessagesManager.get().setPlayerLocale(player, cachedLocale,  false);
-            } else {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        HeadsPlusMessagesManager.get().setPlayerLocale(player);
-                        cachedLocale = HeadsPlusMessagesManager.get().getSetLocale(player);
-                        localeForced = false;
-                        scores.setLocale(player.toString(), cachedLocale, false);
-                    }
-                }.runTaskLaterAsynchronously(hp, 100);
-            }
-        } else {
-            cachedLocale = "";
-            localeForced = false;
-        }
-        if (MainConfig.get().getMainFeatures().LEVELS) {
-	    level = scores.getLevel(player.toString());
-	    nextLevel = LevelsManager.get().getNextLevel(level).getConfigName();                
-        }
-        this.completeChallenges = sc;
-        players.put(p.getUniqueId(), this);
+        PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
+                result.ifPresent(str ->
+                        MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
+        xp = PlayerSQLManager.get().getXPSync(uuid);
+        this.uuid = uuid;
+        players.put(uuid, this);
     }
 
-    public void clearMask() {
-        try {
-            ignoreFallDamage = false;
-            currentMask = "";
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-            activeMask.clear();
-        } catch (NullPointerException ignored) { // When the mask messes up
-
-        }
-    }
-
-    public void tempClearMasks() {
-        try {
-            ignoreFallDamage = false;
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-        } catch (NullPointerException ignored) {
-        }
-    }
-
-    public void addMask(String s) {
-        if (s.equalsIgnoreCase("WANDERING_TRADER") || s.equalsIgnoreCase("TRADER_LLAMA")) {
-            s = s.toLowerCase();
-        } else {
-            s = s.toLowerCase().replaceAll("_", "");
-        }
-        ConfigMobs hpch = ConfigMobs.get();
-        List<PotionEffect> po = new ArrayList<>();
-        // TODO mask rework
-        for (int i = 0; i < hpch.getStringList(s + ".mask-effects").size(); i++) {
-            String is = hpch.getStringList(s + ".mask-effects").get(i).toUpperCase();
-            if (is.equalsIgnoreCase("ignore-fall-damage")) {
-                ignoreFallDamage = true;
-                continue;
-            }
-            int amp;
-            if (ignoreFallDamage) {
-                amp = (int) hpch.getList(s + ".mask-amplifiers").get(i - 1);
-            } else {
-                amp = (int) hpch.getList(s + ".mask-amplifiers").get(i);
-            }
-
-            try {
-                PotionEffectType type = PotionEffectType.getByName(is);
-                if (type == null) {
-                    HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
-                    continue;
-                }
-                PotionEffect p = new PotionEffect(type, MainConfig.get().getMasks().EFFECT_LENGTH, amp);
-                ((Player) getPlayer()).addPotionEffect(p);
-                po.add(p);
-            } catch (IllegalArgumentException ex) {
-                HeadsPlus.get().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
-            }
-        }
-        activeMask = po;
-        currentMask = s;
-    }
-
-    public void refreshMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(effect.getType(), MainConfig.get().getMasks().EFFECT_LENGTH, effect.getAmplifier()));
-        }
-    }
-
-    public void clearAllMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-        }
-    }
-
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 
@@ -185,75 +66,47 @@ public class HPPlayer {
     }
 
     public OfflinePlayer getPlayer() {
-        return Bukkit.getOfflinePlayer(player);
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     public UUID getUuid() {
-        return player;
+        return uuid;
     }
 
-    public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        UUID uuid = p.getUniqueId();
-        return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
+    public static HPPlayer getHPPlayer(UUID uuid) {
+        return players.get(uuid);
     }
 
-    public List<PotionEffect> getActiveMasks() {
-        return activeMask;
-    }
-
-    public String getActiveMaskType() {
-        return currentMask;
-    }
-
-    public String getLocale() {
-        return cachedLocale;
-    }
-
-    public boolean isLocaleForced() {
-        return localeForced;
-    }
-
-    public void setLocale(String locale) {
-        setLocale(locale, true);
-    }
-
-    public void setLocale(String locale, boolean forced) {
-        cachedLocale = locale;
-        localeForced = forced;
-        HeadsPlus.get().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
-    }
-
-    public void addCompleteChallenge(Challenge c) {
-        PlayerScores scores = HeadsPlus.get().getScores();
-        scores.completeChallenge(player.toString(), c);
+    public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
         completeChallenges.add(c.getConfigName());
+        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName());
     }
 
-    public void addXp(int xp) {
+    public void addXp(long xp) {
         setXp(this.xp + xp);
     }
 
-    public void removeXp(int xp) {
+    public void removeXp(long xp) {
         setXp(this.xp - xp);
     }
 
-    public void setXp(int xp) {
+    public void setXp(long xp) {
         HeadsPlus hp = HeadsPlus.get();
-        PlayerScores scores = HeadsPlus.get().getScores();
-        scores.setXp(player.toString(), xp);
+        PlayerSQLManager.get().setXP(uuid, xp);
         this.xp = xp;
         if (MainConfig.get().getMainFeatures().LEVELS) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-	            Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    int jumps = 0;
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
                         jumps++;
                         nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
                         if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(jumps);
                         if (nextLevelLocal.isrEnabled()) nextLevelLocal.getReward().rewardPlayer(null, (Player) getPlayer());
-
                     }
+                    if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
                 }
             }.runTask(hp);
         }
@@ -274,47 +127,47 @@ public class HPPlayer {
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
         }
+        PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
 
     public boolean hasHeadFavourited(String s) {
         return favouriteHeads.contains(s);
     }
 
-    public void addFavourite(String s) {
+    public CompletableFuture<Void> addFavourite(String s) {
         favouriteHeads.add(s);
-        HeadsPlus.get().getFavourites().writeData(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().addHead(uuid, s);
     }
 
-    public void removeFavourite(String s) {
+    public CompletableFuture<Void> removeFavourite(String s) {
         favouriteHeads.remove(s);
-        HeadsPlus.get().getFavourites().removeHead(getPlayer(), s);
-    }
-
-    public boolean hasChallengePinned(Challenge challenge) {
-        return pinnedChallenges.contains(challenge.getConfigName());
-    }
-
-    public void addChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.add(s);
-        HeadsPlus.get().getPinned().writeData(getPlayer(), s);
-    }
-
-    public void removeChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.remove(s);
-        HeadsPlus.get().getPinned().removeChallenge(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().removeHead(uuid, s);
     }
 
     public List<String> getPinnedChallenges() {
         return pinnedChallenges;
     }
 
-    public boolean isIgnoringFallDamage() {
-        return ignoreFallDamage;
+    public boolean hasChallengePinned(Challenge challenge) {
+        return pinnedChallenges.contains(challenge.getConfigName());
+    }
+
+    public CompletableFuture<Void> addChallengePin(Challenge challenge) {
+        pinnedChallenges.add(challenge.getConfigName());
+        return PinnedChallengeManager.get().addChallenge(uuid, challenge.getConfigName());
+    }
+
+    public CompletableFuture<Void> removeChallengePin(Challenge challenge) {
+        pinnedChallenges.remove(challenge.getConfigName());
+        return PinnedChallengeManager.get().removeChallenge(uuid, challenge.getConfigName());
     }
 
     public List<String> getFavouriteHeads() {
         return favouriteHeads;
+    }
+
+    public static void reload() {
+        players.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> new HPPlayer(player.getUniqueId()));
     }
 }

@@ -1,12 +1,14 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
+import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.managers.DataManager;
-import io.github.thatsmusic99.headsplus.util.PagedHashmaps;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
+import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -16,14 +18,15 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ConfigTextMenus extends HPConfig {
 
-    private static final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
     private static ConfigTextMenus instance;
 
     public ConfigTextMenus() {
@@ -75,7 +78,6 @@ public class ConfigTextMenus extends HPConfig {
                 "&cXP &8» &7{xp}",
                 "&c{msg_textmenus.profile.completed-challenges} &8» &7{completed-challenges}",
                 "&c{msg_textmenus.profile.total-heads-dropped} &8» &7{hunter-counter}",
-                "&c{msg_textmenus.profile.total-heads-sold} &8» &7{sellhead-counter}",
                 "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
                 "&c{msg_textmenus.profile.current-level} &8» &7{level}",
                 "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
@@ -106,8 +108,7 @@ public class ConfigTextMenus extends HPConfig {
     }
 
     private static String translateColors(String s, CommandSender sender) {
-        HeadsPlus hp = HeadsPlus.get();
-        return ChatColor.translateAlternateColorCodes('&', hpc.formatMsg(translateHeader(s), sender));
+        return ChatColor.translateAlternateColorCodes('&', MessagesManager.get().formatMsg(translateHeader(s), sender));
     }
 
 
@@ -116,172 +117,35 @@ public class ConfigTextMenus extends HPConfig {
                 .replaceAll("\\{default-paged}", instance.getString("default-header-paged"));
     }
 
-    public static class BlacklistTranslator {
-
-        public static String translate(CommandSender sender, String type, String type2, List<String> l, int page) {
-
-            StringBuilder sb = new StringBuilder();
-            PagedLists<String> list = new PagedLists<>(l, instance.getInteger(type + "." + type2 + ".lines-per-page"));
-            if ((page > list.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
-            }
-            sb.append(translateColors(instance.getString(type + "." + type2 + ".header")
-                    .replaceAll("\\{page}", String.valueOf(page))
-            .replaceAll("\\{pages}", String.valueOf(list.getTotalPages())), sender)).append("\n");
-            for (String str : list.getContentsInPage(page)) {
-                sb.append(translateColors(str.replaceAll("\\{name}", str), sender)).append("\n");
-            }
-            return sb.toString();
-        }
-    }
-
     public static class ProfileTranslator {
-        public static String translate(HPPlayer p, CommandSender sender) throws SQLException {
-            StringBuilder sb = new StringBuilder();
-            for (String str : instance.getStringList("profile.layout")) {
-                try {
-                    String stri = translateColors(str.replace("{player}", p.getPlayer().getName())
-                            .replaceAll("\\{xp}", String.valueOf(p.getXp()))
-                            .replaceAll("\\{completed-challenges}", String.valueOf(p.getCompleteChallenges().size()))
-                            .replaceAll("\\{hunter-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluslb")))
-                            .replaceAll("\\{sellhead-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headsplussh")))
-                            .replaceAll("\\{crafting-counter}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(p.getPlayer(), "total", "headspluscraft")))
-                            .replace("{header}", instance.getString("profile.header")), sender);
-                    if (stri.contains("{level}") || (stri.contains("{next-level}"))) {
-                        stri = stri.replaceAll("\\{level}", ChatColor.translateAlternateColorCodes('&', p.getLevel().getDisplayName()))
-                                .replaceAll("\\{next-level}", String.valueOf((p.getNextLevel() != null ? (p.getNextLevel().getRequiredXP() - p.getXp()) : 0)));
-                    }
-                    sb.append(stri).append("\n");
 
-                } catch (NullPointerException ignored) {
-
+        public static CompletableFuture<String> translate(OfflinePlayer player, CommandSender sender) {
+            return CompletableFuture.supplyAsync(() -> {
+                List<String> profile = new ArrayList<>();
+                int levelPos = PlayerSQLManager.get().getLevelSync(player.getName());
+                Level level = null;
+                if (levelPos > -1 && levelPos < LevelsManager.get().getLevels().size())
+                    level = LevelsManager.get().getLevel(levelPos);
+                Level nextLevel = null;
+                if (level != null) nextLevel = LevelsManager.get().getNextLevel(level.getConfigName());
+                long xp = PlayerSQLManager.get().getXPSync(player.getName());
+                Level finalLevel = level;
+                for (String str : instance.getStringList("profile.layout")) {
+                    HPUtils.parseLorePlaceholders(profile, translateColors(str, sender),
+                            new HPUtils.PlaceholderInfo("{xp}", xp, true),
+                            new HPUtils.PlaceholderInfo("{completed-challenges}", () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()), true),
+                            new HPUtils.PlaceholderInfo("{hunter-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING), true),
+                            new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
+                            new HPUtils.PlaceholderInfo("{crafting-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING), true),
+                            new HPUtils.PlaceholderInfo("{header}", instance.getString("profile.header"), true),
+                            new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(), sender), level != null),
+                            new HPUtils.PlaceholderInfo("{next-level}", nextLevel != null ? (nextLevel.getRequiredXP() - xp) : 0, true));
                 }
-            }
-            return sb.toString();
-        }
-    }
-
-    public static class HeadInfoTranslator {
-
-        private static class Head {
-            String type;
-            String colour;
-
-            Head(String t, String c) {
-                type = t;
-                colour = c;
-            }
-        }
-
-        private static class Mask {
-            String type;
-            int amplifier;
-            String effect;
-
-            Mask(String t, int a, String e) {
-                type = t;
-                amplifier = a;
-                effect = e;
-            }
-        }
-
-        public static String translateNormal(String type, CommandSender sender) {
-            StringBuilder sb = new StringBuilder();
-            for (String str : instance.getStringList("head-info.normal-layout")) {
-                sb.append(translateColors(str.replaceAll("\\{header}", instance.getString("head-info.header"))
-                .replace("{type}", type)
-                .replace("{display-name}", ConfigMobs.get().getDisplayName(type))
-                .replaceAll("\\{price}", String.valueOf(ConfigMobs.get().getPrice(type)))
-                .replaceAll("\\{chance}", String.valueOf(ConfigMobs.get().getChance(type))), sender)).append("\n");
-            }
-            return sb.toString();
-        }
-
-        public static String translateNameInfo(String type, CommandSender sender, int page) {
-            if (ConfigMobs.get().get(type + ".name") instanceof ConfigurationSection) {
-                return translateColored(sender, type, page);
-            }
-            StringBuilder sb = new StringBuilder();
-            PagedLists<String> heads = new PagedLists<>(ConfigMobs.get().getStringList(type + ".name"),
-                    instance.getInteger("head-info.name-info.default.lines-per-page"));
-            if ((page > heads.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
-            }
-            sb.append(translateColors(instance.getString("head-info.name-info.default.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getString("head-info.name-info.default.first-line"), sender)
-                    .replace("{type}", type));
-            for (String name : heads.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getString("head-info.name-info.default.for-each-line"), sender)
-                        .replace("{name}", name));
-            }
-            return sb.toString();
-        }
-
-        public static String translateColored(CommandSender sender, String type, int page) {
-            StringBuilder sb = new StringBuilder();
-            List<Head> h = new ArrayList<>();
-            for (String t : ConfigMobs.get().getConfigSection(type + ".name").getKeys(false)) {
-                for (String r : ConfigMobs.get().getStringList(type + ".name." + t)) {
-                    h.add(new Head(r, t));
-                }
-            }
-            PagedLists<Head> hs = new PagedLists<>(h, instance.getInteger("head-info.name-info.colored.lines-per-page"));
-            if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
-            }
-            sb.append(translateColors(instance.getString("head-info.name-info.colored.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getString("head-info.name-info.colored.first-line"), sender)
-            .replace("{type}", type));
-            for (Head head : hs.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getString("head-info.name-info.colored.for-each-line"), sender)
-                .replace("{name}", head.type)
-                .replaceAll("\\{color}", head.colour));
-            }
-            return sb.toString();
-        }
-
-        public static String translateMaskInfo(CommandSender sender, String type, int page) {
-            StringBuilder sb = new StringBuilder();
-            List<Mask> m = new ArrayList<>();
-            for (int i = 0; i < ConfigMobs.get().getStringList(type + ".mask-effects").size(); i++) {
-                String s = ConfigMobs.get().getStringList(type + ".mask-effects").get(i);
-                int a = 1;
-                try {
-                    a = (int) ConfigMobs.get().getList(type + ".mask-amplifiers").get(i);
-                } catch (IndexOutOfBoundsException ignored) {
-                }
-                m.add(new Mask(type, a, s));
-
-            }
-            PagedLists<Mask> hs = new PagedLists<>(m, instance.getInteger("head-info.mask-info.lines-per-page"));
-            if ((page > hs.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
-            }
-            sb.append(translateColors(instance.getString("head-info.mask-info.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getString("head-info.mask-info.first-line"), sender)
-                    .replaceAll("\\{type}", type));
-            for (Mask mask : hs.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getString("head-info.mask-info.for-each-line"), sender)
-                        .replaceAll("\\{effect}", mask.effect)
-                        .replaceAll("\\{amplifier}", String.valueOf(mask.amplifier)));
-            }
-            return sb.toString();
-        }
-
-        public static String translateLoreInfo(CommandSender sender, String type, int page) {
-            StringBuilder sb = new StringBuilder();
-            PagedLists<String> lore = new PagedLists<>(ConfigMobs.get().getLore(type, "default"), instance.getInteger("head-info.lore-info.lines-per-page"));
-            if ((page > lore.getTotalPages()) || (0 >= page)) {
-                return HeadsPlusMessagesManager.get().getString("commands.errors.invalid-pg-no", sender);
-            }
-            sb.append(translateColors(instance.getString("head-info.lore-info.header"), sender)).append("\n");
-            sb.append(translateColors(instance.getString("head-info.lore-info.first-line"), sender)
-                    .replaceAll("\\{type}", type));
-            for (String s : lore.getContentsInPage(page)) {
-                sb.append("\n").append(translateColors(instance.getString("head-info.lore-info.for-each-line")
-                .replace("{lore}", s), sender));
-            }
-            return sb.toString();
+                return String.join("\n", profile);
+            }, HeadsPlus.async).exceptionally(ex -> {
+                ex.printStackTrace();
+                return "no";
+            });
         }
     }
 
@@ -299,7 +163,7 @@ public class ConfigTextMenus extends HPConfig {
             PagedLists<IHeadsPlusCommand> pl = new PagedLists<>(headPerms, instance.getInteger("help.lines-per-page"));
 
             if ((page > pl.getTotalPages()) || (0 >= page)) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
+                MessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
                 sender.sendMessage(translateColors(instance.getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
@@ -309,6 +173,7 @@ public class ConfigTextMenus extends HPConfig {
                             .replace("{usage}", c.usage())
                             .replace("{description}", key.getCmdDescription(sender)), sender);
                     TextComponent component = new TextComponent(help);
+                    // TODO - adventure time, one day...!
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/hp " + c.commandname()));
                     component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateCommandHelp(key, sender)).create()));
                     try {
@@ -321,54 +186,50 @@ public class ConfigTextMenus extends HPConfig {
         }
 
         public static String translateCommandHelp(IHeadsPlusCommand key, CommandSender sender) {
-            StringBuilder sb = new StringBuilder();
+            List<String> helpList = new ArrayList<>();
+            CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
             for (String s : instance.getStringList("help.command-help.layout")) {
-                if (!s.contains("{permission}") || sender.hasPermission("headsplus.help.viewperms")) {
-                    if (s.contains("{further-usage}") && key.advancedUsages().length > 0) {
-                        sb.append(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
-                        for (String s2 : key.advancedUsages()) {
-                            sb.append("\n").append(translateColors(s2, sender));
-                        }
-                    } else if (!s.contains("{further-usage}")){
-                        CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
-                        sb.append("\n").append(translateColors(s.replaceAll("\\{header}", instance.getString("help.command-help.header"))
-                                .replace("{description}", key.getCmdDescription(sender)).replaceAll("\\{usage}", c.usage()), sender)
-                                .replaceAll("\\{permission}", c.permission()));
-                    }
-                }
+                HPUtils.parseLorePlaceholders(helpList, s,
+                        new HPUtils.PlaceholderInfo("{permission}", c.permission(), sender.hasPermission("headsplus.help.viewperms")),
+                        new HPUtils.PlaceholderInfo("{further-usage}", () -> {
+                            List<String> strings = new ArrayList<>();
+                            strings.add(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
+                            for (String str : key.advancedUsages()) { strings.add(translateColors(str, sender)); }
+                            return strings;
+                        }, key.advancedUsages().length > 0),
+                        new HPUtils.PlaceholderInfo("{header}", translateColors(instance.getString("help.command-help.header"), sender), true),
+                        new HPUtils.PlaceholderInfo("{description}", key.getCmdDescription(sender), true),
+                        new HPUtils.PlaceholderInfo("{usage}", c.usage(), true));
             }
-            return sb.toString();
+            return String.join("\n", helpList);
         }
     }
 
     public static class LeaderBoardTranslator {
 
-        public static String translate(CommandSender sender, String section, String database, int page) {
-            PagedHashmaps<OfflinePlayer, Integer> ph = null;
-            HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+        public static String translate(CommandSender sender, String section, List<StatisticsSQLManager.LeaderboardEntry> entries, int page) {
+            PagedLists<StatisticsSQLManager.LeaderboardEntry> ph;
+            MessagesManager hpc = MessagesManager.get();
             try {
-                HeadsPlus hp = HeadsPlus.get();
                 StringBuilder sb = new StringBuilder();
-                ph = new PagedHashmaps<>(DataManager.getScores(database, section, false), instance.getInteger("leaderboard.lines-per-page"));
+                ph = new PagedLists<>(entries, instance.getInteger("leaderboard.lines-per-page"));
                 sb.append(translateColors(instance.getString("leaderboard.header")
                         .replace("{section}", WordUtils.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages())), sender));
-                Set<OfflinePlayer> it = ph.getContentsInPage(page).keySet();
-                Collection<Integer> it2 = ph.getContentsInPage(page).values();
-                for (int i = 0; i < it.size(); i++) {
+                int index = ph.getContentsPerPage() * (page - 1);
+                for (StatisticsSQLManager.LeaderboardEntry entry : ph.getContentsInPage(page)) {
                     try {
-                        int in = i + (ph.getContentsPerPage() * (ph.getCurrentPage() - 1));
                         sb.append("\n").append(translateColors(instance.getString("leaderboard.for-each-line")
-                                .replaceAll("\\{pos}", String.valueOf(in + 1))
-                                .replace("{name}", ((OfflinePlayer)it.toArray()[i]).getName())
-                                .replaceAll("\\{score}", String.valueOf(it2.toArray()[i])), sender));
+                                .replaceAll("\\{pos}", String.valueOf(index++))
+                                .replace("{name}", entry.getPlayer())
+                                .replaceAll("\\{score}", String.valueOf(entry.getSum())), sender));
                     } catch (NullPointerException ignored) {
                     }
                 }
                 return sb.toString();
             } catch (IllegalArgumentException ex) {
-                if (ph.getHs().size() > 0) {
+                if (entries.size() > 0) {
                     return hpc.getString("commands.errors.invalid-pg-no", sender);
                 } else {
                     return hpc.getString("commands.errors.no-data-lb", sender);
@@ -382,17 +243,17 @@ public class ConfigTextMenus extends HPConfig {
     public static class InfoTranslator {
 
         public static String translate(CommandSender sender) {
-            StringBuilder sb = new StringBuilder();
             HeadsPlus hp = HeadsPlus.get();
+            List<String> infoCommand = new ArrayList<>();
             for (String s : instance.getStringList("info.layout")) {
-                sb.append("\n").append(translateColors(s
-                        .replaceAll("\\{version}", String.valueOf(hp.getVersion()))
-                        .replace("{header}", instance.getString("info.header"))
-                        .replace("{author}", String.valueOf(hp.getAuthor()))
-                        .replace("{locale}", MainConfig.get().getLocalisation().LOCALE)
-                        .replaceAll("\\{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167"), sender));
+                HPUtils.parseLorePlaceholders(infoCommand, translateColors(s, sender),
+                        new HPUtils.PlaceholderInfo("{version}", hp.getVersion(), true),
+                        new HPUtils.PlaceholderInfo("{header}", instance.getString("info.header"), true),
+                        new HPUtils.PlaceholderInfo("{author}", hp.getAuthor(), true),
+                        new HPUtils.PlaceholderInfo("{locale}", MainConfig.get().getLocalisation().LOCALE, true),
+                        new HPUtils.PlaceholderInfo("{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167", true));
             }
-            return sb.toString();
+            return String.join("\n", infoCommand);
         }
     }
 }

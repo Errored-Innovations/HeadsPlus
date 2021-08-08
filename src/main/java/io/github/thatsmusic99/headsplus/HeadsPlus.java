@@ -1,7 +1,5 @@
 package io.github.thatsmusic99.headsplus;
 
-import io.github.thatsmusic99.headsplus.api.HPExpansion;
-import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
@@ -11,15 +9,15 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.managers.*;
-import io.github.thatsmusic99.headsplus.storage.Favourites;
-import io.github.thatsmusic99.headsplus.storage.Pinned;
-import io.github.thatsmusic99.headsplus.storage.PlayerScores;
+import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
+import io.github.thatsmusic99.headsplus.placeholders.HPExpansion;
+import io.github.thatsmusic99.headsplus.sql.*;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
-import io.github.thatsmusic99.headsplus.util.NewMySQLAPI;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
+import io.papermc.lib.PaperLib;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -36,9 +34,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.Executor;
 
@@ -52,15 +47,10 @@ public class HeadsPlus extends JavaPlugin {
     private Economy econ = null;
     private Permission perms;
     private static Object[] update = null;
-    private Connection connection;
-    private boolean con = false;
     // Other management stuff
     private final LinkedHashMap<String, IHeadsPlusCommand> commands = new LinkedHashMap<>();
     private final List<HeadsPlusListener<?>> listeners = new ArrayList<>();
     private List<HPConfig> configFiles = new ArrayList<>();
-    private Favourites favourites;
-    private Pinned pinned;
-    private PlayerScores scores;
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
     private boolean vaultEnabled = false;
@@ -72,12 +62,10 @@ public class HeadsPlus extends JavaPlugin {
     public void onLoad() {
         instance = this;
         Plugin wg = getServer().getPluginManager().getPlugin("WorldGuard");
-        if (wg != null && getServer().getPluginManager().getPlugin("WorldEdit") != null) {
-            if (wg.getDescription().getVersion().startsWith("7")) {
-                canUseWG = true;
-                new FlagHandler();
-            }
-        }
+        if (wg == null || getServer().getPluginManager().getPlugin("WorldEdit") == null) return;
+        if (!wg.getDescription().getVersion().startsWith("7")) return;
+        canUseWG = true;
+        new FlagHandler();
     }
 
     @Override
@@ -100,7 +88,7 @@ public class HeadsPlus extends JavaPlugin {
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
 
             if (!isEnabled()) return;
-            new HeadsPlusMessagesManager();
+            new MessagesManager();
             // Registers plugin events
             registerEvents();
 
@@ -113,6 +101,7 @@ public class HeadsPlus extends JavaPlugin {
             // Hooks PlaceholderAPI
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new HPExpansion(this).register();
+                new CacheManager();
                 getLogger().info("We've registered our PAPI placeholders!");
             }
 
@@ -129,12 +118,12 @@ public class HeadsPlus extends JavaPlugin {
                     public void run() {
                         update = UpdateChecker.getUpdate();
                         if (update != null) {
-                            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                                    + "\n" + HeadsPlusMessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                                    + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
+                                    + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
                             getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
                         } else {
-                            getLogger().info(HeadsPlusMessagesManager.get().getString("update.plugin-up-to-date"));
+                            getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
                         }
                         checkDates();
 
@@ -148,7 +137,7 @@ public class HeadsPlus extends JavaPlugin {
                 }.runTaskLater(this, 20);
 
            // }
-            getServer().getConsoleSender().sendMessage(HeadsPlusMessagesManager.get().getString("startup.plugin-enabled"));
+            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
            // if (getConfiguration().getPerks().ascii) {
                 getServer().getConsoleSender().sendMessage("                                                               §f\n" +
                         "§c    __  __               __     §9____  __                   §e_____§r\n" +
@@ -184,39 +173,14 @@ public class HeadsPlus extends JavaPlugin {
     public void onDisable() {
         if (!fullyEnabled) return;
 		// close any open interfaces
-		for(UUID p : InventoryManager.storedInventories.keySet()) {
+		for (UUID p : InventoryManager.storedInventories.keySet()) {
 		    Player player = Bukkit.getPlayer(p);
-		    if (player != null) {
-                final InventoryManager im = InventoryManager.getManager(player);
-                if(im.getInventory() != null) {
-                    player.closeInventory();
-                }
-            }
-
+		    if (player == null) continue;
+		    final InventoryManager im = InventoryManager.getManager(player);
+		    if (im.getInventory() == null) continue;
+		    player.closeInventory();
 		}
-        try {
-            favourites.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving favourites)", false, null);
-        }  catch (NullPointerException ignored) {
-
-        }
-        try {
-            scores.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving scores)", false, null);
-        } catch (NullPointerException ignored) {
-
-        }
-
-        try {
-            pinned.save();
-        } catch (IOException e) {
-            DebugPrint.createReport(e, "Disabling (saving pinned challenges)", false, null);
-        } catch (NullPointerException ignored) {
-
-        }
-        getLogger().info(HeadsPlusMessagesManager.get().getString("startup.plugin-disabled"));
+        getLogger().info(MessagesManager.get().getString("startup.plugin-disabled"));
     }
 
     public static HeadsPlus get() {
@@ -235,37 +199,7 @@ public class HeadsPlus extends JavaPlugin {
             return false;
         }
         econ = rsp.getProvider();
-
-        return econ != null;
-    }
-
-    @Deprecated
-    private void openConnection() throws SQLException, ClassNotFoundException {
-        if (connection != null && !connection.isClosed()) {
-            return;
-        }
-
-        synchronized (this) {
-            if (connection != null && !connection.isClosed()) {
-                return;
-            }
-            Class.forName("com.mysql.jdbc.Driver");
-            try {
-
-                connection = DriverManager.getConnection(
-                        "jdbc:mysql://" + MainConfig.get().getMySQL().MYSQL_HOST + ":" +
-                                MainConfig.get().getMySQL().MYSQL_PORT + "/" +
-                                MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
-                        MainConfig.get().getMySQL().MYSQL_USERNAME,
-                        MainConfig.get().getMySQL().MYSQL_PASSWORD);
-                NewMySQLAPI.createTable();
-                con = true;
-            } catch (SQLException ex) {
-                getLogger().warning("MySQL could not be enabled due to a problem connecting. Details to follow... (Error code: 3)");
-                getLogger().warning(ex.getMessage() + " (MySQL Error code: " + ex.getErrorCode() + ")");
-                getLogger().warning(ex.getCause().getMessage());
-            }
-        }
+        return true;
     }
 
     private void initiateEarlyManagers() {
@@ -280,7 +214,13 @@ public class HeadsPlus extends JavaPlugin {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             new RewardsManager();
             new ChallengeManager();
+            new LevelsManager();
             new CraftingManager();
+            new PlayerSQLManager();
+            new ChallengeSQLManager();
+            new FavouriteHeadsSQLManager();
+            new PinnedChallengeManager();
+            new StatisticsSQLManager();
         });
     }
 
@@ -294,6 +234,7 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new MaskListener());
         listeners.add(new PlayerCraftListener());
         listeners.add(new PlayerJoinListener());
+        listeners.add(new PlayerLocaleListener());
         listeners.add(new BlockPlaceListener());
         listeners.add(new PlayerPickBlockListener());
         listeners.add(new PlayerMessageDeathListener());
@@ -338,7 +279,7 @@ public class HeadsPlus extends JavaPlugin {
         config.load();
         configFiles.add(new ConfigAnimations());
         configFiles.add(new ConfigChallenges());
-        configFiles.add(new ConfigCustomHeads());
+        if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
         configFiles.add(new ConfigCrafting());
         configFiles.add(new ConfigHeads());
         configFiles.add(new ConfigHeadsSelector());
@@ -368,26 +309,6 @@ public class HeadsPlus extends JavaPlugin {
                 getLogger().severe("Failed to load config " + file.getClass().getSimpleName() + "!");
                 ex.printStackTrace();
             }
-
-        }
-
-        try {
-            setupJSON();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    try {
-                        openConnection();
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.runTaskAsynchronously(this);
         }
 
         EntityDataManager.init();
@@ -398,39 +319,38 @@ public class HeadsPlus extends JavaPlugin {
         createLocales();
     }
 
-    private boolean setupPermissions() {
+    private void setupPermissions() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return;
+        }
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        if (rsp == null) {
+            return;
+        }
         perms = rsp.getProvider();
-        return perms != null;
-    }
-
-    private void setupJSON() throws IOException {
-        favourites = new Favourites();
-        favourites.create();
-        favourites.read();
-        scores = new PlayerScores();
-        scores.create();
-        scores.read();
-        pinned = new Pinned();
-        pinned.create();
-        pinned.read();
     }
 
     private void createLocales() {
         List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn", "zh_tw"));
-        File dir = new File(getDataFolder() + File.separator + "locale");
+        File dir = new File(getDataFolder(), "locale");
         if (!dir.exists()) {
-            dir.mkdirs();
+            if (!dir.mkdirs()) {
+                getLogger().warning("Failed to make the locale directory! Please check your file permissions.");
+                return;
+            }
         }
         for (String locale : locales) {
             File conf = new File(dir + File.separator + locale + ".yml");
-            if (!conf.exists()) {
-                InputStream is = getResource(locale + ".yml");
-                try {
-                    Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (conf.exists()) continue;
+            InputStream is = getResource(locale + ".yml");
+            if (is == null) {
+                getLogger().warning("Locale resource file " + locale + ".yml was not found, please report this to the developer!");
+                continue;
+            }
+            try {
+                Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -453,6 +373,40 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().severe("If this is the latest version and you find problems/bugs, please report them.");
             getLogger().severe("Any new entities with special properties will be implemented in a newer plugin version.");
             getLogger().severe("And lastly, how DARE you update faster than I can, pesky lass");
+        }
+        // Send Paper warning
+        if (!PaperLib.isPaper()) {
+            getLogger().warning("!!! YOU ARE NOT USING PAPER AS YOUR SERVER TYPE. !!!");
+            getLogger().warning("HeadsPlus will be removing CraftBukkit and Spigot support in a future version.");
+            getLogger().warning("In addition to this, you are already at risk of server stalls if you are on 1.16.5 or lower whilst using HP.");
+            getLogger().warning("Paper fixes these stalls for versions 1.16.5 and below. It also provides API that Spigot does not, which HP will rely on fully soon.");
+            getLogger().warning("The vast majority of plugins will still work with Paper, and HP certainly will.");
+        }
+        // death to the dodgy forks and hybrids
+        for (DangerousServer server : Arrays.asList(
+                new DangerousServer("Yatopia", "dev.tr7wz.yatopia.events.GameProfileLookupEvent",
+                        "!!! YOU ARE USING YATOPIA. !!!",
+                        "This is considered an unstable server type that mindlessly implements patches with no full testing.",
+                        "It is even abandoned now and not recommended for use whatsoever.",
+                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                new DangerousServer("SugarcaneMC", "org.sugarcane.sugarcane.events.GameProfileLookupEvent",
+                        "!!! YOU ARE USING SUGARCANE. !!!",
+                        "Sugarcane is a fork that is following Yatopia's steps in making itself unstable through implementing patches not written themselves.",
+                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                new DangerousServer("Mohist", "com.mohistmc.Mohist",
+                        "!!! YOU ARE USING MOHIST. !!!",
+                        "HeadsPlus is not made to work with Forge-Bukkit hybrid server types.",
+                        "Generally, Mohist is not recommended for use either see why here: https://essentialsx.net/do-not-use-mohist.html",
+                        "To prevent possible problems arising from this, HeadsPlus will now disable."))) {
+            try {
+                Class.forName(server.clazz);
+                for (String message : server.message) getLogger().severe(message);
+                setEnabled(false);
+                return false;
+            } catch (ClassNotFoundException ignored) {
+            }
         }
         return true;
     }
@@ -478,29 +432,12 @@ public class HeadsPlus extends JavaPlugin {
         commands.put("restore", new RestoreCommand());
     }
 
-    // GETTERS
-    public Favourites getFavourites() {
-        return favourites;
-    }
-
-    public PlayerScores getScores() {
-        return scores;
-    }
-
     public String getVersion() {
         return version;
     }
 
-    public boolean isConnectedToMySQLDatabase() {
-        return con;
-    }
-
     public boolean isVaultEnabled() {
         return vaultEnabled;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public Economy getEconomy() {
@@ -525,10 +462,6 @@ public class HeadsPlus extends JavaPlugin {
 
     public static Object[] getUpdate() {
         return update;
-    }
-
-    public Pinned getPinned() {
-        return pinned;
     }
 
     public void checkForMutuals() {
@@ -598,5 +531,19 @@ public class HeadsPlus extends JavaPlugin {
 
     public boolean canUseWG() {
         return canUseWG;
+    }
+
+    private static class DangerousServer {
+
+        private final String name;
+        private final String[] message;
+        private final String clazz;
+
+        public DangerousServer(String name, String clazz, String... message) {
+            this.name = name;
+            this.message = message;
+            this.clazz = clazz;
+        }
+
     }
 }

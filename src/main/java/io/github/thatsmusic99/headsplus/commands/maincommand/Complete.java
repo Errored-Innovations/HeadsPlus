@@ -3,11 +3,10 @@ package io.github.thatsmusic99.headsplus.commands.maincommand;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +20,10 @@ import java.util.List;
         commandname = "complete", permission = "headsplus.maincommand.complete", usage = "/hp complete <Challenge name> [Player]", descriptionPath = "descriptions.hp.complete", maincommand = true)
 public class Complete implements IHeadsPlusCommand {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
             return false;
@@ -40,14 +39,11 @@ public class Complete implements IHeadsPlusCommand {
                 hpc.sendMessage("commands.errors.no-perm", sender);
                 return false;
             }
-            // TODO - not on main thread, dumbass!
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
-            if (!offlinePlayer.isOnline() || offlinePlayer.getPlayer() == null) {
+            player = Bukkit.getPlayer(args[2]);
+            if (player == null || !player.isOnline()) {
                 hpc.sendMessage("commands.errors.player-offline", sender);
                 return false;
             }
-            player = offlinePlayer.getPlayer();
-
         } else if (sender instanceof Player) {
             player = (Player) sender;
         } else {
@@ -58,11 +54,10 @@ public class Complete implements IHeadsPlusCommand {
             hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
             return true;
         }
-        if (c.canComplete(player)) {
-            c.complete(player);
-        } else {
-            hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
-        }
+        c.canComplete(player).thenApply(result -> {
+            if (result) c.complete(player); else hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
+            return true;
+        });
         return true;
     }
 

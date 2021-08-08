@@ -3,11 +3,12 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -52,7 +53,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null
                 || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
-        if (!HPUtils.runBlacklistTests(event.getEntity())) return;
+        if (!shouldDropHead(event.getEntity())) return;
         double fixedChance = addData("fixed-chance", ConfigMobs.get().getPlayerChance(victim.getName()));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
@@ -78,8 +79,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
         }
 
-        // TODO - lore
-        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo());
+        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo(), "player");
         headInfo.withTexture(victim.getName())
                 .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null : killer.getName()));
@@ -91,7 +91,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         if (phdEvent.isCancelled()) return;
         if (lostprice > 0.0) {
             economy.withdrawPlayer(victim, lostprice);
-            HeadsPlusMessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
+            MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
         }
         double finalPrice = price;
         headInfo.buildHead().thenAccept(item -> {
@@ -101,5 +101,19 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             PersistenceManager.get().setSellPrice(item, finalPrice);
             location.getWorld().dropItem(location, item);
         });
+    }
+
+    private boolean shouldDropHead(Player player) {
+        // Check world restrictions
+        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.MOBS)) return false;
+        // Check killer restrictions
+        if (player.getKiller() == null) {
+            if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;
+            if (MainConfig.get().getMobDrops().ENTITIES_NEEDING_KILLER.contains("player")) return false;
+        } else {
+            if (!player.getKiller().hasPermission("headsplus.drops.player")) return false;
+        }
+        // Check ignored players restriction
+        return !MainConfig.get().getPlayerDrops().IGNORED_PLAYERS.contains(player.getName());
     }
 }

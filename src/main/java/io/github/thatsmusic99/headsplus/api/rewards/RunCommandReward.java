@@ -10,15 +10,18 @@ import java.util.List;
 
 public class RunCommandReward extends Reward {
 
-    private List<String> commands;
+    private final List<String> commands;
 
-    public RunCommandReward(int xp, List<String> commands) {
+    public RunCommandReward(long xp, List<String> commands) {
         super(xp);
         this.commands = commands;
     }
 
     public static RunCommandReward fromConfigSection(String id, ConfigSection section) {
-        return null;
+        if (!section.contains("base-value") && !section.contains("reward-value"))
+            throw new IllegalStateException("Reward type RUN_COMMAND for reward " + id + " must have a base-value option!");
+        return new RunCommandReward(section.getLong("base-xp", 0),
+                section.getList("base-value", section.getList("reward-value")));
     }
 
     @Override

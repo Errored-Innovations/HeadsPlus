@@ -13,13 +13,13 @@ public enum HeadsPlusChallengeDifficulty {
     PAINFUL_DEADLY("painful_deadly", "&8[&5Painful&8-&4Deadly&8]", "PINK_TERRACOTTA", 30, 2, 9),
     DEADLY("deadly", "&8[&4Deadly&8]", "RED_TERRACOTTA", 32, 2, 10);
 
-    public String key;
-    String displayName;
-    public String material;
-    public int i;
+    public final String key;
+    final String displayName;
+    public final String material;
+    public final int i;
     public int p;
-    public int page;
-    public int min;
+    public final int page;
+    public final int min;
 
     HeadsPlusChallengeDifficulty(String key, String dn, String material, int i, int page, int min) {
         this.key = key;

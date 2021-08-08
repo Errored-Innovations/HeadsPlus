@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.IconClickEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.list.Air;
@@ -35,8 +35,7 @@ import java.util.regex.Pattern;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
-    protected static HeadsPlus hp = HeadsPlus.get();
-    protected static HeadsPlusMessagesManager hpc = HeadsPlusMessagesManager.get();
+    protected static MessagesManager hpc = MessagesManager.get();
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");
     private static final Pattern SECTION = Pattern.compile("\\{section}");
@@ -76,10 +75,10 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                         new NewInventoryEvent(player, getInventory());
                         player.openInventory(getInventory());
                     }
-                }.runTask(hp);
+                }.runTask(HeadsPlus.get());
             }
-        }.runTaskAsynchronously(hp);
-        hp.getServer().getPluginManager().registerEvents(this, hp);
+        }.runTaskAsynchronously(HeadsPlus.get());
+        HeadsPlus.get().getServer().getPluginManager().registerEvents(this, HeadsPlus.get());
     }
 
     public abstract String getDefaultTitle();
@@ -150,7 +149,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     try {
                         icon = Air.class.getConstructor(Player.class).newInstance(player);
                         if (!suppressWarnings) {
-                            hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                            HeadsPlus.get().getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
                         }
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();
@@ -240,6 +239,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
         private static final HandlerList HANDLERS = new HandlerList();
 
+        @NotNull
         public HandlerList getHandlers() {
             return HANDLERS;
         }
