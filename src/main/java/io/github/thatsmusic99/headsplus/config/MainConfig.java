@@ -186,7 +186,7 @@ public class MainConfig extends HPConfig {
         addDefault("default-selector-head-price", 10.0,
                 "The default price the heads in the heads selector can be sold at.");
         addComment("per-world-prices", "Defines the price of heads by default in a given world.");
-        createConfigSection("per-world-prices");
+        makeSectionLenient("per-world-prices");
         addExample("per-world-prices.cool-world", 15.0);
 
         addSection("Permissions");
