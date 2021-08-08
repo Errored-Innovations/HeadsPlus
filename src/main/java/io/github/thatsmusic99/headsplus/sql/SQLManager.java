@@ -33,26 +33,28 @@ public abstract class SQLManager {
     }
 
     public Connection implementConnection() {
-        Connection connection;
-        if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://"
-                                + MainConfig.get().getMySQL().MYSQL_HOST + ":"
-                                + MainConfig.get().getMySQL().MYSQL_PORT + "/"
-                                + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
-                        MainConfig.get().getMySQL().MYSQL_USERNAME,
-                        MainConfig.get().getMySQL().MYSQL_PASSWORD);
-                usingSqlite = false;
-                return connection;
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
+        synchronized (this) {
+            Connection connection;
+            if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    connection = DriverManager.getConnection("jdbc:mysql://"
+                                    + MainConfig.get().getMySQL().MYSQL_HOST + ":"
+                                    + MainConfig.get().getMySQL().MYSQL_PORT + "/"
+                                    + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
+                            MainConfig.get().getMySQL().MYSQL_USERNAME,
+                            MainConfig.get().getMySQL().MYSQL_PASSWORD);
+                    usingSqlite = false;
+                    return connection;
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                    connection = loadSqlite();
+                }
+            } else {
                 connection = loadSqlite();
             }
-        } else {
-            connection = loadSqlite();
+            return connection;
         }
-        return connection;
     }
 
     public abstract void createTable();
