@@ -43,6 +43,7 @@ public class XPCommand implements IHeadsPlusCommand {
                     return false;
                 }
                 int amount = HPUtils.isInt(args[3]);
+                // TODO check for online player
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
                         MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
                                 String.valueOf(PlayerSQLManager.get().getLevelSync(args[1]) + amount), "{amount}", args[3]), HeadsPlus.async);
