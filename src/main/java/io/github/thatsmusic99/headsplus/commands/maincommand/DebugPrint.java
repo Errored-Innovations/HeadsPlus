@@ -144,7 +144,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                         DebugVerbose.fire(sender, args);
                 }
             }
-        } catch (IOException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return true;

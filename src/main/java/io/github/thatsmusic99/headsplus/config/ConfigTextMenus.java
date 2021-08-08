@@ -119,7 +119,7 @@ public class ConfigTextMenus extends HPConfig {
 
     public static class ProfileTranslator {
 
-        public static CompletableFuture<String> translate(OfflinePlayer player, CommandSender sender) throws SQLException {
+        public static CompletableFuture<String> translate(OfflinePlayer player, CommandSender sender) {
             return CompletableFuture.supplyAsync(() -> {
                 List<String> profile = new ArrayList<>();
                 int levelPos = PlayerSQLManager.get().getLevelSync(player.getName());

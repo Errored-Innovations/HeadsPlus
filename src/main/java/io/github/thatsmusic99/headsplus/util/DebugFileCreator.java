@@ -148,7 +148,7 @@ public class DebugFileCreator {
         return fileReport.getName();
     }
 
-    public String createHeadReport(ItemStack s) throws NoSuchFieldException, IllegalAccessException, IOException {
+    public String createHeadReport(ItemStack s) throws IllegalAccessException, IOException {
         HeadsPlus hp = HeadsPlus.get();
         JSONArray infoArray = new JSONArray();
         JSONObject basicInfo = getBasicInfo();
