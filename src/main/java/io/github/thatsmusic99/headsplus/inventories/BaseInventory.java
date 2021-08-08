@@ -239,6 +239,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
         private static final HandlerList HANDLERS = new HandlerList();
 
+        @NotNull
         public HandlerList getHandlers() {
             return HANDLERS;
         }

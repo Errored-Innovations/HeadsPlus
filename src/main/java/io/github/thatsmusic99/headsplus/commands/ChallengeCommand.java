@@ -23,7 +23,7 @@ import java.util.List;
 public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(CommandSender cs, Command c, String l, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command c, @NotNull String l, @NotNull String[] args) {
         try {
             MessagesManager hpc = MessagesManager.get();
             if (MainConfig.get().getMainFeatures().CHALLENGES) {

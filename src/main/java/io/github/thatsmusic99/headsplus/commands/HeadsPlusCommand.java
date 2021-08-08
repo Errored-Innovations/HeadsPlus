@@ -65,7 +65,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 	}
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String s, String[] args) {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();

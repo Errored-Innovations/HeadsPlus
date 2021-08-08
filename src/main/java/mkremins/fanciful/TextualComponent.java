@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -118,6 +119,7 @@ public abstract class TextualComponent implements Cloneable {
 			writer.name(getKey()).value(getValue());
 		}
 
+		@NotNull
 		@SuppressWarnings("serial")
 		public Map<String, Object> serialize() {
 			return new HashMap<String, Object>() {{
@@ -185,6 +187,7 @@ public abstract class TextualComponent implements Cloneable {
 			writer.endObject();
 		}
 
+		@NotNull
 		@SuppressWarnings("serial")
 		public Map<String, Object> serialize() {
 			return new HashMap<String, Object>() {{

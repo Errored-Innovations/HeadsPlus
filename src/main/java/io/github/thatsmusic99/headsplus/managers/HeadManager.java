@@ -114,6 +114,7 @@ public class HeadManager {
             return this;
         }
 
+        @NotNull
         public List<String> getLore() {
             return lore;
         }
@@ -122,6 +123,7 @@ public class HeadManager {
             return material;
         }
 
+        @Nullable
         public String getDisplayName() {
             return displayName;
         }
