@@ -24,8 +24,8 @@ public class HPPlayer {
 
     private final UUID uuid;
     private long xp;
-    private String level = null;
-    private String nextLevel = null;
+    private int level;
+    private int nextLevel = -1;
     public static HashMap<UUID, HPPlayer> players = new HashMap<>();
     private final List<String> favouriteHeads;
     private final List<String> pinnedChallenges;
@@ -36,11 +36,10 @@ public class HPPlayer {
         pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid);
         favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid);
         completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid);
-        int levelIndex = PlayerSQLManager.get().getLevelSync(uuid);
+        level = PlayerSQLManager.get().getLevelSync(uuid);
         int max = LevelsManager.get().getLevels().size();
-        if (levelIndex > -1 && levelIndex < max) {
-            this.level = LevelsManager.get().getLevels().get(levelIndex);
-            if (levelIndex + 1 < max) this.nextLevel = LevelsManager.get().getLevels().get(levelIndex + 1);
+        if (level > -1 && level + 1 < max) {
+            this.nextLevel = level + 1;
         }
         PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
                 result.ifPresent(str ->
@@ -100,23 +99,26 @@ public class HPPlayer {
                 @Override
                 public void run() {
                     Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    int jumps = 0;
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
+                        jumps++;
                         nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
-                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp();
+                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(jumps);
+                        if (nextLevelLocal.isrEnabled()) nextLevelLocal.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
-                    if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp();
+                    if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
                 }
             }.runTask(hp);    
         }
     }
 
-    private void initLevelUp() {
-        Level nextLevel = LevelsManager.get().getLevel(this.nextLevel);
+    private void initLevelUp(int jumps) {
+        Level nextLevel = LevelsManager.get().getLevel(this.level + jumps);
         LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevel);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
-        this.level = this.nextLevel;
-        this.nextLevel = LevelsManager.get().getNextLevel(this.level).getConfigName();
+        this.level += jumps;
+        this.nextLevel += jumps;
         Player player = (Player) getPlayer();
         if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
             final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
@@ -124,9 +126,6 @@ public class HPPlayer {
                 MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}",
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
-        }
-        if (nextLevel.isrEnabled()) {
-            nextLevel.getReward().rewardPlayer(null, player); // TODO
         }
         PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
