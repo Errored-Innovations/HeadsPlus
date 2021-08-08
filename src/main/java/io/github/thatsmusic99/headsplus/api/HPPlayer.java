@@ -9,6 +9,7 @@ import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
 import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
 import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -94,6 +95,7 @@ public class HPPlayer {
         HeadsPlus hp = HeadsPlus.get();
         PlayerSQLManager.get().setXP(uuid, xp);
         this.xp = xp;
+        HPUtils.addBossBar(getPlayer());
         if (MainConfig.get().getMainFeatures().LEVELS) {
             new BukkitRunnable() {
                 @Override
