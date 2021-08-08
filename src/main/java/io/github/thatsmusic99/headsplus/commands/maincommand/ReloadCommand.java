@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;
@@ -56,6 +57,7 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 MaskManager.get().reload();
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
+                HPPlayer.reload();
                 MessagesManager.get().sendMessage("commands.reload.reload-message", sender);
             }
         }.runTaskLaterAsynchronously(HeadsPlus.get(), 2);

@@ -165,4 +165,9 @@ public class HPPlayer {
     public List<String> getFavouriteHeads() {
         return favouriteHeads;
     }
+
+    public static void reload() {
+        players.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> new HPPlayer(player.getUniqueId()));
+    }
 }
