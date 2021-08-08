@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 @Deprecated // Also needs a cleanup
 public class DebugPrint implements IHeadsPlusCommand {
 
-    private static MessagesManager hpc = MessagesManager.get();
+    private static final MessagesManager hpc = MessagesManager.get();
 
     public static void createReport(Exception e, String name, boolean command, CommandSender sender) {
         try {

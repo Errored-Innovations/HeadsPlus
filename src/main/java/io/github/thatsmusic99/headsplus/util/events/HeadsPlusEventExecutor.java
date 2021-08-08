@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 public class HeadsPlusEventExecutor implements EventExecutor {
 
     //
-    private Class<? extends Event> eventClass;
-    private HeadsPlusTimingsHandler handler;
-    private String name;
-    private static HashMap<String, HeadsPlusListener<?>> events = new HashMap<>();
+    private final Class<? extends Event> eventClass;
+    private final HeadsPlusTimingsHandler handler;
+    private final String name;
+    private static final HashMap<String, HeadsPlusListener<?>> events = new HashMap<>();
 
     public HeadsPlusEventExecutor(Class<? extends Event> clazz, String name, HeadsPlusListener<?> listener) {
         eventClass = clazz;

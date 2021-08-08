@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class EconomyReward extends Reward {
 
-    private double money;
+    private final double money;
 
     public EconomyReward(double money, int xp) {
         super(xp);

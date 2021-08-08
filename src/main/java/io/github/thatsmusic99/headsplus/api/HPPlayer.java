@@ -26,7 +26,7 @@ public class HPPlayer {
     private long xp;
     private int level;
     private int nextLevel = -1;
-    public static HashMap<UUID, HPPlayer> players = new HashMap<>();
+    public static final HashMap<UUID, HPPlayer> players = new HashMap<>();
     private final List<String> favouriteHeads;
     private final List<String> pinnedChallenges;
     private final List<String> completeChallenges;
