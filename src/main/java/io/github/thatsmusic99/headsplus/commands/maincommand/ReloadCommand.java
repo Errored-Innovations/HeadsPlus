@@ -32,7 +32,6 @@ public class ReloadCommand implements IHeadsPlusCommand {
             @Override
             public void run() {
                 HeadManager.get().reset();
-                MaskManager.get().reset();
                 SellableHeadsManager.get().reset();
                 for (HPConfig cs : HeadsPlus.get().getConfigs()) {
                     try {
@@ -51,7 +50,10 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 }
                 EntityDataManager.init();
                 CraftingManager.get().reload();
+                RewardsManager.get().reload();
                 ChallengeManager.get().reload();
+                LevelsManager.get().reload();
+                MaskManager.get().reload();
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
                 MessagesManager.get().sendMessage("commands.reload.reload-message", sender);
