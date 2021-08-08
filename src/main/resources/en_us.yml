@@ -49,10 +49,6 @@ textmenus:
     total-heads-crafted: Total Heads Crafted
     current-level: Current Level
     xp-until-next-level: XP until next level
-  blacklist: Blacklist
-  whitelist: Whitelist
-  blacklistw: World Blacklist
-  whitelistw: World Whitelist
   info:
     version: Version
     author: Author
@@ -110,23 +106,6 @@ commands:
       &c{sections}&7)'
     texture: '{header} Type in or copy and paste the texture for the head. (This may
       require several messages, so when you are done, type "done" in chat and enter.)'
-  blacklist:
-    bl-a-off: '{header} The blacklist is already disabled!'
-    bl-a-on: '{header} The blacklist is already enabled!'
-    bl-off: '{header} The blacklist has been disabled!'
-    bl-on: '{header} The blacklist has been enabled!'
-    blw-a-on: '{header} The world blacklist has been enabled!'
-    blw-a-off: '{header} The world blacklist has been disabled!'
-    empty-bl: '{header} The blacklist is empty!'
-    empty-blw: '{header} The world blacklist is empty!'
-    head-a-add: '{header} This head is already added!'
-    head-a-removed-bl: '{header} This head is not on the blacklist!'
-    head-added-bl: '{header} &c{player} &7has been added to the blacklist!'
-    head-removed-bl: '{header} &c{player} &7has been removed from the blacklist!'
-    world-a-add: '{header} This world is already added!'
-    world-added-bl: '{header} &c{world} &7has been added to the world blacklist!'
-    world-a-removed-bl: '{header} This world is not on the blacklist!'
-    world-removed-bl: '{header} &c{world} &7has been removed from the blacklist!'
   challenges:
     already-complete-challenge: '{header} You''ve already completed that challenge!'
     cant-complete-challenge: '{header} You can''t complete this challenge!'
@@ -135,14 +114,12 @@ commands:
     reward-string: '{header} Reward: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} This command only handles alphanumeric names!'
-    blacklist-head: '{header} This head is blacklisted and cannot be used!'
     full-inv: '{header} Your inventory is full!'
     head-too-long: '{header} IGN is too long to be valid! Please use an IGN between
       3 and 16 characters.'
     head-too-short: '{header} IGN is too short to be valid! Please use an IGN between
       3 and 16 characters.'
-    whitelist-head: '{header} This head isn''t whitelisted and therefore cannot be
-      used!'
+    restricted-head: '{header} You cannot use that head!'
   head-info:
     add-value: '{header} &c{value} &7has been added to &c{entity}&7''s &c{setting}&7!'
     no-lore-data: '{header} There is no lore data for this entity!'
@@ -176,23 +153,6 @@ commands:
   tests:
     running-tests: '{header} Running tests... (this may take a while)'
     results: '{header} Results: &c{results}'
-  whitelist:
-    empty-wl: '{header} The whitelist is empty!'
-    empty-wlw: '{header} The world whitelist is empty!'
-    head-a-removed-wl: '{header} This head is not on the whitelist!'
-    head-added-wl: '{header} &c{player} &7has been added to the whitelist!'
-    head-removed-wl: '{header} &c{player} &7has been removed from the whitelist!'
-    wl-a-off: '{header} The whitelist is already disabled!'
-    wl-a-on: '{header} The blacklist is already enabled!'
-    wl-off: '{header} The whitelist has been disabled!'
-    wl-on: '{header} The whitelist has been enabled!'
-    wlw-a-off: '{header} The world whitelist is already disabled!'
-    wlw-a-on: '{header} The world whitelist is already enabled!'
-    wlw-off: '{header} The world whitelist has been disabled!'
-    wlw-on: '{header} The world whitelist has been enabled!'
-    world-a-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
-    world-added-wl: '{header} &c{world} &7has been added to the world whitelist!'
-    world-removed-wl: '{header} &c{world} &7has been removed from the whitelist!'
   xp:
     added-xp: '{header} Added &c{amount} &7XP to &c{player}&7, they now have &c{xp}&7!'
     current-xp: '{header} &c{player}&7''s current XP: &c{xp}'
@@ -204,32 +164,17 @@ commands:
     reset-xp: '{header} Reset &c{player}&7''s XP!'
 descriptions:
   hp:
-    blacklist: Toggles the blacklist.
-    blacklistadd: Adds a head to the blacklist.
-    blacklistdel: Removes a head from the blacklist.
-    blacklistl: Lists all heads in the blacklist.
-    blacklistw: Toggles the crafting recipe blacklist on/off.
-    blacklistwadd: Adds a world to the crafting recipe blacklist.
-    blacklistwdel: Removes a world to the crafting recipe blacklist.
-    blacklistwl: Lists blacklisted worlds.
     complete: Completes a challenge.
     conjure: Retrieves a head of a specific type.
     debug: Dumps a debug file.
     headinfo: Displays/modifies information about a specific entity's head.
     help: Displays the help menu.
     info: Displays plugin information.
+    locale: Changes a user's localisation if smart locale is enabled.
     profile: Displays your profile for the plugin.
     reload: Reloads configuration files.
     restore: Restores or repairs a head that was already provided by the plugin.
     tests: Runs tests for mob drop rates.
-    whitelist: Toggles the whitelist.
-    whitelistadd: Adds a head to the whitelist.
-    whitelistdel: Removes a head from the whitelist.
-    whitelistl: Lists all heads in the whitelist.
-    whitelistw: Toggles the crafting recipe whitelist on/off.
-    whitelistwadd: Adds a world to the crafting recipe whitelist.
-    whitelistwdel: Removes a world to the crafting recipe whitelist.
-    whitelistwl: Lists whitelisted worlds.
     xp: View or change a player's XP.
   addhead: Adds a player head to the heads menu
   head: Spawns in a head.
@@ -246,6 +191,8 @@ event:
   head-mhf-interact-message-2: '{header} That is an &c{name}&7''s head!'
   lost-money: '{header} Because you got killed by &c{player}&7, you lost &c{price}&7!'
 startup:
+  cannot-craft-heads: '{header} You cannot craft heads!'
+  cannot-craft-heads-here: '{header} You cannot craft heads here!'
   faulty-theme: '{header} Faulty theme was put in! No theme changes will be made.'
   no-vault: '{header} Vault not found! Heads cannot be sold and challenge rewards
     can not add/remove groups.'
