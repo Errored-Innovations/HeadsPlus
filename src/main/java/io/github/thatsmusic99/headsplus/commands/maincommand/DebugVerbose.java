@@ -71,7 +71,7 @@ public class DebugVerbose {
                     }
                     for (String key : event.getPossibleValues().keySet()) {
                         if (!conditions.containsKey(key)) {
-                            possibleSelections.add(builder.toString() + key + "=");
+                            possibleSelections.add(builder + key + "=");
                         }
                     }
                 }
