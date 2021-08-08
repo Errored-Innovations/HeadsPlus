@@ -157,16 +157,17 @@ public class MainConfig extends HPConfig {
         addDefault("broadcast-challenge-complete", true);
 
         addSection("Levels");
-        addDefault("add-boss-bars", true);
-        addDefault("boss-bar-color", "RED");
-        addDefault("boss-bar-title", "&c&lXP to next HP level");
-        addDefault("boss-bar-lifetime", 5);
-        addDefault("broadcast-level-up", true);
+        addDefault("add-boss-bars", true, "Whether or not boss bars should be displayed to show the progress of a player's level.");
+        addDefault("boss-bar-color", "RED", "The colour of the bossbar.\n" +
+                "See https://papermc.io/javadocs/paper/1.17/org/bukkit/boss/BarColor.html for a list of possible colours.");
+        addDefault("boss-bar-title", "&c&lXP to next HP level", "The title of the bossbar.");
+        addDefault("boss-bar-lifetime", 5, "The number of seconds the bossbar should last before disappearing.");
+        addDefault("broadcast-level-up", true, "Whether or not ");
         addDefault("multiple-level-ups", false);
 
-        addSection("Leaderboards");
-        addDefault("cache-leaderboards", true);
-        addDefault("cache-duration", 300);
+        addSection("Statistics");
+        addDefault("cache-duration", 300, "How long in seconds statistics are cached for.\n" +
+                "Statistics are cached if you use the PlaceholderAPI expansion for HeadsPlus.");
 
         addSection("Updates");
         addDefault("check-for-updates", true,
