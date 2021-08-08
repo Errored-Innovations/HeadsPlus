@@ -143,6 +143,9 @@ public class MaskManager {
         @Override
         public void run(Player player) {
             BukkitRunnable runnable = new BukkitRunnable() {
+
+                private int intervals = MainConfig.get().getMasks().RESET_INTERVAL - 1;
+
                 @Override
                 public void run() {
                     if (player == null || !player.isOnline()) {
@@ -159,7 +162,8 @@ public class MaskManager {
                         cancel();
                         return;
                     }
-
+                    if (++intervals != MainConfig.get().getMasks().RESET_INTERVAL) return;
+                    intervals = 0;
                     for (PotionEffect effect : effects) {
                         effect.apply(player);
                     }
