@@ -170,4 +170,8 @@ public class HPPlayer {
         players.clear();
         Bukkit.getOnlinePlayers().forEach(player -> new HPPlayer(player.getUniqueId()));
     }
+
+    public static void removePlayer(UUID uuid) {
+        players.remove(uuid);
+    }
 }

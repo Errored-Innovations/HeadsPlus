@@ -18,7 +18,7 @@ public class MaskManager {
 
     private final HashMap<String, MaskInfo> masks = new HashMap<>();
     private static MaskManager instance;
-    private final HashSet<BukkitRunnable> runningTasks = new HashSet<>();
+    private final HashMap<String, BukkitRunnable> runningTasks = new HashMap<>();
 
     public MaskManager() {
         instance = this;
@@ -34,9 +34,14 @@ public class MaskManager {
         init();
     }
 
+    public void resetMask(Player player) {
+        if (!runningTasks.containsKey(player.getUniqueId().toString())) return;
+        runningTasks.get(player.getUniqueId().toString()).cancel();
+    }
+
     public void reset() {
         masks.clear();
-        runningTasks.forEach(BukkitRunnable::cancel);
+        runningTasks.values().forEach(BukkitRunnable::cancel);
         runningTasks.clear();
     }
 
@@ -173,10 +178,13 @@ public class MaskManager {
                 public void cancel() {
                     super.cancel();
                     runningTasks.remove(this);
+                    for (PotionEffect effect : effects) {
+                        player.removePotionEffect(effect.getType());
+                    }
                 }
             };
             runnable.runTaskTimer(HeadsPlus.get(), 1, MainConfig.get().getMasks().CHECK_INTERVAL);
-            runningTasks.add(runnable);
+            runningTasks.put(player.getUniqueId().toString(), runnable);
         }
     }
 }
