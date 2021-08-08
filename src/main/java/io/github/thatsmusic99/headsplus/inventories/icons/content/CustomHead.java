@@ -44,7 +44,7 @@ public class CustomHead extends Content {
                 MessagesManager.get().sendMessage("commands.head.full-inv", player);
                 return false;
             }
-            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
+            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : determinePrice(player.getWorld()); // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
                     && HeadsPlus.get().isVaultEnabled()
