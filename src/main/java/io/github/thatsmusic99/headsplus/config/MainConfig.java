@@ -174,9 +174,13 @@ public class MainConfig extends HPConfig {
         addDefault("notify-admins-about-updates", true);
 
         addSection("Localisation");
-        addDefault("locale", "en_us");
-        addDefault("smart-locale", false);
-        addDefault("use-tellraw", true);
+        addDefault("locale", "en_us", "The localisation used globally within the plugin.\n" +
+                "See the locale folder for viable options. To select a language, write its file name - without the .yml - in here.");
+        addDefault("smart-locale", false, "Whether or not to enable smart locale.\n" +
+                "This makes HeadsPlus automatically translate itself into a different language for each user depending on their chosen language.\n" +
+                "However, ");
+        addDefault("use-tellraw", true, "Whether or not /tellraw should be used to send messages.\n" +
+                "Will be replaced in a future version. May cause problems with floodgate players.");
 
         addSection("Heads Selector");
         addDefault("default-selector-head-price", 10.0,
