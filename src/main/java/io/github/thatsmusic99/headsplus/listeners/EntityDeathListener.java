@@ -110,6 +110,38 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         addPossibleData("killer", "<Player>");
     }
 
+    public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
+        Random random = new Random();
+        HashMap<String, List<EntityDataManager.DroppedHeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
+        List<EntityDataManager.DroppedHeadInfo> heads = storedHeads.get(id + ";" + meta);
+        if (heads == null) {
+            String[] possibleConditions = meta.split(",");
+            for (String str : possibleConditions) {
+                if ((heads = storedHeads.get(id + ";" + str)) != null) break;
+            }
+            if (heads == null) {
+                heads = storedHeads.get(id + ";default");
+            }
+        }
+        if (heads == null) {
+            throw new NullPointerException("Found no heads list for " + id + "!");
+        }
+        if (heads.isEmpty()) return;
+        EntityDataManager.DroppedHeadInfo info = heads.get(random.nextInt(heads.size()));
+
+        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            info.buildHead().thenAccept(head -> {
+                HeadsPlus.debug(info.getClass().getSimpleName());
+                head.setAmount(amount);
+                PersistenceManager.get().setSellable(head, true);
+                PersistenceManager.get().setSellType(head, "mobs_" + id);
+                location.getWorld().dropItem(location, head);
+            });
+        }
+    }
+
     @Override
     public boolean shouldEnable() {
         return MainConfig.get().getMainFeatures().MOB_DROPS;

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemCheckListener extends HeadsPlusListener<InventoryClickEvent> {
 
-    @Override // TODO - move into a runnable
+    @Override
     public void onEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         for (int i = 0; i < 46; i++) {
