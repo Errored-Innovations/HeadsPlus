@@ -16,7 +16,9 @@ public abstract class Reward {
 
     public static Reward fromConfigSection(String id, ConfigSection section) {
         String type = section.getString("type");
-        if (type == null) throw new IllegalStateException("There is no reward type for " + id + "!");
+        if (type == null) type = section.getString("reward-type");
+        if (type == null)
+            throw new IllegalStateException("There is no reward type for " + id + "!");
 
         Reward reward;
         switch (type.toLowerCase()) {

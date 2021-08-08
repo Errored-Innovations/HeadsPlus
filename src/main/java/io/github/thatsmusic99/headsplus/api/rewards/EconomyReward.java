@@ -17,9 +17,10 @@ public class EconomyReward extends Reward {
     }
 
     public static EconomyReward fromConfigSection(String id, ConfigSection section) {
-        if (!section.contains("base-value"))
+        if (!section.contains("base-value") && !section.contains("reward-value"))
             throw new IllegalStateException("Reward type ECO for reward " + id + " must have a base-value option!");
-        return new EconomyReward(section.getDouble("base-value"), section.getInteger("base-xp"));
+        return new EconomyReward(section.getDouble("base-value", section.getDouble("reward-value")),
+                section.getInteger("base-xp", 0));
     }
 
     @Override

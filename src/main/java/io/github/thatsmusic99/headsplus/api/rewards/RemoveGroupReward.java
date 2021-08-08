@@ -18,9 +18,10 @@ public class RemoveGroupReward extends Reward {
     }
 
     public static RemoveGroupReward fromConfigSection(String id, ConfigSection section) {
-        if (!section.contains("base-value"))
+        if (!section.contains("base-value") && !section.contains("reward-value"))
             throw new IllegalStateException("Reward type REMOVE_GROUP for reward " + id + " must have a base-value option!");
-        return new RemoveGroupReward(section.getString("base-value"), section.getInteger("base-xp"));
+        return new RemoveGroupReward(section.getString("base-value", section.getString("reward-value")), 
+                section.getInteger("base-xp"));
     }
 
     @Override
