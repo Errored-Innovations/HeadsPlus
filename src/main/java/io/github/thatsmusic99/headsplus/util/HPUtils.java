@@ -89,7 +89,7 @@ public class HPUtils {
         }
         if (level == 0) return chance;
         if (chance <= lootingThresholds.getDouble("rare")) {
-            if (chance < 0) {
+            if (chance < 1) {
                 chance *= level;
             } else {
                 chance += level;
