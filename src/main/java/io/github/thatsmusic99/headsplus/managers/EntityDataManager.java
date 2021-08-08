@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -207,8 +208,8 @@ public class EntityDataManager {
 
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {
 
-        private int xp;
-        private String id;
+        private long xp;
+        private final String id;
         private MaskManager.MaskInfo info;
 
         public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
@@ -218,7 +219,7 @@ public class EntityDataManager {
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
             setLore(info.getLore());
-            xp = ConfigMobs.get().getInteger("defaults.xp");
+            xp = MainConfig.get().getMobDrops().DEFAULT_XP_GAINED;
             if (info instanceof MaskManager.MaskInfo) {
                 this.info = (MaskManager.MaskInfo) info;
             }
@@ -226,11 +227,11 @@ public class EntityDataManager {
 
         public DroppedHeadInfo withXP(String path) {
             if (!ConfigMobs.get().contains(path + ".xp")) return this;
-            xp = ConfigMobs.get().getInteger(path + ".xp");
+            xp = ConfigMobs.get().getLong(path + ".xp");
             return this;
         }
 
-        public int getXp() {
+        public long getXp() {
             return xp;
         }
 
@@ -243,6 +244,7 @@ public class EntityDataManager {
             return super.buildHead().thenApply(item -> {
                 if (info == null) return item;
                 PersistenceManager.get().setMaskType(item, info.id);
+                HeadsPlus.debug("Implemented mask type " + info.id);
                 return item;
             });
         }
