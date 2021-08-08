@@ -11,7 +11,7 @@ public class EconomyReward extends Reward {
 
     private final double money;
 
-    public EconomyReward(double money, int xp) {
+    public EconomyReward(double money, long xp) {
         super(xp);
         this.money = money;
     }
@@ -20,7 +20,7 @@ public class EconomyReward extends Reward {
         if (!section.contains("base-value") && !section.contains("reward-value"))
             throw new IllegalStateException("Reward type ECO for reward " + id + " must have a base-value option!");
         return new EconomyReward(section.getDouble("base-value", section.getDouble("reward-value")),
-                section.getInteger("base-xp", 0));
+                section.getLong("base-xp", 0));
     }
 
     @Override

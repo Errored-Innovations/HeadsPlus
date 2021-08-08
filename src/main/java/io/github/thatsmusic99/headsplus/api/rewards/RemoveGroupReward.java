@@ -12,7 +12,7 @@ public class RemoveGroupReward extends Reward {
 
     private final String group;
 
-    public RemoveGroupReward(String group, int xp) {
+    public RemoveGroupReward(String group, long xp) {
         super(xp);
         this.group = group;
     }
@@ -21,7 +21,7 @@ public class RemoveGroupReward extends Reward {
         if (!section.contains("base-value") && !section.contains("reward-value"))
             throw new IllegalStateException("Reward type REMOVE_GROUP for reward " + id + " must have a base-value option!");
         return new RemoveGroupReward(section.getString("base-value", section.getString("reward-value")), 
-                section.getInteger("base-xp"));
+                section.getLong("base-xp"));
     }
 
     @Override

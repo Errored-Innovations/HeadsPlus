@@ -6,11 +6,11 @@ import org.bukkit.entity.Player;
 
 public abstract class Reward {
 
-    private final int xp;
+    private final long xp;
     private String message;
     private boolean useMultiplier;
 
-    public Reward(int xp) {
+    public Reward(long xp) {
         this.xp = xp;
     }
 
@@ -67,7 +67,7 @@ public abstract class Reward {
 
     public void multiplyRewardValues(int multiplier) {}
 
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 }

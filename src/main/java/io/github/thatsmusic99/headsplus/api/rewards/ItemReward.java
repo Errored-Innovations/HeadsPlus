@@ -13,7 +13,7 @@ public class ItemReward extends Reward {
 
     private final ItemStack item;
 
-    public ItemReward(Material material, int amount, int xp) {
+    public ItemReward(Material material, int amount, long xp) {
         super(xp);
         item = new ItemStack(material, amount);
     }
@@ -24,7 +24,7 @@ public class ItemReward extends Reward {
             throw new IllegalStateException("Reward type GIVE_ITEM " + id + " must have a material option!");
         Material material = Material.getMaterial(materialStr);
         int amount = section.getInteger("amount", 1);
-        return new ItemReward(material, amount, section.getInteger("base-xp"));
+        return new ItemReward(material, amount, section.getLong("base-xp"));
     }
 
     @Override
