@@ -15,8 +15,8 @@ import java.lang.reflect.Method;
 
 public class SoundListener<T extends Event> extends HeadsPlusListener<T> {
 
-    private String section;
-    private String playerAccessor;
+    private final String section;
+    private final String playerAccessor;
     private final Class<T> clazz;
 
     public SoundListener(String section, Class<T> clazz) {

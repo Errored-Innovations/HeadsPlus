@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
@@ -23,7 +24,7 @@ public class Search extends Icon {
         player.closeInventory();
         HashMap<String, String> context = new HashMap<>();
         InventoryManager manager = InventoryManager.getManager(player);
-        ConversationFactory c = new ConversationFactory(hp);
+        ConversationFactory c = new ConversationFactory(HeadsPlus.get());
         Conversation conv = c.withFirstPrompt(new ChatPrompt())
                 .withLocalEcho(false)
                 .withModality(MainConfig.get().getMiscellaneous().SUPPRESS_MESSAGES_DURING_SEARCH)

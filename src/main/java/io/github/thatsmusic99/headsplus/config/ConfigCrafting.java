@@ -89,18 +89,18 @@ public class ConfigCrafting extends FeatureConfig {
 		try {
 			if (get(key + ".lore").equals("{default}")) {
 				for (String str : getStringList("base-item.lore")) {
-					lore.add(HeadsPlusMessagesManager.get().formatMsg(str, null)
+					lore.add(MessagesManager.get().formatMsg(str, null)
 							.replaceAll("\\{type}", getString(key + ".display-type"))
 							.replaceAll("\\{price}", String.valueOf(getPrice(key))));
 				}
 			} else {
 				for (String str : getStringList(key + ".lore")) {
-					lore.add(HeadsPlusMessagesManager.get().formatMsg(str, null));
+					lore.add(MessagesManager.get().formatMsg(str, null));
 				}
 			}
 		} catch (NullPointerException ex) {
 			for (String str : getStringList(key + ".lore")) {
-				lore.add(HeadsPlusMessagesManager.get().formatMsg(str, null));
+				lore.add(MessagesManager.get().formatMsg(str, null));
 			}
 		}
 
@@ -112,7 +112,7 @@ public class ConfigCrafting extends FeatureConfig {
 	}
 
 	public String getDisplayName(String key) {
-		return HeadsPlusMessagesManager.get().formatMsg(getString(key + ".display-name", getString("base-item.display-name")), null)
+		return MessagesManager.get().formatMsg(getString(key + ".display-name", getString("base-item.display-name")), null)
 				.replaceAll("\\{type}", getString(key + ".display-type", getString("base-item.display-type")));
 	}
 

@@ -27,7 +27,7 @@ public class InventoryManager {
         CHALLENGES_LIST(ChallengesSection.class),
         CHALLENGES_PINNED(ChallengesPinnedInv.class);
 
-        private Class<? extends BaseInventory> inventory;
+        private final Class<? extends BaseInventory> inventory;
 
         InventoryType(Class<? extends BaseInventory> inventory) {
             this.inventory = inventory;
@@ -65,12 +65,12 @@ public class InventoryManager {
         SEARCH("search", 'K', Material.NAME_TAG.name(), "{msg_inventory.icon.search}", new String[]{}, Search.class),
         PINNED_CHALLENGES("pinned-challenges", 'P', Material.DIAMOND.name(), "{msg_inventory.icon.pinned-challenges}", new String[]{}, ChallengesPinned.class);
 
-        private Class<? extends Icon> icon;
-        private Character c;
-        private String id;
-        private String material;
-        private String displayName;
-        private String[] lore;
+        private final Class<? extends Icon> icon;
+        private final Character c;
+        private final String id;
+        private final String material;
+        private final String displayName;
+        private final String[] lore;
 
         IconType(String id, Character c, String material, String name, String[] lore, Class<? extends Icon> icon) {
             this.id = id;

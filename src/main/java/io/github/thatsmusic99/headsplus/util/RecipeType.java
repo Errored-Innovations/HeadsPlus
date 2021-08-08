@@ -14,8 +14,8 @@ public enum RecipeType {
     SMOKING(SmokingRecipe.class, true),
     STONECUTTING(StonecuttingRecipe.class, true);
 
-    private Class<?> clazz;
-    private boolean allowsHeads;
+    private final Class<?> clazz;
+    private final boolean allowsHeads;
 
     RecipeType(Class<?> clazz, boolean allowsHeads) {
         this.allowsHeads = allowsHeads;

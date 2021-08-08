@@ -2,31 +2,33 @@ package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class AutograbManager {
 
     // texture lookups need to be protected from spam
-    private static HashMap<String, Long> lookups = new HashMap<>();
+    private static final HashMap<String, Long> lookups = new HashMap<>();
 
     public static String grabUUID(String username, int tries, CommandSender callback) {
         String uuid = null;
@@ -122,44 +124,17 @@ public class AutograbManager {
                     return;
                 }
 
+                String name = (String) resp.get("name");
+
                 Object o = resp.get("properties");
-                if(o instanceof List) {
-                    for(Object o2 : (List) o) {
-                        if(o2 instanceof Map) {
-                            Map m = (Map) o2;
-                            if("textures".equals(m.get("name")) && m.containsKey("value")) {
-                                String encoded = m.get("value").toString();
-                                String decoded = new String(Base64.getDecoder().decode(encoded));
-                                JSONObject resp2 = (JSONObject) JSONValue.parse(decoded);
-                                if((o2 = resp2.get("textures")) instanceof Map
-                                        && (o2 = ((Map) o2).get("SKIN")) instanceof Map
-                                        && ((Map) o2).containsKey("url")) {
-                                    String texUrl = ((Map) o2).get("url").toString();
-                                    int last = texUrl.lastIndexOf('/');
-                                    if(last != -1) {
-                                        texUrl = texUrl.substring(last + 1);
-                                        String name = resp.get("name").toString();
-                                        if(!ConfigCustomHeads.get().allHeadsCache.contains(texUrl)) {
-                                            ConfigCustomHeads.get().addHead(texUrl, true,
-                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.title").replace("{player}", name),
-                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.section"),
-                                                    HeadsPlus.get().getConfig().getString("plugin.autograb.price"),
-                                                    forceAdd || HeadsPlus.get().getConfig().getBoolean("plugin.autograb.add-as-enabled"));
-                                            if(callback != null) {
-                                                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", callback, "{player}", name);
-                                            }
-                                        } else if (forceAdd && ConfigCustomHeads.get().enableHead(texUrl)){
-                                            if(callback != null) {
-                                                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", callback, "{player}", name);
-                                            }
-                                        } else if(callback != null) {
-                                            HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-already-added", callback, "{player}", name);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if (!(o instanceof List)) return;
+                for (Object mapObj : (List) o) {
+                    if (!(mapObj instanceof Map)) continue;
+                    Map map = (Map) mapObj;
+                    if (!"textures".equals(map.get("name")) || !map.containsKey("value")) continue;
+                    String encoded = map.get("value").toString();
+                    addTexture(encoded, forceAdd, callback, name);
+                    return;
                 }
             } catch (Exception ex) {
                 if(ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
@@ -184,43 +159,68 @@ public class AutograbManager {
             public void run() {
                 final String[] playerInfo = new String[1];
                 try {
-                    // TODO - replacement
                     playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
-                    addTexture(playerInfo[0], force, sender, player);
+                    addTexture(playerInfo[0], force, sender, player.getName() == null ? "<No Name>" : player.getName());
                 } catch (NoSuchElementException exception) {
 
                 }
             }
-        }.runTask(HeadsPlus.get());
+        }.runTaskAsynchronously(HeadsPlus.get());
     }
 
-    private static void addTexture(String info, boolean force, CommandSender sender, OfflinePlayer player) {
+    private static void addTexture(String texture, boolean force, CommandSender sender, String name) {
         try {
-            JSONObject playerJson = (JSONObject) new JSONParser().parse(new String(Base64.getDecoder().decode(info.getBytes())));
-            JSONObject textureJson = (JSONObject) playerJson.get("textures");
-            if (textureJson.isEmpty()) return;
-            JSONObject skinJSON = ((JSONObject)textureJson.get("SKIN"));
-            String texture = String.valueOf(skinJSON.get("url"));
-            ConfigurationSection section = HeadsPlus.get().getConfig().getConfigurationSection("plugin.autograb");
-            // If the head never existed
-            if(!ConfigCustomHeads.get().allHeadsCache.contains(texture)) {
-                ConfigCustomHeads.get().addHead(texture, true,
-                        section.getString("title").replace("{player}", player.getName()),
-                        section.getString("section"),
-                        section.getString("price"),
-                        force || section.getBoolean("add-as-enabled"));
-
-            } else if (force && ConfigCustomHeads.get().enableHead(texture)){
-                // Keep going.
-            } else if(sender != null) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-already-added", sender, "{player}", player.getName());
+            if (name == null) name = texture;
+            String sectionStr = MainConfig.get().getAutograbber().SECTION;
+            if (!ConfigHeadsSelector.get().getSections().containsKey(sectionStr)) {
+                HeadsPlus.get().getLogger().warning("Section " + sectionStr + " does not exist!");
                 return;
             }
-            if(sender != null) {
-                HeadsPlusMessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", player.getName());
+            ConfigHeadsSelector.SectionInfo section = ConfigHeadsSelector.get().getSection(sectionStr);
+            String title = MainConfig.get().getAutograbber().DISPLAY_NAME.replace("{player}", name);
+            // If the head doesn't exist, add it
+            String id;
+            HeadManager.HeadInfo headInfo;
+            if (HeadManager.get().contains(name)) {
+                name += "_" + section.getHeads().size();
+            }
+            if (!HeadManager.get().getAddedTextures().contains(texture)) {
+                headInfo = new HeadManager.HeadInfo();
+                id = name;
+            } else if (force) {
+                id = HeadManager.get().getId(texture);
+                headInfo = HeadManager.get().getHeadInfo(id);
+
+            } else if (sender != null) {
+                MessagesManager.get().sendMessage("commands.addhead.head-already-added", sender, "{player}", name);
+                return;
+            } else {
+                return;
             }
 
-        } catch (ParseException e) {
+            headInfo.withDisplayName(title);
+            HeadManager.get().registerHead(id, headInfo);
+
+            ConfigHeads.get().forceExample("heads." + id + ".display-name", title);
+            ConfigHeads.get().forceExample("heads." + id + ".texture", texture);
+            ConfigHeads.get().save();
+
+            if (MainConfig.get().getAutograbber().ADD_GRABBED_HEADS) {
+                ConfigHeadsSelector.BuyableHeadInfo buyableHead = new ConfigHeadsSelector.BuyableHeadInfo(headInfo);
+                buyableHead.withPrice(MainConfig.get().getAutograbber().PRICE);
+                section.addHead(id, buyableHead);
+                // Add to the actual config
+                ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".section", sectionStr);
+                if (buyableHead.getPrice() != -1) {
+                    ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".price", buyableHead.getPrice());
+                }
+                ConfigHeadsSelector.get().save();
+            }
+            if (sender != null) {
+                MessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

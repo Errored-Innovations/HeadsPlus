@@ -1,10 +1,11 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.HeadsPlusAPI;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,26 +34,32 @@ public class Challenge extends Content {
         try {
             if (event.isLeftClick()) {
                 if (!challenge.isComplete(player)) {
-                    if (challenge.canComplete(player)) {
-                        challenge.complete(player);
-                        item.setType(challenge.getCompleteIcon().getType());
-                        initNameAndLore("challenge", player);
-                        event.getInventory().setItem(event.getSlot(), item);
-                    } else {
-                        HeadsPlusMessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
-                    }
+                    challenge.canComplete(player).thenAcceptAsync(result -> {
+                        if (result) {
+                            challenge.complete(player);
+                            item.setType(challenge.getCompleteIcon().getType());
+                            initNameAndLore("challenge", player);
+                            event.getInventory().setItem(event.getSlot(), item);
+                        } else {
+                            MessagesManager.get().sendMessage("commands.challenges.cant-complete-challenge", player);
+                        }
+                    }, HeadsPlus.sync);
                 } else {
-                    HeadsPlusMessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
+                    MessagesManager.get().sendMessage("commands.challenges.already-complete-challenge", player);
                 }
             } else {
-                HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
+                HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
                 if (hpPlayer.hasChallengePinned(challenge)) {
-                    hpPlayer.removeChallengePin(challenge);
+                    hpPlayer.removeChallengePin(challenge).thenAcceptAsync(why -> {
+                        initNameAndLore("challenge", player);
+                        event.getInventory().setItem(event.getSlot(), item);
+                    }, HeadsPlus.sync);
                 } else {
-                    hpPlayer.addChallengePin(challenge);
+                    hpPlayer.addChallengePin(challenge).thenAcceptAsync(why -> {
+                        initNameAndLore("challenge", player);
+                        event.getInventory().setItem(event.getSlot(), item);
+                    }, HeadsPlus.sync);
                 }
-                initNameAndLore("challenge", player);
-                event.getInventory().setItem(event.getSlot(), item);
             }
         }catch (NullPointerException ignored) {
         }
@@ -67,42 +74,29 @@ public class Challenge extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(HeadsPlusMessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons.challenge.lore")) {
             if (loreStr.contains("{challenge-lore}")) {
                 for (String loreStr2 : challenge.getDescription()) {
-                    lore.add(HeadsPlusMessagesManager.get().formatMsg(loreStr2, player));
+                    lore.add(MessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
-                if (loreStr.contains("{completed}")) {
-                    if (challenge.isComplete(player)) {
-                        lore.add(HeadsPlusMessagesManager.get().getString("commands.challenges.challenge-completed", player));
-                    }
-                } else if (loreStr.contains("{pinned}")) {
-                    if (HPPlayer.getHPPlayer(player).hasChallengePinned(challenge)) {
-                        lore.add(HeadsPlusMessagesManager.get().getString("inventory.icon.challenge.pinned", player));
-                    }
-                } else {
-                    String str = HeadsPlusMessagesManager.get().formatMsg(
-                            HeadsPlusMessagesManager.get().completed(loreStr, player, challenge), player);
-                    try {
-                        str = str.replace("{reward}", reward)
-                                .replace("{challenge-reward}", reward);
-                    } catch (NullPointerException ignored) {
-
-                    }
-                    str = str.replaceAll("(\\{xp}|\\{challenge-xp})", String.valueOf(challenge.getGainedXP()))
-                            .replaceAll("\\{heads}", String.valueOf(HeadsPlusAPI.getPlayerInLeaderboards(player,
-                                    challenge.getHeadType(),
-                                    challenge.getDatabaseType())))
-                            .replaceAll("\\{total}", String.valueOf(challenge.getRequiredHeadAmount()));
-                    lore.add(str);
-                }
-
+                HPUtils.parseLorePlaceholders(lore, loreStr,
+                        new HPUtils.PlaceholderInfo("{completed}",
+                                MessagesManager.get().getString("commands.challenges.challenge-completed", player),
+                                challenge.isComplete(player)),
+                        new HPUtils.PlaceholderInfo("{pinned}",
+                                MessagesManager.get().getString("inventory.icon.challenge.pinned", player),
+                                HPPlayer.getHPPlayer(player.getUniqueId()).hasChallengePinned(challenge)),
+                        new HPUtils.PlaceholderInfo("{reward}", reward, true),
+                        new HPUtils.PlaceholderInfo("{challenge-reward}", reward, true),
+                        new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),
+                        new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
+                        new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
+                        new HPUtils.PlaceholderInfo("{heads}", () -> String.valueOf(challenge.getStatSync(player.getUniqueId())), true));
             }
-
         }
         meta.setLore(lore);
         item.setItemMeta(meta);

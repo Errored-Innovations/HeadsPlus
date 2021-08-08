@@ -3,8 +3,7 @@ package io.github.thatsmusic99.headsplus.config;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
-import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +20,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Objects;
@@ -30,14 +28,14 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HeadsPlusMessagesManager {
+public class MessagesManager {
 
     private static YamlConfiguration config;
     private static HashMap<String, YamlConfiguration> locales;
     private static HashMap<UUID, YamlConfiguration> players;
-    private static HeadsPlusMessagesManager instance;
+    private static MessagesManager instance;
 
-    public HeadsPlusMessagesManager() {
+    public MessagesManager() {
         instance = this;
         HeadsPlus hp = HeadsPlus.get();
         String dest = hp.getDataFolder() + File.separator + "locale" + File.separator;
@@ -903,7 +901,7 @@ public class HeadsPlusMessagesManager {
         }
     }
 
-    public static HeadsPlusMessagesManager get() {
+    public static MessagesManager get() {
         return instance;
     }
 
@@ -941,7 +939,7 @@ public class HeadsPlusMessagesManager {
         Pattern pat = Pattern.compile("\\{msg_inventory\\.icon\\.head\\.favourite}");
         Matcher m = pat.matcher(string);
         while (m.find()) {
-            if (HPPlayer.getHPPlayer(player).hasHeadFavourited(id)) {
+            if (HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)) {
                 string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", (CommandSender) player));
             } else {
                 string = string.replace("{msg_inventory.icon.head.favourite}", "");
@@ -973,13 +971,12 @@ public class HeadsPlusMessagesManager {
 
     public String getString(String path, OfflinePlayer player) {
         if (player == null) return getString(path);
-        YamlConfiguration config = HeadsPlusMessagesManager.config;
+        YamlConfiguration config = MessagesManager.config;
         if (MainConfig.get().getLocalisation().SMART_LOCALE) {
             if (players.containsKey(player.getUniqueId()) && player.isOnline()) {
                 config = players.get(player.getUniqueId());
                 if (config == null) {
-                    setPlayerLocale(player.getPlayer());
-                    config = players.get(player.getUniqueId());
+                    config = MessagesManager.config;
                 }
             }
         }
@@ -1000,39 +997,19 @@ public class HeadsPlusMessagesManager {
         return str;
     }
 
-    public void setPlayerLocale(Player player) {
-        String locale = getLocale(player);
+    public void setPlayerLocale(Player player, String locale) {
+        setPlayerLocale(player, locale, false);
+    }
+    public void setPlayerLocale(Player player, String locale, boolean b) {
         String first = locale.split("_")[0].toLowerCase();
         if (locales.containsKey(first)) {
             players.put(player.getUniqueId(), locales.get(first));
         }
-        HPPlayer.getHPPlayer(player).setLocale(locale, false);
+        if (b) PlayerSQLManager.get().setLocale(player.getName(), locale);
     }
 
-    public void setPlayerLocale(Player player, String locale, boolean b) {
-        players.put(player.getUniqueId(), locales.get(locale));
-        if (b) {
-            HPPlayer.getHPPlayer(player).setLocale(locale);
-        }
-    }
-
-    public void setPlayerLocale(Player player, String locale) {
-        setPlayerLocale(player, locale, true);
-    }
     public String getSetLocale(Player player) {
         return players.get(player.getUniqueId()).getName().split("_")[0];
-    }
-
-    private static String getLocale(Player player) {
-        try {
-            Object entityPlayer = player.getClass().getMethod("getHandle").invoke(player);
-            return String.valueOf(entityPlayer.getClass().getField("locale").get(entityPlayer));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e) {
-            HeadsPlus.get().getServer().getLogger().info("Whoops, have an error to report...");
-            DebugFileCreator.createReport(new HeadsPlusException(e));
-            e.printStackTrace();
-        }
-        return "en_us";
     }
 
     public static HashMap<String, YamlConfiguration> getLocales() {

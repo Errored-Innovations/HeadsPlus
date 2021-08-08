@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
@@ -537,6 +539,7 @@ public class FancyMessage implements JsonRepresentedObject, Cloneable, Iterable<
 	}
 
 	// Doc copied from interface
+	@NotNull
 	public Map<String, Object> serialize() {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("messageParts", messageParts);

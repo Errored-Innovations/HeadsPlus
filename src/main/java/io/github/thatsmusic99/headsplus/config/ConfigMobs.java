@@ -238,7 +238,7 @@ public class ConfigMobs extends FeatureConfig {
     }
 
     public double getPrice(String type) {
-		return getDouble(type + ".price", getDouble("defaults.price"));
+		return getDouble(type + ".price", MainConfig.get().getMobDrops().DEFAULT_PRICE);
     }
 
     public String getPlayerDisplayName(String name) {
@@ -265,7 +265,7 @@ public class ConfigMobs extends FeatureConfig {
 	}
 
     public double getChance(String path) {
-		return getDouble(path + ".chance", getDouble("defaults.chance"));
+		return getDouble(path + ".chance", MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE);
 	}
 
 	@Nullable

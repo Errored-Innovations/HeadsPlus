@@ -48,11 +48,6 @@ public class ConfigHeads extends HPConfig {
         }
     }
 
-    @Override
-    public void moveToNew() {
-
-    }
-
     public static ConfigHeads get() {
         return instance;
     }

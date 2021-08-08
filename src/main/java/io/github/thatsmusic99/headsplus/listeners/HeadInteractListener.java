@@ -39,7 +39,6 @@ public class HeadInteractListener extends HeadsPlusListener<PlayerInteractEvent>
         return MainConfig.get().getMainFeatures().INTERACTIONS;
     }
 
-    // TODO - rewrite for interactions overhaul
     @Override
     public void onEvent(PlayerInteractEvent event) {
         try {

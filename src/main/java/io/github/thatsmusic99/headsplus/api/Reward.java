@@ -6,17 +6,19 @@ import org.bukkit.entity.Player;
 
 public abstract class Reward {
 
-    private int xp;
+    private final long xp;
     private String message;
     private boolean useMultiplier;
 
-    public Reward(int xp) {
+    public Reward(long xp) {
         this.xp = xp;
     }
 
     public static Reward fromConfigSection(String id, ConfigSection section) {
         String type = section.getString("type");
-        if (type == null) throw new IllegalStateException("There is no reward type for " + id + "!");
+        if (type == null) type = section.getString("reward-type");
+        if (type == null)
+            throw new IllegalStateException("There is no reward type for " + id + "!");
 
         Reward reward;
         switch (type.toLowerCase()) {
@@ -49,7 +51,7 @@ public abstract class Reward {
     }
 
     public void rewardPlayer(Challenge challenge, Player player) {
-        HPPlayer.getHPPlayer(player).addXp(useMultiplier ? xp * challenge.getDifficulty() : xp);
+        HPPlayer.getHPPlayer(player.getUniqueId()).addXp(useMultiplier ? xp * challenge.getDifficulty() : xp);
     }
 
     public String getRewardString(Player player) {
@@ -65,7 +67,7 @@ public abstract class Reward {
 
     public void multiplyRewardValues(int multiplier) {}
 
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 }

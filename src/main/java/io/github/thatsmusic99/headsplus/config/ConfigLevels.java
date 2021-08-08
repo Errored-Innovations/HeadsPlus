@@ -1,11 +1,8 @@
 package io.github.thatsmusic99.headsplus.config;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
-import io.github.thatsmusic99.headsplus.api.Level;
-import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import io.github.thatsmusic99.headsplus.util.HPUtils;
 
 import java.util.HashMap;
 
@@ -17,7 +14,6 @@ public class ConfigLevels extends FeatureConfig {
         return levels;
     }
 
-    private int maxHierarchy = 0;
     private static ConfigLevels instance;
 
     public ConfigLevels() {
@@ -34,29 +30,36 @@ public class ConfigLevels extends FeatureConfig {
     public void loadDefaults() {
         double version = 0.3;
         double current = getDouble("version");
+        makeSectionLenient("levels");
         if (current < version) {
             set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
-                if (current < 0.3) {
-                    set("levels." + l.getConfigName() + ".hierarchy", i);
-                    set("levels." + l.getConfigName() + ".hierachy", null);
-                }
                 if (l.getAddedVersion() > current) {
-                    addDefault("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-                    addDefault("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-                    addDefault("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    addDefault("levels." + l.getConfigName() + ".hierarchy", i);
-                    addDefault("levels." + l.getConfigName() + ".rewards.enabled", false);
-                    addDefault("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
-                    addDefault("levels." + l.getConfigName() + ".rewards.reward-value", 300);
-                    addDefault("levels." + l.getConfigName() + ".rewards.item-amount", 0);
-                    addDefault("levels." + l.getConfigName() + ".rewards.command-sender", "player");
+                    addExample("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
+                    addExample("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
+                    addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
+                    addExample("levels." + l.getConfigName() + ".hierarchy", i);
+                    addExample("levels." + l.getConfigName() + ".rewards.enabled", false);
+                    addExample("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
+                    addExample("levels." + l.getConfigName() + ".rewards.reward-value", 300);
+                    addExample("levels." + l.getConfigName() + ".rewards.item-amount", 0);
+                    addExample("levels." + l.getConfigName() + ".rewards.command-sender", "player");
                 }
 
             }
         }
+    }
 
+    @Override
+    public void moveToNew() {
+
+        ConfigSection levelsSection = getConfigSection("levels");
+        if (levelsSection == null) return;
+
+        for (String key : levelsSection.getKeys(false)) {
+            moveTo("levels." + key + ".hierachy", "levels." + key + ".hierarchy");
+        }
     }
 
     private void addDefLevels() {
@@ -97,10 +100,6 @@ public class ConfigLevels extends FeatureConfig {
         levels.put(34, new BaseLevel("netherite_3", "&4&lNetherite III", 1000000, 0.2));
         levels.put(35, new BaseLevel("netherite_4", "&4&lNetherite IV", 1500000, 0.2));
         levels.put(36, new BaseLevel("netherite_5", "&4&lNetherite V", 2000000, 0.2));
-    }
-
-    public int getMaxHierarchy() {
-        return maxHierarchy;
     }
 
     @Override

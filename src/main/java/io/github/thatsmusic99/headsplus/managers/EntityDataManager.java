@@ -1,16 +1,17 @@
 package io.github.thatsmusic99.headsplus.managers;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class EntityDataManager {
 
@@ -149,9 +150,9 @@ public class EntityDataManager {
                     for (String head : conditionSection.getKeys(false)) {
                         DroppedHeadInfo headInfo;
                         if (head.startsWith("HPM#")) {
-                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head));
+                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head), head);
                         } else {
-                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head));
+                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head), head);
                         }
 
                         if (head.equalsIgnoreCase("{mob-default}")) {
@@ -182,7 +183,7 @@ public class EntityDataManager {
 
                         headInfo.withXP(path);
 
-                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions)); // TODO
+                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions));
 
                         heads.add(headInfo);
                         SellableHeadsManager.get().registerPrice("mobs_" + name, ConfigMobs.get().getPrice(path));
@@ -207,25 +208,50 @@ public class EntityDataManager {
 
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {
 
-        private int xp;
+        private long xp;
+        private final String id;
+        private MaskManager.MaskInfo info;
 
-        public DroppedHeadInfo(HeadManager.HeadInfo info) {
+        public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
+            this.id = id;
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
             setLore(info.getLore());
-            xp = ConfigMobs.get().getInteger("defaults.xp");
+            xp = MainConfig.get().getMobDrops().DEFAULT_XP_GAINED;
+            if (info instanceof MaskManager.MaskInfo) {
+                this.info = (MaskManager.MaskInfo) info;
+            }
         }
 
         public DroppedHeadInfo withXP(String path) {
             if (!ConfigMobs.get().contains(path + ".xp")) return this;
-            xp = ConfigMobs.get().getInteger(path + ".xp");
+            xp = ConfigMobs.get().getLong(path + ".xp");
             return this;
         }
 
-        public int getXp() {
+        public long getXp() {
             return xp;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public CompletableFuture<ItemStack> buildHead() {
+            return super.buildHead().thenApply(item -> {
+                if (info == null) return item;
+                PersistenceManager.get().setMaskType(item, info.id);
+                HeadsPlus.debug("Implemented mask type " + info.id);
+                return item;
+            });
+        }
+
+        @Override
+        public void run(Player player) {
+            if (info != null) info.run(player);
         }
     }
 }

@@ -10,10 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class ConfigHeadsSelector extends FeatureConfig {
 
@@ -86,9 +84,12 @@ public class ConfigHeadsSelector extends FeatureConfig {
             SectionInfo sectionInfo = sections.get(section.getString("section"));
             // Get the head info itself
             if (!HeadManager.get().contains(key)) continue;
-            // TODO - lore
             BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key));
             headInfo.withDisplayName(section.getString("display-name", null));
+            headInfo.setLore(section.getList("lore", null));
+            if (section.contains("price")) {
+                headInfo.withPrice(section.getDouble("price", -1.0));
+            }
             buyableHeads.put(key, headInfo);
             sectionInfo.addHead(key, headInfo);
             totalHeads++;
@@ -177,7 +178,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
     }
 
     public static class BuyableHeadInfo extends HeadManager.HeadInfo {
-        private double price;
+        private double price = -1;
 
         public BuyableHeadInfo(HeadManager.HeadInfo info) {
             super();
@@ -185,6 +186,15 @@ public class ConfigHeadsSelector extends FeatureConfig {
                     .withMaterial(info.getMaterial())
                     .withTexture(info.getTexture());
             setLore(info.getLore());
+        }
+
+        public BuyableHeadInfo withPrice(double price) {
+            this.price = price;
+            return this;
+        }
+
+        public double getPrice() {
+            return price;
         }
     }
 }

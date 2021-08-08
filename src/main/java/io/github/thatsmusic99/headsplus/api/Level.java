@@ -27,7 +27,7 @@ public class Level {
     }
 
     public boolean isrEnabled() {
-        return reward == null;
+        return reward != null;
     }
 
     public Reward getReward() {

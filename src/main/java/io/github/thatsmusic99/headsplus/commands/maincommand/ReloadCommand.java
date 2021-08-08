@@ -6,7 +6,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,13 +27,12 @@ import java.util.List;
 public class ReloadCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        HeadsPlusMessagesManager.get().sendMessage("commands.reload.reloading-message", sender);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        MessagesManager.get().sendMessage("commands.reload.reloading-message", sender);
         new BukkitRunnable() {
             @Override
             public void run() {
                 HeadManager.get().reset();
-                MaskManager.get().reset();
                 SellableHeadsManager.get().reset();
                 for (HPConfig cs : HeadsPlus.get().getConfigs()) {
                     try {
@@ -50,13 +49,16 @@ public class ReloadCommand implements IHeadsPlusCommand {
                         e.printStackTrace();
                     }
                 }
-                HPPlayer.players.clear();
                 EntityDataManager.init();
                 CraftingManager.get().reload();
+                RewardsManager.get().reload();
                 ChallengeManager.get().reload();
+                LevelsManager.get().reload();
+                MaskManager.get().reload();
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
-                HeadsPlusMessagesManager.get().sendMessage("commands.reload.reload-message", sender);
+                HPPlayer.reload();
+                MessagesManager.get().sendMessage("commands.reload.reload-message", sender);
             }
         }.runTaskLaterAsynchronously(HeadsPlus.get(), 2);
         return true;

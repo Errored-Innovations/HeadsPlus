@@ -40,9 +40,9 @@ public class DebugManager {
     }
 
     public static class DebugConditions {
-        private String listener;
-        private HashMap<String, String> conditions;
-        protected static HashMap<UUID, DebugConditions> openDebugTrackers = new HashMap<>();
+        private final String listener;
+        private final HashMap<String, String> conditions;
+        protected static final HashMap<UUID, DebugConditions> openDebugTrackers = new HashMap<>();
 
         public DebugConditions(UUID sender, String listener, HashMap<String, String> conditions) {
             this.listener = listener;

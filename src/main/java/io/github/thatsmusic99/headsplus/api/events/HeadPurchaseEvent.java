@@ -5,6 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class HeadPurchaseEvent extends Event implements Cancellable {
 
@@ -19,6 +20,7 @@ public class HeadPurchaseEvent extends Event implements Cancellable {
     
 	private static final HandlerList HANDLERS = new HandlerList();
 
+    @NotNull
     public HandlerList getHandlers() {
         return HANDLERS;
     }

@@ -34,9 +34,9 @@ public enum CraftingDefaults {
             "OAK_SLAB", "OAK_SLAB", "OAK_SLAB"),
     PAPERS(RecipeType.SHAPED, "HP#papers", "PAPER", "AIR", "PAPER", "AIR");
 
-    private String[] materials;
-    private String head;
-    private RecipeType type;
+    private final String[] materials;
+    private final String head;
+    private final RecipeType type;
 
     CraftingDefaults(RecipeType type, String head, String... materials) {
         this.type = type;

@@ -1,8 +1,9 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
+import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,51 +33,22 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
             return true;
         }
         if (args.length == 0) {
-            cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
+            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
             return true;
         }
-        switch (args[0].toLowerCase()) {
-            case "hunting":
-            case "selling":
-            case "crafting":
-                if (args.length > 1) {
-                    // TODO - can't work
-                    if (!(SellHead.getRegisteredIDs().contains(args[1])
-                            && args[1].equalsIgnoreCase("total"))
-                            && CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
-                        return true;
-                    }
-                    if (args.length > 2 && CachedValues.MATCH_PAGE.matcher(args[2]).matches()) {
-                        try {
-                            cs.sendMessage(getLeaderboard(cs, args[1], Integer.parseInt(args[2]), args[0].toLowerCase()));
-                            return true;
-                        } catch (IllegalArgumentException ignored) {
-                        }
-                    }
-                    if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-                        cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[1]), args[0].toLowerCase()));
-                        return true;
-                    }
-                }
-                cs.sendMessage(getLeaderboard(cs, "total", 1, args[0].toLowerCase()));
-                return true;
-            default:
-                if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                    cs.sendMessage(getLeaderboard(cs, "total", Integer.parseInt(args[0]), "hunting"));
-                    return true;
-                }
-                cs.sendMessage(getLeaderboard(cs, "total", 1, "hunting"));
+        // Check category
+        StatisticsSQLManager.CollectionType type = StatisticsSQLManager.CollectionType.getType(args[0].toUpperCase());
+        if (type == null) {
+            int page = 1;
+            if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                page = Integer.parseInt(args[0]);
+            }
+            int finalPage = page;
+            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, finalPage)));
+            return true;
         }
-        return false;
-    }
-
-    private String getLeaderboard(CommandSender sender, String sec, int page, String part) {
-        return ConfigTextMenus.LeaderBoardTranslator.translate(sender, sec, part, page);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
         return false;
     }
 
@@ -89,9 +61,9 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "selling", "crafting"), results);
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting"), results);
         } else if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], SellHead.getRegisteredIDs(), results);
+            StringUtil.copyPartialMatches(args[1], SellableHeadsManager.get().getKeys(), results);
         }
         return results;
     }

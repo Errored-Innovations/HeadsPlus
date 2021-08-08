@@ -49,7 +49,7 @@ public class HelpMenu implements IHeadsPlusCommand {
     }
 
 	@Override
-	public boolean fire(String[] args, CommandSender sender) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 	    if (args.length == 0) {
 	        helpNoArgs(sender);
 	    } else if (args.length == 1) {
