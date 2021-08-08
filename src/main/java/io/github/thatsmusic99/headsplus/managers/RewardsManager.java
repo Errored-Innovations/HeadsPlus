@@ -23,6 +23,11 @@ public class RewardsManager {
         return instance;
     }
 
+    public void reload() {
+        rewards.clear();
+        init();
+    }
+
     public Reward getReward(String key) {
         return rewards.get(key);
     }

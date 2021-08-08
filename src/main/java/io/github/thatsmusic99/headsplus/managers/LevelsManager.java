@@ -28,6 +28,12 @@ public class LevelsManager {
         return instance;
     }
 
+    public void reload() {
+    	levels.clear();
+    	levelOrder.clear();
+    	init();
+	}
+
     public Level getLevel(String key) {
         return levels.get(key);
     }
