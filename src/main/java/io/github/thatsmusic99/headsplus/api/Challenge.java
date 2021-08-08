@@ -106,7 +106,7 @@ public abstract class Challenge {
         return headType;
     }
 
-    public int getGainedXP() {
+    public long getGainedXP() {
         return getReward().getXp();
     }
 

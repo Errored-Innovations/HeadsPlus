@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
@@ -26,7 +27,7 @@ public class HeadsSearch extends HeadsSection {
                 name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', headInfo.getDisplayName())).toLowerCase().replaceAll("[^a-z]", "");
             } catch (NullPointerException | IllegalArgumentException ex) {
                 if (!suppressWarnings) {
-                    hp.getLogger().warning("Null display name for " + headName + "! (Error code: 12)");
+                    HeadsPlus.get().getLogger().warning("Null display name for " + headName + "! (Error code: 12)");
                 }
                 continue;
             }
