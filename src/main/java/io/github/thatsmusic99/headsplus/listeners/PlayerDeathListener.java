@@ -114,6 +114,6 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             if (!player.getKiller().hasPermission("headsplus.drops.player")) return false;
         }
         // Check ignored players restriction
-        return !MainConfig.get().getPlayerDrops().IGNORED_PLAYERS.contains(player.getName());
+        return !MainConfig.get().getPlayerDrops().IGNORED_PLAYERS.contains(player.getName().toLowerCase());
     }
 }
