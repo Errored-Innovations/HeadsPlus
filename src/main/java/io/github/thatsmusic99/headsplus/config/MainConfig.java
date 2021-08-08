@@ -172,7 +172,8 @@ public class MainConfig extends HPConfig {
         addSection("Updates");
         addDefault("check-for-updates", true,
                 "Whether or not the plugin should check for new updates.");
-        addDefault("notify-admins-about-updates", true);
+        addDefault("notify-admins-about-updates", true,
+                "Whether or not the plugin should notify admins when a plugin update is available.");
 
         addSection("Localisation");
         addDefault("locale", "en_us", "The localisation used globally within the plugin.\n" +
@@ -221,9 +222,6 @@ public class MainConfig extends HPConfig {
                 "The format in which prices should appear in messages, heads, wherever.\n" +
                         "By default, this adds a comma for every 1000$ and rounds to two decimal points.\n" +
                         "Please do not swap the notation for this as Java doesn't like that, see the option below.");
-        // TODO: depends on locale rather than config option
-        addDefault("swap-decimal-notation", false,
-                "If you decimal notation is different to the Western standard (i.e. uses , instead of . for decimal points) and want this in the plugin, turn on this option.");
     }
 
      @Override
