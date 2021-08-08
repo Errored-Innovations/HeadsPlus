@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class MaskManager {
 
