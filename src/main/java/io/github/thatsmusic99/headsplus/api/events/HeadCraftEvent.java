@@ -67,16 +67,6 @@ public class HeadCraftEvent extends Event implements Cancellable {
         this.skull = skull;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public String getEventName() {
-        return super.getEventName();
-    }
-
     public int getHeadsCrafted() {
         return headsCrafted;
     }

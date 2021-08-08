@@ -15,7 +15,6 @@ import java.util.List;
 
 public abstract class Icon {
 
-    protected static HeadsPlus hp = HeadsPlus.get();
     protected ItemStack item;
     private String id;
 
@@ -50,7 +49,7 @@ public abstract class Icon {
             item = new ItemStack(Material.valueOf(ConfigInventories.get().getString("icons." + id + ".material")));
 
         } catch (NullPointerException ex) {
-            hp.getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists! (Error code: 8)");
+            HeadsPlus.get().getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists! (Error code: 8)");
         }
     }
 
@@ -74,7 +73,7 @@ public abstract class Icon {
             }
             meta.setLore(lore);
         } catch (NullPointerException ex) {
-            hp.getLogger().warning("There was a problem setting the display name or lore for icon " + id + "! (Error code: 9)");
+            HeadsPlus.get().getLogger().warning("There was a problem setting the display name or lore for icon " + id + "! (Error code: 9)");
         }
         item.setItemMeta(meta);
     }

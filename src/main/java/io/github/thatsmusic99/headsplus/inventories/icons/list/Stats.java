@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
@@ -47,7 +48,7 @@ public class Stats extends Icon {
                     new HPUtils.PlaceholderInfo("{head}",
                             manager.getSection() != null ? hpch.getSections().get(manager.getSection()).getHeads().size() :
                                     hpch.getTotalHeads(), true),
-                    new HPUtils.PlaceholderInfo("{balance}", getBalance(player), hp.isVaultEnabled()),
+                    new HPUtils.PlaceholderInfo("{balance}", getBalance(player), HeadsPlus.get().isVaultEnabled()),
                     new HPUtils.PlaceholderInfo("{sections}",  hpch.getSections().size(), true),
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
@@ -58,7 +59,7 @@ public class Stats extends Icon {
 
     private double getBalance(Player player) {
         try {
-            return hp.getEconomy().getBalance(player);
+            return HeadsPlus.get().getEconomy().getBalance(player);
         } catch (NoClassDefFoundError ex) {
             return 0.0;
         }

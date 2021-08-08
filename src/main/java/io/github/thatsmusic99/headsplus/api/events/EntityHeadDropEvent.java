@@ -82,19 +82,4 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
     public int getAmount() {
         return amount;
     }
-
-    @Override
-    public String getEventName() {
-        return super.getEventName();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

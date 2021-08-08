@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 
 public abstract class BaseInventory implements InventoryHolder, Listener {
 
-    protected static HeadsPlus hp = HeadsPlus.get();
     protected static MessagesManager hpc = MessagesManager.get();
     private static final Pattern PAGE = Pattern.compile("\\{page}");
     private static final Pattern PAGES = Pattern.compile("\\{pages}");
@@ -76,10 +75,10 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                         new NewInventoryEvent(player, getInventory());
                         player.openInventory(getInventory());
                     }
-                }.runTask(hp);
+                }.runTask(HeadsPlus.get());
             }
-        }.runTaskAsynchronously(hp);
-        hp.getServer().getPluginManager().registerEvents(this, hp);
+        }.runTaskAsynchronously(HeadsPlus.get());
+        HeadsPlus.get().getServer().getPluginManager().registerEvents(this, HeadsPlus.get());
     }
 
     public abstract String getDefaultTitle();
@@ -150,7 +149,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     try {
                         icon = Air.class.getConstructor(Player.class).newInstance(player);
                         if (!suppressWarnings) {
-                            hp.getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                            HeadsPlus.get().getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
                         }
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();

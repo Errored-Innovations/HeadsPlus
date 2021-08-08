@@ -47,8 +47,8 @@ public class CustomHead extends Content {
             double price = player.hasPermission("headsplus.bypass.cost") ? 0 : this.price; // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
-                    && hp.isVaultEnabled()
-                    && (ef = hp.getEconomy()) != null
+                    && HeadsPlus.get().isVaultEnabled()
+                    && (ef = HeadsPlus.get().getEconomy()) != null
                     && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
                 MessagesManager.get().sendMessage("commands.heads.not-enough-money", player); // K.O
                 return false;

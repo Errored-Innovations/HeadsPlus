@@ -66,7 +66,7 @@ public class TestsCommand implements IHeadsPlusCommand {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getEntities(), results);
+            StringUtil.copyPartialMatches(args[1], EntityDataManager.ableEntities, results);
         }
         return results;
     }

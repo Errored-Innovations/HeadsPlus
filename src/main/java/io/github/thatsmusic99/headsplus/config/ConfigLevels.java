@@ -14,7 +14,6 @@ public class ConfigLevels extends FeatureConfig {
         return levels;
     }
 
-    private int maxHierarchy = 0;
     private static ConfigLevels instance;
 
     public ConfigLevels() {
@@ -101,10 +100,6 @@ public class ConfigLevels extends FeatureConfig {
         levels.put(34, new BaseLevel("netherite_3", "&4&lNetherite III", 1000000, 0.2));
         levels.put(35, new BaseLevel("netherite_4", "&4&lNetherite IV", 1500000, 0.2));
         levels.put(36, new BaseLevel("netherite_5", "&4&lNetherite V", 2000000, 0.2));
-    }
-
-    public int getMaxHierarchy() {
-        return maxHierarchy;
     }
 
     @Override

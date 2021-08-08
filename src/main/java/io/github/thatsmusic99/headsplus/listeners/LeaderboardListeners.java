@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import com.google.common.collect.Lists;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
@@ -47,7 +48,7 @@ public class LeaderboardListeners implements Listener {
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(EntityHeadDropEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent", this), hp, true);
+                    new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent", this), HeadsPlus.get(), true);
 
         }
 
@@ -78,7 +79,7 @@ public class LeaderboardListeners implements Listener {
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), hp, true);
+                    new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.get(), true);
         }
 
         @Override
@@ -101,7 +102,7 @@ public class LeaderboardListeners implements Listener {
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(HeadCraftEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(HeadCraftEvent.class, "HeadCraftEvent", this), hp, true);
+                    new HeadsPlusEventExecutor(HeadCraftEvent.class, "HeadCraftEvent", this), HeadsPlus.get(), true);
 
         }
     }

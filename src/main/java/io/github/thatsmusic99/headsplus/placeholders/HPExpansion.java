@@ -48,11 +48,6 @@ public class HPExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean register(){
-        return super.register();
-    }
-
-    @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier){
 
         if (identifier.equals("xp")) {

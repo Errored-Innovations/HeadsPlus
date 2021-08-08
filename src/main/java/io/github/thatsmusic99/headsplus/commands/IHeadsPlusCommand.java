@@ -39,9 +39,4 @@ public interface IHeadsPlusCommand extends CommandExecutor, TabCompleter {
 
         return p;
     }
-
-    static List<String> getEntities() {
-        return EntityDataManager.ableEntities;
-    }
-
 }

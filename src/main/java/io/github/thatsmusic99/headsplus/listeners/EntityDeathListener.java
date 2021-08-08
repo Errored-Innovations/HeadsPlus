@@ -33,7 +33,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
-        if (!addData("not-wg-restricted", !hp.canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
+        if (!addData("not-wg-restricted", !HeadsPlus.get().canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
 
         if (!shouldDropHead(event.getEntity())) return;
         //
