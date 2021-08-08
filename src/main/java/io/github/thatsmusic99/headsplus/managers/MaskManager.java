@@ -82,9 +82,9 @@ public class MaskManager {
                             PotionEffectType effectType = PotionEffectType.getByName(content[0]);
                             if (effectType == null)
                                 throw new IllegalArgumentException("Mask effect " + content[0] + " is not an existing potion effect! (Mask: " + key + ")");
-                            int amplifier = 1;
+                            int amplifier = 0;
                             if (content.length > 1 && CachedValues.MATCH_PAGE.matcher(content[1]).matches())
-                                amplifier = Integer.getInteger(content[1]);
+                                amplifier = Integer.getInteger(content[1]) - 1;
                             PotionEffect effect = new PotionEffect(effectType, MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
                             ((PotionMask) info).addEffect(effect);
                         }
