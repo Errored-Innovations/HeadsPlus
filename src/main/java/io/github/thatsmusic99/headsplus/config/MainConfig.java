@@ -93,9 +93,17 @@ public class MainConfig extends HPConfig {
                         "This is to prevent potential exploits with sellable heads.");
         addDefault("enable-looting", true,
                 "Whether or not the looting enchantment should have an effect on how many heads are dropped.");
-        addDefault("thresholds.common", 100);
-        addDefault("thresholds.uncommon", 20);
-        addDefault("thresholds.rare", 5);
+        addDefault("thresholds.common", 100,
+                "The maximum chance needed for the looting enchantment to increase the head drop number.\n" +
+                        "For example, heads with a 50% chance of dropping will drop extra heads depending on the looting level.\n" +
+                        "Every 100% added guarantees a new head, but the extra 50% - the remaining head - is decided by random chance.\n" +
+                        "Equation used: chance += level * 100");
+        addDefault("thresholds.uncommon", 20,
+                "The minimum chance needed for the looting enchantment to bump up the chance of the head dropping.\n" +
+                        "In this example, a head with a 10% chance is changed to 50% with level 1 looting, 66% with level 2 and 75%  with level 3.\n" +
+                        "Equation used: chance = level / (level + 1)");
+        addDefault("thresholds.rare", 5, "The minimum chance for the looting enchantment to softly bump the chance of a head dropping.\n" +
+                "Equation used: chance *= level when chance is below 1, chance += level when chance is above or equal to 1");
         addDefault("looting-ignored", new ArrayList<>(),
                 "Mobs that will get ignored by the looting enchantment so their head drop count remains unchanged.");
         addDefault("disable-for-mythic-mobs", true,
@@ -104,28 +112,40 @@ public class MainConfig extends HPConfig {
         addSection("Player Head Drops");
         addDefault("default-player-drop-chance", 100, "The default chance that a player head will drop when killed.");
         addDefault("default-player-head-price", 10.0, "The default price of a player head when it is dropped.");
-        addDefault("ignored-players", new ArrayList<>());
-        addDefault("enable-player-head-death-messages", false);
+        addDefault("ignored-players", new ArrayList<>(), "A list of players that shouldn't drop heads at all.\n" +
+                "Any entries made here should all be in lowercase.");
+        addDefault("enable-player-head-death-messages", false,
+                "Whether or not messages should be broadcasted when a player loses their head upon death.");
         addDefault("player-head-death-messages",
                 Lists.newArrayList("&c{player} &7was killed by &c{killer} &7and had their head removed!",
                         "&c{killer} &7finished the job and removed the worst part of &c{player}&7: The head.",
-                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."));
-        addDefault("adjust-price-according-to-balance", false);
-        addDefault("use-killer-balance", false);
+                        "&7The server owner screamed at &c{player} &7\"OFF WITH HIS HEAD!\". &c{killer} &7finished the job."),
+                "The list of death messages you can set and add.");
+        addDefault("adjust-price-according-to-balance", false,
+                "Whether or not to adjust the price of the head according to either the victim's or killer's balance (see below).");
+        addDefault("use-killer-balance", false, "Whether to use the killer's balance or victim's balance when the option above is enabled.\n" +
+                "If set to true, the killer's balance is used.\n" +
+                "If set to false, the victim's balance is used.");
         addDefault("percentage-taken-off-victim", 5,
                 "The percentage of the victim's/killer's balance that is taken off the actual victim.\n" +
                         "This is a value out of 100, so in the default option, 5% of the balance is taken.");
-        addDefault("percentage-of-balance-as-price", 5);
+        addDefault("percentage-of-balance-as-price", 5,
+                "The percentage of the victim's/killer's balance that is used as the actual price of the head.\n" +
+                        "Must be a value out of 100.");
 
         addSection("Selling Heads");
-        addDefault("stop-placement-of-sellable-heads", false);
-        addDefault("use-sellhead-gui", true);
-        addDefault("case-sensitive-names", true);
+        addDefault("stop-placement-of-sellable-heads", false, "Whether or not players should be able to place heads that can be sold.\n" +
+                "Heads lose their metadata when placed on the ground, so this purely serves as an option to prevent that.");
+        addDefault("use-sellhead-gui", true, "Whether or not the sellhead GUI is opened when a player does /sellhead.");
+        addDefault("case-sensitive-names", false, "Whether or not names in /sellhead should be case sensitive.");
 
         addSection("Masks");
-        addDefault("check-interval", 60);
-        addDefault("reset-after-x-intervals", 20);
-        addDefault("effect-length", 12000);
+        addDefault("check-interval", 60, "How often in ticks the plugin checks to make sure it is still on the player's head.\n" +
+                "Default is 3 seconds.");
+        addDefault("reset-after-x-intervals", 20, "How many check intervals it takes for a potion mask to reset.\n" +
+                "The default here makes the mask reset every minute.");
+        addDefault("effect-length", 12000, "How long in ticks the effects on the potion mask lasts.\n" +
+                "The effect is removed after the mask is taken off.");
 
         addSection("Restrictions");
         addDefault("whitelist-worlds", false, "Whether or not the list below should be treated as a whitelist.\n" +
@@ -154,7 +174,7 @@ public class MainConfig extends HPConfig {
         addDefault("autograb-price", "default", "The default price set for autograbbed heads. Use \"default\" to use the default price used for all heads.");
 
         addSection("Challenges");
-        addDefault("broadcast-challenge-complete", true);
+        addDefault("broadcast-challenge-complete", true, "Whether or not challenge completion should be broadcasted.");
 
         addSection("Levels");
         addDefault("add-boss-bars", true, "Whether or not boss bars should be displayed to show the progress of a player's level.");
@@ -162,8 +182,11 @@ public class MainConfig extends HPConfig {
                 "See https://papermc.io/javadocs/paper/1.17/org/bukkit/boss/BarColor.html for a list of possible colours.");
         addDefault("boss-bar-title", "&c&lXP to next HP level", "The title of the bossbar.");
         addDefault("boss-bar-lifetime", 5, "The number of seconds the bossbar should last before disappearing.");
-        addDefault("broadcast-level-up", true, "Whether or not ");
-        addDefault("multiple-level-ups", false);
+        addDefault("broadcast-level-up", true, "Whether or not a broadcast should be made when a player levels up.\n" +
+                "The message for this can be changed in your localisation file (in the locale folder).");
+        addDefault("multiple-level-ups", false, "Whether or not multiple level-ups should occur at once.\n" +
+                "If disabled for example, a player levelling up from A to C will only get the broadcast for level C, but all rewards in between.\n" +
+                "If enabled, there will be broadcasts for levelling up to B and C despite the player's new level being level C.");
 
         addSection("Statistics");
         addDefault("cache-duration", 300, "How long in seconds statistics are cached for.\n" +
@@ -215,9 +238,9 @@ public class MainConfig extends HPConfig {
         addDefault("smite-player", false, "This April Fool's feature genuinely got me a complaint.\n" +
                 "Basically, it strikes the player with lightning whenever a head is dropped. That is it.\n" +
                 "Someone genuinely complained about it.");
-        addDefault("suppress-gui-warnings", true);
-        addDefault("allow-negative-xp", false);
-        addDefault("suppress-messages-during-search", false);
+        addDefault("suppress-gui-warnings", true, "Whether or not GUI warnings from HeadsPlus should be suppressed.");
+        addDefault("allow-negative-xp", false, "Whether or not the plugin should allow negative XP.");
+        addDefault("suppress-messages-during-search", false, "Whether or not you are able to receive messages when searching for a head.");
         addDefault("price-decimal-format", "#,###.##",
                 "The format in which prices should appear in messages, heads, wherever.\n" +
                         "By default, this adds a comma for every 1000$ and rounds to two decimal points.\n" +
@@ -333,162 +356,6 @@ public class MainConfig extends HPConfig {
          moveTo("plugin.perks.xp.allow-negative", "allow-negative-xp");
          moveTo("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
      }
-    /*
-    protected void loadS() {
-
-        getConfig().options().header("HeadsPlus by Thatsmusic99 - Config wiki: https://github.com/Thatsmusic99/HeadsPlus/wiki/Configuring-config.yml");
-        getConfig().addDefault("locale", "en_us");
-        getConfig().addDefault("smart-locale", false);
-        getConfig().addDefault("blacklist.default.enabled", true);
-        getConfig().addDefault("blacklist.world.enabled", true);
-        getConfig().addDefault("whitelist.default.enabled", false);
-        getConfig().addDefault("whitelist.world.enabled", false);
-        getConfig().addDefault("blacklist.default.list", new ArrayList<>());
-        getConfig().addDefault("blacklist.world.list", new ArrayList<>());
-        getConfig().addDefault("whitelist.default.list", new ArrayList<>());
-        getConfig().addDefault("whitelist.world.list", new ArrayList<>());
-        getConfig().addDefault("mysql.host", "localhost");
-        getConfig().addDefault("mysql.port", "3306");
-        getConfig().addDefault("mysql.database", "db");
-        getConfig().addDefault("mysql.username", "username");
-        getConfig().addDefault("mysql.password", "password");
-        getConfig().addDefault("mysql.enabled", false);
-        getConfig().addDefault("theme-colours.1", "DARK_BLUE");
-        getConfig().addDefault("theme-colours.2", "GOLD");
-        getConfig().addDefault("theme-colours.3", "GRAY");
-        getConfig().addDefault("theme-colours.4", "DARK_AQUA");
-        getConfig().addDefault("plugin.larger-menus", false);
-        getConfig().addDefault("plugin.autograb.enabled", false);
-        getConfig().addDefault("plugin.autograb.add-as-enabled", true);
-        getConfig().addDefault("plugin.autograb.section", "players");
-        getConfig().addDefault("plugin.autograb.title", "&8[&6{player}&8]");
-        getConfig().addDefault("plugin.autograb.price", "default");
-        getConfig().addDefault("plugin.perks.interact.middle-click-head", true);
->>>>>>> configuration-rewrite:src/main/java/io/github/thatsmusic99/headsplus/config/MainConfig.java
-        config.addDefault("plugin.perks.interact.click-head", true);
-        config.addDefault("plugin.perks.xp.allow-negative", false);
-        config.addDefault("plugin.perks.ascii-art", true);
-        config.addDefault("plugin.perks.sell-heads", true);
-        config.addDefault("plugin.perks.drop-heads", true);
-        config.addDefault("plugin.perks.drops.ignore-players", new ArrayList<>());
-        config.addDefault("plugin.perks.drops.needs-killer", false);
-        config.addDefault("plugin.perks.drops.entities-requiring-killer", new ArrayList<>(Collections.singleton("player")));
-        config.addDefault("plugin.perks.craft-heads", false);
-        config.addDefault("plugin.perks.disable-crafting", false);
-        config.addDefault("plugin.perks.heads-selector", true);
-        config.addDefault("plugin.perks.challenges", true);
-        config.addDefault("plugin.perks.leaderboards", true);
-        config.addDefault("plugin.perks.levels", true);
-        config.addDefault("plugin.perks.player-death-messages", false);
-        config.addDefault("plugin.perks.death-messages",
-                new ArrayList<>(Arrays.asList("&b{player} &3was killed by &b{killer} &3and had their head removed!",
-                                "&b{killer} &3finished the job and removed the worst part of &b{player}&3: The head.",
-                                "&3The server owner screamed at &b{player} &3\"OFF WITH HIS HEAD!\"&3. &b{killer} &3finished the job.")));
-        config.addDefault("plugin.perks.smite-player-if-they-get-a-head", false);
-        config.addDefault("plugin.perks.mask-powerups", true);
-        config.addDefault("plugin.perks.pvp.player-balance-competition", false);
-        config.addDefault("plugin.perks.pvp.use-killer-balance", false);
-        config.addDefault("plugin.perks.pvp.percentage-lost", 5);
-        config.addDefault("plugin.perks.pvp.percentage-balance-for-head", 5);
-        config.addDefault("plugin.mechanics.theme", "classic");
-        config.addDefault("plugin.mechanics.plugin-theme-dont-change", "classic");
-        config.addDefault("plugin.mechanics.update.check", true);
-        config.addDefault("plugin.mechanics.update.notify", true);
-        config.addDefault("plugin.mechanics.allow-looting-enchantment", true);
-        config.addDefault("plugin.mechanics.looting.ignored-entities", new ArrayList<>());
-        config.addDefault("plugin.mechanics.looting.use-old-system", false);
-        config.addDefault("plugin.mechanics.looting.thresholds.common", 100);
-        config.addDefault("plugin.mechanics.looting.thresholds.uncommon", 20);
-        config.addDefault("plugin.mechanics.looting.thresholds.rare", 5);
-        config.addDefault("plugin.mechanics.stop-placement-of-sellable-heads", false);
-        config.addDefault("plugin.mechanics.sellhead-gui", true);
-        config.addDefault("plugin.mechanics.debug.create-debug-files", true);
-        config.addDefault("plugin.mechanics.debug.print-stacktraces-in-console", true);
-        config.addDefault("plugin.mechanics.anvil-menu-search", false);
-        config.addDefault("plugin.mechanics.suppress-messages-during-search", false);
-        config.addDefault("plugin.mechanics.mythicmobs.no-hp-drops", true);
-        config.addDefault("plugin.mechanics.round-balance-to-2-d-p", true);
-        config.addDefault("plugin.mechanics.boss-bar.enabled", true);
-        config.addDefault("plugin.mechanics.boss-bar.color", "RED");
-        config.addDefault("plugin.mechanics.boss-bar.title", "&c&lXP to next HP level");
-        config.addDefault("plugin.mechanics.boss-bar.lifetime", 5);
-        config.addDefault("plugin.mechanics.broadcasts.level-up", true);
-        config.addDefault("plugin.mechanics.broadcasts.challenge-complete", true);
-        config.addDefault("plugin.mechanics.leaderboards.cache-boards", true);
-        config.addDefault("plugin.mechanics.leaderboards.cache-lifetime-seconds", 300);
-        config.addDefault("plugin.mechanics.xp.crafting", 10);
-        config.addDefault("plugin.mechanics.xp.head-drops", 10);
-        config.addDefault("plugin.mechanics.xp.selling", 10);
-        config.addDefault("plugin.mechanics.suppress-gui-warnings", true);
-        config.addDefault("plugin.mechanics.blocked-spawn-causes", new ArrayList<>(Collections.singleton("SPAWNER_EGG")));
-        config.addDefault("plugin.mechanics.use-tellraw", false);
-        config.addDefault("plugin.mechanics.masks.check-interval", 60);
-        config.addDefault("plugin.mechanics.masks.reset-after-x-intervals", 20);
-        config.addDefault("plugin.mechanics.masks.effect-length", 12000);
-        config.addDefault("plugin.mechanics.sellhead-ids-case-sensitive", true);
-        config.options().copyDefaults(true);
-        save();
-
-        // Whitelist / Blacklist
-        whitelist_worlds.list.clear();
-        blacklist_worlds.list.clear();
-        whitelist_heads.list.clear();
-        blacklist_heads.list.clear();
-
-        ConfigurationSection l = config.getConfigurationSection("blacklist.world");
-        blacklist_worlds.list.addAll(l.getStringList("list"));
-        blacklist_worlds.enabled = l.getBoolean("enabled");
-
-        l = config.getConfigurationSection("whitelist.world");
-        whitelist_worlds.list.addAll(l.getStringList("list"));
-        whitelist_worlds.enabled = l.getBoolean("enabled");
-
-        l = config.getConfigurationSection("blacklist.default");
-        blacklist_heads.list.addAll(l.getStringList("list"));
-        blacklist_heads.enabled = l.getBoolean("enabled");
-
-        l = config.getConfigurationSection("whitelist.default");
-        whitelist_heads.list.addAll(l.getStringList("list"));
-        whitelist_heads.enabled = l.getBoolean("enabled");
-
-        // Perks
-        perks.drops_entities_requiring_killer.clear();
-        perks.drops_ignore_players.clear();
-        perks.death_messages.clear();
-
-        ConfigurationSection p = config.getConfigurationSection("plugin.perks");
-        perks.drops_entities_requiring_killer.addAll(p.getStringList("drops.entities-requiring-killer"));
-        perks.drops_ignore_players.addAll(p.getStringList("drops.ignore-players"));
-        perks.drops_needs_killer = p.getBoolean("drops.needs-killer");
-
-        perks.death_messages.addAll(p.getStringList("death-messages"));
-        perks.sell_heads = p.getBoolean("sell-heads");
-        perks.drop_heads = p.getBoolean("drop-heads");
-        perks.craft_heads = p.getBoolean("craft-heads");
-        perks.disable_crafting = p.getBoolean("disable-crafting");
-        perks.heads_selector = p.getBoolean("heads-selector");
-        perks.challenges = p.getBoolean("challenges");
-        perks.leaderboards = p.getBoolean("leaderboards");
-        perks.levels = p.getBoolean("levels");
-        perks.player_death_messages = p.getBoolean("player-death-messages");
-        perks.smite_on_head = p.getBoolean("smite-player-if-they-get-a-head");
-        perks.mask_powerups = p.getBoolean("mask-powerups");
-
-        perks.pvp_player_balance_competition = p.getBoolean("pvp.player-balance-competition");
-        perks.pvp_percentage_lost = p.getDouble("pvp.percentage-lost");
-        perks.pvp_balance_for_head = p.getDouble("pvp.percentage-balance-for-head");
-        perks.use_killer_balance = p.getBoolean("pvp.use-killer-balance");
-        perks.ascii = p.getBoolean("ascii-art");
-        perks.middle_click_in = p.getBoolean("interact.middle-click-head");
-        perks.click_in = p.getBoolean("interact.click-head");
-        perks.negative_xp = p.getBoolean("xp.allow-negative");
-<<<<<<< HEAD:src/main/java/io/github/thatsmusic99/headsplus/config/HeadsPlusMainConfig.java
-    }
-
-    public ConfigurationSection getMechanics() {
-        return config.getConfigurationSection("plugin.mechanics");
-=======
-    } */
 
     @Override
     public void postSave() {
