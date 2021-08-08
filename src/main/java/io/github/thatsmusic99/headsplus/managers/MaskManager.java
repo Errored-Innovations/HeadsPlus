@@ -76,7 +76,8 @@ public class MaskManager {
                 switch (type.toLowerCase()) {
                     case "potion":
                         info = new PotionMask(key, headInfo);
-                        for (String effectStr : masksSection.getStringList("effects")) {
+                        for (String effectStr : maskSection.getStringList("effects")) {
+                            HeadsPlus.debug("Effect: " + effectStr);
                             String[] content = effectStr.split(":");
                             PotionEffectType effectType = PotionEffectType.getByName(content[0]);
                             if (effectType == null)
