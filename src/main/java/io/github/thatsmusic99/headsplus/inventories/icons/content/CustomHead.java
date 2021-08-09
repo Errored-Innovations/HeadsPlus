@@ -30,7 +30,7 @@ public class CustomHead extends Content {
 
     public CustomHead(String id) {
         super(ConfigHeadsSelector.get().getBuyableHead(id).forceBuildHead());
-        this.price = ConfigHeadsSelector.get().getBuyableHead(id).getPrice(); // TODO - set price
+        this.price = ConfigHeadsSelector.get().getBuyableHead(id).getPrice();
         this.id = id;
     }
 

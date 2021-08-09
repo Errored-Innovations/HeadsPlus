@@ -68,16 +68,4 @@ public abstract class SQLManager {
     public String getStupidAutoIncrementThing() {
         return usingSqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT";
     }
-
-    protected synchronized ResultSet executeQuery(PreparedStatement statement) throws SQLException {
-        return statement.executeQuery();
-    }
-
-    protected synchronized void executeUpdate(PreparedStatement statement) throws SQLException {
-        statement.executeUpdate();
-    }
-
-    protected synchronized PreparedStatement prepareStatement(Connection connection, String sql) throws SQLException {
-        return connection.prepareStatement(sql);
-    }
 }
