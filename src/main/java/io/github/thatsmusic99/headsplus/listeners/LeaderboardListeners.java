@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
@@ -34,15 +35,19 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(EntityHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player.getUniqueId()).addXp(event.getHeadInfo().getXp() * event.getAmount());
+            if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
+                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(event.getHeadInfo().getXp() * event.getAmount());
+            }
             if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                 }
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
-            StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
-                    event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount());
+            if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
+            Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
+                    event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount()), 20);
         }
 
         @Override
@@ -64,15 +69,19 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(PlayerHeadDropEvent event) {
             if (event.getPlayer() == null) return;
             Player player = event.getPlayer();
-            HPPlayer.getHPPlayer(player.getUniqueId()).addXp(0 * event.getAmount());
+            if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
+                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(event.getHeadInfo().getXp() * event.getAmount());
+            }
             if (MainConfig.get().getMiscellaneous().SMITE_PLAYER) {
                 for (int i = 0; i < 5; ++i) {
                     event.getLocation().getWorld().strikeLightningEffect(player.getLocation());
                 }
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
-            StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
-                    event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount());
+            if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
+            Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
+                    event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount()), 20);
 
         }
 
@@ -92,11 +101,16 @@ public class LeaderboardListeners implements Listener {
 
         @Override
         public void onEvent(HeadCraftEvent event) {
-            HPPlayer.getHPPlayer(event.getPlayer().getUniqueId()).addXp(0 * event.getHeadsCrafted());
+            Player player = event.getPlayer();
+            if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
+                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(0 * event.getHeadsCrafted());
+            }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
-            StatisticsSQLManager.get().addToTotal(event.getPlayer().getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING,
-                    event.getType(), "", event.getHeadsCrafted());
+            if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
+            Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING,
+                    event.getType(), "", event.getHeadsCrafted()), 20);
         }
 
         @Override
