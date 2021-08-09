@@ -19,7 +19,6 @@ public class EntityDataManager {
 
 
     private static final LinkedHashMap<String, List<DroppedHeadInfo>> storedHeads = new LinkedHashMap<>();
-    private static final LinkedHashMap<String, ItemStack> sellheadCache = new LinkedHashMap<>();
     private static final HashSet<String> NOT_ALIVE = Sets.newHashSet("PLAYER", "ARMOR_STAND");
 
     public static void createEntityList() {
@@ -38,7 +37,6 @@ public class EntityDataManager {
             public void run() {
                 try {
                     storedHeads.clear();
-                    sellheadCache.clear();
                     setupHeads();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -186,7 +184,7 @@ public class EntityDataManager {
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions));
 
                         heads.add(headInfo);
-                        SellableHeadsManager.get().registerPrice("mobs_" + name, ConfigMobs.get().getPrice(path));
+                        SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head, SellableHeadsManager.SellingType.HUNTING, ConfigMobs.get().getPrice(path));
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }
@@ -198,12 +196,8 @@ public class EntityDataManager {
             }
         }
 
-        SellableHeadsManager.get().registerPrice("mobs_PLAYER",
+        SellableHeadsManager.get().registerPrice("mobs_PLAYER", SellableHeadsManager.SellingType.HUNTING,
                 ConfigMobs.get().getDouble("player.default.price", ConfigMobs.get().getDouble("defaults.price")));
-    }
-
-    public static LinkedHashMap<String, ItemStack> getSellheadCache() {
-        return sellheadCache;
     }
 
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {

@@ -84,17 +84,14 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                 String fixedId = args[0];
                 if (fixedId.equalsIgnoreCase("all")) {
                     getValidHeads(player, null, -1);
-                } else if (SellableHeadsManager.get().isRegistered(fixedId)) {
-
+                } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                    getValidHeads(player, null, Integer.parseInt(args[0]));
+                } else {
                     int limit = -1;
                     if (args.length > 1) {
                         limit = HPUtils.isInt(args[1]);
                     }
                     getValidHeads(player, fixedId, limit);
-                } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                    getValidHeads(player, null, Integer.parseInt(args[0]));
-                } else {
-                    hpc.sendMessage("commands.errors.invalid-args", sender);
                 }
             }
 
@@ -116,8 +113,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
             double headPrice;
             String id = PersistenceManager.get().getSellType(item);
             if (fixedId != null) {
-                if (!fixedId.equals(id) ||
-                        (!MainConfig.get().getSellingHeads().CASE_INSENSITIVE && fixedId.equalsIgnoreCase(id))) continue;
+                if (MainConfig.get().getSellingHeads().CASE_INSENSITIVE) {
+                    if (!id.toLowerCase().startsWith(fixedId.toLowerCase())) continue;
+                } else if (!id.startsWith(fixedId)) continue;
             }
 
             if (PersistenceManager.get().hasSellPrice(item)) {

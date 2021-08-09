@@ -229,9 +229,7 @@ public class ConfigMobs extends FeatureConfig {
     private void addPlayerHeads() {
 		makeSectionLenient("player");
 		createConfigSection("player.default");
-    	addExample("player.default.chance", 100);
     	addExample("player.default.display-name", "{player}'s head");
-    	addExample("player.default.price", "{default}");
         addExample("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
 
         addExample("player.Thatsmusic99.lore", "oi mate it's a bit rood to stab me innit?");

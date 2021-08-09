@@ -126,12 +126,15 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         Random random = new Random();
         HashMap<String, List<EntityDataManager.DroppedHeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
         List<EntityDataManager.DroppedHeadInfo> heads = storedHeads.get(id + ";" + meta);
+        String chosenConditions = meta;
         if (heads == null) {
             String[] possibleConditions = meta.split(",");
             for (String str : possibleConditions) {
+                chosenConditions = str;
                 if ((heads = storedHeads.get(id + ";" + str)) != null) break;
             }
             if (heads == null) {
+                chosenConditions = "default";
                 heads = storedHeads.get(id + ";default");
             }
         }
@@ -144,10 +147,11 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
+            String finalChosenConditions = chosenConditions;
             info.buildHead().thenAccept(head -> {
                 head.setAmount(amount);
                 PersistenceManager.get().setSellable(head, true);
-                PersistenceManager.get().setSellType(head, "mobs_" + id);
+                PersistenceManager.get().setSellType(head, "mobs_" + id + ":" + finalChosenConditions + ":" + info.getId());
                 location.getWorld().dropItem(location, head);
             });
         }
