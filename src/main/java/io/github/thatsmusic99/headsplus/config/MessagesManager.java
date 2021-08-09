@@ -1021,6 +1021,7 @@ public class MessagesManager {
         if (file == null) {
             file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
         }
+        if (name.endsWith(".yml")) name = name.substring(0, name.length() - 4);
         YamlConfiguration config = new YamlConfiguration();
         try {
 
