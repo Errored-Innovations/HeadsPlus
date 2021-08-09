@@ -84,12 +84,15 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
                 .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null : killer.getName()));
 
+        headInfo.withXP("player.default"); // Sets default XP
+        headInfo.withXP("player." + victim.getName());
+
         Location location = victim.getLocation();
         PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, headInfo, location, amount);
         Bukkit.getPluginManager().callEvent(phdEvent);
 
         if (phdEvent.isCancelled()) return;
-        if (lostprice > 0.0) {
+        if (lostprice > 0.0 && killer != null) {
             economy.withdrawPlayer(victim, lostprice);
             MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
         }
