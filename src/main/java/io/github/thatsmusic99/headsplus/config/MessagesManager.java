@@ -44,6 +44,7 @@ public class MessagesManager {
         if (MainConfig.get().getBoolean("smart-locale")) {
             File langDir = new File(dest);
             for (File f : Objects.requireNonNull(langDir.listFiles())) {
+                if (f.getName().contains("errored")) continue;
                 locales.put(f.getName().split("_")[0].toLowerCase(), performChecks(f, f.getName().toLowerCase()));
             }
             players = new HashMap<>();
@@ -1034,6 +1035,10 @@ public class MessagesManager {
             logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
             logger.severe("The default configuration will be loaded in response to this.");
             InputStream is = HeadsPlus.get().getResource(name + ".yml");
+            if (is == null) {
+                logger.severe("No default config found... nothing new will be loaded.");
+                return null;
+            }
             try {
                 file.delete();
                 Files.copy(is, new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
