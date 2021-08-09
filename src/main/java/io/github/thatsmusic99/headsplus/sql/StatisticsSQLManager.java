@@ -60,18 +60,21 @@ public class StatisticsSQLManager extends SQLManager {
         try (FileReader reader = new FileReader(playerInfo)) {
             JSONObject core = (JSONObject) new JSONParser().parse(reader);
             for (Object uuidObj : core.keySet()) {
+                if (uuidObj.equals("server-total")) continue;
                 JSONObject playerObj = (JSONObject) core.get(uuidObj);
                 UUID uuid = UUID.fromString((String) uuidObj);
 
                 JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
                 if (huntingObj != null) {
                     for (Object mobObj : huntingObj.keySet()) {
+                        if (mobObj.equals("total")) continue;
+                        HeadsPlus.debug((String) mobObj);
                         ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
                         String head = "";
-                        if (defaultSection.getKeys(false).size() != 0) {
+                        if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
                             head = defaultSection.getKeys(false).get(0);
                         }
-                        int total = (int) huntingObj.get(mobObj);
+                        int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
                         addToTotalSync(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total);
                     }
                 }
@@ -79,12 +82,13 @@ public class StatisticsSQLManager extends SQLManager {
                 JSONObject craftingObj = (JSONObject) playerObj.get("crafting");
                 if (craftingObj != null) {
                     for (Object mobObj : craftingObj.keySet()) {
+                        if (mobObj.equals("total")) continue;
                         ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
                         String head = "";
-                        if (defaultSection.getKeys(false).size() != 0) {
+                        if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
                             head = defaultSection.getKeys(false).get(0);
                         }
-                        int total = (int) craftingObj.get(mobObj);
+                        int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
                         addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
                     }
                 }

@@ -63,8 +63,12 @@ public class PlayerSQLManager extends SQLManager {
         try (FileReader reader = new FileReader(playerInfo)) {
             JSONObject core = (JSONObject) new JSONParser().parse(reader);
             for (Object uuidObj : core.keySet()) {
+                if (uuidObj.equals("server-total")) continue;
                 JSONObject playerObj = (JSONObject) core.get(uuidObj);
-                long xp = (long) playerObj.get("xp");
+                long xp = 0;
+                if (playerObj.containsKey("xp")) {
+                    xp = (long) playerObj.get("xp");
+                }
                 String levelStr = (String) playerObj.get("level");
                 int levelIndex = LevelsManager.get().getLevels().indexOf(levelStr);
                 if (levelIndex == -1) levelIndex = 0;

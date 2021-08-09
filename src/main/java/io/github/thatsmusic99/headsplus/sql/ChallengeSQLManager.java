@@ -58,6 +58,7 @@ public class ChallengeSQLManager extends SQLManager {
         try (FileReader reader = new FileReader(playerInfo)) {
             JSONObject core = (JSONObject) new JSONParser().parse(reader);
             for (Object uuidObj : core.keySet()) {
+                if (uuidObj.equals("server-total")) continue;
                 JSONObject playerObj = (JSONObject) core.get(uuidObj);
                 UUID uuid = UUID.fromString((String) uuidObj);
 
