@@ -41,27 +41,18 @@ public class HeadInteractListener extends HeadsPlusListener<PlayerInteractEvent>
 
     @Override
     public void onEvent(PlayerInteractEvent event) {
-        try {
-            if (addData("action", event.getAction()) == Action.RIGHT_CLICK_BLOCK) {
-                Player player = event.getPlayer();
-                BlockState block = event.getClickedBlock().getState();
-                if (addData("is-skull", block instanceof Skull)) {
-
-                    Skull skull = (Skull) block;
-                    String owner;
-
-                    owner = addData("owner", skull.getOwner());
-                    if (owner == null) return;
-                    if (!sent.contains(player.getUniqueId())) {
-                        sent.add(player.getUniqueId());
-                        ConfigInteractions.get().getMessageForHead(skull, player).thenAccept(player::sendMessage);
-                    } else {
-                        sent.remove(player.getUniqueId());
-                    }
+        if (addData("action", event.getAction()) == Action.RIGHT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
+            BlockState block = event.getClickedBlock().getState();
+            if (addData("is-skull", block instanceof Skull)) {
+                Skull skull = (Skull) block;
+                if (!sent.contains(player.getUniqueId())) {
+                    sent.add(player.getUniqueId());
+                    player.sendMessage(ConfigInteractions.get().getMessageForHead(skull, player));
+                } else {
+                    sent.remove(player.getUniqueId());
                 }
             }
-        } catch (NullPointerException ex) {
-            //
         }
     }
 }

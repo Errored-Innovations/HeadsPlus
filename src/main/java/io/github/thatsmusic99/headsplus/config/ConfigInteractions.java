@@ -1,9 +1,9 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Skull;
@@ -13,16 +13,19 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfigInteractions extends HPConfig {
 
     private static ConfigInteractions instance;
+    private Gson gson;
 
     public ConfigInteractions() {
         super("interactions.yml");
         instance = this;
+        gson = new Gson();
     }
 
     /*
@@ -44,7 +47,9 @@ public class ConfigInteractions extends HPConfig {
             addDefault("defaults.vowel-message", "{msg_event.head-mhf-interact-message-2}");
             addDefault("defaults.commands", Lists.newArrayList());
 
-            makeSectionLenient("special");
+            makeSectionLenient("special.names");
+            makeSectionLenient("special.textures");
+            makeSectionLenient("special.locations");
             addComment("special", "This is the section where you can specify unique interactions with heads.\n" +
                     "These can be specified with location, name and texture.\n" +
                     "Locations are placed at the highest priority and are formatted as 0x0y0zworld_name. (Replace the 0s with the coordinates you want and world_name with the world's name.)\n" +
@@ -94,48 +99,47 @@ public class ConfigInteractions extends HPConfig {
         return instance;
     }
 
-    public CompletableFuture<String> getMessageForHead(Skull skull, Player receiver) {
-        return CompletableFuture.supplyAsync(() -> {
-            Location location = skull.getLocation();
-            String locationStr = location.getBlockX() + "x" + location.getBlockY() + "y" + location.getBlockZ() + "z" + location.getWorld().getName();
-            if (contains("special.locations." + locationStr)) {
-                runCommands("special.locations." + locationStr, receiver);
-                return getMessage("special.locations." + locationStr, receiver, skull.getOwner());
+    public String getMessageForHead(Skull skull, Player receiver) {
+        Location location = skull.getLocation();
+        String locationStr = location.getBlockX() + "x" + location.getBlockY() + "y" + location.getBlockZ() + "z" + location.getWorld().getName();
+        if (contains("special.locations." + locationStr)) {
+            runCommands("special.locations." + locationStr, receiver);
+            return getMessage("special.locations." + locationStr, receiver, skull.getOwner());
+        }
+
+        try {
+            // Get the skull's game profile
+            Field profileField = skull.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            GameProfile profile = (GameProfile) profileField.get(skull);
+            // Check to see if the config contains the head's name.
+            if (contains("special.names." + profile.getName())) {
+                runCommands("special.names." + profile.getName(), receiver);
+                return getMessage("special.names." + profile.getName(), receiver, profile.getName());
             }
 
-            try {
-                // Get the skull's game profile
-                Field profileField = skull.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                GameProfile profile = (GameProfile) profileField.get(skull);
-                // Check to see if the config contains the head's name.
-                if (contains("special.names." + profile.getName())) {
-                    runCommands("special.names." + profile.getName(), receiver);
-                    return getMessage("special.names." + profile.getName(), receiver, profile.getName());
-                }
+            // Check to see if the texture is noted.
+            // We'll get all three forms of this: the b64 texture, the URL and the hash.
+            // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
+            // EXCITING STUFF
+            // update: fuck you microsoft
+            Property texturesProp = profile.getProperties().get("textures").iterator().next();
+            String b64Texture = texturesProp.getValue();
+            Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(b64Texture.getBytes())), Map.class);
+            String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
+            String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
 
-                // Check to see if the texture is noted.
-                // We'll get all three forms of this: the b64 texture, the URL and the hash.
-                // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
-                // EXCITING STUFF
-                // update: fuck you microsoft
-                Property texturesProp = profile.getProperties().get("textures").iterator().next();
-                String b64Texture = texturesProp.getValue();
-                String url = new String(Base64.getDecoder().decode(b64Texture.getBytes()));
-                String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
-
-                for (String str : Arrays.asList(b64Texture, url, hash)) {
-                    if (contains("special.textures." + str)) {
-                        runCommands("special.textures." + str, receiver);
-                        return getMessage("special.textures." + str, receiver, profile.getName());
-                    }
+            for (String str : Arrays.asList(b64Texture, url, hash)) {
+                if (contains("special.textures." + str)) {
+                    runCommands("special.textures." + str, receiver);
+                    return getMessage("special.textures." + str, receiver, profile.getName());
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
             }
-            runCommands("defaults", receiver);
-            return getMessage("defaults", receiver, skull.getOwner());
-        }, HeadsPlus.async).thenApplyAsync(msg -> msg, HeadsPlus.sync);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        runCommands("defaults", receiver);
+        return getMessage("defaults", receiver, skull.getOwner());
     }
 
     private String getMessage(String path, Player player, String name) {
@@ -143,29 +147,27 @@ public class ConfigInteractions extends HPConfig {
         // Default message is null, what the hell
         if (message == null) return "";
         Pattern defaultsPattern = Pattern.compile("\\{(.+)}");
-        if (defaultsPattern.matcher(message).matches()) {
-            String pointer = defaultsPattern.matcher(message).group(1);
+        Matcher matcher = defaultsPattern.matcher(message);
+        if (matcher.matches()) {
+            String pointer = matcher.group(1);
             if (getConfigSection("defaults").getKeys(false).contains(pointer)) {
                 message = getString("defaults." + pointer, getString("defaults.message"));
             }
         }
-
         if (message == null) return "";
-
+        message = MessagesManager.get().formatMsg(message, player);
         if (getString(path + ".name") != null) {
             message = message.replaceAll("\\{name}", getString(path + ".name"));
         } else {
             message = message.replaceAll("\\{name}", name);
         }
-
-        return MessagesManager.get().formatMsg(message, player);
+        return message;
     }
 
     private void runCommands(String path, Player player) {
-        List<String> commands = getList(path + ".commands", Lists.newArrayList(getString(path + ".commands")));
-        if (commands == null) return;
-
+        List<String> commands = getList(path + ".commands");
         for (String command : commands) {
+            if (command == null) continue;
             if (command.startsWith("player:")) {
                 player.performCommand(command.replaceFirst("player:", ""));
             } else {
