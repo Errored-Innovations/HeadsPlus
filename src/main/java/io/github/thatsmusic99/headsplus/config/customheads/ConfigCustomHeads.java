@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
 import java.io.File;
+import java.io.IOException;
 
 @Deprecated
 public class ConfigCustomHeads extends HPConfig {
@@ -20,6 +21,9 @@ public class ConfigCustomHeads extends HPConfig {
 
     @Override
     public void loadDefaults() {
+        makeSectionLenient("heads");
+        makeSectionLenient("sections");
+        makeSectionLenient("options");
     }
 
     @Override
@@ -53,10 +57,12 @@ public class ConfigCustomHeads extends HPConfig {
     }
 
     @Override
-    public void postSave() {
+    public void save() throws IOException {
         File customHeads = new File(HeadsPlus.get().getDataFolder(), "customheads.yml");
         if (!customHeads.exists()) return;
-        customHeads.renameTo(new File(HeadsPlus.get().getDataFolder(), "customheads-backup.yml"));
+        if (!customHeads.renameTo(new File(HeadsPlus.get().getDataFolder(), "customheads-backup.yml"))) {
+            HeadsPlus.get().getLogger().warning("Failed to rename customheads.yml to customheads-backup.yml name! You will need to do this yourself.");
+        }
     }
 
     public static ConfigCustomHeads get() {
