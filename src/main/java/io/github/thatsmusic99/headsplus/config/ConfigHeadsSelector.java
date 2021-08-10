@@ -128,7 +128,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
         public SectionInfo(String id) {
             this.id = id;
             this.permission = "headsplus.section." + id;
-            this.heads = new HashMap<>();
+            this.heads = new LinkedHashMap<>();
         }
 
         public SectionInfo withPermission(String permission) {
