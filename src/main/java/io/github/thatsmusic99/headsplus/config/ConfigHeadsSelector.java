@@ -36,8 +36,8 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     @Override
     public void loadDefaults() {
-        double version = getDouble("version", 0.0);
-        if (isNew()) version = 0.0;
+        double version = getDouble("version", -1.0);
+        if (isNew()) version = -1.0;
         addComment("This is where you can configure where the heads selector (/heads)");
 
         addDefault("version", 3.5);
@@ -57,6 +57,8 @@ public class ConfigHeadsSelector extends FeatureConfig {
                 addDefault("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
             }
         }
+
+        set("version", 3.5);
     }
 
     @Override
