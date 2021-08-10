@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.managers;
 
+import com.google.gson.Gson;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
@@ -26,6 +27,7 @@ public class AutograbManager {
 
     // texture lookups need to be protected from spam
     private static final HashMap<String, Long> lookups = new HashMap<>();
+    private static final Gson gson = new Gson();
 
     public static String grabUUID(String username, int tries, CommandSender callback) {
         String uuid = null;
