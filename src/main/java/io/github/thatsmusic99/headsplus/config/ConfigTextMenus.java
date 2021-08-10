@@ -137,7 +137,7 @@ public class ConfigTextMenus extends HPConfig {
                             new HPUtils.PlaceholderInfo("{hunter-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING), true),
                             new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
                             new HPUtils.PlaceholderInfo("{crafting-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING), true),
-                            new HPUtils.PlaceholderInfo("{header}", instance.getString("profile.header"), true),
+                            new HPUtils.PlaceholderInfo("{header}", instance.getHeader("profile.header", sender), true),
                             new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(), sender), level != null),
                             new HPUtils.PlaceholderInfo("{next-level}", nextLevel != null ? (nextLevel.getRequiredXP() - xp) : 0, true));
                 }
@@ -248,12 +248,16 @@ public class ConfigTextMenus extends HPConfig {
             for (String s : instance.getStringList("info.layout")) {
                 HPUtils.parseLorePlaceholders(infoCommand, translateColors(s, sender),
                         new HPUtils.PlaceholderInfo("{version}", hp.getVersion(), true),
-                        new HPUtils.PlaceholderInfo("{header}", instance.getString("info.header"), true),
+                        new HPUtils.PlaceholderInfo("{header}", instance.getHeader("info.header", sender), true),
                         new HPUtils.PlaceholderInfo("{author}", hp.getAuthor(), true),
                         new HPUtils.PlaceholderInfo("{locale}", MainConfig.get().getLocalisation().LOCALE, true),
                         new HPUtils.PlaceholderInfo("{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167", true));
             }
             return String.join("\n", infoCommand);
         }
+    }
+
+    private String getHeader(String path, CommandSender sender) {
+        return translateColors(getString(path), sender);
     }
 }
