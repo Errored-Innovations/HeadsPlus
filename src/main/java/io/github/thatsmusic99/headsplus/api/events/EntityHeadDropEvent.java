@@ -1,25 +1,25 @@
 package io.github.thatsmusic99.headsplus.api.events;
 
-import io.github.thatsmusic99.headsplus.api.Head;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityHeadDropEvent extends Event implements Cancellable {
 
-    // O
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
-    private Head head;
+    private EntityDataManager.DroppedHeadInfo head;
     private Player player;
     private EntityType entityType;
     private Location location;
     private final int amount;
 
-    public EntityHeadDropEvent(Player killer, Head head, Location location, EntityType entityType, int amount) {
+    public EntityHeadDropEvent(Player killer, EntityDataManager.DroppedHeadInfo head, Location location, EntityType entityType, int amount) {
         this.player = killer;
         this.head = head;
         this.location = location;
@@ -37,12 +37,13 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         this.cancelled = b;
     }
 
+    @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
-    public Head getHead() {
+    public EntityDataManager.DroppedHeadInfo getHeadInfo() {
         return head;
     }
 
@@ -74,26 +75,11 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         this.player = player;
     }
 
-    public void setHead(Head skull) {
+    public void setHeadInfo(EntityDataManager.DroppedHeadInfo skull) {
         this.head = skull;
     }
 
     public int getAmount() {
         return amount;
-    }
-
-    @Override
-    public String getEventName() {
-        return super.getEventName();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

@@ -4,24 +4,20 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.DebugManager;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class HeadsPlusEventExecutor implements EventExecutor {
 
     //
-    private Class<? extends Event> eventClass;
-    private HeadsPlusTimingsHandler handler;
-    private String name;
-    private static HashMap<String, HeadsPlusListener<?>> events = new HashMap<>();
+    private final Class<? extends Event> eventClass;
+    private final HeadsPlusTimingsHandler handler;
+    private final String name;
+    private static final HashMap<String, HeadsPlusListener<?>> events = new HashMap<>();
 
     public HeadsPlusEventExecutor(Class<? extends Event> clazz, String name, HeadsPlusListener<?> listener) {
         eventClass = clazz;
@@ -46,7 +42,7 @@ public class HeadsPlusEventExecutor implements EventExecutor {
                     HeadsPlusException ex1 = new HeadsPlusException(ex, hpListener.getData());
                     String s = DebugFileCreator.createReport(ex1);
                     handler.finish();
-                    Logger log = HeadsPlus.getInstance().getLogger();
+                    Logger log = HeadsPlus.get().getLogger();
                     log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
                     log.severe("Report name: " + s);
                     log.severe("Please submit this report to the developer at one of the following links:");

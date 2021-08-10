@@ -22,23 +22,4 @@ public class Close extends Icon {
         return "close";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "BARRIER";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.close}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

@@ -1,16 +1,14 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
-import io.github.thatsmusic99.headsplus.nms.SearchGUI;
-import io.github.thatsmusic99.headsplus.util.AnvilSlot;
 import io.github.thatsmusic99.headsplus.util.prompts.ChatPrompt;
-import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -26,37 +24,18 @@ public class Search extends Icon {
         player.closeInventory();
         HashMap<String, String> context = new HashMap<>();
         InventoryManager manager = InventoryManager.getManager(player);
-        if (hp.getConfiguration().getMechanics().getBoolean("anvil-menu-search", false)) {
-            SearchGUI s = null;
-            try {
-                s = hp.getNMS().getSearchGUI(player, event1 -> {
-                    if (event1.getSlot().equals(AnvilSlot.OUTPUT)) {
-                        event1.setWillClose(false);
-                        event1.setWillDestroy(false);
-                        context.put("search", event1.getName().replace(":", ""));
-                        manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
-                    }
-                });
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
+        ConversationFactory c = new ConversationFactory(HeadsPlus.get());
+        Conversation conv = c.withFirstPrompt(new ChatPrompt())
+                .withLocalEcho(false)
+                .withModality(MainConfig.get().getMiscellaneous().SUPPRESS_MESSAGES_DURING_SEARCH)
+                .buildConversation(player);
+        conv.addConversationAbandonedListener(event1 -> {
+            if (event1.gracefulExit()) {
+                context.put("search", String.valueOf(event1.getContext().getSessionData("term")));
+                manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
             }
-            ItemStack is = new ItemStack(Material.NAME_TAG);
-            s.setSlot(AnvilSlot.INPUT_LEFT, is);
-            s.open();
-        } else {
-            ConversationFactory c = new ConversationFactory(hp);
-            Conversation conv = c.withFirstPrompt(new ChatPrompt())
-                    .withLocalEcho(false)
-                    .withModality(hp.getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
-                    .buildConversation(player);
-            conv.addConversationAbandonedListener(event1 -> {
-                if (event1.gracefulExit()) {
-                    context.put("search", String.valueOf(event1.getContext().getSessionData("term")));
-                    manager.open(InventoryManager.InventoryType.HEADS_SEARCH, context);
-                }
-            });
-            conv.begin();
-        }
+        });
+        conv.begin();
         return true;
     }
 
@@ -65,23 +44,4 @@ public class Search extends Icon {
         return "search";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "NAME_TAG";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.search}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

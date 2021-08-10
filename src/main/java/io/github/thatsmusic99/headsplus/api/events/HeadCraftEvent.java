@@ -7,10 +7,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class HeadCraftEvent extends Event implements Cancellable {
 
-    // M
     private boolean cancelled;
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
@@ -39,6 +39,7 @@ public class HeadCraftEvent extends Event implements Cancellable {
         cancelled = b;
     }
 
+    @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -68,16 +69,6 @@ public class HeadCraftEvent extends Event implements Cancellable {
         this.skull = skull;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public String getEventName() {
-        return super.getEventName();
-    }
-
     public int getHeadsCrafted() {
         return headsCrafted;
     }
@@ -86,7 +77,7 @@ public class HeadCraftEvent extends Event implements Cancellable {
         this.headsCrafted = headsCrafted;
     }
 
-    public String getEntityType() {
+    public String getType() {
         return entityType;
     }
 }

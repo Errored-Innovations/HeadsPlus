@@ -1,10 +1,10 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.Challenge;
+import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,10 +36,10 @@ public class ChallengesPinnedInv extends BaseInventory {
 
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
-        HPPlayer hpPlayer = HPPlayer.getHPPlayer(player);
+        HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
         List<Content> contents = new ArrayList<>();
         for (String challenge : hpPlayer.getPinnedChallenges()) {
-            contents.add(new Challenge(HeadsPlus.getInstance().getChallengeByName(challenge), player));
+            contents.add(new Challenge(ChallengeManager.get().getChallengeByName(challenge), player));
         }
         return contents;
     }

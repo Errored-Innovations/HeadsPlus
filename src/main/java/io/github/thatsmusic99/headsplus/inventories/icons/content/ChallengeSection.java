@@ -1,6 +1,8 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
 import io.github.thatsmusic99.headsplus.api.events.SectionChangeEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import org.bukkit.Bukkit;
@@ -18,7 +20,7 @@ public class ChallengeSection extends Content {
     private io.github.thatsmusic99.headsplus.api.ChallengeSection section;
 
     public ChallengeSection(io.github.thatsmusic99.headsplus.api.ChallengeSection section) {
-        super(new ItemStack(section.getMaterial(), 1, section.getMaterialData()));
+        super(new ItemStack(section.getMaterial()));
         this.section = section;
     }
 
@@ -46,29 +48,20 @@ public class ChallengeSection extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(hpi.getString("icons.challenges-section.display-name")
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges-section.display-name")
                 .replaceAll("\\{section-name}", section.getDisplayName()), player));
         List<String> lore = new ArrayList<>();
-        for (String loreStr : hpi.getStringList("icons.challenges-section.lore")) {
+        for (String loreStr : ConfigInventories.get().getStringList("icons.challenges-section.lore")) {
             if (loreStr.contains("{section-lore}")) {
                 for (String loreStr2 : section.getLore()) {
-                    lore.add(hpc.formatMsg(loreStr2, player));
+                    lore.add(MessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
-                lore.add(hpc.formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
+                lore.add(MessagesManager.get().formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
             }
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
 
-    @Override
-    public String getDefaultDisplayName() {
-        return "{section-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{section-lore}", "{msg_inventory.icon.challenge.count}"};
-    }
 }

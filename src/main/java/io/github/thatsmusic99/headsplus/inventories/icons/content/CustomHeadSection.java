@@ -11,7 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class CustomHeadSection extends Content {
+
     private String section;
+
     public CustomHeadSection(ItemStack itemStack, String section) {
         super(itemStack);
         this.section = section;
@@ -38,16 +40,6 @@ public class CustomHeadSection extends Content {
     @Override
     public String getId() {
         return "headsection";
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{head-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.head.count}"};
     }
 
 }

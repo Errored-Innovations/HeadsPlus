@@ -1,33 +1,28 @@
 package io.github.thatsmusic99.headsplus.util;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
-import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
-import io.github.thatsmusic99.headsplus.api.heads.EntityHead;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMainConfig;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 public class HPUtils {
@@ -35,47 +30,41 @@ public class HPUtils {
     private static final HashMap<UUID, BossBar> bossBars = new HashMap<>();
 
     public static void addBossBar(OfflinePlayer pl) {
-        HPPlayer p = HPPlayer.getHPPlayer(pl);
-        ConfigurationSection c = HeadsPlus.getInstance().getConfiguration().getMechanics();
-        if (c.getBoolean("boss-bar.enabled")) {
-            if (p.getNextLevel() != null) {
-                try {
-                    if (!bossBars.containsKey(pl.getPlayer().getUniqueId())) {
-                        String s = ChatColor.translateAlternateColorCodes('&', c.getString("boss-bar.title"));
-                        BossBar bossBar = Bukkit.getServer().createBossBar(s, BarColor.valueOf(c.getString("boss-bar.color")), BarStyle.SEGMENTED_6);
-                        bossBar.addPlayer(pl.getPlayer());
-                        Double d = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
-                        d = 1 - d;
-                        bossBar.setProgress(d);
-                        bossBar.setVisible(true);
-                        bossBars.put(pl.getPlayer().getUniqueId(), bossBar);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                bossBar.setVisible(false);
-                                bossBar.removePlayer(pl.getPlayer());
-                                bossBars.remove(pl.getPlayer().getUniqueId());
-                            }
-                        }.runTaskLater(HeadsPlus.getInstance(), c.getInt("boss-bar.lifetime") * 20);
-                    } else {
-                        Double d = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
-                        d = 1 - d;
-                        bossBars.get(pl.getPlayer().getUniqueId()).setProgress(d);
-                    }
-                } catch (NoClassDefFoundError | IllegalArgumentException | NullPointerException ignored) {
-
-                }
-
+        HPPlayer p = HPPlayer.getHPPlayer(pl.getUniqueId());
+        if (!MainConfig.get().getLevels().ENABLE_BOSS_BARS) return;
+        if (p.getNextLevel() == null) return;
+        try {
+            if (!bossBars.containsKey(p.getUuid())) {
+                String title = ChatColor.translateAlternateColorCodes('&', MainConfig.get().getLevels().BOSS_BAR_TITLE);
+                BossBar bossBar = Bukkit.getServer().createBossBar(title, BarColor.valueOf(MainConfig.get().getLevels().BOSS_BAR_COLOR), BarStyle.SEGMENTED_6);
+                if (pl.getPlayer() != null)
+                    bossBar.addPlayer(pl.getPlayer());
+                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                percentageProgress = 1 - percentageProgress;
+                bossBar.setProgress(percentageProgress);
+                bossBar.setVisible(true);
+                bossBars.put(p.getUuid(), bossBar);
+                Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
+                    bossBar.setVisible(false);
+                    bossBar.removePlayer(pl.getPlayer());
+                    bossBars.remove(pl.getPlayer().getUniqueId());
+                }, MainConfig.get().getLevels().BOSS_BAR_LIFETIME * 20L);
+            } else {
+                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                percentageProgress = 1 - percentageProgress;
+                bossBars.get(p.getUuid()).setProgress(percentageProgress);
             }
+        } catch (NoClassDefFoundError | IllegalArgumentException ignored) {
+
         }
     }
 
     public static int matchCount(Matcher m) {
-        int i = 0;
+        int matches = 0;
         while (m.find()) {
-            i++;
+            matches++;
         }
-        return i;
+        return matches;
     }
 
     public static <T> T notNull(T object, String message) throws NullPointerException {
@@ -90,18 +79,17 @@ public class HPUtils {
     }
 
     public static double calculateChance(double chance, double randChance, Player killer) {
-        ConfigurationSection mechanics = HeadsPlus.getInstance().getConfiguration().getMechanics();
-        if (!mechanics.getBoolean("allow-looting-enchantment")) return chance;
-        ConfigurationSection lootingThresholds = mechanics.getConfigurationSection("looting.thresholds");
+        if (!MainConfig.get().getMobDrops().ENABLE_LOOTING) return chance;
+        ConfigSection lootingThresholds = MainConfig.get().getConfigSection("thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
-        if (killer.getInventory().getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
-            ItemStack item = killer.getInventory().getItemInHand();
+        if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+            ItemStack item = killer.getInventory().getItemInMainHand();
             level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
         }
         if (level == 0) return chance;
         if (chance <= lootingThresholds.getDouble("rare")) {
-            if (chance < 0) {
+            if (chance < 1) {
                 chance *= level;
             } else {
                 chance += level;
@@ -117,31 +105,6 @@ public class HPUtils {
         return chance;
     }
 
-    public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
-        Random random = new Random();
-        HashMap<String, List<EntityHead>> storedHeads = EntityDataManager.getStoredHeads();
-        List<EntityHead> heads = storedHeads.get(id + ";" + meta);
-        if (heads == null) {
-            String[] possibleConditions = meta.split(",");
-            for (String str : possibleConditions) {
-                if ((heads = storedHeads.get(id + ";" + str)) != null) break;
-            }
-            if (heads == null) {
-                heads = storedHeads.get(id + ";default");
-            }
-        }
-        if (heads == null) {
-            throw new NullPointerException("Found no heads list for " + id + "!");
-        }
-        if (heads.isEmpty()) return;
-        EntityHead head = heads.get(random.nextInt(heads.size()));
-        head.withAmount(amount);
-        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, head, location, EntityType.valueOf(id), amount);
-        Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            head.getItemStackFuture().thenAccept(itemStack -> location.getWorld().dropItem(location, itemStack));
-        }
-    }
 
     public static int getAmount(double fixedChance) {
         if (fixedChance <= 100) return 1;
@@ -160,9 +123,10 @@ public class HPUtils {
     }
 
     public static boolean isMythicMob(Entity entity) {
-        HeadsPlus hp = HeadsPlus.getInstance();
+        HeadsPlus hp = HeadsPlus.get();
+
         try {
-            if (hp.getConfiguration().getMechanics().getBoolean("mythicmobs.no-hp-drops")) {
+            if (MainConfig.get().getMobDrops().DISABLE_FOR_MYTHIC_MOBS) {
                 Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");
                 if (plugin != null && plugin.isEnabled()) {
                     return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
@@ -173,52 +137,34 @@ public class HPUtils {
         return false;
     }
 
-    @Deprecated
-    public static boolean runBlacklistTests(LivingEntity e) {
-        HeadsPlusMainConfig c = HeadsPlus.getInstance().getConfiguration();
-        // Killer checks
-        if (e.getKiller() == null) {
-            if (c.getPerks().drops_needs_killer) {
-                return false;
-            } else if (c.getPerks().drops_entities_requiring_killer.contains(e.getName().replaceAll("_", "").toLowerCase())) {
-                return false;
-            } else if (e instanceof Player) {
-                if (c.getPerks().drops_entities_requiring_killer.contains("player")) {
-                    return false;
-                }
-            }
+    public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {
+        for (PlaceholderInfo placeholder : placeholders) {
+            if (!placeholder.requirement) continue;
+            if (!message.contains(placeholder.placeholder)) continue;
+            lore.add(message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get())));
         }
-        // Whitelist checks
-        if (c.getWorldWhitelist().enabled) {
-            if (!c.getWorldWhitelist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.whitelistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        // Blacklist checks
-        if (c.getWorldBlacklist().enabled) {
-            if (c.getWorldBlacklist().list.contains(e.getWorld().getName())) {
-                if (e.getKiller() != null) {
-                    if (!e.getKiller().hasPermission("headsplus.bypass.blacklistw")) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (e instanceof Player) {
-            return !(c.getPerks().drops_ignore_players.contains(e.getUniqueId().toString())
-                    || c.getPerks().drops_ignore_players.contains(e.getName()));
-        } else {
-            return true;
-        }
-
     }
 
-    public enum SkillType {
-        HUNTING,
-        CRAFTING
+    public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
+        return CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name), HeadsPlus.async)
+                .thenApplyAsync(player -> player, HeadsPlus.sync);
+    }
+
+    public static class PlaceholderInfo {
+        private final String placeholder;
+        private final Supplier<Object> replacement;
+        private final boolean requirement;
+
+        public PlaceholderInfo(String placeholder, Object replacement, boolean requirement) {
+            this.placeholder = placeholder;
+            this.replacement = () -> replacement;
+            this.requirement = requirement;
+        }
+
+        public PlaceholderInfo(String placeholder, Supplier<Object> replacement, boolean requirement) {
+            this.placeholder = placeholder;
+            this.replacement = replacement;
+            this.requirement = requirement;
+        }
     }
 }
