@@ -340,7 +340,6 @@ public class MainConfig extends HPConfig {
          moveTo("plugin.mechanics.broadcasts.level-up", "broadcast-level-up");
 
          // Leaderboard Options
-         moveTo("plugin.mechanics.leaderboards.cache-boards", "cache-leaderboards");
          moveTo("plugin.mechanics.leaderboards.cache-lifetime-seconds", "cache-duration");
 
          // Update Options
