@@ -81,16 +81,12 @@ public class CustomHead extends Content {
         } else {
             HPPlayer hpp = HPPlayer.getHPPlayer(player.getUniqueId());
             if (hpp.hasHeadFavourited(id)) {
-                hpp.removeFavourite(id).thenAcceptAsync(what -> {
-                    initNameAndLore(id, player);
-                    event.getInventory().setItem(event.getSlot(), this.item);
-                }, HeadsPlus.sync);
+                hpp.removeFavourite(id);
             } else {
-                hpp.addFavourite(id).thenAcceptAsync(why -> {
-                    initNameAndLore(id, player);
-                    event.getInventory().setItem(event.getSlot(), this.item);
-                }, HeadsPlus.sync);
+                hpp.addFavourite(id);
             }
+            initNameAndLore(id, player);
+            event.getInventory().setItem(event.getSlot(), this.item);
         }
         return false;
     }
