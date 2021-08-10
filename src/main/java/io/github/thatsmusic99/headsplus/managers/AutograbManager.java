@@ -20,10 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class AutograbManager {
 
@@ -194,6 +191,7 @@ public class AutograbManager {
             if (!HeadManager.get().getAddedTextures().contains(texture)) {
                 headInfo = new HeadManager.HeadInfo();
                 id = name;
+                headInfo.withTexture(texture);
             } else if (force) {
                 id = HeadManager.get().getId(texture);
                 headInfo = HeadManager.get().getHeadInfo(id);
