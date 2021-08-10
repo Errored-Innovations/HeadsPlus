@@ -130,6 +130,7 @@ public class ConfigTextMenus extends HPConfig {
                 if (level != null) nextLevel = LevelsManager.get().getNextLevel(level.getConfigName());
                 long xp = PlayerSQLManager.get().getXPSync(player.getName());
                 Level finalLevel = level;
+                Level finalNextLevel = nextLevel;
                 for (String str : instance.getStringList("profile.layout")) {
                     HPUtils.parseLorePlaceholders(profile, translateColors(str, sender),
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
