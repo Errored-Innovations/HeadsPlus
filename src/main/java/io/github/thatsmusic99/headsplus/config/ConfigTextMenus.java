@@ -19,7 +19,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,18 +80,6 @@ public class ConfigTextMenus extends HPConfig {
                 "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
                 "&c{msg_textmenus.profile.current-level} &8» &7{level}",
                 "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
-        addDefault("blacklist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lBlacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        addDefault("blacklist.default.for-each-line", "&8» &7{name}");
-        addDefault("blacklist.default.lines-per-page", 8);
-        addDefault("blacklist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Blacklist &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        addDefault("blacklist.world.for-each-line", "&8» &7{name}");
-        addDefault("blacklist.world.lines-per-page", 8);
-        addDefault("whitelist.default.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWhitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        addDefault("whitelist.default.for-each-line", "&8» &7{name}");
-        addDefault("whitelist.default.lines-per-page", 8);
-        addDefault("whitelist.world.header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lWorld Whitelist: &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
-        addDefault("whitelist.world.for-each-line", "&8» &7{name}");
-        addDefault("whitelist.world.lines-per-page", 8);
         addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━&c．・");
         addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
         addDefault("leaderboard.lines-per-page", 8);
