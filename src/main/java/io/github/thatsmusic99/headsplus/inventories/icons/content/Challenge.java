@@ -50,16 +50,12 @@ public class Challenge extends Content {
             } else {
                 HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
                 if (hpPlayer.hasChallengePinned(challenge)) {
-                    hpPlayer.removeChallengePin(challenge).thenAcceptAsync(why -> {
-                        initNameAndLore("challenge", player);
-                        event.getInventory().setItem(event.getSlot(), item);
-                    }, HeadsPlus.sync);
+                    hpPlayer.removeChallengePin(challenge);
                 } else {
-                    hpPlayer.addChallengePin(challenge).thenAcceptAsync(why -> {
-                        initNameAndLore("challenge", player);
-                        event.getInventory().setItem(event.getSlot(), item);
-                    }, HeadsPlus.sync);
+                    hpPlayer.addChallengePin(challenge);
                 }
+                initNameAndLore("challenge", player);
+                event.getInventory().setItem(event.getSlot(), item);
             }
         }catch (NullPointerException ignored) {
         }
