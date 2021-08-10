@@ -189,12 +189,14 @@ public class ConfigTextMenus extends HPConfig {
             List<String> helpList = new ArrayList<>();
             CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
             for (String s : instance.getStringList("help.command-help.layout")) {
-                HPUtils.parseLorePlaceholders(helpList, s,
+                HPUtils.parseLorePlaceholders(helpList, translateColors(s, sender),
                         new HPUtils.PlaceholderInfo("{permission}", c.permission(), sender.hasPermission("headsplus.help.viewperms")),
                         new HPUtils.PlaceholderInfo("{further-usage}", () -> {
                             List<String> strings = new ArrayList<>();
                             strings.add(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
-                            for (String str : key.advancedUsages()) { strings.add(translateColors(str, sender)); }
+                            for (String str : key.advancedUsages()) {
+                                strings.add(translateColors(str, sender));
+                            }
                             return strings;
                         }, key.advancedUsages().length > 0),
                         new HPUtils.PlaceholderInfo("{header}", translateColors(instance.getString("help.command-help.header"), sender), true),
