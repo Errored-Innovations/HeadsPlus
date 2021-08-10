@@ -10,7 +10,7 @@
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>7.0.0-ALPHA-1</hp-project.version>
+        <hp-project.version>7.0.0-BETA-1</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
