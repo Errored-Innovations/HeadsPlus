@@ -131,6 +131,7 @@ public class ChallengeManager {
             // Get the challenge section
             ConfigSection section = ConfigChallenges.get().getConfigSection("challenges." + key);
             if (section == null) return;
+            if (key.equals("options")) return;
 
             // Check that the main challenge icon exists
             // TODO - shove repeated code into a function?
