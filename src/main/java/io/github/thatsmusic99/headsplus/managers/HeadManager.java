@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.managers;
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -83,7 +84,7 @@ public class HeadManager {
 
         public HeadInfo withDisplayName(@Nullable String name) {
             if (name == null) return this;
-            this.displayName = name;
+            this.displayName = ChatColor.translateAlternateColorCodes('&', name);
             return this;
         }
 
