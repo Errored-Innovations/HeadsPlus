@@ -159,8 +159,11 @@ public class AutograbManager {
             public void run() {
                 final String[] playerInfo = new String[1];
                 try {
+                    // can't wait for PAPER fricks sake
                     playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
-                    addTexture(playerInfo[0], force, sender, player.getName() == null ? "<No Name>" : player.getName());
+                    Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())), Map.class);
+                    String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
+                    addTexture(url, force, sender, player.getName() == null ? "<No Name>" : player.getName());
                 } catch (NoSuchElementException exception) {
 
                 }
@@ -183,6 +186,10 @@ public class AutograbManager {
             HeadManager.HeadInfo headInfo;
             if (HeadManager.get().contains(name)) {
                 name += "_" + section.getHeads().size();
+            }
+            if (texture.startsWith("http")) {
+                texture = String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture);
+                texture = new String(Base64.getEncoder().encode(texture.getBytes(StandardCharsets.UTF_8)));
             }
             if (!HeadManager.get().getAddedTextures().contains(texture)) {
                 headInfo = new HeadManager.HeadInfo();
