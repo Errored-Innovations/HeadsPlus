@@ -92,7 +92,6 @@ public class ConfigHeadsSelector extends FeatureConfig {
             if (section.contains("price")) {
                 headInfo.withPrice(section.getDouble("price", -1.0));
             }
-            buyableHeads.put(key, headInfo);
             sectionInfo.addHead(key, headInfo);
             totalHeads++;
         }
@@ -148,6 +147,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
         public void addHead(String id, BuyableHeadInfo head) {
             heads.put(id, head);
+            instance.getBuyableHeads().put(id, head);
         }
 
         public String getPermission() {
