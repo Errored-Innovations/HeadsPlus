@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.RecipeType;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class CraftingManager {
     }
 
     public void init() {
-        clear();
+        if (!MainConfig.get().getMainFeatures().ENABLE_CRAFTING) return;
         ConfigCrafting crafting = ConfigCrafting.get();
         // The crafting.yml file is empty/disabled
         if (crafting.getConfigSection("recipes") == null) return;
