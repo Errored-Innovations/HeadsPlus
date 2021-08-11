@@ -262,10 +262,6 @@ public class ConfigMobs extends FeatureConfig {
 		return getString(path + ".display-name", getString("defaults.display-name", null));
 	}
 
-    public double getChance(String path) {
-		return getDouble(path + ".chance", MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE);
-	}
-
 	@Nullable
     public List<String> getLore(String type, String conditions) {
 		List<String> lore = new ArrayList<>();

@@ -179,7 +179,7 @@ public class EntityDataManager {
                             headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name.replaceAll("_", " "))));
                         }
 
-                        headInfo.withXP(path);
+                        headInfo.withXP(path).withChance(path);
 
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions));
 
@@ -205,10 +205,12 @@ public class EntityDataManager {
         private long xp;
         private final String id;
         private MaskManager.MaskInfo info;
+        private double chance;
 
         public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
             this.id = id;
+            this.chance = MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE;
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
@@ -225,12 +227,22 @@ public class EntityDataManager {
             return this;
         }
 
+        public DroppedHeadInfo withChance(String path) {
+            if (!ConfigMobs.get().contains(path + ".chance")) return this;
+            chance = ConfigMobs.get().getLong(path + ".chance");
+            return this;
+        }
+
         public long getXp() {
             return xp;
         }
 
         public String getId() {
             return id;
+        }
+
+        public double getChance() {
+            return chance;
         }
 
         @Override

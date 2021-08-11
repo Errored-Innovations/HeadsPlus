@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -19,7 +18,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
@@ -43,16 +45,40 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
             }
         }
         String entity = event.getEntityType().name();
-        double fixedChance = addData("fixed-chance", ConfigMobs.get().getChance(entity));
-        if (fixedChance == 0) return;
-        double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (event.getEntity().getKiller() != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains(entity)) {
-            fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
+        // Check for each head
+        String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
+        List<EntityDataManager.DroppedHeadInfo> heads = EntityDataManager.getStoredHeads().get(entity + ";" + meta);
+        String chosenConditions = meta;
+        if (heads == null) {
+            String[] possibleConditions = meta.split(",");
+            for (String str : possibleConditions) {
+                chosenConditions = str;
+                if ((heads = EntityDataManager.getStoredHeads().get(entity + ";" + str)) != null) break;
+            }
+            if (heads == null) {
+                chosenConditions = "default";
+                heads = EntityDataManager.getStoredHeads().get(entity + ";default");
+            }
         }
-        if (randomChance <= fixedChance) {
-            String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
-            int amount = addData("amount", HPUtils.getAmount(fixedChance));
-            dropHead(entity, meta, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
+        if (heads == null) {
+            throw new NullPointerException("Found no heads list for " + entity + "!");
+        }
+
+        // Check the chance of each head
+        // TODO - option to set a max number of heads to drop at once
+        for (EntityDataManager.DroppedHeadInfo info : heads) {
+            double fixedChance = addData("fixed-chance", info.getChance());
+            HeadsPlus.debug("e: " + info.getChance());
+            if (fixedChance == 0) return;
+            double randomChance = addData("random-chance", new Random().nextDouble() * 100);
+            if (event.getEntity().getKiller() != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains(entity)) {
+                fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
+            }
+
+            if (randomChance <= fixedChance) {
+                int amount = addData("amount", HPUtils.getAmount(fixedChance));
+                dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
+            }
         }
     }
 
@@ -122,36 +148,15 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         addPossibleData("killer", "<Player>");
     }
 
-    public static void dropHead(String id, String meta, Location location, int amount, Player killer) {
-        Random random = new Random();
-        HashMap<String, List<EntityDataManager.DroppedHeadInfo>> storedHeads = EntityDataManager.getStoredHeads();
-        List<EntityDataManager.DroppedHeadInfo> heads = storedHeads.get(id + ";" + meta);
-        String chosenConditions = meta;
-        if (heads == null) {
-            String[] possibleConditions = meta.split(",");
-            for (String str : possibleConditions) {
-                chosenConditions = str;
-                if ((heads = storedHeads.get(id + ";" + str)) != null) break;
-            }
-            if (heads == null) {
-                chosenConditions = "default";
-                heads = storedHeads.get(id + ";default");
-            }
-        }
-        if (heads == null) {
-            throw new NullPointerException("Found no heads list for " + id + "!");
-        }
-        if (heads.isEmpty()) return;
-        EntityDataManager.DroppedHeadInfo info = heads.get(random.nextInt(heads.size()));
+    public static void dropHead(String id, String conditions, EntityDataManager.DroppedHeadInfo info, Location location, int amount, Player killer) {
 
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            String finalChosenConditions = chosenConditions;
             info.buildHead().thenAccept(head -> {
                 head.setAmount(amount);
                 PersistenceManager.get().setSellable(head, true);
-                PersistenceManager.get().setSellType(head, "mobs_" + id + ":" + finalChosenConditions + ":" + info.getId());
+                PersistenceManager.get().setSellType(head, "mobs_" + id + ":" + conditions + ":" + info.getId());
                 location.getWorld().dropItem(location, head);
             });
         }
