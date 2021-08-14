@@ -6,7 +6,13 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
+    <packaging>pom</packaging>
     <version>6.11.8</version>
+    <modules>
+        <module>HeadsPlus-Core</module>
+        <module>HeadsPlus-Spigot</module>
+        <module>HeadsPlus-Paper</module>
+    </modules>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
