@@ -57,7 +57,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         double fixedChance = addData("fixed-chance", ConfigMobs.get().getPlayerChance(victim.getName()));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (killer != null) {
+        if (killer != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains("PLAYER")) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
             addData("killer", killer.getName());
         }
@@ -112,7 +112,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         // Check killer restrictions
         if (player.getKiller() == null) {
             if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;
-            if (MainConfig.get().getMobDrops().ENTITIES_NEEDING_KILLER.contains("player")) return false;
+            if (MainConfig.get().getMobDrops().ENTITIES_NEEDING_KILLER.contains("PLAYER")) return false;
         } else {
             if (!player.getKiller().hasPermission("headsplus.drops.player")) return false;
         }
