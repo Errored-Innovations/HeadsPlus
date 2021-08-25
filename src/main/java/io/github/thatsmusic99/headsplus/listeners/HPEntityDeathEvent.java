@@ -130,7 +130,7 @@ public class HPEntityDeathEvent extends HeadsPlusListener<EntityDeathEvent> {
         double fixedChance = addData("fixed-chance", hpch.getChance(entity));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (event.getEntity().getKiller() != null) {
+        if (event.getEntity().getKiller() != null && !hp.getConfiguration().getStringList("plugin.mechanics.looting.ignored-entities").contains(event.getEntityType.name())) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
         }
         if (randomChance <= fixedChance) {
