@@ -52,7 +52,7 @@ public class HPPlayerDeathEvent extends HeadsPlusListener<PlayerDeathEvent> {
         double fixedChance = addData("fixed-chance", hpch.getChance("player"));
         if (fixedChance == 0) return;
         double randomChance = addData("random-chance", new Random().nextDouble() * 100);
-        if (killer != null) {
+        if (killer != null && !HeadsPlus.getInstance().getConfiguration().getStringList("plugin.mechanics.looting.ignored-entities").contains("PLAYER")) {
             fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
             addData("killer", event.getEntity().getKiller().getName());
         }
