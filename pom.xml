@@ -6,11 +6,11 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>6.11.8</version>
+    <version>6.11.9</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>6.11.8+DEV_${env.BUILD_NUMBER}</hp-project.version>
+        <hp-project.version>6.11.9+DEV_${env.BUILD_NUMBER}</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
