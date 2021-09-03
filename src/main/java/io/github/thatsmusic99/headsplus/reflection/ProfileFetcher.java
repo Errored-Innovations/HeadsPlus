@@ -1,7 +1,10 @@
 package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,10 +44,21 @@ public class ProfileFetcher {
 
     public static SkullMeta setProfile(SkullMeta meta, String name) {
         UUID uuid;
-        if (Bukkit.getPlayer(name) != null) {
-            uuid = Bukkit.getPlayer(name).getUniqueId();
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
+        if (player.getUniqueId().equals(offlineUUID)) {
+            String uuidStr = HeadsPlus.getInstance().getHeadsXConfig().grabUUID(name, 0, null);
+            if (uuidStr == null) {
+                uuid = offlineUUID;
+            } else {
+                uuid = UUID.fromString(uuidStr.substring(0, 8) +
+                        "-" + uuidStr.substring(8, 12) +
+                        "-" + uuidStr.substring(12, 16) +
+                        "-" + uuidStr.substring(16, 20) +
+                        "-" + uuidStr.substring(20));
+            }
         } else {
-            uuid = UUID.nameUUIDFromBytes(name.getBytes());
+            uuid = player.getUniqueId();
         }
         GameProfile profile = new GameProfile(uuid, name);
         return setProfile(meta, profile);
