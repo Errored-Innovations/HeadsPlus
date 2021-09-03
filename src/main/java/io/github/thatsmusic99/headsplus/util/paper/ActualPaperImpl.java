@@ -3,7 +3,7 @@ package io.github.thatsmusic99.headsplus.util.paper;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.UUID;
@@ -19,11 +19,21 @@ public class ActualPaperImpl implements PaperImpl {
     public CompletableFuture<SkullMeta> setProfile(SkullMeta meta, String name) {
         return CompletableFuture.supplyAsync(() -> {
             UUID uuid;
-            Player player = Bukkit.getPlayer(name);
-            if (player != null) {
-                uuid = player.getUniqueId();
+            OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+            UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
+            if (player.getUniqueId().equals(offlineUUID)) {
+                String uuidStr = HeadsPlus.getInstance().getHeadsXConfig().grabUUID(name, 0, null);
+                if (uuidStr == null) {
+                    uuid = offlineUUID;
+                } else {
+                    uuid = UUID.fromString(uuidStr.substring(0, 8) +
+                            "-" + uuidStr.substring(8, 12) +
+                            "-" + uuidStr.substring(12, 16) +
+                            "-" + uuidStr.substring(16, 20) +
+                            "-" + uuidStr.substring(20));
+                }
             } else {
-                uuid = UUID.nameUUIDFromBytes(name.getBytes());
+                uuid = player.getUniqueId();
             }
 
             try {

@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHead;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
