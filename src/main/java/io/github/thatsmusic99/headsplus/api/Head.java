@@ -94,7 +94,7 @@ public class Head {
     }
 
     public ItemStack getItemStack() {
-        if (this.name != null) {
+        if (this.name != null && !this.name.equals("{mob-default}")) {
             // set sync
             SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
             sm = ProfileFetcher.setProfile(sm, this.name);
