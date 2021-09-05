@@ -248,13 +248,11 @@ public class ConfigMobs extends FeatureConfig {
     }
 
     public double getPlayerChance(String name) {
-		return getDouble("player." + name + ".chance", getDouble("player.default.chance",
-				getDouble("defaults.chance")));
+		return getDouble("player." + name + ".chance", MainConfig.get().getPlayerDrops().DEFAULT_DROP_CHANCE);
 	}
 
 	public double getPlayerPrice(String name) {
-		return getDouble("player." + name + ".price", getDouble("player.default.price",
-				getDouble("defaults.price")));
+		return getDouble("player." + name + ".price", MainConfig.get().getPlayerDrops().DEFAULT_PRICE);
 	}
 
 	@Nullable

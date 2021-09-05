@@ -513,7 +513,9 @@ public class MainConfig extends HPConfig {
                 ADJUST_PRICE_ACCORDING_TO_PRICE = getBoolean("adjust-price-according-to-balance"),
                 USE_VICTIM_BALANCE = getBoolean("use-victim-balance");
         public double PERCENTAGE_TAKEN_OFF_VICTIM = getDouble("percentage-taken-off-victim"),
-                PERCENTAGE_OF_BALANCE_AS_PRICE = getDouble("percentage-of-balance-as-price");
+                PERCENTAGE_OF_BALANCE_AS_PRICE = getDouble("percentage-of-balance-as-price"),
+                DEFAULT_DROP_CHANCE = getDouble("default-player-drop-chance"),
+                DEFAULT_PRICE = getDouble("default-player-head-price");
     }
 
     public class SellingHeads {
