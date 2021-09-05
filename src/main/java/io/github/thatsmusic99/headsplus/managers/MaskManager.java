@@ -155,7 +155,7 @@ public class MaskManager {
 
                 @Override
                 public void run() {
-                    if (player == null || !player.isOnline()) {
+                    if (player == null || !player.isOnline() || !MainConfig.get().getMainFeatures().MASKS) {
                         cancel();
                         return;
                     }
