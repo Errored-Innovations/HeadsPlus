@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.MaskManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -86,7 +87,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
             SectionInfo sectionInfo = sections.get(section.getString("section"));
             // Get the head info itself
             if (!HeadManager.get().contains(key)) continue;
-            BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key));
+            BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key), key);
             headInfo.withDisplayName(section.getString("display-name", null));
             headInfo.setLore(section.getList("lore", null));
             if (section.contains("price")) {
@@ -179,11 +180,11 @@ public class ConfigHeadsSelector extends FeatureConfig {
         }
     }
 
-    public static class BuyableHeadInfo extends HeadManager.HeadInfo {
+    public static class BuyableHeadInfo extends MaskManager.MaskInfo {
         private double price = -1;
 
-        public BuyableHeadInfo(HeadManager.HeadInfo info) {
-            super();
+        public BuyableHeadInfo(HeadManager.HeadInfo info, String id) {
+            super(info, id);
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial())
                     .withTexture(info.getTexture());

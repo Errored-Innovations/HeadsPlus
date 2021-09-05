@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.managers;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,6 +43,7 @@ public class HeadManager {
     }
 
     public boolean contains(String key) {
+        if (key.startsWith("HPM#")) return MaskManager.get().isMaskRegistered(key);
         if (key.startsWith("HP#")) {
             key = key.substring(3);
         }
@@ -49,6 +51,13 @@ public class HeadManager {
     }
 
     public HeadInfo getHeadInfo(String key) {
+        if (key.startsWith("HPM#")) {
+            if (MaskManager.get().isMaskRegistered(key)) return MaskManager.get().getMaskInfo(key);
+            key = key.substring(4);
+            if (ConfigMobs.get().isLoaded()) {
+                key = ConfigMobs.get().getString("masks." + key + ".idle");
+            }
+        }
         if (key.startsWith("HP#")) {
             key = key.substring(3);
         }

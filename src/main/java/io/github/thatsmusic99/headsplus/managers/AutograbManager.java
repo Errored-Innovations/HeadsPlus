@@ -213,7 +213,7 @@ public class AutograbManager {
             ConfigHeads.get().save();
 
             if (MainConfig.get().getAutograbber().ADD_GRABBED_HEADS) {
-                ConfigHeadsSelector.BuyableHeadInfo buyableHead = new ConfigHeadsSelector.BuyableHeadInfo(headInfo);
+                ConfigHeadsSelector.BuyableHeadInfo buyableHead = new ConfigHeadsSelector.BuyableHeadInfo(headInfo, id);
                 buyableHead.withPrice(MainConfig.get().getAutograbber().PRICE);
                 section.addHead(id, buyableHead);
                 // Add to the actual config

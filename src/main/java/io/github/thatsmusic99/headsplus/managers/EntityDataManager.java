@@ -146,12 +146,7 @@ public class EntityDataManager {
                     ConfigSection conditionSection = entitySection.getConfigSection(conditions);
                     if (conditionSection == null) continue;
                     for (String head : conditionSection.getKeys(false)) {
-                        DroppedHeadInfo headInfo;
-                        if (head.startsWith("HPM#")) {
-                            headInfo = new DroppedHeadInfo(MaskManager.get().getMaskInfo(head), head);
-                        } else {
-                            headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head), head);
-                        }
+                        DroppedHeadInfo headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head), head);
 
                         if (head.equalsIgnoreCase("{mob-default}")) {
                             switch (name) {
@@ -247,12 +242,7 @@ public class EntityDataManager {
 
         @Override
         public CompletableFuture<ItemStack> buildHead() {
-            return super.buildHead().thenApply(item -> {
-                if (info == null) return item;
-                PersistenceManager.get().setMaskType(item, info.id);
-                HeadsPlus.debug("Implemented mask type " + info.id);
-                return item;
-            });
+            return info != null ? info.buildHead() : super.buildHead();
         }
 
         @Override

@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class MaskManager {
 
@@ -125,6 +126,23 @@ public class MaskManager {
         }
 
         public void run(Player player) {
+        }
+
+        @Override
+        public CompletableFuture<ItemStack> buildHead() {
+            return super.buildHead().thenApply(item -> {
+                PersistenceManager.get().setMaskType(item, id);
+                HeadsPlus.debug("Implemented mask type " + id);
+                return item;
+            });
+        }
+
+        @Override
+        public ItemStack forceBuildHead() {
+            ItemStack item = super.forceBuildHead();
+            PersistenceManager.get().setMaskType(item, id);
+            HeadsPlus.debug("Implemented mask type " + id);
+            return item;
         }
     }
 
