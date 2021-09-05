@@ -89,7 +89,7 @@ public class LevelsManager {
 				levelOrder.add(hierarchy - 1, levelKey);
 				levels.put(levelKey, level);
 			} catch (NullPointerException ex) {
-				HeadsPlus.get().getLogger().warning(ex.getMessage());
+				HeadsPlus.get().getLogger().warning("Null value received when registering level " + levelKey + ": " + ex.getMessage());
 			}
 		}
 	}

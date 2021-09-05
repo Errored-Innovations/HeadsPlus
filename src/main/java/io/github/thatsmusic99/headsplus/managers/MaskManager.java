@@ -100,7 +100,7 @@ public class MaskManager {
 
                 registerMask(key, info);
             } catch (NullPointerException | IllegalArgumentException ex) {
-                HeadsPlus.get().getLogger().warning(ex.getMessage());
+                HeadsPlus.get().getLogger().warning("Null value received when registering mask " + key + ": " + ex.getMessage());
             }
         }
     }

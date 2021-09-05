@@ -102,7 +102,7 @@ public class ChallengeManager {
             icons.put(key, item);
             HeadsPlus.debug("Registered icon " + key + ".");
         } catch (NullPointerException ex) {
-            HeadsPlus.get().getLogger().warning(ex.getMessage());
+            HeadsPlus.get().getLogger().warning("Null value received when registering challenge icon " + key + ": " + ex.getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ public class ChallengeManager {
             this.sections.put(key, new ChallengeSection(material, displayName, lore, key));
             HeadsPlus.debug("Registered section " + key + ".");
         } catch (NullPointerException ex) {
-            HeadsPlus.get().getLogger().warning(ex.getMessage());
+            HeadsPlus.get().getLogger().warning("Null value received when registering challenge section " + key + ": " + ex.getMessage());
         }
     }
 
@@ -160,7 +160,7 @@ public class ChallengeManager {
             this.challenges.put(key, challenge);
             HeadsPlus.debug("Registered challenge " + key + ".");
         } catch (NullPointerException ex) {
-            HeadsPlus.get().getLogger().warning(ex.getMessage());
+            HeadsPlus.get().getLogger().warning("Null value received when registering challenge " + key + ": " + ex.getMessage());
         }
     }
 
