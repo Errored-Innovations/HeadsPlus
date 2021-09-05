@@ -68,7 +68,6 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         // TODO - option to set a max number of heads to drop at once
         for (EntityDataManager.DroppedHeadInfo info : heads) {
             double fixedChance = addData("fixed-chance", info.getChance());
-            HeadsPlus.debug("e: " + info.getChance());
             if (fixedChance == 0) return;
             double randomChance = addData("random-chance", new Random().nextDouble() * 100);
             if (event.getEntity().getKiller() != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains(entity)) {
