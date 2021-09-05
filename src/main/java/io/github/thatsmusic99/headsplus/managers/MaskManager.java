@@ -88,8 +88,10 @@ public class MaskManager {
                             if (effectType == null)
                                 throw new IllegalArgumentException("Mask effect " + content[0] + " is not an existing potion effect! (Mask: " + key + ")");
                             int amplifier = 0;
-                            if (content.length > 1 && CachedValues.MATCH_PAGE.matcher(content[1]).matches())
-                                amplifier = Integer.getInteger(content[1]) - 1;
+                            if (content.length > 1) {
+                                HeadsPlus.debug("Selected amplifier for " + effectStr + ": " + content[1]);
+                                amplifier = Integer.parseInt(content[1]) - 1;
+                            }
                             PotionEffect effect = new PotionEffect(effectType, MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
                             ((PotionMask) info).addEffect(effect);
                         }
@@ -100,7 +102,7 @@ public class MaskManager {
 
                 registerMask(key, info);
             } catch (NullPointerException | IllegalArgumentException ex) {
-                HeadsPlus.get().getLogger().warning("Null value received when registering mask " + key + ": " + ex.getMessage());
+                HeadsPlus.get().getLogger().warning("Error received when registering mask " + key + ": " + ex.getMessage());
             }
         }
     }
