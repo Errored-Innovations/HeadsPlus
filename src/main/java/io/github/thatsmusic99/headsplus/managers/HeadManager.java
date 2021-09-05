@@ -147,7 +147,10 @@ public class HeadManager {
             ItemMeta meta = head.getItemMeta();
             meta.setDisplayName(displayName);
             meta.setLore(lore);
-            if (material != Material.PLAYER_HEAD) return CompletableFuture.completedFuture(head);
+            if (material != Material.PLAYER_HEAD) {
+                head.setItemMeta(meta);
+                return CompletableFuture.completedFuture(head);
+            }
             HeadsPlus.debug("Building a head.");
             if (player != null && !player.isEmpty()) {
                 HeadsPlus.debug("Setting a player skull. (" + player + ")");
@@ -172,7 +175,10 @@ public class HeadManager {
             ItemMeta meta = head.getItemMeta();
             meta.setDisplayName(displayName);
             meta.setLore(lore);
-            if (material != Material.PLAYER_HEAD) return head;
+            if (material != Material.PLAYER_HEAD) {
+                head.setItemMeta(meta);
+                return head;
+            }
             HeadsPlus.debug("Building a head.");
             if (player != null && !player.isEmpty()) {
                 HeadsPlus.debug("Setting a player skull. (" + player + ")");
