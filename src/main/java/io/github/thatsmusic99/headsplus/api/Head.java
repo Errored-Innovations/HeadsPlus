@@ -104,7 +104,7 @@ public class Head {
     }
 
     public CompletableFuture<ItemStack> getItemStackFuture() {
-        if (this.name == null || !this.name.equals("{mob-default}")) {
+        if (this.name == null || this.name.equals("{mob-default}")) {
             return CompletableFuture.completedFuture(this.itemStack);
         }
         SkullMeta sm = (SkullMeta) itemStack.getItemMeta();
