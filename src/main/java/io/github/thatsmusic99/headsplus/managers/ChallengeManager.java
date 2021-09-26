@@ -148,6 +148,7 @@ public class ChallengeManager {
 
             // Load the challenge
             Challenge challenge = Challenge.fromConfigSection(key, section, icons.get(iconId), icons.get(completeIconId));
+            if (!challenge.canRegister()) return;
 
             // Add the challenge to the section
             String sectionStr = Objects.requireNonNull(section.getString("section"),

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api.challenges;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.Challenge;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,12 @@ public class MobKillChallenge extends Challenge {
     public int getStatSync(UUID uuid) {
         if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.HUNTING);
         return StatisticsSQLManager.get().getStatMetaSync(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity=" + getHeadType());
+    }
+
+    @Override
+    public boolean canRegister() {
+        return (MainConfig.get().getMainFeatures().MOB_DROPS && !getHeadType().equals("PLAYER"))
+                || (MainConfig.get().getMainFeatures().PLAYER_DROPS && getHeadType().equals("PLAYER"));
     }
 
 }

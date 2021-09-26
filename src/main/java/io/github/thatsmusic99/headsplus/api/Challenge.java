@@ -118,6 +118,8 @@ public abstract class Challenge {
 
     public abstract int getStatSync(UUID uuid);
 
+    public abstract boolean canRegister();
+
     public boolean isComplete(Player p) {
         return HPPlayer.getHPPlayer(p.getUniqueId()).getCompleteChallenges().contains(getConfigName());
     }

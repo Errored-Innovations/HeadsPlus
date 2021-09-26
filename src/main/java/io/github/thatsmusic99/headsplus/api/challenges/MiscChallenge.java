@@ -34,4 +34,9 @@ public class MiscChallenge extends Challenge {
         return 0;
     }
 
+    @Override
+    public boolean canRegister() {
+        return true;
+    }
+
 }

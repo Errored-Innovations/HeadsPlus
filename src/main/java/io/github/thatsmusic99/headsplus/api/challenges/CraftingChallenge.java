@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.api.challenges;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.Challenge;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,11 @@ public class CraftingChallenge extends Challenge {
     public int getStatSync(UUID uuid) {
         if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING);
         return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING, getHeadType());
+    }
+
+    @Override
+    public boolean canRegister() {
+        return MainConfig.get().getMainFeatures().ENABLE_CRAFTING;
     }
 
 }
