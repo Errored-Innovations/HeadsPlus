@@ -60,6 +60,10 @@ public class HPExpansion extends PlaceholderExpansion {
             return String.valueOf(pl.getXp());
         }
 
+        if (identifier.equals("remaining_xp")) {
+            return String.valueOf(pl.getNextLevel().getRequiredXP() - pl.getXp());
+        }
+
         // %example_placeholder2%
         if(identifier.equals("completed_challenges_total")){
             return String.valueOf(pl.getCompleteChallenges().size());
