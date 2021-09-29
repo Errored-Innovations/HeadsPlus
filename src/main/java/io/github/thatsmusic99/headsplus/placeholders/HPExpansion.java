@@ -2,8 +2,10 @@ package io.github.thatsmusic99.headsplus.placeholders;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
+import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
@@ -52,6 +54,15 @@ public class HPExpansion extends PlaceholderExpansion {
 
         if (identifier.equals("xp")) {
             return String.valueOf(CacheManager.get().getXP(player));
+        }
+
+        if (identifier.equals("remaining_xp")) {
+            String level = CacheManager.get().getLevel(player);
+            if (level == null) return "-1";
+            Level levelObj = LevelsManager.get().getLevel(level);
+            long xp = CacheManager.get().getXP(player);
+            if (xp == -1) return "-1";
+            return String.valueOf(levelObj.getRequiredXP() - xp);
         }
 
         if (identifier.equals("level")) {
