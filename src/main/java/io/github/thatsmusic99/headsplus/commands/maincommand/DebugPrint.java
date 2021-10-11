@@ -175,27 +175,33 @@ public class DebugPrint implements IHeadsPlusCommand {
 
                                                     LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
                                                     for (OfflinePlayer player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headspluslb...");
                                                         DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
                                                     }
                                                     hashmap = DataManager.getScores(section, "headsplussh", true);
                                                     for (OfflinePlayer player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headsplussh...");
                                                         DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
                                                     }
                                                     hashmap = DataManager.getScores(section, "headspluscraft", true);
                                                     for (OfflinePlayer player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headspluscraft...");
                                                         DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
                                                     }
                                                 }
                                                 LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
                                                 for (OfflinePlayer player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headspluslb...");
                                                     DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
                                                 }
                                                 hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
                                                 for (OfflinePlayer player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headsplussh...");
                                                     DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
                                                 }
                                                 hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
                                                 for (OfflinePlayer player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headspluscraft...");
                                                     DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
                                                 }
                                                 sender.sendMessage(ChatColor.GREEN + "Transition successful.");
