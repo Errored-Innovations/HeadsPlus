@@ -104,9 +104,10 @@ public class HPPlayer {
                     int jumps = 0;
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
                         jumps++;
+                        Level level = nextLevelLocal;
                         nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
                         if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(jumps);
-                        if (nextLevelLocal.isrEnabled()) nextLevelLocal.getReward().rewardPlayer(null, (Player) getPlayer());
+                        if (level.isrEnabled()) level.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
                     if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
                 }
