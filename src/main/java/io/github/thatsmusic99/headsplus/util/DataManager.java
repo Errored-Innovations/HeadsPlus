@@ -29,6 +29,17 @@ public class DataManager {
             return hs;
         }
     }
+    
+    public static HashMap<UUID, Integer> getScoresMemFr(String database, String section) {
+        PlayerScores scores = hp.getScores();
+        HashMap<UUID, Integer> hs = new LinkedHashMap<>();
+        for (Object cs : scores.getJSON().keySet()) {
+            if (String.valueOf(cs).equalsIgnoreCase("server-total")) continue;
+            int i = scores.getPlayerTotal(String.valueOf(cs), (section.equalsIgnoreCase("total") ? section : section.toUpperCase()), database);
+            hs.put(UUID.fromString(String.valueOf(cs)), i);
+        }
+        return hs;
+    }
 
     public static int getPlayerScore(OfflinePlayer player, String database, String section) {
         if (hp.isConnectedToMySQLDatabase()) {
@@ -37,17 +48,17 @@ public class DataManager {
             return hp.getScores().getPlayerTotal(player.getUniqueId().toString(), section, database);
         }
     }
-    public static void addToTotal(OfflinePlayer player, String section, String database, int amount) {
+    public static void addToTotal(UUID player, String section, String database, int amount) {
         if (hp.isConnectedToMySQLDatabase()) {
-            NewMySQLAPI.addToTotal(database, amount, section, player.getUniqueId().toString());
+            NewMySQLAPI.addToTotal(database, amount, section, player.toString());
             NewMySQLAPI.addToTotal(database, amount, section, "server-total");
         } else {
             PlayerScores scores = hp.getScores();
             try {
-                scores.addPlayerTotal(player.getUniqueId().toString(), section.toUpperCase(), database, amount);
+                scores.addPlayerTotal(player.toString(), section.toUpperCase(), database, amount);
                 scores.addPlayerTotal("server-total", section.toUpperCase(), database, amount);
             } catch (Exception e) {
-                scores.setPlayerTotal(player.getUniqueId().toString(), section.toUpperCase(), database, amount);
+                scores.setPlayerTotal(player.toString(), section.toUpperCase(), database, amount);
             }
 
         }

@@ -173,35 +173,35 @@ public class DebugPrint implements IHeadsPlusCommand {
                                             try {
                                                 for (String section : EntityDataManager.ableEntities) {
 
-                                                    LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores(section, "headspluslb", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headspluslb...");
+                                                    HashMap<UUID, Integer> hashmap = DataManager.getScoresMemFr(section, "headspluslb");
+                                                    for (UUID player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to " + section + " in headspluslb...");
                                                         DataManager.addToTotal(player, section, "headspluslb", hashmap.get(player));
                                                     }
-                                                    hashmap = DataManager.getScores(section, "headsplussh", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headsplussh...");
+                                                    hashmap = DataManager.getScoresMemFr(section, "headsplussh");
+                                                    for (UUID player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to " + section + " in headsplussh...");
                                                         DataManager.addToTotal(player, section, "headsplussh", hashmap.get(player));
                                                     }
-                                                    hashmap = DataManager.getScores(section, "headspluscraft", true);
-                                                    for (OfflinePlayer player : hashmap.keySet()) {
-                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to " + section + " in headspluscraft...");
+                                                    hashmap = DataManager.getScoresMemFr(section, "headspluscraft");
+                                                    for (UUID player : hashmap.keySet()) {
+                                                        HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to " + section + " in headspluscraft...");
                                                         DataManager.addToTotal(player, section, "headspluscraft", hashmap.get(player));
                                                     }
                                                 }
-                                                LinkedHashMap<OfflinePlayer, Integer> hashmap = DataManager.getScores("PLAYER", "headspluslb", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headspluslb...");
+                                                HashMap<UUID, Integer> hashmap = DataManager.getScoresMemFr("PLAYER", "headspluslb");
+                                                for (UUID player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to PLAYER in headspluslb...");
                                                     DataManager.addToTotal(player, "PLAYER", "headspluslb", hashmap.get(player));
                                                 }
-                                                hashmap = DataManager.getScores("PLAYER", "headsplussh", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headsplussh...");
+                                                hashmap = DataManager.getScoresMemFr("PLAYER", "headsplussh");
+                                                for (UUID player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to PLAYER in headsplussh...");
                                                     DataManager.addToTotal(player, "PLAYER", "headsplussh", hashmap.get(player));
                                                 }
-                                                hashmap = DataManager.getScores("PLAYER", "headspluscraft", true);
-                                                for (OfflinePlayer player : hashmap.keySet()) {
-                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.getName() + " to PLAYER in headspluscraft...");
+                                                hashmap = DataManager.getScoresMemFr("PLAYER", "headspluscraft");
+                                                for (UUID player : hashmap.keySet()) {
+                                                    HeadsPlus.getInstance().getLogger().info("Adding " + player.toString() + " to PLAYER in headspluscraft...");
                                                     DataManager.addToTotal(player, "PLAYER", "headspluscraft", hashmap.get(player));
                                                 }
                                                 sender.sendMessage(ChatColor.GREEN + "Transition successful.");
