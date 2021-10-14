@@ -37,7 +37,7 @@ public class LeaderboardEvents implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    DataManager.addToTotal(player, event.getEntityType().name(), "headspluslb", event.getAmount());
+                                    DataManager.addToTotal(player.getUniqueId(), event.getEntityType().name(), "headspluslb", event.getAmount());
                                 }
                             }.runTaskAsynchronously(hp);
 
@@ -63,7 +63,7 @@ public class LeaderboardEvents implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    DataManager.addToTotal(player, "player", "headspluslb", event.getAmount());
+                                    DataManager.addToTotal(player.getUniqueId(), "player", "headspluslb", event.getAmount());
                                 }
                             }.runTaskAsynchronously(hp);
 
@@ -87,7 +87,7 @@ public class LeaderboardEvents implements Listener {
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
-                                            DataManager.addToTotal(event.getPlayer(), s, "headsplussh", i);
+                                            DataManager.addToTotal(event.getPlayer().getUniqueId(), s, "headsplussh", i);
                                         }
                                     }.runTaskAsynchronously(hp);
                                 }
@@ -109,7 +109,7 @@ public class LeaderboardEvents implements Listener {
                                     @Override
                                     public void run() {
                                         HPPlayer.getHPPlayer(event.getPlayer()).addXp(hp.getConfiguration().getMechanics().getInt("xp.crafting") * event.getHeadsCrafted());
-                                        DataManager.addToTotal(event.getPlayer(), event.getEntityType(), "headspluscraft", event.getHeadsCrafted());
+                                        DataManager.addToTotal(event.getPlayer().getUniqueId(), event.getEntityType(), "headspluscraft", event.getHeadsCrafted());
                                     }
                                 }.runTaskAsynchronously(hp);
                             }
