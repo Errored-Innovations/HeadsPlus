@@ -46,6 +46,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     private Icon[] icons;
     protected boolean suppressWarnings;
     private boolean destroy = false;
+    protected HashMap<String, String> context;
 
     // Used for config setup purposes
     public BaseInventory() {
@@ -64,6 +65,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         uuid = player.getUniqueId();
         // Get the icon list
         String items = hpi.getString("inventories." + getId() + ".icons");
+        // Assign context
+        this.context = context;
         // Count the amount of contents that will appear in
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
         contents = new PagedLists<>(transformContents(context, player), contentsPerPage);

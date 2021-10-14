@@ -83,7 +83,7 @@ public class InventoryManager {
         } else if (currentPage > inventory.contents.getTotalPages()) {
             currentPage = inventory.contents.getTotalPages();
         }
-        open(type, new HashMap<>());
+        open(type, inventory.context);
     }
 
     public void setGlitchSlot(boolean flag) {
