@@ -214,7 +214,7 @@ public class ConfigTextMenus extends HPConfig {
                 for (StatisticsSQLManager.LeaderboardEntry entry : ph.getContentsInPage(page)) {
                     try {
                         sb.append("\n").append(translateColors(instance.getString("leaderboard.for-each-line")
-                                .replaceAll("\\{pos}", String.valueOf(index++))
+                                .replaceAll("\\{pos}", String.valueOf(++index))
                                 .replace("{name}", entry.getPlayer())
                                 .replaceAll("\\{score}", String.valueOf(entry.getSum())), sender));
                     } catch (NullPointerException ignored) {
