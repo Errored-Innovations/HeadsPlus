@@ -191,7 +191,9 @@ public class StatisticsSQLManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players ORDER BY total DESC");
+                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                        "WHERE headsplus_stats.user_id = headsplus_players.id " +
+                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 ResultSet set = statement.executeQuery();
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
@@ -210,8 +212,10 @@ public class StatisticsSQLManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? ORDER BY total DESC");
+                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                                "WHERE headsplus_stats.user_id = headsplus_players.id AND collection_type = ?" +
+                                "AND headsplus_stats.user_id = headsplus_players.id " +
+                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 statement.setString(1, type.name());
 
@@ -233,7 +237,9 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND head = ? ORDER BY total DESC");
+                                " WHERE collection_type = ? AND head = ? " +
+                                "AND headsplus_stats.user_id = headsplus_players.id " +
+                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 statement.setString(1, type.name());
                 statement.setString(2, head);
@@ -255,8 +261,10 @@ public class StatisticsSQLManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND metadata LIKE ? ORDER BY total DESC");
+                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                        "WHERE collection_type = ? AND metadata LIKE ? " +
+                        "AND headsplus_stats.user_id = headsplus_players.id " +
+                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 statement.setString(1, type.name());
                 statement.setString(2,  "%" + metadata + "%");
@@ -278,8 +286,10 @@ public class StatisticsSQLManager extends SQLManager {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND head = ? AND metadata LIKE ? ORDER BY total DESC");
+                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                                "WHERE collection_type = ? AND head = ? AND metadata LIKE ? " +
+                                "AND headsplus_stats.user_id = headsplus_players.id " +
+                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 statement.setString(1, type.name());
                 statement.setString(2, head);
