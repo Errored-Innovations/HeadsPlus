@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
@@ -39,17 +40,26 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
         }
         // Check category
         StatisticsSQLManager.CollectionType type = StatisticsSQLManager.CollectionType.getType(args[0].toUpperCase());
+        int page = 1;
         if (type == null) {
-            int page = 1;
-            if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-                page = Integer.parseInt(args[0]);
-            }
-            int finalPage = page;
+            int finalPage = checkPage(args[0]);
             StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
                     cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, finalPage)));
-            return true;
+        } else {
+            if (args.length > 1) {
+                page = checkPage(args[1]);
+            }
+
+            int finalPage = page;
+            StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, HeadsPlus.capitalize(type.name()), list, finalPage)));
         }
-        return false;
+        return true;
+    }
+
+    private int checkPage(String input) {
+        return CachedValues.MATCH_PAGE.matcher(input).matches() ? Integer.parseInt(input) : 1;
+
     }
 
     @Override
