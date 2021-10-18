@@ -22,6 +22,9 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
@@ -259,18 +262,25 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("headsplus").setExecutor(new HeadsPlusCommand());
-        getCommand("hp").setTabCompleter(new HeadsPlusCommand());
-        getCommand("head").setExecutor(new Head());
-        getCommand("head").setTabCompleter(new Head());
-        getCommand("myhead").setExecutor(new MyHead());
-        getCommand("heads").setExecutor(new Heads());
-        getCommand("hplb").setExecutor(new LeaderboardsCommand());
-        getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
-        getCommand("sellhead").setExecutor(new SellHead());
-        getCommand("sellhead").setTabCompleter(new SellHead());
-        getCommand("hpc").setExecutor(new ChallengeCommand());
-        getCommand("addhead").setExecutor(new AddHead());
+        registerCommand("headsplus", new HeadsPlusCommand(), "hp");
+        registerCommand("head", new Head());
+        registerCommand("myhead", new MyHead());
+        registerCommand("heads", new Heads());
+        registerCommand("hplb", new LeaderboardsCommand());
+        registerCommand("sellhead", new SellHead());
+        registerCommand("hpc", new ChallengeCommand());
+        registerCommand("addhead", new AddHead());
+    }
+
+    private void registerCommand(String command, CommandExecutor executor, String... aliases) {
+        PluginCommand pluginCommand = getCommand(command);
+        if (pluginCommand == null) return;
+        if (executor instanceof TabExecutor)
+            pluginCommand.setTabCompleter((TabExecutor) executor);
+        if (aliases == null || aliases.length == 0) return;
+        for (String alias : aliases) {
+            registerCommand(alias, executor, (String) null);
+        }
     }
 
     private void createInstances() {
