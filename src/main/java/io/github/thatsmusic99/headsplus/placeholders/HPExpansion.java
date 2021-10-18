@@ -171,35 +171,34 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         Matcher matcher = STATISTIC_PATTERN.matcher(identifier);
-        if (matcher.matches()) {
-            // Get the category
-            String categoryStr = matcher.group(1);
-            StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
-            if (category == null) return "-1";
-            // Get the extra metadata
-            String[] metadata = matcher.group(2).split(",");
-            List<String> actualMetadata = new ArrayList<>();
-            String head = null;
-            for (String str : metadata) {
-                if (str.startsWith("HP#")) head = str;
-                else actualMetadata.add(str);
-            }
-            String metadataStr = String.join(",", actualMetadata);
-            if (head == null) {
-                if (metadataStr.isEmpty()) {
-                    return String.valueOf(CacheManager.get().getStat(player, category));
-                } else {
-                    return String.valueOf(CacheManager.get().getStatMeta(player, category, metadataStr));
-                }
+        if (!matcher.matches()) return null;
+        // Get the category
+        String categoryStr = matcher.group(1);
+        StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
+        if (category == null) return "-1";
+        // Get the extra metadata
+        String[] metadata = matcher.group(2).split(",");
+        List<String> actualMetadata = new ArrayList<>();
+        String head = null;
+        for (String str : metadata) {
+            if (str.startsWith("HP#")) head = str;
+            else actualMetadata.add(str);
+        }
+        String metadataStr = String.join(",", actualMetadata);
+        if (head == null) {
+            if (metadataStr.isEmpty()) {
+                return String.valueOf(CacheManager.get().getStat(player, category));
             } else {
-                if (metadataStr.isEmpty()) {
-                    return String.valueOf(CacheManager.get().getStat(player, category, head));
-                } else {
-                    return String.valueOf(CacheManager.get().getStat(player, category, head, metadataStr));
-                }
+                return String.valueOf(CacheManager.get().getStatMeta(player, category, metadataStr));
+            }
+        } else {
+            if (metadataStr.isEmpty()) {
+                return String.valueOf(CacheManager.get().getStat(player, category, head));
+            } else {
+                return String.valueOf(CacheManager.get().getStat(player, category, head, metadataStr));
             }
         }
-        return null;
+
     }
 
 }

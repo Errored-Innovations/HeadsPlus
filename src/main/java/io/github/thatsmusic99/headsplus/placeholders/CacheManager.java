@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -156,11 +157,6 @@ public class CacheManager {
     }
 
     private void makeRequest(String key) {
-        cachedRequests.put(key, new BukkitRunnable() {
-            @Override
-            public void run() {
-                cachedRequests.remove(key);
-            }
-        }.runTaskLater(HeadsPlus.get(), MainConfig.get().getLeaderboards().CACHE_DURATION));
+        cachedRequests.put(key, Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> cachedRequests.remove(key), MainConfig.get().getLeaderboards().CACHE_DURATION));
     }
 }

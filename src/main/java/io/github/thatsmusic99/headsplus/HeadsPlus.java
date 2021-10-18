@@ -31,7 +31,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -115,29 +114,19 @@ public class HeadsPlus extends JavaPlugin {
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));
              // if (getConfiguration().getMechanics().getBoolean("update.check")) {
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        update = UpdateChecker.getUpdate();
-                        if (update != null) {
-                            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                                    + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
-                            getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
-                        } else {
-                            getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
-                        }
-                        checkDates();
-
-                    }
-                }.runTaskAsynchronously(this);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        checkForMutuals();
-                    }
-                }.runTaskLater(this, 20);
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                update = UpdateChecker.getUpdate();
+                if (update != null) {
+                    getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                            + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
+                            + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                    getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
+                } else {
+                    getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
+                }
+                checkDates();
+            });
+            Bukkit.getScheduler().runTaskLater(this, this::checkForMutuals, 20);
 
            // }
             getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
@@ -398,7 +387,7 @@ public class HeadsPlus extends JavaPlugin {
                         "!!! YOU ARE USING YATOPIA. !!!",
                         "This is considered an unstable server type that mindlessly implements patches with no full testing.",
                         "It is even abandoned now and not recommended for use whatsoever.",
-                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "If you are worried about performance, please look into Paper or Airplane.",
                         "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
                 new DangerousServer("SugarcaneMC", "org.sugarcane.sugarcane.events.GameProfileLookupEvent",
                         "!!! YOU ARE USING SUGARCANE. !!!",
