@@ -121,6 +121,8 @@ public class HeadsPlusChallenges extends ConfigSettings {
                 int difficulty = challenge.getInt("difficulty");
                 Reward reward;
                 if (prepareOptions.get("rewards")) {
+                    if (!rewards.containsKey(challenge.getString("reward")))
+                        throw new NullPointerException("Reward for " + st + " was not found! (Reward: " + challenge.getString("reward"));
                     reward = rewards.get(challenge.getString("reward")).clone();
                 } else {
                     reward = getReward(challenge.getString("reward"));
