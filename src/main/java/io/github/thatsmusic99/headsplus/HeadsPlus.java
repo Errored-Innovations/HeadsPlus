@@ -374,14 +374,6 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().severe("Any new entities with special properties will be implemented in a newer plugin version.");
             getLogger().severe("And lastly, how DARE you update faster than I can, pesky lass");
         }
-        // Send Paper warning
-        if (!PaperLib.isPaper()) {
-            getLogger().warning("!!! YOU ARE NOT USING PAPER AS YOUR SERVER TYPE. !!!");
-            getLogger().warning("HeadsPlus will be removing CraftBukkit and Spigot support in a future version.");
-            getLogger().warning("In addition to this, you are already at risk of server stalls if you are on 1.16.5 or lower whilst using HP.");
-            getLogger().warning("Paper fixes these stalls for versions 1.16.5 and below. It also provides API that Spigot does not, which HP will rely on fully soon.");
-            getLogger().warning("The vast majority of plugins will still work with Paper, and HP certainly will.");
-        }
         // death to the dodgy forks and hybrids
         for (DangerousServer server : Arrays.asList(
                 new DangerousServer("Yatopia", "dev.tr7wz.yatopia.events.GameProfileLookupEvent",
