@@ -66,7 +66,7 @@ textmenus:
     interact-name: Nazwa interakcji
     chance: Szansa
   help:
-    usage: Stosowanie
+    usage: Użycie
     description: Opis
     permission: Uprawnienie
     further-usages: Dalsze zastosowania
@@ -80,7 +80,7 @@ commands:
       disabled: '{header} Wyłączono szczegółowe debugowanie!'
   locale:
     invalid-lang: '{header} To nie jest poprawny język! Dostępne języki: &c{languages}'
-    changed-locale: '{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski
+    changed-locale: '{header} Dzień dobry! Twój język jest teraz ustawiony na &cPolski
       (PL)'
     changed-locale-other: '{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!'
   errors:
@@ -91,7 +91,7 @@ commands:
     invalid-input-int: '{header} Ta komenda używa tylko liczb!'
     invalid-pg-no: '{header} Zły numer strony!'
     no-data: '{header} Brak danych dla tego gracza!'
-    no-perm: '{header} Nie masz pozwolenia na używanie tej komendy.'
+    no-perm: '{header} Nie masz uprawnień do użycia tej komendy.'
     player-offline: '{header} Ten gracz jest offline!'
     too-many-args: '{header} Za dużo argumentów!'
   addhead:
@@ -102,11 +102,11 @@ commands:
     displayname: '{header} Wpisz nazwę wyświetlaną głowy (w tym kody kolorów).'
     id: '{header} Wpisz identyfikator głowy (np. brown_sheep, red_flower_bush)'
     id-taken: '{header} Ten identyfikator został zabrany (&c{id}&7)!'
-    price: '{header} Wpisz cenę głowicy (lub „default” dla wartości domyślnej).'
+    price: '{header} Wpisz cenę głowy (lub „default” dla wartości domyślnej).'
     section: '{header} Wpisz sekcję, w której zostanie umieszczona głowa. (Dostępne
       sekcje: &c{sections}&7)'
     texture: '{header} Wpisz lub skopiuj i wklej teksturę głowy. (Może to wymagać
-      kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wejdź).'
+      kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wciśnij enter).'
     head-added: '{header} Wyszukiwanie tekstury do dodania dla &c{player}&7...'
     head-adding: '{header} Dodano &c{player}&7!'
     head-already-added: '{header} Udaj się do &c{player} &7już w bazie danych!'

@@ -38,7 +38,7 @@ public class AutograbManager {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                if(sb.length() == 0) {
+                if (sb.length() == 0) {
                     sb.append("\n");
                 }
                 sb.append(line);
@@ -47,15 +47,15 @@ public class AutograbManager {
             JSONObject resp = (JSONObject) JSONValue.parse(json);
             if (resp == null || resp.isEmpty()) {
                 HeadsPlus.get().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
-                if(callback != null) {
+                if (callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
                 return null;
             } else if (resp.containsKey("error")) {
                 // Retry
-                if(tries > 0) {
+                if (tries > 0) {
                     grabUUID(username, tries - 1, callback);
-                } else if(callback != null) {
+                } else if (callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
                 return null;
@@ -72,8 +72,8 @@ public class AutograbManager {
     public static boolean grabProfile(String id, CommandSender callback, boolean forceAdd) {
         Long last = lookups.get(id);
         long now = System.currentTimeMillis();
-        if(last != null && last > now - 180000) {
-            if(callback != null) {
+        if (last != null && last > now - 180000) {
+            if (callback != null) {
                 callback.sendMessage(ChatColor.RED + "/addhead spam protection - try again in a few minutes");
             }
             return false;
@@ -99,7 +99,7 @@ public class AutograbManager {
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    if(sb.length() == 0) {
+                    if (sb.length() == 0) {
                         sb.append("\n");
                     }
                     sb.append(line);
@@ -107,17 +107,17 @@ public class AutograbManager {
                 String json = sb.toString();
 
                 JSONObject resp = (JSONObject) JSONValue.parse(json);
-                if(resp == null || resp.isEmpty()) {
+                if (resp == null || resp.isEmpty()) {
                     HeadsPlus.get().getLogger().warning("Failed to grab data for user " + id + " - invalid id");
-                    if(callback != null) {
+                    if (callback != null) {
                         callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
                     }
                     return;
-                } else if(resp.containsKey("error")) {
+                } else if (resp.containsKey("error")) {
                     // retry
-                    if(tries > 0) {
+                    if (tries > 0) {
                         grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
-                    } else if(callback != null) {
+                    } else if (callback != null) {
                         callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + Bukkit.getOfflinePlayer(id).getName());
                     }
                     return;
@@ -136,16 +136,16 @@ public class AutograbManager {
                     return;
                 }
             } catch (Exception ex) {
-                if(ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
+                if (ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
                     grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
                 } else {
                     DebugPrint.createReport(ex, "Retreiving profile (addhead)", true, callback);
                 }
             } finally {
-                if(reader != null) {
+                if (reader != null) {
                     try {
                         reader.close();
-                    } catch (IOException ex) {
+                    } catch (IOException ignored) {
                     }
                 }
             }
@@ -153,21 +153,17 @@ public class AutograbManager {
     }
 
     public static void grabTexture(OfflinePlayer player, boolean force, CommandSender sender) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                final String[] playerInfo = new String[1];
-                try {
-                    // can't wait for PAPER fricks sake
-                    playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
-                    Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())), Map.class);
-                    String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
-                    addTexture(url, force, sender, player.getName() == null ? "<No Name>" : player.getName());
-                } catch (NoSuchElementException exception) {
-
-                }
+        Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> {
+            final String[] playerInfo = new String[1];
+            try {
+                // can't wait for PAPER fricks sake
+                playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
+                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())), Map.class);
+                String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
+                addTexture(url, force, sender, player.getName() == null ? "<No Name>" : player.getName());
+            } catch (NoSuchElementException ignored) {
             }
-        }.runTaskAsynchronously(HeadsPlus.get());
+        });
     }
 
     private static void addTexture(String texture, boolean force, CommandSender sender, String name) {

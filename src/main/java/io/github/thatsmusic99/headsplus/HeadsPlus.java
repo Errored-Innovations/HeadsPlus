@@ -22,13 +22,15 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,29 +114,19 @@ public class HeadsPlus extends JavaPlugin {
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));
              // if (getConfiguration().getMechanics().getBoolean("update.check")) {
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        update = UpdateChecker.getUpdate();
-                        if (update != null) {
-                            getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                                    + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                                    + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
-                            getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
-                        } else {
-                            getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
-                        }
-                        checkDates();
-
-                    }
-                }.runTaskAsynchronously(this);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        checkForMutuals();
-                    }
-                }.runTaskLater(this, 20);
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                update = UpdateChecker.getUpdate();
+                if (update != null) {
+                    getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
+                            + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
+                            + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                    getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
+                } else {
+                    getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
+                }
+                checkDates();
+            });
+            Bukkit.getScheduler().runTaskLater(this, this::checkForMutuals, 20);
 
            // }
             getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
@@ -259,18 +251,26 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("headsplus").setExecutor(new HeadsPlusCommand());
-        getCommand("hp").setTabCompleter(new HeadsPlusCommand());
-        getCommand("head").setExecutor(new Head());
-        getCommand("head").setTabCompleter(new Head());
-        getCommand("myhead").setExecutor(new MyHead());
-        getCommand("heads").setExecutor(new Heads());
-        getCommand("hplb").setExecutor(new LeaderboardsCommand());
-        getCommand("hplb").setTabCompleter(new LeaderboardsCommand());
-        getCommand("sellhead").setExecutor(new SellHead());
-        getCommand("sellhead").setTabCompleter(new SellHead());
-        getCommand("hpc").setExecutor(new ChallengeCommand());
-        getCommand("addhead").setExecutor(new AddHead());
+        registerCommand("headsplus", new HeadsPlusCommand(), "hp");
+        registerCommand("head", new Head());
+        registerCommand("myhead", new MyHead());
+        registerCommand("heads", new Heads());
+        registerCommand("hplb", new LeaderboardsCommand());
+        registerCommand("sellhead", new SellHead());
+        registerCommand("hpc", new ChallengeCommand());
+        registerCommand("addhead", new AddHead());
+    }
+
+    private void registerCommand(String command, CommandExecutor executor, String... aliases) {
+        PluginCommand pluginCommand = getCommand(command);
+        if (pluginCommand == null) return;
+        if (executor instanceof TabExecutor)
+            pluginCommand.setTabCompleter((TabExecutor) executor);
+        if (aliases == null || aliases.length == 0) return;
+        for (String alias : aliases) {
+            if (alias == null) continue;
+            registerCommand(alias, executor, (String) null);
+        }
     }
 
     private void createInstances() {
@@ -388,7 +388,7 @@ public class HeadsPlus extends JavaPlugin {
                         "!!! YOU ARE USING YATOPIA. !!!",
                         "This is considered an unstable server type that mindlessly implements patches with no full testing.",
                         "It is even abandoned now and not recommended for use whatsoever.",
-                        "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
+                        "If you are worried about performance, please look into Paper or Airplane.",
                         "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
                 new DangerousServer("SugarcaneMC", "org.sugarcane.sugarcane.events.GameProfileLookupEvent",
                         "!!! YOU ARE USING SUGARCANE. !!!",

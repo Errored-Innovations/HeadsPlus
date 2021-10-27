@@ -23,7 +23,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,20 +63,14 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         String items = hpi.getString("inventories." + getId() + ".icons");
         // Count the amount of contents that will appear in
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
-                build(context, player);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        new NewInventoryEvent(player, getInventory());
-                        player.openInventory(getInventory());
-                    }
-                }.runTask(HeadsPlus.get());
-            }
-        }.runTaskAsynchronously(HeadsPlus.get());
+        Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> {
+            contents = new PagedLists<>(transformContents(context, player), contentsPerPage);
+            build(context, player);
+            Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> {
+                new NewInventoryEvent(player, getInventory());
+                player.openInventory(getInventory());
+            });
+        });
         HeadsPlus.get().getServer().getPluginManager().registerEvents(this, HeadsPlus.get());
     }
 
@@ -132,7 +125,6 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                             } else {
                                 icon = Air.class.getConstructor(Player.class).newInstance(player);
                             }
-
                         } else if (Stats.class.isAssignableFrom(iconClass)) {
                             icon = iconClass.getConstructor(Player.class, Integer.class).newInstance(player, totalPages);
                         } else {
@@ -180,10 +172,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
             event.setCancelled(true);
             for (int i = 0; i < 46; i++) {
                 ItemStack item = player.getInventory().getItem(i);
-                if (item != null) {
-                    if (PersistenceManager.get().isIcon(item)) {
-                        player.getInventory().setItem(i, new ItemStack(Material.AIR));
-                    }
+                if (item != null && PersistenceManager.get().isIcon(item)) {
+                    player.getInventory().setItem(i, new ItemStack(Material.AIR));
                 }
             }
             IconClickEvent iconEvent = new IconClickEvent(player, icons[slot]);

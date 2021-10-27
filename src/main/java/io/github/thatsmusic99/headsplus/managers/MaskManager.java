@@ -4,7 +4,6 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMasks;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

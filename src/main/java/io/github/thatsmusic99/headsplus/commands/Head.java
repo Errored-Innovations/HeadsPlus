@@ -31,7 +31,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private final MessagesManager hpc = MessagesManager.get();
 
-	private void giveHead(Player p, String n) {
+    private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
@@ -42,12 +42,12 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-	    try {
-	        if (!sender.hasPermission("headsplus.head")) {
+        try {
+            if (!sender.hasPermission("headsplus.head")) {
                 hpc.sendMessage("commands.errors.no-perm", sender);
                 return true;
             }
-	        if (args.length > 1) {
+            if (args.length > 1) {
                 if (!sender.hasPermission("headsplus.head.others")) {
                     hpc.sendMessage("commands.errors.no-perm", sender);
                     return true;
@@ -91,7 +91,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 hpc.sendMessage("commands.errors.invalid-args", sender);
             }
         } catch (Exception e) {
-	        DebugPrint.createReport(e, "Command (head)", true, sender);
+            DebugPrint.createReport(e, "Command (head)", true, sender);
         }
         return false;
     }
@@ -104,14 +104,11 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         List<String> results = new ArrayList<>();
-        if (sender.hasPermission("headsplus.head")) {
-            if (args.length == 1) {
-                StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(sender), results);
-            } else if (args.length == 2 && sender.hasPermission("headsplus.head.others")) {
-                StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);
-            }
+        if (args.length == 1 && sender.hasPermission("headsplus.head")) {
+            StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(sender), results);
+        } else if (args.length == 2 && sender.hasPermission("headsplus.head.others")) {
+            StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);
         }
-
         return results;
     }
 }
