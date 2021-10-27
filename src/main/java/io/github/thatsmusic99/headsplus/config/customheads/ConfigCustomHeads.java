@@ -28,7 +28,7 @@ public class ConfigCustomHeads extends HPConfig {
 
     @Override
     public void moveToNew() {
-
+        // TODO - this is broken, investigate
         moveTo("options.update-heads", "update-heads", ConfigHeads.get());
         moveTo("options.version", "version", ConfigHeads.get());
         moveTo("options.default-price", "default-selector-head-price", MainConfig.get());
