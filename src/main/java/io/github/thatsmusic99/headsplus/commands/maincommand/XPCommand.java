@@ -1,14 +1,17 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +35,8 @@ public class XPCommand implements IHeadsPlusCommand {
             return false;
         }
 
+        Player target = Bukkit.getPlayer(args[1]);
+
         switch (args[2].toLowerCase()) {
             case "add":
                 if (sender.hasPermission("headsplus.maincommand.xp.add")) {
@@ -43,10 +48,16 @@ public class XPCommand implements IHeadsPlusCommand {
                     return false;
                 }
                 int amount = HPUtils.isInt(args[3]);
-                // TODO check for online player
+                if (target != null) {
+                    HPPlayer player = HPPlayer.getHPPlayer(target.getUniqueId());
+                    player.setXp(player.getXp() + amount);
+                    MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
+                            String.valueOf(player.getXp() + amount), "{amount}", args[3]);
+                    return true;
+                }
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
                         MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
-                                String.valueOf(PlayerSQLManager.get().getLevelSync(args[1]) + amount), "{amount}", args[3]), HeadsPlus.async);
+                                String.valueOf(PlayerSQLManager.get().getXPSync(args[1])), "{amount}", args[3]), HeadsPlus.async);
                 return true;
             case "subtract":
                 if (!sender.hasPermission("headsplus.maincommand.xp.subtract")) {
@@ -58,6 +69,17 @@ public class XPCommand implements IHeadsPlusCommand {
                     return false;
                 }
                 amount = HPUtils.isInt(args[3]);
+                if (target != null) {
+                    HPPlayer player = HPPlayer.getHPPlayer(target.getUniqueId());
+                    if (amount > player.getXp() && !MainConfig.get().getMiscellaneous().ALLOW_NEGATIVE_XP) {
+                        MessagesManager.get().sendMessage("commands.xp.negative-xp", sender);
+                        return false;
+                    }
+                    player.setXp(player.getXp() - amount);
+                    MessagesManager.get().sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}",
+                            String.valueOf(player.getXp() - amount), "{amount}", args[3]);
+                    return true;
+                }
                 PlayerSQLManager.get().getXP(args[1]).thenAccept(xp -> {
                     if (amount > xp && !MainConfig.get().getMiscellaneous().ALLOW_NEGATIVE_XP) {
                         MessagesManager.get().sendMessage("commands.xp.negative-xp", sender);
@@ -68,6 +90,12 @@ public class XPCommand implements IHeadsPlusCommand {
                 break;
             case "reset":
                 if (sender.hasPermission("headsplus.maincommand.reset")) {
+                    if (target != null) {
+                        HPPlayer player = HPPlayer.getHPPlayer(target.getUniqueId());
+                        player.setXp(0);
+                        MessagesManager.get().sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
+                        return true;
+                    }
                     PlayerSQLManager.get().setXP(args[1], 0);
                     MessagesManager.get().sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
                 } else {
