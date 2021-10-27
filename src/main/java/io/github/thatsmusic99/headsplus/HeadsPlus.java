@@ -268,8 +268,7 @@ public class HeadsPlus extends JavaPlugin {
             pluginCommand.setTabCompleter((TabExecutor) executor);
         if (aliases == null || aliases.length == 0) return;
         for (String alias : aliases) {
-            if (alias == null) continue;
-            registerCommand(alias, executor, (String) null);
+            registerCommand(alias, executor);
         }
     }
 
