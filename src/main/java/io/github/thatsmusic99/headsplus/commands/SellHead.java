@@ -18,6 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand {
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
-            if (item != null && NBTManager.isSellable(item)) {
+            if (item != null && (item.getItemMeta() instanceof SkullMeta) && NBTManager.isSellable(item)) {
                 String id = NBTManager.getType(item);
                 if (fixedId != null) {
                     if (!fixedId.equals(id) || (!useCases && fixedId.equalsIgnoreCase(id))) continue;
