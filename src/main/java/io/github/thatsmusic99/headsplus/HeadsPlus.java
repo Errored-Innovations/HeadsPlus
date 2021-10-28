@@ -264,6 +264,7 @@ public class HeadsPlus extends JavaPlugin {
     private void registerCommand(String command, CommandExecutor executor, String... aliases) {
         PluginCommand pluginCommand = getCommand(command);
         if (pluginCommand == null) return;
+        pluginCommand.setExecutor(executor);
         if (executor instanceof TabExecutor)
             pluginCommand.setTabCompleter((TabExecutor) executor);
         if (aliases == null || aliases.length == 0) return;
