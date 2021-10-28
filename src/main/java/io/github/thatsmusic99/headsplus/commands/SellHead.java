@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -109,7 +110,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         for (int slot : slots) {
             ItemStack item = player.getInventory().getItem(slot);
             if (slot == player.getInventory().getSize() - 2) continue;
-            if (item == null || !PersistenceManager.get().isSellable(item)) continue;
+            if (item == null
+                    || !(item.getItemMeta() instanceof SkullMeta)
+                    || !PersistenceManager.get().isSellable(item)) continue;
             double headPrice;
             String id = PersistenceManager.get().getSellType(item);
             if (fixedId != null) {
