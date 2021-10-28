@@ -130,6 +130,7 @@ public class MaskManager {
         @Override
         public CompletableFuture<ItemStack> buildHead() {
             return super.buildHead().thenApply(item -> {
+                if (id == null) return item;
                 PersistenceManager.get().setMaskType(item, id);
                 HeadsPlus.debug("Implemented mask type " + id);
                 return item;
@@ -139,6 +140,7 @@ public class MaskManager {
         @Override
         public ItemStack forceBuildHead() {
             ItemStack item = super.forceBuildHead();
+            if (id == null) return item;
             PersistenceManager.get().setMaskType(item, id);
             HeadsPlus.debug("Implemented mask type " + id);
             return item;
