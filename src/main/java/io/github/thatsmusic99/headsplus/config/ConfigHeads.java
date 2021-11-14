@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.ChatColor;
@@ -25,6 +26,7 @@ public class ConfigHeads extends HPConfig {
 
         makeSectionLenient("heads");
         if (isNew() || getDouble("version") < 3.5) {
+            if (ConfigCustomHeads.get() != null) return;
             for (HeadsXEnums head : HeadsXEnums.values()) {
                 if (isNew() || head.version > getDouble("version")) {
                     addDefault("heads." + head.name().toLowerCase() + ".display-name", head.displayName);

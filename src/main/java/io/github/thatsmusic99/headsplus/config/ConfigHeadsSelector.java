@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXSections;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -45,6 +46,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
         makeSectionLenient("sections");
         makeSectionLenient("heads");
         if (version >= 3.5) return;
+        if (ConfigCustomHeads.get() != null) return;
         for (HeadsXSections section : HeadsXSections.values()) {
             if (section.version > version) {
                 addDefault("sections." + section.id + ".texture", section.texture);
