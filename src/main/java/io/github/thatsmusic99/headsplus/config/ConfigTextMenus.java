@@ -95,7 +95,7 @@ public class ConfigTextMenus extends HPConfig {
     }
 
     private static String translateColors(String s, CommandSender sender) {
-        return ChatColor.translateAlternateColorCodes('&', MessagesManager.get().formatMsg(translateHeader(s), sender));
+        return ChatColor.translateAlternateColorCodes('&', MessagesManager.get().formatMsg(s, sender));
     }
 
 
@@ -119,7 +119,9 @@ public class ConfigTextMenus extends HPConfig {
                 Level finalLevel = level;
                 Level finalNextLevel = nextLevel;
                 for (String str : instance.getStringList("profile.layout")) {
-                    HPUtils.parseLorePlaceholders(profile, translateColors(str, sender),
+                    String s = str;
+                    if (!s.equals("{header}")) s = translateColors(s, sender);
+                    HPUtils.parseLorePlaceholders(profile, s,
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
                             new HPUtils.PlaceholderInfo("{completed-challenges}", () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()),
                                     MainConfig.get().getMainFeatures().CHALLENGES),
@@ -239,9 +241,11 @@ public class ConfigTextMenus extends HPConfig {
             HeadsPlus hp = HeadsPlus.get();
             List<String> infoCommand = new ArrayList<>();
             for (String s : instance.getStringList("info.layout")) {
-                HPUtils.parseLorePlaceholders(infoCommand, translateColors(s, sender),
+                String str = s;
+                if (!str.equals("{header}")) str = translateColors(s, sender);
+                HPUtils.parseLorePlaceholders(infoCommand, str,
                         new HPUtils.PlaceholderInfo("{version}", hp.getVersion(), true),
-                        new HPUtils.PlaceholderInfo("{header}", instance.getHeader("info.header", sender), true),
+                        new HPUtils.PlaceholderInfo("{header}", () -> instance.getHeader("info.header", sender), true),
                         new HPUtils.PlaceholderInfo("{author}", hp.getAuthor(), true),
                         new HPUtils.PlaceholderInfo("{locale}", MainConfig.get().getLocalisation().LOCALE, true),
                         new HPUtils.PlaceholderInfo("{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167", true));
@@ -251,6 +255,6 @@ public class ConfigTextMenus extends HPConfig {
     }
 
     private String getHeader(String path, CommandSender sender) {
-        return translateColors(getString(path), sender);
+        return translateColors(translateHeader(getString(path)), sender);
     }
 }
