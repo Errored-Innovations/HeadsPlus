@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
@@ -60,7 +60,7 @@ public class ProfileFetcher {
         OfflinePlayer player = Bukkit.getOfflinePlayer(name);
         UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
         if (player.getUniqueId().equals(offlineUUID)) {
-            String uuidStr = HeadsPlus.getInstance().getHeadsXConfig().grabUUID(name, 0, null);
+            String uuidStr = AutograbManager.grabUUID(name, 0, null);
             if (uuidStr == null) {
                 uuid = offlineUUID;
             } else {
