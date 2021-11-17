@@ -1,14 +1,11 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.CustomHeadSection;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,37 +42,13 @@ public class HeadsMenu extends BaseInventory {
     @Override
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
-        HeadsPlusConfigCustomHeads headsConfig = HeadsPlus.getInstance().getHeadsXConfig();
-        for (String section : headsConfig.sections.keySet()) {
-            ConfigurationSection configSec = headsConfig.getConfig().getConfigurationSection("sections." + section);
-            ConfigurationSection itemSec = hpi.getConfigurationSection("icons.headsection");
-            ItemStack item;
+        ConfigHeadsSelector selector = ConfigHeadsSelector.get();
+        for (ConfigHeadsSelector.SectionInfo section : selector.getSections().values()) {
             try {
-                item = headsConfig.getSkull(configSec.getString("texture"));
-            } catch (NullPointerException ex) {
-                if (!suppressWarnings) {
-                    hp.getLogger().warning("Texture for " + configSec.getString("texture") + " not found. (Error code: 10)");
-                }
-                continue;
+                contents.add(new CustomHeadSection(section.buildSection(), section.getId()));
+            } catch (IllegalStateException ex) {
+                HeadsPlus.get().getLogger().warning(ex.getMessage());
             }
-            SkullMeta meta = (SkullMeta) item.getItemMeta();
-            try {
-                meta.setDisplayName(hpc.formatMsg(itemSec.getString("display-name")
-                        .replaceAll("\\{head-name}", configSec.getString("display-name")), player));
-                List<String> lore = new ArrayList<>();
-                for (String loreStr : itemSec.getStringList("lore")) {
-                    lore.add(hpc.formatMsg(loreStr, player)
-                            .replaceAll("\\{head-count}", String.valueOf(headsConfig.sections.get(section).size())));
-                }
-                meta.setLore(lore);
-            } catch (NullPointerException ex) {
-                if (!suppressWarnings) {
-                    hp.getLogger().warning("A problem was found when setting the display name for icon Heads Section with ID " + section + ". Either the item is null, or there is a config error in the display names! (Error code: 11)");
-                }
-            }
-
-            item.setItemMeta(meta);
-            contents.add(new CustomHeadSection(item, section));
         }
         return contents;
     }

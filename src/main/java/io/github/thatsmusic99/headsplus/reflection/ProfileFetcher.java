@@ -1,7 +1,7 @@
 package io.github.thatsmusic99.headsplus.reflection;
 
 import com.mojang.authlib.GameProfile;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
@@ -30,6 +30,10 @@ public class ProfileFetcher {
 
     public static GameProfile getProfile(ItemStack item) throws IllegalAccessException {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
+        return getProfile(meta);
+    }
+
+    public static GameProfile getProfile(SkullMeta meta) throws IllegalAccessException {
         Field profile;
         try {
             profile = meta.getClass().getDeclaredField("profile");
@@ -41,12 +45,22 @@ public class ProfileFetcher {
         return (GameProfile) profile.get(meta);
     }
 
+    public static GameProfile getProfile(OfflinePlayer player) {
+        try {
+            Method method = player.getClass().getMethod("getProfile");
+            return (GameProfile) method.invoke(player);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static SkullMeta setProfile(SkullMeta meta, String name) {
         UUID uuid;
         OfflinePlayer player = Bukkit.getOfflinePlayer(name);
         UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
         if (player.getUniqueId().equals(offlineUUID)) {
-            String uuidStr = HeadsPlus.getInstance().getHeadsXConfig().grabUUID(name, 0, null);
+            String uuidStr = AutograbManager.grabUUID(name, 0, null);
             if (uuidStr == null) {
                 uuid = offlineUUID;
             } else {

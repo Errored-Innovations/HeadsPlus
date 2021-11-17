@@ -1,13 +1,10 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.util.DebugManager;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
-import mkremins.fanciful.FancyMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.*;
@@ -19,14 +16,14 @@ public class DebugVerbose {
             String event = args[2];
             if (event.equalsIgnoreCase("off")) {
                 DebugManager.removeListener(sender);
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.disabled", sender));
+                sender.sendMessage(MessagesManager.get().getString("commands.debug.verbose.disabled", sender));
             } else {
                 String[] arguments = new String[0];
                 if (args.length > 3) {
                     arguments = args[3].split(",");
                 }
                 DebugManager.addListener(sender, event, stringToConditions(arguments));
-                sender.sendMessage(HeadsPlus.getInstance().getMessagesConfig().getString("commands.debug.verbose.enabled", sender)
+                sender.sendMessage(MessagesManager.get().getString("commands.debug.verbose.enabled", sender)
                         .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", arguments.length == 0 ? "(none)" : args[3]));
             }
 
@@ -66,7 +63,7 @@ public class DebugVerbose {
                         builder.append(currentArgs[i]).append(",");
                     }
                     for (String key : event.getPossibleData(arg)) {
-                        possibleSelections.add(builder.toString() + arg + "=" + key + ",");
+                        possibleSelections.add(builder + arg + "=" + key + ",");
                     }
                 } else {
                     for (int i = 0; i < modifyingArg; i++) {
@@ -74,7 +71,7 @@ public class DebugVerbose {
                     }
                     for (String key : event.getPossibleValues().keySet()) {
                         if (!conditions.containsKey(key)) {
-                            possibleSelections.add(builder.toString() + key + "=");
+                            possibleSelections.add(builder + key + "=");
                         }
                     }
                 }

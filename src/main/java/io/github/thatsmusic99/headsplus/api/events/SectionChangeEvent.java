@@ -4,10 +4,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class SectionChangeEvent extends Event implements Cancellable {
 
-    // E
     private final Player player;
     private final String newSection;
     private final String oldSection;
@@ -21,6 +21,7 @@ public class SectionChangeEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
+    @NotNull
     public HandlerList getHandlers() {
         return HANDLERS;
     }

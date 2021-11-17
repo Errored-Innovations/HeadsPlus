@@ -1,68 +1,77 @@
 package io.github.thatsmusic99.headsplus.api;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
-import io.github.thatsmusic99.headsplus.config.challenges.HeadsPlusChallengeTypes;
-import org.apache.commons.lang.WordUtils;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.api.challenges.CraftingChallenge;
+import io.github.thatsmusic99.headsplus.api.challenges.MiscChallenge;
+import io.github.thatsmusic99.headsplus.api.challenges.MobKillChallenge;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.RewardsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-public class Challenge {
+public abstract class Challenge {
 
-    // I
     private final String configName;
     private final String mainName;
     private final String header;
     private final List<String> description;
     private final int requiredHeadAmount;
-    private final HeadsPlusChallengeTypes challengeType;
-    private final Reward reward;
+    private final String reward;
     private final int difficulty;
     private final ItemStack icon;
     private final ItemStack completeIcon;
     private final String headType;
 
-    public Challenge(String configName, String mainName, String header, List<String> description, int requiredHeadAmount, HeadsPlusChallengeTypes challengeType, String headType, Reward reward, int difficulty, ItemStack icon, ItemStack completeIcon) {
-        this.configName = configName;
-        this.mainName = mainName;
-        this.header = header;
-        this.description = description;
-        this.requiredHeadAmount = requiredHeadAmount;
-        this.challengeType = challengeType;
-        this.headType = headType;
-        this.reward = reward;
-        if (reward.isMultiply() && reward.getType() == HPChallengeRewardTypes.ECO) {
-            reward.setMoney(reward.getMoney() * difficulty);
-            reward.setXp(reward.getXp() * difficulty);
+    public Challenge(String key, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
+        this.configName = key;
+        this.mainName = Objects.requireNonNull(section.getString("name"), "Challenge name for " + key + " not found!");
+        this.header = Objects.requireNonNull(section.getString("header"), "Challenge header for " + key + " not found!");
+        this.description = section.getStringList("description");
+        if (!section.contains("min")) throw new NullPointerException("Minimum head count (min) for " + key + " not found!");
+        this.requiredHeadAmount = section.getInteger("min");
+        this.headType = Objects.requireNonNull(section.getString("head-type"), "Challenge head type for " + key + " not found!");
+        String reward = section.getString("reward");
+        if (reward == null) throw new NullPointerException("No reward found for challenge " + key + "!");
+        if (!(reward.startsWith("levels_") || reward.startsWith("challenges_"))) {
+            reward = "challenges_" + reward;
         }
-        this.difficulty = difficulty;
+        if (!RewardsManager.get().contains(reward))
+            throw new NullPointerException("Reward ID " + reward + " was not found for challenge " + key + "!");
+        this.reward = reward;
+        this.difficulty = section.getInteger("difficulty", 1);
         this.icon = icon;
         this.completeIcon = completeIcon;
+    }
+
+    public static Challenge fromConfigSection(String id, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
+        String type = section.getString("type");
+        if (type == null) throw new NullPointerException("No type found for challenge " + id + "!");
+        switch (type.toUpperCase()) {
+            case "LEADERBOARD":
+            case "MOBKILL":
+                return new MobKillChallenge(id, section, icon, completeIcon);
+            case "CRAFTING":
+                return new CraftingChallenge(id, section, icon, completeIcon);
+            case "MISC":
+                return new MiscChallenge(id, section, icon, completeIcon);
+            default:
+                throw new IllegalArgumentException("No such challenge type " + type + " for " + id + "!");
+        }
     }
 
     public String getConfigName() {
         return configName;
     }
 
-    public HeadsPlusChallengeTypes getChallengeType() {
-        return challengeType;
-    }
-
     public int getRequiredHeadAmount() {
         return requiredHeadAmount;
-    }
-
-    public HPChallengeRewardTypes getRewardType() {
-        return reward.getType();
-    }
-
-    public int getRewardItemAmount() {
-        return reward.getItem().getAmount();
     }
 
     public List<String> getDescription() {
@@ -75,21 +84,6 @@ public class Challenge {
 
     public ItemStack getCompleteIcon() {
         return completeIcon;
-    }
-
-    public Object getRewardValue() {
-        switch (reward.getType()) {
-            case GIVE_ITEM:
-                return reward.getItem();
-            case RUN_COMMAND:
-                return reward.getCommands();
-            case ADD_GROUP:
-            case REMOVE_GROUP:
-                return reward.getGroup();
-            case ECO:
-                return reward.getMoney();
-        }
-        return null;
     }
 
     public int getDifficulty() {
@@ -105,71 +99,47 @@ public class Challenge {
     }
 
     public Reward getReward() {
-        return reward;
+        return RewardsManager.get().getReward(reward);
     }
 
     public String getHeadType() {
         return headType;
     }
 
-    public int getGainedXP() {
-        return reward.getXp();
+    public long getGainedXP() {
+        return getReward().getXp();
     }
 
-    public boolean canComplete(Player p) throws SQLException {
-        HeadsPlusAPI hapi = HeadsPlus.getInstance().getAPI();
-        if (getChallengeType() == HeadsPlusChallengeTypes.MISC) {
-            return true;
-        } else if (getChallengeType() == HeadsPlusChallengeTypes.CRAFTING) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluscraft") >= getRequiredHeadAmount();
-        } else if (getChallengeType() == HeadsPlusChallengeTypes.LEADERBOARD) {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headspluslb") >= getRequiredHeadAmount();
-        } else {
-            return hapi.getPlayerInLeaderboards(p, getHeadType().equals("total") ? "total" : getHeadType(), "headsplussh") >= getRequiredHeadAmount();
-        }
-    }
+    public abstract CompletableFuture<Boolean> canComplete(Player p);
+
+    public abstract String getCacheID();
+
+    public abstract CompletableFuture<Integer> getStatFuture(UUID uuid);
+
+    public abstract int getStatSync(UUID uuid);
+
+    public abstract boolean canRegister();
 
     public boolean isComplete(Player p) {
-        return HeadsPlus.getInstance().getScores().getCompletedChallenges(p.getUniqueId().toString()).contains(getConfigName());
+        return HPPlayer.getHPPlayer(p.getUniqueId()).getCompleteChallenges().contains(getConfigName());
     }
 
     public void complete(Player p) {
-        HeadsPlus hp = HeadsPlus.getInstance();
-        HeadsPlusMessagesManager hpc = hp.getMessagesConfig();
-        HPPlayer player = HPPlayer.getHPPlayer(p);
+        MessagesManager hpc = MessagesManager.get();
+        HPPlayer player = HPPlayer.getHPPlayer(p.getUniqueId());
         player.addCompleteChallenge(this);
 
-        StringBuilder sb2 = new StringBuilder();
-        HPChallengeRewardTypes re = reward.getType();
-        if (re != HPChallengeRewardTypes.RUN_COMMAND) {
-            String value = String.valueOf(getRewardValue());
-            String rewardString = reward.getRewardString();
-            if (rewardString != null) {
-                sb2.append(rewardString);
-            } else if (re == HPChallengeRewardTypes.ECO) {
-                sb2.append(hpc.getString("inventory.icon.reward.currency", p).replace("{amount}", value));
-            } else if (re == HPChallengeRewardTypes.GIVE_ITEM) {
-                sb2.append(hpc.getString("inventory.icon.reward.item-give", p)
-                        .replace("{amount}", String.valueOf(getRewardItemAmount()))
-                        .replace("{item}", WordUtils.capitalize(value.toLowerCase().replaceAll("_", " "))));
-            } else if (re == HPChallengeRewardTypes.ADD_GROUP) {
-                sb2.append(hpc.getString("inventory.icon.reward.group-add", p).replace("{group}", value));
-            } else if (re == HPChallengeRewardTypes.REMOVE_GROUP) {
-                sb2.append(hpc.getString("inventory.icon.reward.group-remove", p).replace("{group}", value));
-            }
-        }
-
         player.addXp(getGainedXP());
-        reward.reward(p);
-        if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.challenge-complete")) {
+        getReward().rewardPlayer(this, p);
+        if (MainConfig.get().getChallenges().BROADCAST_CHALLENGE_COMPLETE) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
             }
         }
-        String message = hp.getMessagesConfig().getString("commands.challenges.reward-string", p);
+        String message = MessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
-            hpc.sendMessage(str.replace("{reward}", sb2.toString()).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
+            hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
         }
     }
 }

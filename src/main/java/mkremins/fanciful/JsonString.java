@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a JSON string value.
@@ -29,7 +30,8 @@ final class JsonString implements JsonRepresentedObject, ConfigurationSerializab
 		return _value;
 	}
 
-	public Map<String, Object> serialize() {
+	@NotNull
+    public Map<String, Object> serialize() {
 		HashMap<String, Object> theSingleValue = new HashMap<>();
 		theSingleValue.put("stringValue", _value);
 		return theSingleValue;

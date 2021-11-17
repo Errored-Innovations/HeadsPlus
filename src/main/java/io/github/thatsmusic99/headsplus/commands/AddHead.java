@@ -1,12 +1,13 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
-
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.prompts.DataListener;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,52 +19,53 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @CommandInfo(
         commandname = "addhead",
         permission = "headsplus.addhead",
-        subcommand = "addhead",
         maincommand = false,
-        usage = "/addhead [player]"
-)
+        usage = "/addhead [player]",
+        descriptionPath = "descriptions.addhead")
 public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-    private final HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
+    private final MessagesManager hpc = MessagesManager.get();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if(args.length > 0) {
-            if (args[0].matches("^[A-Za-z0-9_]+$")) {
-                if (args[0].length() > 2) {
-                    if (args[0].length() < 17) {
-                        HeadsPlus hp = HeadsPlus.getInstance();
-                        OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-                        String uuid = p.getUniqueId().toString();
-                        if (!hp.getServer().getOnlineMode()) {
-                            hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
-                            uuid = hp.getHeadsXConfig().grabUUID(p.getName(), 3, null);
-                        }
-                        if(hp.getHeadsXConfig().grabProfile(uuid, sender, true)) {
-                            hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", p.getName());
-                        }
-                        return true;
-                    } else {
-                        hpc.sendMessage("commands.head.head-too-long", sender);
-                    }
-                } else {
-                    hpc.sendMessage("commands.head.head-too-short", sender);
-                }
-            } else {
+        if (args.length > 0) {
+            if (!args[0].matches("^[A-Za-z0-9_]+$")) {
                 hpc.sendMessage("commands.head.alpha-names", sender);
+                return true;
             }
+            if (args[0].length() < 3) {
+                hpc.sendMessage("commands.head.head-too-short", sender);
+                return true;
+            }
+            if (args[0].length() > 16) {
+                hpc.sendMessage("commands.head.head-too-long", sender);
+                return true;
+            }
+            HeadsPlus hp = HeadsPlus.get();
+            HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
+                String uuid = player.getUniqueId().toString();
+                if (!hp.getServer().getOnlineMode()) {
+                    hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                    uuid = AutograbManager.grabUUID(player.getName(), 3, null);
+                }
+                if (AutograbManager.grabProfile(uuid, sender, true)) {
+                    hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", player.getName());
+                }
+            });
+            return true;
         } else {
             if (sender.hasPermission("headsplus.addhead.texture")) {
                 if (sender instanceof Conversable) {
-                    ConversationFactory factory = new ConversationFactory(HeadsPlus.getInstance());
+                    ConversationFactory factory = new ConversationFactory(HeadsPlus.get());
                     Conversation conversation = factory.withLocalEcho(false)
-                            .withModality(HeadsPlus.getInstance().getConfiguration().getMechanics().getBoolean("suppress-messages-during-search"))
+                            .withModality(MainConfig.get().getMiscellaneous().SUPPRESS_MESSAGES_DURING_SEARCH)
                             .withFirstPrompt(new DataListener(0, hpc.getString("commands.addhead.id", sender)))
                             .buildConversation((Conversable) sender);
                     conversation.addConversationAbandonedListener(event -> {
@@ -73,14 +75,22 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            HeadsPlusConfigCustomHeads customHeads = HeadsPlus.getInstance().getHeadsXConfig();
+                            
+                            ConfigHeads selector = ConfigHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
-                                customHeads.getConfig().addDefault("heads." + id + "." + key, context.getSessionData(key));
+                                selector.forceExample("heads." + id + "." + key, context.getSessionData(key));
                             }
-                            customHeads.getConfig().options().copyDefaults(true);
-                            customHeads.save();
-                            customHeads.addHeadToCache(id, String.valueOf(context.getSessionData("section")));
+                            try {
+                                selector.save();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo();
+                            HeadManager.get().registerHead(id, headInfo
+                                    .withDisplayName((String) context.getSessionData("display-name"))
+                                    .withTexture((String) context.getSessionData("texture")));
+
                             hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
                         }
                     });
@@ -94,13 +104,8 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
     }
 
     @Override
-    public String getCmdDescription(CommandSender sender) {
-        return hpc.getString("descriptions.addhead", sender);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
+    public boolean shouldEnable() {
+        return true;
     }
 
     @Override

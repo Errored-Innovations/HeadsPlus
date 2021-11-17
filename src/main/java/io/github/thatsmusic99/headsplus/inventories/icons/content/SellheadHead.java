@@ -31,13 +31,4 @@ public class SellheadHead extends Content {
         return "sellable-head";
     }
 
-    @Override
-    public String getDefaultDisplayName() {
-        return null;
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }
