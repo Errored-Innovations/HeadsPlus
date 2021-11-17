@@ -6,11 +6,19 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
+<<<<<<< HEAD
     <version>7.0.0-BETA-1</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
         <hp-project.version>7.0.0-BETA-1</hp-project.version>
+=======
+    <version>6.11.10</version>
+
+    <properties>
+        <!--suppress UnresolvedMavenProperty -->
+        <hp-project.version>6.11.10+DEV_${env.BUILD_NUMBER}</hp-project.version>
+>>>>>>> master
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
