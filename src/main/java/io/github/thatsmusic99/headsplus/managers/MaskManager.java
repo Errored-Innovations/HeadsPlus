@@ -76,6 +76,7 @@ public class MaskManager {
                 //
                 MaskInfo info;
                 String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"), "No idle texture for " + key + " found!");
+                if (!HeadManager.get().contains(headInfoStr)) throw new IllegalArgumentException("Head " + headInfoStr + " for " + key + "'s idle state is not registered!");
                 HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
                 String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
                 switch (type.toLowerCase()) {
