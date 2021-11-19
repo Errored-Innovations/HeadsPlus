@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.UUID;
@@ -70,5 +71,16 @@ public class ActualPaperImpl implements PaperImpl {
         profile.setProperty(new ProfileProperty("textures", texture));
         profile.complete(true, true);
         meta.setPlayerProfile(profile);
+    }
+
+    @Override
+    public String getTexture(Player player) {
+        PlayerProfile profile = player.getPlayerProfile();
+        if (!profile.hasTextures()) return "";
+        for (ProfileProperty property : profile.getProperties()) {
+            if (!property.getName().equals("textures")) continue;
+            return property.getValue();
+        }
+        return player.getName();
     }
 }
