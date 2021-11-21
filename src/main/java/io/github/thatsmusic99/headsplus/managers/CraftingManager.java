@@ -87,6 +87,11 @@ public class CraftingManager {
         // Get the result section
         ConfigSection resultSection = section.getConfigSection("result");
         HPUtils.notNull(resultSection, "Recipe " + key + " does not have a result section!");
+        // Head ID
+        String headId = resultSection.getString("head", "");
+        // If the head isn't registered
+        if (!HeadManager.get().contains(headId))
+            throw new IllegalArgumentException("Head result ID " + headId + " for crafting recipe " + key + " is not registered!");
         // Get the head itself
         HeadManager.HeadInfo resultHead = HeadManager.get().getHeadInfo(resultSection.getString("head", ""));
         // Build the resulting item/wait for it
