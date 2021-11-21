@@ -273,7 +273,7 @@ public class MainConfig extends HPConfig {
      public void moveToNew() {
          // Main Features
          moveTo("plugin.perks.sell-heads", "sell-heads");
-         boolean b = getBoolean("plugin.perks.drop-heads", getBoolean("player-drops"));
+         boolean b = getBoolean("plugin.perks.drop-heads", getBoolean("player-drops"), true);
          moveTo("plugin.perks.drop-heads", "mob-drops");
          set("player-drops", b);
          moveTo("plugin.perks.craft-heads", "enable-crafting");
@@ -332,18 +332,18 @@ public class MainConfig extends HPConfig {
 
          // Rererestreeeeeeeeeeeeeeecshuns maybe?
          boolean whitelist = false;
-         if (getBoolean("whitelist.default.enabled")) {
+         if (getBoolean("whitelist.default.enabled", false, true)) {
              moveTo("whitelist.default.list", "blocked-heads");
              set("whitelist-worlds", whitelist = true);
-         } else if (getBoolean("blacklist.default.enabled")) {
+         } else if (getBoolean("blacklist.default.enabled", false, true)) {
              moveTo("blacklist.default.list", "blocked-heads");
          }
 
          List<String> worlds = new ArrayList<>();
-         if (whitelist && getBoolean("whitelist.worlds.enabled")) {
-             worlds = getStringList("whitelist.worlds.list");
-         } else if (!whitelist && getBoolean("blacklist.worlds.enabled")) {
-             worlds = getStringList("blacklist.worlds.list");
+         if (whitelist && getBoolean("whitelist.worlds.enabled", false, true)) {
+             worlds = getList("whitelist.worlds.list", true);
+         } else if (!whitelist && getBoolean("blacklist.worlds.enabled", false, true)) {
+             worlds = getList("blacklist.worlds.list", true);
          }
          if (!worlds.isEmpty()) {
              set("mobs-drops-list", worlds);
