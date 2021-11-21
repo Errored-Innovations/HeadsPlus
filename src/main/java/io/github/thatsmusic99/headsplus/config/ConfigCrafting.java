@@ -1,9 +1,12 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConfigCrafting extends FeatureConfig {
@@ -21,6 +24,7 @@ public class ConfigCrafting extends FeatureConfig {
 
 	@Override
 	public void loadDefaults() {
+		HeadsPlus.get().getLogger().info(saveToString());
 		addComment("");
 		addDefault("defaults.price", 0.0);
 		addExample("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}"));
@@ -33,58 +37,52 @@ public class ConfigCrafting extends FeatureConfig {
 			addExample("recipes." + key + ".ingredients", defaultOption.getMaterials());
 			addExample("recipes." + key + ".result.head", defaultOption.getHead());
 		}
-
-	/*	addDefault("base-item.material", "PLAYER_HEAD");
-		addDefault("base-item.data", 0);
-		addDefault("base-item.price", 10.0);
-		addDefault("base-item.display-name", "{type} Head");
-		addDefault("base-item.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
-		addDefault("base-item.use-base-item", true);
-		for (RecipeEnums key : RecipeEnums.values()) {
-			if (key == RecipeEnums.SHEEP) {
-				for (DyeColor d : DyeColor.values()) {
-					if (d.name().equalsIgnoreCase("LIGHT_GRAY")) { // stupid move ngl
-						addDefault(key.str + "." + d.name() + ".head", "HP#silver_sheep");
-					} else {
-						addDefault(key.str + "." + d.name() + ".head", "HP#" + d.name().toLowerCase() + "_sheep");
-					}
-					addDefault(key.str + "." + d.name() + ".ingredients", new ArrayList<>(Collections.singletonList(d.name() + "_WOOL")));
-					addDefault(key.str + "." + d.name() + ".price", "{default}");
-					addDefault(key.str + "." + d.name() + ".display-name", "{default}");
-					addDefault(key.str + "." + d.name() + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
-					addDefault(key.str + "." + d.name() + ".lore", "{default}");
-					addDefault(key.str + "." + d.name() + ".shaped", false);
-					addDefault(key.str + "." + d.name() + ".sellhead-id", key.name());
-				}
-				continue;
-			} else {
-				addDefault(key.str + ".ingredients", new ArrayList<>(Collections.singletonList(key.mat)));
-				switch (key) {
-					case RABBIT:
-						addDefault(key.str + ".head", "HP#brown_" + key.name().toLowerCase());
-						break;
-					case MUSHROOM_COW:
-						addDefault(key.str + ".head", "HP#red_mooshroom");
-						break;
-					case VILLAGER:
-						addDefault(key.str + ".head", "HP#villager_plains");
-						break;
-					default:
-						addDefault(key.str + ".head", "HP#" + key.name().toLowerCase());
-				}
-
-			}
-			addDefault(key.str + ".price", "{default}");
-			addDefault(key.str + ".display-name", "{default}");
-			addDefault(key.str + ".display-type", HeadsPlus.capitalize(key.name().toLowerCase().replaceAll("_", " ")));
-			addDefault(key.str + ".lore", "{default}");
-			addDefault(key.str + ".shaped", false);
-			addDefault(key.str + ".sellhead-id", key.name());
-
-		} */
 	}
 
-    public List<String> getLore(String key) {
+	@Override
+	public void moveToNew() {
+		HeadsPlus.get().getLogger().info("ee " + getKeys(false).size());
+		HeadsPlus.get().getLogger().info(saveToString());
+		if (getKeys(false).size() == 2) return;
+		boolean usingBaseItem = getBoolean("base-item.use-base-item");
+		String baseItemMaterial = getString("base-item.material");
+		for (String str : getKeys(false)) {
+			HeadsPlus.get().getLogger().info("a");
+			ConfigSection section = getConfigSection(str);
+			if (str.equals("recipes")) {
+				HeadsPlus.get().getLogger().info("b");
+				if (section.getKeys(false).size() == 0) continue;
+				HeadsPlus.get().getLogger().info("c");
+				if (section.get(section.getKeys(false).get(0)) instanceof ConfigSection) return;
+				HeadsPlus.get().getLogger().info("d");
+			}
+			if (str.equals("base-item")) {
+				moveTo("base-item.lore", "defaults.lore");
+				moveTo("base-item.price", "defaults.price");
+			} else {
+				boolean shaped = section.getBoolean("shaped");
+				set("recipes." + str + ".recipe-type", shaped ? "SHAPED" : "SHAPELESS");
+				moveTo(str + ".head", "recipes." + str + ".result.head");
+				for (String option : Arrays.asList("price", "display-name", "lore")) {
+					if (!section.get(option).equals("{default}")) {
+						moveTo(str + "." + option, "recipes." + str + "." + option);
+					}
+				}
+
+				if (!shaped && usingBaseItem) {
+					List<String> ingredients = section.getStringList("ingredients");
+					ingredients.add(baseItemMaterial);
+					set("recipes." + str + ".ingredients", ingredients);
+				} else  {
+					moveTo(str + ".ingredients", "recipes." + str + ".ingredients");
+				}
+			}
+
+			set(str, null);
+		}
+	}
+
+	public List<String> getLore(String key) {
 		List<String> lore = new ArrayList<>();
 		try {
 			if (get(key + ".lore").equals("{default}")) {
