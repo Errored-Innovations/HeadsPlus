@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
 
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ public class ConfigCrafting extends FeatureConfig {
 
 	@Override
 	public void loadDefaults() {
-		HeadsPlus.get().getLogger().info(saveToString());
-		addComment("");
 		addDefault("defaults.price", 0.0);
 		addExample("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}"));
 		addDefault("defaults.sellable", false);
@@ -41,20 +38,23 @@ public class ConfigCrafting extends FeatureConfig {
 
 	@Override
 	public void moveToNew() {
-		HeadsPlus.get().getLogger().info("ee " + getKeys(false).size());
-		HeadsPlus.get().getLogger().info(saveToString());
-		if (getKeys(false).size() == 2) return;
-		boolean usingBaseItem = getBoolean("base-item.use-base-item");
-		String baseItemMaterial = getString("base-item.material");
-		for (String str : getKeys(false)) {
-			HeadsPlus.get().getLogger().info("a");
-			ConfigSection section = getConfigSection(str);
+		// If there's only two keys, you probably shouldn't care unless some asshole decides 1 recipe is acceptable
+		if (existingValues.size() == 2) return;
+		boolean usingBaseItem = true;
+		String baseItemMaterial = "SKELETON_SKULL";
+
+		ConfigSection baseItem = getConfigSection("base-item", true);
+		if (baseItem != null) {
+			usingBaseItem = baseItem.getBoolean("use-base-item", true, true);
+			baseItemMaterial = baseItem.getString("material", true);
+		}
+
+		for (String str : existingValues.keySet()) {
+			if (!(existingValues.get(str) instanceof ConfigSection)) continue;
+			ConfigSection section = (ConfigSection) existingValues.get(str);
 			if (str.equals("recipes")) {
-				HeadsPlus.get().getLogger().info("b");
 				if (section.getKeys(false).size() == 0) continue;
-				HeadsPlus.get().getLogger().info("c");
 				if (section.get(section.getKeys(false).get(0)) instanceof ConfigSection) return;
-				HeadsPlus.get().getLogger().info("d");
 			}
 			if (str.equals("base-item")) {
 				moveTo("base-item.lore", "defaults.lore");
@@ -64,13 +64,14 @@ public class ConfigCrafting extends FeatureConfig {
 				set("recipes." + str + ".recipe-type", shaped ? "SHAPED" : "SHAPELESS");
 				moveTo(str + ".head", "recipes." + str + ".result.head");
 				for (String option : Arrays.asList("price", "display-name", "lore")) {
+					if (section.get(option) == null) continue;
 					if (!section.get(option).equals("{default}")) {
 						moveTo(str + "." + option, "recipes." + str + "." + option);
 					}
 				}
 
 				if (!shaped && usingBaseItem) {
-					List<String> ingredients = section.getStringList("ingredients");
+					List<String> ingredients = section.getList("ingredients", true);
 					ingredients.add(baseItemMaterial);
 					set("recipes." + str + ".ingredients", ingredients);
 				} else  {
