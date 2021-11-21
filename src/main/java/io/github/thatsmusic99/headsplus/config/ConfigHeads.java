@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
@@ -48,6 +49,8 @@ public class ConfigHeads extends HPConfig {
             headInfo.setLore(section.getStringList("lore"));
             HeadManager.get().registerHead(head, headInfo);
         }
+
+        HeadsPlus.get().getLogger().info("Registered " + HeadManager.get().getKeys().size() + " heads.");
     }
 
     public static ConfigHeads get() {

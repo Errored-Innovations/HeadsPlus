@@ -53,6 +53,7 @@ public class CraftingManager {
                 ex.printStackTrace();
             }
         }
+        HeadsPlus.get().getLogger().info("Registered " + recipes.size() + " recipes.");
     }
 
     public void clear() {

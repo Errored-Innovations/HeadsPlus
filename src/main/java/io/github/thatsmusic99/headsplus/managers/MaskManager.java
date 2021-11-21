@@ -106,6 +106,8 @@ public class MaskManager {
                 HeadsPlus.get().getLogger().warning("Error received when registering mask " + key + ": " + ex.getMessage());
             }
         }
+
+        HeadsPlus.get().getLogger().info("Registered " + masks.size() + " masks.");
     }
 
     public static class MaskInfo extends HeadManager.HeadInfo {
