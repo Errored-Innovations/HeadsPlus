@@ -85,5 +85,7 @@ public class RewardsManager {
                 }
             }
         }
+
+        HeadsPlus.get().getLogger().info("Registered " + this.rewards.size() + " rewards.");
     }
 }

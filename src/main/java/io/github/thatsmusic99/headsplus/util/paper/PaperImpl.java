@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.util.paper;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.concurrent.CompletableFuture;
@@ -12,4 +13,6 @@ public interface PaperImpl {
     void forceSetProfile(SkullMeta meta, String name);
 
     void forceSetProfileTexture(SkullMeta meta, String texture);
+
+    String getTexture(Player player);
 }

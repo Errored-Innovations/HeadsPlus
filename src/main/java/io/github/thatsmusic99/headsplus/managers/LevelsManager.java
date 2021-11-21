@@ -92,5 +92,6 @@ public class LevelsManager {
 				HeadsPlus.get().getLogger().warning("Null value received when registering level " + levelKey + ": " + ex.getMessage());
 			}
 		}
+		HeadsPlus.get().getLogger().info("Registered " + levels.size() + " levels.");
 	}
 }

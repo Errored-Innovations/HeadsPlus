@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.papermc.lib.PaperLib;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.concurrent.CompletableFuture;
@@ -71,6 +72,11 @@ public class PaperUtil implements PaperImpl {
             return;
         }
         internalImpl.forceSetProfileTexture(meta, texture);
+    }
+
+    @Override
+    public String getTexture(Player player) {
+        return internalImpl == null ? player.getName() : internalImpl.getTexture(player);
     }
 
     public static PaperUtil get() {

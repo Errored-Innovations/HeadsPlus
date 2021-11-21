@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import io.github.thatsmusic99.configurationmaster.api.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -38,6 +39,27 @@ public class MainConfig extends HPConfig {
 
     @Override
     public void loadDefaults() {
+        setTitle(new Title().withWidth(100)
+                .addSolidLine()
+                .addLine("HeadsPlus v7", Title.Pos.CENTER)
+                .addLine("Developed by Thatsmusic99 (Holly)", Title.Pos.CENTER)
+                .addLine("")
+                .addSolidLine()
+                .addLine("This is an MVP release of v7, so configuration is not completely polished over.")
+                .addLine("If there's ANY part of the config you can't find or don't understand, please bring it up in Discord:")
+                .addLine("https://discord.gg/DHE2aSh")
+                .addLine("")
+                .addLine("Find a vague error message or stacktrace occurring in the plugin? Send it over.")
+                .addLine("https://github.com/Errored-Innovations/HeadsPlus")
+                .addLine("")
+                .addLine("Experiencing lag problems? Try using a specific server type that's made out of trees.")
+                .addLine("")
+                .addLine("Got any other feedback? Let me know or leave a review. Don't report bugs in reviews or I will send the screaming goat gods your way.")
+                .addLine("")
+                .addLine("Other than that, enjoy the hellscape I put together four years ago. :) ")
+                .addLine("")
+                .addSolidLine());
+
         addSection("Main Features");
 
         addDefault("sell-heads", true, "Whether or not players are able to sell heads.\n" +

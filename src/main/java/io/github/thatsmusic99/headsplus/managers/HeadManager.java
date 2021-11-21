@@ -107,7 +107,7 @@ public class HeadManager {
             return this;
         }
 
-        public HeadInfo withTexture(String str) {
+        public HeadInfo withTexture(@NotNull String str) {
             if (str.length() < 17) {
                 this.player = str;
                 return this;
