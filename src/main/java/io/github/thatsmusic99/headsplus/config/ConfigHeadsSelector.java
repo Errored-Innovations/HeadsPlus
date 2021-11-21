@@ -38,7 +38,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
     @Override
     public void loadDefaults() {
-        double version = getDouble("version", -1.0);
+        double version = getDouble("version", -1.0, true);
         if (isNew()) version = -1.0;
         addComment("This is where you can configure where the heads selector (/heads)");
 
