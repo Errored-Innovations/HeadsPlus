@@ -244,6 +244,11 @@ public class HeadsPlus extends JavaPlugin {
     public void initiateEvents() {
         HandlerList.unregisterAll(this);
         new LeaderboardListeners();
+
+        for (InventoryManager manager : InventoryManager.storedInventories.values()) {
+            getServer().getPluginManager().registerEvents(manager.getInventory(), this);
+        }
+
         for (HeadsPlusListener<?> listener : listeners) {
             if (!listener.shouldEnable()) continue;
             listener.init();
