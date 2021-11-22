@@ -8,6 +8,7 @@ import io.papermc.lib.PaperLib;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
@@ -66,7 +67,9 @@ public class PaperUtil implements PaperImpl {
                 e.printStackTrace();
                 return;
             }
-            if (profile == null) return;
+            if (profile == null) {
+                profile = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+            }
             profile.getProperties().put("textures", new Property("texture", texture));
             ProfileFetcher.setProfile(meta, profile);
             return;
