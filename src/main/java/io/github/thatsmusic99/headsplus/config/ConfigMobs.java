@@ -45,11 +45,14 @@ public class ConfigMobs extends FeatureConfig {
 
 	@Override
 	public void moveToNew() {
-		for (String key : getKeys(false)) {
-			if (!(get(key) instanceof ConfigurationSection)) continue;
-			ConfigSection section = getConfigSection(key);
-			if (section == null || !section.contains("interact-name") || !section.contains("name") || !(section.get("name") instanceof ConfigurationSection)) continue;
-			ConfigSection name = section.getConfigSection("name");
+		for (String key : existingValues.keySet()) {
+			if (!(existingValues.get(key) instanceof ConfigSection)) continue;
+			ConfigSection section = (ConfigSection) existingValues.get(key);
+			if (section == null
+					|| !section.contains("interact-name", true)
+					|| !section.contains("name", true)
+					|| !(section.get("name", true) instanceof ConfigSection)) continue;
+			ConfigSection name = section.getConfigSection("name", true);
 			if (name == null) continue;
 			for (String nameKey : name.getKeys(false)) {
 				if (!(name.get(nameKey) instanceof List)) continue;
@@ -70,22 +73,35 @@ public class ConfigMobs extends FeatureConfig {
 			set(head + "N", null);
 		}
 
-		for (String entity : Arrays.asList("blaze", "bee", "cat", "chicken", "cod", "cow", "creeper", "dolphin", "donkey", "drowned",
+		for (String entity : Arrays.asList("axolotl", "bat", "blaze", "bee", "cat", "chicken", "cod", "cow", "creeper", "dolphin", "donkey", "drowned",
 				"enderman", "endermite", "evoker", "fox", "ghast", "giant", "guardian", "hoglin", "horse", "husk", "llama", "mule",
 				"ocelot", "panda", "parrot", "phantom", "pig", "piglin", "pillager", "pufferfish", "rabbit", "ravager", "salmon", "sheep",
-				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "turtle", "vex", "villager",
-				"vindicator", "witch", "wither", "wolf", "zoglin", "zombie")) {
-			moveTo(entity + ".name", entity.toUpperCase());
+				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "trader_llama", "turtle", "vex", "villager",
+				"vindicator", "wandering_trader", "witch", "wither", "wolf", "zoglin", "zombie")) {
+			ConfigSection section = getConfigSection(entity + ".name", true);
+			if (section == null) return;
+			for (String key : section.getKeys(false, true)) {
+				if (get(entity + ".name." + key, true) instanceof ConfigSection) break;
+				List<String> heads = getList(entity + ".name." + key, true);
+				for (String head : heads) {
+					createConfigSection(entity.toUpperCase() + "." + key + "." + head);
+				}
+			}
 		}
 
 		for (String entity : Arrays.asList("CAVE_SPIDER", "ELDER_GUARDIAN", "ENDER_DRAGON", "IRON_GOLEM", "MAGMA_CUBE",
 				"MUSHROOM_COW", "PIGLIN_BRUTE", "PIG_ZOMBIE", "POLAR_BEAR", "SKELETON_HORSE", "TROPICAL_FISH", "WITHER_SKELETON",
 				"ZOMBIE_HORSE", "ZOMBIE_VILLAGER", "ZOMBIFIED_PIGLIN")) {
-			moveTo(entity.toLowerCase().replaceAll("_", ""), entity);
-		}
 
-		moveTo("trader_llama", "TRADER_LLAMA");
-		moveTo("wandering_trader", "WANDERING_TRADER");
+			String badEntity = entity.toLowerCase().replaceAll("_", "");
+			for (String key : getConfigSection(badEntity + ".name", true).getKeys(false, true)) {
+				if (get(badEntity + ".name." + key, true) instanceof ConfigSection) break;
+				List<String> heads = getList(badEntity + ".name." + key, true);
+				for (String head : heads) {
+					createConfigSection(entity + "." + key + "." + head);
+				}
+			}
+		}
 	}
 
 	private void addHeads() {
