@@ -119,6 +119,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     int slot = player.getInventory().getHeldItemSlot();
                                     // lmao who needs getItemInMainHand
                                     ItemStack item = player.getInventory().getItem(slot);
+                                    if (item == null) return false;
+                                    item = item.clone();
                                     PersistenceManager.get().setSellable(item, true);
                                     PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
@@ -129,7 +131,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                                         price = ConfigCrafting.get().getPrice(args[2]);
                                     }
                                     PersistenceManager.get().setSellPrice(item, price);
-                                    player.getInventory().setItem(slot, item);
+                                    final ItemStack finalItem = item;
+                                    Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> player.getInventory().setItem(slot, finalItem));
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }
