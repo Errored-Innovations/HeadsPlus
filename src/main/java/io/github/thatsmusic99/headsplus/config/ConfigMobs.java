@@ -78,7 +78,9 @@ public class ConfigMobs extends FeatureConfig {
 				"ocelot", "panda", "parrot", "phantom", "pig", "piglin", "pillager", "pufferfish", "rabbit", "ravager", "salmon", "sheep",
 				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "trader_llama", "turtle", "vex", "villager",
 				"vindicator", "wandering_trader", "witch", "wither", "wolf", "zoglin", "zombie")) {
-			for (String key : getConfigSection(entity + ".name", true).getKeys(false, true)) {
+			ConfigSection section = getConfigSection(entity + ".name", true);
+			if (section == null) return;
+			for (String key : section.getKeys(false, true)) {
 				if (get(entity + ".name." + key, true) instanceof ConfigSection) break;
 				List<String> heads = getList(entity + ".name." + key, true);
 				for (String head : heads) {
