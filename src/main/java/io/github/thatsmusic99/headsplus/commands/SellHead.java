@@ -71,10 +71,16 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                     // Get the item in the player's hand
                     ItemStack item = player.getInventory().getItemInMainHand();
                     // If the item exists and is sellable,
-                    if (!PersistenceManager.get().isSellable(item)) return true;
+                    if (!PersistenceManager.get().isSellable(item)) {
+                        MessagesManager.get().sendMessage("commands.sellhead.false-head", player);
+                        return true;
+                    }
                     // Get the ID
                     String id = PersistenceManager.get().getSellType(item);
-                    if (!SellableHeadsManager.get().isRegistered(id)) return true;
+                    if (!SellableHeadsManager.get().isRegistered(id)) {
+                        MessagesManager.get().sendMessage("commands.sellhead.false-head", player);
+                        return true;
+                    }
                     double price = SellableHeadsManager.get().getPrice(id) * item.getAmount();
                     SellData data = new SellData(player);
                     data.addID(id, item.getAmount());
