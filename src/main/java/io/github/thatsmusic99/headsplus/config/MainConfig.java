@@ -376,11 +376,6 @@ public class MainConfig extends HPConfig {
          moveTo("plugin.mechanics.suppress-gui-warnings", "suppress-gui-warnings");
          moveTo("plugin.perks.xp.allow-negative", "allow-negative-xp");
          moveTo("plugin.mechanics.suppress-messages-during-search", "suppress-messages-during-search");
-
-         // temp. patches 
-         set("plugin", null);
-         set("whitelist", null);
-         set("blacklist", null);
      }
 
     @Override
