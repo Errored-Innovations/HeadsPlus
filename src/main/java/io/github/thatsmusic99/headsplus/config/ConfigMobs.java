@@ -45,11 +45,14 @@ public class ConfigMobs extends FeatureConfig {
 
 	@Override
 	public void moveToNew() {
-		for (String key : getKeys(false)) {
-			if (!(get(key) instanceof ConfigurationSection)) continue;
-			ConfigSection section = getConfigSection(key);
-			if (section == null || !section.contains("interact-name") || !section.contains("name") || !(section.get("name") instanceof ConfigurationSection)) continue;
-			ConfigSection name = section.getConfigSection("name");
+		for (String key : existingValues.keySet()) {
+			if (!(existingValues.get(key) instanceof ConfigSection)) continue;
+			ConfigSection section = (ConfigSection) existingValues.get(key);
+			if (section == null
+					|| !section.contains("interact-name", true)
+					|| !section.contains("name", true)
+					|| !(section.get("name", true) instanceof ConfigSection)) continue;
+			ConfigSection name = section.getConfigSection("name", true);
 			if (name == null) continue;
 			for (String nameKey : name.getKeys(false)) {
 				if (!(name.get(nameKey) instanceof List)) continue;
