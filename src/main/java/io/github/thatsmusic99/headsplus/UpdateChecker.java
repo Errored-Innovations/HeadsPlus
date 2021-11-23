@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,9 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-@Deprecated // should probably replace regardless lmao
 class UpdateChecker {
-    // TODO - implement AT's update checking system
 
     private final static String updateURL = "https://api.spiget.org/v2/resources/40265/updates/latest";
     private final static String versionURL = "https://api.spiget.org/v2/resources/40265/versions/latest";
