@@ -76,19 +76,30 @@ public class ConfigMobs extends FeatureConfig {
 		for (String entity : Arrays.asList("axolotl", "bat", "blaze", "bee", "cat", "chicken", "cod", "cow", "creeper", "dolphin", "donkey", "drowned",
 				"enderman", "endermite", "evoker", "fox", "ghast", "giant", "guardian", "hoglin", "horse", "husk", "llama", "mule",
 				"ocelot", "panda", "parrot", "phantom", "pig", "piglin", "pillager", "pufferfish", "rabbit", "ravager", "salmon", "sheep",
-				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "turtle", "vex", "villager",
-				"vindicator", "witch", "wither", "wolf", "zoglin", "zombie")) {
-			moveTo(entity + ".name", entity.toUpperCase());
+				"shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider", "trader_llama", "turtle", "vex", "villager",
+				"vindicator", "wandering_trader", "witch", "wither", "wolf", "zoglin", "zombie")) {
+			for (String key : getConfigSection(entity + ".name", true).getKeys(false, true)) {
+				if (get(entity + ".name." + key, true) instanceof ConfigSection) break;
+				List<String> heads = getList(entity + ".name." + key, true);
+				for (String head : heads) {
+					createConfigSection(entity.toUpperCase() + "." + key + "." + head);
+				}
+			}
 		}
 
 		for (String entity : Arrays.asList("CAVE_SPIDER", "ELDER_GUARDIAN", "ENDER_DRAGON", "IRON_GOLEM", "MAGMA_CUBE",
 				"MUSHROOM_COW", "PIGLIN_BRUTE", "PIG_ZOMBIE", "POLAR_BEAR", "SKELETON_HORSE", "TROPICAL_FISH", "WITHER_SKELETON",
 				"ZOMBIE_HORSE", "ZOMBIE_VILLAGER", "ZOMBIFIED_PIGLIN")) {
-			moveTo(entity.toLowerCase().replaceAll("_", ""), entity);
-		}
 
-		moveTo("trader_llama", "TRADER_LLAMA");
-		moveTo("wandering_trader", "WANDERING_TRADER");
+			String badEntity = entity.toLowerCase().replaceAll("_", "");
+			for (String key : getConfigSection(badEntity + ".name", true).getKeys(false, true)) {
+				if (get(badEntity + ".name." + key, true) instanceof ConfigSection) break;
+				List<String> heads = getList(badEntity + ".name." + key, true);
+				for (String head : heads) {
+					createConfigSection(entity + "." + key + "." + head);
+				}
+			}
+		}
 	}
 
 	private void addHeads() {
