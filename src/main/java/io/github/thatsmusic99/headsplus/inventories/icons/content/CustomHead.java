@@ -101,14 +101,18 @@ public class CustomHead extends Content {
         // We only really need to add the lore here
         List<String> lore = new ArrayList<>();
         for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
-            HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(str, player),
-                    new HPUtils.PlaceholderInfo("{favourite}",
-                            MessagesManager.get().getString("inventory.icon.head.favourite", player),
-                            HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)),
-                    new HPUtils.PlaceholderInfo("{msg_inventory.icon.head.favourite}",
-                            MessagesManager.get().getString("inventory.icon.head.favourite", player),
-                            HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)),
-                    new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
+            // it seems that I have messed up
+            if (str.equals("{msg_inventory.icon.head.favourite}") || str.equals("{favourite}")) {
+                HPUtils.parseLorePlaceholders(lore, str, new HPUtils.PlaceholderInfo("{favourite}",
+                                MessagesManager.get().getString("inventory.icon.head.favourite", player),
+                                HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)),
+                        new HPUtils.PlaceholderInfo("{msg_inventory.icon.head.favourite}",
+                                MessagesManager.get().getString("inventory.icon.head.favourite", player),
+                                HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)));
+            } else {
+                HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(str, player),
+                        new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
+            }
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
