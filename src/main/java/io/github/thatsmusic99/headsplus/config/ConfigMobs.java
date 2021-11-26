@@ -258,7 +258,7 @@ public class ConfigMobs extends FeatureConfig {
     public String getPlayerDisplayName(String name) {
 		String displayName = getString("player." + name + ".display-name", "");
 		if (displayName.isEmpty()) {
-			displayName = getString("player.default.display-name", getString("defaults.display-name"));
+			displayName = getString("player.display-name", getString("defaults.display-name"));
 		}
 		return ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("\\{player}", name));
     }
