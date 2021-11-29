@@ -56,7 +56,7 @@ public class MessagesManager {
             hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
             config = performChecks(new File(dest, "en_us.yml"), "en_us");
         }
-        double version = 1.5;
+        double version = 1.7;
         if (config.getDouble("version") != version) {
             new BukkitRunnable() {
                 @Override
@@ -73,6 +73,7 @@ public class MessagesManager {
                     YamlConfiguration ru_ru = performChecks(new File(dest, "ru_ru.yml"), "ru_ru");
                     YamlConfiguration nl_nl = performChecks(new File(dest, "nl_nl.yml"), "nl_nl");
                     YamlConfiguration zh_cn = performChecks(new File(dest, "zh_cn.yml"), "zh_cn");
+                    YamlConfiguration zh_tw = performChecks(new File(dest, "zh_tw.yml"), "zh_tw");
 
                     {
                         en_us.addDefault("language", "English (US)");
@@ -111,10 +112,6 @@ public class MessagesManager {
                         en_us.addDefault("textmenus.profile.total-heads-crafted", "Total Heads Crafted");
                         en_us.addDefault("textmenus.profile.current-level", "Current Level");
                         en_us.addDefault("textmenus.profile.xp-until-next-level", "XP until next level");
-                        en_us.addDefault("textmenus.blacklist", "Blacklist");
-                        en_us.addDefault("textmenus.whitelist", "Whitelist");
-                        en_us.addDefault("textmenus.blacklistw", "World Blacklist");
-                        en_us.addDefault("textmenus.whitelistw", "World Whitelist");
                         en_us.addDefault("textmenus.info.version", "Version");
                         en_us.addDefault("textmenus.info.author", "Author");
                         en_us.addDefault("textmenus.info.language", "Language");
@@ -152,6 +149,9 @@ public class MessagesManager {
                         en_us.addDefault("commands.restore.restored-head", "{header} Restored {head}!");
                         en_us.addDefault("commands.restore.invalid-head", "{header} {head} is not a valid ID!");
                         en_us.addDefault("descriptions.hp.restore", "Restores or repairs a head that was already provided by the plugin.");
+                        en_us.addDefault("commands.head.restricted-head", "{header} You cannot use that head!");
+                        en_us.addDefault("event.cannot-craft-heads", "{header} You cannot craft heads!");
+                        en_us.addDefault("event.cannot-craft-heads-here", "{header} You cannot craft heads here!");
                         en_us.set("version", version);
                         en_us.options().copyDefaults(true);
                         try {
@@ -239,6 +239,9 @@ public class MessagesManager {
                         de_de.addDefault("commands.restore.restored-head", "{header} {head} erfolgreich wiederhergestellter!");
                         de_de.addDefault("commands.restore.invalid-head", "{header} {head} ist keine gültige ID!");
                         de_de.addDefault("descriptions.hp.restore", "Stellt einen Kopf wieder her oder repariert ihn, der bereits vom Plugin bereitgestellt wurde.");
+                        de_de.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht verwenden!");
+                        de_de.addDefault("event.cannot-craft-heads", "{header} Sie können keine Köpfe herstellen!");
+                        de_de.addDefault("event.cannot-craft-heads-here", "{header} Hier kann man keine Köpfe herstellen!");
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
@@ -326,6 +329,9 @@ public class MessagesManager {
                         es_es.addDefault("commands.restore.restored-head", "{header} ¡Restaurado/a {cabeza}!");
                         es_es.addDefault("commands.restore.invalid-head", "{header} ¡{head} no es una identificación válida!");
                         es_es.addDefault("descriptions.hp.restore", "Restaura o repara un cabezal que ya fue proporcionado por el complemento.");
+                        es_es.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht verwenden!");
+                        es_es.addDefault("event.cannot-craft-heads", "{header} ¡No puedes fabricar cabezas!");
+                        es_es.addDefault("event.cannot-craft-heads-here", "{header} ¡No puedes fabricar cabezas aquí!");
                         es_es.set("version", version);
                         es_es.options().copyDefaults(true);
                         try {
@@ -413,6 +419,9 @@ public class MessagesManager {
                         fr_fr.addDefault("commands.restore.restored-head", "{header} Restauré {head}!");
                         fr_fr.addDefault("commands.restore.invalid-head", "{header} {head} n''est pas un identifiant valide!");
                         fr_fr.addDefault("descriptions.hp.restore", "Restaure ou répare une tête déjà fournie par le plugin.");
+                        fr_fr.addDefault("commands.head.restricted-head", "{header} Vous ne pouvez pas utiliser cette tête!");
+                        fr_fr.addDefault("event.cannot-craft-heads", "{header} Vous ne pouvez pas fabriquer des têtes!");
+                        fr_fr.addDefault("event.cannot-craft-heads-here", "{header} Vous ne pouvez pas fabriquer des têtes ici!");
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
@@ -500,6 +509,9 @@ public class MessagesManager {
                         hu_hu.addDefault("commands.restore.restored-head", "{header} Visszaállítva {head}!");
                         hu_hu.addDefault("commands.restore.invalid-head", "{header} A {head} nem érvényes azonosító!");
                         hu_hu.addDefault("descriptions.hp.restore", "Visszaállítja vagy megjavítja a plugin által biztosított fejet.");
+                        hu_hu.addDefault("commands.head.restricted-head", "{header} Nem használhatod azt a fejet!");
+                        hu_hu.addDefault("event.cannot-craft-heads", "{header} Nem készíthet fejeket!");
+                        hu_hu.addDefault("event.cannot-craft-heads-here", "{header} Itt nem lehet fejeket készíteni!");
                         hu_hu.set("version", version);
                         hu_hu.options().copyDefaults(true);
                         try {
@@ -587,7 +599,9 @@ public class MessagesManager {
                         lol_us.addDefault("commands.restore.restored-head", "{header} summumd {head}!");
                         lol_us.addDefault("commands.restore.invalid-head", "{header} {head} iz not ur frend :(");
                         lol_us.addDefault("descriptions.hp.restore", "summun an old frend");
-
+                        lol_us.addDefault("commands.head.restricted-head", "{header} Dis hed iz nawt aloud!");
+                        lol_us.addDefault("event.cannot-craft-heads", "{header} no crafty, only hugs");
+                        lol_us.addDefault("event.cannot-craft-heads-here", "{header} no crafty here, only hugs");
                         lol_us.set("version", version);
                         lol_us.options().copyDefaults(true);
                         try {
@@ -675,7 +689,9 @@ public class MessagesManager {
                         pl_pl.addDefault("commands.restore.restored-head", "{header} Przywrócono {head}!");
                         pl_pl.addDefault("commands.restore.invalid-head", "{header} {head} nie jest prawidłowym identyfikatorem!");
                         pl_pl.addDefault("descriptions.hp.restore", "Przywraca lub naprawia głowicę, która została już dostarczona przez wtyczkę.");
-
+                        pl_pl.addDefault("commands.head.restricted-head", "{header} Nie możesz użyć tej głowy!");
+                        pl_pl.addDefault("event.cannot-craft-heads", "{header} Nie możesz tworzyć głów!");
+                        pl_pl.addDefault("event.cannot-craft-heads-here", "{header} Nie możesz tu tworzyć głów!");
                         pl_pl.set("version", version);
                         pl_pl.options().copyDefaults(true);
                         try {
@@ -763,7 +779,9 @@ public class MessagesManager {
                         ro_ro.addDefault("commands.restore.restored-head", "{header} {head} restaurat!");
                         ro_ro.addDefault("commands.restore.invalid-head", "{header} {head} nu este un ID valid!");
                         ro_ro.addDefault("descriptions.hp.restore", "Restaureaza sau repara un cap care a fost deja furnizat de plugin.");
-
+                        ro_ro.addDefault("commands.head.restricted-head", "{header} Nu poți folosi acel cap!");
+                        ro_ro.addDefault("event.cannot-craft-heads", "{header} Nu poți crea capete!");
+                        ro_ro.addDefault("event.cannot-craft-heads-here", "{header} Nu poți crea capete aici!");
                         ro_ro.set("version", version);
                         ro_ro.options().copyDefaults(true);
                         try {
@@ -851,7 +869,9 @@ public class MessagesManager {
                         ru_ru.addDefault("commands.restore.restored-head", "{header} Восстановил {head}!");
                         ru_ru.addDefault("commands.restore.invalid-head", "{header} {head} не является действительным идентификатором!");
                         ru_ru.addDefault("descriptions.hp.restore", "Восстанавливает или ремонтирует голову, которая уже была предоставлена плагином.");
-
+                        ru_ru.addDefault("commands.head.restricted-head", "{header} Ты не можешь использовать эту голову!");
+                        ru_ru.addDefault("event.cannot-craft-heads", "{header} Вы не можете создавать головы!");
+                        ru_ru.addDefault("event.cannot-craft-heads-here", "{header} Здесь нельзя лепить головы!");
                         ru_ru.set("version", version);
                         ru_ru.options().copyDefaults(true);
                         try {
@@ -870,7 +890,9 @@ public class MessagesManager {
                         nl_nl.addDefault("commands.restore.restored-head", "{header} {head} hersteld!");
                         nl_nl.addDefault("commands.restore.invalid-head", "{header} {head} is geen geldige ID!");
                         nl_nl.addDefault("descriptions.hp.restore", "Herstelt of repareert een kop die al door de plug-in werd geleverd.");
-
+                        nl_nl.addDefault("commands.head.restricted-head", "{header} Je kunt dat hoofd niet gebruiken!");
+                        nl_nl.addDefault("event.cannot-craft-heads", "{header} Je kunt geen hoofden maken!");
+                        nl_nl.addDefault("event.cannot-craft-heads-here", "{header} Je kunt hier geen hoofden maken!");
                         nl_nl.set("version", version);
                         nl_nl.options().copyDefaults(true);
                         try {
@@ -886,11 +908,28 @@ public class MessagesManager {
                         zh_cn.addDefault("commands.restore.restored-head", "{header} 已恢复{head}!");
                         zh_cn.addDefault("commands.restore.invalid-head", "{header} {head}不是有效的ID!");
                         zh_cn.addDefault("descriptions.hp.restore", "恢复或修复插件已提供的头部.");
+                        zh_cn.addDefault("commands.head.restricted-head", "{header} 你不能用那个头！");
+                        zh_cn.addDefault("event.cannot-craft-heads", "{header} 你不能制作人头!");
+                        zh_cn.addDefault("event.cannot-craft-heads-here", "{header} 你不能在这里制作人头!");
 
                         zh_cn.set("version", version);
                         zh_cn.options().copyDefaults(true);
                         try {
                             zh_cn.save(new File(dest, "zh_cn.yml"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    {
+                        zh_tw.addDefault("commands.head.restricted-head", "{header} 你不能用那個頭！");
+                        zh_tw.addDefault("event.cannot-craft-heads", "{header} 你不能製作人頭!");
+                        zh_tw.addDefault("event.cannot-craft-heads-here", "{header} 你不能在這裡製作人頭!");
+
+                        zh_tw.set("version", version);
+                        zh_tw.options().copyDefaults(true);
+                        try {
+                            zh_tw.save(new File(dest, "zh_tw.yml"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

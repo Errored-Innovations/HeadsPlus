@@ -60,7 +60,7 @@ textmenus:
     description: Описание
     permission: разрешение
     further-usages: Дальнейшее использование
-version: 1.5
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:

@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.6
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:

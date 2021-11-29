@@ -60,7 +60,7 @@ textmenus:
     description: Opis
     permission: Uprawnienie
     further-usages: Dalsze zastosowania
-version: 1.5
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -108,8 +108,6 @@ commands:
     reward-string: '{header} Nagroda: &c{reward}\n{header} Dośw.: &c{xp}'
   head:
     alpha-names: '{header} Ta komenda używa tylko znaków alfanumerycznych!'
-    blacklist-head: '{header} Ta głowa znajduje się na czarnej liście i nie można
-      jej używać!'
     full-inv: '{header} Twój ekwipunek jest pełny!'
     head-too-long: '{header} Za długa nazwa! Użyj nazwy, która ma od 3 do 16 znaków.'
     head-too-short: '{header} Za krótka nazwa! Użyj nazwy, która ma od 3 do 16 znaków.'

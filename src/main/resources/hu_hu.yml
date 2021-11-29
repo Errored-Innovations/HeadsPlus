@@ -70,7 +70,7 @@ textmenus:
     description: Leírás
     permission: Permission
     further-usages: További felhasználások
-version: 1.5
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:

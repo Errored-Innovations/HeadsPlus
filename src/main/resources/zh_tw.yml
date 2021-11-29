@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Chinese: Taiwan (andy3559167)
 # 請勿變更版本 在外掛程式內部用於新增新訊息.
 language: Chinese (TW)
-version: 1.5
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:

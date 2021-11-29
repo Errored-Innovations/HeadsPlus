@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Nederlands (Tepoloco)
 # Wijzig de versie niet! Dit wordt intern gebruikt in de plug-in om nieuwe berichten toe te voegen.
 language: Nederlands (NL)
-version: 1.5
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -112,7 +112,6 @@ commands:
     reward-string: '{header} Beloning: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Deze opdracht behandelt alleen alfanumerieke namen!'
-    blacklist-head: '{header} Dit hoofd staat op de blacklist en kan niet worden gebruikt!'
     full-inv: '{header} Je inventaris is vol!'
     head-too-long: '{header} IGN is te lang om geldig te zijn! Gebruik een IGN tussen
       3 en 16 karakters.'

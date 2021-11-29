@@ -60,7 +60,7 @@ textmenus:
     description: Beschreibung
     permission: Genehmigung
     further-usages: Weitere Verwendung
-version: 1.6
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -179,7 +179,7 @@ descriptions:
 event:
   block-place-denied: '{header} Du kannst keine verkaufbaren Köpfe platzieren!'
   cannot-craft-heads: '{header} Sie können keine Köpfe herstellen!'
-  cannot-craft-heads-here: '{header} Hier kann man keine Köpfe herstellen! '
+  cannot-craft-heads-here: '{header} Hier kann man keine Köpfe herstellen!'
   head-interact-message: '{header} Das ist &c{name}&7''s Kopf!'
   head-mhf-interact-message: '{header} Das ist der &c{name} &7Kopf!'
   head-mhf-interact-message-2: '{header} Das ist der &c{name} &7Kopf!'
