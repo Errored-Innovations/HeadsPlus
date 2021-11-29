@@ -396,7 +396,7 @@ public class MainConfig extends HPConfig {
         miscellaneous = new Miscellaneous();
 
         // Default permissions handling
-        List<String> permissions = getStringList("default-permissions-list");
+        List<String> permissions = getStringList("default-permissions");
         // If there's no defaults already set up, just create a new list
         // Otherwise, if this is a reload, reset the permissions set
         if (defaults == null) {
