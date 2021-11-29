@@ -38,7 +38,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
                 }
                 Player p = (Player) sender;
                 if (!RestrictionsManager.canUse(p.getName(), RestrictionsManager.ActionType.HEADS)) {
-                    // TODO message
+                    hpc.sendMessage("commands.head.restricted-head", sender);
                     return true;
                 }
                 giveHead(p, sender.getName());

@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
@@ -44,14 +45,14 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         if (type == null || type.isEmpty()) return;
         if (!player.hasPermission("headsplus.craft")
                 || !RestrictionsManager.canUse(e.getWhoClicked().getWorld().getName(), RestrictionsManager.ActionType.CRAFTING)) {
-            e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
+            MessagesManager.get().sendMessage("event.cannot-craft-heads", e.getWhoClicked());
             e.setCancelled(true);
             return;
         }
 
         if (HeadsPlus.get().canUseWG()) {
             if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
-                e.getWhoClicked().sendMessage(ChatColor.RED + "You cannot craft heads!");
+                MessagesManager.get().sendMessage("event.cannot-craft-heads-here", e.getWhoClicked());
                 e.setCancelled(true);
                 return;
             }

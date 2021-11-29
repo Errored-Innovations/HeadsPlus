@@ -65,7 +65,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                 }
                 // Check restrictions
                 if (!RestrictionsManager.canUse(args[0].toLowerCase(), RestrictionsManager.ActionType.HEADS)) {
-                    // TODO: cannot use head
+                    hpc.sendMessage("commands.head.restricted-head", sender);
                     return true;
                 }
                 giveHead(target, args[0]);
