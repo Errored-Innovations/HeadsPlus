@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.config;
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.configurationmaster.api.Title;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -417,6 +418,7 @@ public class MainConfig extends HPConfig {
                 Bukkit.getPluginManager().addPermission(permission);
             }
             permission.setDefault(PermissionDefault.TRUE);
+            HeadsPlus.debug("Made " + permission.getName() + " set to default.");
             defaults.add(perm);
         }
     }
