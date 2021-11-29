@@ -3,9 +3,12 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.SellHeadEvent;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -23,10 +26,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @CommandInfo(
         commandname = "sellhead",
@@ -88,17 +88,17 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                     pay(player, data, price);
                 }
 		    } else {
-                String fixedId = args[0];
-                if (fixedId.equalsIgnoreCase("all")) {
+                if (args[0].equalsIgnoreCase("all")) {
                     getValidHeads(player, null, -1);
                 } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
                     getValidHeads(player, null, Integer.parseInt(args[0]));
                 } else {
                     int limit = -1;
-                    if (args.length > 1) {
-                        limit = HPUtils.isInt(args[1]);
+                    if (CachedValues.MATCH_PAGE.matcher(args[args.length - 1]).matches()) {
+                        limit = HPUtils.isInt(args[args.length - 1]);
+                        args = Arrays.copyOfRange(args, 0, args.length - 1);
                     }
-                    getValidHeads(player, fixedId, limit);
+                    getValidHeads(player, getIDs(args), limit);
                 }
             }
 
@@ -110,7 +110,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         return false;
 	}
 
-	public void getValidHeads(Player player, String fixedId, int limit) {
+	public void getValidHeads(Player player, HashSet<String> ids, int limit) {
         double price = 0;
         SellData data = new SellData(player);
         for (int slot : slots) {
@@ -121,10 +121,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                     || !PersistenceManager.get().isSellable(item)) continue;
             double headPrice;
             String id = PersistenceManager.get().getSellType(item);
-            if (fixedId != null) {
-                if (MainConfig.get().getSellingHeads().CASE_INSENSITIVE) {
-                    if (!id.toLowerCase().startsWith(fixedId.toLowerCase())) continue;
-                } else if (!id.startsWith(fixedId)) continue;
+            if (ids != null) {
+                if (!ids.contains(id)) continue;
             }
 
             if (PersistenceManager.get().hasSellPrice(item)) {
@@ -217,6 +215,53 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         }
     }
 
+    private HashSet<String> getIDs(String[] args) {
+        HashSet<String> ids = new HashSet<>();
+        if (args.length == 1) {
+            String mobId = args[0].toUpperCase();
+            ids.add("crafting_" + args[0]);
+            if (mobId.equals("PLAYER")) {
+                ids.add("mobs_PLAYER");
+                return ids;
+            }
+            if (!EntityDataManager.ableEntities.contains(mobId)) return ids;
+            for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
+                for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
+                    String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
+                    ids.add(id);
+                    HeadsPlus.get().getLogger().info("Surprise, " + id);
+                }
+            }
+
+        } else if (args.length == 2) {
+            if (args[1].equals("crafting")) {
+                ids.add("crafting_" + args[0]);
+            } else if (args[1].equals("mobs")) {
+                String mobId = args[0].toUpperCase();
+                if (mobId.equals("PLAYER")) {
+                    ids.add("mobs_PLAYER");
+                    return ids;
+                }
+                for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
+                    for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
+                        String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
+                        ids.add(id);
+                    }
+                }
+            }
+        } else {
+            if (!args[2].startsWith("HP#")) args[2] = "HP#" + args[2];
+            if (args[1].equals("mobs")) {
+                for (String condition : ConfigMobs.get().getConfigSection(args[0].toUpperCase()).getKeys(false)) {
+                    ids.add(args[1] + "_" + args[0].toUpperCase() + ":" + condition + ":" + args[2]);
+                }
+            } else {
+                ids.add(args[1] + "_" + args[0] + args[2]);
+            }
+        }
+        return ids;
+    }
+
     @Override
     public boolean shouldEnable() {
         return MainConfig.get().getMainFeatures().SELL_HEADS;
@@ -224,13 +269,19 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
             List<String> headIdList = new ArrayList<>(SellableHeadsManager.get().getKeys());
             headIdList.add("all");
-            List<String> suggestions = new ArrayList<>();
+            headIdList.add("PLAYER");
+            headIdList.addAll(EntityDataManager.ableEntities);
             StringUtil.copyPartialMatches(args[0], headIdList, suggestions);
-            return suggestions;
+        } else if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], Arrays.asList("crafting", "mobs"), suggestions);
+        } else if (args.length == 3) {
+            StringUtil.copyPartialMatches(args[2], HeadManager.get().getKeys(), suggestions);
         }
-        return new ArrayList<>();
+        Collections.sort(suggestions);
+        return suggestions;
     }
 }
