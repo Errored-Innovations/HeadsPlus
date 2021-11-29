@@ -66,7 +66,7 @@ permissions:
       headsplus.sellhead: true
       headsplus.sellhead.gui: true
       headsplus.help.viewperms: true
-      headsplus.drops: true
+      headsplus.drops.*: true
   headsplus.maincommand.*:
     description: Provides access to every subcommand in /hp.
     default: op

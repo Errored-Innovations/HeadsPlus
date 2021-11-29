@@ -5,9 +5,11 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -22,11 +24,18 @@ public class EntityDataManager {
     private static final HashSet<String> NOT_ALIVE = Sets.newHashSet("PLAYER", "ARMOR_STAND");
 
     public static void createEntityList() {
+        Permission permission = Bukkit.getPluginManager().getPermission("headsplus.drops.*");
+        if (permission == null) {
+            permission = new Permission("headsplus.drops.*");
+        }
         for (EntityType type : EntityType.values()) {
             if (!type.isAlive()) continue;
 
             // who decided that an armor stand is alive?
-            if (!NOT_ALIVE.contains(type.name())) ableEntities.add(type.name());
+            if (!NOT_ALIVE.contains(type.name())) {
+                ableEntities.add(type.name());
+                permission.getChildren().put("headsplus.drops." + type.name().toLowerCase(), true);
+            }
         }
         Collections.sort(ableEntities);
     }
