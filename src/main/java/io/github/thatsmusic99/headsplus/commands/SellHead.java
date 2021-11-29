@@ -8,6 +8,7 @@ import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -213,6 +214,10 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         if (args.length == 1) {
             String mobId = args[0].toUpperCase();
             ids.add("crafting_" + args[0]);
+            if (mobId.equals("PLAYER")) {
+                ids.add("mobs_PLAYER");
+                return ids;
+            }
             if (!EntityDataManager.ableEntities.contains(mobId)) return ids;
             for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
                 for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
@@ -227,6 +232,10 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                 ids.add("crafting_" + args[0]);
             } else if (args[1].equals("mobs")) {
                 String mobId = args[0].toUpperCase();
+                if (mobId.equals("PLAYER")) {
+                    ids.add("mobs_PLAYER");
+                    return ids;
+                }
                 for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
                     for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
                         String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
@@ -235,7 +244,14 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                 }
             }
         } else {
-            ids.add(args[1] + "_" + args[0] + args[3]);
+            if (!args[2].startsWith("HP#")) args[2] = "HP#" + args[2];
+            if (args[1].equals("mobs")) {
+                for (String condition : ConfigMobs.get().getConfigSection(args[0].toUpperCase()).getKeys(false)) {
+                    ids.add(args[1] + "_" + args[0].toUpperCase() + ":" + condition + ":" + args[2]);
+                }
+            } else {
+                ids.add(args[1] + "_" + args[0] + args[2]);
+            }
         }
         return ids;
     }
@@ -247,20 +263,19 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
             List<String> headIdList = new ArrayList<>(SellableHeadsManager.get().getKeys());
             headIdList.add("all");
+            headIdList.add("PLAYER");
             headIdList.addAll(EntityDataManager.ableEntities);
-            List<String> suggestions = new ArrayList<>();
             StringUtil.copyPartialMatches(args[0], headIdList, suggestions);
-            Collections.sort(suggestions);
-            return suggestions;
         } else if (args.length == 2) {
-            List<String> suggestions = new ArrayList<>();
             StringUtil.copyPartialMatches(args[1], Arrays.asList("crafting", "mobs"), suggestions);
-            Collections.sort(suggestions);
-            return suggestions;
+        } else if (args.length == 3) {
+            StringUtil.copyPartialMatches(args[2], HeadManager.get().getKeys(), suggestions);
         }
-        return new ArrayList<>();
+        Collections.sort(suggestions);
+        return suggestions;
     }
 }
