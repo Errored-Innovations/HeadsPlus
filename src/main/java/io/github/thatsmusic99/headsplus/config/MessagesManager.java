@@ -1,8 +1,6 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.Challenge;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -933,32 +931,6 @@ public class MessagesManager {
         string = string.replaceAll("''", "'");
         string = string.replaceAll("^'", "");
         string = string.replaceAll("'$", "");
-        return ChatColor.translateAlternateColorCodes('&', string);
-    }
-
-    public String favourite(String string, Player player, String id) {
-        Pattern pat = Pattern.compile("\\{msg_inventory\\.icon\\.head\\.favourite}");
-        Matcher m = pat.matcher(string);
-        while (m.find()) {
-            if (HPPlayer.getHPPlayer(player.getUniqueId()).hasHeadFavourited(id)) {
-                string = string.replace("{msg_inventory.icon.head.favourite}", getString("inventory.icon.head.favourite", (CommandSender) player));
-            } else {
-                string = string.replace("{msg_inventory.icon.head.favourite}", "");
-            }
-        }
-        return ChatColor.translateAlternateColorCodes('&', string);
-    }
-
-    public String completed(String string, Player player, Challenge challenge) {
-        Pattern pat = Pattern.compile("\\{completed}");
-        Matcher m = pat.matcher(string);
-        while (m.find()) {
-            if (challenge.isComplete(player)) {
-                string = string.replace("{completed}", getString("command.challenges.challenge-completed", (CommandSender) player));
-            } else {
-                string = string.replace("{completed}", "");
-            }
-        }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 

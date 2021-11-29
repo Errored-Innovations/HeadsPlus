@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.5
+version: 1.6
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -57,12 +57,6 @@ textmenus:
     spigot: Spigot link
     discord: Discord Server
     github: Github
-  head-info:
-    type: Type
-    display-name: Display Name
-    price: Price
-    interact-name: Interact Name
-    chance: Chance
   help:
     usage: Usage
     description: Description
@@ -120,13 +114,6 @@ commands:
     head-too-short: '{header} IGN is too short to be valid! Please use an IGN between
       3 and 16 characters.'
     restricted-head: '{header} You cannot use that head!'
-  head-info:
-    add-value: '{header} &c{value} &7has been added to &c{entity}&7''s &c{setting}&7!'
-    no-lore-data: '{header} There is no lore data for this entity!'
-    no-mask-data: '{header} There is no mask data for this entity!'
-    no-name-data: '{header} There is no name data for this entity!'
-    remove-value: '{header} &c{value} &7has been removed from &c{entity}&7''s &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''s &c{setting} &7has been changed to &c{value}&7!'
   heads:
     buy-success: '{header} You have bought a head for &c{price} &7and now have &c{balance}&7!'
     chat-input: '{header} Type in a term you want to search.'
@@ -167,7 +154,6 @@ descriptions:
     complete: Completes a challenge.
     conjure: Retrieves a head of a specific type.
     debug: Dumps a debug file.
-    headinfo: Displays/modifies information about a specific entity's head.
     help: Displays the help menu.
     info: Displays plugin information.
     locale: Changes a user's localisation if smart locale is enabled.
@@ -186,13 +172,13 @@ descriptions:
     number, entity name to sell a specific mob's head, and all to sell every head.
 event:
   block-place-denied: '{header} You can not place sellable heads!'
+  cannot-craft-heads: '{header} You cannot craft heads!'
+  cannot-craft-heads-here: '{header} You cannot craft heads here!'
   head-interact-message: '{header} That is &c{name}&7''s head!'
   head-mhf-interact-message: '{header} That is a &c{name}&7''s head!'
   head-mhf-interact-message-2: '{header} That is an &c{name}&7''s head!'
   lost-money: '{header} Because you got killed by &c{player}&7, you lost &c{price}&7!'
 startup:
-  cannot-craft-heads: '{header} You cannot craft heads!'
-  cannot-craft-heads-here: '{header} You cannot craft heads here!'
   faulty-theme: '{header} Faulty theme was put in! No theme changes will be made.'
   no-vault: '{header} Vault not found! Heads cannot be sold and challenge rewards
     can not add/remove groups.'

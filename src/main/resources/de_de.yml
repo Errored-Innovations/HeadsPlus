@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Totale Köpfe gefertigt
     current-level: Aktuelles Level
     xp-until-next-level: XP bis zum nächsten Level
-  blacklist: Blacklist
-  whitelist: Whitelist
-  blacklistw: Welten-Blacklist
-  whitelistw: Welten-Whitelist
   info:
     version: Ausführung
     author: Autorin
@@ -59,18 +55,12 @@ textmenus:
     spigot: SpigotMC Link
     discord: Discord-Server
     github: Github
-  head-info:
-    type: Sorte
-    display-name: Anzeigename
-    price: Pries
-    interact-name: Interaktionsname
-    chance: Möglichkeit
   help:
     usage: Verwendung
     description: Beschreibung
     permission: Genehmigung
     further-usages: Weitere Verwendung
-version: 1.5
+version: 1.6
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -110,25 +100,6 @@ commands:
     head-adding: '{header} Textur für &c{player} &7nachschlagen...'
     head-already-added: '{header} Gehen Sie zu &c{player}&7, das bereits in der Datenbank
       vorhanden ist!'
-  blacklist:
-    bl-a-off: '{header} Die Blacklist ist schon inaktiv!'
-    bl-a-on: '{header} Die Blacklist ist schon aktiv!'
-    bl-off: '{header} Die Blacklist wurde deaktiviert!'
-    bl-on: '{header} Die Blacklist wurde aktiviert!'
-    blw-a-on: '{header} Die Welten-Blacklist ist schon aktiv!'
-    blw-a-off: '{header} Die Welten-Blacklist ist schon inaktiv!'
-    blw-on: '{header} Die Welten-Blacklist wurde aktiviert!'
-    blw-off: '{header} Die Welten-Blacklist wurde deaktiviert!'
-    empty-bl: '{header} Die Blacklist ist leer!'
-    empty-blw: '{header} Die Welten-Blacklist ist leer!'
-    head-a-add: '{header} Dieser Kopf wurde schon hinzugefügt!'
-    head-a-removed-bl: '{header} Dieser Kopf ist nicht auf der Blacklist!'
-    head-added-bl: '{header} &c{name} &7wurde zur Blacklist hinzugefügt!'
-    head-removed-bl: '{header} &c{name} &7wurde aus der Blacklist entfernt!'
-    world-a-add: '{header} Diese Welt wurde schon hinzugefügt!'
-    world-added-bl: '{header} &c{name} &7wurde zur Welten-Blacklist hinzugefügt!'
-    world-a-removed-bl: '{header} Diese Welt ist nicht auf der Blacklist!'
-    world-removed-bl: '{header} &c{name} &7wurde aus der Blacklist entfernt!'
   challenges:
     already-complete-challenge: '{header} Du hast schon diese Herausforderung abgeschlossen!'
     cant-complete-challenge: '{header} Du kannst diese Herausforderung nicht abschließen!'
@@ -138,22 +109,12 @@ commands:
     reward-string: '{header} Belohnung: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Dieses Kommando verarbeitet nur alphanummerische Namen!'
-    blacklist-head: '{header} Dieser Kopf ist auf der Blacklist und kann daher nicht
-      verwendet werden!'
     full-inv: '{header} Dein Inventar ist voll!'
     head-too-long: '{header} Der Spielername ist zu lang! Bitte benutze einen Spielernamen
       zwischen 3 und 16 Zeichen.'
     head-too-short: '{header} Der Spielername ist zu kurz! Bitte benutze einen Spielernamen
       zwischen 3 und 16 Zeichen.'
-    whitelist-head: '{header} Dieser Kopf ist nicht auf der Whitelist und kann daher
-      nicht benutzt werden!'
-  headinfo:
-    add-value: '{header} &c{value} &7wurde zu &c{entity}&7''s &c{setting} &7hinzugefügt!'
-    no-lore-data: '{header} Es gibt keine Wissensdaten über dieses Wesen!'
-    no-mask-data: '{header} Es gibt keine Maskendaten über dieses Wesen!'
-    no-name-data: '{header} Es gibt keine Daten über dieses Wesen!'
-    remove-value: '{header} &c{value} &7wurde aus &c{entity}&7''s &c{setting} &7entfernt!'
-    set-value: '{header} &c{entity}&7''s &c{setting} &7wurde geändert auf &c{value}&7!'
+    restricted-head: '{header} Du kannst diesen Kopf hier nicht verwenden!'
   heads:
     buy-success: '{header} Du hast einen Kopf gekauft und hast nun &c{balance}&7!'
     chat-input: '{header} Gib einen Begriff ein über das du suchen möchtest.'
@@ -186,23 +147,6 @@ commands:
   tests:
     running-tests: '{header} Tests ausführen... (dies kann eine Weile dauern)'
     results: '{header} Ergebnisse: {results}'
-  whitelist:
-    empty-wl: '{header} Die Whitelist ist leer!'
-    empty-wlw: '{header} Die Welten-Whitelist ist leer!'
-    head-a-removed-wl: '{header} Dieser Kopf ist nicht auf der Whitelist!'
-    head-added-wl: '{header} &c{name} &7wurde zur Whitelist hinzugefügt!'
-    head-removed-wl: '{header} &c{name} &7wurde aus der Whitelist entfernt!'
-    wl-a-off: '{header} Die Whitelist ist schon inaktiv!'
-    wl-a-on: '{header} Die Whitelist ist schon aktiv!'
-    wl-off: '{header} Die Whitelist wurde deaktiviert!'
-    wl-on: '{header} Die Whitelist wurde aktiviert!'
-    wlw-a-off: '{header} Die Welten-Whitelist ist schon inaktiv!'
-    wlw-a-on: '{header} Die Welten-Whitelist ist schon aktiv!'
-    wlw-off: '{header} Die Welten-Whitelist wurde deaktiviert!'
-    wlw-on: '{header} Die Welten-Whitelist wurde aktiviert!'
-    world-a-removed-wl: '{header} Diese Welt ist nicht auf der Whitelist!'
-    world-added-wl: '{header} &c{name} &7wurde zur Welten-Whitelist hinzugefügt!'
-    world-removed-wl: '{header} &c{name} &7wurde aus der Whitelist entfernt!'
   xp:
     added-xp: '{header} &c{amount} &7XP zu &c{player} &7hinzugefügt, sie haben jetzt
       &c{xp}&7!'
@@ -215,32 +159,15 @@ commands:
     reset-xp: '{header} Setze die XP von &c{player} &7zurück!'
 descriptions:
   hp:
-    blacklist: Aktiviert und deaktiviert die Blacklist.
-    blacklistadd: Fügt einen Kopf zur Blacklist hinzu.
-    blacklistdel: Entfernt einen Kopf aus der Blacklist.
-    blacklistl: Zeigt eine Liste von allen Köpfen auf der Blacklist.
-    blacklistw: Aktiviert und deaktiviert die Welten-Blacklist.
-    blacklistwadd: Fügt ein Craftingrezept zur Welten-Blacklist hinzu.
-    blacklistwdel: Entfernt ein Craftingrezept aus der Welten-Blacklist.
-    blacklistwl: Zeigt eine Liste von allen Welten auf der Welten-Blacklist.
     complete: Schließt eine Herausforderung ab.
     conjure: Erhält einen Kopf eines bestimmten Typs.
     debug: Lagert eine Debug-datei.
-    headinfo: Zeigt/modifiziert Informationen über einen gewissen Kopf eines Wesens
     help: Zeigt das Hilfe-menü an.
     info: Zeigt Informationen zum Plugin.
     profile: Zeigt dein Profil für das Plugin an.
     reload: Lädt Konfigurationen neu.
     restore: Stellt einen Kopf wieder her oder repariert ihn, der bereits vom Plugin bereitgestellt wurde.
     tests: Führen Sie Tests für Mob Drop-Raten durch.
-    whitelist: Aktiviert und deaktiviert die Whitelist.
-    whitelistadd: Fügt einen Kopf zur Whitelist hinzu.
-    whitelistdel: Entfernt einen Kopf aus der Whitelist.
-    whitelistl: Zeigt eine Liste von allen Köpfen auf der Whitelist.
-    whitelistw: Aktiviert und deaktiviert die Welten-Whitelist.
-    whitelistwadd: Fügt ein Craftingrezept zur Welten-Whitelist hinzu.
-    whitelistwdel: Entfernt ein Craftingrezept aus der Welten-Whitelist.
-    whitelistwl: Zeigt eine Liste von allen Welten auf der Welten-Whitelist.
     xp: Zeigen Sie die XP eines Players an oder ändern Sie sie.
   addhead: Voeg een spelerskop toe aan het hoofdmenu.
   head: Erzeugt einen Kopf.
@@ -251,14 +178,13 @@ descriptions:
   sellhead: Verkauft Köpfe, entweder von Wesen, Menge oder in deiner Hand.
 event:
   block-place-denied: '{header} Du kannst keine verkaufbaren Köpfe platzieren!'
+  cannot-craft-heads: '{header} Sie können keine Köpfe herstellen!'
+  cannot-craft-heads-here: '{header} Hier kann man keine Köpfe herstellen! '
   head-interact-message: '{header} Das ist &c{name}&7''s Kopf!'
   head-mhf-interact-message: '{header} Das ist der &c{name} &7Kopf!'
   head-mhf-interact-message-2: '{header} Das ist der &c{name} &7Kopf!'
-  lost-money: '{header} Weil Sie von &c{player} &7getötet wurden, haben Sie &c{price}
-    &7verloren!'
+  lost-money: '{header} Weil Sie von &c{player} &7getötet wurden, haben Sie &c{price} &7verloren!'
 startup:
-  faulty-theme: '{header} Ein fehlerhaftes Thema wurde eingefügt! Es werden keine
-    Themenwechsel vorgenommen.'
   no-vault: '{header} Vault wurde nicht gefunden! Köpfe können nicht verkauft und
     Herausforderungsbelohnungen können keine Gruppen hinzufügen/entfernen.'
   no-vault-2: '{header} Vault konnte beim Start nicht gefunden werden! Gruppen können

@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Total de têtes fabriquées
     current-level: Niveau actuel
     xp-until-next-level: XP jusqu'au niveau suivant
-  blacklist: Blacklist
-  whitelist: Whitelist
-  blacklistw: Blacklist du monde
-  whitelistw: Whitelist du monde
   info:
     version: Version
     author: Auteure
@@ -59,12 +55,6 @@ textmenus:
     spigot: SpigotMC lein
     discord: Serveur Discord
     github: Github
-  head-info:
-    type: Sorte
-    display-name: Afficher un nom
-    price: Prix
-    interact-name: Nom d'interaction
-    chance: Possibilité
   help:
     usage: Usage
     description: Description
@@ -118,25 +108,6 @@ commands:
     head-adding: '{header} Recherche de texture à ajouter pour &c{player}&7.'
     head-already-added: '{header} Dirigez-vous vers &c{player} &7déjà dans la base
       de données!'
-  blacklist:
-    bl-a-off: '{header} La blacklist est déjà désactivée!'
-    bl-a-on: '{header} La blacklist est déjà activée!'
-    bl-off: '{header} La blacklist a bien été désactivée!'
-    bl-on: '{header} La blacklist a bien été activée!'
-    blw-a-on: '{header} La blacklist du monde est déjà activée!'
-    blw-on: '{header} La blacklist du monde a bien été activée!'
-    blw-a-off: '{header} La blacklist du monde est déjà désactivée!'
-    blw-off: '{header} La blacklist du monde a bien été désactivée!'
-    empty-bl: '{header} La blacklist est vide!'
-    empty-blw: '{header} La blacklist du monde est vide!'
-    head-a-add: '{header} Cette tête est déjà ajoutée!'
-    head-a-removed-bl: '{header} Cette tête n''est pas dans la blacklist!'
-    head-added-bl: '{header} &c{name} &7a bien été ajouté à la blacklist!'
-    head-removed-bl: '{header} &c{name} &7a bien été retiré de la blacklist!'
-    world-a-add: '{header} &3Ce monde a déjà été ajouté!'
-    world-a-removed-bl: '{header} Ce monde n''est pas dans la blacklist!'
-    world-added-bl: '{header} &c{name} &7a bien été ajouté à la blacklist!'
-    world-removed-bl: '{header} &c{name} &7a bien été retiré de la blacklist!'
   challenges:
     already-complete-challenge: '{header} Tu as déjà complété ce challenge!'
     cant-complete-challenge: '{header} Tu ne peux pas compléter ce challenge!'
@@ -145,22 +116,12 @@ commands:
     reward-string: '{header} Récompense: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Cette commande ne gère que les noms alphanumériques!'
-    blacklist-head: '{header} Cette tête est sur la blacklist et ne peut pas être
-      utilisée!'
     full-inv: '{header} Ton iventaire est plein!'
     head-too-long: '{header} IGN est trop long pour être validé! Merci d''utiliser
       une IGN entre 3 et 16 caractères.'
     head-too-short: '{header} IGN est trop court pour être validé! Merci d''utiliser
       une IGN entre 3 et 16 caractères.'
-    whitelist-head: '{header} Cette tête n''est pas sur la whitelist et ne peut donc
-      pas être utilisée!'
-  headinfo:
-    add-value: '{header} &c{value} &7a bien été ajouté(e) &c{entity} {setting}&7!'
-    no-lore-data: '{header} &cIl n''y a pas de déscription pour cette entité!'
-    no-mask-data: '{header} &cIl n''y a pas de cache pour cette entité!'
-    no-name-data: '{header} &cIl n''y a pas de nom pour cette entité!'
-    remove-value: '{header} &c{value} &7a bien été retiré(e) &c{entity} {setting}&7!'
-    set-value: '{header} &c{entity} {setting} &7a bien été changé en &c{value}&7!'
+    restricted-head: '{header} Vous ne pouvez pas utiliser cette tête!'
   heads:
     buy-success: '{header} Tu as acheté une tête pour &c{price} &7et maintenant tu
       as &c{balance}&7!'
@@ -187,25 +148,8 @@ commands:
     sell-success: '{header} Tu as bien vendu des têtes pour &c{price} &7et maintenant
       tu as &c{balance}&7!'
   tests:
-    running-tests: Tests ausführen ... (dies kann eine Weile dauern)
-    results: 'Ergebnisse: {results}'
-  whitelist:
-    empty-wl: '{header} La whitelist est vide!'
-    empty-wlw: '{header} La whitelist du monde est vide!'
-    head-a-removed-wl: '{header} Cette tête n''est pas dans la whitelist!'
-    head-added-wl: '{header} &c{name} &7a bien été ajouté à la whitelist!'
-    head-removed-wl: '{header} &c{name} &7a bien été retiré de la whitelist!'
-    wl-a-off: '{header} La whitelist est déjà désactivée!'
-    wl-a-on: '{header} La whitelist est déjà activée!'
-    wl-off: '{header} La whitelist a bien été désactivée!'
-    wl-on: '{header} La whitelist a bien été activée!'
-    wlw-a-off: '{header} La whitelist du monde est déjà désactivée!'
-    wlw-a-on: '{header} La whitelist du monde est déjà activée!'
-    wlw-off: '{header} La whitelist du monde a bien été désactivée!'
-    wlw-on: '{header} La whitelist du monde a bien été activée!'
-    world-a-removed-wl: '{header} Ce monde n''est pas dans la whitelist!'
-    world-added-wl: '{header} &c{name} &7a bien été ajouté à la whitelist!'
-    world-removed-wl: '{header} &c{name} &7a bien été retiré de whitelist!'
+    running-tests: 'Exécution des tests... (cela peut prendre un certain temps)'
+    results: 'Résultats: {results}'
   xp:
     added-xp: '{header} Ajout de &c{amount} &7XP à &c{player}&7, ils ont maintenant
       &c{xp}&7!'
@@ -256,6 +200,8 @@ descriptions:
     pour vendre tous les têtes.
 event:
   block-place-denied: '{header} Vous ne pouvez pas placer de têtes vendables!'
+  cannot-craft-heads: '{header} Vous ne pouvez pas fabriquer des têtes!'
+  cannot-craft-heads-here: '{header} Vous ne pouvez pas fabriquer des têtes ici!'
   head-interact-message: '{header} C''est une tête d''&c{name}&7!'
   head-mhf-interact-message: '{header} C''est une tête d''&c{name}&7!'
   head-mhf-interact-message-2: '{header} C''est une tête d''&c{name}&7!'

@@ -49,10 +49,6 @@ textmenus:
     total-heads-crafted: 製作頭顱總數
     current-level: 當前等級
     xp-until-next-level: 到下一級所需XP
-  blacklist: 黑名單
-  whitelist: 白名單
-  blacklistw: 世界黑名單
-  whitelistw: 世界白名單
   info:
     version: 版本
     author: 作者
@@ -61,12 +57,6 @@ textmenus:
     spigot: Spigot連結
     discord: Discord Server
     github: Github
-  head-info:
-    type: 類型
-    display-name: 顯示名稱
-    price: 價格
-    interact-name: 互動名稱
-    chance: 機率
   help:
     usage: 用法
     description: 描述
@@ -105,23 +95,6 @@ commands:
     price: '{header} 輸入頭顱價格（或“默认”为默认值）.'
     section: '{header} 鍵入將放置頭顱的部分.(可用部分: &c{sections}&7)'
     texture: '{header} 輸入或複製並貼上頭部的紋理.（這可能需要幾條訊息，因此完成後，在聊天中輸入“done”.）'
-  blacklist:
-    bl-a-off: '{header} 黑名單已被禁用!'
-    bl-a-on: '{header} 黑名單已啟用!'
-    bl-off: '{header} 黑名單已被禁用!'
-    bl-on: '{header} 黑名單已啟用!'
-    blw-a-on: '{header} 世界黑名單已啟用!'
-    blw-a-off: '{header} 世界黑名單已被禁用!'
-    empty-bl: '{header} 黑名單是空的!'
-    empty-blw: '{header} 世界黑名單為空!'
-    head-a-add: '{header} 該頭顱已經添加!'
-    head-a-removed-bl: '{header} 這個頭顱不在黑名單!'
-    head-added-bl: '{header} &c{player} &7已添加到黑名單!'
-    head-removed-bl: '{header} &c{player} &7已從黑名單中刪除!'
-    world-a-add: '{header} 這個世界已經被添加!'
-    world-added-bl: '{header} &c{world} &7已添加到世界黑名單!'
-    world-a-removed-bl: '{header} 這個世界不在黑名單上!'
-    world-removed-bl: '{header} &c{world} &7已從黑名單中刪除!'
   challenges:
     already-complete-challenge: '{header} 您已經完成了挑戰!'
     cant-complete-challenge: '{header} 您無法完成了挑戰!'
@@ -130,18 +103,10 @@ commands:
     reward-string: '{header} 獎勵: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} 此指令只會處理字母數位名稱!'
-    blacklist-head: '{header} 此頭顱已列入黑名單，無法使用!'
     full-inv: '{header} 您的背包已滿!'
     head-too-long: '{header} IGN時間太長，無法生效！ 請在之間使用IGN 3和16个字符.'
     head-too-short: '{header} IGN太短，無效！ 請在之間使用IGN 3和16个字符.'
-    whitelist-head: '{header} 此頭未列入白名單，因此不能被列入白名單 用過的!'
-  head-info:
-    add-value: '{header} &c{value} &7已添加到 &c{entity}&7''s &c{setting}&7!'
-    no-lore-data: '{header} 沒有該實體的擊殺資料!'
-    no-mask-data: '{header} 該實體沒有遮罩資料!'
-    no-name-data: '{header}沒有該實體的名稱資料!'
-    remove-value: '{header} &c{value} &7已從中刪除 &c{entity}&7''s &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''s &c{setting} &7已更改為    &c{value}&7!'
+    restricted-head: '{header} 你不能用那個頭！'
   heads:
     buy-success: '{header} 你以&c{price}的價格 &7購買了一个頭顱 現在還有&c{balance}&7!'
     chat-input: '{header} 輸入您要搜尋的字詞.'
@@ -167,23 +132,6 @@ commands:
   tests:
     running-tests: '{header}正在執行測試...（這可能需要一段時間）'
     results: '{header} 结果: &c{results}'
-  whitelist:
-    empty-wl: '{header} 白名單为空!'
-    empty-wlw: '{header} 世界白名單是空的!'
-    head-a-removed-wl: '{header} 这个頭顱不在白名單上!'
-    head-added-wl: '{header} &c{player} &7已添加到白名單!'
-    head-removed-wl: '{header} &c{player} &7已從白名單中删除!'
-    wl-a-off: '{header} 白名單已被禁用!'
-    wl-a-on: '{header} 黑名單已啟用!'
-    wl-off: '{header} 白名單已被禁用!'
-    wl-on: '{header} 白名ㄉ安已啟用!'
-    wlw-a-off: '{header} 世界白名單已被禁用!'
-    wlw-a-on: '{header} 世界白名單已啟用!'
-    wlw-off: '{header} 世界白名單已被禁用!'
-    wlw-on: '{header} 世界白名單已啟用!'
-    world-a-removed-wl: '{header} &c{world} &7已從白名單中删除!'
-    world-added-wl: '{header} &c{world} &7h被添加到世界白名單中!'
-    world-removed-wl: '{header} &c{world} &7已從白名單中删除!'
   xp:
     added-xp: '{header} 加 &c{amount} &7XP 到 &c{player}&7,他現在有&c{xp}&7!'
     current-xp: '{header} &c{player}&7的 當前XP: &c{xp}'
@@ -192,32 +140,15 @@ commands:
     reset-xp: '{header} 重設 &c{player}&7的XP!'
 descriptions:
   hp:
-    blacklist: 切換黑名單.
-    blacklistadd: 將頭顱添加到黑名單.
-    blacklistdel: 從黑名單中删除一個頭顱.
-    blacklistl: 列出所有頭顱黑名單.
-    blacklistw: 打開/關閉工藝配方黑名單.
-    blacklistwadd: 為手動配方黑名單加入一個世界.
-    blacklistwdel: 為手動配方黑名單移除世界.
-    blacklistwl: 列出列入黑名單的世界.
     complete: 完成挑戰.
     conjure: 搜尋特定類型的頭顱.
     debug: 轉儲調試文件.
-    headinfo:  顯示/修改有關特定實體負責人的資訊..
     help: 顯示說明選單.
     info: 顯示插件信息.
     profile: 顯示您的插件配置文件.
     reload: 重新加載配置文件.
     restore: 恢復或修复插件已提供的頭顱.
     tests: 對怪物掉落率進行測試.
-    whitelist: 切換白名單.
-    whitelistadd: 將頭添加到白名單.
-    whitelistdel: 從白名單中删除一個頭顱.
-    whitelistl: 列出所有頭顱白名單.
-    whitelistw: 開啟/關閉工藝配方白名單.
-    whitelistwadd: 為手工配方白名單增添色彩.
-    whitelistwdel: 為手工配方白名單移除一个世界.
-    whitelistwl: 列出列入白名單的世界.
   xp: 查看或更改玩家的XP.
   addhead: 將玩家頭顱添加到頭顱菜單
   head: 頭顱產生.
@@ -228,6 +159,8 @@ descriptions:
   sellhead: 出售您手中的頭，使用数字参数出售特定的 编号，出售特定头颅头部的实体名称，以及所有出售每个头颅的实体.
 event:
   block-place-denied: '{header}您不能放置可出售的頭顱!'
+  cannot-craft-heads: '{header} 你不能製作人頭!'
+  cannot-craft-heads-here: '{header} 你不能在這裡製作人頭!'
   head-interact-message: '{header} 是 &c{name}&7的頭顱!'
   head-mhf-interact-message: '{header} 是 &c{name}&7的頭顱!'
   head-mhf-interact-message-2: '{header} 是 &c{name}&7的頭顱!'
