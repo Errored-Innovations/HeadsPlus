@@ -6,11 +6,11 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>7.0.0-BETA-1</version>
+    <version>7.0.0-MVP-1</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>7.0.0-BETA-1</hp-project.version>
+        <hp-project.version>7.0.0-MVP-1</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
     </properties>
@@ -131,7 +131,7 @@
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>
-            <version>v2.0.0-BETA-2</version>
+            <version>v2.0.0-BETA-3</version>
         </dependency>
     </dependencies>
 
