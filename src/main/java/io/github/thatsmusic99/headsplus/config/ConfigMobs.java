@@ -11,10 +11,8 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Rabbit;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class ConfigMobs extends FeatureConfig {
 
@@ -75,7 +73,7 @@ public class ConfigMobs extends FeatureConfig {
         for (String entity : Arrays.asList("axolotl", "bat", "blaze", "bee", "cat", "chicken", "cod", "cow", "creeper"
                 , "dolphin", "donkey", "drowned",
                 "enderman", "endermite", "evoker", "fox", "ghast", "giant", "guardian", "hoglin", "horse", "husk",
-                "llama", "mule",
+                "illusioner", "llama",  "mule",
                 "ocelot", "panda", "parrot", "phantom", "pig", "piglin", "pillager", "pufferfish", "rabbit", "ravager"
                 , "salmon", "sheep",
                 "shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider",
