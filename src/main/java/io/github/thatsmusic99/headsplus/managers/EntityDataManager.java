@@ -233,7 +233,7 @@ public class EntityDataManager {
 
         public DroppedHeadInfo withChance(String path) {
             if (!ConfigMobs.get().contains(path + ".chance")) return this;
-            chance = ConfigMobs.get().getLong(path + ".chance");
+            chance = ConfigMobs.get().getDouble(path + ".chance");
             return this;
         }
 
