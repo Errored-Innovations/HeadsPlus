@@ -44,8 +44,10 @@ public class HeadInteractListener extends HeadsPlusListener<PlayerInteractEvent>
     public void onEvent(PlayerInteractEvent event) {
         if (addData("action", event.getAction()) == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
+            if (event.getClickedBlock() == null) return;
             BlockState block = event.getClickedBlock().getState();
             if (addData("is-skull", block instanceof Skull)) {
+                assert block instanceof Skull;
                 Skull skull = (Skull) block;
                 if (!sent.contains(player.getUniqueId())) {
                     sent.add(player.getUniqueId());

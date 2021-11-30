@@ -74,7 +74,7 @@ public class MaskManager {
                 ConfigSection maskSection = masksSection.getConfigSection(key);
                 if (maskSection == null) continue;
                 //
-                MaskInfo info;
+                PotionMask info;
                 String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"),
                         "No idle texture for " + key + " found!");
                 if (!HeadManager.get().contains(headInfoStr))
@@ -100,7 +100,7 @@ public class MaskManager {
                             }
                             PotionEffect effect = new PotionEffect(effectType,
                                     MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
-                            ((PotionMask) info).addEffect(effect);
+                            info.addEffect(effect);
                         }
                         break;
                     default:
@@ -207,7 +207,7 @@ public class MaskManager {
                 @Override
                 public void cancel() {
                     super.cancel();
-                    runningTasks.remove(this);
+                    runningTasks.remove(player.getUniqueId().toString());
                     for (PotionEffect effect : effects) {
                         player.removePotionEffect(effect.getType());
                     }

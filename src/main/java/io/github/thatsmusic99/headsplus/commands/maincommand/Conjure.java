@@ -44,9 +44,8 @@ public class Conjure implements IHeadsPlusCommand {
             amount = HPUtils.isInt(args[2]);
         }
         if (args.length > 3) {
-            if (Bukkit.getPlayer(args[3]) != null && Bukkit.getPlayer(args[3]).isOnline()) {
-                p = Bukkit.getPlayer(args[3]);
-            }
+            p = Bukkit.getPlayer(args[3]);
+            if (p != null && !p.isOnline()) p = null;
         }
         if (p == null) {
             if (sender instanceof Player) {

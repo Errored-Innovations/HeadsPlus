@@ -107,7 +107,7 @@ public class DebugFileCreator {
         }
         fw = new OutputStreamWriter(new FileOutputStream(fr));
         try {
-            fw.write(str.replace("\u0026", "&"));
+            fw.write(str);
         } finally {
             fw.flush();
             fw.close();
@@ -142,7 +142,7 @@ public class DebugFileCreator {
         File fileReport = getReportFile();
         writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            writer.write(jsonString.replace("\u0026", "&"));
+            writer.write(jsonString);
         } finally {
             writer.flush();
             writer.close();
@@ -151,7 +151,6 @@ public class DebugFileCreator {
     }
 
     public String createHeadReport(ItemStack s) throws IllegalAccessException, IOException {
-        HeadsPlus hp = HeadsPlus.get();
         JSONArray infoArray = new JSONArray();
         JSONObject basicInfo = getBasicInfo();
         JSONObject headDetails = new JSONObject();
@@ -184,7 +183,7 @@ public class DebugFileCreator {
         File fileReport = getReportFile();
         writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            writer.write(jsonString.replace("\u0026", "&"));
+            writer.write(jsonString);
         } finally {
             writer.flush();
             writer.close();
@@ -213,7 +212,7 @@ public class DebugFileCreator {
         File fileReport = getReportFile();
         writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            writer.write(str.replace("\u0026", "&"));
+            writer.write(str);
         } finally {
             writer.flush();
             writer.close();
@@ -235,7 +234,7 @@ public class DebugFileCreator {
         File fileReport = getReportFile();
         writer = new OutputStreamWriter(new FileOutputStream(fileReport));
         try {
-            writer.write(jsonString.replace("\u0026", "&"));
+            writer.write(jsonString);
         } finally {
             writer.flush();
             writer.close();

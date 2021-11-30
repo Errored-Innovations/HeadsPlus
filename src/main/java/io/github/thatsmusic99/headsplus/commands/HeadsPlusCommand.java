@@ -89,7 +89,7 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
                 CommandInfo commandInfo = command.getClass().getAnnotation(CommandInfo.class);
                 if (cs.hasPermission(commandInfo.permission())) {
                     List<String> results = command.onTabComplete(cs, cmd, s, args);
-                    Collections.sort(results);
+                    if (results != null) Collections.sort(results);
                     return results;
                 }
                 return IHeadsPlusCommand.getPlayers(cs);
