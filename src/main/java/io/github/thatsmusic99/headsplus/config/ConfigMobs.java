@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ConfigMobs extends FeatureConfig {
@@ -244,7 +245,7 @@ public class ConfigMobs extends FeatureConfig {
     	addExample("player.default.display-name", "{player}'s head");
         addExample("player.default.lore", new ArrayList<>(Arrays.asList("&7Price: &6{price}", "&7Player: &a{player}")));
 
-        addExample("player.Thatsmusic99.lore", "oi mate it's a bit rood to stab me innit?");
+        addExample("player.Thatsmusic99.lore",  Collections.singletonList("oi mate it's a bit rood to stab me innit?"));
     }
 
     public double getPrice(String type) {
