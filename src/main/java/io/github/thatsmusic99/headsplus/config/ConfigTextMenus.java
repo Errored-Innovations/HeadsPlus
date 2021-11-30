@@ -122,6 +122,7 @@ public class ConfigTextMenus extends HPConfig {
                     String s = str;
                     if (!s.equals("{header}")) s = translateColors(s, sender);
                     HPUtils.parseLorePlaceholders(profile, s,
+                            new HPUtils.PlaceholderInfo("{player}", player.getName(), true),
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
                             new HPUtils.PlaceholderInfo("{completed-challenges}", () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()),
                                     MainConfig.get().getMainFeatures().CHALLENGES),
