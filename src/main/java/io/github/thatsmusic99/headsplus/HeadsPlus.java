@@ -370,14 +370,14 @@ public class HeadsPlus extends JavaPlugin {
         int number = Integer.parseInt(bukkitVersion.split("_")[1]);
         if (number < 15) {
             getLogger().severe("!!! YOU ARE USING HEADSPLUS ON AN OLD UNSUPPORTED VERSION. !!!");
-            getLogger().severe("The plugin only supports 1.15.2 to 1.17.");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.18.");
             getLogger().severe("Please update your server if you wish to continue using the plugin.");
             getLogger().severe("To prevent any damage, the plugin is now disabling...");
             setEnabled(false);
             return false;
-        } else if (number > 17) {
+        } else if (number > 18) {
             getLogger().severe("!!! YOU ARE USING HEADSPLUS ON A NEW UNSUPPORTED VERSION. !!!");
-            getLogger().severe("The plugin only supports 1.15.2 to 1.17.");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.18.");
             getLogger().severe("Considering this is a new version though, there's a chance the plugin still works.");
             getLogger().severe("The plugin will remain enabled, but update it as soon as possible.");
             getLogger().severe("If this is the latest version and you find problems/bugs, please report them.");
