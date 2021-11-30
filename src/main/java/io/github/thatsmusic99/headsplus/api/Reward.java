@@ -65,7 +65,8 @@ public abstract class Reward {
 
     public abstract String getDefaultRewardString(Player player);
 
-    public void multiplyRewardValues(int multiplier) {}
+    public void multiplyRewardValues(int multiplier) {
+    }
 
     public long getXp() {
         return xp;

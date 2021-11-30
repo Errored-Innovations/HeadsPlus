@@ -9,7 +9,8 @@ public class Close extends Icon {
         super(player);
     }
 
-    public Close() {}
+    public Close() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

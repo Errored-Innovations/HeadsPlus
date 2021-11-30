@@ -9,9 +9,13 @@ import java.lang.annotation.*;
 public @interface CommandInfo {
 
     String commandname();
+
     String permission();
+
     String usage();
+
     String descriptionPath();
+
     boolean maincommand();
 
 }

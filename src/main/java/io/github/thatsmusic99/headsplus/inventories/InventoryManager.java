@@ -49,21 +49,26 @@ public class InventoryManager {
         CHALLENGE_SECTION("challenges-section", null, null, "{section-name}",
                 new String[]{"{section-lore}", "{msg_inventory.icon.challenge.count}"}, ChallengeSection.class),
         CUSTOM_HEAD("head", null, null, "{head-name}",
-                new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"}, CustomHead.class),
-        CUSTOM_HEAD_SECTION("headsection", null, null, "{head-name}", new String[]{"{msg_inventory.icon.head.count}"}, CustomHeadSection.class),
+                new String[]{"{msg_inventory.icon.head.price}", "{msg_inventory.icon.head.favourite}"},
+                CustomHead.class),
+        CUSTOM_HEAD_SECTION("headsection", null, null, "{head-name}", new String[]{"{msg_inventory.icon.head.count}"}
+                , CustomHeadSection.class),
         SELLHEAD_HEAD("sellable-head", null, null, "{head-name}", new String[]{}, SellheadHead.class), // TODO
         GLASS("glass", 'G', Material.LIGHT_GRAY_STAINED_GLASS_PANE.name(), "&c", new String[]{}, Glass.class),
         CLOSE("close", 'X', Material.BARRIER.name(), "{msg_inventory.icon.close}", new String[]{}, Close.class),
         AIR("air", 'A', Material.AIR.name(), "", new String[]{}, Air.class),
         MENU("menu", 'M', Material.NETHER_STAR.name(), "{msg_inventory.icon.menu}", new String[]{}, Menu.class),
-        FAVOURITES("favourites", 'F', Material.DIAMOND.name(), "{msg_inventory.icon.favourites}", new String[]{}, Favourites.class),
-        STATS("stats", 'S', Material.PAPER.name(), "{msg_inventory.icon.stats.icon}", new String[]{"{msg_inventory.icon.stats.total-heads} {heads}",
+        FAVOURITES("favourites", 'F', Material.DIAMOND.name(), "{msg_inventory.icon.favourites}", new String[]{},
+                Favourites.class),
+        STATS("stats", 'S', Material.PAPER.name(), "{msg_inventory.icon.stats.icon}", new String[]{"{msg_inventory" +
+                ".icon.stats.total-heads} {heads}",
                 "{msg_inventory.icon.stats.total-pages} {pages}",
                 "{msg_inventory.icon.stats.total-sections} {sections}",
                 "{msg_inventory.icon.stats.current-balance} {balance}",
                 "{msg_inventory.icon.stats.current-section} {section}"}, Stats.class),
         SEARCH("search", 'K', Material.NAME_TAG.name(), "{msg_inventory.icon.search}", new String[]{}, Search.class),
-        PINNED_CHALLENGES("pinned-challenges", 'P', Material.DIAMOND.name(), "{msg_inventory.icon.pinned-challenges}", new String[]{}, ChallengesPinned.class);
+        PINNED_CHALLENGES("pinned-challenges", 'P', Material.DIAMOND.name(), "{msg_inventory.icon.pinned-challenges}"
+                , new String[]{}, ChallengesPinned.class);
 
         private final Class<? extends Icon> icon;
         private final Character c;
@@ -107,8 +112,10 @@ public class InventoryManager {
     }
 
     public static final HashMap<UUID, InventoryManager> storedInventories = new HashMap<>(); // Stores Inventories
-    public static final HashMap<Character, IconType> cachedIcons = new HashMap<>(); // Stores icons with their stored character (exception for content icons)
-    public static final HashMap<Character, NavIcon> cachedNavIcons = new HashMap<>(); // Nav Icons have their own special settings
+    public static final HashMap<Character, IconType> cachedIcons = new HashMap<>(); // Stores icons with their stored
+    // character (exception for content icons)
+    public static final HashMap<Character, NavIcon> cachedNavIcons = new HashMap<>(); // Nav Icons have their own
+    // special settings
 
     private int currentPage; // Current page
     private BaseInventory inventory; // Inventory itself

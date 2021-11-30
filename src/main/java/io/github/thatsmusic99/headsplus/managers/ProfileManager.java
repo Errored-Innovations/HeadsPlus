@@ -14,9 +14,9 @@ public class ProfileManager {
 
     public static CompletableFuture<String> getName(SkullMeta meta) {
         return CompletableFuture.supplyAsync(() -> {
-                    GameProfile profile = getProfile(meta);
-                    if (profile != null) return profile.getName();
-                    return "";
+            GameProfile profile = getProfile(meta);
+            if (profile != null) return profile.getName();
+            return "";
         }, HeadsPlus.async).thenApplyAsync(name -> name, HeadsPlus.sync);
     }
 

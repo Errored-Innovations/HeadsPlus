@@ -10,7 +10,6 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,7 +43,8 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         if (type == null || type.isEmpty()) return;
         if (!player.hasPermission("headsplus.craft")
-                || !RestrictionsManager.canUse(e.getWhoClicked().getWorld().getName(), RestrictionsManager.ActionType.CRAFTING)) {
+                || !RestrictionsManager.canUse(e.getWhoClicked().getWorld().getName(),
+                RestrictionsManager.ActionType.CRAFTING)) {
             MessagesManager.get().sendMessage("event.cannot-craft-heads", e.getWhoClicked());
             e.setCancelled(true);
             return;
@@ -59,11 +59,11 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         }
 
         fireEvent(e);
-	}
+    }
 
-	private int shift(InventoryClickEvent e) {
-	    if (!e.isShiftClick()) return 1;
-	    int slot = getSlot(e.getInventory().getType());
+    private int shift(InventoryClickEvent e) {
+        if (!e.isShiftClick()) return 1;
+        int slot = getSlot(e.getInventory().getType());
         return e.getInventory().getItem(slot).getAmount();
     }
 
@@ -71,7 +71,8 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         HeadCraftEvent event;
         int amount = shift(e);
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
-        event = new HeadCraftEvent((Player) e.getWhoClicked(), e.getCurrentItem(), e.getWhoClicked().getWorld(), e.getWhoClicked().getLocation(), amount, type);
+        event = new HeadCraftEvent((Player) e.getWhoClicked(), e.getCurrentItem(), e.getWhoClicked().getWorld(),
+                e.getWhoClicked().getLocation(), amount, type);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             e.setCancelled(true);

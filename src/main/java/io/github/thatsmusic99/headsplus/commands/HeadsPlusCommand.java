@@ -19,7 +19,8 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
 
     private final MessagesManager hpc = MessagesManager.get();
 
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                             @NotNull String[] args) {
         try {
             if (args.length == 0) {
                 HeadsPlus.get().getCommands().get("help").onCommand(sender, cmd, label, args);
@@ -61,11 +62,12 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
         } catch (Exception e) {
             DebugPrint.createReport(e, "Command (headsplus)", true, sender);
         }
-		return false;
-	}
+        return false;
+    }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String s, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String s,
+                                      String[] args) {
         if (args.length == 1) {
             List<String> f = new ArrayList<>();
             List<String> c = new ArrayList<>();
@@ -98,6 +100,6 @@ public class HeadsPlusCommand implements CommandExecutor, TabCompleter {
     }
 
     private IHeadsPlusCommand getCommandByName(String name) {
-	    return HeadsPlus.get().getCommands().get(name.toLowerCase());
+        return HeadsPlus.get().getCommands().get(name.toLowerCase());
     }
 }

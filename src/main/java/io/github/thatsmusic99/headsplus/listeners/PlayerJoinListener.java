@@ -17,20 +17,21 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
 
     private final MessagesManager hpc = MessagesManager.get();
 
-	public void onEvent(PlayerJoinEvent e) {
-	    HeadsPlus hp = HeadsPlus.get();
-	    Player player = e.getPlayer();
-	    addData("player", player.getName());
+    public void onEvent(PlayerJoinEvent e) {
+        HeadsPlus hp = HeadsPlus.get();
+        Player player = e.getPlayer();
+        addData("player", player.getName());
 
-		Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
-		    if (!player.isOnline())
-		        return;
+        Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> {
+            if (!player.isOnline())
+                return;
             MaskListener.checkMask(player, player.getInventory().getHelmet());
         }, 20);
-		
+
         if (MainConfig.get().getAutograbber().ENABLE_AUTOGRABBER) {
             if (!hp.getServer().getOnlineMode()) {
-                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to " +
+                        "grab UUID...");
                 String uuid = AutograbManager.grabUUID(player.getName(), 3, null);
                 AutograbManager.grabProfile(uuid);
             } else {
@@ -46,11 +47,15 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
         if (addData("has-update", HeadsPlus.getUpdate() == null)) return;
         if (!addData("notify-admins", MainConfig.get().getUpdates().NOTIFY_ADMINS)) return;
         new FancyMessage().text(hpc.getString("update.update-found", player))
-                .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}", hp.getDescription().getVersion())
-                        + "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}", String.valueOf(HeadsPlus.getUpdate()[0]))
-                        + "\n" + hpc.getString("update.description", player).replaceAll("\\{description}", String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc.org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
+                .tooltip(hpc.getString("update.current-version", player).replaceAll("\\{version}",
+                        hp.getDescription().getVersion())
+                        + "\n" + hpc.getString("update.new-version", player).replaceAll("\\{version}",
+                        String.valueOf(HeadsPlus.getUpdate()[0]))
+                        + "\n" + hpc.getString("update.description", player).replaceAll("\\{description}",
+                        String.valueOf(HeadsPlus.getUpdate()[1]))).link("https://www.spigotmc" +
+                        ".org/resources/headsplus-1-8-x-1-13-x.40265/updates/").send(player);
 
-	}
+    }
 
     @Override
     public void init() {

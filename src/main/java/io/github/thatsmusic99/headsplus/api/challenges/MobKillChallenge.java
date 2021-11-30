@@ -29,14 +29,18 @@ public class MobKillChallenge extends Challenge {
 
     @Override
     public CompletableFuture<Integer> getStatFuture(UUID uuid) {
-        if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING);
-        return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity=" + getHeadType());
+        if (getHeadType().equals("total"))
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING);
+        return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING,
+                "entity=" + getHeadType());
     }
 
     @Override
     public int getStatSync(UUID uuid) {
-        if (getHeadType().equals("total")) return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.HUNTING);
-        return StatisticsSQLManager.get().getStatMetaSync(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity=" + getHeadType());
+        if (getHeadType().equals("total"))
+            return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.HUNTING);
+        return StatisticsSQLManager.get().getStatMetaSync(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity" +
+                "=" + getHeadType());
     }
 
     @Override

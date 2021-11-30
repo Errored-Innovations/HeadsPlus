@@ -19,6 +19,7 @@ public class PersistenceManager {
     private static final NamespacedKey HEADSPLUS_SELL_BOOLEAN = new NamespacedKey(HeadsPlus.get(), "sell_boolean");
     private static final NamespacedKey HEADSPLUS_INVENTORY_ICON = new NamespacedKey(HeadsPlus.get(), "inventory_icon");
     private static final NamespacedKey HEADSPLUS_MASK = new NamespacedKey(HeadsPlus.get(), "mask_identifier");
+
     public PersistenceManager() {
         instance = this;
     }
@@ -107,7 +108,8 @@ public class PersistenceManager {
         return container.get(key, dataType);
     }
 
-    private @Nullable PersistentDataContainer getStorage(@NotNull ItemMeta meta) {
+    private @Nullable
+    PersistentDataContainer getStorage(@NotNull ItemMeta meta) {
         PersistentDataContainer mainContainer = meta.getPersistentDataContainer();
         return mainContainer.get(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER);
     }

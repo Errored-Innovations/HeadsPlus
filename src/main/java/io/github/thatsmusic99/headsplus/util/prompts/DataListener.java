@@ -23,7 +23,8 @@ public class DataListener extends StringPrompt {
     public DataListener(int id, String message) {
         this.type = id;
         if (id == 4) {
-            message = message.replaceAll("\\{sections}", Arrays.toString(ConfigHeadsSelector.get().getSections().keySet().toArray()));
+            message = message.replaceAll("\\{sections}",
+                    Arrays.toString(ConfigHeadsSelector.get().getSections().keySet().toArray()));
         }
         this.message = message;
     }
@@ -58,15 +59,19 @@ public class DataListener extends StringPrompt {
                 } else {
                     context.setSessionData("texture", null);
                     user.sendRawMessage(messages.getString("commands.addhead.bad-texture"));
-                    return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
+                    return new DataListener(type, messages.getString("commands.addhead." + currentType,
+                            (CommandSender) user));
                 }
-                return new DataListener(neW, messages.getString("commands.addhead." + types.get(neW), (CommandSender) user));
+                return new DataListener(neW, messages.getString("commands.addhead." + types.get(neW),
+                        (CommandSender) user));
             } else if (context.getSessionData("texture") != null) {
                 context.setSessionData("texture", context.getSessionData("texture") + s);
-                return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
+                return new DataListener(type, messages.getString("commands.addhead." + currentType,
+                        (CommandSender) user));
             } else {
                 context.setSessionData(currentType, s);
-                return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
+                return new DataListener(type, messages.getString("commands.addhead." + currentType,
+                        (CommandSender) user));
             }
 
         } else if (currentType.equalsIgnoreCase("price")) {
@@ -76,8 +81,10 @@ public class DataListener extends StringPrompt {
             }
         } else if (currentType.equalsIgnoreCase("id")) {
             if (HeadManager.get().contains(s)) {
-                user.sendRawMessage(messages.getString("commands.addhead.id-taken", (CommandSender) user).replaceAll("\\{id}", s));
-                return new DataListener(type, messages.getString("commands.addhead." + currentType, (CommandSender) user));
+                user.sendRawMessage(messages.getString("commands.addhead.id-taken", (CommandSender) user).replaceAll(
+                        "\\{id}", s));
+                return new DataListener(type, messages.getString("commands.addhead." + currentType,
+                        (CommandSender) user));
             }
         } else if (currentType.equalsIgnoreCase("section")) {
             if (!ConfigHeadsSelector.get().getSections().containsKey(s)) {

@@ -12,7 +12,8 @@ public class PlayerHeadDropEvent extends EntityHeadDropEvent {
     private static final HandlerList handlers = new HandlerList();
     private final Player deadPlayer;
 
-    public PlayerHeadDropEvent(Player deadPlayer, Player killer, EntityDataManager.DroppedHeadInfo head, Location location, int amount) {
+    public PlayerHeadDropEvent(Player deadPlayer, Player killer, EntityDataManager.DroppedHeadInfo head,
+                               Location location, int amount) {
         super(killer, head, location, EntityType.PLAYER, amount);
         this.deadPlayer = deadPlayer;
     }

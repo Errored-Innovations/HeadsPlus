@@ -30,9 +30,11 @@ public abstract class HPConfig extends ConfigFile {
 
     public abstract void loadDefaults();
 
-    public void moveToNew() {}
+    public void moveToNew() {
+    }
 
-    public void postSave() {}
+    public void postSave() {
+    }
 
     @Override
     public void reload() throws IOException {

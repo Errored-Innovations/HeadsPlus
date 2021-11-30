@@ -34,7 +34,8 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
     private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         if (args.length > 0) {
             if (!args[0].matches("^[A-Za-z0-9_]+$")) {
                 hpc.sendMessage("commands.head.alpha-names", sender);
@@ -52,7 +53,8 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
             HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
                 String uuid = player.getUniqueId().toString();
                 if (!hp.getServer().getOnlineMode()) {
-                    hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to grab UUID...");
+                    hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting" +
+                            " to grab UUID...");
                     uuid = AutograbManager.grabUUID(player.getName(), 3, null);
                 }
                 if (AutograbManager.grabProfile(uuid, sender, true)) {
@@ -75,7 +77,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                                 return;
                             }
                             String id = String.valueOf(context.getSessionData("id"));
-                            
+
                             ConfigHeads selector = ConfigHeads.get();
                             for (Object key : context.getAllSessionData().keySet()) {
                                 if (key.equals("id")) continue;
@@ -109,7 +111,8 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(sender), results);

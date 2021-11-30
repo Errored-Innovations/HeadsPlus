@@ -26,10 +26,12 @@ public class ConfigChallenges extends FeatureConfig {
 
         makeSectionLenient("rewards");
         addComment("rewards", "Rewards are able to be provided to a player when completing a challenge.\n" +
-                "You are able to easily add them using the /hp settings rewards command if you are unsure on how to configure this.");
+                "You are able to easily add them using the /hp settings rewards command if you are unsure on how to " +
+                "configure this.");
         addExample("rewards.default.type", "ECO", "The type of reward to use.\n" +
                 "Valid types include ECO, ADD_GROUP, REMOVE_GROUP, GIVE_ITEM AND RUN_COMMAND.\n" +
-                "GIVE_ITEM requires an additional config section called \"item\" with properties \"material\" and \"amount\".");
+                "GIVE_ITEM requires an additional config section called \"item\" with properties \"material\" and " +
+                "\"amount\".");
         addExample("rewards.default.base-value", 50);
         addExample("rewards.default.base-xp", 20);
         addExample("rewards.default.multiply-by-difficulty", true);
@@ -74,8 +76,11 @@ public class ConfigChallenges extends FeatureConfig {
                 String s = numberToRomanNumeral(section.min);
                 String e = t.replaceAll("_", " ");
                 addExample("challenges." + t + "-" + section.min + "-hunting.name", e + "-" + s + " Hunting");
-                addExample("challenges." + t + "-" + section.min + "-hunting.header", "&8[&c&l" + HeadsPlus.capitalize(e) + " Hunting " + s + "&8]");
-                addExample("challenges." + t + "-" + section.min + "-hunting.description", Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from", "&7killing " + t.toLowerCase().replaceAll("_", " ") + "(s)!"));
+                addExample("challenges." + t + "-" + section.min + "-hunting.header",
+                        "&8[&c&l" + HeadsPlus.capitalize(e) + " Hunting " + s + "&8]");
+                addExample("challenges." + t + "-" + section.min + "-hunting.description",
+                        Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from",
+                                "&7killing " + t.toLowerCase().replaceAll("_", " ") + "(s)!"));
                 addExample("challenges." + t + "-" + section.min + "-hunting.type", "LEADERBOARD");
                 addExample("challenges." + t + "-" + section.min + "-hunting.min", section.min * multiplier * tempDif);
                 addExample("challenges." + t + "-" + section.min + "-hunting.reward", "default");
@@ -86,8 +91,11 @@ public class ConfigChallenges extends FeatureConfig {
                 addExample("challenges." + t + "-" + section.min + "-hunting.completed-icon", "default-completed");
 
                 addExample("challenges." + t + "-" + section.min + "-crafting.name", e + "-" + s + " Crafting");
-                addExample("challenges." + t + "-" + section.min + "-crafting.header", "&8[&a&l"  + HeadsPlus.capitalize(e) + " Crafting " + s + "&8]");
-                addExample("challenges." + t + "-" + section.min + "-crafting.description", Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from", "&7crafting " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
+                addExample("challenges." + t + "-" + section.min + "-crafting.header",
+                        "&8[&a&l" + HeadsPlus.capitalize(e) + " Crafting " + s + "&8]");
+                addExample("challenges." + t + "-" + section.min + "-crafting.description",
+                        Arrays.asList("&7Get " + (section.min * multiplier * tempDif) + " heads from",
+                                "&7crafting " + t.toLowerCase().replaceAll("_", " ") + " heads!"));
                 addExample("challenges." + t + "-" + section.min + "-crafting.type", "CRAFTING");
                 addExample("challenges." + t + "-" + section.min + "-crafting.min", section.min * multiplier * tempDif);
                 addExample("challenges." + t + "-" + section.min + "-crafting.reward", "default");
@@ -121,17 +129,28 @@ public class ConfigChallenges extends FeatureConfig {
 
     private String numberToRomanNumeral(int in) {
         switch (in) {
-            case 1: return "I";
-            case 2: return "II";
-            case 3: return "III";
-            case 4: return "IV";
-            case 5: return "V";
-            case 6: return "VI";
-            case 7: return "VII";
-            case 8: return "VIII";
-            case 9: return "IX";
-            case 10: return "X";
-            default: return "";
+            case 1:
+                return "I";
+            case 2:
+                return "II";
+            case 3:
+                return "III";
+            case 4:
+                return "IV";
+            case 5:
+                return "V";
+            case 6:
+                return "VI";
+            case 7:
+                return "VII";
+            case 8:
+                return "VIII";
+            case 9:
+                return "IX";
+            case 10:
+                return "X";
+            default:
+                return "";
         }
     }
 

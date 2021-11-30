@@ -46,7 +46,8 @@ public class ConfigInventories extends HPConfig {
 
             addDefault("inventories." + inv.getId() + ".title", inv.getDefaultTitle());
             if (get("inventories." + inv.getId() + ".icons") instanceof List) {
-                HeadsPlus.get().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "! Starting over...");
+                HeadsPlus.get().getLogger().warning("Old format for inventories.yml detected for " + inv.getId() + "!" +
+                        " Starting over...");
                 set("inventories." + inv.getId() + ".icons", inv.getDefaultItems());
             }
             addDefault("inventories." + inv.getId() + ".icons", inv.getDefaultItems());

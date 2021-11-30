@@ -17,7 +17,6 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
-import io.papermc.lib.PaperLib;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -84,7 +83,6 @@ public class HeadsPlus extends JavaPlugin {
             // Create locale files
             createLocales();
 
-
             // Build plugin instances
             createInstances();
             io.github.thatsmusic99.headsplus.inventories.InventoryManager.initiateInvsAndIcons();
@@ -113,13 +111,15 @@ public class HeadsPlus extends JavaPlugin {
             // Sets up Metrics
             Metrics metrics = new Metrics(this, 1285);
             metrics.addCustomChart(new Metrics.SimplePie("languages", () -> MainConfig.get().getString("locale")));
-             // if (getConfiguration().getMechanics().getBoolean("update.check")) {
             Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
                 update = UpdateChecker.getUpdate();
                 if (update != null) {
-                    getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update.current-version").replaceAll("\\{version}", getDescription().getVersion())
-                            + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}", String.valueOf(update[0]))
-                            + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description}", String.valueOf(update[1])));
+                    getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("update" +
+                            ".current-version").replaceAll("\\{version}", getDescription().getVersion())
+                            + "\n" + MessagesManager.get().getString("update.new-version").replaceAll("\\{version}",
+                            String.valueOf(update[0]))
+                            + "\n" + MessagesManager.get().getString("update.description").replaceAll("\\{description" +
+                            "}", String.valueOf(update[1])));
                     getLogger().info("Download link: https://www.spigotmc.org/resources/headsplus-1-8-x-1-12-x.40265/");
                 } else {
                     getLogger().info(MessagesManager.get().getString("update.plugin-up-to-date"));
@@ -128,25 +128,25 @@ public class HeadsPlus extends JavaPlugin {
             });
             Bukkit.getScheduler().runTaskLater(this, this::checkForMutuals, 20);
 
-           // }
             getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
-           // if (getConfiguration().getPerks().ascii) {
-                getServer().getConsoleSender().sendMessage("                                                               §f\n" +
-                        "§c    __  __               __     §9____  __                   §e_____§r\n" +
-                        "§c   / / / /__  ____ _____/ /____§9/ __ \\/ /_  _______  §e _   _/__  /§r\n" +
-                        "§c  / /_/ / _ \\/ __ `/ __  / ___§9/ /_/ / / / / / ___/  §e| | / / / / §r\n" +
-                        "§4 / __  /  __/ /_/ / /_/ /__  §1/ ____/ / /_/ /__  /   §6| |/ / / /  §r\n" +
-                        "§4/_/ /_/\\___/\\__,_/\\__,_/____§1/_/   /_/\\__,_/____/    §6|___/ /_/  §r\n" +
-                        "                                                                \n" +
-                        ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!" + "\n");
-           // }
+            for (String str : Arrays.asList(
+                    "§c    __  __               __     §9____  __                   §e_____§r",
+                    "§c   / / / /__  ____ _____/ /____§9/ __ \\/ /_  _______  §e _   _/__  /§r",
+                    "§c  / /_/ / _ \\/ __ `/ __  / ___§9/ /_/ / / / / / ___/  §e| | / / / / §r",
+                    "§4 / __  /  __/ /_/ / /_/ /__  §1/ ____/ / /_/ /__  /   §6| |/ / / /  §r",
+                    "§4/_/ /_/\\___/\\__,_/\\__,_/____§1/_/   /_/\\__,_/____/    §6|___/ /_/  §r",
+                    "                                                                ",
+                    ChatColor.GREEN + "HeadsPlus " + getDescription().getVersion() + " has been enabled successfully!", "")) {
+                getServer().getConsoleSender().sendMessage(str);
+            }
             fullyEnabled = true;
 
         } catch (Exception e) {
             try {
                 DebugPrint.createReport(e, "Startup", false, null);
             } catch (Exception ex) {
-                getLogger().severe("HeadsPlus has failed to start up correctly and can not read the config. An error report has been made in /plugins/HeadsPlus/debug");
+                getLogger().severe("HeadsPlus has failed to start up correctly and can not read the config. An error " +
+                        "report has been made in /plugins/HeadsPlus/debug");
                 getLogger().info("First stacktrace: ");
                 e.printStackTrace();
                 getLogger().info("Second stacktrace: ");
@@ -164,14 +164,14 @@ public class HeadsPlus extends JavaPlugin {
     @Override
     public void onDisable() {
         if (!fullyEnabled) return;
-		// close any open interfaces
-		for (UUID p : InventoryManager.storedInventories.keySet()) {
-		    Player player = Bukkit.getPlayer(p);
-		    if (player == null) continue;
-		    final InventoryManager im = InventoryManager.getManager(player);
-		    if (im.getInventory() == null) continue;
-		    player.closeInventory();
-		}
+        // close any open interfaces
+        for (UUID p : InventoryManager.storedInventories.keySet()) {
+            Player player = Bukkit.getPlayer(p);
+            if (player == null) continue;
+            final InventoryManager im = InventoryManager.getManager(player);
+            if (im.getInventory() == null) continue;
+            player.closeInventory();
+        }
         getLogger().info(MessagesManager.get().getString("startup.plugin-disabled"));
     }
 
@@ -296,8 +296,10 @@ public class HeadsPlus extends JavaPlugin {
         configFiles.add(new ConfigSounds());
         configFiles.add(new ConfigTextMenus());
 
-        if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals("HeadsPlus")) {
-            getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
+        if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals(
+                "HeadsPlus")) {
+            getLogger().severe("The plugin has been tampered with! The real download can be found here: https://www" +
+                    ".spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/");
             getLogger().severe("Only reupload the plugin on other sites with my permission, please! (Error code: 4)");
             setEnabled(false);
             return;
@@ -336,7 +338,8 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void createLocales() {
-        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us", "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn", "zh_tw"));
+        List<String> locales = new ArrayList<>(Arrays.asList("de_de", "en_us", "es_es", "fr_fr", "hu_hu", "lol_us",
+                "nl_nl", "pl_pl", "ro_ro", "ru_ru", "zh_cn", "zh_tw"));
         File dir = new File(getDataFolder(), "locale");
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
@@ -349,11 +352,13 @@ public class HeadsPlus extends JavaPlugin {
             if (conf.exists()) continue;
             InputStream is = getResource(locale + ".yml");
             if (is == null) {
-                getLogger().warning("Locale resource file " + locale + ".yml was not found, please report this to the developer!");
+                getLogger().warning("Locale resource file " + locale + ".yml was not found, please report this to the" +
+                        " developer!");
                 continue;
             }
             try {
-                Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,locale + ".yml").toPath());
+                Files.copy(is, new File(getDataFolder() + File.separator + "locale" + File.separator,
+                        locale + ".yml").toPath());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -376,26 +381,32 @@ public class HeadsPlus extends JavaPlugin {
             getLogger().severe("Considering this is a new version though, there's a chance the plugin still works.");
             getLogger().severe("The plugin will remain enabled, but update it as soon as possible.");
             getLogger().severe("If this is the latest version and you find problems/bugs, please report them.");
-            getLogger().severe("Any new entities with special properties will be implemented in a newer plugin version.");
+            getLogger().severe("Any new entities with special properties will be implemented in a newer plugin " +
+                    "version.");
             getLogger().severe("And lastly, how DARE you update faster than I can, pesky lass");
         }
         // death to the dodgy forks and hybrids
         for (DangerousServer server : Arrays.asList(
                 new DangerousServer("Yatopia", "dev.tr7wz.yatopia.events.GameProfileLookupEvent",
                         "!!! YOU ARE USING YATOPIA. !!!",
-                        "This is considered an unstable server type that mindlessly implements patches with no full testing.",
+                        "This is considered an unstable server type that mindlessly implements patches with no full " +
+                                "testing.",
                         "It is even abandoned now and not recommended for use whatsoever.",
                         "If you are worried about performance, please look into Paper or Airplane.",
-                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now " +
+                                "disable."),
                 new DangerousServer("SugarcaneMC", "org.sugarcane.sugarcane.events.GameProfileLookupEvent",
                         "!!! YOU ARE USING SUGARCANE. !!!",
-                        "Sugarcane is a fork that is following Yatopia's steps in making itself unstable through implementing patches not written themselves.",
+                        "Sugarcane is a fork that is following Yatopia's steps in making itself unstable through " +
+                                "implementing patches not written themselves.",
                         "If you are worried about performance, please look into Paper, Tuinity or Airplane.",
-                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now disable."),
+                        "To prevent potential breakage in the plugin due to the server type, HeadsPlus will now " +
+                                "disable."),
                 new DangerousServer("Mohist", "com.mohistmc.Mohist",
                         "!!! YOU ARE USING MOHIST. !!!",
                         "HeadsPlus is not made to work with Forge-Bukkit hybrid server types.",
-                        "Generally, Mohist is not recommended for use either see why here: https://essentialsx.net/do-not-use-mohist.html",
+                        "Generally, Mohist is not recommended for use either see why here: https://essentialsx" +
+                                ".net/do-not-use-mohist.html",
                         "To prevent possible problems arising from this, HeadsPlus will now disable."))) {
             try {
                 Class.forName(server.clazz);
@@ -494,7 +505,7 @@ public class HeadsPlus extends JavaPlugin {
         int strLen = str.length();
         StringBuilder buffer = new StringBuilder(strLen);
         boolean capitalizeNext = true;
-        for(int i = 0; i < strLen; ++i) {
+        for (int i = 0; i < strLen; ++i) {
             char ch = str.charAt(i);
             if (Character.isWhitespace(ch)) {
                 buffer.append(ch);

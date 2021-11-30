@@ -26,7 +26,8 @@ import java.util.List;
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s,
+                             @NotNull String[] args) {
         if (!MainConfig.get().getMainFeatures().LEADERBOARDS) {
             return true;
         }
@@ -52,7 +53,8 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
             int finalPage = page;
             StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
-                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, HeadsPlus.capitalize(type.name()), list, finalPage)));
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs,
+                            HeadsPlus.capitalize(type.name()), list, finalPage)));
         }
         return true;
     }
@@ -68,7 +70,8 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting"), results);

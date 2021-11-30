@@ -9,7 +9,8 @@ public class Glass extends Icon {
         super(player);
     }
 
-    public Glass() {}
+    public Glass() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

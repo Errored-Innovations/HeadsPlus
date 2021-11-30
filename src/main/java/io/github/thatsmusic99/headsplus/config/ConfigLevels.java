@@ -25,7 +25,7 @@ public class ConfigLevels extends FeatureConfig {
     public static ConfigLevels get() {
         return instance;
     }
-                        
+
     @Override
     public void loadDefaults() {
         double version = 0.3;
@@ -41,7 +41,8 @@ public class ConfigLevels extends FeatureConfig {
                     addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
                     addExample("levels." + l.getConfigName() + ".hierarchy", i);
                     addExample("levels." + l.getConfigName() + ".rewards.enabled", false);
-                    addExample("levels." + l.getConfigName() + ".rewards.reward-type", HPChallengeRewardTypes.ECO.name());
+                    addExample("levels." + l.getConfigName() + ".rewards.reward-type",
+                            HPChallengeRewardTypes.ECO.name());
                     addExample("levels." + l.getConfigName() + ".rewards.reward-value", 300);
                     addExample("levels." + l.getConfigName() + ".rewards.item-amount", 0);
                     addExample("levels." + l.getConfigName() + ".rewards.command-sender", "player");
@@ -68,7 +69,7 @@ public class ConfigLevels extends FeatureConfig {
         levels.put(2, new BaseLevel("dirt", "&6&lDirt", 250, 0.1));
         levels.put(3, new BaseLevel("stone", "&7&lStone", 750, 0.1));
         levels.put(4, new BaseLevel("coal", "&8&lCoal", 1500, 0.1));
-        levels.put(5,  new BaseLevel("coal_2", "&8&lCoal &0&lII", 2000, 0.1));
+        levels.put(5, new BaseLevel("coal_2", "&8&lCoal &0&lII", 2000, 0.1));
         levels.put(6, new BaseLevel("iron", "&f&lIron", 2750, 0.1));
         levels.put(7, new BaseLevel("iron_2", "&f&lIron &7&lII", 3500, 0.1));
         levels.put(8, new BaseLevel("redstone", "&c&lRedstone", 4500, 0.1));

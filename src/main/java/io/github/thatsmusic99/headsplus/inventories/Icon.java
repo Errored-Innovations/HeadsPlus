@@ -49,7 +49,8 @@ public abstract class Icon {
             item = new ItemStack(Material.valueOf(ConfigInventories.get().getString("icons." + id + ".material")));
 
         } catch (NullPointerException ex) {
-            HeadsPlus.get().getLogger().warning("Null icon found for " + id + ", please check your inventories.yml and see if this icon actually exists! (Error code: 8)");
+            HeadsPlus.get().getLogger().warning("Null icon found for " + id + ", please check your inventories.yml " +
+                    "and see if this icon actually exists! (Error code: 8)");
         }
     }
 
@@ -66,7 +67,8 @@ public abstract class Icon {
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         try {
-            meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+            meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
+                    ".display-name"), player));
             List<String> lore = new ArrayList<>();
             for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
                 lore.add(MessagesManager.get().formatMsg(loreStr, player));

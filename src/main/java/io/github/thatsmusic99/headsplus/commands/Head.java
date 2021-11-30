@@ -41,7 +41,8 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                             @NotNull String[] args) {
         try {
             if (!sender.hasPermission("headsplus.head")) {
                 hpc.sendMessage("commands.errors.no-perm", sender);
@@ -102,7 +103,8 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1 && sender.hasPermission("headsplus.head")) {
             StringUtil.copyPartialMatches(args[0], IHeadsPlusCommand.getPlayers(sender), results);

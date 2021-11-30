@@ -24,7 +24,8 @@ public class ChallengeSection extends Content {
         this.section = section;
     }
 
-    public ChallengeSection() {}
+    public ChallengeSection() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -48,7 +49,8 @@ public class ChallengeSection extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges-section.display-name")
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges" +
+                        "-section.display-name")
                 .replaceAll("\\{section-name}", section.getDisplayName()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons.challenges-section.lore")) {
@@ -57,7 +59,8 @@ public class ChallengeSection extends Content {
                     lore.add(MessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
-                lore.add(MessagesManager.get().formatMsg(loreStr, player).replaceAll("(\\{challenge-count}|\\{challenges})", String.valueOf(section.getChallenges().size())));
+                lore.add(MessagesManager.get().formatMsg(loreStr, player).replaceAll("(\\{challenge-count" +
+                        "}|\\{challenges})", String.valueOf(section.getChallenges().size())));
             }
         }
         meta.setLore(lore);

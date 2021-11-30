@@ -95,7 +95,8 @@ public class StatisticsSQLManager extends SQLManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException ignored) {}
+        } catch (ParseException ignored) {
+        }
         playerInfo.renameTo(new File(storageFolder, "playerinfo-backup.json"));
     }
 
@@ -192,8 +193,8 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                        "WHERE headsplus_stats.user_id = headsplus_players.id " +
-                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+                                "WHERE headsplus_stats.user_id = headsplus_players.id " +
+                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 ResultSet set = statement.executeQuery();
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
@@ -262,12 +263,12 @@ public class StatisticsSQLManager extends SQLManager {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                        "WHERE collection_type = ? AND metadata LIKE ? " +
-                        "AND headsplus_stats.user_id = headsplus_players.id " +
-                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+                                "WHERE collection_type = ? AND metadata LIKE ? " +
+                                "AND headsplus_stats.user_id = headsplus_players.id " +
+                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
                 statement.setString(1, type.name());
-                statement.setString(2,  "%" + metadata + "%");
+                statement.setString(2, "%" + metadata + "%");
 
                 ResultSet set = statement.executeQuery();
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
@@ -282,7 +283,8 @@ public class StatisticsSQLManager extends SQLManager {
         }, HeadsPlus.async);
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head, String metadata) {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head,
+                                                                         String metadata) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement(
@@ -308,7 +310,8 @@ public class StatisticsSQLManager extends SQLManager {
         }, HeadsPlus.async);
     }
 
-    public CompletableFuture<Void> addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount) {
+    public CompletableFuture<Void> addToTotal(UUID uuid, CollectionType type, String head, String metadata,
+                                              int amount) {
         return CompletableFuture.runAsync(() -> addToTotalSync(uuid, type, head, metadata, amount), HeadsPlus.async);
     }
 
@@ -327,7 +330,8 @@ public class StatisticsSQLManager extends SQLManager {
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type, head, metadata, count) VALUES (?, ?, ?, ?, ?)");
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
+                        " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
                 updateStatement.setInt(1, id);
                 updateStatement.setString(2, type.name());
                 updateStatement.setString(3, head);

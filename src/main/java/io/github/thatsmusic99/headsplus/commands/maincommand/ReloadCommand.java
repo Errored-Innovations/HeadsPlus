@@ -27,7 +27,8 @@ import java.util.List;
 public class ReloadCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             @NotNull String[] args) {
         MessagesManager.get().sendMessage("commands.reload.reloading-message", sender);
         new BukkitRunnable() {
             @Override
@@ -65,7 +66,8 @@ public class ReloadCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         return new ArrayList<>();
     }
 

@@ -36,10 +36,12 @@ public class HPUtils {
         try {
             if (!bossBars.containsKey(p.getUuid())) {
                 String title = ChatColor.translateAlternateColorCodes('&', MainConfig.get().getLevels().BOSS_BAR_TITLE);
-                BossBar bossBar = Bukkit.getServer().createBossBar(title, BarColor.valueOf(MainConfig.get().getLevels().BOSS_BAR_COLOR), BarStyle.SEGMENTED_6);
+                BossBar bossBar = Bukkit.getServer().createBossBar(title,
+                        BarColor.valueOf(MainConfig.get().getLevels().BOSS_BAR_COLOR), BarStyle.SEGMENTED_6);
                 if (pl.getPlayer() != null)
                     bossBar.addPlayer(pl.getPlayer());
-                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                double percentageProgress =
+                        (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
                 percentageProgress = 1 - percentageProgress;
                 bossBar.setProgress(percentageProgress);
                 bossBar.setVisible(true);
@@ -50,7 +52,8 @@ public class HPUtils {
                     bossBars.remove(pl.getPlayer().getUniqueId());
                 }, MainConfig.get().getLevels().BOSS_BAR_LIFETIME * 20L);
             } else {
-                double percentageProgress = (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
+                double percentageProgress =
+                        (double) (p.getNextLevel().getRequiredXP() - p.getXp()) / (double) (p.getNextLevel().getRequiredXP() - p.getLevel().getRequiredXP());
                 percentageProgress = 1 - percentageProgress;
                 bossBars.get(p.getUuid()).setProgress(percentageProgress);
             }

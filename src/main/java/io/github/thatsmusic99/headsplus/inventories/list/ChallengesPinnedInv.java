@@ -17,7 +17,8 @@ public class ChallengesPinnedInv extends BaseInventory {
         super(player, context);
     }
 
-    public ChallengesPinnedInv() {}
+    public ChallengesPinnedInv() {
+    }
 
     @Override
     public String getDefaultTitle() {

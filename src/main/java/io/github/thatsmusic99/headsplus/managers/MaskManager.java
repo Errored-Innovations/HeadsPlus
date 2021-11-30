@@ -75,10 +75,14 @@ public class MaskManager {
                 if (maskSection == null) continue;
                 //
                 MaskInfo info;
-                String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"), "No idle texture for " + key + " found!");
-                if (!HeadManager.get().contains(headInfoStr)) throw new IllegalArgumentException("Head " + headInfoStr + " for " + key + "'s idle state is not registered!");
+                String headInfoStr = Objects.requireNonNull(maskSection.getString("idle"),
+                        "No idle texture for " + key + " found!");
+                if (!HeadManager.get().contains(headInfoStr))
+                    throw new IllegalArgumentException("Head " + headInfoStr + " for " + key + "'s idle state is not " +
+                            "registered!");
                 HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(headInfoStr);
-                String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " found!");
+                String type = Objects.requireNonNull(maskSection.getString("type"), "No mask type for " + key + " " +
+                        "found!");
                 switch (type.toLowerCase()) {
                     case "potion":
                         info = new PotionMask(key, headInfo);
@@ -87,13 +91,15 @@ public class MaskManager {
                             String[] content = effectStr.split(":");
                             PotionEffectType effectType = PotionEffectType.getByName(content[0]);
                             if (effectType == null)
-                                throw new IllegalArgumentException("Mask effect " + content[0] + " is not an existing potion effect! (Mask: " + key + ")");
+                                throw new IllegalArgumentException("Mask effect " + content[0] + " is not an existing" +
+                                        " potion effect! (Mask: " + key + ")");
                             int amplifier = 0;
                             if (content.length > 1) {
                                 HeadsPlus.debug("Selected amplifier for " + effectStr + ": " + content[1]);
                                 amplifier = Integer.parseInt(content[1]) - 1;
                             }
-                            PotionEffect effect = new PotionEffect(effectType, MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
+                            PotionEffect effect = new PotionEffect(effectType,
+                                    MainConfig.get().getMasks().EFFECT_LENGTH, amplifier);
                             ((PotionMask) info).addEffect(effect);
                         }
                         break;

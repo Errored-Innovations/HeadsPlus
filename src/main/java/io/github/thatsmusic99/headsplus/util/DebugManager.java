@@ -21,12 +21,14 @@ public class DebugManager {
                     }
                 }
                 CommandSender listener = getSender(uuid);
-                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED + "HEADSPLUS OUTPUT" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
+                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED +
+                        "HEADSPLUS OUTPUT" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
                 listener.sendMessage(ChatColor.RED + "Event " + ChatColor.DARK_GRAY + "» " + ChatColor.GRAY + name);
                 for (String key : conditions.keySet()) {
                     listener.sendMessage(ChatColor.RED + key + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + conditions.get(key));
                 }
-                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED + "OUTPUT END" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
+                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED +
+                        "OUTPUT END" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
             }
         }
     }

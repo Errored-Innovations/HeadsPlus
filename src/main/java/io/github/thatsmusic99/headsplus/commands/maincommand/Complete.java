@@ -17,23 +17,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @CommandInfo(
-        commandname = "complete", permission = "headsplus.maincommand.complete", usage = "/hp complete <Challenge name> [Player]", descriptionPath = "descriptions.hp.complete", maincommand = true)
+        commandname = "complete", permission = "headsplus.maincommand.complete", usage = "/hp complete <Challenge " +
+        "name> [Player]", descriptionPath = "descriptions.hp.complete", maincommand = true)
 public class Complete implements IHeadsPlusCommand {
 
     private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
+        // Too few arguments
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
             return false;
         }
+        // Get the challenge
         Challenge c = ChallengeManager.get().getChallengeByName(args[1]);
+        // If there's no such challenge, stop there
         if (c == null) {
             hpc.sendMessage("commands.challenges.no-such-challenge", sender);
             return false;
         }
         Player player;
+        // If we're completing it for another player
         if (args.length > 2) {
             if (!sender.hasPermission("headsplus.maincommand.complete.others")) {
                 hpc.sendMessage("commands.errors.no-perm", sender);
@@ -50,12 +56,15 @@ public class Complete implements IHeadsPlusCommand {
             hpc.sendMessage("commands.errors.not-a-player", sender);
             return false;
         }
+        // If it's already complete
         if (c.isComplete(player)) {
             hpc.sendMessage("commands.challenges.already-complete-challenge", sender);
             return true;
         }
+        // Complete it
         c.canComplete(player).thenApply(result -> {
-            if (result) c.complete(player); else hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
+            if (result) c.complete(player);
+            else hpc.sendMessage("commands.challenges.cant-complete-challenge", sender);
             return true;
         });
         return true;
@@ -67,7 +76,8 @@ public class Complete implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             List<String> challenges = ChallengeManager.get().getChallengeNames();

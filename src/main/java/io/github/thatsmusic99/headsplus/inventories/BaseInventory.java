@@ -129,7 +129,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                                 icon = Air.class.getConstructor(Player.class).newInstance(player);
                             }
                         } else if (Stats.class.isAssignableFrom(iconClass)) {
-                            icon = iconClass.getConstructor(Player.class, Integer.class).newInstance(player, totalPages);
+                            icon = iconClass.getConstructor(Player.class, Integer.class).newInstance(player,
+                                    totalPages);
                         } else {
                             icon = iconClass.getConstructor(Player.class).newInstance(player);
                         }
@@ -144,7 +145,8 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     try {
                         icon = Air.class.getConstructor(Player.class).newInstance(player);
                         if (!suppressWarnings) {
-                            HeadsPlus.get().getLogger().warning("Illegal icon character " + c + " has been replaced with air.");
+                            HeadsPlus.get().getLogger().warning("Illegal icon character " + c + " has been replaced " +
+                                    "with air.");
                         }
                     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();

@@ -17,7 +17,8 @@ public class HeadsMenu extends BaseInventory {
         super(player, context);
     }
 
-    public HeadsMenu() {}
+    public HeadsMenu() {
+    }
 
     @Override
     public String getDefaultTitle() {

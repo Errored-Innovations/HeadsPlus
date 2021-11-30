@@ -13,7 +13,8 @@ public class Favourites extends Icon {
         super(player);
     }
 
-    public Favourites() {}
+    public Favourites() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

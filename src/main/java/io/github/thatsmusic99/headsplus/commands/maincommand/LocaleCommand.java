@@ -29,7 +29,8 @@ public class LocaleCommand implements IHeadsPlusCommand {
     private final Set<String> languages = MessagesManager.getLocales().keySet();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             @NotNull String[] args) {
         // TODO - disable subcommands if feature is disabled like with events?
         if (!MainConfig.get().getLocalisation().SMART_LOCALE) {
             messages.sendMessage("commands.errors.disabled", sender);
@@ -73,7 +74,8 @@ public class LocaleCommand implements IHeadsPlusCommand {
             }
             if (player != null && player.isOnline()) {
                 messages.setPlayerLocale(player, str, true);
-                messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(), "{language}", str);
+                messages.sendMessage("commands.locale.changed-locale-other", sender, "{player}", player.getName(),
+                        "{language}", str);
                 return true;
             } else {
                 messages.sendMessage("commands.errors.player-offline", sender);
@@ -97,7 +99,8 @@ public class LocaleCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             Set<String> locales = MessagesManager.getLocales().keySet();

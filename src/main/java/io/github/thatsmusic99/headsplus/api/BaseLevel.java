@@ -8,7 +8,7 @@ public class BaseLevel extends Level {
         super(configName, displayName, requiredXP, null);
         this.addedVersion = addedVersion;
     }
-    
+
     public double getAddedVersion() {
         return addedVersion;
     }

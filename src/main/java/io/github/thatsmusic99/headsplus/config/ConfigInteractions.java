@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class ConfigInteractions extends HPConfig {
 
     private static ConfigInteractions instance;
-    private Gson gson;
+    private final Gson gson;
 
     public ConfigInteractions() {
         super("interactions.yml");
@@ -41,7 +41,8 @@ public class ConfigInteractions extends HPConfig {
         if (version < 0.1) {
             // Default values
             set("version", 0.1);
-            addComment("defaults", "This section outlines the default values for heads not specified in the special section.");
+            addComment("defaults", "This section outlines the default values for heads not specified in the special " +
+                    "section.");
             addDefault("defaults.message", "{msg_event.head-interact-message}");
             addDefault("defaults.consonant-message", "{msg_event.head-mhf-interact-message}");
             addDefault("defaults.vowel-message", "{msg_event.head-mhf-interact-message-2}");
@@ -52,17 +53,22 @@ public class ConfigInteractions extends HPConfig {
             makeSectionLenient("special.locations");
             addComment("special", "This is the section where you can specify unique interactions with heads.\n" +
                     "These can be specified with location, name and texture.\n" +
-                    "Locations are placed at the highest priority and are formatted as 0x0y0zworld_name. (Replace the 0s with the coordinates you want and world_name with the world's name.)\n" +
-                    "Names, or names stored inside the skull, are placed at the following priority. It is as simple as specifying your own name, e.g. Thatsmusic99.\n" +
-                    "Texture checks are placed at the lowest priority. These can be Base64 strings, Minecraft Textures/Education URLs or skin hashes.");
+                    "Locations are placed at the highest priority and are formatted as 0x0y0zworld_name. (Replace the" +
+                    " 0s with the coordinates you want and world_name with the world's name.)\n" +
+                    "Names, or names stored inside the skull, are placed at the following priority. It is as simple " +
+                    "as specifying your own name, e.g. Thatsmusic99.\n" +
+                    "Texture checks are placed at the lowest priority. These can be Base64 strings, Minecraft " +
+                    "Textures/Education URLs or skin hashes.");
             // Pre-made names
-            for (String str : Arrays.asList("MHF_CoconutB", "MHF_CoconutG", "MHF_Present1", "MHF_Present2", "MHF_TNT", "MHF_Cactus",
+            for (String str : Arrays.asList("MHF_CoconutB", "MHF_CoconutG", "MHF_Present1", "MHF_Present2", "MHF_TNT"
+                    , "MHF_Cactus",
                     "MHF_Chest", "MHF_Melon", "MHF_TNT2")) {
                 addExample("special.names." + str + ".message", "{consonant-message}");
                 addExample("special.names." + str + ".commands", Lists.newArrayList());
             }
 
-            for (String str : Arrays.asList("MHF_OakLog", "MHF_ArrowUp", "MHF_ArrowDown", "MHF_ArrowRight", "MHF_ArrowLeft")) {
+            for (String str : Arrays.asList("MHF_OakLog", "MHF_ArrowUp", "MHF_ArrowDown", "MHF_ArrowRight",
+                    "MHF_ArrowLeft")) {
                 addExample("special.names." + str + ".message", "{vowel-message}");
                 addExample("special.names." + str + ".commands", Lists.newArrayList());
             }
@@ -88,8 +94,10 @@ public class ConfigInteractions extends HPConfig {
             addExample("special.names.Thatsmusic99.commands", Lists.newArrayList());
 
             addExample("special.textures.7f3ca4f7c92dde3a77ec510a74ba8c2e8d0ec7b80f0e348cc6dddd6b458bd.name", "???");
-            addExample("special.textures.7f3ca4f7c92dde3a77ec510a74ba8c2e8d0ec7b80f0e348cc6dddd6b458bd.message", "{header} what???");
-            addExample("special.textures.7f3ca4f7c92dde3a77ec510a74ba8c2e8d0ec7b80f0e348cc6dddd6b458bd.commands", Lists.newArrayList());
+            addExample("special.textures.7f3ca4f7c92dde3a77ec510a74ba8c2e8d0ec7b80f0e348cc6dddd6b458bd.message",
+                    "{header} what???");
+            addExample("special.textures.7f3ca4f7c92dde3a77ec510a74ba8c2e8d0ec7b80f0e348cc6dddd6b458bd.commands",
+                    Lists.newArrayList());
 
             addExample("special.locations.0x0y0zworld.name", "The Void");
         }
@@ -101,7 +109,8 @@ public class ConfigInteractions extends HPConfig {
 
     public String getMessageForHead(Skull skull, Player receiver) {
         Location location = skull.getLocation();
-        String locationStr = location.getBlockX() + "x" + location.getBlockY() + "y" + location.getBlockZ() + "z" + location.getWorld().getName();
+        String locationStr =
+                location.getBlockX() + "x" + location.getBlockY() + "y" + location.getBlockZ() + "z" + location.getWorld().getName();
         if (contains("special.locations." + locationStr)) {
             runCommands("special.locations." + locationStr, receiver);
             return getMessage("special.locations." + locationStr, receiver, skull.getOwner());
@@ -156,8 +165,9 @@ public class ConfigInteractions extends HPConfig {
         }
         if (message == null) return "";
         message = MessagesManager.get().formatMsg(message, player);
-        if (getString(path + ".name") != null) {
-            message = message.replaceAll("\\{name}", getString(path + ".name"));
+        String uniqueName = getString(path + ".name");
+        if (uniqueName != null) {
+            message = message.replaceAll("\\{name}", uniqueName);
         } else {
             message = message.replaceAll("\\{name}", name);
         }

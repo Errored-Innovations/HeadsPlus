@@ -32,7 +32,6 @@ public class HPPlayer {
     private final List<String> pinnedChallenges;
     private final List<String> completeChallenges;
 
-    // TODO - make sure this is never called on the main server thread.
     public HPPlayer(UUID uuid) {
         pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid);
         favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid);
@@ -126,7 +125,8 @@ public class HPPlayer {
         if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
             final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
             for (Player p : Bukkit.getOnlinePlayers()) {
-                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}",
+                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name,
+                        "{level}",
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
         }

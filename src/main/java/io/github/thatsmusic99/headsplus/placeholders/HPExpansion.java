@@ -20,14 +20,16 @@ public class HPExpansion extends PlaceholderExpansion {
 
     private final HeadsPlus hp;
     // regex hell 2.0
-    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_(player|score)\b");
+    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_" +
+            "(player|score)\b");
     private final Pattern STATISTIC_PATTERN = Pattern.compile("\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?_+");
 
     public HPExpansion(HeadsPlus headsPlus) {
         hp = headsPlus;
     }
+
     @Override
-    public boolean canRegister(){
+    public boolean canRegister() {
         return true;
     }
 
@@ -50,7 +52,7 @@ public class HPExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, @NotNull String identifier){
+    public String onRequest(OfflinePlayer player, @NotNull String identifier) {
 
         if (identifier.equals("xp")) {
             return String.valueOf(CacheManager.get().getXP(player));
@@ -155,7 +157,8 @@ public class HPExpansion extends PlaceholderExpansion {
                 case "min-heads":
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
-                    return String.valueOf(CacheManager.get().getStat(challenge.getCacheID(), challenge.getStatFuture(player.getUniqueId())));
+                    return String.valueOf(CacheManager.get().getStat(challenge.getCacheID(),
+                            challenge.getStatFuture(player.getUniqueId())));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":
@@ -164,7 +167,8 @@ public class HPExpansion extends PlaceholderExpansion {
                     if (player.getPlayer() == null) return null;
                     return challenge.getReward().getRewardString(player.getPlayer());
                 case "completed":
-                    return challenge.isComplete(player.getPlayer()) ? MessagesManager.get().getString("command.challenges.challenge-completed", player) : "";
+                    return challenge.isComplete(player.getPlayer()) ? MessagesManager.get().getString("command" +
+                            ".challenges.challenge-completed", player) : "";
                 case "xp":
                     return String.valueOf(challenge.getGainedXP());
             }

@@ -19,7 +19,8 @@ public class PlayerMessageDeathListener extends HeadsPlusListener<PlayerHeadDrop
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, this, EventPriority.MONITOR,
-                new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.get(), true);
+                new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.get(),
+                true);
     }
 
     @Override
@@ -35,7 +36,9 @@ public class PlayerMessageDeathListener extends HeadsPlusListener<PlayerHeadDrop
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.hasPermission("headsplus.death.ignore")) continue;
             p.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    s.get(thing).replaceAll("\\{header}", MessagesManager.get().getString("prefix", p)).replaceAll("\\{killer}", event.getPlayer().getName()).replaceAll("\\{player}", event.getDeadPlayer().getName())));
+                    s.get(thing).replaceAll("\\{header}", MessagesManager.get().getString("prefix", p)).replaceAll(
+                            "\\{killer}", event.getPlayer().getName()).replaceAll("\\{player}",
+                            event.getDeadPlayer().getName())));
 
         }
     }

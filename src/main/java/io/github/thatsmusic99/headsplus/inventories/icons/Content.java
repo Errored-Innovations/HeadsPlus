@@ -10,7 +10,9 @@ public abstract class Content extends Icon {
         super(itemStack);
     }
 
-    public Content(Player player) { super(player); }
+    public Content(Player player) {
+        super(player);
+    }
 
     public Content() {
 

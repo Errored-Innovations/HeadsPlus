@@ -43,7 +43,8 @@ public class HeadsPlusEventExecutor implements EventExecutor {
                     String s = DebugFileCreator.createReport(ex1);
                     handler.finish();
                     Logger log = HeadsPlus.get().getLogger();
-                    log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
+                    log.severe("HeadsPlus has failed to execute this task. An error report has been made in " +
+                            "/plugins/HeadsPlus/debug");
                     log.severe("Report name: " + s);
                     log.severe("Please submit this report to the developer at one of the following links:");
                     log.severe("https://github.com/Thatsmusic99/HeadsPlus/issues");

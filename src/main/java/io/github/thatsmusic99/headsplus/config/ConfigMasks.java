@@ -10,26 +10,26 @@ public class ConfigMasks extends FeatureConfig {
 
     public ConfigMasks() {
         super("masks.yml");
-	instance = this;
+        instance = this;
     }
 
     @Override
     public void loadDefaults() {
         addExample("masks.chicken.when-wearing", new String[0]);
         addExample("masks.chicken.effects", Collections.singletonList("SLOW_FALLING"));
-	addExample("masks.chicken.type", "potion");
-	addExample("masks.chicken.idle", "HP#chicken");
+        addExample("masks.chicken.type", "potion");
+        addExample("masks.chicken.idle", "HP#chicken");
 
-	addExample("masks.iron_golem.when-wearing", new String[0]);
-	addExample("masks.iron_golem.effects", Lists.newArrayList("INCREASE_DAMAGE:2"));
-	addExample("masks.iron_golem.type", "potion");
-	addExample("masks.iron_golem.idle", "HP#iron_golem");
+        addExample("masks.iron_golem.when-wearing", new String[0]);
+        addExample("masks.iron_golem.effects", Lists.newArrayList("INCREASE_DAMAGE:2"));
+        addExample("masks.iron_golem.type", "potion");
+        addExample("masks.iron_golem.idle", "HP#iron_golem");
 
-	addExample("masks.ocelot.when-wearing", new String[0]);
-	addExample("masks.ocelot.effects", Collections.singletonList("SPEED"));
-	addExample("masks.ocelot.type", "potion");
-	addExample("masks.ocelot.idle", "HP#ocelot");
-        
+        addExample("masks.ocelot.when-wearing", new String[0]);
+        addExample("masks.ocelot.effects", Collections.singletonList("SPEED"));
+        addExample("masks.ocelot.type", "potion");
+        addExample("masks.ocelot.idle", "HP#ocelot");
+
     }
 
     public static ConfigMasks get() {

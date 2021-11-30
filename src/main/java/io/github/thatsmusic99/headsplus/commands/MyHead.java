@@ -29,7 +29,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String l, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String l,
+                             @NotNull String[] args) {
         try {
             if (sender.hasPermission("headsplus.myhead")) {
                 if (!(sender instanceof Player)) {
@@ -65,7 +66,8 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         return new ArrayList<>();
     }
 }

@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.inventories.list;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.inventories.icons.content.SellheadHead;
@@ -18,7 +17,9 @@ public class SellheadCategory extends BaseInventory {
         super(player, context);
     }
 
-    public SellheadCategory() {}
+    public SellheadCategory() {
+    }
+
     @Override
     public String getDefaultTitle() {
         return "HeadsPlus Sellhead: {page}/{pages}";
@@ -42,7 +43,8 @@ public class SellheadCategory extends BaseInventory {
                 for (String str : SellableHeadsManager.get().getKeys(SellableHeadsManager.SellingType.HUNTING)) {
                     String[] parts = str.substring(5).split(":");
                     if (parts.length < 2) continue;
-                    String key = parts[0].toUpperCase() + ";" + (parts[1].equals("default") ? parts[1] : parts[1].toUpperCase());
+                    String key = parts[0].toUpperCase() + ";" + (parts[1].equals("default") ? parts[1] :
+                            parts[1].toUpperCase());
                     List<EntityDataManager.DroppedHeadInfo> heads = EntityDataManager.getStoredHeads().get(key);
                     if (heads == null || heads.size() == 0) continue;
                     contents.add(new SellheadHead(heads.get(0).forceBuildHead(), str));

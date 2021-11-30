@@ -14,7 +14,6 @@ public class ChallengesPinned extends Icon {
     }
 
     public ChallengesPinned() {
-
     }
 
     @Override

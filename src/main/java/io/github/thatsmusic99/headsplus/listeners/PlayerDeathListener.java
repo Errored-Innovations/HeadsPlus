@@ -80,10 +80,12 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
         }
 
-        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo(), "player");
+        EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo()
+                , "player");
         headInfo.withTexture(PaperUtil.get().getTexture(victim))
                 .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
-        headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null : killer.getName()));
+        headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null :
+                killer.getName()));
 
         headInfo.withXP("player.default"); // Sets default XP
         headInfo.withXP("player." + victim.getName());
@@ -95,7 +97,8 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         if (phdEvent.isCancelled()) return;
         if (lostprice > 0.0 && killer != null) {
             economy.withdrawPlayer(victim, lostprice);
-            MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}", MainConfig.get().fixBalanceStr(price));
+            MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}",
+                    MainConfig.get().fixBalanceStr(price));
         }
         double finalPrice = price;
         headInfo.buildHead().thenAccept(item -> {

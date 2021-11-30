@@ -9,7 +9,8 @@ public class Air extends Icon {
         super(player);
     }
 
-    public Air() {}
+    public Air() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

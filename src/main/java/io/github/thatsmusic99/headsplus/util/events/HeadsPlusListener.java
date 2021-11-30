@@ -41,7 +41,9 @@ public abstract class HeadsPlusListener<T> implements Listener {
         return possibleValues;
     }
 
-    public boolean shouldEnable() { return true; }
+    public boolean shouldEnable() {
+        return true;
+    }
 
     public abstract void init();
 }

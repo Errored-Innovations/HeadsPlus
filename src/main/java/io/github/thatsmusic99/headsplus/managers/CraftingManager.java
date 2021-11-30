@@ -76,7 +76,8 @@ public class CraftingManager {
             // If it's a HP head and if the recipe allows such ingredients
             if (ingredientStr.startsWith("HP#")) {
                 if (!recipeType.allowsHeads())
-                    throw new IllegalArgumentException("Recipe type " + recipeType.name() + " (" + key + ") does not support head ingredients!");
+                    throw new IllegalArgumentException("Recipe type " + recipeType.name() + " (" + key + ") does not " +
+                            "support head ingredients!");
                 choices.add(new RecipeChoice.ExactChoice(HeadManager.get().getHeadInfo(ingredientStr).forceBuildHead()));
             } else {
                 Material material = HPUtils.notNull(Material.getMaterial(ingredientStr),
@@ -91,7 +92,8 @@ public class CraftingManager {
         String headId = resultSection.getString("head", "");
         // If the head isn't registered
         if (!HeadManager.get().contains(headId))
-            throw new IllegalArgumentException("Head result ID " + headId + " for crafting recipe " + key + " is not registered!");
+            throw new IllegalArgumentException("Head result ID " + headId + " for crafting recipe " + key + " is not " +
+                    "registered!");
         // Get the head itself
         HeadManager.HeadInfo resultHead = HeadManager.get().getHeadInfo(resultSection.getString("head", ""));
         // Build the resulting item/wait for it
@@ -101,11 +103,13 @@ public class CraftingManager {
         NamespacedKey namespacedKey = new NamespacedKey(HeadsPlus.get(), "crafting_" + key);
         switch (recipeType) {
             case FURNACE:
-                recipe = new FurnaceRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
+                recipe = new FurnaceRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f),
+                        section.getInteger("cooking-time", 200));
                 break;
             case SHAPED:
                 if (!VALID_RECIPE_SIZES.contains(choices.size()))
-                    throw new IllegalArgumentException("Recipe size must be 1, 4 or 9 for shaped recipes (" + key + "), not " + choices.size() + "!");
+                    throw new IllegalArgumentException("Recipe size must be 1, 4 or 9 for shaped recipes (" + key +
+                            "), not " + choices.size() + "!");
                 int dimensions = (int) Math.sqrt(choices.size());
                 // Honestly, why can't I just drop materials in a hashmap and boom recipe made? wtf, minecraft!?
                 int startChar = 50;
@@ -142,22 +146,27 @@ public class CraftingManager {
                 }
                 break;
             case SMOKING:
-                recipe = new SmokingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
+                recipe = new SmokingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f),
+                        section.getInteger("cooking-time", 200));
                 break;
             case BLASTING:
-                recipe = new BlastingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
+                recipe = new BlastingRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f)
+                        , section.getInteger("cooking-time", 200));
                 break;
             case CAMPFIRE:
-                recipe = new CampfireRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f), section.getInteger("cooking-time", 200));
+                recipe = new CampfireRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f)
+                        , section.getInteger("cooking-time", 200));
                 break;
             case MERCHANT:
                 // why does this not require a namespaced key lmao
                 recipe = new MerchantRecipe(item, 0, section.getInteger("max-uses", 5),
-                        section.contains("experience"), section.getInteger("experience", 0), section.getFloat("price-multiplier"),
+                        section.contains("experience"), section.getInteger("experience", 0), section.getFloat("price" +
+                        "-multiplier"),
                         section.getBoolean("ignore-discounts"));
                 break;
             case SMITHING:
-                if (choices.size() != 2) throw new IllegalArgumentException("A smithing recipe (" + key + ") needs 2 ingredients!");
+                if (choices.size() != 2)
+                    throw new IllegalArgumentException("A smithing recipe (" + key + ") needs 2 ingredients!");
                 recipe = new SmithingRecipe(namespacedKey, item, choices.get(0), choices.get(1));
                 break;
             case STONECUTTING:

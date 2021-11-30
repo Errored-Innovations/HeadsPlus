@@ -53,7 +53,8 @@ public class MessagesManager {
         try {
             config = performChecks(new File(dest, locale + ".yml"), locale);
         } catch (Exception e) {
-            hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. Setting locale to en_us...");
+            hp.getLogger().info("Failed to load the locale settings! This is caused by an invalid name provided. " +
+                    "Setting locale to en_us...");
             config = performChecks(new File(dest, "en_us.yml"), "en_us");
         }
         double version = 1.7;
@@ -77,10 +78,14 @@ public class MessagesManager {
 
                     {
                         en_us.addDefault("language", "English (US)");
-                        en_us.addDefault("commands.errors.not-a-player", "{header} You must be a player to run this command/subcommand!");
-                        en_us.addDefault("commands.locale.invalid-lang", "{header} That is not a valid language! Available languages: &c{languages}");
-                        en_us.addDefault("commands.locale.changed-locale", "{header} Good day! Your language is now set to &cEnglish (US)");
-                        en_us.addDefault("commands.locale.changed-locale-other", "{header} &c{player}&7's language is now set to &c{language}&7!");
+                        en_us.addDefault("commands.errors.not-a-player", "{header} You must be a player to run this " +
+                                "command/subcommand!");
+                        en_us.addDefault("commands.locale.invalid-lang", "{header} That is not a valid language! " +
+                                "Available languages: &c{languages}");
+                        en_us.addDefault("commands.locale.changed-locale", "{header} Good day! Your language is now " +
+                                "set to &cEnglish (US)");
+                        en_us.addDefault("commands.locale.changed-locale-other", "{header} &c{player}&7's language is" +
+                                " now set to &c{language}&7!");
                         en_us.addDefault("inventory.icon.challenge.reward", "&6Reward: &a{reward}");
                         en_us.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         en_us.addDefault("inventory.icon.challenge.count", "&7{challenge-count} challenges");
@@ -132,23 +137,34 @@ public class MessagesManager {
                         en_us.addDefault("inventory.icon.reward.group-add", "&7Group {group} &7(&a+&7)");
                         en_us.addDefault("inventory.icon.reward.group-remove", "&7Group {group} &7(&c-&7)");
                         en_us.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(s)");
-                        en_us.addDefault("commands.addhead.bad-texture", "{header} The texture you have provided is invalid. It must be a Minecraft texture URL (https://textures.minecraft.net) or a Base64 encoded string.");
+                        en_us.addDefault("commands.addhead.bad-texture", "{header} The texture you have provided is " +
+                                "invalid. It must be a Minecraft texture URL (https://textures.minecraft.net) or a " +
+                                "Base64 encoded string.");
                         en_us.addDefault("commands.addhead.cancelled", "{header} Cancelled head creation.");
-                        en_us.addDefault("commands.addhead.custom-head-added", "{header} Added new head with ID &c{id}&7!");
-                        en_us.addDefault("commands.addhead.displayname", "{header} Type in the display name for the head (including colour codes).");
-                        en_us.addDefault("commands.addhead.id", "{header} Type in the ID of the head (e.g. brown_sheep, red_flower_bush)");
+                        en_us.addDefault("commands.addhead.custom-head-added", "{header} Added new head with ID " +
+                                "&c{id}&7!");
+                        en_us.addDefault("commands.addhead.displayname", "{header} Type in the display name for the " +
+                                "head (including colour codes).");
+                        en_us.addDefault("commands.addhead.id", "{header} Type in the ID of the head (e.g. " +
+                                "brown_sheep, red_flower_bush)");
                         en_us.addDefault("commands.addhead.id-taken", "{header} That ID has been taken (&c{id}&7)!");
-                        en_us.addDefault("commands.addhead.price", "{header} Type in the price of the head (or \"default\" for the default value).");
-                        en_us.addDefault("commands.addhead.section", "{header} Type in the section the head will be put in. (Available sections: &c{sections}&7)");
-                        en_us.addDefault("commands.addhead.texture", "{header} Type in or copy and paste the texture for the head. (This may require several messages, so when you are done, type \"done\" in chat and enter.)");
+                        en_us.addDefault("commands.addhead.price", "{header} Type in the price of the head (or " +
+                                "\"default\" for the default value).");
+                        en_us.addDefault("commands.addhead.section", "{header} Type in the section the head will be " +
+                                "put in. (Available sections: &c{sections}&7)");
+                        en_us.addDefault("commands.addhead.texture", "{header} Type in or copy and paste the texture " +
+                                "for the head. (This may require several messages, so when you are done, type " +
+                                "\"done\" in chat and enter.)");
                         en_us.addDefault("inventory.icon.challenge.progress", "&7Progress &8❱ &c{heads}&7/&c{total}");
                         en_us.addDefault("inventory.icon.challenge.pinned", "&cPinned!");
                         en_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPinned Challenges &8❱");
-                        en_us.addDefault("commands.debug.verbose.enabled", "{header} Enabled the debugging verbose for event &c{event} &7and arguments &c{args}&7!");
+                        en_us.addDefault("commands.debug.verbose.enabled", "{header} Enabled the debugging verbose " +
+                                "for event &c{event} &7and arguments &c{args}&7!");
                         en_us.addDefault("commands.debug.verbose.disabled", "{header} Disabled the debugging verbose!");
                         en_us.addDefault("commands.restore.restored-head", "{header} Restored {head}!");
                         en_us.addDefault("commands.restore.invalid-head", "{header} {head} is not a valid ID!");
-                        en_us.addDefault("descriptions.hp.restore", "Restores or repairs a head that was already provided by the plugin.");
+                        en_us.addDefault("descriptions.hp.restore", "Restores or repairs a head that was already " +
+                                "provided by the plugin.");
                         en_us.addDefault("commands.head.restricted-head", "{header} You cannot use that head!");
                         en_us.addDefault("event.cannot-craft-heads", "{header} You cannot craft heads!");
                         en_us.addDefault("event.cannot-craft-heads-here", "{header} You cannot craft heads here!");
@@ -163,10 +179,14 @@ public class MessagesManager {
 
                     {
                         de_de.addDefault("language", "Deutsch (DE)");
-                        de_de.addDefault("commands.errors.not-a-player", "{header} Sie müssen ein Spieler sein, um diesen Befehl / Unterbefehl auszuführen!");
-                        de_de.addDefault("commands.locale.invalid-lang", "{header} Das ist keine gültige Sprache! Verfügbare Sprachen: &c{languages}");
-                        de_de.addDefault("commands.locale.changed-locale", "{header} Guten Tag! Ihre Sprache ist jetzt auf &cDeutsch (DE) &7eingestellt.");
-                        de_de.addDefault("commands.locale.changed-locale-other", "{header} Die Sprache von &c{player} &7ist jetzt auf &c{language} &7eingestellt!");
+                        de_de.addDefault("commands.errors.not-a-player", "{header} Sie müssen ein Spieler sein, um " +
+                                "diesen Befehl / Unterbefehl auszuführen!");
+                        de_de.addDefault("commands.locale.invalid-lang", "{header} Das ist keine gültige Sprache! " +
+                                "Verfügbare Sprachen: &c{languages}");
+                        de_de.addDefault("commands.locale.changed-locale", "{header} Guten Tag! Ihre Sprache ist " +
+                                "jetzt auf &cDeutsch (DE) &7eingestellt.");
+                        de_de.addDefault("commands.locale.changed-locale-other", "{header} Die Sprache von &c{player}" +
+                                " &7ist jetzt auf &c{language} &7eingestellt!");
                         de_de.addDefault("inventory.icon.challenge.reward", "&6Belohnung: &a{reward}");
                         de_de.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         de_de.addDefault("inventory.icon.challenge.count", "&7Herausforderungen: {challenge-count}");
@@ -222,26 +242,43 @@ public class MessagesManager {
                         de_de.addDefault("inventory.icon.reward.group-add", "&7Gruppe {group} &7(&a+&7)");
                         de_de.addDefault("inventory.icon.reward.group-remove", "&7Gruppe {group} &7(&c-&7)");
                         de_de.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(n)");
-                        de_de.addDefault("commands.addhead.bad-texture", "{header} Die von Ihnen angegebene Textur ist ungültig. Es muss sich um eine Minecraft-Textur-URL (https://textures.minecraft.net) oder eine Base64-codierte Zeichenfolge handeln.");
+                        de_de.addDefault("commands.addhead.bad-texture", "{header} Die von Ihnen angegebene Textur " +
+                                "ist ungültig. Es muss sich um eine Minecraft-Textur-URL (https://textures.minecraft" +
+                                ".net) oder eine Base64-codierte Zeichenfolge handeln.");
                         de_de.addDefault("commands.addhead.cancelled", "{header} Abgebrochene Kopferstellung.");
-                        de_de.addDefault("commands.addhead.custom-head-added", "{header} Neuer Kopf mit ID {id} hinzugefügt!");
-                        de_de.addDefault("commands.addhead.displayname", "{header} Geben Sie den Anzeigenamen für den Kopf ein (einschließlich Farbcodes).");
-                        de_de.addDefault("commands.addhead.id", "{header} Geben Sie die ID des Kopfes ein (z. B. brown_sheep, red_flower_bush).");
+                        de_de.addDefault("commands.addhead.custom-head-added", "{header} Neuer Kopf mit ID {id} " +
+                                "hinzugefügt!");
+                        de_de.addDefault("commands.addhead.displayname", "{header} Geben Sie den Anzeigenamen für den" +
+                                " Kopf ein (einschließlich Farbcodes).");
+                        de_de.addDefault("commands.addhead.id", "{header} Geben Sie die ID des Kopfes ein (z. B. " +
+                                "brown_sheep, red_flower_bush).");
                         de_de.addDefault("commands.addhead.id-taken", "{header} Diese ID wurde genommen (&c{id}&7)!");
-                        de_de.addDefault("commands.addhead.price", "{header} Geben Sie den Preis des Kopfes ein (oder \"default\" für den Standardwert).");
-                        de_de.addDefault("commands.addhead.section", "{header} Geben Sie den Abschnitt ein, in den der Kopf eingefügt werden soll. (Verfügbare Abschnitte: &c{sections}&7)");
-                        de_de.addDefault("commands.addhead.texture", "{header} Geben Sie die Textur für den Kopf ein oder kopieren Sie sie und fügen Sie sie ein. (Dies kann mehrere Nachrichten erfordern. Wenn Sie fertig sind, geben Sie im Chat \"done\" ein und geben Sie ein.)");
-                        de_de.addDefault("inventory.icon.challenge.progress", "&7Fortschritt &8❱ &c{heads}&7/&c{total}");
+                        de_de.addDefault("commands.addhead.price", "{header} Geben Sie den Preis des Kopfes ein (oder" +
+                                " \"default\" für den Standardwert).");
+                        de_de.addDefault("commands.addhead.section", "{header} Geben Sie den Abschnitt ein, in den " +
+                                "der Kopf eingefügt werden soll. (Verfügbare Abschnitte: &c{sections}&7)");
+                        de_de.addDefault("commands.addhead.texture", "{header} Geben Sie die Textur für den Kopf ein " +
+                                "oder kopieren Sie sie und fügen Sie sie ein. (Dies kann mehrere Nachrichten " +
+                                "erfordern. Wenn Sie fertig sind, geben Sie im Chat \"done\" ein und geben Sie ein.)");
+                        de_de.addDefault("inventory.icon.challenge.progress", "&7Fortschritt &8❱ " +
+                                "&c{heads}&7/&c{total}");
                         de_de.addDefault("inventory.icon.challenge.pinned", "&cGepinnt!");
-                        de_de.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lFestgesteckte Herausforderungen &8❱");
-                        de_de.addDefault("commands.debug.verbose.enabled", "{header} Das ausführliche Debuggen für Ereignis &c{event} &7und Argumente &c{args} &7wurde aktiviert!");
-                        de_de.addDefault("commands.debug.verbose.disabled", "{header} Deaktiviert das ausführliche Debuggen!");
-                        de_de.addDefault("commands.restore.restored-head", "{header} {head} erfolgreich wiederhergestellter!");
+                        de_de.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lFestgesteckte Herausforderungen" +
+                                " &8❱");
+                        de_de.addDefault("commands.debug.verbose.enabled", "{header} Das ausführliche Debuggen für " +
+                                "Ereignis &c{event} &7und Argumente &c{args} &7wurde aktiviert!");
+                        de_de.addDefault("commands.debug.verbose.disabled", "{header} Deaktiviert das ausführliche " +
+                                "Debuggen!");
+                        de_de.addDefault("commands.restore.restored-head", "{header} {head} erfolgreich " +
+                                "wiederhergestellter!");
                         de_de.addDefault("commands.restore.invalid-head", "{header} {head} ist keine gültige ID!");
-                        de_de.addDefault("descriptions.hp.restore", "Stellt einen Kopf wieder her oder repariert ihn, der bereits vom Plugin bereitgestellt wurde.");
-                        de_de.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht verwenden!");
+                        de_de.addDefault("descriptions.hp.restore", "Stellt einen Kopf wieder her oder repariert ihn," +
+                                " der bereits vom Plugin bereitgestellt wurde.");
+                        de_de.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht " +
+                                "verwenden!");
                         de_de.addDefault("event.cannot-craft-heads", "{header} Sie können keine Köpfe herstellen!");
-                        de_de.addDefault("event.cannot-craft-heads-here", "{header} Hier kann man keine Köpfe herstellen!");
+                        de_de.addDefault("event.cannot-craft-heads-here", "{header} Hier kann man keine Köpfe " +
+                                "herstellen!");
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
@@ -253,10 +290,14 @@ public class MessagesManager {
 
                     {
                         es_es.addDefault("language", "Español (ES)");
-                        es_es.addDefault("commands.errors.not-a-player", "{header} ¡Debes ser un jugador para ejecutar este comando/subcomando!");
-                        es_es.addDefault("commands.locale.invalid-lang", "{header} ¡Ese no es un idioma válido! Idiomas disponibles: &c{languages}");
-                        es_es.addDefault("commands.locale.changed-locale", "{header} ¡Hola! Su idioma ahora está configurado en &cEspañol (ES)");
-                        es_es.addDefault("commands.locale.changed-locale-other", "{header} El idioma de &c{player} &7ahora está configurado en &c{language}&7!");
+                        es_es.addDefault("commands.errors.not-a-player", "{header} ¡Debes ser un jugador para " +
+                                "ejecutar este comando/subcomando!");
+                        es_es.addDefault("commands.locale.invalid-lang", "{header} ¡Ese no es un idioma válido! " +
+                                "Idiomas disponibles: &c{languages}");
+                        es_es.addDefault("commands.locale.changed-locale", "{header} ¡Hola! Su idioma ahora está " +
+                                "configurado en &cEspañol (ES)");
+                        es_es.addDefault("commands.locale.changed-locale-other", "{header} El idioma de &c{player} " +
+                                "&7ahora está configurado en &c{language}&7!");
                         es_es.addDefault("inventory.icon.challenge.reward", "&6Recompensa: &a{reward}");
                         es_es.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         es_es.addDefault("inventory.icon.challenge.count", "&7{challenge-count} desafíos");
@@ -312,24 +353,39 @@ public class MessagesManager {
                         es_es.addDefault("inventory.icon.reward.group-add", "&7Grupo {group} &7(&a+&7)");
                         es_es.addDefault("inventory.icon.reward.group-remove", "&7Grupo {group} &7(&c-&7)");
                         es_es.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(s)");
-                        es_es.addDefault("commands.addhead.bad-texture", "{header} La textura que ha proporcionado no es válida. Debe ser una URL de textura de Minecraft (https://textures.minecraft.net) o una cadena codificada en Base64.");
+                        es_es.addDefault("commands.addhead.bad-texture", "{header} La textura que ha proporcionado no" +
+                                " es válida. Debe ser una URL de textura de Minecraft (https://textures.minecraft" +
+                                ".net) o una cadena codificada en Base64.");
                         es_es.addDefault("commands.addhead.cancelled", "{header} Se canceló la creación de la cabeza.");
-                        es_es.addDefault("commands.addhead.custom-head-added", "{header} ¡Se agregó una nueva cabeza con ID &c{id}&7!");
-                        es_es.addDefault("commands.addhead.displayname", "{header} Escriba el nombre para mostrar de la cabeza (incluidos los códigos de color).");
-                        es_es.addDefault("commands.addhead.id", "{header} Escriba el nombre para mostrar de la cabeza (incluido Escriba la ID de la cabeza (por ejemplo, brown_sheep, red_flower_bush)");
-                        es_es.addDefault("commands.addhead.id-taken", "{header} ¡Se ha tomado esa identificación (&c{id}&7)!");
-                        es_es.addDefault("commands.addhead.price", "{header} Escriba el precio de la cabeza (o \"default\" para el valor predeterminado).");
-                        es_es.addDefault("commands.addhead.section", "{header} Escriba la sección en la que se colocará la cabeza. (Secciones disponibles: &c{secciones}&7)");
-                        es_es.addDefault("commands.addhead.texture", "{header} Escriba o copie y pegue la textura de la cabeza. (Esto puede requerir varios mensajes, así que cuando haya terminado, escriba \"done\" en el chat e ingrese).");
+                        es_es.addDefault("commands.addhead.custom-head-added", "{header} ¡Se agregó una nueva cabeza " +
+                                "con ID &c{id}&7!");
+                        es_es.addDefault("commands.addhead.displayname", "{header} Escriba el nombre para mostrar de " +
+                                "la cabeza (incluidos los códigos de color).");
+                        es_es.addDefault("commands.addhead.id", "{header} Escriba el nombre para mostrar de la cabeza" +
+                                " (incluido Escriba la ID de la cabeza (por ejemplo, brown_sheep, red_flower_bush)");
+                        es_es.addDefault("commands.addhead.id-taken", "{header} ¡Se ha tomado esa identificación " +
+                                "(&c{id}&7)!");
+                        es_es.addDefault("commands.addhead.price", "{header} Escriba el precio de la cabeza (o " +
+                                "\"default\" para el valor predeterminado).");
+                        es_es.addDefault("commands.addhead.section", "{header} Escriba la sección en la que se " +
+                                "colocará la cabeza. (Secciones disponibles: &c{secciones}&7)");
+                        es_es.addDefault("commands.addhead.texture", "{header} Escriba o copie y pegue la textura de " +
+                                "la cabeza. (Esto puede requerir varios mensajes, así que cuando haya terminado, " +
+                                "escriba \"done\" en el chat e ingrese).");
                         es_es.addDefault("inventory.icon.challenge.progress", "&7Progreso &8❱ &c{heads}&7/&c{total}");
                         es_es.addDefault("inventory.icon.challenge.pinned", "&c¡Anclado!");
                         es_es.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDesafíos fijados &8❱");
-                        es_es.addDefault("commands.debug.verbose.enabled", "{header} ¡Habilitado la depuración detallada para el evento &c{event} &7y los argumentos &c{args}&7!");
-                        es_es.addDefault("commands.debug.verbose.disabled", "{header} Deshabilitada la depuración detallada!");
+                        es_es.addDefault("commands.debug.verbose.enabled", "{header} ¡Habilitado la depuración " +
+                                "detallada para el evento &c{event} &7y los argumentos &c{args}&7!");
+                        es_es.addDefault("commands.debug.verbose.disabled", "{header} Deshabilitada la depuración " +
+                                "detallada!");
                         es_es.addDefault("commands.restore.restored-head", "{header} ¡Restaurado/a {cabeza}!");
-                        es_es.addDefault("commands.restore.invalid-head", "{header} ¡{head} no es una identificación válida!");
-                        es_es.addDefault("descriptions.hp.restore", "Restaura o repara un cabezal que ya fue proporcionado por el complemento.");
-                        es_es.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht verwenden!");
+                        es_es.addDefault("commands.restore.invalid-head", "{header} ¡{head} no es una identificación " +
+                                "válida!");
+                        es_es.addDefault("descriptions.hp.restore", "Restaura o repara un cabezal que ya fue " +
+                                "proporcionado por el complemento.");
+                        es_es.addDefault("commands.head.restricted-head", "{header} Du kannst diesen Kopf hier nicht " +
+                                "verwenden!");
                         es_es.addDefault("event.cannot-craft-heads", "{header} ¡No puedes fabricar cabezas!");
                         es_es.addDefault("event.cannot-craft-heads-here", "{header} ¡No puedes fabricar cabezas aquí!");
                         es_es.set("version", version);
@@ -343,10 +399,14 @@ public class MessagesManager {
 
                     {
                         fr_fr.addDefault("language", "Français (FR)");
-                        fr_fr.addDefault("commands.errors.not-a-player", "{header} Vous devez être un joueur pour exécuter cette commande / sous-commande!");
-                        fr_fr.addDefault("commands.locale.invalid-lang", "{header} Ce n'est pas une langue valable! Langues disponibles: &c{languages}");
-                        fr_fr.addDefault("commands.locale.changed-locale", "{header} Bonjour! Votre langue est désormais définie sur &cFrançais (FR)");
-                        fr_fr.addDefault("commands.locale.changed-locale-other", "{header} La langue de &c{player} &7est désormais définie sur &c{language}&7!");
+                        fr_fr.addDefault("commands.errors.not-a-player", "{header} Vous devez être un joueur pour " +
+                                "exécuter cette commande / sous-commande!");
+                        fr_fr.addDefault("commands.locale.invalid-lang", "{header} Ce n'est pas une langue valable! " +
+                                "Langues disponibles: &c{languages}");
+                        fr_fr.addDefault("commands.locale.changed-locale", "{header} Bonjour! Votre langue est " +
+                                "désormais définie sur &cFrançais (FR)");
+                        fr_fr.addDefault("commands.locale.changed-locale-other", "{header} La langue de &c{player} " +
+                                "&7est désormais définie sur &c{language}&7!");
                         fr_fr.addDefault("inventory.icon.challenge.reward", "&6Récompense: &a{reward}");
                         fr_fr.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         fr_fr.addDefault("inventory.icon.challenge.count", "&7{challenge-count} défis");
@@ -402,26 +462,41 @@ public class MessagesManager {
                         fr_fr.addDefault("inventory.icon.reward.group-add", "&7Groupe {group} &7(&a+&7)");
                         fr_fr.addDefault("inventory.icon.reward.group-remove", "&7Groupe {group} &7(&c-&7)");
                         fr_fr.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(s)");
-                        fr_fr.addDefault("commands.addhead.bad-texture", "{header} La texture que vous avez fournie n'est pas valide. Il doit s'agir d'une URL de texture Minecraft (https://textures.minecraft.net) ou d'une chaîne encodée en Base64.");
+                        fr_fr.addDefault("commands.addhead.bad-texture", "{header} La texture que vous avez fournie " +
+                                "n'est pas valide. Il doit s'agir d'une URL de texture Minecraft (https://textures" +
+                                ".minecraft.net) ou d'une chaîne encodée en Base64.");
                         fr_fr.addDefault("commands.addhead.cancelled", "{header} Création de tête annulée.");
-                        fr_fr.addDefault("commands.addhead.custom-head-added", "{header} Ajout d'une nouvelle tête avec ID &c{id}&7!");
-                        fr_fr.addDefault("commands.addhead.displayname", "{header} Tapez le nom d'affichage de la tête (y compris les codes de couleur).");
-                        fr_fr.addDefault("commands.addhead.id", "{header} Tapez l'ID de la tête (par exemple brown_sheep, red_flower_bush).");
+                        fr_fr.addDefault("commands.addhead.custom-head-added", "{header} Ajout d'une nouvelle tête " +
+                                "avec ID &c{id}&7!");
+                        fr_fr.addDefault("commands.addhead.displayname", "{header} Tapez le nom d'affichage de la " +
+                                "tête (y compris les codes de couleur).");
+                        fr_fr.addDefault("commands.addhead.id", "{header} Tapez l'ID de la tête (par exemple " +
+                                "brown_sheep, red_flower_bush).");
                         fr_fr.addDefault("commands.addhead.id-taken", "{header} Cet ID a été pris (&c{id}&7)!");
-                        fr_fr.addDefault("commands.addhead.price", "{header} Tapez le prix de la tête (ou \"default\" pour la valeur par défaut).");
-                        fr_fr.addDefault("commands.addhead.section", "{header} Tapez la section dans laquelle la tête sera insérée. (Sections disponibles: &c{sections}&7)");
-                        fr_fr.addDefault("commands.addhead.texture", "{header} Tapez ou copiez et collez la texture de la tête. (Cela peut nécessiter plusieurs messages, donc lorsque vous avez terminé, tapez \"done\" dans le chat et entrez.)");
+                        fr_fr.addDefault("commands.addhead.price", "{header} Tapez le prix de la tête (ou \"default\"" +
+                                " pour la valeur par défaut).");
+                        fr_fr.addDefault("commands.addhead.section", "{header} Tapez la section dans laquelle la tête" +
+                                " sera insérée. (Sections disponibles: &c{sections}&7)");
+                        fr_fr.addDefault("commands.addhead.texture", "{header} Tapez ou copiez et collez la texture " +
+                                "de la tête. (Cela peut nécessiter plusieurs messages, donc lorsque vous avez " +
+                                "terminé, tapez \"done\" dans le chat et entrez.)");
                         fr_fr.addDefault("inventory.icon.challenge.progress", "&7Le progrès &8❱ &c{heads}&7/&c{total}");
                         fr_fr.addDefault("inventory.icon.challenge.pinned", "&cÉpinglé!");
                         fr_fr.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lDéfis épinglés &8❱");
-                        fr_fr.addDefault("commands.debug.verbose.enabled", "{header} Activé le débogage détaillé pour l'événement &c{event} &7et les arguments &c{args}&7!");
+                        fr_fr.addDefault("commands.debug.verbose.enabled", "{header} Activé le débogage détaillé pour" +
+                                " l'événement &c{event} &7et les arguments &c{args}&7!");
                         fr_fr.addDefault("commands.debug.verbose.disabled", "{header} Désactivé le débogage détaillé!");
                         fr_fr.addDefault("commands.restore.restored-head", "{header} Restauré {head}!");
-                        fr_fr.addDefault("commands.restore.invalid-head", "{header} {head} n''est pas un identifiant valide!");
-                        fr_fr.addDefault("descriptions.hp.restore", "Restaure ou répare une tête déjà fournie par le plugin.");
-                        fr_fr.addDefault("commands.head.restricted-head", "{header} Vous ne pouvez pas utiliser cette tête!");
-                        fr_fr.addDefault("event.cannot-craft-heads", "{header} Vous ne pouvez pas fabriquer des têtes!");
-                        fr_fr.addDefault("event.cannot-craft-heads-here", "{header} Vous ne pouvez pas fabriquer des têtes ici!");
+                        fr_fr.addDefault("commands.restore.invalid-head", "{header} {head} n''est pas un identifiant " +
+                                "valide!");
+                        fr_fr.addDefault("descriptions.hp.restore", "Restaure ou répare une tête déjà fournie par le " +
+                                "plugin.");
+                        fr_fr.addDefault("commands.head.restricted-head", "{header} Vous ne pouvez pas utiliser cette" +
+                                " tête!");
+                        fr_fr.addDefault("event.cannot-craft-heads", "{header} Vous ne pouvez pas fabriquer des " +
+                                "têtes!");
+                        fr_fr.addDefault("event.cannot-craft-heads-here", "{header} Vous ne pouvez pas fabriquer des " +
+                                "têtes ici!");
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
@@ -433,10 +508,14 @@ public class MessagesManager {
 
                     {
                         hu_hu.addDefault("language", "Magyar (MA)");
-                        hu_hu.addDefault("commands.errors.not-a-player", "{header} A parancs/alparancs futtatásához játékosnak kell lennie!");
-                        hu_hu.addDefault("commands.locale.invalid-lang", "{header} Ez nem érvényes nyelv! Elérhető nyelvek: &c{languages}");
-                        hu_hu.addDefault("commands.locale.changed-locale", "{header} Helló! Az Ön nyelve most &cmagyarra &7van állítva &c(MA)");
-                        hu_hu.addDefault("commands.locale.changed-locale-other", "{header} A (z) &c{player} &7nyelve most &c{language} &7lett!");
+                        hu_hu.addDefault("commands.errors.not-a-player", "{header} A parancs/alparancs futtatásához " +
+                                "játékosnak kell lennie!");
+                        hu_hu.addDefault("commands.locale.invalid-lang", "{header} Ez nem érvényes nyelv! Elérhető " +
+                                "nyelvek: &c{languages}");
+                        hu_hu.addDefault("commands.locale.changed-locale", "{header} Helló! Az Ön nyelve most " +
+                                "&cmagyarra &7van állítva &c(MA)");
+                        hu_hu.addDefault("commands.locale.changed-locale-other", "{header} A (z) &c{player} &7nyelve " +
+                                "most &c{language} &7lett!");
                         hu_hu.addDefault("inventory.icon.challenge.reward", "&6Jutalom: &a{reward}");
                         hu_hu.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         hu_hu.addDefault("inventory.icon.challenge.count", "&7{challenge-count} kihívások");
@@ -492,23 +571,36 @@ public class MessagesManager {
                         hu_hu.addDefault("inventory.icon.reward.group-add", "&7Csoport {group} &7(&a+&7)");
                         hu_hu.addDefault("inventory.icon.reward.group-remove", "&7Csoport {group} &7(&c-&7)");
                         hu_hu.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(ok)");
-                        hu_hu.addDefault("commands.addhead.bad-texture", "{header} A megadott textúra érvénytelen. Ennek Minecraft textúra URL-jének (https://textures.minecraft.net) vagy Base64 kódolt karakterláncnak kell lennie.");
+                        hu_hu.addDefault("commands.addhead.bad-texture", "{header} A megadott textúra érvénytelen. " +
+                                "Ennek Minecraft textúra URL-jének (https://textures.minecraft.net) vagy Base64 " +
+                                "kódolt karakterláncnak kell lennie.");
                         hu_hu.addDefault("commands.addhead.cancelled", "{header} A fej létrehozása megszakítva.");
-                        hu_hu.addDefault("commands.addhead.custom-head-added", "{header} Hozzáadott új fej, azonosítóval &c{id}&7!");
-                        hu_hu.addDefault("commands.addhead.displayname", "{header} Írja be a fej megjelenített nevét (a színkódokkal együtt).");
-                        hu_hu.addDefault("commands.addhead.id", "{header} Írja be a fej azonosítóját (például brown_sheep, red_flower_bush)");
-                        hu_hu.addDefault("commands.addhead.id-taken", "{header} Ezt az azonosítót elvették (&c{id}&7)!");
-                        hu_hu.addDefault("commands.addhead.price", "{header} Írja be a fej árát (vagy az \"alapértelmezett\" az alapértelmezett értékhez).");
-                        hu_hu.addDefault("commands.addhead.section", "{header} Írja be azt a szekciót, amelybe a fej kerül. (Elérhető szakaszok: &c{szakaszok}&7)");
-                        hu_hu.addDefault("commands.addhead.texture", "{header} Írja be, vagy másolja és illessze be a fej textúráját. (Ehhez több üzenet szükséges, ezért ha kész, írja be a \"kész\" elemet a chatbe, és írja be.)");
+                        hu_hu.addDefault("commands.addhead.custom-head-added", "{header} Hozzáadott új fej, " +
+                                "azonosítóval &c{id}&7!");
+                        hu_hu.addDefault("commands.addhead.displayname", "{header} Írja be a fej megjelenített nevét " +
+                                "(a színkódokkal együtt).");
+                        hu_hu.addDefault("commands.addhead.id", "{header} Írja be a fej azonosítóját (például " +
+                                "brown_sheep, red_flower_bush)");
+                        hu_hu.addDefault("commands.addhead.id-taken", "{header} Ezt az azonosítót elvették (&c{id}&7)" +
+                                "!");
+                        hu_hu.addDefault("commands.addhead.price", "{header} Írja be a fej árát (vagy az " +
+                                "\"alapértelmezett\" az alapértelmezett értékhez).");
+                        hu_hu.addDefault("commands.addhead.section", "{header} Írja be azt a szekciót, amelybe a fej " +
+                                "kerül. (Elérhető szakaszok: &c{szakaszok}&7)");
+                        hu_hu.addDefault("commands.addhead.texture", "{header} Írja be, vagy másolja és illessze be a" +
+                                " fej textúráját. (Ehhez több üzenet szükséges, ezért ha kész, írja be a \"kész\" " +
+                                "elemet a chatbe, és írja be.)");
                         hu_hu.addDefault("inventory.icon.challenge.progress", "&7Haladás &8❱ &c{heads}&7/&c{total}");
                         hu_hu.addDefault("inventory.icon.challenge.pinned", "&cRögzítette!");
                         hu_hu.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lÖsszetett kihívások &8❱");
-                        hu_hu.addDefault("commands.debug.verbose.enabled", "{header} Engedélyezte az &c{event} &7esemény és az &c{args} &7argumentumok hibakereső részletezését!");
-                        hu_hu.addDefault("commands.debug.verbose.disabled", "{header} Letiltotta a hibakeresési részleteket!");
+                        hu_hu.addDefault("commands.debug.verbose.enabled", "{header} Engedélyezte az &c{event} " +
+                                "&7esemény és az &c{args} &7argumentumok hibakereső részletezését!");
+                        hu_hu.addDefault("commands.debug.verbose.disabled", "{header} Letiltotta a hibakeresési " +
+                                "részleteket!");
                         hu_hu.addDefault("commands.restore.restored-head", "{header} Visszaállítva {head}!");
                         hu_hu.addDefault("commands.restore.invalid-head", "{header} A {head} nem érvényes azonosító!");
-                        hu_hu.addDefault("descriptions.hp.restore", "Visszaállítja vagy megjavítja a plugin által biztosított fejet.");
+                        hu_hu.addDefault("descriptions.hp.restore", "Visszaállítja vagy megjavítja a plugin által " +
+                                "biztosított fejet.");
                         hu_hu.addDefault("commands.head.restricted-head", "{header} Nem használhatod azt a fejet!");
                         hu_hu.addDefault("event.cannot-craft-heads", "{header} Nem készíthet fejeket!");
                         hu_hu.addDefault("event.cannot-craft-heads-here", "{header} Itt nem lehet fejeket készíteni!");
@@ -524,9 +616,12 @@ public class MessagesManager {
                     {
                         lol_us.addDefault("language", "LOLCAT (Kingdom of Cats)");
                         lol_us.addDefault("commands.errors.not-a-player", "{header} u nu playah!");
-                        lol_us.addDefault("commands.locale.invalid-lang", "{header} nU such langwaaj :( kewl langs: &c{languages}");
-                        lol_us.addDefault("commands.locale.changed-locale", "{header} AAHHAHAHAHAHHA, ur langwaaj iz nao de bestz! &c(LOLCAT)");
-                        lol_us.addDefault("commands.locale.changed-locale-other", "{header} &c{player}&7'z langwaaj iz nao de kewl &c{language}&7!");
+                        lol_us.addDefault("commands.locale.invalid-lang", "{header} nU such langwaaj :( kewl langs: " +
+                                "&c{languages}");
+                        lol_us.addDefault("commands.locale.changed-locale", "{header} AAHHAHAHAHAHHA, ur langwaaj iz " +
+                                "nao de bestz! &c(LOLCAT)");
+                        lol_us.addDefault("commands.locale.changed-locale-other", "{header} &c{player}&7'z langwaaj " +
+                                "iz nao de kewl &c{language}&7!");
                         lol_us.addDefault("inventory.icon.challenge.reward", "&6Treetz: &a{reward}");
                         lol_us.addDefault("inventory.icon.challenge.xp", "&6ex-pee: &a{xp}");
                         lol_us.addDefault("inventory.icon.challenge.count", "&7{challenge-count} chaleng's");
@@ -582,19 +677,29 @@ public class MessagesManager {
                         lol_us.addDefault("inventory.icon.reward.group-add", "&7Groop {group} &7(&a+&7)");
                         lol_us.addDefault("inventory.icon.reward.group-remove", "&7Groop {group} &7(&c-&7)");
                         lol_us.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(z)");
-                        lol_us.addDefault("commands.addhead.bad-texture", "{header} Deh texturrr u hav givn iz nawt ok. It muzt be a Minecraft texturrr URL (https://textures.minecraft.net) or a Base64 yarn");
+                        lol_us.addDefault("commands.addhead.bad-texture", "{header} Deh texturrr u hav givn iz nawt " +
+                                "ok. It muzt be a Minecraft texturrr URL (https://textures.minecraft.net) or a Base64" +
+                                " yarn");
                         lol_us.addDefault("commands.addhead.cancelled", "{header} stop'd makin heds.");
-                        lol_us.addDefault("commands.addhead.custom-head-added", "{header} Add'd new hed wif ID &c{id}&7!");
-                        lol_us.addDefault("commands.addhead.displayname", "{header} Putz name of hed here (including colour codes).");
-                        lol_us.addDefault("commands.addhead.id", "{header} Putz ID of hed here (leik brown_sheep, red_flower_bush)");
-                        lol_us.addDefault("commands.addhead.id-taken", "{header} oH NO dat ID got stole D: (&c{id}&7)!");
-                        lol_us.addDefault("commands.addhead.price", "{header} Putz price of hed here (or \"default\" 4 de normal).");
-                        lol_us.addDefault("commands.addhead.section", "{header} Putz secshun of hed here (secshuns rn: &c{sections}&7)");
-                        lol_us.addDefault("commands.addhead.texture", "{header} Putz texturrr of hed here (may needz lotsa lettrs, so when dun, screm \"done\" in de chat)");
+                        lol_us.addDefault("commands.addhead.custom-head-added", "{header} Add'd new hed wif ID " +
+                                "&c{id}&7!");
+                        lol_us.addDefault("commands.addhead.displayname", "{header} Putz name of hed here (including " +
+                                "colour codes).");
+                        lol_us.addDefault("commands.addhead.id", "{header} Putz ID of hed here (leik brown_sheep, " +
+                                "red_flower_bush)");
+                        lol_us.addDefault("commands.addhead.id-taken", "{header} oH NO dat ID got stole D: (&c{id}&7)" +
+                                "!");
+                        lol_us.addDefault("commands.addhead.price", "{header} Putz price of hed here (or \"default\" " +
+                                "4 de normal).");
+                        lol_us.addDefault("commands.addhead.section", "{header} Putz secshun of hed here (secshuns " +
+                                "rn: &c{sections}&7)");
+                        lol_us.addDefault("commands.addhead.texture", "{header} Putz texturrr of hed here (may needz " +
+                                "lotsa lettrs, so when dun, screm \"done\" in de chat)");
                         lol_us.addDefault("inventory.icon.challenge.progress", "&7rn &8❱ &c{heads}&7/&c{total}");
                         lol_us.addDefault("inventory.icon.challenge.pinned", "&cSHOT!");
                         lol_us.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lshot chal &8❱");
-                        lol_us.addDefault("commands.debug.verbose.enabled", "{header} kewl thingie on 4 event &c{event} &7'n' arrrrrgs &c{args}&7!");
+                        lol_us.addDefault("commands.debug.verbose.enabled", "{header} kewl thingie on 4 event " +
+                                "&c{event} &7'n' arrrrrgs &c{args}&7!");
                         lol_us.addDefault("commands.debug.verbose.disabled", "{header} kewl thingie iz off!");
                         lol_us.addDefault("commands.restore.restored-head", "{header} summumd {head}!");
                         lol_us.addDefault("commands.restore.invalid-head", "{header} {head} iz not ur frend :(");
@@ -613,10 +718,14 @@ public class MessagesManager {
 
                     {
                         pl_pl.addDefault("language", "Polski (PL)");
-                        pl_pl.addDefault("commands.errors.not-a-player", "{header} Musisz być graczem, aby uruchomić to polecenie/podkomendę!");
-                        pl_pl.addDefault("commands.locale.invalid-lang", "{header} To nie jest poprawny język! Dostępne języki: &c{languages}");
-                        pl_pl.addDefault("commands.locale.changed-locale", "{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski (PL)");
-                        pl_pl.addDefault("commands.locale.changed-locale-other", "{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!");
+                        pl_pl.addDefault("commands.errors.not-a-player", "{header} Musisz być graczem, aby uruchomić " +
+                                "to polecenie/podkomendę!");
+                        pl_pl.addDefault("commands.locale.invalid-lang", "{header} To nie jest poprawny język! " +
+                                "Dostępne języki: &c{languages}");
+                        pl_pl.addDefault("commands.locale.changed-locale", "{header} Dobry dzień! Twój język jest " +
+                                "teraz ustawiony na &cPolski (PL)");
+                        pl_pl.addDefault("commands.locale.changed-locale-other", "{header} Język &c{player} &7jest " +
+                                "teraz ustawiony na &c{language}&7!");
                         pl_pl.addDefault("inventory.icon.challenge.reward", "&6Nagroda: &a{reward}");
                         pl_pl.addDefault("inventory.icon.challenge.xp", "&6Dośw.: &a{xp}");
                         pl_pl.addDefault("inventory.icon.challenge.count", "&7{challenge-count} wyzwania");
@@ -672,23 +781,37 @@ public class MessagesManager {
                         pl_pl.addDefault("inventory.icon.reward.group-add", "&7Grupa {group} &7(&a+&7)");
                         pl_pl.addDefault("inventory.icon.reward.group-remove", "&7Grupa {group} &7(&c-&7)");
                         pl_pl.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(y)");
-                        pl_pl.addDefault("commands.addhead.bad-texture", "{header} Podana tekstura jest nieprawidłowa. Musi to być adres URL tekstury Minecraft (https://textures.minecraft.net) lub ciąg zakodowany w Base64.");
+                        pl_pl.addDefault("commands.addhead.bad-texture", "{header} Podana tekstura jest nieprawidłowa" +
+                                ". Musi to być adres URL tekstury Minecraft (https://textures.minecraft.net) lub ciąg" +
+                                " zakodowany w Base64.");
                         pl_pl.addDefault("commands.addhead.cancelled", "{header} Anulowano tworzenie głowy.");
-                        pl_pl.addDefault("commands.addhead.custom-head-added", "{header} Dodano nową głowę z identyfikatorem &c{id}&7!");
-                        pl_pl.addDefault("commands.addhead.displayname", "{header} Wpisz nazwę wyświetlaną głowy (w tym kody kolorów).");
-                        pl_pl.addDefault("commands.addhead.id", "{header} Wpisz identyfikator głowy (np. brown_sheep, red_flower_bush)");
-                        pl_pl.addDefault("commands.addhead.id-taken", "{header} Ten identyfikator został zabrany (&c{id}&7)!");
-                        pl_pl.addDefault("commands.addhead.price", "{header} Wpisz cenę głowicy (lub „default” dla wartości domyślnej).");
-                        pl_pl.addDefault("commands.addhead.section", "{header} Wpisz sekcję, w której zostanie umieszczona głowa. (Dostępne sekcje: &c{sections}&7)");
-                        pl_pl.addDefault("commands.addhead.texture", "{header} Wpisz lub skopiuj i wklej teksturę głowy. (Może to wymagać kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wejdź).");
+                        pl_pl.addDefault("commands.addhead.custom-head-added", "{header} Dodano nową głowę z " +
+                                "identyfikatorem &c{id}&7!");
+                        pl_pl.addDefault("commands.addhead.displayname", "{header} Wpisz nazwę wyświetlaną głowy (w " +
+                                "tym kody kolorów).");
+                        pl_pl.addDefault("commands.addhead.id", "{header} Wpisz identyfikator głowy (np. brown_sheep," +
+                                " red_flower_bush)");
+                        pl_pl.addDefault("commands.addhead.id-taken", "{header} Ten identyfikator został zabrany " +
+                                "(&c{id}&7)!");
+                        pl_pl.addDefault("commands.addhead.price", "{header} Wpisz cenę głowicy (lub „default” dla " +
+                                "wartości domyślnej).");
+                        pl_pl.addDefault("commands.addhead.section", "{header} Wpisz sekcję, w której zostanie " +
+                                "umieszczona głowa. (Dostępne sekcje: &c{sections}&7)");
+                        pl_pl.addDefault("commands.addhead.texture", "{header} Wpisz lub skopiuj i wklej teksturę " +
+                                "głowy. (Może to wymagać kilku wiadomości, więc kiedy skończysz, wpisz „done” na " +
+                                "czacie i wejdź).");
                         pl_pl.addDefault("inventory.icon.challenge.progress", "&7Postęp &8❱ &c{heads}&7/&c{total}");
                         pl_pl.addDefault("inventory.icon.challenge.pinned", "&cPrzypięte!");
                         pl_pl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lPrzypięte wyzwania &8❱");
-                        pl_pl.addDefault("commands.debug.verbose.enabled", "{header} Włączono szczegółowe debugowanie dla zdarzenia &c{event} &7i argumentów &c{args}&7!");
-                        pl_pl.addDefault("commands.debug.verbose.disabled", "{header} Wyłączono szczegółowe debugowanie!");
+                        pl_pl.addDefault("commands.debug.verbose.enabled", "{header} Włączono szczegółowe debugowanie" +
+                                " dla zdarzenia &c{event} &7i argumentów &c{args}&7!");
+                        pl_pl.addDefault("commands.debug.verbose.disabled", "{header} Wyłączono szczegółowe " +
+                                "debugowanie!");
                         pl_pl.addDefault("commands.restore.restored-head", "{header} Przywrócono {head}!");
-                        pl_pl.addDefault("commands.restore.invalid-head", "{header} {head} nie jest prawidłowym identyfikatorem!");
-                        pl_pl.addDefault("descriptions.hp.restore", "Przywraca lub naprawia głowicę, która została już dostarczona przez wtyczkę.");
+                        pl_pl.addDefault("commands.restore.invalid-head", "{header} {head} nie jest prawidłowym " +
+                                "identyfikatorem!");
+                        pl_pl.addDefault("descriptions.hp.restore", "Przywraca lub naprawia głowicę, która została " +
+                                "już dostarczona przez wtyczkę.");
                         pl_pl.addDefault("commands.head.restricted-head", "{header} Nie możesz użyć tej głowy!");
                         pl_pl.addDefault("event.cannot-craft-heads", "{header} Nie możesz tworzyć głów!");
                         pl_pl.addDefault("event.cannot-craft-heads-here", "{header} Nie możesz tu tworzyć głów!");
@@ -703,10 +826,14 @@ public class MessagesManager {
 
                     {
                         ro_ro.addDefault("language", "Romana (RO)");
-                        ro_ro.addDefault("commands.errors.not-a-player", "{header} Trebuie sa fiți un jucator pentru a rula aceasta comanda/subcomanda!");
-                        ro_ro.addDefault("commands.locale.invalid-lang", "{header} Acesta nu este un limbaj valabil! Limbi disponibile: &c{languages}");
-                        ro_ro.addDefault("commands.locale.changed-locale", "{header} Salut! Limba dvs. este acum setata pe limba &cRomana (RO)");
-                        ro_ro.addDefault("commands.locale.changed-locale-other", "{header} Limba &c{player} &7este acum setata pe &c{language}&7!");
+                        ro_ro.addDefault("commands.errors.not-a-player", "{header} Trebuie sa fiți un jucator pentru " +
+                                "a rula aceasta comanda/subcomanda!");
+                        ro_ro.addDefault("commands.locale.invalid-lang", "{header} Acesta nu este un limbaj valabil! " +
+                                "Limbi disponibile: &c{languages}");
+                        ro_ro.addDefault("commands.locale.changed-locale", "{header} Salut! Limba dvs. este acum " +
+                                "setata pe limba &cRomana (RO)");
+                        ro_ro.addDefault("commands.locale.changed-locale-other", "{header} Limba &c{player} &7este " +
+                                "acum setata pe &c{language}&7!");
                         ro_ro.addDefault("inventory.icon.challenge.reward", "&6Recompensa: &a{reward}");
                         ro_ro.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         ro_ro.addDefault("inventory.icon.challenge.count", "&7{challenge-count} provocari");
@@ -762,23 +889,35 @@ public class MessagesManager {
                         ro_ro.addDefault("inventory.icon.reward.group-add", "&7Grupul {group} &7(&a+&7)");
                         ro_ro.addDefault("inventory.icon.reward.group-remove", "&7Grupul {group} &7(&c-&7)");
                         ro_ro.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(e)");
-                        ro_ro.addDefault("commands.addhead.bad-texture", "{header} Textura pe care ati furnizat-o este nevalida. Trebuie sa fie o adresa URL de textura Minecraft (https://textures.minecraft.net) sau un sir codat Base64.");
+                        ro_ro.addDefault("commands.addhead.bad-texture", "{header} Textura pe care ati furnizat-o " +
+                                "este nevalida. Trebuie sa fie o adresa URL de textura Minecraft (https://textures" +
+                                ".minecraft.net) sau un sir codat Base64.");
                         ro_ro.addDefault("commands.addhead.cancelled", "{header} Crearea capului anulata.");
-                        ro_ro.addDefault("commands.addhead.custom-head-added", "{header} S-a adaugat un nou cap cu ID &c{id}&7!");
-                        ro_ro.addDefault("commands.addhead.displayname", "{header} Introduceti numele afisat pentru cap (inclusiv codurile de culoare).");
-                        ro_ro.addDefault("commands.addhead.id", "{header} Introduceti ID-ul capului (de exemplu, brown_sheep, red_flower_bush)");
+                        ro_ro.addDefault("commands.addhead.custom-head-added", "{header} S-a adaugat un nou cap cu ID" +
+                                " &c{id}&7!");
+                        ro_ro.addDefault("commands.addhead.displayname", "{header} Introduceti numele afisat pentru " +
+                                "cap (inclusiv codurile de culoare).");
+                        ro_ro.addDefault("commands.addhead.id", "{header} Introduceti ID-ul capului (de exemplu, " +
+                                "brown_sheep, red_flower_bush)");
                         ro_ro.addDefault("commands.addhead.id-taken", "{header} ID-ul a fost luat (&c{id}&7)!");
-                        ro_ro.addDefault("commands.addhead.price", "{header} Introduceti pretul capului (sau „default” pentru valoarea implicita).");
-                        ro_ro.addDefault("commands.addhead.section", "{header} Tastati sectiunea in care va fi introdus capul (sectiuni disponibile: &c{section}&7)");
-                        ro_ro.addDefault("commands.addhead.texture", "{header} Introduceți sau copiați și lipiți textura pentru cap. (Acest lucru poate necesita mai multe mesaje, așa că atunci când ați terminat, tastați „done” în chat și introduceți.)");
+                        ro_ro.addDefault("commands.addhead.price", "{header} Introduceti pretul capului (sau " +
+                                "„default” pentru valoarea implicita).");
+                        ro_ro.addDefault("commands.addhead.section", "{header} Tastati sectiunea in care va fi " +
+                                "introdus capul (sectiuni disponibile: &c{section}&7)");
+                        ro_ro.addDefault("commands.addhead.texture", "{header} Introduceți sau copiați și lipiți " +
+                                "textura pentru cap. (Acest lucru poate necesita mai multe mesaje, așa că atunci când" +
+                                " ați terminat, tastați „done” în chat și introduceți.)");
                         ro_ro.addDefault("inventory.icon.challenge.progress", "&7Progres &8❱ &c{heads}&7/&c{total}");
                         ro_ro.addDefault("inventory.icon.challenge.pinned", "&cFixat!");
                         ro_ro.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lProvocari fixate &8❱");
-                        ro_ro.addDefault("commands.debug.verbose.enabled", "{header} A activat depanarea detaliată pentru eveniment &c{event} &7și argumente &c{args}&7!");
-                        ro_ro.addDefault("commands.debug.verbose.disabled", "{header} Dezactivat detaliile de depanare!");
+                        ro_ro.addDefault("commands.debug.verbose.enabled", "{header} A activat depanarea detaliată " +
+                                "pentru eveniment &c{event} &7și argumente &c{args}&7!");
+                        ro_ro.addDefault("commands.debug.verbose.disabled", "{header} Dezactivat detaliile de " +
+                                "depanare!");
                         ro_ro.addDefault("commands.restore.restored-head", "{header} {head} restaurat!");
                         ro_ro.addDefault("commands.restore.invalid-head", "{header} {head} nu este un ID valid!");
-                        ro_ro.addDefault("descriptions.hp.restore", "Restaureaza sau repara un cap care a fost deja furnizat de plugin.");
+                        ro_ro.addDefault("descriptions.hp.restore", "Restaureaza sau repara un cap care a fost deja " +
+                                "furnizat de plugin.");
                         ro_ro.addDefault("commands.head.restricted-head", "{header} Nu poți folosi acel cap!");
                         ro_ro.addDefault("event.cannot-craft-heads", "{header} Nu poți crea capete!");
                         ro_ro.addDefault("event.cannot-craft-heads-here", "{header} Nu poți crea capete aici!");
@@ -793,10 +932,14 @@ public class MessagesManager {
 
                     {
                         ru_ru.addDefault("language", "Русский (RU)");
-                        ru_ru.addDefault("commands.errors.not-a-player", "{header} Вы должны быть игроком для запуска этой команды/подкоманды!");
-                        ru_ru.addDefault("commands.locale.invalid-lang", "{header} Это не правильный язык! Доступные языки: &c{languages}");
-                        ru_ru.addDefault("commands.locale.changed-locale", "{header} Здравствуйте! Ваш язык теперь установлен на &cрусский (RU)");
-                        ru_ru.addDefault("commands.locale.changed-locale-other", "{header} Язык &c{player} &7теперь установлен на &c{language}&7!");
+                        ru_ru.addDefault("commands.errors.not-a-player", "{header} Вы должны быть игроком для запуска" +
+                                " этой команды/подкоманды!");
+                        ru_ru.addDefault("commands.locale.invalid-lang", "{header} Это не правильный язык! Доступные " +
+                                "языки: &c{languages}");
+                        ru_ru.addDefault("commands.locale.changed-locale", "{header} Здравствуйте! Ваш язык теперь " +
+                                "установлен на &cрусский (RU)");
+                        ru_ru.addDefault("commands.locale.changed-locale-other", "{header} Язык &c{player} &7теперь " +
+                                "установлен на &c{language}&7!");
                         ru_ru.addDefault("inventory.icon.challenge.reward", "&6Награда: &a{reward}");
                         ru_ru.addDefault("inventory.icon.challenge.xp", "&6XP: &a{xp}");
                         ru_ru.addDefault("inventory.icon.challenge.count", "&7{challenge-count} проблемы");
@@ -852,24 +995,38 @@ public class MessagesManager {
                         ru_ru.addDefault("inventory.icon.reward.group-add", "&7группа {group} &7(&a+&7)");
                         ru_ru.addDefault("inventory.icon.reward.group-remove", "&7группа {group} &7(&c-&7)");
                         ru_ru.addDefault("inventory.icon.reward.item-give", "&7{amount} {item}(ы)");
-                        ru_ru.addDefault("commands.addhead.bad-texture", "{header} Предоставленная вами текстура недействительна. Это должен быть URL текстуры Minecraft (https://textures.minecraft.net) или строка в кодировке Base64.");
+                        ru_ru.addDefault("commands.addhead.bad-texture", "{header} Предоставленная вами текстура " +
+                                "недействительна. Это должен быть URL текстуры Minecraft (https://textures.minecraft.net) " +
+                          "или строка в кодировке Base64.");
                         ru_ru.addDefault("commands.addhead.cancelled", "{header} Отменено создание головы.");
-                        ru_ru.addDefault("commands.addhead.custom-head-added", "{header} Добавлена новая голова с идентификатором &c{id}&7!");
-                        ru_ru.addDefault("commands.addhead.displayname", "{header} Введите отображаемое имя для головы (включая цветовые коды).");
-                        ru_ru.addDefault("commands.addhead.id", "{header} Введите идентификатор головы (например, brown_sheep, red_flower_bush)");
-                        ru_ru.addDefault("commands.addhead.id-taken", "{header} Этот идентификатор был взят (&c{id}&7)!");
-                        ru_ru.addDefault("commands.addhead.price", "{header} Введите цену головы (или «default» для значения по умолчанию).");
-                        ru_ru.addDefault("commands.addhead.section", "{header} Введите раздел, в который будет вставлена голова. (Доступные разделы: &c{sections}&7)");
-                        ru_ru.addDefault("commands.addhead.texture", "{header} Введите или скопируйте и вставьте текстуру для головы. (Для этого может потребоваться несколько сообщений, поэтому, когда вы закончите, введите «done» в чате и введите.)");
+                        ru_ru.addDefault("commands.addhead.custom-head-added", "{header} Добавлена новая голова с " +
+                         "идентификатором &c{id}&7!");
+                        ru_ru.addDefault("commands.addhead.displayname", "{header} Введите отображаемое имя для " +
+                         "головы (включая цветовые коды).");
+                        ru_ru.addDefault("commands.addhead.id", "{header} Введите идентификатор головы (например, " +
+                         "brown_sheep, red_flower_bush)");
+                        ru_ru.addDefault("commands.addhead.id-taken", "{header} Этот идентификатор был взят " +
+                         "(&c{id}&7)!");
+                        ru_ru.addDefault("commands.addhead.price", "{header} Введите цену головы (или «default» для " +
+                         "значения по умолчанию).");
+                        ru_ru.addDefault("commands.addhead.section", "{header} Введите раздел, в который будет " +
+                         "вставлена голова. (Доступные разделы: &c{sections}&7)");
+                        ru_ru.addDefault("commands.addhead.texture", "{header} Введите или скопируйте и вставьте " +
+                         "текстуру для головы. (Для этого может потребоваться несколько сообщений, поэтому, когда вы " +
+                                "закончите, введите «done» в чате и введите.)");
                         ru_ru.addDefault("inventory.icon.challenge.progress", "&7Прогресс &8❱ &c{heads}&7/&c{total}");
                         ru_ru.addDefault("inventory.icon.challenge.pinned", "&cЗакрепленные!");
                         ru_ru.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lЗакрепленные вызовы&8❱");
-                        ru_ru.addDefault("commands.debug.verbose.enabled", "{header} Включена подробная отладка для события &c{event} &7и аргументов &c{args}&7!");
+                        ru_ru.addDefault("commands.debug.verbose.enabled", "{header} Включена подробная отладка для " +
+                         "события &c{event} &7и аргументов &c{args}&7!");
                         ru_ru.addDefault("commands.debug.verbose.disabled", "{header} Отключена подробная отладка!");
                         ru_ru.addDefault("commands.restore.restored-head", "{header} Восстановил {head}!");
-                        ru_ru.addDefault("commands.restore.invalid-head", "{header} {head} не является действительным идентификатором!");
-                        ru_ru.addDefault("descriptions.hp.restore", "Восстанавливает или ремонтирует голову, которая уже была предоставлена плагином.");
-                        ru_ru.addDefault("commands.head.restricted-head", "{header} Ты не можешь использовать эту голову!");
+                        ru_ru.addDefault("commands.restore.invalid-head", "{header} {head} не является действительным" +
+                         " идентификатором!");
+                        ru_ru.addDefault("descriptions.hp.restore", "Восстанавливает или ремонтирует голову, которая " +
+                                "уже была предоставлена плагином.");
+                        ru_ru.addDefault("commands.head.restricted-head", "{header} Ты не можешь использовать эту " +
+                         "голову!");
                         ru_ru.addDefault("event.cannot-craft-heads", "{header} Вы не можете создавать головы!");
                         ru_ru.addDefault("event.cannot-craft-heads-here", "{header} Здесь нельзя лепить головы!");
                         ru_ru.set("version", version);
@@ -882,14 +1039,18 @@ public class MessagesManager {
                     }
 
                     {
-                        nl_nl.addDefault("inventory.icon.challenge.progress", "&7Vooruitgang &8❱ &c{heads}&7/&c{total}");
+                        nl_nl.addDefault("inventory.icon.challenge.progress", "&7Vooruitgang &8❱ " +
+                         "&c{heads}&7/&c{total}");
                         nl_nl.addDefault("inventory.icon.challenge.pinned", "&cVastgemaakt!");
                         nl_nl.addDefault("inventory.icon.pinned-challenges", "&8❰ &b&lVastgezette uitdagingen &8❱");
-                        nl_nl.addDefault("commands.debug.verbose.enabled", "{header} De uitgebreide debugging ingeschakeld voor gebeurtenis &c{event} &7en argumenten &c{args}&7!");
-                        nl_nl.addDefault("commands.debug.verbose.disabled", "{header} De uitgebreide foutopsporing uitgeschakeld!");
+                        nl_nl.addDefault("commands.debug.verbose.enabled", "{header} De uitgebreide debugging " +
+                         "ingeschakeld voor gebeurtenis &c{event} &7en argumenten &c{args}&7!");
+                        nl_nl.addDefault("commands.debug.verbose.disabled", "{header} De uitgebreide foutopsporing " +
+                         "uitgeschakeld!");
                         nl_nl.addDefault("commands.restore.restored-head", "{header} {head} hersteld!");
                         nl_nl.addDefault("commands.restore.invalid-head", "{header} {head} is geen geldige ID!");
-                        nl_nl.addDefault("descriptions.hp.restore", "Herstelt of repareert een kop die al door de plug-in werd geleverd.");
+                        nl_nl.addDefault("descriptions.hp.restore", "Herstelt of repareert een kop die al door de " +
+                         "plug-in werd geleverd.");
                         nl_nl.addDefault("commands.head.restricted-head", "{header} Je kunt dat hoofd niet gebruiken!");
                         nl_nl.addDefault("event.cannot-craft-heads", "{header} Je kunt geen hoofden maken!");
                         nl_nl.addDefault("event.cannot-craft-heads-here", "{header} Je kunt hier geen hoofden maken!");
@@ -903,7 +1064,8 @@ public class MessagesManager {
                     }
 
                     {
-                        zh_cn.addDefault("commands.debug.verbose.enabled", "{header} 为事件&c{event}&7和参数&c{args}&7启用了调试详细信息！");
+                        zh_cn.addDefault("commands.debug.verbose.enabled", "{header} 为事件&c{event}&7和参数&c{args}&7" +
+                         "启用了调试详细信息！");
                         zh_cn.addDefault("commands.debug.verbose.disabled", "{header} 禁用调试冗长！");
                         zh_cn.addDefault("commands.restore.restored-head", "{header} 已恢复{head}!");
                         zh_cn.addDefault("commands.restore.invalid-head", "{header} {head}不是有效的ID!");
@@ -1012,6 +1174,7 @@ public class MessagesManager {
     public void setPlayerLocale(Player player, String locale) {
         setPlayerLocale(player, locale, false);
     }
+
     public void setPlayerLocale(Player player, String locale, boolean b) {
         String first = locale.split("_")[0].toLowerCase();
         if (locales.containsKey(first)) {
@@ -1030,7 +1193,8 @@ public class MessagesManager {
 
     private YamlConfiguration performChecks(File file, String name) {
         if (file == null) {
-            file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + ".yml");
+            file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name +
+            ".yml");
         }
         if (name.endsWith(".yml")) name = name.substring(0, name.length() - 4);
         YamlConfiguration config = new YamlConfiguration();
@@ -1042,8 +1206,10 @@ public class MessagesManager {
             logger.severe("There is a configuration error in the plugin configuration files! Details below:");
             logger.severe(ex.getMessage());
             logger.severe("We have renamed the faulty configuration to " + name + "-errored.yml for you to inspect.");
-            file.renameTo(new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name + "-errored.yml"));
-            logger.severe("When you believe you have fixed the problems, change the file name back to " + name + ".yml and reload the configuration.");
+            file.renameTo(new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,
+             name + "-errored.yml"));
+            logger.severe("When you believe you have fixed the problems, change the file name back to " + name +
+            ".yml and reload the configuration.");
             logger.severe("If you are unsure, please contact the developer (Thatsmusic99).");
             logger.severe("The default configuration will be loaded in response to this.");
             InputStream is = HeadsPlus.get().getResource(name + ".yml");
@@ -1053,8 +1219,10 @@ public class MessagesManager {
             }
             try {
                 file.delete();
-                Files.copy(is, new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml").toPath());
-                file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,name + ".yml");
+                Files.copy(is, new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator,
+                 name + ".yml").toPath());
+                file = new File(HeadsPlus.get().getDataFolder() + File.separator + "locale" + File.separator, name +
+                ".yml");
                 config.load(file);
             } catch (FileNotFoundException ignored) {
 

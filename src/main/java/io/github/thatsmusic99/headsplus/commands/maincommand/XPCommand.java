@@ -29,7 +29,8 @@ import java.util.List;
 public class XPCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         if (args.length < 3) {
             MessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return false;
@@ -57,7 +58,8 @@ public class XPCommand implements IHeadsPlusCommand {
                 }
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
                         MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
-                                String.valueOf(PlayerSQLManager.get().getXPSync(args[1])), "{amount}", args[3]), HeadsPlus.async);
+                                String.valueOf(PlayerSQLManager.get().getXPSync(args[1])), "{amount}", args[3]),
+                        HeadsPlus.async);
                 return true;
             case "subtract":
                 if (!sender.hasPermission("headsplus.maincommand.xp.subtract")) {
@@ -104,7 +106,8 @@ public class XPCommand implements IHeadsPlusCommand {
                 break;
             case "view":
                 if (sender.hasPermission("headsplus.maincommand.xp.view")) {
-                    PlayerSQLManager.get().getXP(args[1]).thenAccept(xp -> MessagesManager.get().sendMessage("commands.xp.current-xp", sender, "{player}", args[1], "{xp}",
+                    PlayerSQLManager.get().getXP(args[1]).thenAccept(xp -> MessagesManager.get().sendMessage(
+                            "commands.xp.current-xp", sender, "{player}", args[1], "{xp}",
                             String.valueOf(xp)));
 
                 }
@@ -122,7 +125,8 @@ public class XPCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);

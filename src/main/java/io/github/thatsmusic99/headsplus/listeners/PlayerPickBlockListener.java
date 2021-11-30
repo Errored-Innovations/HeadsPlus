@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.listeners;
 
 import com.mojang.authlib.GameProfile;
+
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -51,7 +52,8 @@ public class PlayerPickBlockListener extends HeadsPlusListener<InventoryCreative
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(InventoryCreativeEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent", this), HeadsPlus.get());
+                new HeadsPlusEventExecutor(InventoryCreativeEvent.class, "InventoryCreativeEvent", this),
+                HeadsPlus.get());
 
         new PickBlockInventoryOpenListener().init();
         new PickBlockInventoryCloseListener().init();
@@ -74,7 +76,8 @@ public class PlayerPickBlockListener extends HeadsPlusListener<InventoryCreative
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(InventoryOpenEvent.class, this, EventPriority.NORMAL,
-                    new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent", this), HeadsPlus.get(), true);
+                    new HeadsPlusEventExecutor(InventoryOpenEvent.class, "InventoryOpenEvent", this), HeadsPlus.get()
+                    , true);
 
         }
     }
@@ -89,7 +92,8 @@ public class PlayerPickBlockListener extends HeadsPlusListener<InventoryCreative
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(InventoryCloseEvent.class, this, EventPriority.NORMAL,
-                    new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent", this), HeadsPlus.get(), true);
+                    new HeadsPlusEventExecutor(InventoryCloseEvent.class, "InventoryCloseEvent", this),
+                    HeadsPlus.get(), true);
 
         }
     }

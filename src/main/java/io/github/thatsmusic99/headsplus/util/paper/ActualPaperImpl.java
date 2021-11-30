@@ -15,7 +15,8 @@ import java.util.concurrent.Executor;
 
 public class ActualPaperImpl implements PaperImpl {
 
-    private static final Executor asyncExecutor = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), task);
+    private static final Executor asyncExecutor = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get()
+            , task);
     private static final Executor syncExecutor = task -> Bukkit.getScheduler().runTask(HeadsPlus.get(), task);
 
     @Override

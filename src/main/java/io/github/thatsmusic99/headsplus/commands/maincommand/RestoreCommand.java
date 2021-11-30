@@ -23,7 +23,8 @@ import java.util.List;
 public class RestoreCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         if (args.length > 1) {
             try {
                 HeadsXEnums headToBeAdded = HeadsXEnums.valueOf(args[1].toUpperCase());
@@ -48,7 +49,8 @@ public class RestoreCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             List<String> headNames = new ArrayList<>();

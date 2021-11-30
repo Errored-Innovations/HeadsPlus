@@ -38,7 +38,8 @@ public class ConfigTextMenus extends HPConfig {
     @Override
     public void loadDefaults() {
         addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");
-        addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ &7━━━━━━━━━━━━&c．・");
+        addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ " +
+                "&7━━━━━━━━━━━━&c．・");
         addDefault("help.header", "{default-paged}");
         addDefault("help.for-each-line", "&c{usage} &8» &7{description}");
         addDefault("help.lines-per-page", 8);
@@ -80,7 +81,8 @@ public class ConfigTextMenus extends HPConfig {
                 "&c{msg_textmenus.profile.total-heads-crafted} &8» &7{crafting-counter}",
                 "&c{msg_textmenus.profile.current-level} &8» &7{level}",
                 "&c{msg_textmenus.profile.xp-until-next-level} &8» &7{next-level}")));
-        addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ &7━━━━━&c．・");
+        addDefault("leaderboard.header", "&c・．&7━━━━━ &8❰ &c&lHeadsPlus Leaderboards: {section} &7{page}/{pages} &8❱ " +
+                "&7━━━━━&c．・");
         addDefault("leaderboard.for-each-line", "&7{pos} &8» &c{name} &8⟶ &7{score}");
         addDefault("leaderboard.lines-per-page", 8);
         addDefault("info.header", "{default}");
@@ -124,16 +126,23 @@ public class ConfigTextMenus extends HPConfig {
                     HPUtils.parseLorePlaceholders(profile, s,
                             new HPUtils.PlaceholderInfo("{player}", player.getName(), true),
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
-                            new HPUtils.PlaceholderInfo("{completed-challenges}", () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()),
+                            new HPUtils.PlaceholderInfo("{completed-challenges}",
+                                    () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()),
                                     MainConfig.get().getMainFeatures().CHALLENGES),
-                            new HPUtils.PlaceholderInfo("{hunter-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING),
+                            new HPUtils.PlaceholderInfo("{hunter-counter}",
+                                    () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.HUNTING),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
-                            new HPUtils.PlaceholderInfo("{crafting-counter}", () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING),
+                            new HPUtils.PlaceholderInfo("{crafting-counter}",
+                                    () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.CRAFTING),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{header}", instance.getHeader("profile.header", sender), true),
-                            new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(), sender), level != null),
-                            new HPUtils.PlaceholderInfo("{next-level}", () -> (finalNextLevel.getRequiredXP() - xp), nextLevel != null));
+                            new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(),
+                                    sender), level != null),
+                            new HPUtils.PlaceholderInfo("{next-level}", () -> (finalNextLevel.getRequiredXP() - xp),
+                                    nextLevel != null));
                 }
                 return String.join("\n", profile);
             }, HeadsPlus.async).exceptionally(ex -> {
@@ -159,7 +168,8 @@ public class ConfigTextMenus extends HPConfig {
             if ((page > pl.getTotalPages()) || (0 >= page)) {
                 MessagesManager.get().sendMessage("commands.errors.invalid-pg-no", sender);
             } else {
-                sender.sendMessage(translateColors(instance.getString("help.header"), sender).replaceAll("\\{page}", String.valueOf(page))
+                sender.sendMessage(translateColors(instance.getString("help.header"), sender).replaceAll("\\{page}",
+                                String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(pl.getTotalPages())));
                 for (IHeadsPlusCommand key : pl.getContentsInPage(page)) {
                     CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
@@ -168,8 +178,10 @@ public class ConfigTextMenus extends HPConfig {
                             .replace("{description}", key.getCmdDescription(sender)), sender);
                     TextComponent component = new TextComponent(help);
                     // TODO - adventure time, one day...!
-                    component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/hp " + c.commandname()));
-                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(translateCommandHelp(key, sender)).create()));
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+                            "/hp " + c.commandname()));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder(translateCommandHelp(key, sender)).create()));
                     try {
                         sender.spigot().sendMessage(component);
                     } catch (Exception | NoSuchMethodError e) {
@@ -184,7 +196,8 @@ public class ConfigTextMenus extends HPConfig {
             CommandInfo c = key.getClass().getAnnotation(CommandInfo.class);
             for (String s : instance.getStringList("help.command-help.layout")) {
                 HPUtils.parseLorePlaceholders(helpList, translateColors(s, sender),
-                        new HPUtils.PlaceholderInfo("{permission}", c.permission(), sender.hasPermission("headsplus.help.viewperms")),
+                        new HPUtils.PlaceholderInfo("{permission}", c.permission(), sender.hasPermission("headsplus" +
+                                ".help.viewperms")),
                         new HPUtils.PlaceholderInfo("{further-usage}", () -> {
                             List<String> strings = new ArrayList<>();
                             strings.add(translateColors(s.replaceAll("\\{further-usage}", ""), sender));
@@ -193,7 +206,8 @@ public class ConfigTextMenus extends HPConfig {
                             }
                             return strings;
                         }, key.advancedUsages().length > 0),
-                        new HPUtils.PlaceholderInfo("{header}", translateColors(instance.getString("help.command-help.header"), sender), true),
+                        new HPUtils.PlaceholderInfo("{header}", translateColors(instance.getString("help.command-help" +
+                                ".header"), sender), true),
                         new HPUtils.PlaceholderInfo("{description}", key.getCmdDescription(sender), true),
                         new HPUtils.PlaceholderInfo("{usage}", c.usage(), true));
             }
@@ -203,7 +217,8 @@ public class ConfigTextMenus extends HPConfig {
 
     public static class LeaderBoardTranslator {
 
-        public static String translate(CommandSender sender, String section, List<StatisticsSQLManager.LeaderboardEntry> entries, int page) {
+        public static String translate(CommandSender sender, String section,
+                                       List<StatisticsSQLManager.LeaderboardEntry> entries, int page) {
             PagedLists<StatisticsSQLManager.LeaderboardEntry> ph;
             MessagesManager hpc = MessagesManager.get();
             try {
@@ -249,7 +264,9 @@ public class ConfigTextMenus extends HPConfig {
                         new HPUtils.PlaceholderInfo("{header}", () -> instance.getHeader("info.header", sender), true),
                         new HPUtils.PlaceholderInfo("{author}", hp.getAuthor(), true),
                         new HPUtils.PlaceholderInfo("{locale}", MainConfig.get().getLocalisation().LOCALE, true),
-                        new HPUtils.PlaceholderInfo("{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas, YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167", true));
+                        new HPUtils.PlaceholderInfo("{contributors}", "Toldi, DariusTK, AlansS53, Gneiwny, steve4744," +
+                                " Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, stashenko/The_stas," +
+                                " YouHaveTrouble, Tepoloco, Bieck_Smile, PaulBGD, andy3559167", true));
             }
             return String.join("\n", infoCommand);
         }

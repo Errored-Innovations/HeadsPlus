@@ -24,7 +24,8 @@ import java.util.List;
 public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String l, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String l,
+                             @NotNull String[] args) {
         try {
             MessagesManager hpc = MessagesManager.get();
             if (MainConfig.get().getMainFeatures().HEADS_SELECTOR) {
@@ -54,7 +55,8 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         return new ArrayList<>();
     }
 }

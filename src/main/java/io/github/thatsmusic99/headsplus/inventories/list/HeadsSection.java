@@ -16,7 +16,8 @@ public class HeadsSection extends BaseInventory {
         super(player, context);
     }
 
-    public HeadsSection() {}
+    public HeadsSection() {
+    }
 
     @Override
     public String getDefaultTitle() {

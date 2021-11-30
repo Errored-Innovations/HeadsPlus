@@ -37,31 +37,32 @@ import java.util.*;
 )
 public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
-	private final MessagesManager hpc = MessagesManager.get();
-	private final int[] slots;
+    private final MessagesManager hpc = MessagesManager.get();
+    private final int[] slots;
 
-	public SellHead() {
-	    slots = new int[45];
-	    slots[44] = 45; // off-hand slot
-	    for (int i = 0; i < 44; i++) {
+    public SellHead() {
+        slots = new int[45];
+        slots[44] = 45; // off-hand slot
+        for (int i = 0; i < 44; i++) {
             slots[i] = i;
         }
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-		try {
-		    if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                             @NotNull String[] args) {
+        try {
+            if (!(MainConfig.get().getMainFeatures().SELL_HEADS && HeadsPlus.get().isVaultEnabled())) {
                 hpc.sendMessage("commands.errors.disabled", sender);
                 return true;
             }
-		    if (!(sender instanceof Player)) {
+            if (!(sender instanceof Player)) {
                 hpc.sendMessage("commands.errors.not-a-player", sender);
                 return true;
             }
-		    Player player = (Player) sender;
-		    if (args.length == 0) {
-		        // Open the GUI
+            Player player = (Player) sender;
+            if (args.length == 0) {
+                // Open the GUI
                 if (MainConfig.get().getSellingHeads().USE_GUI && player.hasPermission("headsplus.sellhead.gui")) {
                     HashMap<String, String> context = new HashMap<>();
                     context.put("section", "mobs");
@@ -87,7 +88,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                     data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
                     pay(player, data, price);
                 }
-		    } else {
+            } else {
                 if (args[0].equalsIgnoreCase("all")) {
                     getValidHeads(player, null, -1);
                 } else if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
@@ -105,12 +106,12 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         } catch (NumberFormatException e) {
             hpc.sendMessage("commands.errors.invalid-input-int", sender);
         } catch (Exception e) {
-		    DebugPrint.createReport(e, "Command (sellhead)", true, sender);
-		}
+            DebugPrint.createReport(e, "Command (sellhead)", true, sender);
+        }
         return false;
-	}
+    }
 
-	public void getValidHeads(Player player, HashSet<String> ids, int limit) {
+    public void getValidHeads(Player player, HashSet<String> ids, int limit) {
         double price = 0;
         SellData data = new SellData(player);
         for (int slot : slots) {
@@ -154,7 +155,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         }
     }
 
-	private void pay(Player player, SellData data, double price) {
+    private void pay(Player player, SellData data, double price) {
         double balance = HeadsPlus.get().getEconomy().getBalance(player);
         SellHeadEvent event = new SellHeadEvent(price, player, balance, balance + price, data.ids);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -163,20 +164,22 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
             if (response.transactionSuccess()) {
                 if (price == 0) return;
                 removeItems(player, data);
-                hpc.sendMessage("commands.sellhead.sell-success", player, "{price}", MainConfig.get().fixBalanceStr(price), "{balance}", MainConfig.get().fixBalanceStr(balance + price));
+                hpc.sendMessage("commands.sellhead.sell-success", player, "{price}",
+                        MainConfig.get().fixBalanceStr(price), "{balance}",
+                        MainConfig.get().fixBalanceStr(balance + price));
             } else {
-               hpc.sendMessage("commands.errors.cmd-fail", player);
+                hpc.sendMessage("commands.errors.cmd-fail", player);
             }
         }
     }
 
-	public static class SellData {
-	    private final HashMap<String, Integer> ids = new HashMap<>();
-	    private final HashMap<Integer, Integer> slots = new HashMap<>();
-	    private final UUID player;
+    public static class SellData {
+        private final HashMap<String, Integer> ids = new HashMap<>();
+        private final HashMap<Integer, Integer> slots = new HashMap<>();
+        private final UUID player;
 
-	    public SellData(Player player) {
-	        this.player = player.getUniqueId();
+        public SellData(Player player) {
+            this.player = player.getUniqueId();
         }
 
         public HashMap<String, Integer> getIds() {
@@ -188,30 +191,30 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
         }
 
         public void addID(String id, int amount) {
-	        if (ids.containsKey(id)) {
-	            int currAmount = ids.get(id);
-	            ids.put(id, currAmount + amount);
+            if (ids.containsKey(id)) {
+                int currAmount = ids.get(id);
+                ids.put(id, currAmount + amount);
             } else {
-	            ids.put(id, amount);
+                ids.put(id, amount);
             }
         }
 
         public void addSlot(int slot, int amount) {
-	        slots.put(slot, amount);
+            slots.put(slot, amount);
         }
     }
 
     private void removeItems(Player player, SellData data) {
-	    for (int slot : data.slots.keySet()) {
-	        ItemStack item = player.getInventory().getItem(slot);
-	        int limit = data.slots.get(slot);
-	        if (item == null) return;
-	        if (item.getAmount() > limit && limit != -1) {
-	            item.setAmount(item.getAmount() - limit);
-	            break;
-	        } else {
-	            player.getInventory().setItem(slot, new ItemStack(Material.AIR));
-	        }
+        for (int slot : data.slots.keySet()) {
+            ItemStack item = player.getInventory().getItem(slot);
+            int limit = data.slots.get(slot);
+            if (item == null) return;
+            if (item.getAmount() > limit && limit != -1) {
+                item.setAmount(item.getAmount() - limit);
+                break;
+            } else {
+                player.getInventory().setItem(slot, new ItemStack(Material.AIR));
+            }
         }
     }
 
@@ -226,7 +229,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
             }
             if (!EntityDataManager.ableEntities.contains(mobId)) return ids;
             for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
-                for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
+                for (EntityDataManager.DroppedHeadInfo head :
+                        EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
                     String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
                     ids.add(id);
                     HeadsPlus.get().getLogger().info("Surprise, " + id);
@@ -243,7 +247,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                     return ids;
                 }
                 for (String condition : ConfigMobs.get().getConfigSection(mobId).getKeys(false)) {
-                    for (EntityDataManager.DroppedHeadInfo head : EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
+                    for (EntityDataManager.DroppedHeadInfo head :
+                            EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
                         String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
                         ids.add(id);
                     }
@@ -268,7 +273,8 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
             List<String> headIdList = new ArrayList<>(SellableHeadsManager.get().getKeys());

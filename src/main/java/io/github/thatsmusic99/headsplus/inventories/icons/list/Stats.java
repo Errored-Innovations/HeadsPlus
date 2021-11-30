@@ -18,7 +18,8 @@ public class Stats extends Icon {
 
     private int totalPages;
 
-    public Stats() {}
+    public Stats() {
+    }
 
     public Stats(Player player, Integer totalPages) {
         initItem("stats");
@@ -41,15 +42,17 @@ public class Stats extends Icon {
         ConfigHeadsSelector hpch = ConfigHeadsSelector.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id + ".display-name"), player));
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
+                ".display-name"), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
             HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(loreStr, player),
                     new HPUtils.PlaceholderInfo("{head}",
-                            manager.getSection() != null ? hpch.getSections().get(manager.getSection()).getHeads().size() :
+                            manager.getSection() != null ?
+                                    hpch.getSections().get(manager.getSection()).getHeads().size() :
                                     hpch.getTotalHeads(), true),
                     new HPUtils.PlaceholderInfo("{balance}", getBalance(player), HeadsPlus.get().isVaultEnabled()),
-                    new HPUtils.PlaceholderInfo("{sections}",  hpch.getSections().size(), true),
+                    new HPUtils.PlaceholderInfo("{sections}", hpch.getSections().size(), true),
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
         }

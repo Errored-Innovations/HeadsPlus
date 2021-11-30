@@ -26,7 +26,8 @@ public class FlagHandler {
     public final StateFlag HEAD_CRAFT = new StateFlag("head-craft", true);
     public final StateFlag ALLOW_MASKS = new StateFlag("allow-mask-use", true);
     public final SetFlag<String> HEAD_DENIED_IDS = new SetFlag<>("head-denied-ids", new StringFlag("head-denied-id"));
-    public final SetFlag<String> HEAD_ALLOWED_IDS = new SetFlag<>("head-allowed-ids", new StringFlag("head-allowed-id"));
+    public final SetFlag<String> HEAD_ALLOWED_IDS = new SetFlag<>("head-allowed-ids", new StringFlag("head-allowed-id"
+    ));
     private static FlagHandler handler = null;
 
     public FlagHandler() {

@@ -17,7 +17,8 @@ public class HeadsFavourite extends BaseInventory {
         super(player, context);
     }
 
-    public HeadsFavourite() {}
+    public HeadsFavourite() {
+    }
 
     @Override
     public String getDefaultTitle() {

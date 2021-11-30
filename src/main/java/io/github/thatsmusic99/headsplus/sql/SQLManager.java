@@ -14,7 +14,8 @@ public abstract class SQLManager {
         // TODO - table prefix
         tablePrefix = "headsplus";
         if (!tablePrefix.matches("^[_A-Za-z0-9]+$")) {
-            HeadsPlus.get().getLogger().warning("Table prefix " + tablePrefix + " is not alphanumeric. Using headsplus...");
+            HeadsPlus.get().getLogger().warning("Table prefix " + tablePrefix + " is not alphanumeric. Using " +
+                    "headsplus...");
             tablePrefix = "headsplus";
         }
     }
@@ -23,7 +24,8 @@ public abstract class SQLManager {
         // Load JDBC
         try {
             Class.forName("org.sqlite.JDBC");
-            Connection connection = DriverManager.getConnection("jdbc:sqlite:" + HeadsPlus.get().getDataFolder() + "/data.db");
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:" + HeadsPlus.get().getDataFolder() +
+                    "/data.db");
             usingSqlite = true;
             return connection;
         } catch (ClassNotFoundException | SQLException e) {

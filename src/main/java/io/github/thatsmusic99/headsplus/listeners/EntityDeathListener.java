@@ -35,7 +35,10 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
-        if (!addData("not-wg-restricted", !HeadsPlus.get().canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
+        if (!addData("not-wg-restricted",
+                !HeadsPlus.get().canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(),
+                        event.getEntity().getType())))
+            return;
 
         if (!shouldDropHead(event.getEntity())) return;
         //
@@ -76,7 +79,8 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
             if (randomChance <= fixedChance) {
                 int amount = addData("amount", HPUtils.getAmount(fixedChance));
-                dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount, event.getEntity().getKiller());
+                dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount,
+                        event.getEntity().getKiller());
             }
         }
     }
@@ -137,9 +141,11 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
         addPossibleData("metadata", "default",
                 "WHITE", "CREAMY", "CHESTNUT", "BROWN", "BLACK", "GRAY", "DARK_BROWN",
-                "RED", "ORANGE", "YELLOW", "LIME", "GREEN", "LIGHT_BLUE", "CYAN", "BLUE", "PURPLE", "MAGENTA", "PINK", "LIGHT_GRAY",
+                "RED", "ORANGE", "YELLOW", "LIME", "GREEN", "LIGHT_BLUE", "CYAN", "BLUE", "PURPLE", "MAGENTA", "PINK"
+                , "LIGHT_GRAY",
                 "BLACK_AND_WHITE", "GOLD", "SALT_AND_PEPPER", "THE_KILLER_BUNNY",
-                "KOB", "SUNSTREAK", "SNOOPER", "DASHER", "BRINELY", "SPOTTY", "FLOPPER", "STRIPEY", "GLITTER", "BLOCKFISH", "BETTY", "CLAYFISH",
+                "KOB", "SUNSTREAK", "SNOOPER", "DASHER", "BRINELY", "SPOTTY", "FLOPPER", "STRIPEY", "GLITTER",
+                "BLOCKFISH", "BETTY", "CLAYFISH",
                 "SNOW",
                 "TABBY", "SIAMESE", "BRITISH_SHORTHAIR", "CALICO", "PERSIAN", "RAGDOLL", "JELLIE", "ALL_BLACK",
                 "NONE", "");
@@ -147,7 +153,8 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         addPossibleData("killer", "<Player>");
     }
 
-    public static void dropHead(String id, String conditions, EntityDataManager.DroppedHeadInfo info, Location location, int amount, Player killer) {
+    public static void dropHead(String id, String conditions, EntityDataManager.DroppedHeadInfo info,
+                                Location location, int amount, Player killer) {
 
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);

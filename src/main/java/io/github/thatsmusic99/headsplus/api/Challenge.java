@@ -32,11 +32,14 @@ public abstract class Challenge {
     public Challenge(String key, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
         this.configName = key;
         this.mainName = Objects.requireNonNull(section.getString("name"), "Challenge name for " + key + " not found!");
-        this.header = Objects.requireNonNull(section.getString("header"), "Challenge header for " + key + " not found!");
+        this.header = Objects.requireNonNull(section.getString("header"), "Challenge header for " + key + " not " +
+                "found!");
         this.description = section.getStringList("description");
-        if (!section.contains("min")) throw new NullPointerException("Minimum head count (min) for " + key + " not found!");
+        if (!section.contains("min"))
+            throw new NullPointerException("Minimum head count (min) for " + key + " not found!");
         this.requiredHeadAmount = section.getInteger("min");
-        this.headType = Objects.requireNonNull(section.getString("head-type"), "Challenge head type for " + key + " not found!");
+        this.headType = Objects.requireNonNull(section.getString("head-type"), "Challenge head type for " + key + " " +
+                "not found!");
         String reward = section.getString("reward");
         if (reward == null) throw new NullPointerException("No reward found for challenge " + key + "!");
         if (!(reward.startsWith("levels_") || reward.startsWith("challenges_"))) {
@@ -50,7 +53,8 @@ public abstract class Challenge {
         this.completeIcon = completeIcon;
     }
 
-    public static Challenge fromConfigSection(String id, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
+    public static Challenge fromConfigSection(String id, ConfigSection section, ItemStack icon,
+                                              ItemStack completeIcon) {
         String type = section.getString("type");
         if (type == null) throw new NullPointerException("No type found for challenge " + id + "!");
         switch (type.toUpperCase()) {
@@ -133,13 +137,15 @@ public abstract class Challenge {
         getReward().rewardPlayer(this, p);
         if (MainConfig.get().getChallenges().BROADCAST_CHALLENGE_COMPLETE) {
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player}", p.getName(), "{name}", p.getName());
+                hpc.sendMessage("commands.challenges.challenge-complete", pl, "{challenge}", getMainName(), "{player" +
+                        "}", p.getName(), "{name}", p.getName());
             }
         }
         String message = MessagesManager.get().getString("commands.challenges.reward-string", p);
         String[] msgs = message.split("\\\\n");
         for (String str : msgs) {
-            hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}", String.valueOf(getGainedXP())), p, false);
+            hpc.sendMessage(str.replace("{reward}", getReward().getRewardString(p)).replaceAll("\\{xp}",
+                    String.valueOf(getGainedXP())), p, false);
         }
     }
 }

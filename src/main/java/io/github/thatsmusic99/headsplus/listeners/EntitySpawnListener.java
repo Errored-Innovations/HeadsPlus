@@ -28,7 +28,8 @@ public class EntitySpawnListener extends HeadsPlusListener<CreatureSpawnEvent> {
     public void init() {
         Bukkit.getPluginManager().registerEvent(CreatureSpawnEvent.class,
                 this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(CreatureSpawnEvent.class, "CreatureSpawnEvent", this), HeadsPlus.get(), true);
+                new HeadsPlusEventExecutor(CreatureSpawnEvent.class, "CreatureSpawnEvent", this), HeadsPlus.get(),
+                true);
         String[] entities = new String[]{};
         entities = EntityDataManager.ableEntities.toArray(entities);
 

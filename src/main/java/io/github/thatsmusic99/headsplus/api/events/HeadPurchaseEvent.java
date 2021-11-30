@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class HeadPurchaseEvent extends Event implements Cancellable {
 
-	private final Player player;
-	private final ItemStack itemStack;
-	private boolean cancelled = false;
+    private final Player player;
+    private final ItemStack itemStack;
+    private boolean cancelled = false;
 
     public HeadPurchaseEvent(Player player, ItemStack itemStack) {
         this.player = player;
         this.itemStack = itemStack;
     }
-    
-	private static final HandlerList HANDLERS = new HandlerList();
+
+    private static final HandlerList HANDLERS = new HandlerList();
 
     @NotNull
     public HandlerList getHandlers() {
@@ -28,15 +28,15 @@ public class HeadPurchaseEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
-	
+
     public Player getPlayer() {
         return this.player;
     }
-    
+
     public ItemStack getItemStack() {
-    	return this.itemStack;
+        return this.itemStack;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancelled;

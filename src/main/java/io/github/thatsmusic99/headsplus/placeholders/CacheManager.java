@@ -48,7 +48,8 @@ public class CacheManager {
 
     public long getXP(OfflinePlayer player) {
         // Check cache
-        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getXp();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null)
+            return HPPlayer.getHPPlayer(player.getUniqueId()).getXp();
         UUID uuid = player.getUniqueId();
         // Update caches, use supplier to avoid running SQL query
         updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, () -> PlayerSQLManager.get().getXP(uuid));
@@ -59,14 +60,17 @@ public class CacheManager {
 
     public String getLevel(OfflinePlayer player) {
         // Check HPPlayer cache, ez
-        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null)
+            return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
         UUID uuid = player.getUniqueId();
-        updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels, () -> PlayerSQLManager.get().getLevel(uuid));
+        updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels,
+                () -> PlayerSQLManager.get().getLevel(uuid));
         int i = -1;
         if (cachedLevels.containsKey(uuid.toString())) {
             i = cachedLevels.get(uuid.toString());
         } else {
-            PlayerSQLManager.get().getLevel(player.getUniqueId()).thenApply(level -> cachedLevels.put(uuid.toString(), level));
+            PlayerSQLManager.get().getLevel(player.getUniqueId()).thenApply(level -> cachedLevels.put(uuid.toString()
+                    , level));
         }
         if (i == -1) return null;
         Level level = LevelsManager.get().getLevel(i);
@@ -75,7 +79,8 @@ public class CacheManager {
     }
 
     public int getTotalChallengesComplete(OfflinePlayer player) {
-        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null) return HPPlayer.getHPPlayer(player.getUniqueId()).getCompleteChallenges().size();
+        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null)
+            return HPPlayer.getHPPlayer(player.getUniqueId()).getCompleteChallenges().size();
         UUID uuid = player.getUniqueId();
         // Update the caches
         updateCaches("challenges_" + player.getName(), uuid.toString(), cachedChallengeTotal,
@@ -91,20 +96,26 @@ public class CacheManager {
         return getEntries(type.name(), StatisticsSQLManager.get().getLeaderboardTotal(type));
     }
 
-    public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type, String head) {
+    public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
+                                                                  String head) {
         return getEntries(type.name() + "_" + head, StatisticsSQLManager.get().getLeaderboardTotal(type, head));
     }
 
-    public List<StatisticsSQLManager.LeaderboardEntry> getEntriesMeta(StatisticsSQLManager.CollectionType type, String metadata) {
-        return getEntries(type.name() + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, metadata));
+    public List<StatisticsSQLManager.LeaderboardEntry> getEntriesMeta(StatisticsSQLManager.CollectionType type,
+                                                                      String metadata) {
+        return getEntries(type.name() + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotalMetadata(type,
+                metadata));
     }
 
-    public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type, String head, String metadata) {
-        return getEntries(type.name() + "_" + head + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata));
+    public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
+                                                                  String head, String metadata) {
+        return getEntries(type.name() + "_" + head + "_" + metadata,
+                StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata));
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type) {
-        return getStat(player.getName() + "_" + type.name(), StatisticsSQLManager.get().getStat(player.getUniqueId(), type));
+        return getStat(player.getName() + "_" + type.name(), StatisticsSQLManager.get().getStat(player.getUniqueId(),
+                type));
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head) {
@@ -129,7 +140,8 @@ public class CacheManager {
         return -1;
     }
 
-    private List<StatisticsSQLManager.LeaderboardEntry> getEntries(String id, CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>> ree) {
+    private List<StatisticsSQLManager.LeaderboardEntry> getEntries(String id,
+                                                                   CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>> ree) {
         updateCaches("leaderboards_" + id, id, cachedEntries, () -> ree);
         //
         if (cachedEntries.containsKey(id)) return cachedEntries.get(id);
@@ -137,7 +149,8 @@ public class CacheManager {
         return new ArrayList<>();
     }
 
-    private <T> void updateCaches(String key, String id, HashMap<String, T> hashMap, Supplier<CompletableFuture<T>> runnable) {
+    private <T> void updateCaches(String key, String id, HashMap<String, T> hashMap,
+                                  Supplier<CompletableFuture<T>> runnable) {
         int duration = MainConfig.get().getLeaderboards().CACHE_DURATION;
         if (cachedRequests.containsKey(key)) {
             cachedRequests.get(key).cancel();
@@ -157,6 +170,7 @@ public class CacheManager {
     }
 
     private void makeRequest(String key) {
-        cachedRequests.put(key, Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> cachedRequests.remove(key), MainConfig.get().getLeaderboards().CACHE_DURATION));
+        cachedRequests.put(key, Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () -> cachedRequests.remove(key),
+                MainConfig.get().getLeaderboards().CACHE_DURATION));
     }
 }

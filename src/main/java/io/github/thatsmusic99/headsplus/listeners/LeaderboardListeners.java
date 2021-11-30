@@ -46,14 +46,17 @@ public class LeaderboardListeners implements Listener {
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
             if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
-                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
-                    event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount()), 20);
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
+                            StatisticsSQLManager.CollectionType.HUNTING,
+                            event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount())
+                    , 20);
         }
 
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(EntityHeadDropEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent", this), HeadsPlus.get(), true);
+                    new HeadsPlusEventExecutor(EntityHeadDropEvent.class, "EntityHeadDropEvent", this),
+                    HeadsPlus.get(), true);
 
         }
 
@@ -80,15 +83,17 @@ public class LeaderboardListeners implements Listener {
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return;
             if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
-                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.HUNTING,
-                    event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount()), 20);
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
+                            StatisticsSQLManager.CollectionType.HUNTING,
+                            event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount()), 20);
 
         }
 
         @Override
         public void init() {
             Bukkit.getPluginManager().registerEvent(PlayerHeadDropEvent.class, this, EventPriority.MONITOR,
-                    new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this), HeadsPlus.get(), true);
+                    new HeadsPlusEventExecutor(PlayerHeadDropEvent.class, "PlayerHeadDropEvent", this),
+                    HeadsPlus.get(), true);
         }
 
         @Override
@@ -109,8 +114,9 @@ public class LeaderboardListeners implements Listener {
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
             if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.STATS)) return;
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
-                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(), StatisticsSQLManager.CollectionType.CRAFTING,
-                    event.getType(), "", event.getHeadsCrafted()), 20);
+                    StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
+                            StatisticsSQLManager.CollectionType.CRAFTING,
+                            event.getType(), "", event.getHeadsCrafted()), 20);
         }
 
         @Override

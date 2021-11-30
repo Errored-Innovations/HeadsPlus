@@ -33,7 +33,8 @@ public class DebugFileCreator {
         HeadsPlus hp = HeadsPlus.get();
         JSONArray array1 = new JSONArray();
         JSONObject o1 = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
+        String date =
+                new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
         o1.put("Date", date);
         o1.put("Special message", getErrorHeader());
         try {
@@ -96,7 +97,8 @@ public class DebugFileCreator {
         File fr = null;
         for (int i = 0; !cancelled; i++) {
             createDebugFolder();
-            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            File f = new File(hp.getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") +
+                    "-REPORT-" + i + ".json");
             if (!f.exists()) {
                 f.createNewFile();
                 fr = f;
@@ -244,7 +246,8 @@ public class DebugFileCreator {
     private static JSONObject getBasicInfo() {
         HeadsPlus hp = HeadsPlus.get();
         JSONObject basicInfo = new JSONObject();
-        String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
+        String date =
+                new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
         basicInfo.put("Date", date);
         basicInfo.put("Special message", getErrorHeader());
         try {
@@ -262,7 +265,8 @@ public class DebugFileCreator {
     private static String getErrorHeader() {
         List<String> msgs = new ArrayList<>();
         msgs.add("Oh sorry, did I hurt you?");
-        msgs.add("Oopsie Whoopsie! UwU We made a ****y wucky! A wittle ****o boingo! The code monkeys at our headquarters are working VEWY HARD to fix this!");
+        msgs.add("Oopsie Whoopsie! UwU We made a ****y wucky! A wittle ****o boingo! The code monkeys at our " +
+                "headquarters are working VEWY HARD to fix this!");
         msgs.add("The plugin works well with a few exceptions, amirite?");
         msgs.add("Please don't put me on Santa's naughty list.");
         msgs.add("Off with your head!");
@@ -305,7 +309,8 @@ public class DebugFileCreator {
         msgs.add("KEVIIIIIIIIIIIIIIIIIN!!! FOR GOODNESS SAKE, NO I'M NOT!");
         msgs.add("what the hell, chris");
         msgs.add("nope, nope, nope, out. no. get out. get out of here.");
-        msgs.add("what's the time quarter to 9 time to take a bath what do you mean we're already clean scrub scrub scrub til the waters brown");
+        msgs.add("what's the time quarter to 9 time to take a bath what do you mean we're already clean scrub scrub " +
+                "scrub til the waters brown");
         msgs.add("B L E H");
         msgs.add("At least you didn't come up to me saying I'd be a dad...");
         msgs.add("THEY BROUGHT BRITISH MILK");
@@ -321,7 +326,10 @@ public class DebugFileCreator {
         msgs.add("BEES");
         msgs.add("Hi there, my name is the Kneecap bot! And I can confirm this a big YIKES moment.");
         msgs.add("https://media.discordapp.net/attachments/715322160226238635/730734060401590322/mau424glmas31.png");
-        msgs.add("This Java-built addition to your video game software which allows multiple individuals with the required client to connect has spontaneously failed to carry out one of its many functions, please report this troubling situation to the individual who compiled this code so that she can investigate further.");
+        msgs.add("This Java-built addition to your video game software which allows multiple individuals with the " +
+                "required client to connect has spontaneously failed to carry out one of its many functions, please " +
+                "report this troubling situation to the individual who compiled this code so that she can investigate" +
+                " further.");
         msgs.add("yuganda sekai ni dan dan boku wa sukitootte mienaku natte\n" +
                 "mitsukenaide boku no koto wo mitsumenaide\n" +
                 "dareka ga egaita sekai no naka de anata wo kizutsuketaku wa nai yo\n" +
@@ -365,8 +373,10 @@ public class DebugFileCreator {
     private static File getReportFile() {
         createDebugFolder();
         for (int i = 0; true; i++) {
-            String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
-            File report = new File(HeadsPlus.get().getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll("/", ".") + "-REPORT-" + i + ".json");
+            String date =
+                    new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date(System.currentTimeMillis()));
+            File report = new File(HeadsPlus.get().getDataFolder() + "/debug/", date.replaceAll(":", "_").replaceAll(
+                    "/", ".") + "-REPORT-" + i + ".json");
             if (!report.exists()) {
                 return report;
             }

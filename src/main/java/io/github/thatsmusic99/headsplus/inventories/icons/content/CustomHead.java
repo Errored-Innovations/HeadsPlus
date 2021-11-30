@@ -34,7 +34,8 @@ public class CustomHead extends Content {
         this.id = id;
     }
 
-    public CustomHead() {}
+    public CustomHead() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -44,21 +45,23 @@ public class CustomHead extends Content {
                 MessagesManager.get().sendMessage("commands.head.full-inv", player);
                 return false;
             }
-            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : determinePrice(player.getWorld()); // Set price to 0 or not
+            double price = player.hasPermission("headsplus.bypass.cost") ? 0 : determinePrice(player.getWorld()); //
+            // Set price to 0 or not
             Economy ef = null;
             if (price > 0.0
                     && HeadsPlus.get().isVaultEnabled()
                     && (ef = HeadsPlus.get().getEconomy()) != null
-                    && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player can't afford the head
+                    && price > ef.getBalance(player)) { // If Vault is enabled, price is above 0, and the player
+                // can't afford the head
                 MessagesManager.get().sendMessage("commands.heads.not-enough-money", player); // K.O
                 return false;
             }
             HeadPurchaseEvent purchaseEvent = new HeadPurchaseEvent(player, item);
             Bukkit.getServer().getPluginManager().callEvent(purchaseEvent);
             if (!purchaseEvent.isCancelled()) {
-                if(price > 0.0 && ef != null) {
+                if (price > 0.0 && ef != null) {
                     EconomyResponse er = ef.withdrawPlayer(player, price);
-                    if(er.transactionSuccess()) {
+                    if (er.transactionSuccess()) {
                         MessagesManager.get().sendMessage("commands.heads.buy-success", player,
                                 "{price}", MainConfig.get().fixBalanceStr(price),
                                 "{balance}", MainConfig.get().fixBalanceStr(ef.getBalance(player)));

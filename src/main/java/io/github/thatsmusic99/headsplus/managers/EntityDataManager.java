@@ -180,7 +180,8 @@ public class EntityDataManager {
                         String path = name + "." + conditions + "." + head;
                         String displayName = ConfigMobs.get().getDisplayName(path);
                         if (displayName != null) {
-                            headInfo.withDisplayName(displayName.replaceAll("\\{type}", HeadsPlus.capitalize(name.replaceAll("_", " "))));
+                            headInfo.withDisplayName(displayName.replaceAll("\\{type}",
+                                    HeadsPlus.capitalize(name.replaceAll("_", " "))));
                         }
 
                         headInfo.withXP(path).withChance(path);
@@ -188,13 +189,15 @@ public class EntityDataManager {
                         headInfo.setLore(ConfigMobs.get().getLore(name, conditions));
 
                         heads.add(headInfo);
-                        SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head, SellableHeadsManager.SellingType.HUNTING, ConfigMobs.get().getPrice(path));
+                        SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head,
+                                SellableHeadsManager.SellingType.HUNTING, ConfigMobs.get().getPrice(path));
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
             } catch (Exception e) {
-                HeadsPlus.get().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a custom head, please double check the name. (Error code: 6)");
+                HeadsPlus.get().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a " +
+                        "custom head, please double check the name. (Error code: 6)");
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
                 e.printStackTrace();
             }

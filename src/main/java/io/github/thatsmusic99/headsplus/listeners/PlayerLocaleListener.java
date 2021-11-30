@@ -19,7 +19,8 @@ public class PlayerLocaleListener extends HeadsPlusListener<PlayerLocaleChangeEv
     @Override
     public void init() {
         Bukkit.getPluginManager().registerEvent(PlayerLocaleChangeEvent.class, this, EventPriority.NORMAL,
-                new HeadsPlusEventExecutor(PlayerLocaleChangeEvent.class, "PlayerLocaleChangeEvent", this), HeadsPlus.get());
+                new HeadsPlusEventExecutor(PlayerLocaleChangeEvent.class, "PlayerLocaleChangeEvent", this),
+                HeadsPlus.get());
 
     }
 

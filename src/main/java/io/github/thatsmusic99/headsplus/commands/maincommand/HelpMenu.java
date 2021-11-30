@@ -22,15 +22,15 @@ import java.util.List;
 )
 public class HelpMenu implements IHeadsPlusCommand {
 
-	private void helpNoArgs(CommandSender sender) {
+    private void helpNoArgs(CommandSender sender) {
         ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, 1);
-	}
+    }
 
-	private void helpNo(CommandSender sender, String str) {
+    private void helpNo(CommandSender sender, String str) {
         ConfigTextMenus.HelpMenuTranslator.translateHelpMenu(sender, Integer.parseInt(str));
-	}
+    }
 
-	private void helpCmd(CommandSender cs, String cmdName) {
+    private void helpCmd(CommandSender cs, String cmdName) {
         if (!cs.hasPermission("headsplus.maincommand")) return;
 
         IHeadsPlusCommand pe = null;
@@ -48,31 +48,32 @@ public class HelpMenu implements IHeadsPlusCommand {
         }
     }
 
-	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-	    if (args.length == 0) {
-	        helpNoArgs(sender);
-	    } else if (args.length == 1) {
-	        if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
-	            helpNo(sender, args[0]);
-	        } else if (args[0].equalsIgnoreCase("help")) {
-	            helpNoArgs(sender);
-	        } else {
-	            helpNoArgs(sender);
-	        }
-	    } else {
-	        if (args[0].equalsIgnoreCase("help")) {
-	            if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
-	                helpNo(sender, args[1]);
-	            } else {
-	                helpCmd(sender, args[1]);
-	            }
-	        } else {
-	            helpNoArgs(sender);
-	        }
-	    }
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
+        if (args.length == 0) {
+            helpNoArgs(sender);
+        } else if (args.length == 1) {
+            if (CachedValues.MATCH_PAGE.matcher(args[0]).matches()) {
+                helpNo(sender, args[0]);
+            } else if (args[0].equalsIgnoreCase("help")) {
+                helpNoArgs(sender);
+            } else {
+                helpNoArgs(sender);
+            }
+        } else {
+            if (args[0].equalsIgnoreCase("help")) {
+                if (CachedValues.MATCH_PAGE.matcher(args[1]).matches()) {
+                    helpNo(sender, args[1]);
+                } else {
+                    helpCmd(sender, args[1]);
+                }
+            } else {
+                helpNoArgs(sender);
+            }
+        }
         return true;
-	}
+    }
 
     @Override
     public boolean shouldEnable() {
@@ -80,7 +81,8 @@ public class HelpMenu implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         if (args.length == 2) {
             List<String> commands = new ArrayList<>();
             for (IHeadsPlusCommand key : HeadsPlus.get().getCommands().values()) {

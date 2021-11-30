@@ -19,7 +19,8 @@ public class CustomHeadSection extends Content {
         this.section = section;
     }
 
-    public CustomHeadSection() {}
+    public CustomHeadSection() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

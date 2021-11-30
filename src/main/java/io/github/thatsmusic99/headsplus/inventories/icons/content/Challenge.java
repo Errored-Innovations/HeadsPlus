@@ -57,7 +57,7 @@ public class Challenge extends Content {
                 initNameAndLore("challenge", player);
                 event.getInventory().setItem(event.getSlot(), item);
             }
-        }catch (NullPointerException ignored) {
+        } catch (NullPointerException ignored) {
         }
         return false;
     }
@@ -70,7 +70,8 @@ public class Challenge extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge.display-name")
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenge" +
+                        ".display-name")
                 .replaceAll("\\{challenge-name}", challenge.getChallengeHeader()), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons.challenge.lore")) {
@@ -91,7 +92,8 @@ public class Challenge extends Content {
                         new HPUtils.PlaceholderInfo("{xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
-                        new HPUtils.PlaceholderInfo("{heads}", () -> String.valueOf(challenge.getStatSync(player.getUniqueId())), true));
+                        new HPUtils.PlaceholderInfo("{heads}",
+                                () -> String.valueOf(challenge.getStatSync(player.getUniqueId())), true));
             }
         }
         meta.setLore(lore);

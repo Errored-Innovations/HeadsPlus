@@ -27,7 +27,8 @@ import java.util.Random;
 public class TestsCommand implements IHeadsPlusCommand {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         if (args.length < 3) {
             MessagesManager.get().sendMessage("commands.errors.invalid-args", sender);
             return true;
@@ -51,7 +52,8 @@ public class TestsCommand implements IHeadsPlusCommand {
                         successes++;
                     }
                 }
-                MessagesManager.get().sendMessage("commands.tests.results", sender, "{results}", successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
+                MessagesManager.get().sendMessage("commands.tests.results", sender, "{results}",
+                        successes + "/" + amount + " (" + (((double) successes / (double) amount) * 100) + "%)");
             }
         }.runTaskAsynchronously(HeadsPlus.get());
         return true;
@@ -63,7 +65,8 @@ public class TestsCommand implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], EntityDataManager.ableEntities, results);

@@ -16,7 +16,8 @@ public class ChallengesMenu extends BaseInventory {
         super(player, context);
     }
 
-    public ChallengesMenu() {}
+    public ChallengesMenu() {
+    }
 
     @Override
     public String getDefaultTitle() {
@@ -37,7 +38,8 @@ public class ChallengesMenu extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> sections = new ArrayList<>();
         for (ChallengeSection section : ChallengeManager.get().getChallengeSections()) {
-            io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection icon = new io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection(section);
+            io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection icon =
+                    new io.github.thatsmusic99.headsplus.inventories.icons.content.ChallengeSection(section);
             icon.initNameAndLore("challenge-section", player);
             sections.add(icon);
         }

@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -34,7 +33,8 @@ public class AutograbManager {
         BufferedReader reader;
         try {
             URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
-            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(), StandardCharsets.UTF_8));
+            reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream(),
+                    StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -46,7 +46,8 @@ public class AutograbManager {
             String json = sb.toString();
             JSONObject resp = (JSONObject) JSONValue.parse(json);
             if (resp == null || resp.isEmpty()) {
-                HeadsPlus.get().getLogger().warning("Failed to grab data for user " + username + " - invalid username.");
+                HeadsPlus.get().getLogger().warning("Failed to grab data for user " + username + " - invalid username" +
+                        ".");
                 if (callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
@@ -60,7 +61,8 @@ public class AutograbManager {
                 }
                 return null;
             } else {
-                uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an IllegalArgumentException
+                uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an
+                // IllegalArgumentException
             }
         } catch (IOException e) {
             DebugPrint.createReport(e, "Retreiving UUID (addhead)", true, callback);
@@ -95,7 +97,8 @@ public class AutograbManager {
                 if (id == null) return;
                 URL uRL = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + id.replace("-", ""));
 
-                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(), StandardCharsets.UTF_8));
+                reader = new BufferedReader(new InputStreamReader(uRL.openConnection().getInputStream(),
+                        StandardCharsets.UTF_8));
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -136,7 +139,8 @@ public class AutograbManager {
                     return;
                 }
             } catch (Exception ex) {
-                if (ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
+                if (ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 " +
+                        "for URL")) {
                     grabProfile(id, tries - 1, callback, forceAdd, 30 * 20);
                 } else {
                     DebugPrint.createReport(ex, "Retreiving profile (addhead)", true, callback);
@@ -157,8 +161,10 @@ public class AutograbManager {
             final String[] playerInfo = new String[1];
             try {
                 // can't wait for PAPER fricks sake
-                playerInfo[0] = ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
-                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())), Map.class);
+                playerInfo[0] =
+                        ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
+                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())),
+                        Map.class);
                 String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
                 addTexture(url, force, sender, player.getName() == null ? "<No Name>" : player.getName());
             } catch (NoSuchElementException ignored) {

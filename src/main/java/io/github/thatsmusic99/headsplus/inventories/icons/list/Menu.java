@@ -13,7 +13,8 @@ public class Menu extends Icon {
         super(player);
     }
 
-    public Menu() {}
+    public Menu() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

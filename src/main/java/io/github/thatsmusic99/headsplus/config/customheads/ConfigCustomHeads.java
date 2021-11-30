@@ -28,7 +28,6 @@ public class ConfigCustomHeads extends HPConfig {
 
     @Override
     public void moveToNew() {
-        // TODO - this is broken, investigate
         moveTo("options.update-heads", "update-heads", ConfigHeads.get());
         moveTo("options.version", "version", ConfigHeads.get());
         moveTo("options.default-price", "default-selector-head-price", MainConfig.get());
@@ -49,7 +48,8 @@ public class ConfigCustomHeads extends HPConfig {
         if (contains("sections")) {
             for (String key : getConfigSection("sections").getKeys(false)) {
                 moveTo("sections." + key + ".texture", "sections." + key + ".texture", ConfigHeadsSelector.get());
-                moveTo("sections." + key + ".display-name", "sections." + key + ".display-name", ConfigHeadsSelector.get());
+                moveTo("sections." + key + ".display-name", "sections." + key + ".display-name",
+                        ConfigHeadsSelector.get());
                 ConfigHeadsSelector.get().addDefault("sections." + key + ".enabled", true);
                 ConfigHeadsSelector.get().addDefault("sections." + key + ".permission", "headsplus.section." + key);
             }
@@ -57,11 +57,12 @@ public class ConfigCustomHeads extends HPConfig {
     }
 
     @Override
-    public void save() throws IOException {
+    public void save() {
         File customHeads = new File(HeadsPlus.get().getDataFolder(), "customheads.yml");
         if (!customHeads.exists()) return;
         if (!customHeads.renameTo(new File(HeadsPlus.get().getDataFolder(), "customheads-backup.yml"))) {
-            HeadsPlus.get().getLogger().warning("Failed to rename customheads.yml to customheads-backup.yml name! You will need to do this yourself.");
+            HeadsPlus.get().getLogger().warning("Failed to rename customheads.yml to customheads-backup.yml name! You" +
+                    " will need to do this yourself.");
         }
     }
 

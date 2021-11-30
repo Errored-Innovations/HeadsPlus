@@ -17,7 +17,8 @@ public class Search extends Icon {
         super(player);
     }
 
-    public Search() {}
+    public Search() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

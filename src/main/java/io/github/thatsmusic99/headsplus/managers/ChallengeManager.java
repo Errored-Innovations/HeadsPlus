@@ -65,8 +65,9 @@ public class ChallengeManager {
         breakUpTasks(0, challenges.getConfigSection("icons").getKeys(false), this::registerIcon, () ->
                 // Then sections
                 breakUpTasks(0, challenges.getConfigSection("sections").getKeys(false), this::registerSection, () ->
-                // And then challenges last
-                breakUpTasks(0, challenges.getConfigSection("challenges").getKeys(false), this::registerChallenge, null)));
+                        // And then challenges last
+                        breakUpTasks(0, challenges.getConfigSection("challenges").getKeys(false),
+                                this::registerChallenge, null)));
 
     }
 
@@ -76,11 +77,13 @@ public class ChallengeManager {
             ConfigSection section = ConfigChallenges.get().getConfigSection("icons." + key);
             if (section == null) return;
             ItemStack item;
-            String material = Objects.requireNonNull(section.getString("material"), "Material for icon " + key + " is null!");
+            String material = Objects.requireNonNull(section.getString("material"), "Material for icon " + key + " is" +
+                    " null!");
             if (material.startsWith("HP#")) {
                 item = HeadManager.get().getHeadInfo(material).forceBuildHead();
             } else {
-                Material actualMaterial = Objects.requireNonNull(Material.getMaterial(material.toUpperCase()), "Material " + material.toUpperCase() + " does not exist!");
+                Material actualMaterial = Objects.requireNonNull(Material.getMaterial(material.toUpperCase()),
+                        "Material " + material.toUpperCase() + " does not exist!");
                 item = new ItemStack(actualMaterial);
             }
             String displayName = section.getString("display-name");
@@ -121,7 +124,8 @@ public class ChallengeManager {
             this.sections.put(key, new ChallengeSection(material, displayName, lore, key));
             HeadsPlus.debug("Registered section " + key + ".");
         } catch (NullPointerException ex) {
-            HeadsPlus.get().getLogger().warning("Null value received when registering challenge section " + key + ": " + ex.getMessage());
+            HeadsPlus.get().getLogger().warning("Null value received when registering challenge section " + key + ": "
+                    + ex.getMessage());
         }
     }
 
@@ -147,14 +151,16 @@ public class ChallengeManager {
                 throw new NullPointerException("Completed icon " + iconId + " for " + key + " does not exist!");
 
             // Load the challenge
-            Challenge challenge = Challenge.fromConfigSection(key, section, icons.get(iconId), icons.get(completeIconId));
+            Challenge challenge = Challenge.fromConfigSection(key, section, icons.get(iconId),
+                    icons.get(completeIconId));
             if (!challenge.canRegister()) return;
 
             // Add the challenge to the section
             String sectionStr = Objects.requireNonNull(section.getString("section"),
                     "Section for " + key + " was not found!");
             if (!sections.containsKey(sectionStr))
-                throw new NullPointerException("Section " + sectionStr + " is not registered (challenge: " + key + "!)");
+                throw new NullPointerException("Section " + sectionStr + " is not registered (challenge: " + key +
+                        "!)");
             sections.get(sectionStr).addChallenge(challenge);
 
             // Register the challenge fully

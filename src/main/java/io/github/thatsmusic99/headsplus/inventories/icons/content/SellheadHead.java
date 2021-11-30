@@ -14,7 +14,8 @@ public class SellheadHead extends Content {
         this.type = type;
     }
 
-    public SellheadHead() {}
+    public SellheadHead() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {

@@ -68,7 +68,8 @@ public class ChallengeSQLManager extends SQLManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException ignored) {}
+        } catch (ParseException ignored) {
+        }
     }
 
     public CompletableFuture<Integer> getTotalChallengesComplete(UUID uuid) {
@@ -81,7 +82,8 @@ public class ChallengeSQLManager extends SQLManager {
 
     public int getTotalChallengesCompleteSync(UUID uuid) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT SUM(count) FROM headsplus_challenges WHERE user_id = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT SUM(count) FROM headsplus_challenges " +
+                    "WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
 
             ResultSet set = statement.executeQuery();
@@ -95,16 +97,19 @@ public class ChallengeSQLManager extends SQLManager {
 
     private void completeChallengeSync(UUID uuid, String challenge) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_challenges WHERE user_id = ? AND challenge = ?");
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_challenges " +
+                    "WHERE user_id = ? AND challenge = ?");
             checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             checkStatement.setString(2, challenge);
 
             ResultSet set = checkStatement.executeQuery();
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_challenges (last_completion_time, user_id, challenge, count) VALUES (?, ?, ?, 1)");
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_challenges " +
+                        "(last_completion_time, user_id, challenge, count) VALUES (?, ?, ?, 1)");
             } else {
-                updateStatement = connection.prepareStatement("UPDATE headsplus_challenges SET count = count + 1, last_completion_time = ? WHERE user_id = ? AND challenge = ?");
+                updateStatement = connection.prepareStatement("UPDATE headsplus_challenges SET count = count + 1, " +
+                        "last_completion_time = ? WHERE user_id = ? AND challenge = ?");
             }
             updateStatement.setLong(1, System.currentTimeMillis());
             updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid));
@@ -119,7 +124,8 @@ public class ChallengeSQLManager extends SQLManager {
     public List<String> getCompleteChallenges(UUID uuid) {
         List<String> challenges = new ArrayList<>();
         try (Connection connection = implementConnection()) {
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT challenge FROM headsplus_challenges WHERE user_id = ?");
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT challenge FROM " +
+                    "headsplus_challenges WHERE user_id = ?");
             checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
 
             ResultSet set = checkStatement.executeQuery();

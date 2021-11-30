@@ -30,7 +30,8 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.challenges")) {
-                        InventoryManager.getManager(p).open(InventoryManager.InventoryType.CHALLENGES_MENU, new HashMap<>());
+                        InventoryManager.getManager(p).open(InventoryManager.InventoryType.CHALLENGES_MENU,
+                                new HashMap<>());
                         return true;
                     } else {
                         hpc.sendMessage("commands.errors.no-perm", p);
@@ -53,7 +54,8 @@ public class ChallengeCommand implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         return new ArrayList<>();
     }
 }

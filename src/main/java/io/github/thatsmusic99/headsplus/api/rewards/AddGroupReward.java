@@ -19,7 +19,8 @@ public class AddGroupReward extends Reward {
 
     public static AddGroupReward fromConfigSection(String id, ConfigSection section) {
         if (!section.contains("base-value") && !section.contains("reward-value"))
-            throw new IllegalStateException("Reward type ADD_GROUP for reward " + id + " must have a base-value option!");
+            throw new IllegalStateException("Reward type ADD_GROUP for reward " + id + " must have a base-value " +
+                    "option!");
         return new AddGroupReward(section.getString("base-value", section.getString("reward-value")),
                 section.getLong("base-xp", 0));
     }

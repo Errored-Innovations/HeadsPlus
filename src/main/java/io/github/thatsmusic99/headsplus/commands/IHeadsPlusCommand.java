@@ -1,7 +1,6 @@
 package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

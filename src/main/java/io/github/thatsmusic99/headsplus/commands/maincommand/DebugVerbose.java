@@ -24,7 +24,8 @@ public class DebugVerbose {
                 }
                 DebugManager.addListener(sender, event, stringToConditions(arguments));
                 sender.sendMessage(MessagesManager.get().getString("commands.debug.verbose.enabled", sender)
-                        .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", arguments.length == 0 ? "(none)" : args[3]));
+                        .replaceAll("\\{event}", args[2]).replaceAll("\\{args}", arguments.length == 0 ? "(none)" :
+                                args[3]));
             }
 
         }

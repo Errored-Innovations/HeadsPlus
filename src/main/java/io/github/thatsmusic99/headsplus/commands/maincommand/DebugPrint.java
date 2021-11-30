@@ -47,7 +47,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                 hpc.sendMessage("commands.errors.cmd-fail", sender);
             }
 
-            log.severe("HeadsPlus has failed to execute this task. An error report has been made in /plugins/HeadsPlus/debug");
+            log.severe("HeadsPlus has failed to execute this task. An error report has been made in " +
+                    "/plugins/HeadsPlus/debug - task: " + name);
             String s = DebugFileCreator.createReport(new HeadsPlusException(e));
             log.severe("Report name: " + s);
             log.severe("Please submit this report to the developer at one of the following links:");
@@ -56,14 +57,16 @@ public class DebugPrint implements IHeadsPlusCommand {
             log.severe("https://www.spigotmc.org/threads/headsplus-1-8-x-1-12-x.237088/");
 
         } catch (Exception ex) {
-            HeadsPlus.get().getLogger().warning("An error has occurred! We tried creating a debug report, but that didn't work... stacktraces:");
+            HeadsPlus.get().getLogger().warning("An error has occurred! We tried creating a debug report, but that " +
+                    "didn't work... task: " + name + "; stacktraces:");
             e.printStackTrace();
             ex.printStackTrace();
         }
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         try {
             if (args.length < 2) {
                 hpc.sendMessage("commands.errors.invalid-args", sender);
@@ -85,7 +88,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                 report = new DebugFileCreator().createPlayerReport(pl);
                                 sender.sendMessage(ChatColor.GREEN + "Report name: " + report);
                             } else {
-                                hpc.sendMessage("commands.profile.no-data",  sender);
+                                hpc.sendMessage("commands.profile.no-data", sender);
                             }
                         } else {
                             hpc.sendMessage("commands.errors.invalid-args", sender);
@@ -124,7 +127,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     PersistenceManager.get().setSellable(item, true);
                                     PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
-                                    double headsPrice = ConfigMobs.get().getPrice(args[2].toLowerCase().replaceAll("_", ""));
+                                    double headsPrice = ConfigMobs.get().getPrice(args[2].toLowerCase().replaceAll("_"
+                                            , ""));
                                     if (headsPrice != 0.0) {
                                         price = headsPrice;
                                     } else {
@@ -132,7 +136,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     }
                                     PersistenceManager.get().setSellPrice(item, price);
                                     final ItemStack finalItem = item;
-                                    Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> player.getInventory().setItem(slot, finalItem));
+                                    Bukkit.getScheduler().runTask(HeadsPlus.get(),
+                                            () -> player.getInventory().setItem(slot, finalItem));
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }
@@ -159,11 +164,13 @@ public class DebugPrint implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (sender.hasPermission("headsplus.commands.debug")) {
             if (args.length == 2) {
-                StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item", "delete", "save", "transfer", "fix", "verbose"), results);
+                StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item",
+                        "delete", "save", "transfer", "fix", "verbose"), results);
             } else if (args.length > 2) {
                 switch (args[1].toLowerCase()) {
                     case "fix":

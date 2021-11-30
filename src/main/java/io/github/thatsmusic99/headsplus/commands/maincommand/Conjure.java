@@ -27,7 +27,8 @@ public class Conjure implements IHeadsPlusCommand {
     private final MessagesManager hpc = MessagesManager.get();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             String[] args) {
         // Check argument number
         if (args.length < 2) {
             hpc.sendMessage("commands.errors.invalid-args", sender);
@@ -71,7 +72,8 @@ public class Conjure implements IHeadsPlusCommand {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], HeadManager.get().getKeys(), results);
