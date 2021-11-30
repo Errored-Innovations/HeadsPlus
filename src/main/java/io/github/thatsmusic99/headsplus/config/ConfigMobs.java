@@ -222,7 +222,7 @@ public class ConfigMobs extends FeatureConfig {
 					break;
                 case "WITHER_SKELETON":
                 	addDefaultHead(key + ".default", "{mob-default}");
-                	addExample(key + ".default.{mob-default}.chance", 2.5);
+                	addExample(key + ".default.{mob-default}.chance", 0);
                 	break;
                 case "ENDER_DRAGON":
 				case "ZOMBIE":
