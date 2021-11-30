@@ -81,15 +81,8 @@ public class ConfigMobs extends FeatureConfig {
                 "shulker", "silverfish", "skeleton", "slime", "snowman", "spider", "squid", "stray", "strider",
                 "trader_llama", "turtle", "vex", "villager",
                 "vindicator", "wandering_trader", "witch", "wither", "wolf", "zoglin", "zombie")) {
-            ConfigSection section = getConfigSection(entity + ".name", true);
-            if (section == null) return;
-            for (String key : section.getKeys(false, true)) {
-                if (get(entity + ".name." + key, true) instanceof ConfigSection) break;
-                List<String> heads = getList(entity + ".name." + key, true);
-                for (String head : heads) {
-                    createConfigSection(entity.toUpperCase() + "." + key + "." + head);
-                }
-            }
+
+            transferEntity(entity.toUpperCase()); // I AM SUCH A UH UHHHH TWO NUMBER NINES
         }
 
         for (String entity : Arrays.asList("CAVE_SPIDER", "ELDER_GUARDIAN", "ENDER_DRAGON", "IRON_GOLEM", "MAGMA_CUBE",
@@ -97,11 +90,41 @@ public class ConfigMobs extends FeatureConfig {
                 "WITHER_SKELETON",
                 "ZOMBIE_HORSE", "ZOMBIE_VILLAGER", "ZOMBIFIED_PIGLIN")) {
 
-            String badEntity = entity.toLowerCase().replaceAll("_", "");
-            for (String key : getConfigSection(badEntity + ".name", true).getKeys(false, true)) {
-                if (get(badEntity + ".name." + key, true) instanceof ConfigSection) break;
-                List<String> heads = getList(badEntity + ".name." + key, true);
-                for (String head : heads) {
+            transferEntity(entity);
+        }
+
+        try {
+            ConfigMasks.get().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void transferEntity(String entity) {
+        String oldEntity = entity.replace("_", "").toLowerCase(Locale.ROOT);
+        // Transfer masks
+        List<String> maskList = getList(oldEntity + ".mask-effects", new ArrayList<>(), true);
+        List<Integer> amplifierList = getList(oldEntity + ".mask-amplifiers", new ArrayList<>(), true);
+        for (int i = 0; i < maskList.size(); i++) {
+            maskList.set(i, maskList.get(i) + (amplifierList.size() > i ? ":" + amplifierList.get(i) : ""));
+        }
+
+        ConfigSection section = getConfigSection(oldEntity + ".name", true);
+        if (section == null) return;
+        for (String key : section.getKeys(false, true)) {
+            if (get(oldEntity + ".name." + key, true) instanceof ConfigSection) break;
+            List<String> heads = getList(oldEntity + ".name." + key, true);
+            for (String head : heads) {
+                if (maskList.size() > 0 && !head.equals("{mob-default}")) {
+                    String newHead = head.substring(0, 2) + "M" + head.substring(2);
+                    String id = head.substring(3);
+                    HeadsPlus.get().getLogger().info(maskList.toString());
+                    ConfigMasks.get().forceExample("masks." + id + ".when-wearing", new String[0]);
+                    ConfigMasks.get().forceExample("masks." + id + ".effects", new ArrayList<>(maskList));
+                    ConfigMasks.get().forceExample("masks." + id + ".type", "potion");
+                    ConfigMasks.get().forceExample("masks." + id + ".idle", head);
+                    createConfigSection(entity + "." + key + "." + newHead);
+                } else {
                     createConfigSection(entity + "." + key + "." + head);
                 }
             }
