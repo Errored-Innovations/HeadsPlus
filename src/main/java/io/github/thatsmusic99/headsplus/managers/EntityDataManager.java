@@ -184,13 +184,13 @@ public class EntityDataManager {
                                     HeadsPlus.capitalize(name.replaceAll("_", " "))));
                         }
 
-                        headInfo.withXP(path).withChance(path);
+                        headInfo.withXP(path).withChance(path).withPrice(path);
 
-                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions));
+                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions, headInfo.price));
 
                         heads.add(headInfo);
                         SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head,
-                                SellableHeadsManager.SellingType.HUNTING, ConfigMobs.get().getPrice(path));
+                                SellableHeadsManager.SellingType.HUNTING, headInfo.price);
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }
@@ -213,11 +213,13 @@ public class EntityDataManager {
         private final String id;
         private MaskManager.MaskInfo info;
         private double chance;
+        private double price;
 
         public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
             this.id = id;
             this.chance = MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE;
+            this.price = MainConfig.get().getMobDrops().DEFAULT_PRICE;
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
@@ -240,6 +242,12 @@ public class EntityDataManager {
             return this;
         }
 
+        public DroppedHeadInfo withPrice(String path) {
+            if (!ConfigMobs.get().contains(path + ".price")) return this;
+            price = ConfigMobs.get().getDouble(path + ".price");
+            return this;
+        }
+
         public long getXp() {
             return xp;
         }
@@ -250,6 +258,10 @@ public class EntityDataManager {
 
         public double getChance() {
             return chance;
+        }
+
+        public double getPrice() {
+            return price;
         }
 
         @Override

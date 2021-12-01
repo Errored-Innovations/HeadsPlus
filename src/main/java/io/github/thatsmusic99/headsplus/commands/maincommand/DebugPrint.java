@@ -127,8 +127,7 @@ public class DebugPrint implements IHeadsPlusCommand {
                                     PersistenceManager.get().setSellable(item, true);
                                     PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
-                                    double headsPrice = ConfigMobs.get().getPrice(args[2].toLowerCase().replaceAll("_"
-                                            , ""));
+                                    double headsPrice = SellableHeadsManager.get().getPrice(args[2]);
                                     if (headsPrice != 0.0) {
                                         price = headsPrice;
                                     } else {

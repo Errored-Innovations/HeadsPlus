@@ -306,14 +306,14 @@ public class ConfigMobs extends FeatureConfig {
     }
 
     @Nullable
-    public List<String> getLore(String type, String conditions) {
+    public List<String> getLore(String type, String conditions, double price) {
         List<String> lore = new ArrayList<>();
         List<String> configLore = getList(type + "." + conditions + ".lore", getList("defaults.lore", null));
         if (configLore == null) return null;
         for (String l : configLore) {
             HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
                     new HPUtils.PlaceholderInfo("{type}", HeadsPlus.capitalize(type.replaceAll("_", " ")), true),
-                    new HPUtils.PlaceholderInfo("{price}", getPrice(type), HeadsPlus.get().isVaultEnabled()));
+                    new HPUtils.PlaceholderInfo("{price}", price, HeadsPlus.get().isVaultEnabled()));
         }
         return lore;
     }
