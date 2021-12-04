@@ -155,6 +155,8 @@ public class ConfigInteractions extends HPConfig {
         String message = getString(path + ".message", getString("defaults.message"));
         // Default message is null, what the hell
         if (message == null) return "";
+        // Steve heads
+        if (name == null) return "";
         Pattern defaultsPattern = Pattern.compile("\\{(.+)}");
         Matcher matcher = defaultsPattern.matcher(message);
         if (matcher.matches()) {
