@@ -39,7 +39,7 @@ public class LevelsManager {
     }
 
     public Level getLevel(int position) {
-        return getLevel(levelOrder.get(position));
+        return levelOrder.size() == 0 ? null : getLevel(levelOrder.get(position));
     }
 
     public Level getNextLevel(String key) {
