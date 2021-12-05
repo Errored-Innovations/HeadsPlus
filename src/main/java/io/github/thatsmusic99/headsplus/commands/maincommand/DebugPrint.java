@@ -154,6 +154,8 @@ public class DebugPrint implements IHeadsPlusCommand {
                         DebugVerbose.fire(sender, args);
                         break;
                 }
+            } else {
+                hpc.sendMessage("commands.errors.no-perm", sender);
             }
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
