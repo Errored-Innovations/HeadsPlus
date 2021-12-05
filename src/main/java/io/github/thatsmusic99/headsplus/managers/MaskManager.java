@@ -63,6 +63,10 @@ public class MaskManager {
         return masks.containsKey(key);
     }
 
+    public Set<String> getMaskKeys() {
+        return masks.keySet();
+    }
+
     public void init() {
         ConfigMasks masksConfig = ConfigMasks.get();
         // Get the config section

@@ -5,9 +5,9 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
-import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.managers.MaskManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
@@ -115,15 +115,16 @@ public class DebugPrint implements IHeadsPlusCommand {
                         }
                         break;
                     case "fix":
+                    case "mask":
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
                             if (args.length > 2) {
-                                if (SellableHeadsManager.get().isRegistered(args[2])) {
-                                    int slot = player.getInventory().getHeldItemSlot();
-                                    // lmao who needs getItemInMainHand
-                                    ItemStack item = player.getInventory().getItem(slot);
-                                    if (item == null) return false;
-                                    item = item.clone();
+                                int slot = player.getInventory().getHeldItemSlot();
+                                // lmao who needs getItemInMainHand
+                                ItemStack item = player.getInventory().getItem(slot);
+                                if (item == null) return false;
+                                item = item.clone();
+                                if (subcommand.equals("fix") && SellableHeadsManager.get().isRegistered(args[2])) {
                                     PersistenceManager.get().setSellable(item, true);
                                     PersistenceManager.get().setSellType(item, args[2]);
                                     double price;
@@ -134,12 +135,14 @@ public class DebugPrint implements IHeadsPlusCommand {
                                         price = ConfigCrafting.get().getPrice(args[2]);
                                     }
                                     PersistenceManager.get().setSellPrice(item, price);
-                                    final ItemStack finalItem = item;
-                                    Bukkit.getScheduler().runTask(HeadsPlus.get(),
-                                            () -> player.getInventory().setItem(slot, finalItem));
+                                } else if (subcommand.equals("mask") && MaskManager.get().isMaskRegistered(args[2])) {
+                                    PersistenceManager.get().setMaskType(item, args[2]);
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }
+                                final ItemStack finalItem = item;
+                                Bukkit.getScheduler().runTask(HeadsPlus.get(),
+                                        () -> player.getInventory().setItem(slot, finalItem));
                             } else {
                                 hpc.sendMessage("commands.errors.invalid-args", sender);
                             }
@@ -149,7 +152,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                         break;
                     case "verbose":
                         DebugVerbose.fire(sender, args);
+                        break;
                 }
+            } else {
+
             }
         } catch (IOException | IllegalAccessException e) {
             e.printStackTrace();
@@ -174,6 +180,9 @@ public class DebugPrint implements IHeadsPlusCommand {
                 switch (args[1].toLowerCase()) {
                     case "fix":
                         StringUtil.copyPartialMatches(args[2], SellableHeadsManager.get().getKeys(), results);
+                        break;
+                    case "mask":
+                        StringUtil.copyPartialMatches(args[2], MaskManager.get().getMaskKeys(), results);
                         break;
                     case "verbose":
                         results = DebugVerbose.onTabComplete(sender, args);
