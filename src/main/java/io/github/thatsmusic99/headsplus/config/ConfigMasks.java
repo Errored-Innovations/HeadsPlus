@@ -15,6 +15,7 @@ public class ConfigMasks extends FeatureConfig {
 
     @Override
     public void loadDefaults() {
+        makeSectionLenient("masks");
         addExample("masks.chicken.when-wearing", new String[0]);
         addExample("masks.chicken.effects", Collections.singletonList("SLOW_FALLING"));
         addExample("masks.chicken.type", "potion");
@@ -29,7 +30,6 @@ public class ConfigMasks extends FeatureConfig {
         addExample("masks.ocelot.effects", Collections.singletonList("SPEED"));
         addExample("masks.ocelot.type", "potion");
         addExample("masks.ocelot.idle", "HP#ocelot");
-
     }
 
     public static ConfigMasks get() {
