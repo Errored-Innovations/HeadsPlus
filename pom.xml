@@ -10,7 +10,7 @@
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>7.0.0-MVP-1</hp-project.version>
+        <hp-project.version>7.0.0-MVP-1+DEV_${env.BUILD_NUMBER}</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
     </properties>
