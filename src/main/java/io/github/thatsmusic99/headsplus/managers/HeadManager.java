@@ -54,9 +54,12 @@ public class HeadManager {
         if (key.startsWith("HPM#")) {
             if (MaskManager.get().isMaskRegistered(key)) return MaskManager.get().getMaskInfo(key);
             key = key.substring(4);
+            String oldKey = key;
             if (ConfigMobs.get().isLoaded()) {
                 key = ConfigMobs.get().getString("masks." + key + ".idle");
             }
+            if (key == null)
+                throw new NullPointerException("The idle mask ID for " + oldKey + " appears to not exist, was there an error when registering masks?");
         }
         if (key.startsWith("HP#")) {
             key = key.substring(3);

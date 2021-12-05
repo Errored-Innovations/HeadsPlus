@@ -146,15 +146,15 @@ public class EntityDataManager {
 
     private static void setupHeads() {
         for (String name : ableEntities) {
-            try {
-                ConfigMobs headsCon = ConfigMobs.get();
-                ConfigSection entitySection = headsCon.getConfigSection(name);
-                if (entitySection == null) continue;
-                for (String conditions : entitySection.getKeys(false)) {
-                    List<DroppedHeadInfo> heads = new ArrayList<>();
-                    ConfigSection conditionSection = entitySection.getConfigSection(conditions);
-                    if (conditionSection == null) continue;
-                    for (String head : conditionSection.getKeys(false)) {
+            ConfigMobs headsCon = ConfigMobs.get();
+            ConfigSection entitySection = headsCon.getConfigSection(name);
+            if (entitySection == null) continue;
+            for (String conditions : entitySection.getKeys(false)) {
+                List<DroppedHeadInfo> heads = new ArrayList<>();
+                ConfigSection conditionSection = entitySection.getConfigSection(conditions);
+                if (conditionSection == null) continue;
+                for (String head : conditionSection.getKeys(false)) {
+                    try {
                         DroppedHeadInfo headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo(head), head);
 
                         if (head.equalsIgnoreCase("{mob-default}")) {
@@ -191,15 +191,19 @@ public class EntityDataManager {
                         heads.add(headInfo);
                         SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head,
                                 SellableHeadsManager.SellingType.HUNTING, headInfo.price);
+                    } catch (NullPointerException ex) {
+                        HeadsPlus.get().getLogger().warning("A potential configuration fault was found when creating " +
+                                "the head " + head + " for entity " + name + " with conditions " + conditions + ":");
+                        HeadsPlus.get().getLogger().warning(ex.getMessage());
+                    } catch (Exception e) {
+                        HeadsPlus.get().getLogger().warning("Error thrown when creating " +
+                                "the head " + head + " for entity " + name + " with conditions " + conditions + ":");
+                        storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
+                        e.printStackTrace();
                     }
                     storedHeads.put(name + ";" + conditions, heads);
                 }
                 storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
-            } catch (Exception e) {
-                HeadsPlus.get().getLogger().severe("Error thrown when creating the head for " + name + ". If it's a " +
-                        "custom head, please double check the name. (Error code: 6)");
-                storedHeads.putIfAbsent(name + ";default", new ArrayList<>());
-                e.printStackTrace();
             }
         }
 
