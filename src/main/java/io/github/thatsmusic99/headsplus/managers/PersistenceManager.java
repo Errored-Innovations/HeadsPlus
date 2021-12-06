@@ -46,7 +46,7 @@ public class PersistenceManager {
     }
 
     public String getSellType(ItemStack item) {
-        return getValue(item, HEADSPLUS_SELL_TYPE, PersistentDataType.STRING);
+        return ifNull(getValue(item, HEADSPLUS_SELL_TYPE, PersistentDataType.STRING), "");
     }
 
     public double getSellPrice(ItemStack item) {
@@ -74,11 +74,11 @@ public class PersistenceManager {
     }
 
     public String getMaskType(ItemStack item) {
-        return getValue(item, HEADSPLUS_MASK, PersistentDataType.STRING);
+        return ifNull(getValue(item, HEADSPLUS_MASK, PersistentDataType.STRING), "");
     }
 
     public boolean isAMask(ItemStack item) {
-        return getMaskType(item) != null;
+        return !getMaskType(item).isEmpty();
     }
 
     @NotNull
