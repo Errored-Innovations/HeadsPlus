@@ -25,9 +25,9 @@ public class PlayerSQLManager extends SQLManager {
     private static PlayerSQLManager instance;
 
     public PlayerSQLManager() {
+        instance = this;
         createTable();
         transferOldData();
-        instance = this;
     }
 
     public static PlayerSQLManager get() {
