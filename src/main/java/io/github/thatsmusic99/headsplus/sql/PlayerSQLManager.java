@@ -75,8 +75,13 @@ public class PlayerSQLManager extends SQLManager {
 
                 UUID uuid = UUID.fromString((String) uuidObj);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-                insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex,
-                        player.getLastLogin());
+                try {
+                    insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex,
+                            player.getLastLogin());
+                } catch (NoSuchMethodError ex) {
+                    insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex, -1);
+                }
+
                 String rawLocale = (String) playerObj.get("locale");
                 if (rawLocale == null) continue;
                 String[] parts = rawLocale.split(":");
