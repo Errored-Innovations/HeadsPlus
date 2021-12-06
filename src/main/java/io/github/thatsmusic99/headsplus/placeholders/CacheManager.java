@@ -164,7 +164,7 @@ public class CacheManager {
                     hashMap.remove(id);
                     return;
                 }
-                hashMap.put(id, runnable.get().join());
+                runnable.get().thenApply(run -> hashMap.put(id, run));
             }
         }.runTaskTimer(HeadsPlus.get(), duration, duration));
     }
