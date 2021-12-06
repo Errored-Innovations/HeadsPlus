@@ -135,8 +135,10 @@ public class DebugPrint implements IHeadsPlusCommand {
                                         price = ConfigCrafting.get().getPrice(args[2]);
                                     }
                                     PersistenceManager.get().setSellPrice(item, price);
+                                    sender.sendMessage(ChatColor.GREEN + "Applying ID " + args[2] + " to held item (sellable)");
                                 } else if (subcommand.equals("mask") && MaskManager.get().isMaskRegistered(args[2])) {
                                     PersistenceManager.get().setMaskType(item, args[2]);
+                                    sender.sendMessage(ChatColor.GREEN + "Applying ID " + args[2] + " to held item (mask)");
                                 } else {
                                     hpc.sendMessage("commands.errors.invalid-args", sender);
                                 }
