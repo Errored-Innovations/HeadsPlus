@@ -177,7 +177,7 @@ public class DebugPrint implements IHeadsPlusCommand {
         if (sender.hasPermission("headsplus.commands.debug")) {
             if (args.length == 2) {
                 StringUtil.copyPartialMatches(args[1], Arrays.asList("dump", "head", "player", "clearim", "item",
-                        "delete", "save", "transfer", "fix", "verbose"), results);
+                        "delete", "save", "transfer", "fix", "verbose", "mask"), results);
             } else if (args.length > 2) {
                 switch (args[1].toLowerCase()) {
                     case "fix":
