@@ -33,12 +33,6 @@
                 <version>3.3.0-SNAPSHOT</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>io.github.thatsmusic99.headsplus.paperlib</shadedPattern> <!-- Replace this -->
-                        </relocation>
-                    </relocations>
                     <artifactSet>
                         <includes>
                             <include>io.papermc:paperlib</include>
