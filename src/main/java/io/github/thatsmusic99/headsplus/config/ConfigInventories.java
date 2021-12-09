@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ public class ConfigInventories extends HPConfig {
 
     private static ConfigInventories instance;
 
-    public ConfigInventories() {
+    public ConfigInventories() throws IOException {
         super("inventories.yml");
         instance = this;
     }

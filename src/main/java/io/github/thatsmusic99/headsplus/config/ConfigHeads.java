@@ -7,11 +7,13 @@ import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.ChatColor;
 
+import java.io.IOException;
+
 public class ConfigHeads extends HPConfig {
 
     private static ConfigHeads instance;
 
-    public ConfigHeads() {
+    public ConfigHeads() throws IOException {
         super("heads.yml");
         instance = this;
     }

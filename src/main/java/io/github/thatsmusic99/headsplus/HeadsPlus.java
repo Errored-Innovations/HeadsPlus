@@ -34,6 +34,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.Executor;
@@ -280,21 +281,19 @@ public class HeadsPlus extends JavaPlugin {
 
     private void createInstances() {
         configFiles = new ArrayList<>();
-        MainConfig config;
-        configFiles.add(config = new MainConfig());
-        config.load();
-        configFiles.add(new ConfigChallenges());
-        if (new File(getDataFolder(), "customheads.yml").exists()) configFiles.add(new ConfigCustomHeads());
-        configFiles.add(new ConfigCrafting());
-        configFiles.add(new ConfigHeads());
-        configFiles.add(new ConfigHeadsSelector());
-        configFiles.add(new ConfigInteractions());
-        configFiles.add(new ConfigInventories());
-        configFiles.add(new ConfigLevels());
-        configFiles.add(new ConfigMasks());
-        configFiles.add(new ConfigMobs());
-        configFiles.add(new ConfigSounds());
-        configFiles.add(new ConfigTextMenus());
+        MainConfig config = addConfig(MainConfig.class, "config.yml");
+        if (config != null) config.load();
+        addConfig(ConfigChallenges.class, "challenges.yml");
+        if (new File(getDataFolder(), "customheads.yml").exists()) addConfig(ConfigCustomHeads.class, "customheads.yml");
+        addConfig(ConfigCrafting.class, "crafting.yml");
+        addConfig(ConfigHeads.class, "heads.yml");
+        addConfig(ConfigHeadsSelector.class, "heads-selector.yml");
+        addConfig(ConfigInteractions.class, "interactions.yml");
+        addConfig(ConfigLevels.class, "levels.yml");
+        addConfig(ConfigMasks.class, "masks.yml");
+        addConfig(ConfigMobs.class, "mobs.yml");
+        addConfig(ConfigSounds.class, "sounds.yml");
+        addConfig(ConfigTextMenus.class, "textmenus.yml");
 
         if (!getDescription().getAuthors().get(0).equals("Thatsmusic99") && !getDescription().getName().equals(
                 "HeadsPlus")) {
@@ -320,6 +319,42 @@ public class HeadsPlus extends JavaPlugin {
 
         EntityDataManager.init();
         new MaskManager();
+    }
+
+    private <T extends HPConfig> T addConfig(Class<? extends T> clazz, String name) {
+        T file = null;
+        try {
+            file = clazz.getConstructor().newInstance();
+        } catch (InvocationTargetException ex) {
+            HeadsPlus.get().getLogger().severe("A fatal error occurred loading the config file " + name + ":");
+            HeadsPlus.get().getLogger().severe(ex.getCause().getMessage());
+            File badFile = new File(getDataFolder(), name);
+            String partialName = name.substring(0, name.indexOf('.'));
+
+            File newFile = new File(HeadsPlus.get().getDataFolder(), partialName + "-errored-" + System.currentTimeMillis() + ".yml");
+
+            try {
+                Files.move(badFile.toPath(), newFile.toPath());
+            } catch (IOException e) {
+                HeadsPlus.get().getLogger().severe("Uh oh, looks like we weren't able to rename the file:");
+                HeadsPlus.get().getLogger().severe(ex.getMessage());
+            }
+
+            try {
+                file = clazz.getConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                HeadsPlus.get().getLogger().severe("Aaaaand it happened again...");
+                e.printStackTrace();
+            }
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            HeadsPlus.get().getLogger().severe("A fatal error occurred creating an instance of the config file " + name + ":");
+            e.printStackTrace();
+        }
+
+        if (file == null) return null;
+
+        configFiles.add(file);
+        return file;
     }
 
     public void restartMessagesManager() {

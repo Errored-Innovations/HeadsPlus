@@ -18,7 +18,7 @@ public class ConfigMobs extends FeatureConfig {
 
     private static ConfigMobs instance;
 
-    public ConfigMobs() {
+    public ConfigMobs() throws IOException {
         super("mobs.yml");
         instance = this;
     }

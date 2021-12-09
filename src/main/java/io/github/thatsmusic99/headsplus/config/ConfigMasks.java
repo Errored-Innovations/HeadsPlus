@@ -2,13 +2,14 @@ package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
 
+import java.io.IOException;
 import java.util.Collections;
 
 public class ConfigMasks extends FeatureConfig {
 
     private static ConfigMasks instance;
 
-    public ConfigMasks() {
+    public ConfigMasks() throws IOException {
         super("masks.yml");
         instance = this;
     }

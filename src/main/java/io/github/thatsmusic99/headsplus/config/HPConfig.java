@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public abstract class HPConfig extends ConfigFile {
 
-    public HPConfig(@NotNull String name) {
+    public HPConfig(@NotNull String name) throws IOException {
         super(getOrCreateFile(name));
     }
 
@@ -54,5 +54,15 @@ public abstract class HPConfig extends ConfigFile {
             e.printStackTrace();
         }
         return file;
+    }
+
+    public boolean renameFile() {
+        File file = getFile();
+        if (file.exists()) {
+            String name = getFile().getName();
+            String partialName = name.substring(0, name.indexOf('.'));
+            return file.renameTo(new File(HeadsPlus.get().getDataFolder(), partialName + "-errored-" + System.currentTimeMillis() + ".yml"));
+        }
+        return true;
     }
 }

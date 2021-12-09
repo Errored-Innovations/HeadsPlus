@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,7 @@ public class ConfigCrafting extends FeatureConfig {
 
     private static ConfigCrafting instance;
 
-    public ConfigCrafting() {
+    public ConfigCrafting() throws IOException {
         super("crafting.yml");
         instance = this;
     }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class MainConfig extends HPConfig {
 
     private static MainConfig instance;
 
-    public MainConfig() {
+    public MainConfig() throws IOException {
         super("config.yml");
         instance = this;
     }

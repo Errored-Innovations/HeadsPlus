@@ -4,6 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.api.BaseLevel;
 import io.github.thatsmusic99.headsplus.config.challenges.HPChallengeRewardTypes;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class ConfigLevels extends FeatureConfig {
@@ -16,7 +17,7 @@ public class ConfigLevels extends FeatureConfig {
 
     private static ConfigLevels instance;
 
-    public ConfigLevels() {
+    public ConfigLevels() throws IOException {
         super("levels.yml");
         instance = this;
         addDefLevels();

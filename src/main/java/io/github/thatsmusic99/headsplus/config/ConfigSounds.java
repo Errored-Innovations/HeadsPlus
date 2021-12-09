@@ -1,10 +1,12 @@
 package io.github.thatsmusic99.headsplus.config;
 
+import java.io.IOException;
+
 public class ConfigSounds extends HPConfig {
 
     private static ConfigSounds instance;
 
-    public ConfigSounds() {
+    public ConfigSounds() throws IOException {
         super("sounds.yml");
         instance = this;
     }

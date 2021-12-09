@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ public class ConfigChallenges extends FeatureConfig {
 
     private static ConfigChallenges instance;
 
-    public ConfigChallenges() {
+    public ConfigChallenges() throws IOException {
         super("challenges.yml");
         instance = this;
     }

@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Base64;
@@ -22,7 +23,7 @@ public class ConfigInteractions extends HPConfig {
     private static ConfigInteractions instance;
     private final Gson gson;
 
-    public ConfigInteractions() {
+    public ConfigInteractions() throws IOException {
         super("interactions.yml");
         instance = this;
         gson = new Gson();
