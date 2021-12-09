@@ -31,13 +31,13 @@ public abstract class Icon {
     public Icon(String id) {
         this.id = id;
         initItem(id);
-        PersistenceManager.get().makeIcon(item);
+        if (item != null) PersistenceManager.get().makeIcon(item);
     }
 
     public Icon(Player player) {
         initItem(getId());
         initNameAndLore(getId(), player);
-        PersistenceManager.get().makeIcon(item);
+        if (item != null) PersistenceManager.get().makeIcon(item);
     }
 
     public Icon() {
@@ -50,7 +50,7 @@ public abstract class Icon {
 
         } catch (NullPointerException ex) {
             HeadsPlus.get().getLogger().warning("Null icon found for " + id + ", please check your inventories.yml " +
-                    "and see if this icon actually exists! (Error code: 8)");
+                    "and see if this icon actually exists!");
         }
     }
 
