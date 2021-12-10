@@ -88,7 +88,7 @@ public class StatisticsSQLManager extends SQLManager {
                         if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
                             head = defaultSection.getKeys(false).get(0);
                         }
-                        int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
+                        int total = Integer.parseInt(String.valueOf(craftingObj.get(mobObj)));
                         addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
                     }
                 }
