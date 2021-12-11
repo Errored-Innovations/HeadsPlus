@@ -359,6 +359,7 @@ public class HeadsPlus extends JavaPlugin {
 
     public void restartMessagesManager() {
         createLocales();
+        new MessagesManager();
     }
 
     private void setupPermissions() {
