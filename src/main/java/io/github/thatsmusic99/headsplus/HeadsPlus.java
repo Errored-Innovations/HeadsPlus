@@ -289,6 +289,7 @@ public class HeadsPlus extends JavaPlugin {
         addConfig(ConfigHeads.class, "heads.yml");
         addConfig(ConfigHeadsSelector.class, "heads-selector.yml");
         addConfig(ConfigInteractions.class, "interactions.yml");
+        addConfig(ConfigInventories.class, "inventories.yml");
         addConfig(ConfigLevels.class, "levels.yml");
         addConfig(ConfigMasks.class, "masks.yml");
         addConfig(ConfigMobs.class, "mobs.yml");
