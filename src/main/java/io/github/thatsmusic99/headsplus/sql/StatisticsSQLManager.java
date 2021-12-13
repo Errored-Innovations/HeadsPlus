@@ -120,7 +120,7 @@ public class StatisticsSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                            "WHERE user_id = ? AND collection_type = ?");
+                            "WHERE user_id = ? AND id = user_id AND collection_type = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
 
@@ -137,7 +137,7 @@ public class StatisticsSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                            "WHERE user_id = ? AND collection_type = ? AND head = ?");
+                            "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
             statement.setString(3, head);
@@ -155,7 +155,7 @@ public class StatisticsSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                            "WHERE user_id = ? AND collection_type = ? AND metadata LIKE ?");
+                            "WHERE user_id = ? AND id = user_id AND collection_type = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
             statement.setString(3, "%" + metadata + "%");
@@ -173,7 +173,7 @@ public class StatisticsSQLManager extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
-                            "WHERE user_id = ? AND collection_type = ? AND head = ? AND metadata LIKE ?");
+                            "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
             statement.setString(3, head);
