@@ -86,7 +86,7 @@ public class ChallengeSQLManager extends SQLManager {
                     "WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt(1);
         } catch (SQLException exception) {
@@ -102,7 +102,7 @@ public class ChallengeSQLManager extends SQLManager {
             checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             checkStatement.setString(2, challenge);
 
-            ResultSet set = checkStatement.executeQuery();
+            ResultSet set = executeQuery(checkStatement);
             PreparedStatement updateStatement;
             if (!set.next()) {
                 updateStatement = connection.prepareStatement("INSERT INTO headsplus_challenges " +
@@ -115,7 +115,7 @@ public class ChallengeSQLManager extends SQLManager {
             updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid));
             updateStatement.setString(3, challenge);
 
-            updateStatement.executeUpdate();
+            executeUpdate(updateStatement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -128,7 +128,7 @@ public class ChallengeSQLManager extends SQLManager {
                     "headsplus_challenges WHERE user_id = ?");
             checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
 
-            ResultSet set = checkStatement.executeQuery();
+            ResultSet set = executeQuery(checkStatement);
             while (set.next()) {
                 challenges.add(set.getString(1));
             }

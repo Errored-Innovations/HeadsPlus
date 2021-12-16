@@ -40,7 +40,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
                             "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
             );
 
-            statement.executeUpdate();
+            executeUpdate(statement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -76,7 +76,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, head);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -91,7 +91,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, head);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -103,7 +103,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             List<String> heads = new ArrayList<>();
             while (set.next()) {
                 heads.add(set.getString("head"));

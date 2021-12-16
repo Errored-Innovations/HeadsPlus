@@ -42,7 +42,7 @@ public class PinnedChallengeManager extends SQLManager {
                             "challenge VARCHAR(256) NOT NULL," +
                             "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
             );
-            statement.executeUpdate();
+            executeUpdate(statement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class PinnedChallengeManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             List<String> challenges = new ArrayList<>();
             while (set.next()) {
                 challenges.add(set.getString("challenge"));
@@ -95,7 +95,7 @@ public class PinnedChallengeManager extends SQLManager {
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, challenge);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -111,7 +111,7 @@ public class PinnedChallengeManager extends SQLManager {
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, challenge);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }

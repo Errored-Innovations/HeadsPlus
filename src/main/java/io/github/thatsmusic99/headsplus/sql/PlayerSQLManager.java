@@ -48,7 +48,7 @@ public class PlayerSQLManager extends SQLManager {
                             "last_joined BIGINT NOT NULL)"
             );
 
-            statement.executeUpdate();
+            executeUpdate(statement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class PlayerSQLManager extends SQLManager {
                         "UPDATE headsplus_players SET username = ? WHERE uuid = ?");
                 statement.setString(1, newName);
                 statement.setString(2, uuid.toString());
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -115,7 +115,7 @@ public class PlayerSQLManager extends SQLManager {
                         "UPDATE headsplus_players SET uuid = ? WHERE username = ?");
                 statement.setString(1, newUuid.toString());
                 statement.setString(2, name);
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -129,7 +129,7 @@ public class PlayerSQLManager extends SQLManager {
                         "SELECT uuid, username FROM headsplus_players WHERE username = ? OR uuid = ?");
                 statement.setString(1, name);
                 statement.setString(2, uuid.toString());
-                ResultSet results = statement.executeQuery();
+                ResultSet results = executeQuery(statement);
                 if (!results.next()) {
                     connection.close();
                     insertPlayer(uuid, name, 0, 0, System.currentTimeMillis());
@@ -161,7 +161,7 @@ public class PlayerSQLManager extends SQLManager {
                         "username = ?");
                 statement.setString(1, name);
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 if (!set.next()) return null;
                 UUID uuid = UUID.fromString(set.getString("uuid"));
                 return new HPPlayer(uuid);
@@ -182,7 +182,7 @@ public class PlayerSQLManager extends SQLManager {
             statement.setInt(4, level);
             statement.setLong(5, timestamp);
 
-            statement.executeUpdate();
+            executeUpdate(statement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -196,7 +196,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setLong(1, xp);
                 statement.setString(2, uuid.toString());
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -216,7 +216,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setInt(1, actualLevel);
                 statement.setString(2, uuid.toString());
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -235,7 +235,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setLong(1, timestamp);
                 statement.setString(2, uuid.toString());
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -252,7 +252,7 @@ public class PlayerSQLManager extends SQLManager {
                     "username = ?");
             statement.setString(1, username);
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return 0;
             return set.getInt("level");
         } catch (SQLException exception) {
@@ -267,7 +267,7 @@ public class PlayerSQLManager extends SQLManager {
                     " = ?");
             statement.setString(1, uuid.toString());
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return 0;
             return set.getInt("level");
         } catch (SQLException exception) {
@@ -288,7 +288,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setLong(1, xp);
                 statement.setString(2, username);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -303,7 +303,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setLong(1, xp);
                 statement.setString(2, username);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -317,7 +317,7 @@ public class PlayerSQLManager extends SQLManager {
                         " uuid = ?");
                 statement.setString(1, uuid.toString());
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 if (!set.next()) return Optional.empty();
                 return Optional.of(set.getString("locale"));
             } catch (SQLException exception) {
@@ -335,7 +335,7 @@ public class PlayerSQLManager extends SQLManager {
                 statement.setString(1, locale);
                 statement.setString(2, username);
 
-                statement.executeUpdate();
+                executeUpdate(statement);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -348,7 +348,7 @@ public class PlayerSQLManager extends SQLManager {
                     "username = ?");
             statement.setString(1, username);
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getLong("xp");
         } catch (SQLException exception) {
@@ -363,7 +363,7 @@ public class PlayerSQLManager extends SQLManager {
                     "?");
             statement.setString(1, uuid.toString());
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getLong("xp");
         } catch (SQLException exception) {
@@ -378,7 +378,7 @@ public class PlayerSQLManager extends SQLManager {
                     "?");
             statement.setString(1, uuid.toString());
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt("id");
         } catch (SQLException exception) {

@@ -45,7 +45,7 @@ public class StatisticsSQLManager extends SQLManager {
                             "count INT NOT NULL)"
             );
 
-            statement.executeUpdate();
+            executeUpdate(statement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -124,7 +124,7 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt(1);
         } catch (SQLException exception) {
@@ -142,7 +142,7 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setString(2, type.name());
             statement.setString(3, head);
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt(1);
         } catch (SQLException exception) {
@@ -160,7 +160,7 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setString(2, type.name());
             statement.setString(3, "%" + metadata + "%");
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt(1);
         } catch (SQLException exception) {
@@ -179,7 +179,7 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setString(3, head);
             statement.setString(4, "%" + metadata + "%");
 
-            ResultSet set = statement.executeQuery();
+            ResultSet set = executeQuery(statement);
             if (!set.next()) return -1;
             return set.getInt(1);
         } catch (SQLException exception) {
@@ -196,7 +196,7 @@ public class StatisticsSQLManager extends SQLManager {
                                 "WHERE headsplus_stats.user_id = headsplus_players.id " +
                                 "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
                 while (set.next()) {
                     leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
@@ -220,7 +220,7 @@ public class StatisticsSQLManager extends SQLManager {
 
                 statement.setString(1, type.name());
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
                 while (set.next()) {
                     leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
@@ -245,7 +245,7 @@ public class StatisticsSQLManager extends SQLManager {
                 statement.setString(1, type.name());
                 statement.setString(2, head);
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
                 while (set.next()) {
                     leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
@@ -270,7 +270,7 @@ public class StatisticsSQLManager extends SQLManager {
                 statement.setString(1, type.name());
                 statement.setString(2, "%" + metadata + "%");
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
                 while (set.next()) {
                     leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
@@ -297,7 +297,7 @@ public class StatisticsSQLManager extends SQLManager {
                 statement.setString(2, head);
                 statement.setString(3, "%" + metadata + "%");
 
-                ResultSet set = statement.executeQuery();
+                ResultSet set = executeQuery(statement);
                 List<LeaderboardEntry> leaderboard = new ArrayList<>();
                 while (set.next()) {
                     leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
@@ -326,7 +326,7 @@ public class StatisticsSQLManager extends SQLManager {
             checkStatement.setString(3, head);
             checkStatement.setString(4, metadata);
 
-            ResultSet set = checkStatement.executeQuery();
+            ResultSet set = executeQuery(checkStatement);
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
@@ -347,7 +347,7 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(5, metadata);
             }
 
-            updateStatement.executeUpdate();
+            executeUpdate(updateStatement);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

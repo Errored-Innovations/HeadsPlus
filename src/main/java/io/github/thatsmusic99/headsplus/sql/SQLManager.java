@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
 import java.sql.*;
+import java.util.function.Supplier;
 
 public abstract class SQLManager {
 
@@ -69,5 +70,29 @@ public abstract class SQLManager {
 
     public String getStupidAutoIncrementThing() {
         return usingSqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT";
+    }
+
+    protected ResultSet executeQuery(PreparedStatement statement) throws SQLException {
+        return syncDatabaseOperation(statement::executeQuery);
+    }
+
+    protected void executeUpdate(PreparedStatement statement) throws SQLException {
+        syncDatabaseOperation(() -> {
+            statement.executeUpdate();
+            return null;
+        });
+    }
+
+    protected synchronized ResultSet syncDatabaseOperation(SQLSupplier<ResultSet> supplier) throws SQLException {
+        return supplier.getWithSQL();
+    }
+
+    private interface SQLSupplier<T> extends Supplier<T> {
+
+        ResultSet getWithSQL() throws SQLException;
+
+        default T get() {
+            throw new UnsupportedOperationException("Get outta here with that crap!");
+        }
     }
 }
