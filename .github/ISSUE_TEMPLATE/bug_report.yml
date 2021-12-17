@@ -16,11 +16,11 @@ body:
       label: Checklist
       description: State here when you have checked the following points
       options:
-        - label: Are you using the latest version/snapshot of HeadsPlus?
+        - label: "Are you using the latest version/snapshot of HeadsPlus?"
           required: true
-        - label: Have you checked to see if others have submitted the same bug report?
+        - label: "Have you checked to see if others have submitted the same bug report?"
           required: true
-        - label: Have you been able to reproduce the bug more then once?
+        - label: "Have you been able to reproduce the bug more then once?"
           required: true
 
   - type: textarea
