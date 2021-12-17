@@ -1,15 +1,13 @@
 name: Feature/Improvement Request
 description: Wanting something to be improved about the plugin?
 title: "[Feature/Improvement]: "
-assignees:
-  - Thatsmusic99
 body:
   - type: checkboxes
     attributes:
       label: Checklist
       description: State here when you have checked the following points
       options:
-        - label: "Are you using the latest version/snapshot of HeadsPlus?"
+        - label: "Are you using the latest version/snapshot of [HeadsPlus](https://ci.pluginwiki.us/job/HeadsPlus/)?"
           required: true
         - label: "Have you checked to see if others have submitted the same feature request?"
           required: true
