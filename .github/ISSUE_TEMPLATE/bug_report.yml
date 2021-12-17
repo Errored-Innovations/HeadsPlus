@@ -5,11 +5,6 @@ labels: ["bug"]
 assignees:
   - Thatsmusic99
 body:
-  - type: markdown
-    attributes:
-      value: |
-        <div align="center">Make sure you are using the latest version of the plugin<br>Snapshot/Dev builds are available on the <a href="https://ci.pluginwiki.us/job/HeadsPlus/">JENKINS</a></div>
-
 - type: checkboxes
     id: checklist
     attributes:
