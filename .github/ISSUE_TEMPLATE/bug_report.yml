@@ -1,9 +1,9 @@
 name: 🐞 Bug Report
-description: Got a bug to report? Here is the template to do so.
+description: Got a bug to report?
 title: "[Bug]: "
 labels: ["bug"]
 assignees:
-  - brainsynder-Dev
+  - Thatsmusic99
 body:
   - type: markdown
     attributes:
@@ -14,7 +14,7 @@ body:
     id: checklist
     attributes:
       label: Checklist
-      description: By clicking here you acknowledge that you are using the latest version from the [Jenkins](https://ci.pluginwiki.us/job/SimplePets_v5/)
+      description: State here when you have checked the following points
       options:
         - label: Are you using the latest version/snapshot of HeadsPlus?
           required: true
@@ -36,6 +36,7 @@ body:
       required: true
 
   - type: textarea
+    id: steps
     attributes:
       label: Steps To Reproduce
       description: Steps to reproduce the bug/issue
