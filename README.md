@@ -3,7 +3,7 @@
 
 # HeadsPlus Project
 
-[![](https://img.shields.io/github/v/release/Thatsmusic99/HeadsPlus.svg?label=github%20release)](https://github.com/Thatsmusic99/HeadsPlus/releases)
+[![](https://img.shields.io/github/v/release/Errored-Innovations/HeadsPlus.svg?label=github%20release)](https://github.com/Errored-Innovations/HeadsPlus/releases)
 
 HeadsPlus (referred to as the HeadsPlus Project on Github) is one of Spigot's most ambitious and advanced heads plugins, providing several new and unique features to servers of which have never been seen before. Minecraft's skulls are an important asset to bringing forth incredible amounts of creativity without further intervention by resource packs, mods and data packs, so HeadsPlus makes sure they are used to the best of their ability.
 
@@ -36,11 +36,11 @@ HeadsPlus uses JitPack to host its repository. To use HeadsPlus as a library in 
 
 
 ## More information
-- [Wiki](https://github.com/Thatsmusic99/HeadsPlus/wiki)
+- [Wiki](https://github.com/Errored-Innovations/HeadsPlus/wiki)
 - [Spigot Page](https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/)
-- [Issue Tracker](https://github.com/Thatsmusic99/HeadsPlus/issues)
+- [Issue Tracker](https://github.com/Errored-Innovations/HeadsPlus/issues)
 - [Discord](https://discord.gg/eu8h3BG)
 
 ## Important documents
-- [Code of Conduct](https://github.com/Thatsmusic99/HeadsPlus/blob/master/CODE_OF_CONDUCT.md)
-- [License (GPLv3)](https://github.com/Thatsmusic99/HeadsPlus/blob/master/LICENSE)
+- [Code of Conduct](https://github.com/Errored-Innovations/HeadsPlus/blob/master/CODE_OF_CONDUCT.md)
+- [License (GPLv3)](https://github.com/Errored-Innovations/HeadsPlus/blob/master/LICENSE)
