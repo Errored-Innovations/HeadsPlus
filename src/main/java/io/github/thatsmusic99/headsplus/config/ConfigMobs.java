@@ -313,7 +313,7 @@ public class ConfigMobs extends FeatureConfig {
         for (String l : configLore) {
             HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
                     new HPUtils.PlaceholderInfo("{type}", HeadsPlus.capitalize(type.replaceAll("_", " ")), true),
-                    new HPUtils.PlaceholderInfo("{price}", price, HeadsPlus.get().isVaultEnabled()));
+                    new HPUtils.PlaceholderInfo("{price}", MainConfig.get().fixBalanceStr(price), HeadsPlus.get().isVaultEnabled()));
         }
         return lore;
     }
@@ -325,7 +325,7 @@ public class ConfigMobs extends FeatureConfig {
         for (String l : configLore) {
             HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
                     new HPUtils.PlaceholderInfo("{type}", "Player", true),
-                    new HPUtils.PlaceholderInfo("{price}", price, true),
+                    new HPUtils.PlaceholderInfo("{price}", MainConfig.get().fixBalanceStr(price), HeadsPlus.get().isVaultEnabled()),
                     new HPUtils.PlaceholderInfo("{player}", name, true),
                     new HPUtils.PlaceholderInfo("{killer}", killerName, killerName != null));
         }
