@@ -36,7 +36,7 @@ public class PinnedChallengeManager extends SQLManager {
     @Override
     public void createTable() {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "CREATE TABLE IF NOT EXISTS headsplus_pinned_challenges " +
                             "(user_id INT NOT NULL," +
                             "challenge VARCHAR(256) NOT NULL," +
@@ -72,7 +72,7 @@ public class PinnedChallengeManager extends SQLManager {
 
     public List<String> getPinnedChallenges(UUID uuid) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             ResultSet set = executeQuery(statement);
@@ -90,7 +90,7 @@ public class PinnedChallengeManager extends SQLManager {
     public CompletableFuture<Void> addChallenge(UUID uuid, String challenge) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "INSERT INTO headsplus_pinned_challenges (user_id, challenge) VALUES (?, ?)");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, challenge);
@@ -105,7 +105,7 @@ public class PinnedChallengeManager extends SQLManager {
     public CompletableFuture<Void> removeChallenge(UUID uuid, String challenge) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "DELETE FROM headsplus_pinned_challenges " +
                                 "WHERE headsplus_players.id = ? AND challenge = ?");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));

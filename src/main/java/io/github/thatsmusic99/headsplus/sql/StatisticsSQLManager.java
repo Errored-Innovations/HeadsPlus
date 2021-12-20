@@ -36,7 +36,7 @@ public class StatisticsSQLManager extends SQLManager {
     @Override
     public void createTable() {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "CREATE TABLE IF NOT EXISTS headsplus_stats " +
                             "(user_id INT NOT NULL," +
                             "collection_type VARCHAR(32) NOT NULL," +
@@ -118,7 +118,7 @@ public class StatisticsSQLManager extends SQLManager {
 
     public int getStatSync(UUID uuid, CollectionType type) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
@@ -135,7 +135,7 @@ public class StatisticsSQLManager extends SQLManager {
 
     public int getStatSync(UUID uuid, CollectionType type, String head) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
@@ -153,7 +153,7 @@ public class StatisticsSQLManager extends SQLManager {
 
     public int getStatMetaSync(UUID uuid, CollectionType type, String metadata) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
@@ -171,7 +171,7 @@ public class StatisticsSQLManager extends SQLManager {
 
     public int getStatSync(UUID uuid, CollectionType type, String head, String metadata) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
@@ -191,7 +191,7 @@ public class StatisticsSQLManager extends SQLManager {
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal() {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
                                 "WHERE headsplus_stats.user_id = headsplus_players.id " +
                                 "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
@@ -212,7 +212,7 @@ public class StatisticsSQLManager extends SQLManager {
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
                                 "WHERE headsplus_stats.user_id = headsplus_players.id AND collection_type = ?" +
                                 "AND headsplus_stats.user_id = headsplus_players.id " +
@@ -236,7 +236,7 @@ public class StatisticsSQLManager extends SQLManager {
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
                                 " WHERE collection_type = ? AND head = ? " +
                                 "AND headsplus_stats.user_id = headsplus_players.id " +
@@ -261,7 +261,7 @@ public class StatisticsSQLManager extends SQLManager {
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(CollectionType type, String metadata) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
                                 "WHERE collection_type = ? AND metadata LIKE ? " +
                                 "AND headsplus_stats.user_id = headsplus_players.id " +
@@ -287,7 +287,7 @@ public class StatisticsSQLManager extends SQLManager {
                                                                          String metadata) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
                                 "WHERE collection_type = ? AND head = ? AND metadata LIKE ? " +
                                 "AND headsplus_stats.user_id = headsplus_players.id " +
@@ -318,7 +318,7 @@ public class StatisticsSQLManager extends SQLManager {
     private void addToTotalSync(UUID uuid, CollectionType type, String head, String metadata, int amount) {
         try (Connection connection = implementConnection()) {
             // Check if the entry has been added
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
+            PreparedStatement checkStatement = prepareStatement(connection, "SELECT count FROM headsplus_stats WHERE " +
                     "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
             int id = PlayerSQLManager.get().getUserID(uuid);
             checkStatement.setInt(1, id);
@@ -330,7 +330,7 @@ public class StatisticsSQLManager extends SQLManager {
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
+                updateStatement = prepareStatement(connection, "INSERT INTO headsplus_stats (user_id, collection_type," +
                         " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
                 updateStatement.setInt(1, id);
                 updateStatement.setString(2, type.name());
@@ -338,7 +338,7 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(4, metadata);
                 updateStatement.setInt(5, amount);
             } else {
-                updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET count = count + ? WHERE " +
+                updateStatement = prepareStatement(connection, "UPDATE headsplus_stats SET count = count + ? WHERE " +
                         "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
                 updateStatement.setInt(1, amount);
                 updateStatement.setInt(2, id);

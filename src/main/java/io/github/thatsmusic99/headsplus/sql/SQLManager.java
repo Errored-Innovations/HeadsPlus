@@ -3,6 +3,8 @@ package io.github.thatsmusic99.headsplus.sql;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.*;
 import java.util.function.Supplier;
 
@@ -83,13 +85,17 @@ public abstract class SQLManager {
         });
     }
 
-    protected synchronized ResultSet syncDatabaseOperation(SQLSupplier<ResultSet> supplier) throws SQLException {
+    protected PreparedStatement prepareStatement(Connection connection, String str) throws SQLException {
+        return syncDatabaseOperation(() -> connection.prepareStatement(str));
+    }
+
+    protected synchronized <T> T syncDatabaseOperation(SQLSupplier<T> supplier) throws SQLException {
         return supplier.getWithSQL();
     }
 
     private interface SQLSupplier<T> extends Supplier<T> {
 
-        ResultSet getWithSQL() throws SQLException;
+        T getWithSQL() throws SQLException;
 
         default T get() {
             throw new UnsupportedOperationException("Get outta here with that crap!");

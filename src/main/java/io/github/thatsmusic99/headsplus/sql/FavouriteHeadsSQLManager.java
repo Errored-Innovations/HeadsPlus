@@ -33,7 +33,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     @Override
     public void createTable() {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "CREATE TABLE IF NOT EXISTS headsplus_fav_heads " +
                             "(user_id INT NOT NULL," +
                             "head VARCHAR(256) NOT NULL," +
@@ -71,7 +71,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     public CompletableFuture<Void> addHead(UUID uuid, String head) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "INSERT INTO headsplus_fav_heads (user_id, head) VALUES (?, ?)");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, head);
@@ -86,7 +86,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     public CompletableFuture<Void> removeHead(UUID uuid, String head) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement(
+                PreparedStatement statement = prepareStatement(connection,
                         "DELETE FROM headsplus_fav_heads WHERE user_id = ? AND head = ?");
                 statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                 statement.setString(2, head);
@@ -100,7 +100,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
 
     public List<String> getFavouriteHeads(UUID uuid) {
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = prepareStatement(connection,
                     "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             ResultSet set = executeQuery(statement);
