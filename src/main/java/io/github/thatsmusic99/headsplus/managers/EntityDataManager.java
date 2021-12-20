@@ -28,6 +28,7 @@ public class EntityDataManager {
         if (permission == null) {
             permission = new Permission("headsplus.drops.*");
         }
+        permission.getChildren().put("headsplus.drops.player", true);
         for (EntityType type : EntityType.values()) {
             if (!type.isAlive()) continue;
 
