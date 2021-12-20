@@ -233,7 +233,6 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                         EntityDataManager.getStoredHeads().get(mobId + ";" + condition)) {
                     String id = "mobs_" + mobId + ":" + condition + ":" + head.getId();
                     ids.add(id);
-                    HeadsPlus.get().getLogger().info("Surprise, " + id);
                 }
             }
 
