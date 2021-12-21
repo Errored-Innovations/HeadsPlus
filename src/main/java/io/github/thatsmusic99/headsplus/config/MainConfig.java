@@ -262,8 +262,7 @@ public class MainConfig extends HPConfig {
                 ".yml - in here.");
         addDefault("smart-locale", false, "Whether or not to enable smart locale.\n" +
                 "This makes HeadsPlus automatically translate itself into a different language for each user " +
-                "depending on their chosen language.\n" +
-                "However, ");
+                "depending on their chosen language.");
         addDefault("use-tellraw", true, "Whether or not /tellraw should be used to send messages.\n" +
                 "Will be replaced in a future version. May cause problems with floodgate players.");
 
