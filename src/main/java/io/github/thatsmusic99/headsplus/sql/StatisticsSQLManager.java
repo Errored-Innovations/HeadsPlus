@@ -346,7 +346,7 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(4, head);
                 updateStatement.setString(5, metadata);
             }
-
+            set.close();
             executeUpdate(updateStatement);
         } catch (SQLException exception) {
             exception.printStackTrace();
