@@ -116,7 +116,6 @@ public class PlayerSQLManager extends SQLManager {
 
     public CompletableFuture<Void> checkPlayer(UUID uuid, String name) {
         return createConnection(connection -> {
-            HeadsPlus.get().getLogger().warning("AAA");
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT uuid, username FROM headsplus_players WHERE username = ? OR uuid = ?");
             statement.setString(1, name);

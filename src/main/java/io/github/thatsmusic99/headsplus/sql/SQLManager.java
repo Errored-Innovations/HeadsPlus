@@ -66,7 +66,6 @@ public abstract class SQLManager {
     protected synchronized <T> CompletableFuture<T> createConnection(SQLFunction<T> run, boolean async, String action) {
         Supplier<T> runnable = () -> {
             try (Connection connection = implementConnection()) {
-                HeadsPlus.get().getLogger().warning("AAAA");
                 return run.applyWithSQL(connection);
             } catch (SQLException | ExecutionException ex) {
                 HeadsPlus.get().getLogger().warning("Failed to " + action + " - an internal error occurred. " +
