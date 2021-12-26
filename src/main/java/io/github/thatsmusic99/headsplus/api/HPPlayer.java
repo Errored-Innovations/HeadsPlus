@@ -2,8 +2,8 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
 import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
@@ -16,10 +16,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class HPPlayer {
 
@@ -33,10 +35,10 @@ public class HPPlayer {
     private final List<String> completeChallenges;
 
     public HPPlayer(UUID uuid) {
-        pinnedChallenges = PinnedChallengeManager.get().getPinnedChallenges(uuid);
-        favouriteHeads = FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid);
-        completeChallenges = ChallengeSQLManager.get().getCompleteChallenges(uuid);
-        level = PlayerSQLManager.get().getLevelSync(uuid);
+        pinnedChallenges = HPUtils.ifNull(getValue(PinnedChallengeManager.get().getPinnedChallenges(uuid), "pinned challenges"), new ArrayList<>());
+        favouriteHeads = HPUtils.ifNull(getValue(FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid), "favourite heads"), new ArrayList<>());
+        completeChallenges = HPUtils.ifNull(getValue(ChallengeSQLManager.get().getCompleteChallenges(uuid), "complete challenges"), new ArrayList<>());
+        level = HPUtils.ifNull(getValue(PlayerSQLManager.get().getLevel(uuid, false), "level"), 0);
         int max = LevelsManager.get().getLevels().size();
         if (level > -1 && level + 1 < max) {
             this.nextLevel = level + 1;
@@ -44,7 +46,7 @@ public class HPPlayer {
         PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
                 result.ifPresent(str ->
                         MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
-        xp = PlayerSQLManager.get().getXPSync(uuid);
+        xp = HPUtils.ifNull(getValue(PlayerSQLManager.get().getXP(uuid, true), "XP"), (long) 0);
         this.uuid = uuid;
         players.put(uuid, this);
     }
@@ -79,7 +81,7 @@ public class HPPlayer {
 
     public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
         completeChallenges.add(c.getConfigName());
-        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName());
+        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName(), true);
     }
 
     public void addXp(long xp) {
@@ -176,5 +178,21 @@ public class HPPlayer {
 
     public static void removePlayer(UUID uuid) {
         players.remove(uuid);
+    }
+
+    private <T> T getValue(CompletableFuture<T> task, String object) {
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": interrupted thread. Please try" +
+                    " again or restart the server. If none of the above works, please consult the necessary support" +
+                    " services (e.g. hosting)..");
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": execution failed, " +
+                    "an internal error occurred. Please send the console error to the developer.");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -3,9 +3,10 @@ package io.github.thatsmusic99.headsplus.sql;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.sql.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class SQLManager {
@@ -62,6 +63,28 @@ public abstract class SQLManager {
         }
     }
 
+    protected synchronized <T> CompletableFuture<T> createConnection(SQLFunction<T> run, boolean async, String action) {
+        Supplier<T> runnable = () -> {
+            try (Connection connection = implementConnection()) {
+                HeadsPlus.get().getLogger().warning("AAAA");
+                return run.applyWithSQL(connection);
+            } catch (SQLException | ExecutionException ex) {
+                HeadsPlus.get().getLogger().warning("Failed to " + action + " - an internal error occurred. " +
+                        "Please report the below stacktrace and error to the developer.");
+                ex.printStackTrace();
+            } catch (InterruptedException ex) {
+                HeadsPlus.get().getLogger().warning("Failed to " + action + " - interrupted thread. Please try again or restart the server. " +
+                        "If none of the above works, please consult the necessary support services (e.g. hosting).");
+            }
+            return null;
+        };
+        if (async) {
+            return CompletableFuture.supplyAsync(runnable, HeadsPlus.async).thenApplyAsync(result -> result, HeadsPlus.sync);
+        } else {
+            return CompletableFuture.completedFuture(runnable.get());
+        }
+    }
+
     public abstract void createTable();
 
     public abstract void transferOldData();
@@ -74,30 +97,20 @@ public abstract class SQLManager {
         return usingSqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT";
     }
 
-    protected ResultSet executeQuery(PreparedStatement statement) throws SQLException {
-        return syncDatabaseOperation(statement::executeQuery);
-    }
+    public interface SQLSupplier<T> extends Supplier<T> {
 
-    protected void executeUpdate(PreparedStatement statement) throws SQLException {
-        syncDatabaseOperation(() -> {
-            statement.executeUpdate();
-            return null;
-        });
-    }
-
-    protected PreparedStatement prepareStatement(Connection connection, String str) throws SQLException {
-        return syncDatabaseOperation(() -> connection.prepareStatement(str));
-    }
-
-    protected synchronized <T> T syncDatabaseOperation(SQLSupplier<T> supplier) throws SQLException {
-        return supplier.getWithSQL();
-    }
-
-    private interface SQLSupplier<T> extends Supplier<T> {
-
-        T getWithSQL() throws SQLException;
+        T getWithSQL() throws ExecutionException, InterruptedException;
 
         default T get() {
+            throw new UnsupportedOperationException("Get outta here with that crap!");
+        }
+    }
+
+    interface SQLFunction<T> extends Function<java.sql.Connection, T> {
+
+        T applyWithSQL(Connection connection) throws SQLException, ExecutionException, InterruptedException;
+
+        default T apply(Connection connection) {
             throw new UnsupportedOperationException("Get outta here with that crap!");
         }
     }

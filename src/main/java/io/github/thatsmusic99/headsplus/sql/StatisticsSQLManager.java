@@ -10,10 +10,8 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +33,8 @@ public class StatisticsSQLManager extends SQLManager {
 
     @Override
     public void createTable() {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+        createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS headsplus_stats " +
                             "(user_id INT NOT NULL," +
                             "collection_type VARCHAR(32) NOT NULL," +
@@ -45,10 +43,9 @@ public class StatisticsSQLManager extends SQLManager {
                             "count INT NOT NULL)"
             );
 
-            executeUpdate(statement);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            statement.executeUpdate();
+            return null;
+        }, true, "create table headsplus_stats");
     }
 
     @Override
@@ -75,7 +72,7 @@ public class StatisticsSQLManager extends SQLManager {
                             head = defaultSection.getKeys(false).get(0);
                         }
                         int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
-                        addToTotalSync(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total);
+                        addToTotal(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total, false);
                     }
                 }
 
@@ -89,7 +86,7 @@ public class StatisticsSQLManager extends SQLManager {
                             head = defaultSection.getKeys(false).get(0);
                         }
                         int total = Integer.parseInt(String.valueOf(craftingObj.get(mobObj)));
-                        addToTotalSync(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total);
+                        addToTotal(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total, false);
                     }
                 }
             }
@@ -100,78 +97,53 @@ public class StatisticsSQLManager extends SQLManager {
         playerInfo.renameTo(new File(storageFolder, "playerinfo-backup.json"));
     }
 
-    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type) {
-        return CompletableFuture.supplyAsync(() -> getStatSync(uuid, type), HeadsPlus.async);
-    }
-
-    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type, String head) {
-        return CompletableFuture.supplyAsync(() -> getStatSync(uuid, type, head), HeadsPlus.async);
-    }
-
-    public CompletableFuture<Integer> getStatMeta(UUID uuid, CollectionType type, String metadata) {
-        return CompletableFuture.supplyAsync(() -> getStatMetaSync(uuid, type, metadata), HeadsPlus.async);
-    }
-
-    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type, String head, String metadata) {
-        return CompletableFuture.supplyAsync(() -> getStatSync(uuid, type, head, metadata), HeadsPlus.async);
-    }
-
-    public int getStatSync(UUID uuid, CollectionType type) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type, boolean async) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
 
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;
             return set.getInt(1);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return -1;
+        }, async, "get statistic for " + uuid + " in " + type.name());
     }
 
-    public int getStatSync(UUID uuid, CollectionType type, String head) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type, String head, boolean async) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
             statement.setString(3, head);
 
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;
             return set.getInt(1);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return -1;
+        }, async, "get stat " + type.name() + " for head " + head + " and user " + uuid.toString());
     }
 
-    public int getStatMetaSync(UUID uuid, CollectionType type, String metadata) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<Integer> getStatMeta(UUID uuid, CollectionType type, String metadata, boolean async) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
             statement.setString(2, type.name());
             statement.setString(3, "%" + metadata + "%");
 
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;
             return set.getInt(1);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return -1;
+        }, async, "get stat " + type.name() + " with metadata " + metadata + " for user " + uuid);
     }
 
-    public int getStatSync(UUID uuid, CollectionType type, String head, String metadata) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<Integer> getStat(UUID uuid, CollectionType type, String head, String metadata, boolean async) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ? AND metadata LIKE ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
@@ -179,146 +151,112 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setString(3, head);
             statement.setString(4, "%" + metadata + "%");
 
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;
             return set.getInt(1);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return -1;
+        }, async, "get stat " + type.name() + " with metadata " + metadata + " for head " + head + " and user " + uuid);
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal() {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                                "WHERE headsplus_stats.user_id = headsplus_players.id " +
-                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                            "WHERE headsplus_stats.user_id = headsplus_players.id " +
+                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                ResultSet set = executeQuery(statement);
-                List<LeaderboardEntry> leaderboard = new ArrayList<>();
-                while (set.next()) {
-                    leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-                }
-                return leaderboard;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+            ResultSet set = statement.executeQuery();
+            List<LeaderboardEntry> leaderboard = new ArrayList<>();
+            while (set.next()) {
+                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return leaderboard;
+        }, true, "get leaderboard total");
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                                "WHERE headsplus_stats.user_id = headsplus_players.id AND collection_type = ?" +
-                                "AND headsplus_stats.user_id = headsplus_players.id " +
-                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                            "WHERE headsplus_stats.user_id = headsplus_players.id AND collection_type = ?" +
+                            "AND headsplus_stats.user_id = headsplus_players.id " +
+                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                statement.setString(1, type.name());
+            statement.setString(1, type.name());
 
-                ResultSet set = executeQuery(statement);
-                List<LeaderboardEntry> leaderboard = new ArrayList<>();
-                while (set.next()) {
-                    leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-                }
-                return leaderboard;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+            ResultSet set = statement.executeQuery();
+            List<LeaderboardEntry> leaderboard = new ArrayList<>();
+            while (set.next()) {
+                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return leaderboard;
+        }, true, "get leaderboard total for " + type.name());
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
-                                " WHERE collection_type = ? AND head = ? " +
-                                "AND headsplus_stats.user_id = headsplus_players.id " +
-                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
+                            " WHERE collection_type = ? AND head = ? " +
+                            "AND headsplus_stats.user_id = headsplus_players.id " +
+                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                statement.setString(1, type.name());
-                statement.setString(2, head);
+            statement.setString(1, type.name());
+            statement.setString(2, head);
 
-                ResultSet set = executeQuery(statement);
-                List<LeaderboardEntry> leaderboard = new ArrayList<>();
-                while (set.next()) {
-                    leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-                }
-                return leaderboard;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+            ResultSet set = statement.executeQuery();
+            List<LeaderboardEntry> leaderboard = new ArrayList<>();
+            while (set.next()) {
+                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return leaderboard;
+        }, true, "get leaderboard total for " + type.name() + " and head " + head);
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(CollectionType type, String metadata) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                                "WHERE collection_type = ? AND metadata LIKE ? " +
-                                "AND headsplus_stats.user_id = headsplus_players.id " +
-                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                            "WHERE collection_type = ? AND metadata LIKE ? " +
+                            "AND headsplus_stats.user_id = headsplus_players.id " +
+                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                statement.setString(1, type.name());
-                statement.setString(2, "%" + metadata + "%");
+            statement.setString(1, type.name());
+            statement.setString(2, "%" + metadata + "%");
 
-                ResultSet set = executeQuery(statement);
-                List<LeaderboardEntry> leaderboard = new ArrayList<>();
-                while (set.next()) {
-                    leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-                }
-                return leaderboard;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+            ResultSet set = statement.executeQuery();
+            List<LeaderboardEntry> leaderboard = new ArrayList<>();
+            while (set.next()) {
+                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return leaderboard;
+        }, true, "get leaderboard total for " + type.name() + " and metadata " + metadata);
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head,
                                                                          String metadata) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                                "WHERE collection_type = ? AND head = ? AND metadata LIKE ? " +
-                                "AND headsplus_stats.user_id = headsplus_players.id " +
-                                "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
+        return createConnection(connection -> {
+            PreparedStatement statement =connection.prepareStatement(
+                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                            "WHERE collection_type = ? AND head = ? AND metadata LIKE ? " +
+                            "AND headsplus_stats.user_id = headsplus_players.id " +
+                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
-                statement.setString(1, type.name());
-                statement.setString(2, head);
-                statement.setString(3, "%" + metadata + "%");
+            statement.setString(1, type.name());
+            statement.setString(2, head);
+            statement.setString(3, "%" + metadata + "%");
 
-                ResultSet set = executeQuery(statement);
-                List<LeaderboardEntry> leaderboard = new ArrayList<>();
-                while (set.next()) {
-                    leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-                }
-                return leaderboard;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+            ResultSet set = statement.executeQuery();
+            List<LeaderboardEntry> leaderboard = new ArrayList<>();
+            while (set.next()) {
+                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
-            return new ArrayList<>();
-        }, HeadsPlus.async);
+            return leaderboard;
+        }, true, "get leaderboard total for " + type.name() + ", head " + head + " and metadata " + metadata);
     }
 
-    public CompletableFuture<Void> addToTotal(UUID uuid, CollectionType type, String head, String metadata,
-                                              int amount) {
-        return CompletableFuture.runAsync(() -> addToTotalSync(uuid, type, head, metadata, amount), HeadsPlus.async);
-    }
-
-    private void addToTotalSync(UUID uuid, CollectionType type, String head, String metadata, int amount) {
-        try (Connection connection = implementConnection()) {
-            // Check if the entry has been added
-            PreparedStatement checkStatement = prepareStatement(connection, "SELECT count FROM headsplus_stats WHERE " +
+    public void addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount, boolean async) {
+        createConnection(connection -> {
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
                     "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
             int id = PlayerSQLManager.get().getUserID(uuid);
             checkStatement.setInt(1, id);
@@ -326,11 +264,11 @@ public class StatisticsSQLManager extends SQLManager {
             checkStatement.setString(3, head);
             checkStatement.setString(4, metadata);
 
-            ResultSet set = executeQuery(checkStatement);
+            ResultSet set = checkStatement.executeQuery();
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
-                updateStatement = prepareStatement(connection, "INSERT INTO headsplus_stats (user_id, collection_type," +
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
                         " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
                 updateStatement.setInt(1, id);
                 updateStatement.setString(2, type.name());
@@ -338,7 +276,7 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(4, metadata);
                 updateStatement.setInt(5, amount);
             } else {
-                updateStatement = prepareStatement(connection, "UPDATE headsplus_stats SET count = count + ? WHERE " +
+                updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET count = count + ? WHERE " +
                         "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
                 updateStatement.setInt(1, amount);
                 updateStatement.setInt(2, id);
@@ -347,10 +285,9 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(5, metadata);
             }
             set.close();
-            executeUpdate(updateStatement);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            updateStatement.executeUpdate();
+            return null;
+        }, async, "add to statistics total " + type.name() + ", metadata " + metadata + ", head " + head + " and user " + uuid);
     }
 
     public enum CollectionType {

@@ -6,11 +6,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
-import java.sql.Connection;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,18 +33,17 @@ public class FavouriteHeadsSQLManager extends SQLManager {
 
     @Override
     public void createTable() {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+        createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS headsplus_fav_heads " +
                             "(user_id INT NOT NULL," +
                             "head VARCHAR(256) NOT NULL," +
                             "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
             );
 
-            executeUpdate(statement);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            statement.executeUpdate();
+            return null;
+        }, true, "create headsplus_fav_heads table");
     }
 
     @Override
@@ -69,49 +69,40 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     }
 
     public CompletableFuture<Void> addHead(UUID uuid, String head) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "INSERT INTO headsplus_fav_heads (user_id, head) VALUES (?, ?)");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                statement.setString(2, head);
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO headsplus_fav_heads (user_id, head) VALUES (?, ?)");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setString(2, head);
 
-                executeUpdate(statement);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+            return null;
+        }, true, "add favourite head " + head + " for " + uuid);
     }
 
     public CompletableFuture<Void> removeHead(UUID uuid, String head) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "DELETE FROM headsplus_fav_heads WHERE user_id = ? AND head = ?");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                statement.setString(2, head);
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM headsplus_fav_heads WHERE user_id = ? AND head = ?");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setString(2, head);
 
-                executeUpdate(statement);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+            return null;
+        }, true, "remove favourite head " + head + " for " + uuid);
     }
 
-    public List<String> getFavouriteHeads(UUID uuid) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<List<String>> getFavouriteHeads(UUID uuid) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             List<String> heads = new ArrayList<>();
             while (set.next()) {
                 heads.add(set.getString("head"));
             }
             return heads;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ArrayList<>();
+        }, false, "get favourite heads for " + uuid);
     }
 }

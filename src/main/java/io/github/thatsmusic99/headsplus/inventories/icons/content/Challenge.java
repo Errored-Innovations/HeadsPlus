@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Challenge extends Content {
 
@@ -93,7 +94,15 @@ public class Challenge extends Content {
                         new HPUtils.PlaceholderInfo("{challenge-xp}", challenge.getGainedXP(), true),
                         new HPUtils.PlaceholderInfo("{total}", challenge.getRequiredHeadAmount(), true),
                         new HPUtils.PlaceholderInfo("{heads}",
-                                () -> String.valueOf(challenge.getStatSync(player.getUniqueId())), true));
+                                () -> {
+                                    try {
+                                        return String.valueOf(challenge.getStatSync(player.getUniqueId()));
+                                    } catch (ExecutionException | InterruptedException e) {
+                                        HeadsPlus.get().getLogger().warning("An internal error occurred showing the heads placeholder.");
+                                        e.printStackTrace();
+                                        return "Nothing to see here. Shh.";
+                                    }
+                                }, true));
             }
         }
         meta.setLore(lore);

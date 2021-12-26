@@ -48,7 +48,8 @@ public class LeaderboardListeners implements Listener {
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
                     StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
                             StatisticsSQLManager.CollectionType.HUNTING,
-                            event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount())
+                            event.getHeadInfo().getId(), "entity=" + event.getEntityType().name(), event.getAmount(),
+                            true)
                     , 20);
         }
 
@@ -85,7 +86,7 @@ public class LeaderboardListeners implements Listener {
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
                     StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
                             StatisticsSQLManager.CollectionType.HUNTING,
-                            event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount()), 20);
+                            event.getDeadPlayer().getName(), "entity=PLAYER", event.getAmount(), true), 20);
 
         }
 
@@ -116,7 +117,7 @@ public class LeaderboardListeners implements Listener {
             Bukkit.getScheduler().runTaskLater(HeadsPlus.get(), () ->
                     StatisticsSQLManager.get().addToTotal(player.getUniqueId(),
                             StatisticsSQLManager.CollectionType.CRAFTING,
-                            event.getType(), "", event.getHeadsCrafted()), 20);
+                            event.getType(), "", event.getHeadsCrafted(), true), 20);
         }
 
         @Override

@@ -16,6 +16,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -123,6 +124,11 @@ public class HPUtils {
     public static <T> void addIfAbsent(List<T> list, T element) {
         if (list.contains(element)) return;
         list.add(element);
+    }
+
+    @NotNull
+    public static <T> T ifNull(T object, @NotNull T alternative) {
+        return object == null ? alternative : object;
     }
 
     public static boolean isMythicMob(Entity entity) {

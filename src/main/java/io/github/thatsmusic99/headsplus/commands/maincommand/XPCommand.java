@@ -58,7 +58,7 @@ public class XPCommand implements IHeadsPlusCommand {
                 }
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
                         MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
-                                String.valueOf(PlayerSQLManager.get().getXPSync(args[1])), "{amount}", args[3]),
+                                String.valueOf(PlayerSQLManager.get().getXP(args[1], false)), "{amount}", args[3]),
                         HeadsPlus.async);
                 return true;
             case "subtract":
@@ -82,7 +82,7 @@ public class XPCommand implements IHeadsPlusCommand {
                             String.valueOf(player.getXp() - amount), "{amount}", args[3]);
                     return true;
                 }
-                PlayerSQLManager.get().getXP(args[1]).thenAccept(xp -> {
+                PlayerSQLManager.get().getXP(args[1], true).thenAccept(xp -> {
                     if (amount > xp && !MainConfig.get().getMiscellaneous().ALLOW_NEGATIVE_XP) {
                         MessagesManager.get().sendMessage("commands.xp.negative-xp", sender);
                         return;
@@ -106,7 +106,7 @@ public class XPCommand implements IHeadsPlusCommand {
                 break;
             case "view":
                 if (sender.hasPermission("headsplus.maincommand.xp.view")) {
-                    PlayerSQLManager.get().getXP(args[1]).thenAccept(xp -> MessagesManager.get().sendMessage(
+                    PlayerSQLManager.get().getXP(args[1], true).thenAccept(xp -> MessagesManager.get().sendMessage(
                             "commands.xp.current-xp", sender, "{player}", args[1], "{xp}",
                             String.valueOf(xp)));
 

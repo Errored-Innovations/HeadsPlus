@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,17 +33,16 @@ public class PinnedChallengeManager extends SQLManager {
 
     @Override
     public void createTable() {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+        createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS headsplus_pinned_challenges " +
                             "(user_id INT NOT NULL," +
                             "challenge VARCHAR(256) NOT NULL," +
                             "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
             );
-            executeUpdate(statement);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+            statement.executeUpdate();
+            return null;
+        }, true, "create table headsplus_pinned_challenges");
     }
 
     @Override
@@ -70,51 +67,42 @@ public class PinnedChallengeManager extends SQLManager {
         pinnedChallenges.delete();
     }
 
-    public List<String> getPinnedChallenges(UUID uuid) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = prepareStatement(connection,
+    public CompletableFuture<List<String>> getPinnedChallenges(UUID uuid) {
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
                     "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-            ResultSet set = executeQuery(statement);
+            ResultSet set = statement.executeQuery();
             List<String> challenges = new ArrayList<>();
             while (set.next()) {
                 challenges.add(set.getString("challenge"));
             }
             return challenges;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ArrayList<>();
+        }, false, "get pinned challenges for " + uuid.toString());
     }
 
     public CompletableFuture<Void> addChallenge(UUID uuid, String challenge) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "INSERT INTO headsplus_pinned_challenges (user_id, challenge) VALUES (?, ?)");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                statement.setString(2, challenge);
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO headsplus_pinned_challenges (user_id, challenge) VALUES (?, ?)");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setString(2, challenge);
 
-                executeUpdate(statement);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+            return null;
+        }, true, "add pinned challenge " + challenge + " for " + uuid.toString());
     }
 
     public CompletableFuture<Void> removeChallenge(UUID uuid, String challenge) {
-        return CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = prepareStatement(connection,
-                        "DELETE FROM headsplus_pinned_challenges " +
-                                "WHERE headsplus_players.id = ? AND challenge = ?");
-                statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
-                statement.setString(2, challenge);
+        return createConnection(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM headsplus_pinned_challenges " +
+                            "WHERE headsplus_players.id = ? AND challenge = ?");
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setString(2, challenge);
 
-                executeUpdate(statement);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }, HeadsPlus.async);
+            statement.executeUpdate();
+            return null;
+        }, true, "remove pinned challenge " + challenge + " for " + uuid.toString());
     }
 }

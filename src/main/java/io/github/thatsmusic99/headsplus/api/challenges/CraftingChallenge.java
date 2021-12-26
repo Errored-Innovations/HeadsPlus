@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class CraftingChallenge extends Challenge {
 
@@ -30,16 +31,16 @@ public class CraftingChallenge extends Challenge {
     @Override
     public CompletableFuture<Integer> getStatFuture(UUID uuid) {
         if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING);
-        return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING, getHeadType());
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING, true);
+        return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING, getHeadType(), true);
     }
 
     @Override
-    public int getStatSync(UUID uuid) {
+    public int getStatSync(UUID uuid) throws ExecutionException, InterruptedException {
         if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING);
-        return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.CRAFTING,
-                getHeadType());
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING, false).get();
+        return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.CRAFTING,
+                getHeadType(), false).get();
     }
 
     @Override

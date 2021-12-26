@@ -10,6 +10,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static io.github.thatsmusic99.headsplus.util.HPUtils.ifNull;
+
 public class PersistenceManager {
 
     private static PersistenceManager instance;
@@ -79,11 +81,6 @@ public class PersistenceManager {
 
     public boolean isAMask(ItemStack item) {
         return !getMaskType(item).isEmpty();
-    }
-
-    @NotNull
-    private <T> T ifNull(T object, @NotNull T alternative) {
-        return object == null ? alternative : object;
     }
 
     private <T, Z> void setValue(ItemStack item, NamespacedKey key, PersistentDataType<T, Z> dataType, Z object) {

@@ -47,22 +47,11 @@ public abstract class HPConfig extends ConfigFile {
     protected static File getOrCreateFile(String name) {
         File file = new File(HeadsPlus.get().getDataFolder(), name);
         try {
-
             if (!file.exists()) file.createNewFile();
             return file;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return file;
-    }
-
-    public boolean renameFile() {
-        File file = getFile();
-        if (file.exists()) {
-            String name = getFile().getName();
-            String partialName = name.substring(0, name.indexOf('.'));
-            return file.renameTo(new File(HeadsPlus.get().getDataFolder(), partialName + "-errored-" + System.currentTimeMillis() + ".yml"));
-        }
-        return true;
     }
 }

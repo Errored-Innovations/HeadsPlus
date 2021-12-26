@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class MobKillChallenge extends Challenge {
 
@@ -30,17 +31,17 @@ public class MobKillChallenge extends Challenge {
     @Override
     public CompletableFuture<Integer> getStatFuture(UUID uuid) {
         if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING);
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, true);
         return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING,
-                "entity=" + getHeadType());
+                "entity=" + getHeadType(), true);
     }
 
     @Override
-    public int getStatSync(UUID uuid) {
+    public int getStatSync(UUID uuid) throws ExecutionException, InterruptedException {
         if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStatSync(uuid, StatisticsSQLManager.CollectionType.HUNTING);
-        return StatisticsSQLManager.get().getStatMetaSync(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity" +
-                "=" + getHeadType());
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, false).get();
+        return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity" +
+                "=" + getHeadType(), false).get();
     }
 
     @Override

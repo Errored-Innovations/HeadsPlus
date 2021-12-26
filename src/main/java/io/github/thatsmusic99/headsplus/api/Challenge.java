@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public abstract class Challenge {
 
@@ -120,7 +121,7 @@ public abstract class Challenge {
 
     public abstract CompletableFuture<Integer> getStatFuture(UUID uuid);
 
-    public abstract int getStatSync(UUID uuid);
+    public abstract int getStatSync(UUID uuid) throws ExecutionException, InterruptedException;
 
     public abstract boolean canRegister();
 

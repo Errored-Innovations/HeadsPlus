@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.sql.SQLManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
+import java.util.concurrent.ExecutionException;
 
 public class CacheManager {
 
@@ -52,9 +53,9 @@ public class CacheManager {
             return HPPlayer.getHPPlayer(player.getUniqueId()).getXp();
         UUID uuid = player.getUniqueId();
         // Update caches, use supplier to avoid running SQL query
-        updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, () -> PlayerSQLManager.get().getXP(uuid));
+        updateCaches("xp_" + player.getName(), uuid.toString(), cachedXP, () -> PlayerSQLManager.get().getXP(uuid, true));
         if (cachedXP.containsKey(uuid.toString())) return cachedXP.get(uuid.toString());
-        PlayerSQLManager.get().getXP(player.getUniqueId()).thenApply(xp -> cachedXP.put(uuid.toString(), xp));
+        PlayerSQLManager.get().getXP(player.getUniqueId(), true).thenApply(xp -> cachedXP.put(uuid.toString(), xp));
         return -1;
     }
 
@@ -64,13 +65,13 @@ public class CacheManager {
             return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
         UUID uuid = player.getUniqueId();
         updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels,
-                () -> PlayerSQLManager.get().getLevel(uuid));
+                () -> PlayerSQLManager.get().getLevel(uuid, true));
         int i = -1;
         if (cachedLevels.containsKey(uuid.toString())) {
             i = cachedLevels.get(uuid.toString());
         } else {
-            PlayerSQLManager.get().getLevel(player.getUniqueId()).thenApply(level -> cachedLevels.put(uuid.toString()
-                    , level));
+            PlayerSQLManager.get().getLevel(player.getUniqueId(), true).thenApply(level ->
+                    cachedLevels.put(uuid.toString(), level));
         }
         if (i == -1) return null;
         Level level = LevelsManager.get().getLevel(i);
@@ -84,10 +85,10 @@ public class CacheManager {
         UUID uuid = player.getUniqueId();
         // Update the caches
         updateCaches("challenges_" + player.getName(), uuid.toString(), cachedChallengeTotal,
-                () -> ChallengeSQLManager.get().getTotalChallengesComplete(uuid));
+                () -> ChallengeSQLManager.get().getTotalChallengesComplete(uuid, true));
         //
         if (cachedChallengeTotal.containsKey(uuid.toString())) return cachedChallengeTotal.get(uuid.toString());
-        ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId()).thenAccept(total ->
+        ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId(), true).thenAccept(total ->
                 cachedChallengeTotal.put(uuid.toString(), total));
         return -1;
     }
@@ -115,22 +116,22 @@ public class CacheManager {
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type) {
         return getStat(player.getName() + "_" + type.name(), StatisticsSQLManager.get().getStat(player.getUniqueId(),
-                type));
+                type, true));
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head) {
         return getStat(String.join("_", player.getName(), type.name(), head),
-                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head));
+                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, true));
     }
 
     public int getStatMeta(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String metadata) {
         return getStat(String.join("_", player.getName(), type.name(), metadata),
-                StatisticsSQLManager.get().getStatMeta(player.getUniqueId(), type, metadata));
+                StatisticsSQLManager.get().getStatMeta(player.getUniqueId(), type, metadata, true));
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head, String metadata) {
         return getStat(String.join("_", player.getName(), type.name(), head, metadata),
-                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, metadata));
+                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, metadata, true));
     }
 
     public int getStat(String id, CompletableFuture<Integer> ugh) {
@@ -150,7 +151,7 @@ public class CacheManager {
     }
 
     private <T> void updateCaches(String key, String id, HashMap<String, T> hashMap,
-                                  Supplier<CompletableFuture<T>> runnable) {
+                                  SQLManager.SQLSupplier<CompletableFuture<T>> runnable) {
         int duration = MainConfig.get().getLeaderboards().CACHE_DURATION;
         if (cachedRequests.containsKey(key)) {
             cachedRequests.get(key).cancel();
@@ -164,7 +165,13 @@ public class CacheManager {
                     hashMap.remove(id);
                     return;
                 }
-                runnable.get().thenApply(run -> hashMap.put(id, run));
+                try {
+                    runnable.getWithSQL().thenApply(run -> hashMap.put(id, run));
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }.runTaskTimer(HeadsPlus.get(), duration, duration));
     }

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class ConfigTextMenus extends HPConfig {
 
@@ -112,13 +113,26 @@ public class ConfigTextMenus extends HPConfig {
         public static CompletableFuture<String> translate(OfflinePlayer player, CommandSender sender) {
             return CompletableFuture.supplyAsync(() -> {
                 List<String> profile = new ArrayList<>();
-                int levelPos = PlayerSQLManager.get().getLevelSync(player.getName());
+                int levelPos = 0;
+                try {
+                    levelPos = PlayerSQLManager.get().getLevel(player.getName(), false).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
                 Level level = null;
                 if (levelPos > -1 && levelPos < LevelsManager.get().getLevels().size())
                     level = LevelsManager.get().getLevel(levelPos);
                 Level nextLevel = null;
                 if (level != null) nextLevel = LevelsManager.get().getNextLevel(level.getConfigName());
-                long xp = PlayerSQLManager.get().getXPSync(player.getName());
+                final long xp;
+                long xp1;
+                try {
+                    xp1 = PlayerSQLManager.get().getXP(player.getName(), true).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                    xp1 = -1;
+                }
+                xp = xp1;
                 Level finalLevel = level;
                 Level finalNextLevel = nextLevel;
                 for (String str : instance.getStringList("profile.layout")) {
@@ -128,22 +142,24 @@ public class ConfigTextMenus extends HPConfig {
                             new HPUtils.PlaceholderInfo("{player}", player.getName(), true),
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
                             new HPUtils.PlaceholderInfo("{completed-challenges}",
-                                    () -> ChallengeSQLManager.get().getTotalChallengesCompleteSync(player.getUniqueId()),
+                                    () -> ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId(), false),
                                     MainConfig.get().getMainFeatures().CHALLENGES),
                             new HPUtils.PlaceholderInfo("{hunter-counter}",
-                                    () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(),
-                                            StatisticsSQLManager.CollectionType.HUNTING),
+                                    () -> StatisticsSQLManager.get().getStat(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.HUNTING, false),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
                             new HPUtils.PlaceholderInfo("{crafting-counter}",
-                                    () -> StatisticsSQLManager.get().getStatSync(player.getUniqueId(),
-                                            StatisticsSQLManager.CollectionType.CRAFTING),
+                                    () -> StatisticsSQLManager.get().getStat(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.CRAFTING, false),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{header}", instance.getHeader("profile.header", sender), true),
                             new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(),
                                     sender), level != null),
-                            new HPUtils.PlaceholderInfo("{next-level}", () -> (finalNextLevel.getRequiredXP() - xp),
-                                    nextLevel != null));
+                            new HPUtils.PlaceholderInfo("{next-level}", () -> {
+                                assert finalNextLevel != null;
+                                return finalNextLevel.getRequiredXP() - xp;
+                            }, finalNextLevel != null));
                 }
                 return String.join("\n", profile);
             }, HeadsPlus.async).exceptionally(ex -> {
