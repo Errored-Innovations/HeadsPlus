@@ -64,19 +64,23 @@ public abstract class SQLManager {
     }
 
     protected synchronized <T> CompletableFuture<T> createConnection(SQLFunction<T> run, boolean async, String action) {
+        // The runnable to be processed by CompletableFuture
         Supplier<T> runnable = () -> {
+            // Create the connection to the database
             try (Connection connection = implementConnection()) {
+                // Execute any necessary queries/updates with that connection
                 return run.applyWithSQL(connection);
-            } catch (SQLException | ExecutionException ex) {
+            } catch (SQLException | ExecutionException ex) { // Internal exception
                 HeadsPlus.get().getLogger().warning("Failed to " + action + " - an internal error occurred. " +
                         "Please report the below stacktrace and error to the developer.");
                 ex.printStackTrace();
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException ex) { // The thread gets interrupted, especially if the server stops or someone screws with threads
                 HeadsPlus.get().getLogger().warning("Failed to " + action + " - interrupted thread. Please try again or restart the server. " +
                         "If none of the above works, please consult the necessary support services (e.g. hosting).");
             }
             return null;
         };
+        // If instructed to run async, run it async, otherwise do it without creating a new thread
         if (async) {
             return CompletableFuture.supplyAsync(runnable, HeadsPlus.async).thenApplyAsync(result -> result, HeadsPlus.sync);
         } else {
