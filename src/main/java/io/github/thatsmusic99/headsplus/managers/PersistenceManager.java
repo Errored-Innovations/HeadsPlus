@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -9,6 +10,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 import static io.github.thatsmusic99.headsplus.util.HPUtils.ifNull;
 
@@ -21,6 +24,8 @@ public class PersistenceManager {
     private static final NamespacedKey HEADSPLUS_SELL_BOOLEAN = new NamespacedKey(HeadsPlus.get(), "sell_boolean");
     private static final NamespacedKey HEADSPLUS_INVENTORY_ICON = new NamespacedKey(HeadsPlus.get(), "inventory_icon");
     private static final NamespacedKey HEADSPLUS_MASK = new NamespacedKey(HeadsPlus.get(), "mask_identifier");
+    private static final NamespacedKey HEADSPLUS_DISPLAYNAME = new NamespacedKey(HeadsPlus.get(), "display_name");
+    private static final NamespacedKey HEADSPLUS_LORE = new NamespacedKey(HeadsPlus.get(), "lore");
 
     public PersistenceManager() {
         instance = this;
@@ -113,5 +118,27 @@ public class PersistenceManager {
 
     private void setStorage(@NotNull ItemMeta meta, PersistentDataContainer container) {
         meta.getPersistentDataContainer().set(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER, container);
+    }
+
+    public void copyStorageToSkull(ItemMeta meta, Skull skull) {
+        PersistentDataContainer fromContainer = meta.getPersistentDataContainer();
+        PersistentDataContainer toContainer = skull.getPersistentDataContainer();
+        PersistentDataContainer headsPlusStorage = fromContainer.get(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER);
+        if (headsPlusStorage != null) toContainer.set(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER, headsPlusStorage);
+        toContainer.set(HEADSPLUS_DISPLAYNAME, PersistentDataType.STRING, meta.getDisplayName());
+        toContainer.set(HEADSPLUS_LORE, PersistentDataType.STRING, meta.getLore() == null ? "" : String.join("\n", meta.getLore()));
+        skull.update();
+    }
+
+    public void copyStorageToItem(Skull skull, ItemStack stack) {
+        ItemMeta meta = stack.getItemMeta();
+        PersistentDataContainer fromContainer = skull.getPersistentDataContainer();
+        PersistentDataContainer toContainer = meta.getPersistentDataContainer();
+        PersistentDataContainer headsPlusStorage = fromContainer.get(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER);
+        if (headsPlusStorage != null) toContainer.set(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER, headsPlusStorage);
+        meta.setDisplayName(fromContainer.get(HEADSPLUS_DISPLAYNAME, PersistentDataType.STRING));
+        String rawLore = fromContainer.get(HEADSPLUS_LORE, PersistentDataType.STRING);
+        if (rawLore != null && !rawLore.isEmpty()) meta.setLore(Arrays.asList(rawLore.split("\n")));
+        stack.setItemMeta(meta);
     }
 }
