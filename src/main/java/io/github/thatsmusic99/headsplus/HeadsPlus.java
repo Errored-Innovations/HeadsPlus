@@ -8,6 +8,8 @@ import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
+import io.github.thatsmusic99.headsplus.listeners.persistence.BreakListener;
+import io.github.thatsmusic99.headsplus.listeners.persistence.PlaceListener;
 import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
 import io.github.thatsmusic99.headsplus.placeholders.HPExpansion;
@@ -232,6 +234,8 @@ public class HeadsPlus extends JavaPlugin {
         listeners.add(new BlockPlaceListener());
         listeners.add(new PlayerPickBlockListener());
         listeners.add(new PlayerMessageDeathListener());
+        listeners.add(new PlaceListener());
+        listeners.add(new BreakListener());
         listeners.add(new SoundListener<>("on-sell-head", SellHeadEvent.class));
         listeners.add(new SoundListener<>("on-buy-head", HeadPurchaseEvent.class));
         listeners.add(new SoundListener<>("on-change-section", SectionChangeEvent.class));
