@@ -320,7 +320,7 @@ public class ConfigMobs extends FeatureConfig {
 
     public List<String> getPlayerLore(String name, double price, String killerName) {
         List<String> lore = new ArrayList<>();
-        List<String> configLore = getList("player.lore", getStringList("defaults.lore"));
+        List<String> configLore = getList("player." + name + ".lore", getStringList("player.default.lore"));
 
         for (String l : configLore) {
             HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
