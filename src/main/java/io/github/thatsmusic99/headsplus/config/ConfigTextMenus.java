@@ -142,16 +142,16 @@ public class ConfigTextMenus extends HPConfig {
                             new HPUtils.PlaceholderInfo("{player}", player.getName(), true),
                             new HPUtils.PlaceholderInfo("{xp}", xp, true),
                             new HPUtils.PlaceholderInfo("{completed-challenges}",
-                                    () -> ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId(), false),
+                                    () -> processStat(ChallengeSQLManager.get().getTotalChallengesComplete(player.getUniqueId(), false)),
                                     MainConfig.get().getMainFeatures().CHALLENGES),
                             new HPUtils.PlaceholderInfo("{hunter-counter}",
-                                    () -> StatisticsSQLManager.get().getStat(player.getUniqueId(),
-                                            StatisticsSQLManager.CollectionType.HUNTING, false),
+                                    () -> processStat(StatisticsSQLManager.get().getStat(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.HUNTING, false)),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{sellhead-counter}", 0, false),
                             new HPUtils.PlaceholderInfo("{crafting-counter}",
-                                    () -> StatisticsSQLManager.get().getStat(player.getUniqueId(),
-                                            StatisticsSQLManager.CollectionType.CRAFTING, false),
+                                    () -> processStat(StatisticsSQLManager.get().getStat(player.getUniqueId(),
+                                            StatisticsSQLManager.CollectionType.CRAFTING, false)),
                                     MainConfig.get().getMainFeatures().LEADERBOARDS),
                             new HPUtils.PlaceholderInfo("{header}", instance.getHeader("profile.header", sender), true),
                             new HPUtils.PlaceholderInfo("{level}", () -> translateColors(finalLevel.getDisplayName(),
@@ -167,6 +167,15 @@ public class ConfigTextMenus extends HPConfig {
                 return "no";
             });
         }
+    }
+
+    private static int processStat(CompletableFuture<Integer> stat) {
+        try {
+            return stat.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public static class HelpMenuTranslator {
