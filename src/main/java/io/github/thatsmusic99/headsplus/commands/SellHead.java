@@ -254,7 +254,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                 }
             }
         } else {
-            if (!args[2].startsWith("HP#")) args[2] = "HP#" + args[2];
+            if (!args[2].startsWith("HP#") && !args[2].equals("{mob-default}")) args[2] = "HP#" + args[2];
             if (args[1].equals("mobs")) {
                 for (String condition : ConfigMobs.get().getConfigSection(args[0].toUpperCase()).getKeys(false)) {
                     ids.add(args[1] + "_" + args[0].toUpperCase() + ":" + condition + ":" + args[2]);
