@@ -1,5 +1,5 @@
 
-![Loading beautiful image ;)](https://proxy.spigotmc.org/7f8059160ab428b12bd0b5c6ca741095b43342b1?url=https%3A%2F%2Fi.imgur.com%2F4DjCHmg.png)
+![Loading beautiful image ;)](https://i.imgur.com/4DjCHmg.png)
 
 # HeadsPlus Project
 
