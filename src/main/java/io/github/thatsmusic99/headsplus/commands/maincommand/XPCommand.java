@@ -40,7 +40,7 @@ public class XPCommand implements IHeadsPlusCommand {
 
         switch (args[2].toLowerCase()) {
             case "add":
-                if (sender.hasPermission("headsplus.maincommand.xp.add")) {
+                if (!sender.hasPermission("headsplus.maincommand.xp.add")) {
                     MessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                     return true;
                 }
