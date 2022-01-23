@@ -96,7 +96,7 @@ public class HPPlayer {
         HeadsPlus hp = HeadsPlus.get();
         PlayerSQLManager.get().setXP(uuid, xp);
         this.xp = xp;
-        HPUtils.addBossBar(getPlayer());
+
         if (MainConfig.get().getMainFeatures().LEVELS) {
             new BukkitRunnable() {
                 @Override
@@ -111,6 +111,8 @@ public class HPPlayer {
                         if (level.isrEnabled()) level.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
                     if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
+
+                    HPUtils.addBossBar(getPlayer());
                 }
             }.runTask(hp);
         }
