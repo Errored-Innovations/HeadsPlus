@@ -53,7 +53,7 @@ public class XPCommand implements IHeadsPlusCommand {
                     HPPlayer player = HPPlayer.getHPPlayer(target.getUniqueId());
                     player.setXp(player.getXp() + amount);
                     MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
-                            String.valueOf(player.getXp() + amount), "{amount}", args[3]);
+                            String.valueOf(player.getXp()), "{amount}", args[3]);
                     return true;
                 }
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
