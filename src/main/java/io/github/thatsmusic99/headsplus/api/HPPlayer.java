@@ -101,6 +101,7 @@ public class HPPlayer {
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (nextLevel < 0 || nextLevel >= LevelsManager.get().getLevels().size()) return;
                     Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
                     int jumps = 0;
                     while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
