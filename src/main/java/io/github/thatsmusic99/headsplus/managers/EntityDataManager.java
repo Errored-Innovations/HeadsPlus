@@ -209,7 +209,7 @@ public class EntityDataManager {
         }
 
         SellableHeadsManager.get().registerPrice("mobs_PLAYER", SellableHeadsManager.SellingType.HUNTING,
-                ConfigMobs.get().getDouble("player.default.price", ConfigMobs.get().getDouble("defaults.price")));
+                MainConfig.get().getPlayerDrops().DEFAULT_PRICE);
     }
 
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {
