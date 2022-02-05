@@ -81,7 +81,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
 
                             ConfigHeads selector = ConfigHeads.get();
                             selector.forceExample("heads." + id + ".texture", context.getSessionData("texture"));
-                            selector.forceExample("heads." + id + ".displayname", context.getSessionData("displayname"));
+                            selector.forceExample("heads." + id + ".display-name", context.getSessionData("displayname"));
 
                             ConfigHeadsSelector otherSelector = ConfigHeadsSelector.get();
                             otherSelector.set("heads.HP#" + id + ".section", context.getSessionData("section"));
@@ -95,7 +95,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             }
                             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo();
                             HeadManager.get().registerHead(id, headInfo
-                                    .withDisplayName((String) context.getSessionData("display-name"))
+                                    .withDisplayName((String) context.getSessionData("displayname"))
                                     .withTexture((String) context.getSessionData("texture")));
 
                             hpc.sendMessage("commands.addhead.custom-head-added", sender, "{id}", id);
