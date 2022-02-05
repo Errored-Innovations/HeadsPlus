@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.commands;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
@@ -79,12 +80,16 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             String id = String.valueOf(context.getSessionData("id"));
 
                             ConfigHeads selector = ConfigHeads.get();
-                            for (Object key : context.getAllSessionData().keySet()) {
-                                if (key.equals("id")) continue;
-                                selector.forceExample("heads." + id + "." + key, context.getSessionData(key));
-                            }
+                            selector.forceExample("heads." + id + ".texture", context.getSessionData("texture"));
+                            selector.forceExample("heads." + id + ".displayname", context.getSessionData("displayname"));
+
+                            ConfigHeadsSelector otherSelector = ConfigHeadsSelector.get();
+                            otherSelector.set("heads.HP#" + id + ".section", context.getSessionData("section"));
+                            otherSelector.set("heads.HP#" + id + ".price", context.getSessionData("price"));
+
                             try {
                                 selector.save();
+                                otherSelector.save();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
