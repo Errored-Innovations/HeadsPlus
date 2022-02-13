@@ -206,16 +206,12 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private void initiateAsyncManagers() {
+        SQLManager.setupSQL();
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             new RewardsManager();
             new ChallengeManager();
             new LevelsManager();
             new CraftingManager();
-            new PlayerSQLManager();
-            new ChallengeSQLManager();
-            new FavouriteHeadsSQLManager();
-            new PinnedChallengeManager();
-            new StatisticsSQLManager();
         });
     }
 

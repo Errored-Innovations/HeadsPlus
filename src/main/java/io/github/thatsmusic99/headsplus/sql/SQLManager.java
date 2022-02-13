@@ -24,7 +24,18 @@ public abstract class SQLManager {
         }
     }
 
-    private Connection loadSqlite() {
+    public static void setupSQL() {
+        createConnection(connection -> {
+            new PlayerSQLManager(connection);
+            new ChallengeSQLManager(connection);
+            new FavouriteHeadsSQLManager(connection);
+            new PinnedChallengeManager(connection);
+            new StatisticsSQLManager(connection);
+            return null;
+        }, true, "setting up SQL Managers");
+    }
+
+    private static Connection loadSqlite() {
         // Load JDBC
         try {
             Class.forName("org.sqlite.JDBC");
@@ -38,32 +49,31 @@ public abstract class SQLManager {
         return null;
     }
 
-    public Connection implementConnection() {
-        synchronized (this) {
-            Connection connection;
-            if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    connection = DriverManager.getConnection("jdbc:mysql://"
-                                    + MainConfig.get().getMySQL().MYSQL_HOST + ":"
-                                    + MainConfig.get().getMySQL().MYSQL_PORT + "/"
-                                    + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
-                            MainConfig.get().getMySQL().MYSQL_USERNAME,
-                            MainConfig.get().getMySQL().MYSQL_PASSWORD);
-                    usingSqlite = false;
-                    return connection;
-                } catch (ClassNotFoundException | SQLException e) {
-                    e.printStackTrace();
-                    connection = loadSqlite();
-                }
-            } else {
+    public static Connection implementConnection() {
+        Connection connection;
+        if (MainConfig.get().getMySQL().ENABLE_MYSQL) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connection = DriverManager.getConnection("jdbc:mysql://"
+                                + MainConfig.get().getMySQL().MYSQL_HOST + ":"
+                                + MainConfig.get().getMySQL().MYSQL_PORT + "/"
+                                + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
+                        MainConfig.get().getMySQL().MYSQL_USERNAME,
+                        MainConfig.get().getMySQL().MYSQL_PASSWORD);
+                usingSqlite = false;
+                return connection;
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
                 connection = loadSqlite();
             }
-            return connection;
+        } else {
+            connection = loadSqlite();
         }
+        return connection;
     }
 
-    protected synchronized <T> CompletableFuture<T> createConnection(SQLFunction<T> run, boolean async, String action) {
+    protected static synchronized <T> CompletableFuture<T> createConnection(SQLFunction<T> run, boolean async,
+                                                                            String action) {
         // The runnable to be processed by CompletableFuture
         Supplier<T> runnable = () -> {
             // Create the connection to the database
@@ -74,23 +84,27 @@ public abstract class SQLManager {
                 HeadsPlus.get().getLogger().warning("Failed to " + action + " - an internal error occurred. " +
                         "Please report the below stacktrace and error to the developer.");
                 ex.printStackTrace();
-            } catch (InterruptedException ex) { // The thread gets interrupted, especially if the server stops or someone screws with threads
-                HeadsPlus.get().getLogger().warning("Failed to " + action + " - interrupted thread. Please try again or restart the server. " +
+            } catch (InterruptedException ex) { // The thread gets interrupted, especially if the server stops or
+                // someone screws with threads
+                HeadsPlus.get().getLogger().warning("Failed to " + action + " - interrupted thread. Please try again " +
+                        "or restart the server. " +
                         "If none of the above works, please consult the necessary support services (e.g. hosting).");
             }
             return null;
         };
         // If instructed to run async, run it async, otherwise do it without creating a new thread
         if (async) {
-            return CompletableFuture.supplyAsync(runnable, HeadsPlus.async).thenApplyAsync(result -> result, HeadsPlus.sync);
+            return CompletableFuture.supplyAsync(runnable, HeadsPlus.async).thenApplyAsync(result -> result,
+                    HeadsPlus.sync);
         } else {
             return CompletableFuture.completedFuture(runnable.get());
         }
     }
 
-    public abstract void createTable();
+    public abstract void createTable(Connection connection) throws SQLException;
 
-    public abstract void transferOldData();
+    public abstract void transferOldData(Connection connection) throws SQLException, ExecutionException,
+            InterruptedException;
 
     public static String getTablePrefix() {
         return tablePrefix;

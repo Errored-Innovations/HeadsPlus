@@ -8,8 +8,10 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,10 +21,10 @@ public class ChallengeSQLManager extends SQLManager {
 
     private static ChallengeSQLManager instance;
 
-    public ChallengeSQLManager() {
+    public ChallengeSQLManager(Connection connection) throws SQLException {
         instance = this;
-        createTable();
-        transferOldData();
+        createTable(connection);
+        transferOldData(connection);
     }
 
     public static ChallengeSQLManager get() {
@@ -30,24 +32,22 @@ public class ChallengeSQLManager extends SQLManager {
     }
 
     @Override
-    public void createTable() {
-        createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS headsplus_challenges " +
-                            "(user_id INT NOT NULL," +
-                            "challenge VARCHAR(256) NOT NULL," +
-                            "count INT NOT NULL," +
-                            "last_completion_time BIGINT NOT NULL," +
-                            "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
-            );
+    public void createTable(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS headsplus_challenges " +
+                        "(user_id INT NOT NULL," +
+                        "challenge VARCHAR(256) NOT NULL," +
+                        "count INT NOT NULL," +
+                        "last_completion_time BIGINT NOT NULL," +
+                        "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
+        );
 
-            statement.executeUpdate();
-            return null;
-        }, true, "create table headsplus_challenges");
+        statement.executeUpdate();
+
     }
 
     @Override
-    public void transferOldData() {
+    public void transferOldData(Connection connection) {
         File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
         if (!storageFolder.exists()) return;
         File playerInfo = new File(storageFolder, "playerinfo.json");
@@ -72,7 +72,7 @@ public class ChallengeSQLManager extends SQLManager {
 
     public CompletableFuture<Integer> getTotalChallengesComplete(UUID uuid, boolean async) {
         return createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement( "SELECT SUM(count) FROM headsplus_challenges " +
+            PreparedStatement statement = connection.prepareStatement("SELECT SUM(count) FROM headsplus_challenges " +
                     "WHERE user_id = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
 

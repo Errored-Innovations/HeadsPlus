@@ -12,8 +12,10 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -23,10 +25,10 @@ public class PlayerSQLManager extends SQLManager {
 
     private static PlayerSQLManager instance;
 
-    public PlayerSQLManager() {
+    public PlayerSQLManager(Connection connection) throws SQLException {
         instance = this;
-        createTable();
-        transferOldData();
+        createTable(connection);
+        transferOldData(connection);
     }
 
     public static PlayerSQLManager get() {
@@ -34,32 +36,33 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     @Override
-    public void createTable() {
-        createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS headsplus_players " +
-                            "(id INTEGER PRIMARY KEY " + getStupidAutoIncrementThing() + ", " +
-                            "uuid VARCHAR(256) NOT NULL, " +
-                            "username VARCHAR(32) NOT NULL, " +
-                            "xp BIGINT NOT NULL," +
-                            "level INT NOT NULL," +
-                            "locale VARCHAR(16)," +
-                            "last_joined BIGINT NOT NULL)"
-            );
+    public void createTable(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS headsplus_players " +
+                        "(id INTEGER PRIMARY KEY " + getStupidAutoIncrementThing() + ", " +
+                        "uuid VARCHAR(256) NOT NULL, " +
+                        "username VARCHAR(32) NOT NULL, " +
+                        "xp BIGINT NOT NULL," +
+                        "level INT NOT NULL," +
+                        "locale VARCHAR(16)," +
+                        "last_joined BIGINT NOT NULL)"
+        );
 
-            statement.executeUpdate();
-            return null;
-        }, true, "create table headsplus_players");
+        statement.executeUpdate();
     }
 
     @Override
-    public void transferOldData() {
+    public void transferOldData(Connection connection) throws SQLException {
         File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
         if (!storageFolder.exists()) return;
         File playerInfo = new File(storageFolder, "playerinfo.json");
         if (!playerInfo.exists()) return;
         try (FileReader reader = new FileReader(playerInfo)) {
             JSONObject core = (JSONObject) new JSONParser().parse(reader);
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO headsplus_players " +
+                    "(uuid, username, xp, level, locale, last_joined) VALUES (?, ?, ?, ?, ?, ?)");
+
             for (Object uuidObj : core.keySet()) {
                 if (uuidObj.equals("server-total")) continue;
                 JSONObject playerObj = (JSONObject) core.get(uuidObj);
@@ -74,22 +77,33 @@ public class PlayerSQLManager extends SQLManager {
                 UUID uuid = UUID.fromString((String) uuidObj);
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
                 try {
-                    insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex,
-                            player.getLastLogin());
+                    statement.setString(1, uuid.toString());
+                    statement.setString(2, player.getName() == null ? "Unknown" : player.getName());
+                    statement.setLong(3, xp);
+                    statement.setInt(4, levelIndex);
+                    statement.setString(5, getLocale(playerObj));
+                    statement.setLong(6, player.getLastLogin());
                 } catch (NoSuchMethodError ex) {
-                    insertPlayer(uuid, player.getName() == null ? "Unknown" : player.getName(), xp, levelIndex, -1);
+                    statement.setLong(6, -1);
                 }
 
-                String rawLocale = (String) playerObj.get("locale");
-                if (rawLocale == null) continue;
-                String[] parts = rawLocale.split(":");
-                if (parts.length == 1) continue;
-                if (parts[1].equals("true")) setLocale(player.getName(), parts[0]).join();
+                statement.addBatch();
             }
+
+            statement.executeBatch();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException ignored) {
         }
+    }
+
+    private String getLocale(JSONObject playerObj) {
+        String rawLocale = (String) playerObj.get("locale");
+        if (rawLocale == null) return null;
+        String[] parts = rawLocale.split(":");
+        if (parts.length == 1) return null;
+        if (parts[1].equals("true")) return parts[0];
+        return null;
     }
 
     private CompletableFuture<Void> updateUsername(UUID uuid, String newName) {
@@ -123,6 +137,7 @@ public class PlayerSQLManager extends SQLManager {
             ResultSet results = statement.executeQuery();
             if (!results.next()) {
                 connection.close();
+                results.close();
                 insertPlayer(uuid, name, 0, 0, System.currentTimeMillis());
                 return null;
             }
@@ -167,7 +182,8 @@ public class PlayerSQLManager extends SQLManager {
 
             statement.executeUpdate();
             return null;
-        }, true, "insert player " + uuid + " with data " + name + ", " + xp + " XP, level" + level + " and timestamp " + timestamp);
+        }, true, "insert player " + uuid + " with data " + name + ", " + xp + " XP, level" + level + " and timestamp "
+                + timestamp);
     }
 
     public CompletableFuture<Void> setXP(UUID uuid, long xp) {
@@ -209,7 +225,7 @@ public class PlayerSQLManager extends SQLManager {
 
     private CompletableFuture<Void> updateJoinTimestamp(UUID uuid, long timestamp) {
         return createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement( "UPDATE headsplus_players SET last_joined =" +
+            PreparedStatement statement = connection.prepareStatement("UPDATE headsplus_players SET last_joined =" +
                     " ? WHERE uuid = ?");
             statement.setLong(1, timestamp);
             statement.setString(2, uuid.toString());
@@ -233,7 +249,8 @@ public class PlayerSQLManager extends SQLManager {
 
     public CompletableFuture<Integer> getLevel(String name, boolean async) {
         return createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement("SELECT level FROM headsplus_players WHERE username" +
+            PreparedStatement statement = connection.prepareStatement("SELECT level FROM headsplus_players WHERE " +
+                    "username" +
                     " = ?");
             statement.setString(1, name);
 

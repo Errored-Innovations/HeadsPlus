@@ -10,21 +10,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class FavouriteHeadsSQLManager extends SQLManager {
 
     private static FavouriteHeadsSQLManager instance;
 
-    public FavouriteHeadsSQLManager() {
+    public FavouriteHeadsSQLManager(Connection connection) throws SQLException {
         instance = this;
-        createTable();
-        transferOldData();
+        createTable(connection);
+        transferOldData(connection);
     }
 
     public static FavouriteHeadsSQLManager get() {
@@ -32,22 +35,19 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     }
 
     @Override
-    public void createTable() {
-        createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS headsplus_fav_heads " +
-                            "(user_id INT NOT NULL," +
-                            "head VARCHAR(256) NOT NULL," +
-                            "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
-            );
+    public void createTable(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS headsplus_fav_heads " +
+                        "(user_id INT NOT NULL," +
+                        "head VARCHAR(256) NOT NULL," +
+                        "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
+        );
 
-            statement.executeUpdate();
-            return null;
-        }, true, "create headsplus_fav_heads table");
+        statement.executeUpdate();
     }
 
     @Override
-    public void transferOldData() {
+    public void transferOldData(Connection connection) {
         // Checks to see if the storage folder exists
         File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
         if (!storageFolder.exists() || !storageFolder.isDirectory()) return;

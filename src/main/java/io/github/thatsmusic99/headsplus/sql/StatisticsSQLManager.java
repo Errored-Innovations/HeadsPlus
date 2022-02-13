@@ -10,21 +10,24 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class StatisticsSQLManager extends SQLManager {
 
     private static StatisticsSQLManager instance;
 
-    public StatisticsSQLManager() {
+    public StatisticsSQLManager(Connection connection) throws SQLException, ExecutionException, InterruptedException {
         instance = this;
-        createTable();
-        transferOldData();
+        createTable(connection);
+        transferOldData(connection);
     }
 
     public static StatisticsSQLManager get() {
@@ -32,64 +35,80 @@ public class StatisticsSQLManager extends SQLManager {
     }
 
     @Override
-    public void createTable() {
-        createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS headsplus_stats " +
-                            "(user_id INT NOT NULL," +
-                            "collection_type VARCHAR(32) NOT NULL," +
-                            "head VARCHAR(256) NOT NULL," +
-                            "metadata VARCHAR(256) NOT NULL," +
-                            "count INT NOT NULL)"
-            );
+    public void createTable(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS headsplus_stats " +
+                        "(user_id INT NOT NULL," +
+                        "collection_type VARCHAR(32) NOT NULL," +
+                        "head VARCHAR(256) NOT NULL," +
+                        "metadata VARCHAR(256) NOT NULL," +
+                        "count INT NOT NULL)"
+        );
 
-            statement.executeUpdate();
-            return null;
-        }, true, "create table headsplus_stats");
+        statement.executeUpdate();
     }
 
     @Override
-    public void transferOldData() {
+    public void transferOldData(Connection connection) throws SQLException, ExecutionException, InterruptedException {
         File storageFolder = new File(HeadsPlus.get().getDataFolder(), "storage");
         if (!storageFolder.exists()) return;
         File playerInfo = new File(storageFolder, "playerinfo.json");
         if (!playerInfo.exists()) return;
         try (FileReader reader = new FileReader(playerInfo)) {
             JSONObject core = (JSONObject) new JSONParser().parse(reader);
-            for (Object uuidObj : core.keySet()) {
-                if (uuidObj.equals("server-total")) continue;
-                JSONObject playerObj = (JSONObject) core.get(uuidObj);
-                UUID uuid = UUID.fromString((String) uuidObj);
 
-                JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
-                if (huntingObj != null) {
-                    for (Object mobObj : huntingObj.keySet()) {
-                        if (mobObj.equals("total")) continue;
-                        HeadsPlus.debug((String) mobObj);
-                        ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
-                        String head = "";
-                        if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
-                            head = defaultSection.getKeys(false).get(0);
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
+                        " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
+
+                for (Object uuidObj : core.keySet()) {
+                    if (uuidObj.equals("server-total")) continue;
+                    JSONObject playerObj = (JSONObject) core.get(uuidObj);
+                    UUID uuid = UUID.fromString((String) uuidObj);
+
+                    JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
+                    if (huntingObj != null) {
+                        for (Object mobObj : huntingObj.keySet()) {
+                            if (mobObj.equals("total")) continue;
+                            ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                            String head = "";
+                            if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
+                                head = defaultSection.getKeys(false).get(0);
+                            }
+                            int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
+
+                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+                            statement.setString(2, "HUNTING");
+                            statement.setString(3, head);
+                            statement.setString(4, "mob=" + mobObj);
+                            statement.setInt(5, total);
+
+                            statement.addBatch();
                         }
-                        int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
-                        addToTotal(uuid, CollectionType.HUNTING, head, "mob=" + mobObj, total, false);
+                    }
+
+                    JSONObject craftingObj = (JSONObject) playerObj.get("crafting");
+                    if (craftingObj != null) {
+                        for (Object mobObj : craftingObj.keySet()) {
+                            if (mobObj.equals("total")) continue;
+                            ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
+                            String head = "";
+                            if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
+                                head = defaultSection.getKeys(false).get(0);
+                            }
+                            int total = Integer.parseInt(String.valueOf(craftingObj.get(mobObj)));
+
+                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+                            statement.setString(2, "CRAFTING");
+                            statement.setString(3, head);
+                            statement.setString(4, "mob=" + mobObj);
+                            statement.setInt(5, total);
+
+                            statement.addBatch();
+                        }
                     }
                 }
 
-                JSONObject craftingObj = (JSONObject) playerObj.get("crafting");
-                if (craftingObj != null) {
-                    for (Object mobObj : craftingObj.keySet()) {
-                        if (mobObj.equals("total")) continue;
-                        ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
-                        String head = "";
-                        if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
-                            head = defaultSection.getKeys(false).get(0);
-                        }
-                        int total = Integer.parseInt(String.valueOf(craftingObj.get(mobObj)));
-                        addToTotal(uuid, CollectionType.CRAFTING, head, "mob=" + mobObj, total, false);
-                    }
-                }
-            }
+                statement.executeBatch();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException ignored) {
