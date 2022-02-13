@@ -11,10 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,6 +119,7 @@ public class ConfigInteractions extends HPConfig {
             Field profileField = skull.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             GameProfile profile = (GameProfile) profileField.get(skull);
+            if (profile == null) return "";
             // Check to see if the config contains the head's name.
             if (contains("special.names." + profile.getName())) {
                 runCommands("special.names." + profile.getName(), receiver);
@@ -133,18 +131,22 @@ public class ConfigInteractions extends HPConfig {
             // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
             // EXCITING STUFF
             // update: fuck you microsoft
-            Property texturesProp = profile.getProperties().get("textures").iterator().next();
-            String b64Texture = texturesProp.getValue();
-            Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(b64Texture.getBytes())), Map.class);
-            String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
-            String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
+            Iterator<Property> textureIterator = profile.getProperties().get("textures").iterator();
+            if (textureIterator.hasNext()) {
+                Property texturesProp = textureIterator.next();
+                String b64Texture = texturesProp.getValue();
+                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(b64Texture.getBytes())), Map.class);
+                String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
+                String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
 
-            for (String str : Arrays.asList(b64Texture, url, hash)) {
-                if (contains("special.textures." + str)) {
-                    runCommands("special.textures." + str, receiver);
-                    return getMessage("special.textures." + str, receiver, profile.getName());
+                for (String str : Arrays.asList(b64Texture, url, hash)) {
+                    if (contains("special.textures." + str)) {
+                        runCommands("special.textures." + str, receiver);
+                        return getMessage("special.textures." + str, receiver, profile.getName());
+                    }
                 }
             }
+
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
