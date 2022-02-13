@@ -83,6 +83,9 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
                         return true;
                     }
                     double price = SellableHeadsManager.get().getPrice(id) * item.getAmount();
+                    if (PersistenceManager.get().hasSellPrice(item)) {
+                        price = PersistenceManager.get().getSellPrice(item) * item.getAmount();
+                    }
                     SellData data = new SellData(player);
                     data.addID(id, item.getAmount());
                     data.addSlot(player.getInventory().getHeldItemSlot(), item.getAmount());
