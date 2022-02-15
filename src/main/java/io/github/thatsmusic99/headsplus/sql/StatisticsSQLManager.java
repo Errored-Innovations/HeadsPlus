@@ -38,11 +38,12 @@ public class StatisticsSQLManager extends SQLManager {
     public void createTable(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS headsplus_stats " +
-                        "(user_id INT NOT NULL," +
+                        "(user_id INTEGER NOT NULL," +
                         "collection_type VARCHAR(32) NOT NULL," +
                         "head VARCHAR(256) NOT NULL," +
                         "metadata VARCHAR(256) NOT NULL," +
-                        "count INT NOT NULL)"
+                        "count INT NOT NULL," +
+                        "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
         );
 
         statement.executeUpdate();

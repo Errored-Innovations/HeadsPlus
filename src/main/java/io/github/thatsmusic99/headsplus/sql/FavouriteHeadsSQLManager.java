@@ -38,7 +38,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
     public void createTable(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS headsplus_fav_heads " +
-                        "(user_id INT NOT NULL," +
+                        "(user_id INTEGER NOT NULL," +
                         "head VARCHAR(256) NOT NULL," +
                         "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
         );

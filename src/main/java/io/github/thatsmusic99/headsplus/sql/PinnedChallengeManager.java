@@ -37,7 +37,7 @@ public class PinnedChallengeManager extends SQLManager {
     public void createTable(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS headsplus_pinned_challenges " +
-                        "(user_id INT NOT NULL," +
+                        "(user_id INTEGER NOT NULL," +
                         "challenge VARCHAR(256) NOT NULL," +
                         "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
         );
