@@ -31,8 +31,8 @@ public class ConfigMobs extends FeatureConfig {
     public void loadDefaults() {
         addComment("This configuration file has become more complex compared to previous versions.\n" +
                 "If you have trouble understanding how it works, please use the /hp config mobs command instead.");
-        addExample("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
-        addExample("defaults.display-name", "{type} Head");
+        addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
+        addDefault("defaults.display-name", "{type} Head");
         addHeads();
         addPlayerHeads();
     }
