@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Łączna liczba wytworzonych głów
     current-level: Aktualny poziom
     xp-until-next-level: Dośw. do następnego poziomu
-  blacklist: Czarna lista
-  whitelist: Biała lista
-  blacklistw: Czarna lista światów
-  whitelistw: Biała lista światów
   info:
     version: Wersja
     author: Autor
@@ -59,18 +55,12 @@ textmenus:
     spigot: Łącze SpigotMC
     discord: Serwer Discord
     github: Github
-  head-info:
-    type: Rodzaj
-    display-name: Wyświetlana nazwa
-    price: Cena
-    interact-name: Nazwa interakcji
-    chance: Szansa
   help:
-    usage: Stosowanie
+    usage: Użycie
     description: Opis
     permission: Uprawnienie
     further-usages: Dalsze zastosowania
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -80,7 +70,7 @@ commands:
       disabled: '{header} Wyłączono szczegółowe debugowanie!'
   locale:
     invalid-lang: '{header} To nie jest poprawny język! Dostępne języki: &c{languages}'
-    changed-locale: '{header} Dobry dzień! Twój język jest teraz ustawiony na &cPolski
+    changed-locale: '{header} Dzień dobry! Twój język jest teraz ustawiony na &cPolski
       (PL)'
     changed-locale-other: '{header} Język &c{player} &7jest teraz ustawiony na &c{language}&7!'
   errors:
@@ -91,7 +81,7 @@ commands:
     invalid-input-int: '{header} Ta komenda używa tylko liczb!'
     invalid-pg-no: '{header} Zły numer strony!'
     no-data: '{header} Brak danych dla tego gracza!'
-    no-perm: '{header} Nie masz pozwolenia na używanie tej komendy.'
+    no-perm: '{header} Nie masz uprawnień do użycia tej komendy.'
     player-offline: '{header} Ten gracz jest offline!'
     too-many-args: '{header} Za dużo argumentów!'
   addhead:
@@ -102,34 +92,14 @@ commands:
     displayname: '{header} Wpisz nazwę wyświetlaną głowy (w tym kody kolorów).'
     id: '{header} Wpisz identyfikator głowy (np. brown_sheep, red_flower_bush)'
     id-taken: '{header} Ten identyfikator został zabrany (&c{id}&7)!'
-    price: '{header} Wpisz cenę głowicy (lub „default” dla wartości domyślnej).'
+    price: '{header} Wpisz cenę głowy (lub „default” dla wartości domyślnej).'
     section: '{header} Wpisz sekcję, w której zostanie umieszczona głowa. (Dostępne
       sekcje: &c{sections}&7)'
     texture: '{header} Wpisz lub skopiuj i wklej teksturę głowy. (Może to wymagać
-      kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wejdź).'
+      kilku wiadomości, więc kiedy skończysz, wpisz „done” na czacie i wciśnij enter).'
     head-added: '{header} Wyszukiwanie tekstury do dodania dla &c{player}&7...'
     head-adding: '{header} Dodano &c{player}&7!'
     head-already-added: '{header} Udaj się do &c{player} &7już w bazie danych!'
-  blacklist:
-    bl-a-off: '{header} Czarna lista jest już wyłączona!'
-    bl-a-on: '{header} Czarna lista jest już włączona!'
-    bl-off: '{header} Czarna lista została wyłączona!'
-    bl-on: '{header} Czarna lista została włączona!'
-    blw-a-on: '{header} Czarna lista światów została włączona!'
-    blw-a-off: '{header} Czarna lista światów została wyłączona!'
-    empty-bl: '{header} Czarna lista jest pusta!'
-    empty-blw: '{header} Czarna lista światów jest pusta!'
-    head-a-add: '{header} Ta głowa została już dodana!'
-    head-a-removed-bl: '{header} Głowa tego użytkownika nie znajduje się na czarnej
-      liście!'
-    head-added-bl: '{header} Głowa użytkownika &c{player}&7 została dodana do czarnej
-      listy!'
-    head-removed-bl: '{header} Głowa użytkownika &c{player}&7 została usunięta z czarnej
-      listy!'
-    world-a-add: '{header} Ten świat został już dodany!'
-    world-added-bl: '{header} Świat &c{world}&7 został dodany do czarnej listy!'
-    world-a-removed-bl: '{header} Ten świat nie znajduje się na czarnej liście!'
-    world-removed-bl: '{header} Świat &c{world}&7 został usunięty z czarnej listy!'
   challenges:
     already-complete-challenge: '{header} Już ukończyłeś(-aś) to wyzwanie!'
     cant-complete-challenge: '{header} Nie możesz ukończyć tego wyzwania!'
@@ -138,23 +108,10 @@ commands:
     reward-string: '{header} Nagroda: &c{reward}\n{header} Dośw.: &c{xp}'
   head:
     alpha-names: '{header} Ta komenda używa tylko znaków alfanumerycznych!'
-    blacklist-head: '{header} Ta głowa znajduje się na czarnej liście i nie można
-      jej używać!'
     full-inv: '{header} Twój ekwipunek jest pełny!'
     head-too-long: '{header} Za długa nazwa! Użyj nazwy, która ma od 3 do 16 znaków.'
     head-too-short: '{header} Za krótka nazwa! Użyj nazwy, która ma od 3 do 16 znaków.'
-    whitelist-head: '{header} Ta głowa nie znajduje się na białej liście i nie można
-      jej używać!'
-  head-info:
-    add-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zwiększona
-      o &c{value}&7!'
-    no-lore-data: '{header} Nie znaleziono dodatkowych informacji dla tego obiektu!'
-    no-mask-data: '{header} Nie znaleziono informacji o masce dla tego obiektu!'
-    no-name-data: '{header} Nie znaleziono informacji o nazwie dla tego obiektu!'
-    remove-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zminiejszona
-      o {value}'
-    set-value: '{header} Wartość &c{setting} &7głowy &c{entity} &7została zmieniona
-      na &c{value}'
+    restricted-head: '{header} Nie możesz użyć tej głowy!'
   heads:
     buy-success: '{header} Kupiłeś głowę za &c{price}&7 , zostało ci &c{balance}&7!'
     chat-input: '{header} Napisz, co chcesz wyszukać.'
@@ -168,6 +125,9 @@ commands:
   reload:
     reload-message: '{header} Konfiguracja przeładowana!'
     reloading-message: '{header} Przeładowywanie konfiguracji...'
+  restore:
+    restored-head: '{header} Przywrócono {head}!'
+    invalid-head: '{header} {head} nie jest prawidłowym identyfikatorem!'
   sellhead:
     false-head: '{header} Ta głowa nie może zostać sprzedana!'
     false-item: '{header} To nie jest głowa!'
@@ -178,26 +138,6 @@ commands:
   tests:
     running-tests: '{header} Uruchamianie testów ... (może to chwilę potrwać)'
     results: '{header} Wyniki: &c{results}'
-  whitelist:
-    empty-wl: '{header} Biała lista jest pusta!'
-    empty-wlw: '{header} Biała lista światów jest pusta!'
-    head-a-removed-wl: '{header} Głowa tego użytkownika nie znajduje się na białej
-      liście!'
-    head-added-wl: '{header} Głowa użytkownika &c{player}&7 została dodana do białej
-      listy!'
-    head-removed-wl: '{header} Głowa użytkownika &c{player}&7 została usunięta z białej
-      listy!'
-    wl-a-off: '{header} Biała lista jest już wyłączona!'
-    wl-a-on: '{header} Biała lista jest już włączona!'
-    wl-off: '{header} Biała lista została wyłączona!'
-    wl-on: '{header} Biała lista została włączona!'
-    wlw-a-off: '{header} Biała lista światów jest już wyłączona!'
-    wlw-a-on: '{header} Biała lista światów jest już włączona!'
-    wlw-off: '{header} Biała lista światów została wyłączona!'
-    wlw-on: '{header} Biała lista światów została włączona!'
-    world-a-removed-wl: '{header} Świat &c{world}&7 został usunięty z białej listy!'
-    world-added-wl: '{header} Świat &c{world}&7 został dodany do białej listy!'
-    world-removed-wl: '{header} Świat &c{world}&7 został usunięty z białej listy!'
   xp:
     added-xp: '{header} Dodano &c{amount} &7dośw. dla &c{player}&7. Nowa ilosć: &c{xp}&7!'
     current-xp: '{header} Obecne doświadczenie &c{player}&7: &c{xp}'
@@ -208,31 +148,15 @@ commands:
     reset-xp: '{header} Zresetuj doświadczenie &c{player}&7!'
 descriptions:
   hp:
-    blacklist: Włącza lub wyłącza czarną listę.
-    blacklistadd: Dodaje głowę do czarnej listy.
-    blacklistdel: Usuwa głowę z czarnej listy.
-    blacklistl: Wyświetla wszystkie głowy znajdujące się na czarnej liście.
-    blacklistw: Włącza lub wyłącza czarną listę przepisów.
-    blacklistwadd: Dodaje świat do czarnej listy przepisów.
-    blacklistwdel: Usuwa świat z czarnej listy przepisów.
-    blacklistwl: Wyświetla wszystkie światy znajdujące się na czarnej liście.
     complete: Zmienia stan wyzwania na ukończone.
     conjure: Wyszukuje głowę konkretnego typu.
     debug: Tworzy plik debugowania.
-    headinfo: Wyświetla lub modyfikuje informacje o głowie konkretnego obiektu.
     help: Wyświetla menu pomocy.
     info: Wyświetla informacje o wtyczce.
     profile: Wyświetla twój profil
     reload: Ładuje ponownie pliki konfiguracji.
+    restore: Przywraca lub naprawia głowicę, która została już dostarczona przez wtyczkę.
     tests: Uruchamia testy dla współczynników upuszczania głów mobów.
-    whitelist: Włącza lub wyłącza białą listę.
-    whitelistadd: Dodaje głowę do białej listy.
-    whitelistdel: Usuwa głowę z białej listy.
-    whitelistl: Wyświetla wszystkie głowy znajdujące się na białej liście.
-    whitelistw: Włącza lub wyłącza białą listę przepisów.
-    whitelistwadd: Dodaje świat do białej listy przepisów.
-    whitelistwdel: Usuwa świat z białej listy przepisów.
-    whitelistwl: Wyświetla wszystkie światy znajdujące się na białej liście.
     xp: Wyświetl lub zmień dośw. gracza.
   addhead: Dodaje głowę gracza do menu wyboru głów.
   head: Spawnuje głowę.
@@ -245,6 +169,8 @@ descriptions:
     aby sprzedać wszystkie głowy.
 event:
   block-place-denied: '{header} Nie możesz postawić głów, które da się sprzedać!'
+  cannot-craft-heads: '{header} Nie możesz tworzyć głów!'
+  cannot-craft-heads-here: '{header} Nie możesz tu tworzyć głów!'
   head-interact-message: '{header} To jest głowa użytkownika &c{name}&7!'
   head-mhf-interact-message: '{header} To jest głowa użytkownika &c{name}&7!'
   head-mhf-interact-message-2: '{header} To jest głowa użytkownika &c{name}&7!'

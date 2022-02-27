@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Total capete artizanale
     current-level: Nivelul actual
     xp-until-next-level: XP pana la nivelul urmator
-  blacklist: Lista neagra
-  whitelist: Lista alba
-  blacklistw: Lista neagra lumilor
-  whitelistw: Lista alba lumilor
   info:
     version: Versiune
     author: Autor
@@ -70,7 +66,7 @@ textmenus:
     description: Descriere
     permission: Permisiune
     further-usages: Utilizari ulterioare
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -114,23 +110,6 @@ commands:
     head-adding: '{header} Căutați textură pentru a adăuga &c{player}&7...'
     head-already-added: '{header} Îndreptați-vă spre &c{player} &7deja în baza de
       date!'
-  blacklist:
-    bl-a-off: '{header} Lista neagra este deja dezactivata!'
-    bl-a-on: '{header} Lista neagra este deja activata!'
-    bl-off: '{header} Lista neagra a fost dezactivata!'
-    bl-on: '{header} Lista neagra a fost activata!'
-    blw-a-on: '{header} Lista neagra lumilor a fost activata!'
-    blw-a-off: '{header} Lista neagra lumilor a fost dezactivata!'
-    empty-bl: '{header} Lista cu capete interzise este goala!'
-    empty-blw: '{header} Lista cu lumi interzise este goala!'
-    head-a-add: '{header} Acest cap este deja adaugat!'
-    head-a-removed-bl: '{header} Acest cap nu este inca interzis!'
-    head-added-bl: '{header} &c{player}&7 a fost interzis!'
-    head-removed-bl: '{header} &c{player}&7 nu mai este interzis!'
-    world-a-add: '{header} Aceasta lume este deja adaugata!'
-    world-added-bl: '{header} &c{world}&7 a fost adaugata lumilor interzise!'
-    world-a-removed-bl: '{header} Aceasta lume nu este inca interzisa!'
-    world-removed-bl: '{header} &c{world}&7 nu mai este o lume interzisa!'
   challenges:
     already-complete-challenge: '{header} Ati terminat deja aceasta provocare!'
     cant-complete-challenge: '{header} Nu puteti face aceasta provocare!'
@@ -139,13 +118,12 @@ commands:
     reward-string: '{header} Recompensa: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Aceasta comanda suporta doar nume alfanumerice!'
-    blacklist-head: '{header} Acest cap este interzis si nu poate fi folosit!'
     full-inv: '{header} Inventarul tau este plin!'
     head-too-long: '{header} IGN-ul este prea lung pentru a fi utilizat. Foloseste
       un IGN intre 3 si 16 caractere!'
     head-too-short: '{header} IGN-ul este prea scurt pentru a fi utilizat. Foloseste
       un IGN intre 3 si 16 caractere!'
-    whitelist-head: '{header} Acest cap nu este inca permis si nu poate fi folosit!'
+    restricted-head: '{header} Nu poți folosi acel cap!'
   head-info:
     add-value: '{header} &c{value} &7a fost adăugat la setarea &c{setting} &7a &c{entity}&7!'
     no-lore-data: '{header} Nu exista date de lore pentru aceasta entitate!'
@@ -168,6 +146,9 @@ commands:
   reload:
     reload-message: '{header} Config reincarcat cu succes!'
     reloading-message: '{header} Reincarcare config...'
+  restore:
+    restored-head: '{header} {head} restaurat!'
+    invalid-head: '{header} {head} nu este un ID valid!'
   sellhead:
     false-head: '{header} Acest cap nu poate fi vandut!'
     false-item: '{header} Acesta nu este un cap!'
@@ -178,58 +159,23 @@ commands:
   tests:
     running-tests: '{header} Derularea testelor ... (poate dura ceva timp)'
     results: '{header} Rezultate: &c{results}'
-  whitelist:
-    empty-wl: '{header} Lista cu capete permise este goala!'
-    empty-wlw: '{header} Lista cu lumi permise este goala!'
-    head-a-removed-wl: '{header} Acest cap nu este inca permis!'
-    head-added-wl: '{header} &c{player}&7 a fost permis!'
-    head-removed-wl: '{header} &c{player}&7 nu mai este permis!'
-    wl-a-off: '{header} Permiterea este deja dezactivata!'
-    wl-a-on: '{header} Interzicerea este deja activata!'
-    wl-off: '{header} Permiterea a fost dezactivata!'
-    wl-on: '{header} Permiterea a fost activata!'
-    wlw-a-off: '{header} Permiterea lumilor este deja dezactivata!'
-    wlw-a-on: '{header} Permiterea lumilor este deja activata!'
-    wlw-off: '{header} Permiterea lumilor a fost dezactivata!'
-    wlw-on: '{header} Permiterea lumilor a fost activata!'
-    world-a-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
-    world-added-wl: '{header} &c{world}&7 a fost adaugata lumilor permise!'
-    world-removed-wl: '{header} &c{world}&7 nu mai este o lume permisa!'
   xp:
     added-xp: '{header} Adăugate &c{amount} &7XP la &c{player}&7, acum au &c{xp}&7!'
     current-xp: '{header} XP-ul actual al &c{player}&7: &c{xp}'
-    negative-xp: '{header} I don''t think you want to do that... (to allow negative
-      XP, go into config.yml > plugin > perks > xp > allow-negative, however this
-      has unpredictable results!)'
+    negative-xp: '{header} Nu cred că vrei să faci asta ... (pentru a permite negativ XP, accesați config.yml > plugin > perks > xp > allow-negative, însă aceasta are rezultate imprevizibile!)'
     removed-xp: '{header} Sters {amount} XP de la {player}, acum au {xp}!'
     reset-xp: '{header} Resetati XP-ul &c{player}&7!'
 descriptions:
   hp:
-    blacklist: Porneste sau opreste interzicerea.
-    blacklistadd: Adauga un cap pe lista celor interzise.
-    blacklistdel: Sterge un cap de pe lista celor interzise.
-    blacklistl: Arata toate capetele interzise.
-    blacklistw: Porneste sau opreste interzicerea craftarii capetelor.
-    blacklistwadd: Adauga o lume pe lista celor interzise pentru craftat.
-    blacklistwdel: Sterge o lume de pe lista celor interzise pentru craftat.
-    blacklistwl: Arata toate lumile interzise.
     complete: Finalizeaza o provocare.
     conjure: Retreife un cap de un anumit tip.
     debug: Inchide un fisier de depanare.
-    headinfo: Afiseaza/modifica informatii despre capul entitatii specifice.
     help: Afiseaza meniul de ajutor.
     info: Arata informatii despre plugin.
     profile: Afiseaza profilul pentru plugin-ul.
     reload: Reincarca configuratia.
+    restore: Restaureaza sau repara un cap care a fost deja furnizat de plugin.
     tests: Executa testele pentru ratele de scădere a mafiei.
-    whitelist: Porneste sau opreste permiterea.
-    whitelistadd: Adauga un cap pe lista celor permise.
-    whitelistdel: Sterge un cap de pe lista celor permise.
-    whitelistl: Arata toate capetele permise.
-    whitelistw: Porneste sau opreste permiterea craftarii capetelor.
-    whitelistwadd: Adauga o lume pe lista celor permise pentru craftat.
-    whitelistwdel: Sterge o lume de pe lista celor permise pentru craftat.
-    whitelistwl: Arata toate lumile permise.
     xp: Vizualizați sau schimbați XP-ul unui jucător.
   addhead: Adăugați un cap de jucător în meniul principal
   head: Spawneaza un cap.
@@ -242,6 +188,8 @@ descriptions:
     si valoarea ''all'' pentru a vinde fiecare cap.
 event:
   block-place-denied: '{header} Nu poti sa-ti asezi capete!'
+  cannot-craft-heads: '{header} Nu poți crea capete!'
+  cannot-craft-heads-here: '{header} Nu poți crea capete aici!'
   head-interact-message: '{header} Acesta este capul lui &c{name}&7!'
   head-mhf-interact-message: '{header} Acesta este un cap de &c{name}&7!'
   head-mhf-interact-message-2: '{header} Acesta este un cap de &c{name}&7!'

@@ -1,9 +1,12 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.list;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.config.customheads.HeadsPlusConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,10 +18,10 @@ public class Stats extends Icon {
 
     private int totalPages;
 
-    public Stats() {}
+    public Stats() {
+    }
 
     public Stats(Player player, Integer totalPages) {
-        hpi = hp.getItems().getConfig();
         initItem("stats");
         this.totalPages = totalPages;
         initNameAndLore("stats", player);
@@ -36,44 +39,32 @@ public class Stats extends Icon {
 
     @Override
     public void initNameAndLore(String id, Player player) {
-        HeadsPlusConfigCustomHeads hpch = HeadsPlus.getInstance().getHeadsXConfig();
+        ConfigHeadsSelector hpch = ConfigHeadsSelector.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(hpc.formatMsg(hpi.getString("icons." + id + ".display-name"), player));
+        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
+                ".display-name"), player));
         List<String> lore = new ArrayList<>();
-        for (String loreStr : hpi.getStringList("icons." + id + ".lore")) {
-            lore.add(hpc.formatMsg(loreStr, player)
-                    .replaceAll("\\{heads}", String.valueOf(hpch.allHeadsCache.size()))
-                    .replaceAll("\\{balance}", hp.econ() ? String.valueOf(hp.getEconomy().getBalance(player)) : "None")
-                    .replaceAll("\\{sections}", String.valueOf(hpch.sections.size()))
-                    .replaceAll("\\{section}", manager.getSection() == null ? "None" : manager.getSection())
-                    .replaceAll("\\{pages}", String.valueOf(totalPages)));
+        for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
+            HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(loreStr, player),
+                    new HPUtils.PlaceholderInfo("{head}",
+                            manager.getSection() != null ?
+                                    hpch.getSections().get(manager.getSection()).getHeads().size() :
+                                    hpch.getTotalHeads(), true),
+                    new HPUtils.PlaceholderInfo("{balance}", getBalance(player), HeadsPlus.get().isVaultEnabled()),
+                    new HPUtils.PlaceholderInfo("{sections}", hpch.getSections().size(), true),
+                    new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
+                    new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "PAPER";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.stats.icon}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.stats.total-heads} {heads}",
-                "{msg_inventory.icon.stats.total-pages} {pages}",
-                "{msg_inventory.icon.stats.total-sections} {sections}",
-                "{msg_inventory.icon.stats.current-balance} {balance}",
-                "{msg_inventory.icon.stats.current-section} {section}"};
+    private double getBalance(Player player) {
+        try {
+            return HeadsPlus.get().getEconomy().getBalance(player);
+        } catch (NoClassDefFoundError ex) {
+            return 0.0;
+        }
     }
 }

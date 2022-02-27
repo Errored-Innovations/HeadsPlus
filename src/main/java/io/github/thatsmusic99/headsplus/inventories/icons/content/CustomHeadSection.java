@@ -8,16 +8,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomHeadSection extends Content {
+
     private String section;
-    public CustomHeadSection(ItemStack itemStack, String section) {
+
+    public CustomHeadSection(ItemStack itemStack, String section, Player player) {
         super(itemStack);
         this.section = section;
+        initNameAndLore(getId(), player);
     }
 
-    public CustomHeadSection() {}
+    public CustomHeadSection() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -36,18 +41,14 @@ public class CustomHeadSection extends Content {
     }
 
     @Override
+    public void initNameAndLore(String id, Player player) {
+        // TODO custom descriptions
+        item.setLore(new ArrayList<>());
+    }
+
+    @Override
     public String getId() {
         return "headsection";
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{head-name}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[]{"{msg_inventory.icon.head.count}"};
     }
 
 }

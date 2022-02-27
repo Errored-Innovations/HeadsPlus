@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Всего созданных голов
     current-level: Текущий уровень
     xp-until-next-level: XP до следующего уровня
-  blacklist: Черный список
-  whitelist: Белый список
-  blacklistw: Черный список миров
-  whitelistw: Белый список миров
   info:
     version: Версия
     author: автор
@@ -59,18 +55,12 @@ textmenus:
     spigot: SpigotMC ссылка
     discord: Discord Server
     github: Github
-  head-info:
-    type: Тип
-    display-name: Показать имя
-    price: Цена
-    interact-name: Имя взаимодействия
-    chance: возможность
   help:
     usage: использование
     description: Описание
     permission: разрешение
     further-usages: Дальнейшее использование
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   locale:
@@ -108,23 +98,6 @@ commands:
     head-added: '{header} Голова для &c{player} &7добавлена!'
     head-adding: '{header} Поиск текстуры для добавления для &c{player}&7...'
     head-already-added: '{header} Отправляйтесь в &c{player} &7уже в базе данных!'
-  blacklist:
-    bl-a-off: '{header} Черный список уже отключен!'
-    bl-a-on: '{header} Черный список уже включен!'
-    bl-off: '{header} Черный список отключен!'
-    bl-on: '{header} Черный список включен!'
-    blw-a-on: '{header} Черный список миров включен!'
-    blw-a-off: '{header} Черный список миров отключен!'
-    empty-bl: '{header} Черный список пуст!'
-    empty-blw: '{header} Черный список миров пуст!'
-    head-a-add: '{header} Эта голова уже добавлена!'
-    head-a-removed-bl: '{header} Этой головы нет в черном списке!'
-    head-added-bl: '{header} &c{player}&7 добавлена в черный список!'
-    head-removed-bl: '{header} &c{player}&7 удалена из черного списка!'
-    world-a-add: '{header} Этот мир уже добавлен!'
-    world-added-bl: '{header} &c{world}&7 добавлен в черный список мира!'
-    world-a-removed-bl: '{header} Этот мир не в черном списке!'
-    world-removed-bl: '{header} &c{world}&7 удален из черного списка!'
   challenges:
     already-complete-challenge: '{header} Вы уже выполнили это задание!'
     cant-complete-challenge: '{header} Вы не можете выполнить это задание!'
@@ -133,22 +106,12 @@ commands:
     reward-string: '{header} Награда: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Эта команда обрабатывает только буквенно-цифровые имена!'
-    blacklist-head: '{header} Эта голова занесена в черный список и не может быть
-      использована!'
     full-inv: '{header} Ваш инвентарь полон!'
     head-too-long: '{header} IGN слишком длинный, чтобы быть действительным! Пожалуйста,
       используйте IGN от 3 до 16 символов.'
     head-too-short: '{header} IGN слишком короткий, чтобы быть действительным! Пожалуйста,
       используйте IGN от 3 до 16 символов.'
-    whitelist-head: '{header} Эта голова не занесена в белый список и не может быть
-      использована!'
-  head-info:
-    add-value: '{header} &c{value} &7добавлено для &c{entity} {setting}&7!'
-    no-lore-data: '{header} Для этой сущности нет данных об описании!'
-    no-mask-data: '{header} Для этой сущности нет данных маски!'
-    no-name-data: '{header} Для этой сущности нет данных об имени!'
-    remove-value: '{header} &c{value} &7удалено у &c{entity} {setting}&7!'
-    set-value: '{header} &c{entity} {setting} &7изменена на &c{value}&7!'
+    restricted-head: '{header} Ты не можешь использовать эту голову!'
   heads:
     buy-success: '{header} Вы купили голову за &c{price}&7 и теперь у вас &c{balance}&7!'
     chat-input: '{header} Введите термин, который вы хотите найти.'
@@ -162,6 +125,9 @@ commands:
   reload:
     reload-message: '{header} Перезагрузил конфиг!'
     reloading-message: '{header} Перезагрузка конфигурации...'
+  restore:
+    restored-head: '{header} Восстановил {head}!'
+    invalid-head: '{header} {head} не является действительным идентификатором!'
   sellhead:
     false-head: '{header} Эта голова не может быть продана!'
     false-item: '{header} Это не голова!'
@@ -171,23 +137,6 @@ commands:
   tests:
     running-tests: '{header} Запуск тестов ... (это может занять некоторое время)'
     results: '{header} Результаты: &c{results}'
-  whitelist:
-    empty-wl: '{header} Белый список пуст!'
-    empty-wlw: '{header} Белый список миров пуст!'
-    head-a-removed-wl: '{header} Эта голова не в белом списке!'
-    head-added-wl: '{header} &c{player}&7 добавлена в белый список!'
-    head-removed-wl: '{header} &c{player}&7 удалена из белого списка!'
-    wl-a-off: '{header} Белый список уже отключен!'
-    wl-a-on: '{header} Черный список уже включен!'
-    wl-off: '{header} Белый список отключен!'
-    wl-on: '{header} Белый список включен!'
-    wlw-a-off: '{header} Белый список миров уже отключен!'
-    wlw-a-on: '{header} Белый список миров уже включен!'
-    wlw-off: '{header} Белый список миров отключен!'
-    wlw-on: '{header} Белый список миров включен!'
-    world-a-removed-wl: '{header} &c{world}&7 удален из белого списка миров!'
-    world-added-wl: '{header} &c{world}&7 добавлен в белый список миров!'
-    world-removed-wl: '{header} &c{world}&7 удален из белого списка миров!'
   xp:
     added-xp: '{header} Добавлено &c{amount} &7XP в &c{player}&7, теперь у них есть
       {xp}!'
@@ -200,31 +149,15 @@ commands:
     reset-xp: '{header} Сбросить &c{player} &7ХР!'
 descriptions:
   hp:
-    blacklist: Включает черный список.
-    blacklistadd: Добавляет голову в черный список.
-    blacklistdel: Удаляет голову из черного списка.
-    blacklistl: Список всех голов в черном списке.
-    blacklistw: Вкл/выкл черный список рецептов крафта.
-    blacklistwadd: Добавляет мир в черный список рецептов крафта.
-    blacklistwdel: Удаляет мир из черного списка рецептов крафта.
-    blacklistwl: Миры в в черном списке.
     complete: Завершает задачу.
     conjure: Получает голову определенного типа.
     debug: Сбрасывает файл отладки.
-    headinfo: Отображает/изменяет информацию о голове конкретной сущности.
     help: Отображает меню справки.
     info: Отображает информацию о плагине.
     profile: Отображает ваш профиль для плагина.
     reload: Перезагрузка файлов конфигурации.
+    restore: Восстанавливает или ремонтирует голову, которая уже была предоставлена плагином.
     tests: Запускает тесты на скорость выпадения монстров.
-    whitelist: Включает белый список.
-    whitelistadd: Добавляет голову в белый список.
-    whitelistdel: Удаляет голову из белого списка.
-    whitelistl: Список всех голов в белом списке.
-    whitelistw: Вкл/выкл белый список рецептов крафта.
-    whitelistwadd: Добавляет мир в белый список рецептов крафта.
-    whitelistwdel: Удаляет мир из белого списка рецептов крафта.
-    whitelistwl: Миры в белом списке
     xp: Просмотр или изменение XP игрока.
   addhead: Добавляет голову игрока в меню голов
   head: Создает голову
@@ -237,6 +170,8 @@ descriptions:
     чтобы продать все головы.
 event:
   block-place-denied: '{header} Нельзя ставить продаваемые головы!'
+  cannot-craft-heads: '{header} Вы не можете создавать головы!'
+  cannot-craft-heads-here: '{header} Здесь нельзя лепить головы!'
   head-interact-message: '{header} Эта голова &c{name}&7 !'
   head-mhf-interact-message: '{header} Эта голова &c{name}&7 !'
   head-mhf-interact-message-2: '{header} Эта голова &c{name}&7 !'

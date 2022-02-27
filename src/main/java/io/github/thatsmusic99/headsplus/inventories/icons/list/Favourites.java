@@ -13,7 +13,8 @@ public class Favourites extends Icon {
         super(player);
     }
 
-    public Favourites() {}
+    public Favourites() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -26,23 +27,4 @@ public class Favourites extends Icon {
         return "favourites";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "DIAMOND";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.favourites}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

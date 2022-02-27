@@ -6,11 +6,13 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>7.0.0</version>
+    <version>7.0.5</version>
 
     <properties>
-        <hp-project.version>v6.11</hp-project.version>
-        <craftbukkit-directory>${user.home}\.m2\repository\org\bukkit\craftbukkit\</craftbukkit-directory>
+        <!--suppress UnresolvedMavenProperty -->
+        <hp-project.version>7.0.5+DEV_${env.BUILD_NUMBER}</hp-project.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
     </properties>
 
     <build>
@@ -19,7 +21,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -28,20 +30,29 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>io.github.thatsmusic99.headsplus.paperlib</shadedPattern> <!-- Replace this -->
-                        </relocation>
-                    </relocations>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
                             <include>io.papermc:paperlib</include>
+                            <include>com.github.thatsmusic99:ConfigurationMaster-API</include>
                         </includes>
                     </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>io.papermc:paperlib</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <artifact>com.github.thatsmusic99:ConfigurationMaster-API</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -64,9 +75,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.18-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>2.3.31</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -84,110 +101,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.6</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-3</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8-R0.1-SNAPSHOT\craftbukkit-1.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-2</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8.3-R0.1-SNAPSHOT\craftbukkit-1.8.3-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-5</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.8.8-R0.1-SNAPSHOT\craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-4</artifactId>
-            <version>1.9.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.9.2-R0.1-SNAPSHOT\craftbukkit-1.9.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-6</artifactId>
-            <version>1.9.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.9.4-R0.1-SNAPSHOT\craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-7</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.10.2-R0.1-SNAPSHOT\craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-8</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.11.2-R0.1-SNAPSHOT\craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-10</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.13.2-R0.1-SNAPSHOT\craftbukkit-1.13.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-11</artifactId>
-            <version>1.13-R0.1-SNAPSHOT-1</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.13-R0.1-SNAPSHOT\craftbukkit-1.13-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-12</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.14.4-R0.1-SNAPSHOT\craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.15.1</artifactId>
-            <version>1.15.1-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.15.1-R0.1-SNAPSHOT\craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <!-- Temporary -->
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.16.1</artifactId>
-            <version>1.16.1-R0.1</version>
-            <scope>system</scope>
-            <systemPath>${craftbukkit-directory}\1.16.1-R0.1-SNAPSHOT\craftbukkit-1.16.1-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -199,20 +113,35 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.9.1</version>
+            <version>4.11.0-BETA</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>22.0.0</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.thatsmusic99</groupId>
+            <artifactId>ConfigurationMaster-API</artifactId>
+            <version>v2.0.0-BETA-3</version>
+        </dependency>
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>shade-plugin</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <!-- Repositories -->
     <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -223,24 +152,28 @@
         </repository>
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>craftbukkit</id>
-            <url>http://maven.elmakers.com/repository/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
             <id>nexus</id>
             <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>pluginwiki-repo</id>
+            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>mojang-authlib</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
     </repositories>
 </project>

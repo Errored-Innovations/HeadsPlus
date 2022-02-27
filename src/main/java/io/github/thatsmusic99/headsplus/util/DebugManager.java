@@ -21,12 +21,14 @@ public class DebugManager {
                     }
                 }
                 CommandSender listener = getSender(uuid);
-                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED + "HEADSPLUS OUTPUT" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
+                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED +
+                        "HEADSPLUS OUTPUT" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
                 listener.sendMessage(ChatColor.RED + "Event " + ChatColor.DARK_GRAY + "» " + ChatColor.GRAY + name);
                 for (String key : conditions.keySet()) {
                     listener.sendMessage(ChatColor.RED + key + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + conditions.get(key));
                 }
-                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED + "OUTPUT END" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
+                listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED +
+                        "OUTPUT END" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
             }
         }
     }
@@ -40,9 +42,9 @@ public class DebugManager {
     }
 
     public static class DebugConditions {
-        private String listener;
-        private HashMap<String, String> conditions;
-        protected static HashMap<UUID, DebugConditions> openDebugTrackers = new HashMap<>();
+        private final String listener;
+        private final HashMap<String, String> conditions;
+        protected static final HashMap<UUID, DebugConditions> openDebugTrackers = new HashMap<>();
 
         public DebugConditions(UUID sender, String listener, HashMap<String, String> conditions) {
             this.listener = listener;

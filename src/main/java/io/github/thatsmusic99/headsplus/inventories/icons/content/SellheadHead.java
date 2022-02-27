@@ -14,7 +14,8 @@ public class SellheadHead extends Content {
         this.type = type;
     }
 
-    public SellheadHead() {}
+    public SellheadHead() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -31,13 +32,4 @@ public class SellheadHead extends Content {
         return "sellable-head";
     }
 
-    @Override
-    public String getDefaultDisplayName() {
-        return null;
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

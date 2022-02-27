@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Chinese/CN (Bieck_Smile)
 # 请勿更改版本!在插件内部用于添加新消息.
 language: Chinese (CN)
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -49,10 +49,6 @@ textmenus:
     total-heads-crafted: 制做头颅总数
     current-level: 当前等级
     xp-until-next-level: 到下一级所需XP
-  blacklist: 黑名单
-  whitelist: 白名单
-  blacklistw: 世界黑名单
-  whitelistw: 世界白名单
   info:
     version: 版本
     author: 作者
@@ -61,12 +57,6 @@ textmenus:
     spigot: Spigot链接
     discord: Discord Server
     github: Github
-  head-info:
-    type: 类型
-    display-name: 显示名称
-    price: 价格
-    interact-name: 互动名称
-    chance: 几率
   help:
     usage: 用法
     description: 描述
@@ -105,23 +95,6 @@ commands:
     price: '{header} 输入头颅价格（或“默认”为默认值）.'
     section: '{header} 键入将放置头颅的部分.(可用部分: &c{sections}&7)'
     texture: '{header} 输入或复制并粘贴头部的纹理.（这可能 需要几条消息，因此完成后，在聊天中输入“done”.）'
-  blacklist:
-    bl-a-off: '{header} 黑名单已被禁用!'
-    bl-a-on: '{header} 黑名单已启用!'
-    bl-off: '{header} 黑名单已被禁用!'
-    bl-on: '{header} 黑名单已启用!'
-    blw-a-on: '{header} 世界黑名单已启用!'
-    blw-a-off: '{header} 世界黑名单已被禁用!'
-    empty-bl: '{header} 黑名单是空的!'
-    empty-blw: '{header} 世界黑名单为空!'
-    head-a-add: '{header} 该头颅已经添加!'
-    head-a-removed-bl: '{header} 这个头颅不在黑名单!'
-    head-added-bl: '{header} &c{player} &7已添加到黑名单!'
-    head-removed-bl: '{header} &c{player} &7已从黑名单中删除!'
-    world-a-add: '{header} 这个世界已经被添加!'
-    world-added-bl: '{header} &c{world} &7已添加到世界黑名单!'
-    world-a-removed-bl: '{header} 这个世界不在黑名单上!'
-    world-removed-bl: '{header} &c{world} &7已从黑名单中删除!'
   challenges:
     already-complete-challenge: '{header} 您已经完成了挑战!'
     cant-complete-challenge: '{header} 你无法完成这个挑战!'
@@ -130,18 +103,10 @@ commands:
     reward-string: '{header} 奖励: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} 此命令仅处理字母数字名称!'
-    blacklist-head: '{header} 此头颅已列入黑名单，无法使用!'
     full-inv: '{header} 您的库存已满!'
     head-too-long: '{header} IGN时间太长，无法生效！ 请在之间使用IGN 3和16个字符.'
     head-too-short: '{header} IGN太短，无效！ 请在之间使用IGN 3和16个字符.'
-    whitelist-head: '{header} 此头未列入白名单，因此不能被列入白名单 用过的!'
-  head-info:
-    add-value: '{header} &c{value} &7已添加到 &c{entity}&7''s &c{setting}&7!'
-    no-lore-data: '{header} 没有该实体的击杀数据!'
-    no-mask-data: '{header} 该实体没有遮罩数据!'
-    no-name-data: '{header} 没有该实体的名称数据!'
-    remove-value: '{header} &c{value} &7已从中删除 &c{entity}&7''s &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''s &c{setting} &7已更改为 &c{value}&7!'
+    restricted-head: '{header} 你不能用那个头！'
   heads:
     buy-success: '{header} 你以&c{price}的价格 &7购买了一个头颅 现在还有&c{balance}&7!'
     chat-input: '{header} 输入您要搜索的字词.'
@@ -155,6 +120,9 @@ commands:
   reload:
     reload-message: '{header} 配置已重新加载!'
     reloading-message: '{header} 正在重新加载配置...'
+  restore:
+    restored-head: '{header} 已恢复{head}!'
+    invalid-head: '{header} {head}不是有效的ID!'
   sellhead:
     false-head: '{header} 这个头颅不能卖!'
     false-item: '{header} 这不是头颅!'
@@ -164,23 +132,6 @@ commands:
   tests:
     running-tests: '{header}正在运行测试...（这可能需要一段时间）'
     results: '{header} 结果: &c{results}'
-  whitelist:
-    empty-wl: '{header} 白名单为空!'
-    empty-wlw: '{header} 世界白名单是空的!'
-    head-a-removed-wl: '{header} 这个头颅不在白名单上!'
-    head-added-wl: '{header} &c{player} &7已添加到白名单!'
-    head-removed-wl: '{header} &c{player} &7已从白名单中删除!'
-    wl-a-off: '{header} 白名单已被禁用!'
-    wl-a-on: '{header} 黑名单已启用!'
-    wl-off: '{header} 白名单已被禁用!'
-    wl-on: '{header} 白名单已启用!'
-    wlw-a-off: '{header} 世界白名单已被禁用!'
-    wlw-a-on: '{header} 世界白名单已启用!'
-    wlw-off: '{header} 世界白名单已被禁用!'
-    wlw-on: '{header} 世界白名单已启用!'
-    world-a-removed-wl: '{header} &c{world} &7已从白名单中删除!'
-    world-added-wl: '{header} &c{world} &7h被添加到世界白名单中!'
-    world-removed-wl: '{header} &c{world} &7已从白名单中删除!'
   xp:
     added-xp: '{header} 加 &c{amount} &7XP 到 &c{player}&7,他现在有&c{xp}&7!'
     current-xp: '{header} &c{player}&7的 当前XP: &c{xp}'
@@ -189,31 +140,15 @@ commands:
     reset-xp: '{header} 重设 &c{player}&7的XP!'
 descriptions:
   hp:
-    blacklist: 切换黑名单.
-    blacklistadd: 将头颅添加到黑名单.
-    blacklistdel: 从黑名单中删除一个头颅.
-    blacklistl: 列出所有头颅黑名单.
-    blacklistw: 开启/关闭工艺配方黑名单.
-    blacklistwadd: 为手工配方黑名单添加一个世界.
-    blacklistwdel: 为手工配方黑名单移除世界.
-    blacklistwl: 列出列入黑名单的世界.
     complete: 完成挑战.
     conjure: 检索特定类型的头部.
     debug: 转储调试文件.
-    headinfo: 显示/修改有关特定实体负责人的信息.
     help: 显示帮助菜单.
     info: 显示插件信息.
     profile: 显示您的插件配置文件.
     reload: 重新加载配置文件.
+    restore: 恢复或修复插件已提供的头部.
     tests: 对怪物掉落率进行测试.
-    whitelist: 切换白名单.
-    whitelistadd: 将头添加到白名单.
-    whitelistdel: 从白名单中删除一个头颅.
-    whitelistl: 列出所有头颅白名单.
-    whitelistw: 开启/关闭工艺配方白名单.
-    whitelistwadd: 为手工配方白名单增添色彩.
-    whitelistwdel: 为手工配方白名单移除一个世界.
-    whitelistwl: 列出列入白名单的世界.
   xp: 查看或更改玩家的XP.
   addhead: 将玩家头颅添加到头颅菜单
   head: 头颅产生.
@@ -224,6 +159,8 @@ descriptions:
   sellhead: 出售您手中的头，使用数字参数出售特定的 编号，出售特定头颅头部的实体名称，以及所有出售每个头颅的实体.
 event:
   block-place-denied: '{header} 您不能放置可出售的头颅!'
+  cannot-craft-heads: '{header} 你不能制作人头!'
+  cannot-craft-heads-here: '{header} 你不能在这里制作人头!'
   head-interact-message: '{header} 是 &c{name}&7的头颅!'
   head-mhf-interact-message: '{header} 是 &c{name}&7的头颅!'
   head-mhf-interact-message-2: '{header} 是 &c{name}&7的头颅!'

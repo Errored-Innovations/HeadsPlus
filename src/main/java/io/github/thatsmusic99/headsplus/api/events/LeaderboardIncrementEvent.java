@@ -4,10 +4,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-public class LeaderboardIncrementEvent extends Event implements Cancellable{
+public class LeaderboardIncrementEvent extends Event implements Cancellable {
 
-    // T
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled;
     private final Player player;
@@ -25,6 +25,7 @@ public class LeaderboardIncrementEvent extends Event implements Cancellable{
         cancelled = b;
     }
 
+    @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;

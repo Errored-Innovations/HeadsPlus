@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - Nederlands (Tepoloco)
 # Wijzig de versie niet! Dit wordt intern gebruikt in de plug-in om nieuwe berichten toe te voegen.
 language: Nederlands (NL)
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -49,10 +49,6 @@ textmenus:
     total-heads-crafted: Totaal aantal hoofden gemaakt
     current-level: Huidig ​​level
     xp-until-next-level: XP tot het volgende level
-  blacklist: Blacklist
-  whitelist: Whitelist
-  blacklistw: Wereld Blacklist
-  whitelistw: Wereld Whitelist
   info:
     version: Versie
     author: Auteur
@@ -61,12 +57,6 @@ textmenus:
     spigot: Spigot link
     discord: Discord Server
     github: Github
-  head-info:
-    type: Type
-    display-name: Weergavenaam
-    price: Prijs
-    interact-name: Interactie naam
-    chance: Kans
   help:
     usage: Gebruik
     description: Beschrijving
@@ -97,11 +87,11 @@ commands:
     too-many-args: '{header} Te veel argumenten!'
   addhead:
     bad-texture: '{header} De door u opgegeven structuur is ongeldig. Het moet een
-            Minecraft texture URL (https://textures.minecraft.net) of een Base64-gecodeerde
+      Minecraft texture URL (https://textures.minecraft.net) of een Base64-gecodeerde
       string.'
     cancelled: '{header} Geannuleerde hoofdcreatie.'
     custom-head-added: '{header} Nieuw hoofd met id &c{id} &7toegevoegd!'
-    displayname: '{header} Typ de weergavenaam voor het hoofd (inclusief kleur       codes).'
+    displayname: '{header} Typ de weergavenaam voor het hoofd (inclusief kleur codes).'
     head-added: '{header} Hoofd voor &c{player} &7toegevoegd!'
     head-adding: '{header} Textuur opzoeken om toe te voegen voor &c{player}&7...'
     head-already-added: '{header} Hoofd voor &c{player} &7al in de database!'
@@ -111,25 +101,8 @@ commands:
     section: '{header} Typ de sectie waarin het hoofd wordt geplaatst. (Beschikbare
       secties: &c{sections}&7)'
     texture: '{header} Typ of kopieer en plak de textuur voor het hoofd. (Dit zou
-            meerdere berichten nodig hebben, dus als je klaar bent, typ je "done"
+      meerdere berichten nodig hebben, dus als je klaar bent, typ je "done"
       in de chat en voer je in.)'
-  blacklist:
-    bl-a-off: '{header} De blacklist is al uitgeschakeld!'
-    bl-a-on: '{header} De blacklist is al ingeschakeld!'
-    bl-off: '{header} De blacklist is uitgeschakeld!'
-    bl-on: '{header} De blacklist is ingeschakeld!'
-    blw-a-on: '{header} De wereld blacklist is ingeschakeld!'
-    blw-a-off: '{header} De wereld blacklist is uitgeschakeld!'
-    empty-bl: '{header} De blacklist is leeg!'
-    empty-blw: '{header} De wereld blacklist is leeg!'
-    head-a-add: '{header} Dit hoofd is al toegevoegd!'
-    head-a-removed-bl: '{header} Dit hoofd staat niet op de blacklist!'
-    head-added-bl: '{header} &c{player} &7is toegevoegd aan de blacklist!'
-    head-removed-bl: '{header} &c{player} &7is van de blacklist verwijderd!'
-    world-a-add: '{header} Deze wereld is al toegevoegd!'
-    world-added-bl: '{header} &c{world} &7is toegevoegd aan de wereld blacklist&7!'
-    world-a-removed-bl: '{header} Deze wereld staat niet op de blacklist!'
-    world-removed-bl: '{header} &c{world} &7is van de zwarte lijst verwijderd!'
   challenges:
     already-complete-challenge: '{header} Je hebt die uitdaging al volbracht!'
     cant-complete-challenge: '{header} Je kunt deze uitdaging niet voltooien!'
@@ -139,21 +112,12 @@ commands:
     reward-string: '{header} Beloning: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Deze opdracht behandelt alleen alfanumerieke namen!'
-    blacklist-head: '{header} Dit hoofd staat op de blacklist en kan niet worden gebruikt!'
     full-inv: '{header} Je inventaris is vol!'
     head-too-long: '{header} IGN is te lang om geldig te zijn! Gebruik een IGN tussen
-            3 en 16 karakters.'
+      3 en 16 karakters.'
     head-too-short: '{header} IGN is te kort om geldig te zijn! Gebruik een IGN tussen
-            3 en 16 karakters.'
-    whitelist-head: '{header} Dit hoofd staat niet op de whitelist en kan daarom niet
-      worden       gebruikt!'
-  head-info:
-    add-value: '{header} &c{value} &7is toegevoegd aan &c{entity}&7''s &c{setting}&7!'
-    no-lore-data: '{header} Er zijn geen lore data voor dit entiteit!'
-    no-mask-data: '{header} Er zijn geen mask data voor deze entiteit!'
-    no-name-data: '{header} Er zijn geen name data voor deze entiteit!'
-    remove-value: '{header} &c{value} &7is verwijderd van &c{entity}&7''s &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''s &c{setting} &7is veranderd naar &c{value}&7!'
+      3 en 16 karakters.'
+    restricted-head: '{header} Je kunt dat hoofd niet gebruiken!'
   heads:
     buy-success: '{header} Jij hebt een hoofd gekocht voor &c{price} &en je hebt nu
       een saldo van &c{balance}&7!'
@@ -168,6 +132,9 @@ commands:
   reload:
     reload-message: '{header} Configuratie opnieuw geladen!'
     reloading-message: '{header} Configuratie herladen...'
+  restore:
+    restored-head: '{header} {head} hersteld!'
+    invalid-head: '{header} {head} is geen geldige ID!'
   sellhead:
     false-head: '{header} Dit hoofd kan niet worden verkocht'
     false-item: '{header} Dis is geen hoofd!'
@@ -178,59 +145,26 @@ commands:
   tests:
     running-tests: '{header} Testen uitvoeren... (Dit kan een tijdje duren)'
     results: '{header} Resultaten: &c{results}'
-  whitelist:
-    empty-wl: '{header} De whitelist is leeg!'
-    empty-wlw: '{header} De wereld whitelist is leeg!'
-    head-a-removed-wl: '{header} Dit hoofd is niet op de whitelist!'
-    head-added-wl: '{header} &c{player} &7is toegevoegd aan de whitelist!'
-    head-removed-wl: '{header} &c{player} &7is verwijderd van de witte lijst!'
-    wl-a-off: '{header} De whitelist is al uitgeschakeld!'
-    wl-a-on: '{header} De whitelist is al ingeschakeld!'
-    wl-off: '{header} De whitelist is uitgeschakeld!'
-    wl-on: '{header} De whitelist is ingeschakeld!'
-    wlw-a-off: '{header} De wereld whitelist is al uitgeschakeld!'
-    wlw-a-on: '{header} De wereld whitelist is al ingeschakeld!'
-    wlw-off: '{header} De wereld whitelist is uitgeschakeld!'
-    wlw-on: '{header} De wereld whitelist is ingeschakeld!'
-    world-a-removed-wl: '{header} &c{world} &7is verwijderd van de whitelist!'
-    world-added-wl: '{header} &c{world} &7is toegevoegd aan de wereld whitelist!'
-    world-removed-wl: '{header} &c{world} &7is verwijderd van de whitelist!'
   xp:
     added-xp: '{header} &c{amount} &7XP toegevoegd aan bij &c{player}&7, heeft nu
       &c{xp}&7!'
     current-xp: '{header} &c{player}&7''s huidige XP: &c{xp}'
     negative-xp: '{header} Ik denk niet dat je dat wilt doen... (negatief toestaan
-            XP, ga naar config.yml> plugin> perks> xp> allow-negative, maar dit       heeft
+      XP, ga naar config.yml> plugin> perks> xp> allow-negative, maar dit heeft
       onvoorspelbare resultaten!)'
     removed-xp: '{header}  &c{amount} &7XP verwijderd van &c{player}&7, heeft nu &c{xp}&7!'
     reset-xp: '{header} Reset &c{player}&7''s XP!'
 descriptions:
   hp:
-    blacklist: Schakelt de blacklist om.
-    blacklistadd: Voegt een hoofd toe aan de blacklist.
-    blacklistdel: Verwijdert een hoofd van de blacklist.
-    blacklistl: Lists all heads in the blacklist.
-    blacklistw: Schakelt de blacklist voor het maken van recepten in / uit.
-    blacklistwadd: Voegt een wereld toe aan de blacklist voor het maken van recepten.
-    blacklistwdel: Verwijdert een wereld op de blacklist voor het maken van recepten.
-    blacklistwl: Geeft een lijst van werelden op de blacklist.
     complete: Voltooit een uitdaging.
     conjure: Haalt een hoofd van een specifiek type op.
     debug: Dump een debug-bestand.
-    headinfo: Toont / wijzigt informatie over het hoofd van een specifieke entiteit.
     help: Geeft het helpmenu weer.
     info: Geeft informatie over plugin weer.
     profile: Toont uw profiel voor de plugin.
     reload: Laadt configuratiebestanden opnieuw.
+    restore: Herstelt of repareert een kop die al door de plug-in werd geleverd.
     tests: Voert tests uit voor mob drop-rates.
-    whitelist: Schakelt de whitelist om.
-    whitelistadd: Voegt een kop toe aan de whitelist.
-    whitelistdel: Verwijdert een kop van de whitelist.
-    whitelistl: Geeft alle hoofden op de whitelist.
-    whitelistw: Zet de whitelist voor het maken van recepten aan / uit.
-    whitelistwadd: Voegt een wereld toe aan de whitelist voor het maken van recepten.
-    whitelistwdel: Verwijdert een wereld naar de whitelist voor het maken van recepten.
-    whitelistwl: Lijsten werelden op de whitelist.
     xp: Bekijk of wijzig de XP van een speler.
   addhead: Voegt een spelershoofd toe aan het hoofden-menu
   head: Spawns in een hoofd.
@@ -238,11 +172,13 @@ descriptions:
   hpc: Geeft uitdagingen weer die u kunt voltooien.
   hplb: Geeft het scorebord van de hoofden weer.
   myhead: Spawn in je hoofd.
-  sellhead: Verkoopt het hoofd in je hand, gebruik de nummerparameter om een ​​specifieke
-    te verkopen     nummer, entiteitsnaam om het hoofd van een bepaalde maffia te
+  sellhead: Verkoopt het hoofd in je hand, gebruik de nummerparameter om een specifieke
+    te verkopen nummer, entiteitsnaam om het hoofd van een bepaalde maffia te
     verkopen, en alles om elk hoofd te verkopen.
 event:
   block-place-denied: '{header} Je kunt geen verkoopbare koppen plaatsen!'
+  cannot-craft-heads: '{header} Je kunt geen hoofden maken!'
+  cannot-craft-heads-here: '{header} Je kunt hier geen hoofden maken!'
   head-interact-message: '{header} Dat is het hoofd van &c{name}&7!'
   head-mhf-interact-message: '{header} Dat is een &c{name}&7''s hoofd!'
   head-mhf-interact-message-2: '{header} Dat is een &c{name}&7''s hoofd!'
@@ -256,7 +192,7 @@ startup:
     toevoegen.'
   plugin-disabled: '{header} HeadsPlus is uitgeschakeld!'
   plugin-enabled: '{header} HeadsPlus is ingeschakeld!'
-  plugin-fail: '{header} HeadsPlus is niet goed opgestart. Een foutenrapport     is
+  plugin-fail: '{header} HeadsPlus is niet goed opgestart. Een foutenrapport is
     gemaakt in /plugins/HeadsPlus/debug'
 update:
   current-version: '{header} Huidige versie: &c{version}'
@@ -264,4 +200,4 @@ update:
   new-version: '{header} Nieuwe versie: &c{version}'
   plugin-up-to-date: '{header} Plugin is up-to-date!'
   update-found: '{header} Er is een update gevonden voor HeadsPlus! Plaats de muisaanwijzer
-    op het bericht     voor meer informatie.'
+    op het bericht voor meer informatie.'

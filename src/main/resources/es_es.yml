@@ -47,10 +47,6 @@ textmenus:
     total-heads-crafted: Total de cabezas hechas a mano
     current-level: Nivel actual
     xp-until-next-level: XP hasta el siguiente nivel
-  blacklist: Lista-negra
-  whitelist: Lista-blanca
-  blacklistw: Lista-negra de mundos
-  whitelistw: Lista-blanca de mundos
   info:
     version: Versión
     author: Autora
@@ -59,18 +55,12 @@ textmenus:
     spigot: Enlace SpigotMC
     discord: Servidor Discord
     github: Github
-  head-info:
-    type: Tipo
-    display-name: Nombre para mostrar
-    price: Precio
-    interact-name: Nombre de Interact
-    chance: Posibilidad
   help:
     usage: Uso
     description: Descripción
     permission: Permiso
     further-usages: Usos adicionales
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -115,24 +105,6 @@ commands:
     head-adding: '{header} Buscando textura para agregar para &c{player}&7.'
     head-added: '{header} ¡Dirígete a &c{player} &7añadido!'
     head-already-added: '{header} ¡Dirígete a &c{player} &7ya en la base de datos!'
-  blacklist:
-    bl-a-off: '{header} La lista negra ya está desactivada.'
-    bl-a-on: '{header} La lista negra ya está activada.'
-    bl-off: '{header} La lista negra ha sido desactivada.'
-    bl-on: '{header} ¡La lista negra ha sido activada!'
-    blw-a-on: '{header} ¡La lista de mundos bloqueados ha sido activada!'
-    blw-a-off: '{header} ¡La lista de mundos bloqueados ha sido desactivada!'
-    empty-bl: '{header} La lista negra está vacia.'
-    empty-blw: '{header} La lista de mundos bloqueados está vacía.'
-    head-a-add: '{header} ¡Esa cabeza ya está añadida!'
-    head-a-removed-bl: '{header} Esa cabeza no está en la lista negra.'
-    head-added-bl: '{header} &c{name} &7ha sido añadida a la lista negra.'
-    head-removed-bl: '{header} &c{name} &7ha sido eliminada de la lista negra.'
-    world-a-add: '{header} Ese mundo ya esta añadido.'
-    world-added-bl: '{header} &c{name} &7ha sido añadido a la lista de mundos bloqueados.'
-    world-a-removed-bl: '{header} Ese mundo no está en la lista de bloqueados.'
-    world-removed-bl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
-      bloqueados'
   challenges:
     already-complete-challenge: '{header} Ya has completado ese reto.'
     cant-complete-challenge: '{header} No puedes completar ese reto.'
@@ -141,21 +113,12 @@ commands:
     reward-string: '{header} Recompensa: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Ese comando solo maneja nombres numéricos.'
-    blacklist-head: '{header} Esa cabeza está bloqueada y no puede ser usada.'
     full-inv: '{header} ¡Tu inventario está lleno!'
     head-too-long: '{header} El nombre es demasiado largo, utiliza uno entre 3 y 16
       carácteres.'
     head-too-short: '{header} El nombre es demasiado corto, utiliza uno entre 3 y
       16 carácteres.'
-    whitelist-head: '{header} Esa cabeza no está permitida y por lo tanto no puede
-      ser usada.'
-  head-info:
-    add-value: '{header} ¡&c{value} &7ha sido agregado a la &c{entity} {setting}&7!'
-    no-lore-data: '{header} ¡No hay datos de lore para esta entidad!'
-    no-mask-data: '{header} ¡No hay datos de máscara para esta entidad!'
-    no-name-data: '{header} ¡No hay datos de nombre para esta entidad!'
-    remove-value: '{header} ¡&c{value} &7se ha eliminado de &c{entity} {setting}&7!'
-    set-value: '{header} ¡&c{entity} {setting} &7ha sido cambiado a &c{value}&7!'
+    restricted-head: '{header} ¡No puedes usar esa cabeza! '
   heads:
     buy-success: '{header} Has comprado una cabeza por &c{price} &7y ahora tienes
       &c{balance}'
@@ -170,6 +133,9 @@ commands:
   reload:
     reload-message: '{header} ¡Configuración recargada!'
     reloading-message: '{header} Recargando la configuración...'
+  restore:
+    restored-head: '{header} ¡Restaurado/a {cabeza}!'
+    invalid-head: '{header} ¡{head} no es una identificación válida!'
   sellhead:
     false-head: '{header} ¡Esa cabeza no puede ser vendida!'
     false-item: '{header} ¡Eso no es una cabeza!'
@@ -180,25 +146,6 @@ commands:
   tests:
     running-tests: '{header} Ejecutando pruebas ... (esto puede tomar un tiempo)'
     results: '{header} Resultados: &c{results}'
-  whitelist:
-    empty-wl: '{header} La lista blanca está vacía.'
-    empty-wlw: '{header} La lista de mundos permitidos está vacía.'
-    head-a-removed-wl: '{header} Esa cabeza no está en la lista blanca.'
-    head-added-wl: '{header} &c{name} &7ha sido añadida a la lista blanca.'
-    head-removed-wl: '{header} &c{name} &7ha sido eliminada de la lista blanca.'
-    wl-a-off: '{header} La lista blanca ya está desactivada.'
-    wl-a-on: '{header} La lista negra ya está activada.'
-    wl-off: '{header} ¡La lista blanca ha sido desactivada!'
-    wl-on: '{header} ¡La lista blanca ha sido activada!'
-    wlw-a-off: '{header} La lista de mundos permitidos ya está desactivada.'
-    wlw-a-on: '{header} La lista de mundos permitidos ya está activada.'
-    wlw-off: '{header} ¡La lista de mundos permitidos ha sido desactivada!'
-    wlw-on: '{header} ¡La lista de mundos permitidos ha sido activada!'
-    world-a-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
-      permitidos.'
-    world-added-wl: '{header} &c{name} &7ha sido añadido a la lista de mundos permitidos.'
-    world-removed-wl: '{header} &c{name} &7ha sido eliminado de la lista de mundos
-      permitidos.'
   xp:
     added-xp: '{header} ¡Se agregó &c{amount} &7XP a &c{player}&7, ahora tienen &c{xp}&7!'
     current-xp: '{header} XP actual de &c{player}&7: &c{xp}'
@@ -210,31 +157,15 @@ commands:
     reset-xp: '{header} ¡Restablece la XP de &c{player}&7!'
 descriptions:
   hp:
-    blacklist: Activa o desactiva la lista negra.
-    blacklistadd: Añade cabezas a la lista negra.
-    blacklistdel: Elimina una cabeza de la lista negra.
-    blacklistl: Muestra todas las cabezas en la lista negra.
-    blacklistw: Activa o desactiva la lista negra de crafteos de encendido/apagado.
-    blacklistwadd: Añade un mundo de la lista negra de crafteos.
-    blacklistwdel: Elimina un mundo de la lista negra de crafteos.
-    blacklistwl: Muestra los mundos en la lista negra.
     complete: Completa un reto.
     conjure: Recupera una cabeza de un tipo específico.
     debug: Crea un archivo de depuración.
-    headinfo: Muestra/Modifica información sobre la cabeza de una entidad específica.
     help: Muestra el menú de ayuda.
     info: Muestra información sobre el plugin.
     profile: Muestra su perfil en el plugin.
     reload: Recarga los archivos de configuración.
+    restore: Restaura o repara un cabezal que ya fue proporcionado por el complemento.
     tests: Ejecuta pruebas para las tasas de caída de mob.
-    whitelist: Activa o desactiva la lsta blanca.
-    whitelistadd: Añade cabezas a la lista blanca.
-    whitelistdel: Elimina una cabeza de la lista blanca.
-    whitelistl: Muestra las cabezas de la lista blanca.
-    whitelistw: Activa o desactiva la lista blanca de crafteos
-    whitelistwadd: Añade un mundo a la lista blanca de crafteos.
-    whitelistwdel: Elimina un mundo de la lista blanca de crafteos.
-    whitelistwl: Muestra los mundos en la lista blanca.
     xp: Ver o cambiar el XP de un jugador.
   addhead: Añadir una cabeza de jugador al menú principal.
   head: Obtiene una cabeza.
@@ -246,6 +177,8 @@ descriptions:
     el nombre de la entidad para un mob específico o All para venderlas todas.
 event:
   block-place-denied: '{header} No puedes colocar cabezas vendibles.'
+  cannot-craft-heads: '{header} ¡No puedes fabricar cabezas!'
+  cannot-craft-heads-here: '{header} ¡No puedes fabricar cabezas aquí!'
   head-interact-message: '{header} ¡Cabeza de &c{name}&7!'
   head-mhf-interact-message: '{header} ¡Cabeza de &c{name}&7!'
   head-mhf-interact-message-2: '{header} ¡Cabeza de &c{name}&7!'

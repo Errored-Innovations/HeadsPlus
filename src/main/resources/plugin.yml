@@ -1,10 +1,10 @@
 main: io.github.thatsmusic99.headsplus.HeadsPlus
 name: HeadsPlus
-version: '6.11'
+version: ${hp-project.version}
 api-version: 1.13
 description: Spawns in heads with extra features.
 author: Thatsmusic99
-contributors: [DariusTK, Toldi, AlansS53, Gniewny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, Stashenko, Tepoloco, YouHaveTrouble, Bieck_Smile]
+contributors: [DariusTK, Toldi, AlansS53, Gniewny, steve4744, Niestrat99, Alexisparis007, jascotty2, Gurbiel, Mistermychciak, Stashenko, Tepoloco, YouHaveTrouble, Bieck_Smile, PaulBGD, andy3559167]
 website: 'https://www.spigotmc.org/resources/headsplus-1-8-x-1-15-x.40265/'
 # Please note this is mostly to let the weird messages from each plugin work.
 # Vault - Economy support
@@ -66,6 +66,7 @@ permissions:
       headsplus.sellhead: true
       headsplus.sellhead.gui: true
       headsplus.help.viewperms: true
+      headsplus.drops.*: true
   headsplus.maincommand.*:
     description: Provides access to every subcommand in /hp.
     default: op
@@ -117,17 +118,17 @@ permissions:
       headsplus.maincommand.headinfo.add: true
       headsplus.maincommand.headinfo.remove: true
       headsplus.maincommand.headinfo.set: true
-  headsplus.craft:
-    default: true
+  headsplus.craft.*:
+    default: op
     description: Allows players to craft heads.
   headsplus.challenges:
-    default: true
+    default: op
     description: Allows players to use /hpc.
   headsplus.leaderboards:
-    default: true
+    default: op
     description: Allows players to use /hplb.
   headsplus.maincommand:
-    default: true
+    default: op
     description: Allows players to use /hp or /headsplus.
   headsplus.notify:
     default: op
@@ -136,31 +137,31 @@ permissions:
     default: op
     description: Allows players to use /addhead.
   headsplus.heads:
-    default: true
+    default: op
     description: Allows players to use /heads.
   headsplus.sellhead:
-    default: true
+    default: op
     description: Allows players to use /sellhead.
   headsplus.myhead:
-    default: true
+    default: op
     description: Allows players to use /myhead.
   headsplus.maincommand.info:
-    default: true
+    default: op
     description: Allows players to use /hp info.
   headsplus.maincommand.profile:
-    default: true
+    default: op
     description: Allows players to use /hp profile (only to view their own profile).
   headsplus.bypass.cost:
     default: false
     description: Bypass the cost for purchasing all heads
   headsplus.sellhead.gui:
-    default: true
+    default: op
     description: Allows you to access the sellhead GUI.
   headsplus.death.ignore:
     default: false
     description: Allows you to not receive a death message when a player drops their head.
   headsplus.head:
-    default: true
+    default: op
     description: Allows you to use the /head command.
   headsplus.head.others:
     default: op
@@ -177,3 +178,6 @@ permissions:
   headsplus.maincommand.locale.other:
     default: false
     description: Allows you to change other player's plugin language.
+  headsplus.drops.*:
+    default: op
+    description: Allows players to kill mobs/players for head drops.

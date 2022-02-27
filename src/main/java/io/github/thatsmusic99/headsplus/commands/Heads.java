@@ -1,8 +1,8 @@
 package io.github.thatsmusic99.headsplus.commands;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusMessagesManager;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,18 +17,18 @@ import java.util.List;
 @CommandInfo(
         commandname = "heads",
         permission = "headsplus.heads",
-        subcommand = "Heads",
         maincommand = false,
-        usage = "/heads"
+        usage = "/heads",
+        descriptionPath = "descriptions.heads"
 )
 public class Heads implements CommandExecutor, IHeadsPlusCommand {
 
-
     @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String l, String[] args) {
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command cmd, @NotNull String l,
+                             @NotNull String[] args) {
         try {
-            HeadsPlusMessagesManager hpc = HeadsPlus.getInstance().getMessagesConfig();
-            if (HeadsPlus.getInstance().isUsingHeadDatabase()) {
+            MessagesManager hpc = MessagesManager.get();
+            if (MainConfig.get().getMainFeatures().HEADS_SELECTOR) {
                 if (cs instanceof Player) {
                     Player p = (Player) cs;
                     if (cs.hasPermission("headsplus.heads")) {
@@ -50,17 +50,13 @@ public class Heads implements CommandExecutor, IHeadsPlusCommand {
     }
 
     @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.heads", sender);
+    public boolean shouldEnable() {
+        return MainConfig.get().getMainFeatures().HEADS_SELECTOR;
     }
 
     @Override
-    public boolean fire(String[] args, CommandSender sender) {
-        return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         return new ArrayList<>();
     }
 }

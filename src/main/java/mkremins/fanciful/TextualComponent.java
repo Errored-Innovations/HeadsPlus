@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public abstract class TextualComponent implements Cloneable {
 	 * The returned object should not reference this textual component instance, but should maintain the same key and value.
 	 */
 	@Override
-	public abstract TextualComponent clone() throws CloneNotSupportedException;
+	public abstract TextualComponent clone();
 
 	/**
 	 * Writes the text data represented by this textual component to the specified JSON writer object.
@@ -108,7 +109,7 @@ public abstract class TextualComponent implements Cloneable {
 		private String _value;
 
 		@Override
-		public TextualComponent clone() throws CloneNotSupportedException {
+		public TextualComponent clone() {
 			// Since this is a private and final class, we can just reinstantiate this class instead of casting super.clone
 			return new ArbitraryTextTypeComponent(getKey(), getValue());
 		}
@@ -118,6 +119,7 @@ public abstract class TextualComponent implements Cloneable {
 			writer.name(getKey()).value(getValue());
 		}
 
+		@NotNull
 		@SuppressWarnings("serial")
 		public Map<String, Object> serialize() {
 			return new HashMap<String, Object>() {{
@@ -170,7 +172,7 @@ public abstract class TextualComponent implements Cloneable {
 		private Map<String, String> _value;
 
 		@Override
-		public TextualComponent clone() throws CloneNotSupportedException {
+		public TextualComponent clone() {
 			// Since this is a private and final class, we can just reinstantiate this class instead of casting super.clone
 			return new ComplexTextTypeComponent(getKey(), getValue());
 		}
@@ -185,6 +187,7 @@ public abstract class TextualComponent implements Cloneable {
 			writer.endObject();
 		}
 
+		@NotNull
 		@SuppressWarnings("serial")
 		public Map<String, Object> serialize() {
 			return new HashMap<String, Object>() {{

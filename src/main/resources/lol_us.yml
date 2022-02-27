@@ -59,18 +59,12 @@ textmenus:
     spigot: SpigotMC linkz
     discord: Discord serv
     github: Gitty
-  head-info:
-    type: Tip
-    display-name: publicz nam
-    price: Moneyz
-    interact-name: clicky name
-    chance: maybe??
   help:
     usage: how 2
     description: uhh what
     permission: permy
     further-usages: how 2 but worse
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -107,23 +101,6 @@ commands:
     head-added: '{header} ey i +1''d a hed :D'
     head-adding: '{header} +1''n a hed...'
     head-already-added: '{header} OI hed alredy add''d >:('
-  blacklist:
-    bl-a-off: '{header} Teh naughty list iz alredy off!'
-    bl-a-on: '{header} Teh naughty list iz alredy on!'
-    bl-off: '{header} Teh naughty list iz off!'
-    bl-on: '{header} Teh naughty list iz on!'
-    blw-a-on: '{header} Teh naughty list 4 woldz iz on!'
-    blw-a-off: '{header} Teh naughty list 4 woldz iz off!'
-    empty-bl: '{header} Teh naughty list haz nuffin!'
-    empty-blw: '{header} Teh naughty list 4 woldz has nuffin!'
-    head-a-add: '{header} Teh hed iz alredee add''d!'
-    head-a-removed-bl: '{header} Dis hed iz nawt on teh naughty list!'
-    head-added-bl: '{header} &c{player}&7 haz been add''d 2 teh naughty list!'
-    head-removed-bl: '{header} &c{player}&7 iz nawt on teh naughty list animoar!'
-    world-a-add: '{header} Dis wold iz alredy add''d!'
-    world-added-bl: '{header} &c{world}&7 haz been add''d 2 teh naughty list!'
-    world-a-removed-bl: '{header} Dis wold iz nawt on teh naughty list! :D'
-    world-removed-bl: '{header} &c{world}&7 iz naw longer on teh naughty list!'
   challenges:
     already-complete-challenge: '{header} LOL u alredi compleet''d deh chaleng!'
     cant-complete-challenge: '{header} NU u canz nawt compleet deh chaleng!'
@@ -132,18 +109,10 @@ commands:
     reward-string: '{header} Kitty treetz: &c{reward}\n{header} ex-pee: &c{xp}'
   head:
     alpha-names: '{header} Y U speekz gibberish?'
-    blacklist-head: '{header} Dis hed is banne sah two bad!!'
     full-inv: '{header} Ur nawt faht enuf 2 get anofa hed!'
     head-too-long: '{header} Name 2 smol'
     head-too-short: '{header} NAME 2 BIGZ'
-    whitelist-head: '{header} Dis hed iz nawt aloud!'
-  head-info:
-    add-value: '{header} &c{value} &7haz bin +1''d 2 &c{entity}&7''z &c{setting}&7!'
-    no-lore-data: '{header} AAAAAAA deres nu lore data D:'
-    no-mask-data: '{header} soz but dere iz nu mAHsk data ;-;'
-    no-name-data: '{header} UMG deres nu naim data D:'
-    remove-value: '{header} &c{value} &7haz bin -1''d 2 &c{entity}&7''z &c{setting}&7!'
-    set-value: '{header} &c{entity}&7''z &c{setting} &7haz bin chainge''d 2 &c{value}&7!!!'
+    restricted-head: '{header} Dis hed iz nawt aloud!'
   heads:
     buy-success: '{header} U smh gawt ah hed 4 &c{price}&7 &and nao haz &c{balance}&7!'
     chat-input: '{header} Teyepe sumthin 2 look 4'
@@ -157,6 +126,9 @@ commands:
   reload:
     reload-message: '{header} Dun!'
     reloading-message: '{header} Relodin teh confeeg...'
+  restore:
+    restored-head: '{header} summumd {head}!'
+    invalid-head: '{header} {head} iz not ur frend :('
   sellhead:
     false-head: '{header} LOL u canz nawt sell dis head!'
     false-item: '{header} LOL dis iznt a hed'
@@ -166,23 +138,6 @@ commands:
   tests:
     running-tests: '{header} RUNRUNRUNRABBITRUUUUUUUUUUN (mai taik a weyel :3)'
     results: '{header} dere: &c{results}'
-  whitelist:
-    empty-wl: '{header} Teh nice list haz nuffin!'
-    empty-wlw: '{header} Teh nice list 4 woldz haz nuffin!'
-    head-a-removed-wl: '{header} Dis hed nawt on teh nice list :('
-    head-added-wl: '{header} &c{player}&7 haz been add''d 2 teh nice list!'
-    head-removed-wl: '{header} &c{player}&7 iz naw longer on teh nice list :('
-    wl-a-off: '{header} Teh nice list iz alredy off!'
-    wl-a-on: '{header} Teh naughty list iz alredy on!'
-    wl-off: '{header} Teh nice list iz off!'
-    wl-on: '{header} Teh nice list iz on!'
-    wlw-a-off: '{header} Teh nice list 4 woldz iz alredy off!'
-    wlw-a-on: '{header} Teh nice list 4 woldz iz alredy on!'
-    wlw-off: '{header} Teh nice list 4 woldz iz off!'
-    wlw-on: '{header} Teh nice list 4 woldz iz on!'
-    world-a-removed-wl: '{header} w is naw longer on teh nice list!'
-    world-added-wl: '{header} &c{world}&7 iz nao on teh nice list!'
-    world-removed-wl: '{header} &c{world} &7is naw longer on teh nice list!'
   xp:
     added-xp: '{header} Add''d &c{amount} &7XP-stuffz 2 &c{player}&7, they nao haz
       &c{xp}&7!'
@@ -194,31 +149,15 @@ commands:
     reset-xp: '{header} Alt+F4''d &c{player}&7''s XP!'
 descriptions:
   hp:
-    blacklist: Turnz teh naughty list on 'n' off
-    blacklistadd: Addz a hed 2 teh naughty list
-    blacklistdel: Remuvz a hed from teh naughty list
-    blacklistl: Listz all 'o' deh heds on teh naughty list
-    blacklistw: Turnz teh naughty list 4 woldz on 'n' off
-    blacklistwadd: Addz a hed 2 teh naughty list 4 woldz
-    blacklistwdel: Remuvz a hed from teh naughty list 4 woldz
-    blacklistwl: Listz all 'o' deh heds on teh naughty list 4 woldz
     complete: dis compleetz a kewl chaleng
     conjure: Get a kewl hed or smth
     debug: Poopz sparkly dee-bug flies!
-    headinfo: Shoez ore chaingez sum hed stuffz
     help: Shoes deh halp menoo.
     info: Shoes info 'bowt teh plug-in
     profile: Shoes u ur prof ;3
     reload: Relodz teh confeeg
+    restore: summun an old frend
     tests: RUNRUNRUNRUNRUN
-    whitelist: Turnz teh nice list on 'n' off
-    whitelistadd: Addz a hed 2 teh nice list
-    whitelistdel: Remuvz a hed from teh nice list
-    whitelistl: Listz all 'o' deh heds on teh nice list
-    whitelistw: Turnz teh nice list 4 woldz on 'n' off
-    whitelistwadd: Addz a hed 2 teh nice list 4 woldz
-    whitelistwdel: Remuvz a hed from teh nice list 4 woldz
-    whitelistwl: Listz all 'o' deh heds on teh nice list 4 woldz
     xp: chainj sum xp .3.
   addhead: U can add sum nu hedz to deh menoo.
   head: Givz u a hed
@@ -229,6 +168,8 @@ descriptions:
   sellhead: Sells a hed in ur hands or wif teh givn cmd stuff
 event:
   block-place-denied: '{header} Nu dun do dat'
+  cannot-craft-heads: '{header} no crafty, only hugs'
+  cannot-craft-heads-here: '{header} no crafty here, only hugs'
   head-interact-message: '{header} Dat iz &c{player}&7''s hed!'
   head-mhf-interact-message: '{header} Dat iz a wild &c{player}&7''s hed!'
   head-mhf-interact-message-2: '{header} Dat iz a wild &c{player}&7''s hed!'

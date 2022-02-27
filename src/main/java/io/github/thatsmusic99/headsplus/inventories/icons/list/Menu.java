@@ -13,7 +13,8 @@ public class Menu extends Icon {
         super(player);
     }
 
-    public Menu() {}
+    public Menu() {
+    }
 
     @Override
     public boolean onClick(Player player, InventoryClickEvent event) {
@@ -45,23 +46,4 @@ public class Menu extends Icon {
         return "menu";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "NETHER_STAR";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.menu}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

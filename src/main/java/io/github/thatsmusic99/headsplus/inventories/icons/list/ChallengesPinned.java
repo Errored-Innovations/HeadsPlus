@@ -14,7 +14,6 @@ public class ChallengesPinned extends Icon {
     }
 
     public ChallengesPinned() {
-
     }
 
     @Override
@@ -28,23 +27,4 @@ public class ChallengesPinned extends Icon {
         return "pinned-challenges";
     }
 
-    @Override
-    public String getDefaultMaterial() {
-        return "DIAMOND";
-    }
-
-    @Override
-    public int getDefaultDataValue() {
-        return 0;
-    }
-
-    @Override
-    public String getDefaultDisplayName() {
-        return "{msg_inventory.icon.pinned-challenges}";
-    }
-
-    @Override
-    public String[] getDefaultLore() {
-        return new String[0];
-    }
 }

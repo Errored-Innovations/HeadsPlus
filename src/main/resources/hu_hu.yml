@@ -70,7 +70,7 @@ textmenus:
     description: Leírás
     permission: Permission
     further-usages: További felhasználások
-version: 1.4
+version: 1.7
 prefix: '&cHeadsPlus &8» &7'
 commands:
   debug:
@@ -112,23 +112,6 @@ commands:
     head-added: '{header} A (z) &c{player} &7hozzáadandó textúra felkutatása ...'
     head-adding: '{header} A (z) &c{player} &7fej hozzáadva!'
     head-already-added: '{header} A (z) &c{player} &7fejléce már az adatbázisban található!'
-  blacklist:
-    bl-a-off: '{header} A feketelista már le van tiltva!'
-    bl-a-on: '{header} A feketelista már engedélyezve van!'
-    bl-off: '{header} A feketelista letiltva!'
-    bl-on: '{header} A feketelista engedélyezve van!'
-    blw-a-on: '{header} A világ feketelistája engedélyezve!'
-    blw-a-off: '{header} A világ feketelista le van tiltva!'
-    empty-bl: '{header} A feketelista üres!'
-    empty-blw: '{header} A világ feketelista üres!'
-    head-a-add: '{header} Ez a fej már hozzá van adva!'
-    head-a-removed-bl: '{header} Ez a fej nem szerepel a feketelistán!'
-    head-added-bl: '{header} &c{player}&7 hozzáadva a feketelistához!'
-    head-removed-bl: '{header} &c{player}&7 eltávolítva a feketelistáról!'
-    world-a-add: '{header} Ez a világ már hozzáadva!'
-    world-added-bl: '{header} &c{world}&7 hozzá lett adva a világ a feketelistájához!'
-    world-a-removed-bl: '{header} Ez a világ nem szerepel a feketelistán!'
-    world-removed-bl: '{header} &c{world}&7 eltávolítva a feketelistáról!'
   challenges:
     already-complete-challenge: '{header} Már befejezted a kihívást!'
     cant-complete-challenge: '{header} Nem tudod befejezni ezt a kihívást!'
@@ -137,20 +120,12 @@ commands:
     reward-string: '{header} Jutalom: &c{reward}\n{header} XP: &c{xp}'
   head:
     alpha-names: '{header} Ez a parancs csak az alfanumerikus neveket kezeli!'
-    blacklist-head: '{header} Ez a fej feketelistán szerepel, és nem használható!'
     full-inv: '{header} Az eszköztárad tele van!'
     head-too-long: '{header} Az IGN túl hosszú ahhoz, hogy érvényes legyen! Kérjük,
       használj IGN-t 3 és 16 karakter között.'
     head-too-short: '{header} Az IGN túl rövid ahhoz, hogy érvényes legyen! Kérjük,
       használj IGN-t 3 és 16 karakter között.'
-    whitelist-head: '{header} Ez a fej nem engedélyezett, ezért nem használható!'
-  head-info:
-    add-value: '{header} &c{value} &7hozzáadva &c{entity} {setting} &7beállításához!'
-    no-lore-data: '{header} Ehhez az entitáshoz nincsenek adatok!'
-    no-mask-data: '{header} Nincsenek maszk adatok ehhez az entitáshoz!'
-    no-name-data: '{header} Nincs ilyen névadat ehhez az entitáshoz!'
-    remove-value: '{header} &c{value} &7eltávolítva &c{entity} {setting} &7beállításából!'
-    set-value: '{header} &c{entity}&7''s &c{setting} {value} &7értékre változott!'
+    restricted-head: '{header} Nem használhatod azt a fejet!'
   heads:
     buy-success: '{header} Vettél egy fejre &c{price}&7 és most már &c{balance}&7!'
     chat-input: '{header} Írja be azt a kifejezést, amelyet keresni szeretne.'
@@ -164,6 +139,9 @@ commands:
   reload:
     reload-message: '{header} A konfiguráció újratöltve!'
     reloading-message: '{header} A konfiguráció újratöltése...'
+  restore:
+    restored-head: '{header} Visszaállítva {head}!'
+    invalid-head: '{header} A {head} nem érvényes azonosító!'
   sellhead:
     false-head: '{header} Ez a fej nem értékesíthető!'
     false-item: '{header} Ez nem egy fej!'
@@ -174,23 +152,6 @@ commands:
   tests:
     running-tests: '{header} Tesztek futtatása ... (ez eltarthat egy ideig)'
     results: '{header} Eredmények: &c{results}'
-  whitelist:
-    empty-wl: '{header} A fehérlista üres!'
-    empty-wlw: '{header} A világ fehérlista üres!'
-    head-a-removed-wl: '{header} Ez a fej nincs a fehérlistán!'
-    head-added-wl: '{header} &c{player}&7 hozzáadva a fehérlistához!'
-    head-removed-wl: '{header} &c{player}&7 eltávolítva a listából!'
-    wl-a-off: '{header} A fehérlista már le van tiltva!'
-    wl-a-on: '{header} A feketelista már engedélyezve van!'
-    wl-off: '{header} A fehérlista letiltva!'
-    wl-on: '{header} A fehérlista engedélyezve!'
-    wlw-a-off: '{header} A világ fehérlista már le van tiltva!'
-    wlw-a-on: '{header} A világ fehérlista már engedélyezve!'
-    wlw-off: '{header} A világ fehérlista letiltva!'
-    wlw-on: '{header} A világ fehérlista engedélyezve!'
-    world-a-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
-    world-added-wl: '{header} &c{world}&7 hozzá lett adva a világ a fehérlistájához!'
-    world-removed-wl: '{header} &c{world}&7 eltávolítva a fehérlistából!'
   xp:
     added-xp: '{header} A (z) &c{amount} &7XP-t hozzáadta a (z) &c{player}&7, most
       már van &c{xp}&7!'
@@ -203,31 +164,15 @@ commands:
     reset-xp: '{header} Állítsa vissza a (z) &c{player} &7XP operációs rendszerét!'
 descriptions:
   hp:
-    blacklist: Váltja a feketelistát.
-    blacklistadd: Hozzáad egy fejet a feketelistához.
-    blacklistdel: Eltávolítja a fejet a feketelistáról.
-    blacklistl: Minden feketelistában lévő fejet felsorol.
-    blacklistw: Váltja a készletkészítő feketelista be/ki kapcsolását.
-    blacklistwadd: Hozzáad egy világot a barkács receptek fekete listájához.
-    blacklistwdel: Eltávolítja a világot a barkács receptek feketelistajához.
-    blacklistwl: Kilistázza a feketelistában levő világokat.
     complete: Kihívást jelent.
     conjure: Visszatér egy adott típusú fejet.
     debug: Egy hibakereső fájlt bocsát ki.
-    headinfo: Megjeleníti/módosítja az adott entitás fejével kapcsolatos információkat.
     help: Megjeleníti a segítség menüt.
     info: Megjeleníti a plugin információit.
     profile: A bővítmény profilját jeleníti meg.
     reload: Frissíti a konfigurációs fájlt.
+    restore: Visszaállítja vagy megjavítja a plugin által biztosított fejet.
     tests: Futtatja a mob-esési sebességet.
-    whitelist: Váltja a fehérlistát.
-    whitelistadd: Hozzáad egy fejet a fehérlistához.
-    whitelistdel: Eltávolítja a fejet a fehérlistából.
-    whitelistl: Az összes fejet felsorolja, ami a fehérlistában van.
-    whitelistw: A fehérlista engedélyezése/kikapcsolása.
-    whitelistwadd: Hozzáad egy világot a barkácsoló recept fehérlistájához.
-    whitelistwdel: Eltávolítja a világot a barkácsoló recept fehérlistájából.
-    whitelistwl: Kilistázza a fehérlistában lévő világokat.
     xp: Megtekintheti vagy módosíthatja a játékos XP-jét.
   addhead: Adjunk hozzá egy játékos fejét a fej menübe.
   head: Leidéz egy fejet.
@@ -240,6 +185,8 @@ descriptions:
     eladni minden fejét.
 event:
   block-place-denied: '{header} Nem teheted le a fejeket!'
+  cannot-craft-heads: '{header} Nem készíthet fejeket!'
+  cannot-craft-heads-here: '{header} Itt nem lehet fejeket készíteni!'
   head-interact-message: '{header} Azaz &c{player}&7 feje!'
   head-mhf-interact-message: '{header} Az egy &c{name}&7 feje!'
   head-mhf-interact-message-2: '{header} Ez egy &c{player}&7 feje!'

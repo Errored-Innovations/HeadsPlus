@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.util.events;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;
@@ -8,15 +7,8 @@ import java.util.Set;
 
 public abstract class HeadsPlusListener<T> implements Listener {
 
-    private final HashMap<String, String> data;
-    private final HashMap<String, String[]> possibleValues;
-    protected HeadsPlus hp;
-
-    public HeadsPlusListener() {
-        data = new HashMap<>();
-        possibleValues = new HashMap<>();
-        hp = HeadsPlus.getInstance();
-    }
+    private final HashMap<String, String> data = new HashMap<>();
+    private final HashMap<String, String[]> possibleValues = new HashMap<>();
 
     public abstract void onEvent(T event);
 
@@ -48,4 +40,10 @@ public abstract class HeadsPlusListener<T> implements Listener {
     public HashMap<String, String[]> getPossibleValues() {
         return possibleValues;
     }
+
+    public boolean shouldEnable() {
+        return true;
+    }
+
+    public abstract void init();
 }

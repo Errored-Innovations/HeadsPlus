@@ -22,11 +22,12 @@ import java.util.Set;
 public class FlagHandler {
 
     //
-    public StateFlag HEAD_DROP = new StateFlag("head-drop", true);
-    public StateFlag HEAD_CRAFT = new StateFlag("head-craft", true);
-    public StateFlag ALLOW_MASKS = new StateFlag("allow-mask-use", true);
-    public SetFlag<String> HEAD_DENIED_IDS = new SetFlag<>("head-denied-ids", new StringFlag("head-denied-id"));
-    public SetFlag<String> HEAD_ALLOWED_IDS = new SetFlag<>("head-allowed-ids", new StringFlag("head-allowed-id"));
+    public final StateFlag HEAD_DROP = new StateFlag("head-drop", true);
+    public final StateFlag HEAD_CRAFT = new StateFlag("head-craft", true);
+    public final StateFlag ALLOW_MASKS = new StateFlag("allow-mask-use", true);
+    public final SetFlag<String> HEAD_DENIED_IDS = new SetFlag<>("head-denied-ids", new StringFlag("head-denied-id"));
+    public final SetFlag<String> HEAD_ALLOWED_IDS = new SetFlag<>("head-allowed-ids", new StringFlag("head-allowed-id"
+    ));
     private static FlagHandler handler = null;
 
     public FlagHandler() {
@@ -45,7 +46,7 @@ public class FlagHandler {
     }
 
     public static boolean isHandling() {
-        return handler != null && HeadsPlus.getInstance().canUseWG();
+        return handler != null && HeadsPlus.get().canUseWG();
     }
 
     public static boolean canDrop(Location location, EntityType type) {

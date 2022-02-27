@@ -1,85 +1,70 @@
 package io.github.thatsmusic99.headsplus.commands.maincommand;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
-import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigTextMenu;
-import io.github.thatsmusic99.headsplus.nms.NMSManager;
-import org.bukkit.OfflinePlayer;
+import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @CommandInfo(
         commandname = "profile",
         permission = "headsplus.maincommand.profile",
-        subcommand = "Profile",
         maincommand = true,
-        usage = "/hp profile [Player]"
+        usage = "/hp profile [Player]",
+        descriptionPath = "descriptions.hp.profile"
 )
 public class ProfileCommand implements IHeadsPlusCommand {
 
-    private String prof(OfflinePlayer p, CommandSender sender) throws SQLException {
-        try {
-            HPPlayer pl = HPPlayer.getHPPlayer(p);
-            return HeadsPlusConfigTextMenu.ProfileTranslator.translate(pl, sender);
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-            return HeadsPlus.getInstance().getMessagesConfig().getString("commands.errors.no-data", sender);
+    @Override
+    public boolean onCommand(CommandSender cs, @NotNull Command command, @NotNull String label, String[] args) {
+        String name = cs.getName();
+        if (args.length != 1) {
+            name = args[1];
         }
-    }
 
-    @Override
-    public String getCmdDescription(CommandSender sender) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("descriptions.hp.profile", sender);
-    }
-
-    @Override
-    public boolean fire(String[] args, CommandSender cs) {
-        try {
-            HeadsPlus hp = HeadsPlus.getInstance();
-            OfflinePlayer p;
-            NMSManager nms = hp.getNMS();
-            if (args.length == 1) {
-                p = nms.getOfflinePlayer(cs.getName());
-            } else {
-                p = nms.getOfflinePlayer(args[1]);
-            }
-            if (cs instanceof Player) {
-                if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    cs.sendMessage(prof(p, cs));
-                } else {
-                    if (cs.hasPermission("headsplus.maincommand.profile.others")) {
-                        cs.sendMessage(prof(p, cs));
+        HPUtils.getOfflinePlayer(name).thenAccept(player -> {
+            try {
+                if (cs instanceof Player) {
+                    if (cs.getName().equalsIgnoreCase(player.getName())) {
+                        ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     } else {
-                        hp.getMessagesConfig().sendMessage("commands.errors.no-perm", cs);
+                        if (cs.hasPermission("headsplus.maincommand.profile.others")) {
+                            ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
+                        } else {
+                            MessagesManager.get().sendMessage("commands.errors.no-perm", cs);
+                        }
+                    }
+                } else {
+                    if (cs.getName().equalsIgnoreCase(player.getName())) {
+                        // Not a player
+                        cs.sendMessage(MessagesManager.get().getString("commands.profile.cant-view-data"));
+                    } else {
+                        ConfigTextMenus.ProfileTranslator.translate(player, cs).thenAccept(cs::sendMessage);
                     }
                 }
-            } else {
-                if (cs.getName().equalsIgnoreCase(p.getName())) {
-                    // Not a player
-                    cs.sendMessage(hp.getMessagesConfig().getString("commands.profile.cant-view-data"));
-                } else {
-                    cs.sendMessage(prof(p, cs));
-                }
+            } catch (Exception e) {
+                DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
             }
-        } catch (SQLException e) {
-            DebugPrint.createReport(e, "Subcommand (profile)", true, cs);
-        }
-
-
+        });
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean shouldEnable() {
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label,
+                                      @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
             StringUtil.copyPartialMatches(args[1], IHeadsPlusCommand.getPlayers(sender), results);

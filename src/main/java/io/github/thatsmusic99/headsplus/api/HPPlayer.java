@@ -2,224 +2,65 @@ package io.github.thatsmusic99.headsplus.api;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.LevelUpEvent;
-import io.github.thatsmusic99.headsplus.config.HeadsPlusConfigHeads;
-import io.github.thatsmusic99.headsplus.storage.PlayerScores;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
+import io.github.thatsmusic99.headsplus.sql.ChallengeSQLManager;
+import io.github.thatsmusic99.headsplus.sql.FavouriteHeadsSQLManager;
+import io.github.thatsmusic99.headsplus.sql.PinnedChallengeManager;
+import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class HPPlayer {
 
-    // M
-    private UUID player;
-    private int xp;
-    private Level level = null;
-    private List<String> completeChallenges;
-    private Level nextLevel = null;
-    private String currentMask;
-    private List<PotionEffect> activeMask;
-    public static HashMap<UUID, HPPlayer> players = new HashMap<>();
-    private List<String> favouriteHeads;
-    private List<String> pinnedChallenges;
-    private boolean ignoreFallDamage;
-    private String cachedLocale;
-    private boolean localeForced;
+    private final UUID uuid;
+    private long xp;
+    private int level;
+    private int nextLevel = -1;
+    public static final HashMap<UUID, HPPlayer> players = new HashMap<>();
+    private final List<String> favouriteHeads;
+    private final List<String> pinnedChallenges;
+    private final List<String> completeChallenges;
 
-    public HPPlayer(OfflinePlayer p) {
-        if (p.isOnline() && p.getPlayer().hasMetadata("NPC")) return;
-        HeadsPlus hp = HeadsPlus.getInstance();
-        activeMask = new ArrayList<>();
-        favouriteHeads = new ArrayList<>();
-        pinnedChallenges = new ArrayList<>();
-        ignoreFallDamage = false;
-        this.player = p.getUniqueId();
-        try {
-            for (Object o : (JSONArray) hp.getFavourites().getJSON().get(p.getUniqueId().toString())) {
-                favouriteHeads.add(String.valueOf(o));
-            }
-            for (Object o : (JSONArray) hp.getPinned().getJSON().get(player.toString())) {
-                pinnedChallenges.add(String.valueOf(o));
-            }
-        } catch (NullPointerException ignored) {
+    public HPPlayer(UUID uuid) {
+        pinnedChallenges = HPUtils.ifNull(getValue(PinnedChallengeManager.get().getPinnedChallenges(uuid), "pinned challenges"), new ArrayList<>());
+        favouriteHeads = HPUtils.ifNull(getValue(FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid), "favourite heads"), new ArrayList<>());
+        completeChallenges = HPUtils.ifNull(getValue(ChallengeSQLManager.get().getCompleteChallenges(uuid), "complete challenges"), new ArrayList<>());
+        level = HPUtils.ifNull(getValue(PlayerSQLManager.get().getLevel(uuid, false), "level"), 0);
+        int max = LevelsManager.get().getLevels().size();
+        if (level > -1 && level + 1 < max) {
+            this.nextLevel = level + 1;
         }
-        PlayerScores scores = hp.getScores();
-        HashMap<Integer, Level> levels = hp.getLevels();
-        this.xp = scores.getXp(p.getUniqueId().toString());
-        List<String> sc = new ArrayList<>();
-        sc.addAll(scores.getCompletedChallenges(p.getUniqueId().toString()));
-        if (hp.getConfiguration().getConfig().getBoolean("smart-locale") && p.isOnline()) {
-            Player player = p.getPlayer();
-            String loc = scores.getLocale(p.getUniqueId().toString());
-            if (loc != null && !loc.isEmpty() && !loc.equalsIgnoreCase("null")) {
-                cachedLocale = loc.split(":")[0];
-                localeForced = Boolean.parseBoolean(loc.split(":")[1]);
-                hp.getMessagesConfig().setPlayerLocale(player, cachedLocale,  false);
-            } else {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        hp.getMessagesConfig().setPlayerLocale(player);
-                        cachedLocale = hp.getMessagesConfig().getSetLocale(player);
-                        localeForced = false;
-                        scores.setLocale(player.toString(), cachedLocale, false);
-                    }
-                }.runTaskLaterAsynchronously(hp, 100);
-            }
-        } else {
-            cachedLocale = "";
-            localeForced = false;
-        }
-        if (hp.usingLevels()) {
-            if (scores.getLevel(p.getUniqueId().toString()).isEmpty()) {
-                for (int i = hp.getLevelsConfig().getMaxHierarchy(); i > 0; i--) {
-                    try {
-                        if (levels.get(i) != null && levels.get(i).getRequiredXP() <= xp) {
-                            level = levels.get(i);
-
-                            scores.setLevel(p.getUniqueId().toString(), level.getConfigName());
-                            try {
-                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
-                                    if (levels.get(j) != null) {
-                                        nextLevel = levels.get(j);
-                                        break;
-                                    }
-                                }
-                            } catch (IndexOutOfBoundsException e) { // End of levels
-                                nextLevel = null;
-                            }
-                            break;
-                        }
-                    } catch (NullPointerException ignored) { // Continue
-                    }
-
-                }
-            } else {
-                String configLevel = scores.getLevel(p.getUniqueId().toString());
-                for (int i = hp.getLevelsConfig().getMaxHierarchy(); i > 0; i--) {
-                    try {
-                        if (levels.get(i) != null && levels.get(i).getConfigName().equals(configLevel)) {
-                            level = levels.get(i);
-                            try {
-                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
-                                    if (levels.get(j) != null) {
-                                        nextLevel = levels.get(j);
-                                        break;
-                                    }
-                                }
-                            } catch (IndexOutOfBoundsException e) { // End of levels
-                                nextLevel = null;
-                            }
-                            break;
-                        }
-                    } catch (NullPointerException ignored) {
-
-                    }
-
-                }
-            }
-        }
-        this.completeChallenges = sc;
-        players.put(p.getUniqueId(), this);
+        PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
+                result.ifPresent(str ->
+                        MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
+        xp = HPUtils.ifNull(getValue(PlayerSQLManager.get().getXP(uuid, true), "XP"), (long) 0);
+        this.uuid = uuid;
+        players.put(uuid, this);
     }
 
-    public void clearMask() {
-        try {
-            ignoreFallDamage = false;
-            currentMask = "";
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-            activeMask.clear();
-        } catch (NullPointerException ignored) { // When the mask messes up
-
-        }
-    }
-
-    public void tempClearMasks() {
-        try {
-            ignoreFallDamage = false;
-            if (!getPlayer().isOnline()) return;
-            for (PotionEffect p : activeMask) {
-                ((Player) getPlayer()).removePotionEffect(p.getType());
-            }
-        } catch (NullPointerException ignored) {
-        }
-    }
-
-    public void addMask(String s) {
-        if (s.equalsIgnoreCase("WANDERING_TRADER") || s.equalsIgnoreCase("TRADER_LLAMA")) {
-            s = s.toLowerCase();
-        } else {
-            s = s.toLowerCase().replaceAll("_", "");
-        }
-        HeadsPlusConfigHeads hpch = HeadsPlus.getInstance().getHeadsConfig();
-        List<PotionEffect> po = new ArrayList<>();
-        for (int i = 0; i < hpch.getConfig().getStringList(s + ".mask-effects").size(); i++) {
-            String is = hpch.getConfig().getStringList(s + ".mask-effects").get(i).toUpperCase();
-            if (is.equalsIgnoreCase("ignore-fall-damage")) {
-                ignoreFallDamage = true;
-                continue;
-            }
-            int amp;
-            if (ignoreFallDamage) {
-                amp = hpch.getConfig().getIntegerList(s + ".mask-amplifiers").get(i - 1);
-            } else {
-                amp = hpch.getConfig().getIntegerList(s + ".mask-amplifiers").get(i);
-            }
-
-            try {
-                PotionEffectType type = PotionEffectType.getByName(is);
-                if (type == null) {
-                    HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml! (" + is + ", " + s + ")");
-                    continue;
-                }
-                PotionEffect p = new PotionEffect(type, HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), amp);
-                ((Player) getPlayer()).addPotionEffect(p);
-                po.add(p);
-            } catch (IllegalArgumentException ex) {
-                HeadsPlus.getInstance().getLogger().severe("Invalid potion type detected. Please check your masks configuration in heads.yml!");
-            }
-        }
-        activeMask = po;
-        currentMask = s;
-    }
-
-    public void refreshMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(effect.getType(), HeadsPlus.getInstance().getConfiguration().getMechanics().getInt("masks.effect-length"), effect.getAmplifier()));
-        }
-    }
-
-    public void clearAllMasks() {
-        for (PotionEffect effect : activeMask) {
-            Player player = (Player) getPlayer();
-            player.removePotionEffect(effect.getType());
-        }
-    }
-
-    public int getXp() {
+    public long getXp() {
         return xp;
     }
 
     public Level getLevel() {
-        return level;
+        return LevelsManager.get().getLevel(level);
     }
 
     public Level getNextLevel() {
-        return nextLevel;
+        return LevelsManager.get().getLevel(nextLevel);
     }
 
     public List<String> getCompleteChallenges() {
@@ -227,172 +68,134 @@ public class HPPlayer {
     }
 
     public OfflinePlayer getPlayer() {
-        return Bukkit.getOfflinePlayer(player);
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
-    public static HPPlayer getHPPlayer(OfflinePlayer p) {
-        UUID uuid = p.getUniqueId();
-        return players.get(uuid) != null ? players.get(uuid) : new HPPlayer(p);
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public List<PotionEffect> getActiveMasks() {
-        return activeMask;
+    public static HPPlayer getHPPlayer(UUID uuid) {
+        return players.get(uuid);
     }
 
-    public String getActiveMaskType() {
-        return currentMask;
-    }
-
-    public String getLocale() {
-        return cachedLocale;
-    }
-
-    public boolean isLocaleForced() {
-        return localeForced;
-    }
-
-    public void setLocale(String locale) {
-        setLocale(locale, true);
-    }
-
-    public void setLocale(String locale, boolean forced) {
-        cachedLocale = locale;
-        localeForced = forced;
-        HeadsPlus.getInstance().getScores().setLocale(getPlayer().getUniqueId().toString(), locale, forced);
-    }
-
-    public void addCompleteChallenge(Challenge c) {
-        PlayerScores scores = HeadsPlus.getInstance().getScores();
-        scores.completeChallenge(player.toString(), c);
+    public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
         completeChallenges.add(c.getConfigName());
+        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName(), true);
     }
 
-    public void addXp(int xp) {
+    public void addXp(long xp) {
         setXp(this.xp + xp);
     }
 
-    public void removeXp(int xp) {
+    public void removeXp(long xp) {
         setXp(this.xp - xp);
     }
 
-    public void setXp(int xp) {
-        HeadsPlus hp = HeadsPlus.getInstance();
-        PlayerScores scores = HeadsPlus.getInstance().getScores();
-        scores.setXp(player.toString(), xp);
+    public void setXp(long xp) {
+        HeadsPlus hp = HeadsPlus.get();
+        PlayerSQLManager.get().setXP(uuid, xp);
         this.xp = xp;
-            if (hp.usingLevels()) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        while (nextLevel != null && nextLevel.getRequiredXP() <= getXp()) {
-                            LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), level, nextLevel);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                level = nextLevel;
-                                Player player = (Player) getPlayer();
-                                if (hp.getConfiguration().getMechanics().getBoolean("broadcasts.level-up")) {
-                                    final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
-                                    for (Player p : Bukkit.getOnlinePlayers()) {
-                                        hp.getMessagesConfig().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name, "{level}", ChatColor.translateAlternateColorCodes('&', level.getDisplayName()));
-                                    }
-                                }
-                                HashMap<Integer, Level> levels = HeadsPlus.getInstance().getLevels();
-                                scores.setLevel(player.getUniqueId().toString(), level.getConfigName());
-                                if (level.isrEnabled()) {
-                                    level.getReward().reward(player.getPlayer());
-                                }
-                                for (int i = 1; i < hp.getLevelsConfig().getMaxHierarchy(); i++) {
-                                    if (levels.get(i) == level) {
-                                        try {
-                                            level = levels.get(i);
-                                            boolean found = false;
-                                            for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
-                                                if (levels.get(j) != null) {
-                                                    nextLevel = levels.get(j);
-                                                    found = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (!found) {
-                                                nextLevel = null;
-                                            } else {
-                                                break;
-                                            }
-                                        } catch (IndexOutOfBoundsException e) { // End of levels
-                                            nextLevel = null;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
+        if (MainConfig.get().getMainFeatures().LEVELS) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (nextLevel < 0 || nextLevel >= LevelsManager.get().getLevels().size()) return;
+                    Level nextLevelLocal = LevelsManager.get().getLevel(nextLevel);
+                    int jumps = 0;
+                    while (nextLevelLocal != null && nextLevelLocal.getRequiredXP() <= getXp()) {
+                        jumps++;
+                        Level level = nextLevelLocal;
+                        nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
+                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(jumps);
+                        if (level.isrEnabled()) level.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
-                }.runTask(hp);
-                if (level.getRequiredXP() > getXp()) {
-                    HashMap<Integer, Level> levels = hp.getLevels();
-                    for (int i = 1; i < hp.getLevelsConfig().getMaxHierarchy(); i++) {
-                        if (levels.get(i) != null && levels.get(i).getRequiredXP() <= getXp()) {
-                            try {
-                                level = levels.get(i);
-                                boolean found = false;
-                                for (int j = i + 1; j < hp.getLevelsConfig().getMaxHierarchy(); j++) {
-                                    if (levels.get(i) != null) {
-                                        nextLevel = levels.get(i + 1);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                if (!found) nextLevel = null;
-                                return;
-                            } catch (IndexOutOfBoundsException e) { // End of levels
-                                nextLevel = null;
-                            }
-                        }
-                    }
-                    level = null;
-                    nextLevel = levels.get(1);
+                    if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
+
+                    HPUtils.addBossBar(getPlayer());
                 }
+            }.runTask(hp);
+        }
+    }
+
+    private void initLevelUp(int jumps) {
+        Level nextLevel = LevelsManager.get().getLevel(this.level + jumps);
+        LevelUpEvent event = new LevelUpEvent((Player) getPlayer(), LevelsManager.get().getLevel(level), nextLevel);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
+        this.level += jumps;
+        this.nextLevel += jumps;
+        Player player = (Player) getPlayer();
+        if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
+            final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name,
+                        "{level}",
+                        ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
+        }
+        PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
 
     public boolean hasHeadFavourited(String s) {
         return favouriteHeads.contains(s);
     }
 
-    public void addFavourite(String s) {
+    public CompletableFuture<Void> addFavourite(String s) {
         favouriteHeads.add(s);
-        HeadsPlus.getInstance().getFavourites().writeData(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().addHead(uuid, s);
     }
 
-    public void removeFavourite(String s) {
+    public CompletableFuture<Void> removeFavourite(String s) {
         favouriteHeads.remove(s);
-        HeadsPlus.getInstance().getFavourites().removeHead(getPlayer(), s);
-    }
-
-    public boolean hasChallengePinned(Challenge challenge) {
-        return pinnedChallenges.contains(challenge.getConfigName());
-    }
-
-    public void addChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.add(s);
-        HeadsPlus.getInstance().getPinned().writeData(getPlayer(), s);
-    }
-
-    public void removeChallengePin(Challenge challenge) {
-        String s = challenge.getConfigName();
-        pinnedChallenges.remove(s);
-        HeadsPlus.getInstance().getPinned().removeChallenge(getPlayer(), s);
+        return FavouriteHeadsSQLManager.get().removeHead(uuid, s);
     }
 
     public List<String> getPinnedChallenges() {
         return pinnedChallenges;
     }
 
-    public boolean isIgnoringFallDamage() {
-        return ignoreFallDamage;
+    public boolean hasChallengePinned(Challenge challenge) {
+        return pinnedChallenges.contains(challenge.getConfigName());
+    }
+
+    public CompletableFuture<Void> addChallengePin(Challenge challenge) {
+        pinnedChallenges.add(challenge.getConfigName());
+        return PinnedChallengeManager.get().addChallenge(uuid, challenge.getConfigName());
+    }
+
+    public CompletableFuture<Void> removeChallengePin(Challenge challenge) {
+        pinnedChallenges.remove(challenge.getConfigName());
+        return PinnedChallengeManager.get().removeChallenge(uuid, challenge.getConfigName());
     }
 
     public List<String> getFavouriteHeads() {
         return favouriteHeads;
+    }
+
+    public static void reload() {
+        players.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> new HPPlayer(player.getUniqueId()));
+    }
+
+    public static void removePlayer(UUID uuid) {
+        players.remove(uuid);
+    }
+
+    private <T> T getValue(CompletableFuture<T> task, String object) {
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": interrupted thread. Please try" +
+                    " again or restart the server. If none of the above works, please consult the necessary support" +
+                    " services (e.g. hosting)..");
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": execution failed, " +
+                    "an internal error occurred. Please send the console error to the developer.");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

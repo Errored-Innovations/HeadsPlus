@@ -1,17 +1,19 @@
 package io.github.thatsmusic99.headsplus.util.prompts;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class ChatPrompt extends StringPrompt {
 
 
+    @NotNull
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return HeadsPlus.getInstance().getMessagesConfig().getString("commands.heads.chat-input", (Player) conversationContext.getForWhom());
+        return MessagesManager.get().getString("commands.heads.chat-input", (Player) conversationContext.getForWhom());
     }
 
     @Override
