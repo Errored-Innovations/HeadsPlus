@@ -102,7 +102,8 @@ public class CustomHead extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         // We only really need to add the lore here
-        List<String> lore = new ArrayList<>();
+        List<String> lore = item.getLore();
+        if (lore == null) lore = new ArrayList<>();
         for (String str : ConfigInventories.get().getStringList("icons.head.lore")) {
             // it seems that I have messed up
             if (str.equals("{msg_inventory.icon.head.favourite}") || str.equals("{favourite}")) {

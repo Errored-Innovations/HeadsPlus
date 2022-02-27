@@ -8,15 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomHeadSection extends Content {
 
     private String section;
 
-    public CustomHeadSection(ItemStack itemStack, String section) {
+    public CustomHeadSection(ItemStack itemStack, String section, Player player) {
         super(itemStack);
         this.section = section;
+        initNameAndLore(getId(), player);
     }
 
     public CustomHeadSection() {
@@ -36,6 +38,12 @@ public class CustomHeadSection extends Content {
         // The event was cancelled, so don't destroy the GUI
         return false;
 
+    }
+
+    @Override
+    public void initNameAndLore(String id, Player player) {
+        // TODO custom descriptions
+        item.setLore(new ArrayList<>());
     }
 
     @Override

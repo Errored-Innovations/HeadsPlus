@@ -46,7 +46,7 @@ public class HeadsMenu extends BaseInventory {
         ConfigHeadsSelector selector = ConfigHeadsSelector.get();
         for (ConfigHeadsSelector.SectionInfo section : selector.getSections().values()) {
             try {
-                contents.add(new CustomHeadSection(section.buildSection(), section.getId()));
+                contents.add(new CustomHeadSection(section.buildSection(), section.getId(), player));
             } catch (IllegalStateException ex) {
                 HeadsPlus.get().getLogger().warning(ex.getMessage());
             }
