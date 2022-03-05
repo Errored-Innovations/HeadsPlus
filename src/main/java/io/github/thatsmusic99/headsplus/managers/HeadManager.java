@@ -1,6 +1,5 @@
 package io.github.thatsmusic99.headsplus.managers;
 
-import com.google.common.collect.Lists;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
@@ -101,7 +100,11 @@ public class HeadManager {
         }
 
         public HeadInfo withLore(String... lore) {
-            this.lore = Lists.newArrayList(lore);
+            this.lore = new ArrayList<>();
+            for (String str : lore) {
+                if (str == null) continue;
+                this.lore.add(ChatColor.translateAlternateColorCodes('&', str));
+            }
             return this;
         }
 
@@ -151,7 +154,11 @@ public class HeadManager {
 
         public void setLore(@Nullable List<String> lore) {
             if (lore == null) return;
-            this.lore = lore;
+            this.lore = new ArrayList<>();
+            for (String str : lore) {
+                if (str == null) continue;
+                this.lore.add(ChatColor.translateAlternateColorCodes('&', str));
+            }
         }
 
         public CompletableFuture<ItemStack> buildHead() {
