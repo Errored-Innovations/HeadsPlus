@@ -27,11 +27,13 @@ public class CustomHead extends Content {
 
     private double price = 0;
     private String id;
+    private List<String> paymentLore;
 
     public CustomHead(String id) {
         super(ConfigHeadsSelector.get().getBuyableHead(id).forceBuildHead());
         this.price = ConfigHeadsSelector.get().getBuyableHead(id).getPrice();
         this.id = id;
+        paymentLore = new ArrayList<>();
     }
 
     public CustomHead() {
@@ -76,7 +78,10 @@ public class CustomHead extends Content {
                     im.setGlitchSlot(true);
                 }
                 ItemMeta meta = item.getItemMeta();
-                meta.setLore(new ArrayList<>());
+                List<String> lore = meta.getLore();
+                if (lore == null) lore = new ArrayList<>();
+                lore.removeAll(paymentLore);
+                meta.setLore(lore);
                 item.setItemMeta(meta);
                 PersistenceManager.get().removeIcon(item);
                 player.getInventory().addItem(item);
@@ -117,6 +122,7 @@ public class CustomHead extends Content {
                 HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(str, player),
                         new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
             }
+            paymentLore.add(lore.get(lore.size() - 1));
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
