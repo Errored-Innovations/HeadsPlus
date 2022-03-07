@@ -144,6 +144,7 @@ public class MaskManager {
         public CompletableFuture<ItemStack> buildHead() {
             return super.buildHead().thenApply(item -> {
                 if (id == null) return item;
+                if (id.startsWith("HPM#")) id = id.substring(4);
                 PersistenceManager.get().setMaskType(item, id);
                 HeadsPlus.debug("Implemented mask type " + id);
                 return item;
@@ -154,6 +155,7 @@ public class MaskManager {
         public ItemStack forceBuildHead() {
             ItemStack item = super.forceBuildHead();
             if (id == null) return item;
+            if (id.startsWith("HPM#")) id = id.substring(4);
             PersistenceManager.get().setMaskType(item, id);
             HeadsPlus.debug("Implemented mask type " + id);
             return item;

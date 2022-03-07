@@ -73,7 +73,7 @@ public class PersistenceManager {
     }
 
     public void removeIcon(ItemStack item) {
-        setValue(item, HEADSPLUS_INVENTORY_ICON, PersistentDataType.BYTE, (byte) 0);
+        setValue(item, HEADSPLUS_INVENTORY_ICON, PersistentDataType.BYTE, null);
     }
 
     public void setMaskType(ItemStack item, String type) {
@@ -96,7 +96,11 @@ public class PersistenceManager {
             PersistentDataAdapterContext adapterContext = meta.getPersistentDataContainer().getAdapterContext();
             container = adapterContext.newPersistentDataContainer();
         }
-        container.set(key, dataType, object);
+        if (object == null) {
+            container.remove(key);
+        } else {
+            container.set(key, dataType, object);
+        }
         setStorage(meta, container);
         item.setItemMeta(meta);
     }
