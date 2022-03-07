@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
+import io.github.thatsmusic99.headsplus.managers.MaskManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -75,7 +76,10 @@ public class Conjure implements IHeadsPlusCommand {
                                       @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], HeadManager.get().getKeys(), results);
+            List<String> choices = new ArrayList<>();
+            HeadManager.get().getKeys().forEach(str -> choices.add("HP#" + str));
+            MaskManager.get().getMaskKeys().forEach(str -> choices.add("HPM#" + str));
+            StringUtil.copyPartialMatches(args[1], choices, results);
         } else if (args.length == 4) {
             StringUtil.copyPartialMatches(args[3], IHeadsPlusCommand.getPlayers(sender), results);
         }
