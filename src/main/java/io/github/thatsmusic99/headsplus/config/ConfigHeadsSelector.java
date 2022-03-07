@@ -168,7 +168,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
         public ItemStack buildSection() {
             if (texture == null) throw new IllegalStateException("Texture must not be null!");
-            if (!texture.startsWith("HP#"))
+            if (!texture.startsWith("HP#") && !texture.startsWith("HPM#"))
                 throw new IllegalStateException("The texture for " + id + " must be a registered (HP#) head!");
             HeadManager.HeadInfo headInfo = HeadManager.get().getHeadInfo(texture);
             HeadsPlus.debug("Building a head for " + texture + "...");
