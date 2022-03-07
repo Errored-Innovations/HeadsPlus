@@ -287,11 +287,11 @@ public class HeadsPlus extends JavaPlugin {
         if (new File(getDataFolder(), "customheads.yml").exists()) addConfig(ConfigCustomHeads.class, "customheads.yml");
         addConfig(ConfigCrafting.class, "crafting.yml");
         addConfig(ConfigHeads.class, "heads.yml");
+        addConfig(ConfigMasks.class, "masks.yml");
         addConfig(ConfigHeadsSelector.class, "heads-selector.yml");
         addConfig(ConfigInteractions.class, "interactions.yml");
         addConfig(ConfigInventories.class, "inventories.yml");
         addConfig(ConfigLevels.class, "levels.yml");
-        addConfig(ConfigMasks.class, "masks.yml");
         addConfig(ConfigMobs.class, "mobs.yml");
         addConfig(ConfigSounds.class, "sounds.yml");
         addConfig(ConfigTextMenus.class, "textmenus.yml");
@@ -319,7 +319,6 @@ public class HeadsPlus extends JavaPlugin {
         }
 
         EntityDataManager.init();
-        new MaskManager();
     }
 
     private <T extends HPConfig> T addConfig(Class<? extends T> clazz, String name) {

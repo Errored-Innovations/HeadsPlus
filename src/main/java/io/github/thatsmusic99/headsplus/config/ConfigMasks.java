@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import com.google.common.collect.Lists;
+import io.github.thatsmusic99.headsplus.managers.MaskManager;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -40,5 +41,10 @@ public class ConfigMasks extends FeatureConfig {
     @Override
     public boolean shouldLoad() {
         return MainConfig.get().getMainFeatures().MASKS;
+    }
+
+    @Override
+    public void postSave() {
+        new MaskManager();
     }
 }
