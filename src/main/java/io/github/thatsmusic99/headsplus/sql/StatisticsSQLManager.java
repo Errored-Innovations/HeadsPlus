@@ -80,7 +80,7 @@ public class StatisticsSQLManager extends SQLManager {
                             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
                             statement.setString(2, "HUNTING");
                             statement.setString(3, head);
-                            statement.setString(4, "mob=" + mobObj);
+                            statement.setString(4, "entity=" + mobObj);
                             statement.setInt(5, total);
 
                             statement.addBatch();
