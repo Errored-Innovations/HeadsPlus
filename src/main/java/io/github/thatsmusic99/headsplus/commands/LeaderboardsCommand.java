@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
@@ -21,7 +22,7 @@ import java.util.List;
         commandname = "hplb",
         permission = "headsplus.leaderboards",
         maincommand = false,
-        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [ID|Page No.] [Page No.] ",
+        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [Mob|Page No.] [ID|Page No.] ",
         descriptionPath = "descriptions.hplb")
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
@@ -42,20 +43,49 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
         // Check category
         StatisticsSQLManager.CollectionType type = StatisticsSQLManager.CollectionType.getType(args[0].toUpperCase());
         int page = 1;
-        if (type == null) {
-            int finalPage = checkPage(args[0]);
-            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
-                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, finalPage)));
-        } else {
-            if (args.length > 1) {
-                page = checkPage(args[1]);
-            }
 
-            int finalPage = page;
+        if (type == null) {
+            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[0]))));
+            return true;
+        }
+
+        if (args.length == 1) {
             StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
                     cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs,
-                            HeadsPlus.capitalize(type.name()), list, finalPage)));
+                            HeadsPlus.capitalize(type.name()), list, page)));
+            return true;
         }
+
+        if (args.length == 2) {
+            if (args[1].matches("^[0-9]+$")) {
+                StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
+                        cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[1]))));
+            } else {
+                String key = args[1].toUpperCase();
+                if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
+                StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key).thenAccept(list ->
+                        cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+            }
+        }
+
+        if (args.length == 3) {
+            String key = args[1].toUpperCase();
+            if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
+            if (args[2].matches("^[0-9]+$")) {
+                StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key).thenAccept(list ->
+                        cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[2]))));
+            } else {
+                StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key).thenAccept(list ->
+                        cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+            }
+        }
+
+        String key = args[1].toUpperCase();
+        if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
+        StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key).thenAccept(list ->
+                cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[3]))));
+
         return true;
     }
 
@@ -76,7 +106,18 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting"), results);
         } else if (args.length == 2) {
-            StringUtil.copyPartialMatches(args[1], SellableHeadsManager.get().getKeys(), results);
+            if (args[0].equalsIgnoreCase("hunting")) {
+                StringUtil.copyPartialMatches(args[1], EntityDataManager.ableEntities, results);
+            } else {
+                StringUtil.copyPartialMatches(args[1], SellableHeadsManager.get().getKeys(), results);
+            }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("hunting")) {
+                List<EntityDataManager.DroppedHeadInfo> list = EntityDataManager.getStoredHeads().get(args[1].toUpperCase() + ";default");
+                List<String> names = new ArrayList<>();
+                list.forEach(str -> names.add(str.getId()));
+                StringUtil.copyPartialMatches(args[2], names, results);
+            }
         }
         return results;
     }
