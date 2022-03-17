@@ -4,7 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -138,10 +138,10 @@ public class HPUtils {
             if (MainConfig.get().getMobDrops().DISABLE_FOR_MYTHIC_MOBS) {
                 Plugin plugin = hp.getServer().getPluginManager().getPlugin("MythicMobs");
                 if (plugin != null && plugin.isEnabled()) {
-                    return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
+                    return MythicBukkit.inst().getMobManager().isActiveMob(entity.getUniqueId());
                 }
             }
-        } catch (Exception ignored) {
+        } catch (NoClassDefFoundError ex) {
         }
         return false;
     }
