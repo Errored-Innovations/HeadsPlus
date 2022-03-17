@@ -20,12 +20,17 @@ public class MaskManager {
     private static MaskManager instance;
     private final HashMap<String, BukkitRunnable> runningTasks = new HashMap<>();
 
-    public MaskManager() {
+    private MaskManager(boolean empty) {
         instance = this;
-        init();
+        if (!empty) init();
+    }
+
+    public MaskManager() {
+        this(false);
     }
 
     public static MaskManager get() {
+        if (instance == null) instance = new MaskManager(true);
         return instance;
     }
 
