@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,9 @@ public class CustomHeadSection extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         // TODO custom descriptions
-        item.setLore(new ArrayList<>());
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(new ArrayList<>());
+        item.setItemMeta(meta);
     }
 
     @Override
