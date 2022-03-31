@@ -10,10 +10,8 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -44,11 +42,6 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         if (!isCorrectSlot(e)) return;
         if (!(e.getCurrentItem().getItemMeta() instanceof SkullMeta)) return;
 
-        if (e.getClass().getSimpleName().equals("CraftItemEvent")) {
-            String name = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', e.getCurrentItem().getItemMeta().getDisplayName()));
-            PersistenceManager.get().setSellType(e.getCurrentItem(), name.toUpperCase().replaceAll("[^A-Z]", ""));
-        }
-
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         if (type == null || type.isEmpty()) return;
 
@@ -61,7 +54,8 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         }
 
         if (HeadsPlus.get().canUseWG()) {
-            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
+            String name = type.substring(type.indexOf("_") + 1).toUpperCase();
+            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), name)) {
                 MessagesManager.get().sendMessage("event.cannot-craft-heads-here", e.getWhoClicked());
                 e.setCancelled(true);
                 return;

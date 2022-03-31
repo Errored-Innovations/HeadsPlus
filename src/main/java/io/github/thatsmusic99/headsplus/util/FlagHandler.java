@@ -14,7 +14,6 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -49,12 +48,12 @@ public class FlagHandler {
         return handler != null && HeadsPlus.get().canUseWG();
     }
 
-    public static boolean canDrop(Location location, EntityType type) {
+    public static boolean canDrop(Location location, String type) {
         if (!isHandling()) return true;
         return query(location, type, getHandler().HEAD_DROP);
     }
 
-    public static boolean canCraft(Location location, EntityType type) {
+    public static boolean canCraft(Location location, String type) {
         if (!isHandling()) return true;
         return query(location, type, getHandler().HEAD_CRAFT);
     }
@@ -74,7 +73,7 @@ public class FlagHandler {
         return regions.testState(wrappedPlayer, getHandler().ALLOW_MASKS);
     }
 
-    private static boolean query(Location location, EntityType type, StateFlag flag) {
+    private static boolean query(Location location, String type, StateFlag flag) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         // Get the region manager for the world we're inWorld
         RegionManager manager = container.get(BukkitAdapter.adapt(location.getWorld()));
@@ -87,11 +86,11 @@ public class FlagHandler {
         if (regions.testState(null, flag)) {
             Set<String> allowedMobs = regions.queryValue(null, getHandler().HEAD_ALLOWED_IDS);
             if (allowedMobs != null && !allowedMobs.isEmpty()) {
-                return allowedMobs.contains(type.name());
+                return allowedMobs.contains(type);
             }
             Set<String> deniedMobs = regions.queryValue(null, getHandler().HEAD_DENIED_IDS);
             if (deniedMobs != null && !deniedMobs.isEmpty()) {
-                return !deniedMobs.contains(type.name());
+                return !deniedMobs.contains(type);
             }
             return true;
         }
