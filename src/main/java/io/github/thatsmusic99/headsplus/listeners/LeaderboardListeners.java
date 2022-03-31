@@ -109,7 +109,7 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(HeadCraftEvent event) {
             Player player = event.getPlayer();
             if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
-                //HPPlayer.getHPPlayer(player.getUniqueId()).addXp(0 * event.getHeadsCrafted());
+                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(MainConfig.get().getCraftingHeads().DEFAULT_CRAFTING_XP * event.getHeadsCrafted());
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
