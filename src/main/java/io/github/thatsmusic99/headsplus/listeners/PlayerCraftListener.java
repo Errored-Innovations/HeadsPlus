@@ -12,11 +12,13 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> {
@@ -71,8 +73,16 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
 
     private int shift(InventoryClickEvent e) {
         if (!e.isShiftClick()) return 1;
-        int slot = getSlot(e.getInventory().getType());
-        return e.getInventory().getItem(slot).getAmount();
+        ItemStack[] itemStacks = e.getInventory().getStorageContents();
+
+        int amount = Integer.MAX_VALUE;
+        for (ItemStack is : itemStacks) {
+            if (is == null || is.getAmount() == 0 || is.getType() == Material.PLAYER_HEAD) {
+                continue;
+            }
+            amount = Math.min(amount, is.getAmount());
+        }
+        return amount;
     }
 
     private void fireEvent(InventoryClickEvent e) {
