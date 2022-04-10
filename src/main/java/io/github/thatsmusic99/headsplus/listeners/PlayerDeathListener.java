@@ -53,7 +53,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         // Make sure the entity isn't from MythicMobs
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null
-                || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType()))) return;
+                || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType().toString()))) return;
         if (!shouldDropHead(event.getEntity())) return;
         double fixedChance = addData("fixed-chance", ConfigMobs.get().getPlayerChance(victim.getName()));
         if (fixedChance == 0) return;

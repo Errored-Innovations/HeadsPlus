@@ -37,7 +37,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
         if (!addData("not-wg-restricted",
                 !HeadsPlus.get().canUseWG() || FlagHandler.canDrop(event.getEntity().getLocation(),
-                        event.getEntity().getType())))
+                        event.getEntity().getType().toString())))
             return;
 
         if (!shouldDropHead(event.getEntity())) return;

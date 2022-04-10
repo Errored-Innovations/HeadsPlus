@@ -101,6 +101,7 @@ public class CraftingManager {
         //
         Recipe recipe;
         NamespacedKey namespacedKey = new NamespacedKey(HeadsPlus.get(), "crafting_" + key);
+        PersistenceManager.get().setSellType(item, namespacedKey.toString());
         switch (recipeType) {
             case FURNACE:
                 recipe = new FurnaceRecipe(namespacedKey, item, choices.get(0), section.getFloat("experience", 0.1f),

@@ -111,6 +111,10 @@ public class ConfigCrafting extends FeatureConfig {
         return getDouble(key + ".price", getDouble("base-item.price"));
     }
 
+    public long getCraftingXp(String key) {
+        return getLong(key + ".xp", MainConfig.get().getCraftingHeads().DEFAULT_CRAFTING_XP);
+    }
+
     public String getDisplayName(String key) {
         return MessagesManager.get().formatMsg(getString(key + ".display-name", getString("base-item.display-name")), null)
                 .replaceAll("\\{type}", getString(key + ".display-type", getString("base-item.display-type")));

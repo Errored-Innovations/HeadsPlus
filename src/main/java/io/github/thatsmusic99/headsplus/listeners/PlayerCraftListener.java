@@ -11,11 +11,12 @@ import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.EntityType;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> {
@@ -40,8 +41,10 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         if (e.getCurrentItem() == null) return;
         if (!isCorrectSlot(e)) return;
         if (!(e.getCurrentItem().getItemMeta() instanceof SkullMeta)) return;
+
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         if (type == null || type.isEmpty()) return;
+
         if (!player.hasPermission("headsplus.craft")
                 || !RestrictionsManager.canUse(e.getWhoClicked().getWorld().getName(),
                 RestrictionsManager.ActionType.CRAFTING)) {
@@ -51,7 +54,8 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         }
 
         if (HeadsPlus.get().canUseWG()) {
-            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), EntityType.valueOf(type))) {
+            String name = type.substring(type.indexOf("_") + 1).toUpperCase();
+            if (!FlagHandler.canCraft(e.getWhoClicked().getLocation(), name)) {
                 MessagesManager.get().sendMessage("event.cannot-craft-heads-here", e.getWhoClicked());
                 e.setCancelled(true);
                 return;
@@ -63,8 +67,16 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
 
     private int shift(InventoryClickEvent e) {
         if (!e.isShiftClick()) return 1;
-        int slot = getSlot(e.getInventory().getType());
-        return e.getInventory().getItem(slot).getAmount();
+        ItemStack[] itemStacks = e.getInventory().getStorageContents();
+
+        int amount = Integer.MAX_VALUE;
+        for (ItemStack is : itemStacks) {
+            if (is == null || is.getAmount() == 0 || is.getType() == Material.PLAYER_HEAD) {
+                continue;
+            }
+            amount = Math.min(amount, is.getAmount());
+        }
+        return amount;
     }
 
     private void fireEvent(InventoryClickEvent e) {
@@ -73,6 +85,7 @@ public class PlayerCraftListener extends HeadsPlusListener<InventoryClickEvent> 
         String type = PersistenceManager.get().getSellType(e.getCurrentItem());
         event = new HeadCraftEvent((Player) e.getWhoClicked(), e.getCurrentItem(), e.getWhoClicked().getWorld(),
                 e.getWhoClicked().getLocation(), amount, type);
+
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             e.setCancelled(true);

@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
 import io.github.thatsmusic99.headsplus.api.events.HeadCraftEvent;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigCrafting;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
@@ -109,7 +110,8 @@ public class LeaderboardListeners implements Listener {
         public void onEvent(HeadCraftEvent event) {
             Player player = event.getPlayer();
             if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
-                //HPPlayer.getHPPlayer(player.getUniqueId()).addXp(0 * event.getHeadsCrafted());
+                String key = "recipes." + event.getType().substring(event.getType().indexOf("_") + 1);
+                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(ConfigCrafting.get().getCraftingXp(key) * event.getHeadsCrafted());
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;

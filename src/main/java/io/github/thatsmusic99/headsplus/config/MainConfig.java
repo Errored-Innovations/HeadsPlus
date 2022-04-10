@@ -21,6 +21,7 @@ public class MainConfig extends HPConfig {
     private MobDrops mobDrops;
     private PlayerDrops playerDrops;
     private SellingHeads sellingHeads;
+    private CraftingHeads craftingHeads;
     private Masks masks;
     private Autograbber autograbber;
     private Challenges challenges;
@@ -181,6 +182,9 @@ public class MainConfig extends HPConfig {
                 "that.");
         addDefault("use-sellhead-gui", true, "Whether or not the sellhead GUI is opened when a player does /sellhead.");
         addDefault("case-sensitive-names", false, "Whether or not names in /sellhead should be case sensitive.");
+
+        addSection("Crafting Heads");
+        addDefault("default-crafting-xp", 10, "The default amount of XP (plugin) gained when crafting a head.\n");
 
         addSection("Masks");
         addDefault("check-interval", 60, "How often in ticks the plugin checks to make sure it is still on the " +
@@ -424,6 +428,7 @@ public class MainConfig extends HPConfig {
         mobDrops = new MobDrops();
         playerDrops = new PlayerDrops();
         sellingHeads = new SellingHeads();
+        craftingHeads = new CraftingHeads();
         masks = new Masks();
         autograbber = new Autograbber();
         challenges = new Challenges();
@@ -475,6 +480,10 @@ public class MainConfig extends HPConfig {
 
     public SellingHeads getSellingHeads() {
         return sellingHeads;
+    }
+
+    public CraftingHeads getCraftingHeads() {
+        return craftingHeads;
     }
 
     public MobDrops getMobDrops() {
@@ -579,6 +588,10 @@ public class MainConfig extends HPConfig {
         public final boolean STOP_PLACEMENT = getBoolean("stop-placement-of-sellable-heads");
         public final boolean USE_GUI = getBoolean("use-sellhead-gui");
         public final boolean CASE_INSENSITIVE = getBoolean("case-sensitive-names");
+    }
+
+    public class CraftingHeads {
+        public final long DEFAULT_CRAFTING_XP = getLong("default-crafting-xp");
     }
 
     public class Masks {
