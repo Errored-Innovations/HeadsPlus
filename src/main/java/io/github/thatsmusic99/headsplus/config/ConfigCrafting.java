@@ -44,10 +44,10 @@ public class ConfigCrafting extends FeatureConfig {
         boolean usingBaseItem = true;
         String baseItemMaterial = "SKELETON_SKULL";
 
-        ConfigSection baseItem = getConfigSection("base-item", true);
+        ConfigSection baseItem = getConfigSection("base-item");
         if (baseItem != null) {
-            usingBaseItem = baseItem.getBoolean("use-base-item", true, true);
-            baseItemMaterial = baseItem.getString("material", true);
+            usingBaseItem = baseItem.getBoolean("use-base-item", true);
+            baseItemMaterial = baseItem.getString("material");
         }
 
         for (String str : existingValues.keySet()) {
@@ -72,7 +72,7 @@ public class ConfigCrafting extends FeatureConfig {
                 }
 
                 if (!shaped && usingBaseItem) {
-                    List<String> ingredients = section.getList("ingredients", true);
+                    List<String> ingredients = section.getList("ingredients");
                     ingredients.add(baseItemMaterial);
                     set("recipes." + str + ".ingredients", ingredients);
                 } else {

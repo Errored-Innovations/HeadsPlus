@@ -43,10 +43,10 @@ public class ConfigMobs extends FeatureConfig {
             if (!(existingValues.get(key) instanceof ConfigSection)) continue;
             ConfigSection section = (ConfigSection) existingValues.get(key);
             if (section == null
-                    || !section.contains("interact-name", true)
-                    || !section.contains("name", true)
-                    || !(section.get("name", true) instanceof ConfigSection)) continue;
-            ConfigSection name = section.getConfigSection("name", true);
+                    || !section.contains("interact-name")
+                    || !section.contains("name")
+                    || !(section.get("name") instanceof ConfigSection)) continue;
+            ConfigSection name = section.getConfigSection("name");
             if (name == null) continue;
             for (String nameKey : name.getKeys(false)) {
                 if (!(name.get(nameKey) instanceof List)) continue;
@@ -101,17 +101,17 @@ public class ConfigMobs extends FeatureConfig {
     private void transferEntity(String entity) {
         String oldEntity = entity.replace("_", "").toLowerCase(Locale.ROOT);
         // Transfer masks
-        List<String> maskList = getList(oldEntity + ".mask-effects", new ArrayList<>(), true);
-        List<Integer> amplifierList = getList(oldEntity + ".mask-amplifiers", new ArrayList<>(), true);
+        List<String> maskList = getList(oldEntity + ".mask-effects", new ArrayList<>());
+        List<Integer> amplifierList = getList(oldEntity + ".mask-amplifiers", new ArrayList<>());
         for (int i = 0; i < maskList.size(); i++) {
             maskList.set(i, maskList.get(i) + (amplifierList.size() > i ? ":" + amplifierList.get(i) : ""));
         }
 
-        ConfigSection section = getConfigSection(oldEntity + ".name", true);
+        ConfigSection section = getConfigSection(oldEntity + ".name");
         if (section == null) return;
         for (String key : section.getKeys(false, true)) {
-            if (get(oldEntity + ".name." + key, true) instanceof ConfigSection) break;
-            List<String> heads = getList(oldEntity + ".name." + key, true);
+            if (get(oldEntity + ".name." + key) instanceof ConfigSection) break;
+            List<String> heads = getList(oldEntity + ".name." + key);
             for (String head : heads) {
                 if (maskList.size() > 0 && !head.equals("{mob-default}")) {
                     String newHead = head.substring(0, 2) + "M" + head.substring(2);
