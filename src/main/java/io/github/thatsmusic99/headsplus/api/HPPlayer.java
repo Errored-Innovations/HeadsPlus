@@ -98,6 +98,10 @@ public class HPPlayer {
         this.xp = xp;
 
         if (MainConfig.get().getMainFeatures().LEVELS) {
+            if (xp == 0) {
+                resetLevel();
+                return;
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -136,6 +140,12 @@ public class HPPlayer {
             }
         }
         PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
+    }
+
+    private void resetLevel() {
+        PlayerSQLManager.get().setLevel(this.uuid, LevelsManager.get().getLevel(0).getConfigName());
+        level = 0;
+        nextLevel = 1;
     }
 
     public boolean hasHeadFavourited(String s) {

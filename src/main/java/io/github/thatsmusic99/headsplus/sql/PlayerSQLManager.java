@@ -223,6 +223,19 @@ public class PlayerSQLManager extends SQLManager {
         }, true, "set level " + level + " for " + uuid.toString());
     }
 
+    public CompletableFuture<Void> setLevel(String username, String level) {
+        return createConnection(connection -> {
+            int actualLevel = LevelsManager.get().getLevels().indexOf(level);
+            PreparedStatement statement = connection.prepareStatement("UPDATE headsplus_players SET level = ? " +
+                    "WHERE username = ?");
+            statement.setInt(1, actualLevel);
+            statement.setString(2, username);
+
+            statement.executeUpdate();
+            return null;
+        }, true, "set level " + level + " for " + username);
+    }
+
     private CompletableFuture<Void> updateJoinTimestamp(UUID uuid, long timestamp) {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement("UPDATE headsplus_players SET last_joined =" +

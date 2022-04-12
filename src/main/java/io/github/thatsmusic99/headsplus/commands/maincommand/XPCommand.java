@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
+import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -99,7 +100,9 @@ public class XPCommand implements IHeadsPlusCommand {
                         return true;
                     }
                     PlayerSQLManager.get().setXP(args[1], 0);
+                    PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevel(0).getConfigName());
                     MessagesManager.get().sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
+                    return true;
                 } else {
                     MessagesManager.get().sendMessage("commands.errors.no-perm", sender);
                 }
