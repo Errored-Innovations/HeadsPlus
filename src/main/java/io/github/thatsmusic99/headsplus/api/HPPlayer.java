@@ -116,6 +116,7 @@ public class HPPlayer {
                         if (level.isrEnabled()) level.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
                     if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
+                    PlayerSQLManager.get().setLevel(uuid, LevelsManager.get().getLevel(level).getConfigName());
 
                     HPUtils.addBossBar(getPlayer());
                 }
@@ -139,7 +140,6 @@ public class HPPlayer {
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
         }
-        PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
 
     private void resetLevel() {
