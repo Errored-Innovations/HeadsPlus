@@ -100,7 +100,9 @@ public class XPCommand implements IHeadsPlusCommand {
                         return true;
                     }
                     PlayerSQLManager.get().setXP(args[1], 0);
-                    PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevel(0).getConfigName());
+                    if (MainConfig.get().getMainFeatures().LEVELS && LevelsManager.get().getLevel(0) != null) {
+                        PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevel(0).getConfigName());
+                    }
                     MessagesManager.get().sendMessage("commands.xp.reset-xp", sender, "{player}", args[1]);
                     return true;
                 } else {
