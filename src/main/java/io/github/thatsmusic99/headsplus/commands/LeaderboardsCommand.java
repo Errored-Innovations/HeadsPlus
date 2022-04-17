@@ -67,6 +67,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                 StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
             }
+            return true;
         }
 
         if (args.length == 3) {
@@ -79,6 +80,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                 StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
             }
+            return true;
         }
 
         String key = args[1].toUpperCase();
