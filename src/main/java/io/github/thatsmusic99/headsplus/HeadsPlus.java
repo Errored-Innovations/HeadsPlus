@@ -69,7 +69,11 @@ public class HeadsPlus extends JavaPlugin {
         if (wg == null || getServer().getPluginManager().getPlugin("WorldEdit") == null) return;
         if (!wg.getDescription().getVersion().startsWith("7")) return;
         canUseWG = true;
-        new FlagHandler();
+        try {
+            new FlagHandler();
+        } catch (IllegalStateException ex) {
+            HeadsPlus.get().getLogger().severe("Failed to register WorldGuard flags, are you reloading the server, you masochist??");
+        }
     }
 
     @Override

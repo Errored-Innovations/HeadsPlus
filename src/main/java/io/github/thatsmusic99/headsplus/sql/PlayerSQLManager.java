@@ -161,7 +161,14 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     public CompletableFuture<HPPlayer> loadPlayer(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> new HPPlayer(uuid), HeadsPlus.async);
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new HPPlayer(uuid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }, HeadsPlus.async);
     }
 
     public CompletableFuture<HPPlayer> loadPlayer(String name) {
@@ -312,7 +319,7 @@ public class PlayerSQLManager extends SQLManager {
 
             ResultSet set = statement.executeQuery();
             if (!set.next()) return Optional.empty();
-            return Optional.of(set.getString("locale"));
+            return Optional.ofNullable(set.getString("locale"));
         }, true, "get locale for " + uuid.toString());
     }
 

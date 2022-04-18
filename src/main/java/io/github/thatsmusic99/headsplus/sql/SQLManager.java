@@ -26,10 +26,15 @@ public abstract class SQLManager {
 
     public static void setupSQL() {
         createConnection(connection -> {
+            HeadsPlus.debug("Setting up PlayerSQLManager");
             new PlayerSQLManager(connection);
+            HeadsPlus.debug("Setting up ChallengeSQLManager");
             new ChallengeSQLManager(connection);
+            HeadsPlus.debug("Setting up FavouriteHeadsSQLManager");
             new FavouriteHeadsSQLManager(connection);
+            HeadsPlus.debug("Setting up PinnedChallengeManager");
             new PinnedChallengeManager(connection);
+            HeadsPlus.debug("Setting up StatisticsSQLManager");
             new StatisticsSQLManager(connection);
             return null;
         }, true, "setting up SQL Managers");
@@ -89,6 +94,9 @@ public abstract class SQLManager {
                 HeadsPlus.get().getLogger().warning("Failed to " + action + " - interrupted thread. Please try again " +
                         "or restart the server. " +
                         "If none of the above works, please consult the necessary support services (e.g. hosting).");
+            } catch (Exception ex) {
+                HeadsPlus.get().getLogger().severe("Failed to " + action + " - generic issue that needs fixing by the developer.");
+                ex.printStackTrace();
             }
             return null;
         };
