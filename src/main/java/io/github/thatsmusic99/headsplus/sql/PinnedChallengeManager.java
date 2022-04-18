@@ -57,9 +57,16 @@ public class PinnedChallengeManager extends SQLManager {
             // Parse the JSON
             JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader(file));
             for (Object obj : json.keySet()) {
-                String uuid = (String) obj;
-                JSONArray challenges = (JSONArray) json.get(uuid);
-                challenges.forEach(challenge -> addChallenge(UUID.fromString(uuid), (String) challenge));
+                String uuidStr = (String) obj;
+                JSONArray challenges = (JSONArray) json.get(uuidStr);
+                UUID uuid;
+                try {
+                    uuid = UUID.fromString(uuidStr);
+                } catch (IllegalArgumentException ex) {
+                    HeadsPlus.get().getLogger().severe("Failed to transfer pinned challenge data for " + uuidStr + " - invalid UUID");
+                    continue;
+                }
+                challenges.forEach(challenge -> addChallenge(uuid, (String) challenge));
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();

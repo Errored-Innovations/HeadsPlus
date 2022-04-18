@@ -58,9 +58,16 @@ public class FavouriteHeadsSQLManager extends SQLManager {
             // Parse the JSON
             JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader(file));
             for (Object obj : json.keySet()) {
-                String uuid = (String) obj;
-                JSONArray heads = (JSONArray) json.get(uuid);
-                heads.forEach(head -> addHead(UUID.fromString(uuid), (String) head));
+                String uuidStr = (String) obj;
+                JSONArray heads = (JSONArray) json.get(uuidStr);
+                UUID uuid;
+                try {
+                    uuid = UUID.fromString(uuidStr);
+                } catch (IllegalArgumentException ex) {
+                    HeadsPlus.get().getLogger().severe("Failed to transfer fav. head data for " + uuidStr + " - invalid UUID");
+                    continue;
+                }
+                heads.forEach(head -> addHead(uuid, (String) head));
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();

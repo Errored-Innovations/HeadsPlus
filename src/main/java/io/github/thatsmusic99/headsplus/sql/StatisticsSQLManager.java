@@ -64,7 +64,13 @@ public class StatisticsSQLManager extends SQLManager {
                 for (Object uuidObj : core.keySet()) {
                     if (uuidObj.equals("server-total")) continue;
                     JSONObject playerObj = (JSONObject) core.get(uuidObj);
-                    UUID uuid = UUID.fromString((String) uuidObj);
+                    UUID uuid;
+                    try {
+                        uuid = UUID.fromString((String) uuidObj);
+                    } catch (IllegalArgumentException ex) {
+                        HeadsPlus.get().getLogger().severe("Failed to transfer stats data for " + uuidObj + " - invalid UUID");
+                        continue;
+                    }
 
                     JSONObject huntingObj = (JSONObject) playerObj.get("hunting");
                     if (huntingObj != null) {

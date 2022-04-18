@@ -74,7 +74,14 @@ public class PlayerSQLManager extends SQLManager {
                 int levelIndex = LevelsManager.get().getLevels().indexOf(levelStr);
                 if (levelIndex == -1) levelIndex = 0;
 
-                UUID uuid = UUID.fromString((String) uuidObj);
+                UUID uuid;
+                try {
+                     uuid = UUID.fromString((String) uuidObj);
+                } catch (IllegalArgumentException ex) {
+                    HeadsPlus.get().getLogger().severe("Failed to transfer data for " + uuidObj + " - invalid UUID");
+                    continue;
+                }
+
                 OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
                 try {
                     statement.setString(1, uuid.toString());
