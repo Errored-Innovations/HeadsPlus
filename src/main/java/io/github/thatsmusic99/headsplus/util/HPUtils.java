@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
@@ -157,6 +158,22 @@ public class HPUtils {
     public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
         return CompletableFuture.supplyAsync(() -> Bukkit.getOfflinePlayer(name), HeadsPlus.async)
                 .thenApplyAsync(player -> player, HeadsPlus.sync);
+    }
+
+    public static <T> T getValue(CompletableFuture<T> task, String object) {
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": interrupted thread. Please try" +
+                    " again or restart the server. If none of the above works, please consult the necessary support" +
+                    " services (e.g. hosting)..");
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": execution failed, " +
+                    "an internal error occurred. Please send the console error to the developer.");
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static class PlaceholderInfo {
