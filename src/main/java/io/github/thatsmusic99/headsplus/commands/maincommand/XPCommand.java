@@ -65,7 +65,7 @@ public class XPCommand implements IHeadsPlusCommand {
                     MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
                             String.valueOf(updatedXp), "{amount}", args[3]);
 
-                    if (MainConfig.get().getMainFeatures().LEVELS) {
+                    if (MainConfig.get().getMainFeatures().LEVELS && LevelsManager.get().getLevels().size() > 0) {
                         PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevelFromXp(updatedXp).getConfigName());
                     }
                 }, HeadsPlus.async);
