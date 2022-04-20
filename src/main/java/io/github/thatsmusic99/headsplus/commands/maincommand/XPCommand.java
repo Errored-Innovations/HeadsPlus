@@ -98,7 +98,7 @@ public class XPCommand implements IHeadsPlusCommand {
                     }
                     PlayerSQLManager.get().setXP(args[1], xp - amount).thenAccept(ree -> MessagesManager.get().sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}", String.valueOf(xp - amount), "{amount}", args[3]));
                 });
-                break;
+                return true;
             case "reset":
                 if (sender.hasPermission("headsplus.maincommand.reset")) {
                     if (target != null) {
