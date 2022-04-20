@@ -29,7 +29,6 @@ import java.util.List;
 )
 public class XPCommand implements IHeadsPlusCommand {
 
-    private long updatedXp;
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
                              String[] args) {
@@ -60,7 +59,7 @@ public class XPCommand implements IHeadsPlusCommand {
                 }
 
                 PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood -> {
-                    updatedXp = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getXP(args[1], true), "XP"), (long) 0);
+                    long updatedXp = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getXP(args[1], true), "XP"), (long) 0);
 
                     MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
                             String.valueOf(updatedXp), "{amount}", args[3]);
