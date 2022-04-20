@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class HPPlayer {
 
@@ -35,10 +34,10 @@ public class HPPlayer {
     private final List<String> completeChallenges;
 
     public HPPlayer(UUID uuid) {
-        pinnedChallenges = HPUtils.ifNull(getValue(PinnedChallengeManager.get().getPinnedChallenges(uuid), "pinned challenges"), new ArrayList<>());
-        favouriteHeads = HPUtils.ifNull(getValue(FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid), "favourite heads"), new ArrayList<>());
-        completeChallenges = HPUtils.ifNull(getValue(ChallengeSQLManager.get().getCompleteChallenges(uuid), "complete challenges"), new ArrayList<>());
-        level = HPUtils.ifNull(getValue(PlayerSQLManager.get().getLevel(uuid, false), "level"), 0);
+        pinnedChallenges = HPUtils.ifNull(HPUtils.getValue(PinnedChallengeManager.get().getPinnedChallenges(uuid), "pinned challenges"), new ArrayList<>());
+        favouriteHeads = HPUtils.ifNull(HPUtils.getValue(FavouriteHeadsSQLManager.get().getFavouriteHeads(uuid), "favourite heads"), new ArrayList<>());
+        completeChallenges = HPUtils.ifNull(HPUtils.getValue(ChallengeSQLManager.get().getCompleteChallenges(uuid), "complete challenges"), new ArrayList<>());
+        level = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getLevel(uuid, false), "level"), 0);
         int max = LevelsManager.get().getLevels().size();
         if (level > -1 && level + 1 < max) {
             this.nextLevel = level + 1;
@@ -46,7 +45,7 @@ public class HPPlayer {
         PlayerSQLManager.get().getLocale(uuid).thenAccept(result ->
                 result.ifPresent(str ->
                         MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
-        xp = HPUtils.ifNull(getValue(PlayerSQLManager.get().getXP(uuid, true), "XP"), (long) 0);
+        xp = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getXP(uuid, true), "XP"), (long) 0);
         this.uuid = uuid;
         players.put(uuid, this);
     }
@@ -112,10 +111,11 @@ public class HPPlayer {
                         jumps++;
                         Level level = nextLevelLocal;
                         nextLevelLocal = LevelsManager.get().getNextLevel(nextLevelLocal.getConfigName());
-                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(jumps);
+                        if (MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS) initLevelUp(1);
                         if (level.isrEnabled()) level.getReward().rewardPlayer(null, (Player) getPlayer());
                     }
                     if (!MainConfig.get().getLevels().MULTIPLE_LEVEL_UPS && jumps > 0) initLevelUp(jumps);
+                    PlayerSQLManager.get().setLevel(uuid, LevelsManager.get().getLevel(level).getConfigName());
 
                     HPUtils.addBossBar(getPlayer());
                 }
@@ -139,7 +139,6 @@ public class HPPlayer {
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
         }
-        PlayerSQLManager.get().setLevel(this.uuid, nextLevel.getConfigName());
     }
 
     private void resetLevel() {
@@ -191,21 +190,5 @@ public class HPPlayer {
 
     public static void removePlayer(UUID uuid) {
         players.remove(uuid);
-    }
-
-    private <T> T getValue(CompletableFuture<T> task, String object) {
-        try {
-            return task.get();
-        } catch (InterruptedException e) {
-            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": interrupted thread. Please try" +
-                    " again or restart the server. If none of the above works, please consult the necessary support" +
-                    " services (e.g. hosting)..");
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            HeadsPlus.get().getLogger().severe("Failed to get data for " + object + ": execution failed, " +
-                    "an internal error occurred. Please send the console error to the developer.");
-            e.printStackTrace();
-        }
-        return null;
     }
 }
