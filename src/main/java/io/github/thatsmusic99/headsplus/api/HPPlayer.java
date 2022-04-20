@@ -97,6 +97,7 @@ public class HPPlayer {
             if (this.level > -1 && this.level + 1 < LevelsManager.get().getLevels().size()) {
                 this.nextLevel = this.level + 1;
             }
+            HPUtils.addBossBar(getPlayer());
         }
     }
 
