@@ -87,7 +87,7 @@ public class XPCommand implements IHeadsPlusCommand {
                         return false;
                     }
                     player.setXp(player.getXp() - amount);
-                    MessagesManager.get().sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}",
+                    MessagesManager.get().sendMessage("commands.xp.removed-xp", sender, "{player}", args[1], "{xp}",
                             String.valueOf(player.getXp() - amount), "{amount}", args[3]);
                     return true;
                 }
