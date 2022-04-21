@@ -96,7 +96,13 @@ public class XPCommand implements IHeadsPlusCommand {
                         MessagesManager.get().sendMessage("commands.xp.negative-xp", sender);
                         return;
                     }
-                    PlayerSQLManager.get().setXP(args[1], xp - amount).thenAccept(ree -> MessagesManager.get().sendMessage("commands.xp.remove-xp", sender, "{player}", args[1], "{xp}", String.valueOf(xp - amount), "{amount}", args[3]));
+                    long updatedXp = xp - amount;
+                    PlayerSQLManager.get().setXP(args[1], updatedXp).thenAccept(ree ->
+                        MessagesManager.get().sendMessage("commands.xp.removed-xp", sender, "{player}", args[1], "{xp}", String.valueOf(updatedXp), "{amount}", args[3]));
+
+                    if (MainConfig.get().getMainFeatures().LEVELS && LevelsManager.get().getLevels().size() > 0) {
+                        PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevelFromXp(updatedXp).getConfigName());
+                    }
                 });
                 return true;
             case "reset":
