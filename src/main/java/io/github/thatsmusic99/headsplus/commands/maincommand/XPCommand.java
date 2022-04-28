@@ -57,10 +57,18 @@ public class XPCommand implements IHeadsPlusCommand {
                             String.valueOf(player.getXp()), "{amount}", args[3]);
                     return true;
                 }
-                PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood ->
-                        MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
-                                String.valueOf(PlayerSQLManager.get().getXP(args[1], false)), "{amount}", args[3]),
-                        HeadsPlus.async);
+
+                PlayerSQLManager.get().addXP(args[1], amount).thenAcceptAsync(rood -> {
+                    long updatedXp = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getXP(args[1], true), "XP"), (long) 0);
+
+                    MessagesManager.get().sendMessage("commands.xp.added-xp", sender, "{player}", args[1], "{xp}",
+                            String.valueOf(updatedXp), "{amount}", args[3]);
+
+                    if (MainConfig.get().getMainFeatures().LEVELS && LevelsManager.get().getLevels().size() > 0) {
+                        PlayerSQLManager.get().setLevel(args[1], LevelsManager.get().getLevelFromXp(updatedXp).getConfigName());
+                    }
+                }, HeadsPlus.async);
+
                 return true;
             case "subtract":
                 if (!sender.hasPermission("headsplus.maincommand.xp.subtract")) {

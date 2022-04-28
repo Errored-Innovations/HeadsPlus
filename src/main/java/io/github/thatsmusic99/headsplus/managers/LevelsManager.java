@@ -48,6 +48,18 @@ public class LevelsManager {
         return getLevel(order);
     }
 
+    public Level getLevelFromXp(long xp) {
+        int index = 0;
+        for (String name : levelOrder) {
+            if (levels.get(name).getRequiredXP() <= xp) {
+                continue;
+            }
+            index = levelOrder.indexOf(name);
+            break;
+        }
+        return index > 0 ? getLevel(index - 1) : getLevel(0);
+    }
+
     public List<String> getLevels() {
         return levelOrder;
     }
