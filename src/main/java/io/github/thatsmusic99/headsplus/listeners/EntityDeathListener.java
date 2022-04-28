@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.listeners;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.EntityHeadDropEvent;
+import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
@@ -17,6 +18,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,6 +162,11 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             info.buildHead().thenAccept(head -> {
+                // Because I need to set up extra l o r e
+                ItemMeta meta = head.getItemMeta();
+                meta.setLore(ConfigMobs.get().getLore(id, conditions, info.getPrice(), killer == null ? null : killer.getName()));
+                head.setItemMeta(meta);
+
                 head.setAmount(amount);
                 PersistenceManager.get().setSellable(head, true);
                 PersistenceManager.get().setSellType(head, "mobs_" + id + ":" + conditions + ":" + info.getId());

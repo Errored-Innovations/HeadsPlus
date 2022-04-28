@@ -187,7 +187,7 @@ public class EntityDataManager {
 
                         headInfo.withXP(path).withChance(path).withPrice(path);
 
-                        headInfo.setLore(ConfigMobs.get().getLore(name, conditions, headInfo.price));
+                        //headInfo.setLore(ConfigMobs.get().getLore(name, conditions, headInfo.price));
 
                         heads.add(headInfo);
                         SellableHeadsManager.get().registerPrice("mobs_" + name + ":" + conditions + ":" + head,
