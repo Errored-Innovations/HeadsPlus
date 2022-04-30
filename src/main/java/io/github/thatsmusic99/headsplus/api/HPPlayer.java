@@ -88,7 +88,17 @@ public class HPPlayer {
     }
 
     public void removeXp(long xp) {
-        setXp(this.xp - xp);
+        this.xp -= xp;
+        PlayerSQLManager.get().setXP(uuid, this.xp);
+        if (MainConfig.get().getMainFeatures().LEVELS && LevelsManager.get().getLevels().size() > 0) {
+            Level level = LevelsManager.get().getLevelFromXp(this.xp);
+            PlayerSQLManager.get().setLevel(uuid, level.getConfigName());
+            this.level = LevelsManager.get().getLevels().indexOf(level.getConfigName());
+            if (this.level > -1 && this.level + 1 < LevelsManager.get().getLevels().size()) {
+                this.nextLevel = this.level + 1;
+            }
+            HPUtils.addBossBar(getPlayer());
+        }
     }
 
     public void setXp(long xp) {
