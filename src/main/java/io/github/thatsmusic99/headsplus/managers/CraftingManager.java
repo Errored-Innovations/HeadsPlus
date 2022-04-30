@@ -37,6 +37,10 @@ public class CraftingManager {
         return registeredKeys.contains(recipeKey);
     }
 
+    public HashSet<String> getRegisteredKeys() {
+        return registeredKeys;
+    }
+
     public void init() {
         if (!MainConfig.get().getMainFeatures().ENABLE_CRAFTING) return;
         ConfigCrafting crafting = ConfigCrafting.get();

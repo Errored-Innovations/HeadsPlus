@@ -3,8 +3,8 @@ package io.github.thatsmusic99.headsplus.commands;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigTextMenus;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.CraftingManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
 import io.github.thatsmusic99.headsplus.sql.StatisticsSQLManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.command.Command;
@@ -62,10 +62,14 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                 StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[1]))));
             } else {
-                String key = args[1].toUpperCase();
-                if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
-                StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key).thenAccept(list ->
-                        cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                String key = args[1];
+                if (args[0].equalsIgnoreCase("hunting")) {
+                    StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, "entity=" + key.toUpperCase()).thenAccept(list ->
+                            cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                } else if (args[0].equalsIgnoreCase("crafting")) {
+                    StatisticsSQLManager.get().getLeaderboardTotal(type, "headsplus:crafting_" + key).thenAccept(list ->
+                            cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                }
             }
             return true;
         }
@@ -111,7 +115,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
             if (args[0].equalsIgnoreCase("hunting")) {
                 StringUtil.copyPartialMatches(args[1], EntityDataManager.ableEntities, results);
             } else {
-                StringUtil.copyPartialMatches(args[1], SellableHeadsManager.get().getKeys(), results);
+                StringUtil.copyPartialMatches(args[1], CraftingManager.get().getRegisteredKeys(), results);
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("hunting")) {
