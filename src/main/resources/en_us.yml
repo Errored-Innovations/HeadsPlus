@@ -144,7 +144,7 @@ commands:
     added-xp: '{header} Added &c{amount} &7XP to &c{player}&7, they now have &c{xp}&7!'
     current-xp: '{header} &c{player}&7''s current XP: &c{xp}'
     negative-xp: '{header} I don''t think you want to do that... (to allow negative
-      XP, go into config.yml > plugin > perks > xp > allow-negative, however this
+      XP, go into config.yml > allow-negative-xp, however this
       has unpredictable results!)'
     removed-xp: '{header} Removed &c{amount} &7XP from &c{player}&7, they now have
       &c{xp}&7!'
