@@ -51,7 +51,9 @@ public class HeadInteractListener extends HeadsPlusListener<PlayerInteractEvent>
                 Skull skull = (Skull) block;
                 if (!sent.contains(player.getUniqueId())) {
                     sent.add(player.getUniqueId());
-                    player.sendMessage(ConfigInteractions.get().getMessageForHead(skull, player));
+                    String message = ConfigInteractions.get().getMessageForHead(skull, player);
+                    if (message.isEmpty()) return;
+                    player.sendMessage(message);
                 } else {
                     sent.remove(player.getUniqueId());
                 }

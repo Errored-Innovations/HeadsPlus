@@ -46,6 +46,8 @@ public class ConfigInteractions extends HPConfig {
             addDefault("defaults.vowel-message", "{msg_event.head-mhf-interact-message-2}");
             addDefault("defaults.commands", Lists.newArrayList());
 
+            addDefault("ignored-names", Lists.newArrayList());
+
             makeSectionLenient("special.names");
             makeSectionLenient("special.textures");
             makeSectionLenient("special.locations");
@@ -120,6 +122,8 @@ public class ConfigInteractions extends HPConfig {
             profileField.setAccessible(true);
             GameProfile profile = (GameProfile) profileField.get(skull);
             if (profile == null) return "";
+            // Make sure the name isn't blacklisted
+            if (getList("ignored-names", new ArrayList<>()).contains(profile.getName())) return "";
             // Check to see if the config contains the head's name.
             if (contains("special.names." + profile.getName())) {
                 runCommands("special.names." + profile.getName(), receiver);
