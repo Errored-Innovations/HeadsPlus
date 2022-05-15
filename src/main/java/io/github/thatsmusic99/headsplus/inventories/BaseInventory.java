@@ -180,7 +180,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         if (event.getInventory().getHolder() != this) return;
         int slot = event.getRawSlot();
         Player player = (Player) event.getWhoClicked();
-        if (slot > -1 && slot < event.getInventory().getSize()) {
+        if (slot > -1) {
             event.setCancelled(true);
             for (int i = 0; i < 46; i++) {
                 ItemStack item = player.getInventory().getItem(i);
@@ -188,6 +188,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     player.getInventory().setItem(i, new ItemStack(Material.AIR));
                 }
             }
+            if (slot > inventory.getSize()) return;
             IconClickEvent iconEvent = new IconClickEvent(player, icons[slot]);
             Bukkit.getPluginManager().callEvent(iconEvent);
             if (!iconEvent.isCancelled()) {
