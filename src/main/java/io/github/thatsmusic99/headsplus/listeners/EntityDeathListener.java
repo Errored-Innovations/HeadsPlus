@@ -164,7 +164,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
             info.buildHead().thenAccept(head -> {
                 // Because I need to set up extra l o r e
                 ItemMeta meta = head.getItemMeta();
-                meta.setLore(ConfigMobs.get().getLore(id, conditions, info.getPrice(), killer == null ? null : killer.getName()));
+                meta.setLore(ConfigMobs.get().getLore(id, conditions, info.getId(), info.getPrice(), killer == null ? null : killer.getName()));
                 head.setItemMeta(meta);
 
                 head.setAmount(amount);

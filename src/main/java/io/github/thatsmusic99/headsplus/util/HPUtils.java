@@ -151,8 +151,9 @@ public class HPUtils {
         for (PlaceholderInfo placeholder : placeholders) {
             if (!placeholder.requirement) continue;
             if (!message.contains(placeholder.placeholder)) continue;
-            lore.add(message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get())));
+            message = message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get()));
         }
+        lore.add(message);
     }
 
     public static CompletableFuture<OfflinePlayer> getOfflinePlayer(String name) {
