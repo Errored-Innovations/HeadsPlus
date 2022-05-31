@@ -308,7 +308,7 @@ public class ConfigMobs extends FeatureConfig {
     @Nullable
     public List<String> getLore(String type, String conditions, String name, double price, String killerName) {
         List<String> lore = new ArrayList<>();
-        List<String> configLore = getList(type + "." + conditions + ".lore", getList("defaults.lore", null));
+        List<String> configLore = getList(type + "." + conditions + "." + name + ".lore", getList("defaults.lore", null));
         if (configLore == null) return null;
         for (String l : configLore) {
             HPUtils.parseLorePlaceholders(lore, ChatColor.translateAlternateColorCodes('&', l),
