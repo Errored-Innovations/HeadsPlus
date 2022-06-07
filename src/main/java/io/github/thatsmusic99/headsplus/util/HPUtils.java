@@ -148,11 +148,15 @@ public class HPUtils {
     }
 
     public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {
+        boolean contains = false;
         for (PlaceholderInfo placeholder : placeholders) {
-            if (!placeholder.requirement) continue;
             if (!message.contains(placeholder.placeholder)) continue;
+            contains = true;
+            if (!placeholder.requirement) continue;
+            contains = false;
             message = message.replace(placeholder.placeholder, String.valueOf(placeholder.replacement.get()));
         }
+        if (contains) return;
         lore.add(message);
     }
 
