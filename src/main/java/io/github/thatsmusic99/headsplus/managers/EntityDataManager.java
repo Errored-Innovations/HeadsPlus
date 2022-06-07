@@ -136,6 +136,10 @@ public class EntityDataManager {
                 builder.append(entity.isOnGround() ? "COLD" : "");
                 break;
             }
+            case "FROG": {
+                builder.append(((Frog) entity).getVariant().name());
+                break;
+            }
 
         }
         if (builder.length() > 0) {

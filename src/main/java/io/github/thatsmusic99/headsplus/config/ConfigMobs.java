@@ -168,6 +168,11 @@ public class ConfigMobs extends FeatureConfig {
                     addDefaultHead(key + ".RED", "HP#fox_mc");
                     addDefaultHead(key + ".SNOW", "HP#snow_fox");
                     break;
+                case "FROG":
+                    addDefaultHead(key + ".TEMPERATE", "HP#temperate_frog");
+                    addDefaultHead(key + ".COLD", "HP#cold_frog");
+                    addDefaultHead(key + ".WARM", "HP#warm_frog");
+                    break;
                 case "HORSE":
                     addDefaultHead(key + ".default", "HP#brown_horse");
                     for (Horse.Color variant : Horse.Color.values()) {

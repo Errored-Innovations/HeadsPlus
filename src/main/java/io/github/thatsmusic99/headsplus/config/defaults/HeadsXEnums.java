@@ -493,7 +493,12 @@ public enum HeadsXEnums {
     CYAN_AXOLOTL("&bCyan Axolotl", "e1c2d0c3b96ad45b466388e028b247aafe36b26b12c411ecb72e9b50ea21e52c", "animals", 3.5),
     BLUE_AXOLOTL("&3Blue Axolotl", "eef630657e4a279b0b7ea0f67905920af365f9c84ca9f34a32b53343ff629910", "animals", 3.5),
     GLOW_SQUID("&3Glow Squid", "3e94a1bb1cb00aaa153a74daf4b0eea20b8974522fe9901eb55aef478ebeff0d", "animals", 3.5),
-    GOAT("&fGoat", "a662336d8ae092407e58f7cc80d20f20e7650357a454ce16e3307619a0110648", "animals", 3.5);
+    GOAT("&fGoat", "a662336d8ae092407e58f7cc80d20f20e7650357a454ce16e3307619a0110648", "animals", 3.5),
+    WARDEN("&9Warden", "6cf3674b2ddc0ef7c39e3b9c6b58677de5cf377d2eb073f2f3fe50919b1ca4c9", "mobs", 3.6),
+    WARM_FROG("&fWarm Frog", "1e9312b5b2bab9ad51ea4b6a407d6d390bb5043408757b976a7556898ac43de0", "animals", 3.6),
+    TEMPERATE_FROG("&6Temperate Frog", "1f3e29dd947a177895f6121d2331b65ac3f896fda4bdd1151491e40b804952a7", "animals", 3.6),
+    COLD_FROG("&aCold Frog", "27bcccc125a4110434a85c40ada039d050f14ef7db34a3444067310f8ce69606", "animals", 3.6),
+    ALLAY("&bAllay", "e1c59dccde4b8535500dcf6794ca450663f607290e2510f6d8eb1e5eb71da5af", "mobs", 3.6);
 
     public final String name;
     public final String displayName;
