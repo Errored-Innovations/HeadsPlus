@@ -188,7 +188,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                     player.getInventory().setItem(i, new ItemStack(Material.AIR));
                 }
             }
-            if (slot > inventory.getSize()) return;
+            if (slot > inventory.getSize() -1) return;
             IconClickEvent iconEvent = new IconClickEvent(player, icons[slot]);
             Bukkit.getPluginManager().callEvent(iconEvent);
             if (!iconEvent.isCancelled()) {
