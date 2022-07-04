@@ -144,7 +144,7 @@ public class HPPlayer {
         if (MainConfig.get().getLevels().BROADCAST_LEVEL_UP) {
             final String name = player.isOnline() ? player.getPlayer().getDisplayName() : player.getName();
             for (Player p : Bukkit.getOnlinePlayers()) {
-                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", name, "{name}", name,
+                MessagesManager.get().sendMessage("commands.levels.level-up", p, "{player}", player.getName(), "{name}", name,
                         "{level}",
                         ChatColor.translateAlternateColorCodes('&', nextLevel.getDisplayName()));
             }
