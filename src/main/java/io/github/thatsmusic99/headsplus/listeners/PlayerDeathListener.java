@@ -5,10 +5,7 @@ import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
-import io.github.thatsmusic99.headsplus.managers.HeadManager;
-import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
+import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
@@ -65,9 +62,15 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         if (randomChance > fixedChance) return;
         int amount = addData("amount", HPUtils.getAmount(fixedChance));
         double lostprice = 0.0;
-        double price = ConfigMobs.get().getPlayerPrice(victim.getName());
+        // The unique selling ID of the player
+        final String SELL_ID = "mobs_PLAYER;" + victim.getName();
+        // The worth of the head
+        double price = SellableHeadsManager.get().isRegistered(SELL_ID) ? SellableHeadsManager.get().getPrice(SELL_ID)
+                : MainConfig.get().getPlayerDrops().DEFAULT_PRICE;
+        // Is this price unique? Does it require a sell price?
+        boolean unique = MainConfig.get().getPlayerDrops().ADJUST_PRICE_ACCORDING_TO_PRICE;
         Economy economy = HeadsPlus.get().getEconomy();
-        if (MainConfig.get().getPlayerDrops().ADJUST_PRICE_ACCORDING_TO_PRICE) {
+        if (unique) {
             double playerPrice;
             if (!MainConfig.get().getPlayerDrops().USE_VICTIM_BALANCE
                     && killer != null
@@ -104,8 +107,13 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         headInfo.buildHead().thenAccept(item -> {
             item.setAmount(amount);
             PersistenceManager.get().setSellable(item, true);
-            PersistenceManager.get().setSellType(item, "mobs_PLAYER");
-            PersistenceManager.get().setSellPrice(item, finalPrice);
+            if (unique) {
+                PersistenceManager.get().setSellType(item, "mobs_PLAYER");
+                PersistenceManager.get().setSellPrice(item, finalPrice);
+            } else {
+                PersistenceManager.get().setSellType(item, SELL_ID);
+            }
+
             location.getWorld().dropItem(location, item);
         });
     }

@@ -42,6 +42,7 @@ public class SellableHeadsManager {
     }
 
     public double getPrice(String key) {
+        if (!isRegistered(key) && key.startsWith("mobs_PLAYER")) key = "mobs_PLAYER";
         return prices.get(getKey(key));
     }
 

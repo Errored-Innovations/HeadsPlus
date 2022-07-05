@@ -131,7 +131,7 @@ public class SellHead implements CommandExecutor, IHeadsPlusCommand, TabComplete
 
             if (PersistenceManager.get().hasSellPrice(item)) {
                 headPrice = PersistenceManager.get().getSellPrice(item);
-            } else if (SellableHeadsManager.get().isRegistered(id)) {
+            } else if (SellableHeadsManager.get().isRegistered(id) || id.startsWith("mobs_PLAYER")) {
                 headPrice = SellableHeadsManager.get().getPrice(id);
             } else {
                 continue;

@@ -301,10 +301,6 @@ public class ConfigMobs extends FeatureConfig {
         return getDouble("player." + name + ".chance", MainConfig.get().getPlayerDrops().DEFAULT_DROP_CHANCE);
     }
 
-    public double getPlayerPrice(String name) {
-        return getDouble("player." + name + ".price", MainConfig.get().getPlayerDrops().DEFAULT_PRICE);
-    }
-
     @Nullable
     public String getDisplayName(String path) {
         return getString(path + ".display-name", getString("defaults.display-name", null));
