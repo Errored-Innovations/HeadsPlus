@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -1246,7 +1247,9 @@ public class MessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
-        if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
+        if (PaperUtil.get().useAdventure()) {
+            PaperUtil.get().sendMessage(sender, str);
+        } else if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
             try {
                 new JSONParser().parse(str);
             } catch (ParseException e) {

@@ -4,8 +4,12 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -83,5 +87,10 @@ public class ActualPaperImpl implements PaperImpl {
             return property.getValue();
         }
         return player.getName();
+    }
+
+    @Override
+    public void sendMessage(CommandSender sender, String message) {
+        sender.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 }

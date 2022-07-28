@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.util.paper;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -15,4 +16,6 @@ public interface PaperImpl {
     void forceSetProfileTexture(SkullMeta meta, String texture);
 
     String getTexture(Player player);
+
+    void sendMessage(CommandSender sender, String message);
 }

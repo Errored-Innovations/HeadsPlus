@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.papermc.lib.PaperLib;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -16,6 +17,7 @@ public class PaperUtil implements PaperImpl {
 
     private final PaperImpl internalImpl;
     private static PaperUtil instance;
+    private boolean adventureEnabled;
 
     public PaperUtil() {
         instance = this;
@@ -29,6 +31,14 @@ public class PaperUtil implements PaperImpl {
             }
         } else {
             impl = null;
+        }
+
+        try {
+            Class.forName("net.kyori.adventure.text.Component");
+            Class.forName("net.kyori.adventure.text.minimessage.MiniMessage");
+            adventureEnabled = true;
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            HeadsPlus.get().getLogger().warning("Adventure support not possible, failed to find class " + e.getMessage());
         }
         internalImpl = impl;
     }
@@ -84,5 +94,15 @@ public class PaperUtil implements PaperImpl {
 
     public static PaperUtil get() {
         return instance;
+    }
+
+    public boolean useAdventure() {
+        return adventureEnabled;
+    }
+
+    @Override
+    public void sendMessage(CommandSender sender, String message) {
+        if (!adventureEnabled) return;
+        internalImpl.sendMessage(sender, message);
     }
 }
