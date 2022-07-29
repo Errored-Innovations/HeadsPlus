@@ -164,8 +164,8 @@ public class HeadManager {
         public CompletableFuture<ItemStack> buildHead() {
             ItemStack head = new ItemStack(material);
             ItemMeta meta = head.getItemMeta();
-            meta.setDisplayName(displayName);
-            meta.setLore(lore);
+            PaperUtil.get().setDisplayName(meta, displayName);
+            PaperUtil.get().setLore(meta, lore);
             if (material != Material.PLAYER_HEAD) {
                 head.setItemMeta(meta);
                 return CompletableFuture.completedFuture(head);
@@ -192,8 +192,8 @@ public class HeadManager {
         public ItemStack forceBuildHead() {
             ItemStack head = new ItemStack(material);
             ItemMeta meta = head.getItemMeta();
-            meta.setDisplayName(displayName);
-            meta.setLore(lore);
+            PaperUtil.get().setDisplayName(meta, displayName);
+            PaperUtil.get().setLore(meta, lore);
             if (material != Material.PLAYER_HEAD) {
                 head.setItemMeta(meta);
                 return head;

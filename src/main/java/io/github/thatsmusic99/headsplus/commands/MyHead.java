@@ -54,7 +54,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
     private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ConfigMobs.get().getPlayerDisplayName(n)));
+            PaperUtil.get().setDisplayName(meta, ChatColor.translateAlternateColorCodes('&', ConfigMobs.get().getPlayerDisplayName(n)));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
         });

@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.ChallengeSection;
 import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -90,7 +91,7 @@ public class ChallengeManager {
             if (displayName != null) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+                    PaperUtil.get().setDisplayName(meta, ChatColor.translateAlternateColorCodes('&', displayName));
                     item.setItemMeta(meta);
                 }
             }
@@ -98,7 +99,7 @@ public class ChallengeManager {
             if (!lore.isEmpty()) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null) {
-                    meta.setLore(lore);
+                    PaperUtil.get().setLore(meta, lore);
                     item.setItemMeta(meta);
                 }
             }

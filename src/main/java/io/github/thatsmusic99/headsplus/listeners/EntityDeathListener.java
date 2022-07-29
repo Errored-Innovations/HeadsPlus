@@ -11,6 +11,7 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -164,7 +165,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
             info.buildHead().thenAccept(head -> {
                 // Because I need to set up extra l o r e
                 ItemMeta meta = head.getItemMeta();
-                meta.setLore(ConfigMobs.get().getLore(id, conditions, info.getId(), info.getPrice(), killer == null ? null : killer.getName()));
+                PaperUtil.get().setLore(meta, ConfigMobs.get().getLore(id, conditions, info.getId(), info.getPrice(), killer == null ? null : killer.getName()));
                 head.setItemMeta(meta);
 
                 head.setAmount(amount);

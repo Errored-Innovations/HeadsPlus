@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
@@ -140,9 +141,9 @@ public class PersistenceManager {
         PersistentDataContainer toContainer = meta.getPersistentDataContainer();
         PersistentDataContainer headsPlusStorage = fromContainer.get(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER);
         if (headsPlusStorage != null) toContainer.set(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER, headsPlusStorage);
-        meta.setDisplayName(fromContainer.get(HEADSPLUS_DISPLAYNAME, PersistentDataType.STRING));
+        PaperUtil.get().setDisplayName(meta, fromContainer.get(HEADSPLUS_DISPLAYNAME, PersistentDataType.STRING));
         String rawLore = fromContainer.get(HEADSPLUS_LORE, PersistentDataType.STRING);
-        if (rawLore != null && !rawLore.isEmpty()) meta.setLore(Arrays.asList(rawLore.split("\n")));
+        if (rawLore != null && !rawLore.isEmpty()) PaperUtil.get().setLore(meta, Arrays.asList(rawLore.split("\n")));
         stack.setItemMeta(meta);
     }
 }

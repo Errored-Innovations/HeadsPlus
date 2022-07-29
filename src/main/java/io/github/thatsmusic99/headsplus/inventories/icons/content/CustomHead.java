@@ -11,6 +11,7 @@ import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -81,7 +82,7 @@ public class CustomHead extends Content {
                 List<String> lore = meta.getLore();
                 if (lore == null) lore = new ArrayList<>();
                 lore.removeAll(paymentLore);
-                meta.setLore(lore);
+                PaperUtil.get().setLore(meta, lore);
                 item.setItemMeta(meta);
                 PersistenceManager.get().removeIcon(item);
                 player.getInventory().addItem(item);
@@ -125,7 +126,7 @@ public class CustomHead extends Content {
             paymentLore.add(lore.get(lore.size() - 1));
         }
         ItemMeta im = item.getItemMeta();
-        im.setLore(lore);
+        PaperUtil.get().setLore(im, lore);
         item.setItemMeta(im);
     }
 

@@ -7,8 +7,10 @@ import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.papermc.lib.PaperLib;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -104,5 +106,23 @@ public class PaperUtil implements PaperImpl {
     public void sendMessage(CommandSender sender, String message) {
         if (!adventureEnabled) return;
         internalImpl.sendMessage(sender, message);
+    }
+
+    @Override
+    public void setDisplayName(ItemMeta meta, String name) {
+        if (internalImpl == null || !adventureEnabled) {
+            meta.setDisplayName(name);
+            return;
+        }
+        internalImpl.setDisplayName(meta, name);
+    }
+
+    @Override
+    public void setLore(ItemMeta meta, List<String> lore) {
+        if (internalImpl == null || !adventureEnabled) {
+            meta.setLore(lore);
+            return;
+        }
+        internalImpl.setLore(meta, lore);
     }
 }

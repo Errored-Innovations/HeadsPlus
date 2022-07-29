@@ -1109,10 +1109,6 @@ public class MessagesManager {
     public String getString(String path) {
         String str = config.getString(path);
         if (str == null) return "";
-        str = str.replaceAll("\\{header}", config.getString("prefix"));
-        str = str.replaceAll("''", "'");
-        str = str.replaceAll("^'", "");
-        str = str.replaceAll("'$", "");
         formatMsg(str, null);
 
         str = ChatColor.translateAlternateColorCodes('&', str);

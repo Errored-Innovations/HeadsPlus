@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -49,7 +50,7 @@ public class ChallengeSection extends Content {
     @Override
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges" +
+        PaperUtil.get().setDisplayName(meta, MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons.challenges" +
                         "-section.display-name")
                 .replaceAll("\\{section-name}", section.getDisplayName()), player));
         List<String> lore = new ArrayList<>();
@@ -63,7 +64,7 @@ public class ChallengeSection extends Content {
                         "}|\\{challenges})", String.valueOf(section.getChallenges().size())));
             }
         }
-        meta.setLore(lore);
+        PaperUtil.get().setLore(meta, lore);
         item.setItemMeta(meta);
     }
 

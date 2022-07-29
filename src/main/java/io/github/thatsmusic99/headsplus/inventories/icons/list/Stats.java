@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.Icon;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,7 +43,7 @@ public class Stats extends Icon {
         ConfigHeadsSelector hpch = ConfigHeadsSelector.get();
         InventoryManager manager = InventoryManager.getManager(player);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
+        PaperUtil.get().setDisplayName(meta, MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
                 ".display-name"), player));
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
@@ -56,7 +57,7 @@ public class Stats extends Icon {
                     new HPUtils.PlaceholderInfo("{section}", manager.getSection(), manager.getSection() != null),
                     new HPUtils.PlaceholderInfo("{pages}", totalPages, true));
         }
-        meta.setLore(lore);
+        PaperUtil.get().setLore(meta, lore);
         item.setItemMeta(meta);
     }
 

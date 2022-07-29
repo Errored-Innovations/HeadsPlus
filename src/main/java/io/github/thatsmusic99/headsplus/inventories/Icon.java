@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigInventories;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
+import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -67,13 +68,13 @@ public abstract class Icon {
     public void initNameAndLore(String id, Player player) {
         ItemMeta meta = item.getItemMeta();
         try {
-            meta.setDisplayName(MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
+            PaperUtil.get().setDisplayName(meta, MessagesManager.get().formatMsg(ConfigInventories.get().getString("icons." + id +
                     ".display-name"), player));
             List<String> lore = new ArrayList<>();
             for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
                 lore.add(MessagesManager.get().formatMsg(loreStr, player));
             }
-            meta.setLore(lore);
+            PaperUtil.get().setLore(meta, lore);
         } catch (NullPointerException ex) {
             HeadsPlus.get().getLogger().warning("There was a problem setting the display name or lore for icon " + id + "! (Error code: 9)");
         }
