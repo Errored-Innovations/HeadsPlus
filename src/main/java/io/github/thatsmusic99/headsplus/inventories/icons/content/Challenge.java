@@ -81,7 +81,7 @@ public class Challenge extends Content {
                     lore.add(MessagesManager.get().formatMsg(loreStr2, player));
                 }
             } else {
-                HPUtils.parseLorePlaceholders(lore, loreStr,
+                HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(loreStr, player),
                         new HPUtils.PlaceholderInfo("{completed}",
                                 MessagesManager.get().getString("commands.challenges.challenge-completed", player),
                                 challenge.isComplete(player)),
