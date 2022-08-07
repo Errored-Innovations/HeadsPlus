@@ -13,11 +13,20 @@
         <hp-project.version>7.0.8+DEV_${env.BUILD_NUMBER}</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
+        <dir>${project.build.directory}</dir>
     </properties>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <outputDirectory>${dir}</outputDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
