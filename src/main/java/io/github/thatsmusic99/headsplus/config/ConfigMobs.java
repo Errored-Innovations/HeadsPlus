@@ -335,8 +335,13 @@ public class ConfigMobs extends FeatureConfig {
     }
 
     private void addDefaultHead(String path, String head) {
-        makeSectionLenient(path);
-        createExampleSection(path + "." + head);
+        if (!contains(path)) {
+            makeSectionLenient(path);
+            createConfigSection(path + "." + head);
+        } else {
+            makeSectionLenient(path);
+            createExampleSection(path + "." + head);
+        }
     }
 
     @Override
