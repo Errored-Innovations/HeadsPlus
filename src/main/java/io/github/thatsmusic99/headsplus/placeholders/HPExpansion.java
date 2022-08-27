@@ -86,7 +86,7 @@ public class HPExpansion extends PlaceholderExpansion {
             StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
             if (category == null) return "-1";
             // Get the extra metadata
-            String[] metadata = matcher.group(2).split(",");
+            String[] metadata = (matcher.group(2) == null ? "" : matcher.group(2)).split(",");
             List<String> actualMetadata = new ArrayList<>();
             String head = null;
             for (String str : metadata) {
