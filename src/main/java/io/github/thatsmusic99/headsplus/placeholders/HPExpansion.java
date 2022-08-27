@@ -80,11 +80,12 @@ public class HPExpansion extends PlaceholderExpansion {
             // %headsplus_top_HUNTING_HP#iron_golem_0_player%
             // %headsplus_top_HUNTING_HP#iron_golem,entity=IRON_GOLEM_0_player%
             Matcher matcher = TOP_PLACEHOLDER_PATTERN.matcher(identifier);
-            if (!matcher.matches()) return "-1";
+            HeadsPlus.get().getLogger().info(matcher.matches() + ", " + identifier + ", " + TOP_PLACEHOLDER_PATTERN.pattern());
+            if (!matcher.matches()) return "N/A";
             // Get the category
             String categoryStr = matcher.group(1);
             StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
-            if (category == null) return "-1";
+            if (category == null) return "N/A";
             // Get the extra metadata
             String[] metadata = (matcher.group(2) == null ? "" : matcher.group(2)).split(",");
             List<String> actualMetadata = new ArrayList<>();
@@ -114,7 +115,7 @@ public class HPExpansion extends PlaceholderExpansion {
                 }
             }
 
-            if (position >= entries.size()) return "-1";
+            if (position >= entries.size()) return "N/A";
             StatisticsSQLManager.LeaderboardEntry entry = entries.get(position);
             switch (matcher.group(4)) {
                 case "player":
