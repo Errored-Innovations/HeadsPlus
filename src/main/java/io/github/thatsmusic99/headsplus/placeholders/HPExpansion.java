@@ -20,9 +20,8 @@ public class HPExpansion extends PlaceholderExpansion {
 
     private final HeadsPlus hp;
     // regex hell 2.0
-    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_" +
-            "(player|score)\b");
-    private final Pattern STATISTIC_PATTERN = Pattern.compile("\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?_+");
+    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_(player|score)\\b");
+    private final Pattern STATISTIC_PATTERN = Pattern.compile("\\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?_+");
 
     public HPExpansion(HeadsPlus headsPlus) {
         hp = headsPlus;
