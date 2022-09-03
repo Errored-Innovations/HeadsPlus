@@ -21,6 +21,7 @@ public class DebugManager {
                     }
                 }
                 CommandSender listener = getSender(uuid);
+                if (listener == null) continue;
                 listener.sendMessage(ChatColor.GRAY + "━━━━━━━━━━━━" + ChatColor.DARK_GRAY + " ❰ " + ChatColor.RED +
                         "HEADSPLUS OUTPUT" + ChatColor.DARK_GRAY + " ❱ " + ChatColor.GRAY + "━━━━━━━━━━━━");
                 listener.sendMessage(ChatColor.RED + "Event " + ChatColor.DARK_GRAY + "» " + ChatColor.GRAY + name);
