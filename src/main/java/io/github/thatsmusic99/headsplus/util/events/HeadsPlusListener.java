@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus.util.events;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.event.Listener;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public abstract class HeadsPlusListener<T> implements Listener {
 
     public <D> D addData(String variableName, D data) {
         this.data.put(variableName, String.valueOf(data));
+        HeadsPlus.debug("Added data " + data + " to " + variableName + " under " + getClass().getSimpleName());
         return data;
     }
 
