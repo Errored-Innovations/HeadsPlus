@@ -97,13 +97,17 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         PlayerHeadDropEvent phdEvent = new PlayerHeadDropEvent(victim, killer, headInfo, location, amount);
         Bukkit.getPluginManager().callEvent(phdEvent);
 
-        if (phdEvent.isCancelled()) return;
+        if (phdEvent.isCancelled()) {
+            HeadsPlus.debug("Player head drop event has been cancelled.");
+            return;
+        }
         if (lostprice > 0.0 && killer != null) {
             economy.withdrawPlayer(victim, lostprice);
             MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}",
                     MainConfig.get().fixBalanceStr(price));
         }
         double finalPrice = price;
+        HeadsPlus.debug("Creating player head of " + victim.getName() + "...");
         headInfo.buildHead().thenAccept(item -> {
             item.setAmount(amount);
             PersistenceManager.get().setSellable(item, true);
@@ -115,6 +119,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             }
 
             location.getWorld().dropItem(location, item);
+            HeadsPlus.debug("Dropped " + victim.getName() + " head at " + location.getBlockX() + " " + location.getY() + " " + location.getBlockZ());
         });
     }
 
