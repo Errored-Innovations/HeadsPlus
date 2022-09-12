@@ -163,7 +163,7 @@
         </repository>
         <repository>
             <id>essx-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+            <url>https://repo.essentialsx.net/releases/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -185,10 +185,6 @@
         <repository>
             <id>mojang-authlib</id>
             <url>https://libraries.minecraft.net/</url>
-        </repository>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
     </repositories>
 </project>
