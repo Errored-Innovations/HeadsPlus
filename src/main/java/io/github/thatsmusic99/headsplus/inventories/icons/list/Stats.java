@@ -63,7 +63,7 @@ public class Stats extends Icon {
     private double getBalance(Player player) {
         try {
             return HeadsPlus.get().getEconomy().getBalance(player);
-        } catch (NoClassDefFoundError ex) {
+        } catch (NoClassDefFoundError | NullPointerException ex) {
             return 0.0;
         }
     }
