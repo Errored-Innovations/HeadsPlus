@@ -46,9 +46,11 @@ public class ReloadCommand implements IHeadsPlusCommand {
                             }
                         }
                         cs.reload();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception ex) {
+                        HeadsPlus.get().getLogger().severe("Failed to reload " + cs.getClass().getSimpleName());
+                        ex.printStackTrace();
                     }
+
                 }
                 EntityDataManager.init();
                 CraftingManager.get().reload();
