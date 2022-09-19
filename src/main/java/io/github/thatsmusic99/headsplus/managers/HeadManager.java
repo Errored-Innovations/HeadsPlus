@@ -63,7 +63,11 @@ public class HeadManager {
         if (key.startsWith("HP#")) {
             key = key.substring(3);
         }
-        return heads.getOrDefault(key, new HeadInfo()).clone();
+        return heads.computeIfAbsent(key, (originalKey) -> {
+            if (originalKey.equals("{mob-default}")) return new HeadInfo();
+            HeadsPlus.get().getLogger().warning("Head with ID " + originalKey + " not found.");
+            return new HeadInfo();
+        }).clone();
     }
 
     public Set<String> getKeys() {
