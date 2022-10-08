@@ -577,7 +577,7 @@ public class MainConfig extends HPConfig {
         public final List<String> IGNORED_PLAYERS = getStringList("ignored-players");
         public final boolean ENABLE_PLAYER_DEATH_MESSAGES = getBoolean("enable-player-head-death-messages");
         public final boolean ADJUST_PRICE_ACCORDING_TO_PRICE = getBoolean("adjust-price-according-to-balance");
-        public final boolean USE_VICTIM_BALANCE = getBoolean("use-victim-balance");
+        public final boolean USE_KILLER_BALANCE = getBoolean("use-killer-balance");
         public final double PERCENTAGE_TAKEN_OFF_VICTIM = getDouble("percentage-taken-off-victim");
         public final double PERCENTAGE_OF_BALANCE_AS_PRICE = getDouble("percentage-of-balance-as-price");
         public final double DEFAULT_DROP_CHANCE = getDouble("default-player-drop-chance");

@@ -72,7 +72,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         Economy economy = HeadsPlus.get().getEconomy();
         if (unique) {
             double playerPrice;
-            if (!MainConfig.get().getPlayerDrops().USE_VICTIM_BALANCE
+            if (MainConfig.get().getPlayerDrops().USE_KILLER_BALANCE
                     && killer != null
                     && economy.getBalance(killer) > 0.0) {
                 playerPrice = economy.getBalance(killer);
