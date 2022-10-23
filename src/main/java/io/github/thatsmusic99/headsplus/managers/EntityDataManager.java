@@ -129,7 +129,7 @@ public class EntityDataManager {
                 break;
             }
             case "CREEPER": {
-                builder.append(((Creeper) entity).isPowered() ? "CHARGED" : "");
+                builder.append(((Creeper) entity).isPowered() ? "POWERED" : "");
                 break;
             }
             case "STRIDER": {
