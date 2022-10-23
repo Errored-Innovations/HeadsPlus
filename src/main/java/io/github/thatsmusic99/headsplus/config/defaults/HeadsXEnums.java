@@ -153,7 +153,7 @@ public enum HeadsXEnums {
     DOGE("&6Doge", "e8e6f7795df2eb8d7f4ff5d0aed529be81134d97bb51263e38cb694d6704da4", "animals", 0.0),
     LIZARD("&aLizard", "9da2813d4f5acd69ed590c1d8a442b595519dcbc0e17198adfaaaaf15f89b0", "animals", 0.0),
     ELEPHANT("&7Elephant", "771e82965d33213ef26f6b89722edee4346c354c08e34ecfcfd6ddd361a9e7e", "animals", 0.0),
-    RACOON("&7Racoon", "8a9a96a26b78c5b8374f580dfffc8199aa17671b4c532ddd545217bb25176ed", "animals", 0.0),
+    RACCOON("&7Raccoon", "8a9a96a26b78c5b8374f580dfffc8199aa17671b4c532ddd545217bb25176ed", "animals", 0.0),
     LLAMA("&6Llama", "818cd457fbaf327fa39f10b5b36166fd018264036865164c02d9e5ff53f45", "animals", 0.0),
     POLAR_BEAR("&fPolar Bear", "442123ac15effa1ba46462472871b88f1b09c1db467621376e2f71656d3fbc", "animals", 0.0),
     YOUTUBE("&cYouTube", "d2f6c07a326def984e72f772ed645449f5ec96c6ca256499b5d2b84a8dce", "logos", 0.5),
