@@ -94,24 +94,24 @@ public class CacheManager {
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type) {
-        return getEntries(type.name(), StatisticsSQLManager.get().getLeaderboardTotal(type));
+        return getEntries(type.name(), StatisticsSQLManager.get().getLeaderboardTotal(type, false));
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
                                                                   String head) {
-        return getEntries(type.name() + "_" + head, StatisticsSQLManager.get().getLeaderboardTotal(type, head));
+        return getEntries(type.name() + "_" + head, StatisticsSQLManager.get().getLeaderboardTotal(type, head, false));
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntriesMeta(StatisticsSQLManager.CollectionType type,
                                                                       String metadata) {
         return getEntries(type.name() + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotalMetadata(type,
-                metadata));
+                metadata, false));
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
                                                                   String head, String metadata) {
         return getEntries(type.name() + "_" + head + "_" + metadata,
-                StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata));
+                StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata, false));
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type) {

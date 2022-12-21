@@ -22,36 +22,37 @@ import java.util.List;
         commandname = "hplb",
         permission = "headsplus.leaderboards",
         maincommand = false,
-        usage = "/hplb [Hunting|Selling|Crafting|Page No.] [Mob|Page No.] [ID|Page No.] ",
+        usage = "/hplb [Hunting|Selling|Crafting|Unique|Page No.] [Unique|Mob|Page No.] [ID|Page No.] ",
         descriptionPath = "descriptions.hplb")
 public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s,
                              @NotNull String[] args) {
-        if (!MainConfig.get().getMainFeatures().LEADERBOARDS) {
-            return true;
-        }
-        if (!cs.hasPermission("headsplus.leaderboards")) {
-            return true;
-        }
+
+        // Ensure the command can be used
+        if (!MainConfig.get().getMainFeatures().LEADERBOARDS) return true;
+        if (!cs.hasPermission("headsplus.leaderboards")) return true;
+
+        // For /hplb
         if (args.length == 0) {
-            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
+            StatisticsSQLManager.get().getLeaderboardTotal(false).thenAccept(list ->
                     cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
             return true;
         }
+
         // Check category
         StatisticsSQLManager.CollectionType type = StatisticsSQLManager.CollectionType.getType(args[0].toUpperCase());
         int page = 1;
 
         if (type == null) {
-            StatisticsSQLManager.get().getLeaderboardTotal().thenAccept(list ->
+            StatisticsSQLManager.get().getLeaderboardTotal(args[0].equalsIgnoreCase("unique")).thenAccept(list ->
                     cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[0]))));
             return true;
         }
 
         if (args.length == 1) {
-            StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
+            StatisticsSQLManager.get().getLeaderboardTotal(type, false).thenAccept(list ->
                     cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs,
                             HeadsPlus.capitalize(type.name()), list, page)));
             return true;
@@ -59,17 +60,23 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
         if (args.length == 2) {
             if (args[1].matches("^[0-9]+$")) {
-                StatisticsSQLManager.get().getLeaderboardTotal(type).thenAccept(list ->
+                StatisticsSQLManager.get().getLeaderboardTotal(type, false).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[1]))));
             } else {
                 String key = args[1];
-                if (args[0].equalsIgnoreCase("hunting")) {
-                    StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, "entity=" + key.toUpperCase()).thenAccept(list ->
+                if (key.equalsIgnoreCase("unique")) {
+                    StatisticsSQLManager.get().getLeaderboardTotal(type, true).thenAccept(list ->
                             cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
-                } else if (args[0].equalsIgnoreCase("crafting")) {
-                    StatisticsSQLManager.get().getLeaderboardTotal(type, "headsplus:crafting_" + key).thenAccept(list ->
-                            cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                } else {
+                    if (args[0].equalsIgnoreCase("hunting")) {
+                        StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, "entity=" + key.toUpperCase(), false).thenAccept(list ->
+                                cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                    } else if (args[0].equalsIgnoreCase("crafting")) {
+                        StatisticsSQLManager.get().getLeaderboardTotal(type, "headsplus:crafting_" + key, false).thenAccept(list ->
+                                cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                    }
                 }
+
             }
             return true;
         }
@@ -78,10 +85,10 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
             String key = args[1].toUpperCase();
             if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
             if (args[2].matches("^[0-9]+$")) {
-                StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key).thenAccept(list ->
+                StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, key, false).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[2]))));
             } else {
-                StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key).thenAccept(list ->
+                StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key, false).thenAccept(list ->
                         cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
             }
             return true;
@@ -89,7 +96,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
 
         String key = args[1].toUpperCase();
         if (args[0].equalsIgnoreCase("hunting")) key = "entity=" + key;
-        StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key).thenAccept(list ->
+        StatisticsSQLManager.get().getLeaderboardTotal(type, args[2], key, false).thenAccept(list ->
                 cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[3]))));
 
         return true;
@@ -110,13 +117,16 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                                       @NotNull String[] args) {
         List<String> results = new ArrayList<>();
         if (args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting"), results);
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("hunting", "crafting", "unique"), results);
         } else if (args.length == 2) {
+            List<String> options = new ArrayList<>();
+            options.add("unique");
             if (args[0].equalsIgnoreCase("hunting")) {
-                StringUtil.copyPartialMatches(args[1], EntityDataManager.ableEntities, results);
+                options.addAll(EntityDataManager.ableEntities);
             } else {
-                StringUtil.copyPartialMatches(args[1], CraftingManager.get().getRegisteredKeys(), results);
+                options.addAll(CraftingManager.get().getRegisteredKeys());
             }
+            StringUtil.copyPartialMatches(args[1], options, results);
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("hunting")) {
                 List<EntityDataManager.DroppedHeadInfo> list = EntityDataManager.getStoredHeads().get(args[1].toUpperCase() + ";default");
