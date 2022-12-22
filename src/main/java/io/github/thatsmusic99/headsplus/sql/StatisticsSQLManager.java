@@ -183,86 +183,66 @@ public class StatisticsSQLManager extends SQLManager {
         }, async, "get stat " + type.name() + " with metadata " + metadata + " for head " + head + " and user " + uuid);
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal() {
-        return createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
-                            "WHERE headsplus_stats.user_id = headsplus_players.id " +
-                            "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
-
-            ResultSet set = statement.executeQuery();
-            List<LeaderboardEntry> leaderboard = new ArrayList<>();
-            while (set.next()) {
-                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-            }
-            return leaderboard;
-        }, true, "get leaderboard total");
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(boolean unique) {
+        
+        return getLeaderboard("get leaderboard total", connection -> connection.prepareStatement(
+                "SELECT " + (unique ? "COUNT" : "SUM") + "(count) as total, username FROM headsplus_stats, headsplus_players " +
+                        "WHERE headsplus_stats.user_id = headsplus_players.id " +
+                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC"));
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type) {
-        return createConnection(connection -> {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, boolean unique) {
+        
+        return getLeaderboard("get leaderboard total for " + type.name(), connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                    "SELECT " + (unique ? "COUNT" : "SUM") + "(count) as total, username FROM headsplus_stats, headsplus_players " +
                             "WHERE headsplus_stats.user_id = headsplus_players.id AND collection_type = ?" +
                             "AND headsplus_stats.user_id = headsplus_players.id " +
                             "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
             statement.setString(1, type.name());
-
-            ResultSet set = statement.executeQuery();
-            List<LeaderboardEntry> leaderboard = new ArrayList<>();
-            while (set.next()) {
-                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-            }
-            return leaderboard;
-        }, true, "get leaderboard total for " + type.name());
+            
+            return statement;
+        });
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head) {
-        return createConnection(connection -> {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head, boolean unique) {
+        
+        return getLeaderboard("get leaderboard total for " + type.name() + " and head " + head, connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
+                    "SELECT " + (unique ? "COUNT" : "SUM") + "(count) as total, username FROM headsplus_stats, headsplus_players" +
                             " WHERE collection_type = ? AND head = ? " +
                             "AND headsplus_stats.user_id = headsplus_players.id " +
                             "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
             statement.setString(1, type.name());
             statement.setString(2, head);
-
-            ResultSet set = statement.executeQuery();
-            List<LeaderboardEntry> leaderboard = new ArrayList<>();
-            while (set.next()) {
-                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-            }
-            return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + " and head " + head);
+            
+            return statement;
+        });
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(CollectionType type, String metadata) {
-        return createConnection(connection -> {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(CollectionType type, String metadata, boolean unique) {
+        
+        return getLeaderboard("get leaderboard total for " + type.name() + " and metadata " + metadata, connection -> {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                    "SELECT " + (unique ? "COUNT" : "SUM") + "(count) as total, username FROM headsplus_stats, headsplus_players " +
                             "WHERE collection_type = ? AND metadata LIKE ? " +
                             "AND headsplus_stats.user_id = headsplus_players.id " +
                             "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
 
             statement.setString(1, type.name());
             statement.setString(2, "%" + metadata + "%");
-
-            ResultSet set = statement.executeQuery();
-            List<LeaderboardEntry> leaderboard = new ArrayList<>();
-            while (set.next()) {
-                leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
-            }
-            return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + " and metadata " + metadata);
+            return statement;
+        });
     }
 
     public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head,
-                                                                         String metadata) {
-        return createConnection(connection -> {
+                                                                         String metadata, boolean unique) {
+
+        return getLeaderboard("get leaderboard total for " + type.name() + ", head " + head + " and metadata " + metadata, connection -> {
             PreparedStatement statement =connection.prepareStatement(
-                    "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
+                    "SELECT " + (unique ? "COUNT" : "SUM") + "(count) as total, username FROM headsplus_stats, headsplus_players " +
                             "WHERE collection_type = ? AND head = ? AND metadata LIKE ? " +
                             "AND headsplus_stats.user_id = headsplus_players.id " +
                             "GROUP BY headsplus_stats.user_id ORDER BY total DESC");
@@ -270,14 +250,26 @@ public class StatisticsSQLManager extends SQLManager {
             statement.setString(1, type.name());
             statement.setString(2, head);
             statement.setString(3, "%" + metadata + "%");
+            return statement;
+        });
+    }
 
-            ResultSet set = statement.executeQuery();
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardUniqueHeads() {
+        return getLeaderboard("get unique leaderboard total", connection -> connection.prepareStatement(
+                "SELECT COUNT(count) as total, username FROM headsplus_stats, headsplus_players " +
+                        "WHERE headsplus_stats.user_id = headsplus_players.id " +
+                        "GROUP BY headsplus_stats.user_id ORDER BY total DESC"));
+    }
+
+    private CompletableFuture<List<LeaderboardEntry>> getLeaderboard(String message, SQLFunction<PreparedStatement> statement) {
+        return createConnection(connection -> {
+            ResultSet set = statement.applyWithSQL(connection).executeQuery();
             List<LeaderboardEntry> leaderboard = new ArrayList<>();
             while (set.next()) {
                 leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
             return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + ", head " + head + " and metadata " + metadata);
+        }, true, message);
     }
 
     public void addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount, boolean async) {
