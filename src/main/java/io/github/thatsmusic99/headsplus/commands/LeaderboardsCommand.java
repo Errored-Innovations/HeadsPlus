@@ -46,8 +46,9 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
         int page = 1;
 
         if (type == null) {
-            StatisticsSQLManager.get().getLeaderboardTotal(args[0].equalsIgnoreCase("unique")).thenAccept(list ->
-                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, checkPage(args[0]))));
+            boolean unique = args[0].equalsIgnoreCase("unique");
+            StatisticsSQLManager.get().getLeaderboardTotal(unique).thenAccept(list ->
+                    cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, unique ? "Unique" : "Total", list, checkPage(args[0]))));
             return true;
         }
 
@@ -66,7 +67,7 @@ public class LeaderboardsCommand implements CommandExecutor, IHeadsPlusCommand, 
                 String key = args[1];
                 if (key.equalsIgnoreCase("unique")) {
                     StatisticsSQLManager.get().getLeaderboardTotal(type, true).thenAccept(list ->
-                            cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Total", list, 1)));
+                            cs.sendMessage(ConfigTextMenus.LeaderBoardTranslator.translate(cs, "Unique", list, 1)));
                 } else {
                     if (args[0].equalsIgnoreCase("hunting")) {
                         StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, "entity=" + key.toUpperCase(), false).thenAccept(list ->
