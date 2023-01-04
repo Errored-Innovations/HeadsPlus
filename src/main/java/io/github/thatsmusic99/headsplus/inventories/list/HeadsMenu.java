@@ -45,6 +45,7 @@ public class HeadsMenu extends BaseInventory {
         List<Content> contents = new ArrayList<>();
         ConfigHeadsSelector selector = ConfigHeadsSelector.get();
         for (ConfigHeadsSelector.SectionInfo section : selector.getSections().values()) {
+            if (!player.hasPermission(section.getPermission())) continue;
             try {
                 contents.add(new CustomHeadSection(section.buildSection(), section.getId(), player));
             } catch (IllegalStateException ex) {

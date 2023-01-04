@@ -63,6 +63,7 @@ permissions:
       headsplus.maincommand.xp.*: true
       headsplus.myhead: true
       headsplus.notify: true
+      headsplus.section.*: true
       headsplus.sellhead: true
       headsplus.sellhead.gui: true
       headsplus.help.viewperms: true
@@ -181,3 +182,6 @@ permissions:
   headsplus.drops.*:
     default: op
     description: Allows players to kill mobs/players for head drops.
+  headsplus.section.*:
+    default: true
+    description: Offers access to all
