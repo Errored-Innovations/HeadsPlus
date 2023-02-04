@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.CommandInfo;
 import io.github.thatsmusic99.headsplus.commands.IHeadsPlusCommand;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
@@ -40,7 +41,7 @@ public class TestsCommand implements IHeadsPlusCommand {
         int amount = HPUtils.isInt(args[2]);
         String type = args[1].toLowerCase().replaceAll("_", "");
         MessagesManager.get().sendMessage("commands.tests.running-tests", sender);
-        double chance = ConfigMobs.get().getDouble(type + ".chance");
+        double chance = ConfigMobs.get().getDouble(type + ".chance", MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE);
         Random rand = new Random();
         new BukkitRunnable() {
             @Override
