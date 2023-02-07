@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.sql;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -199,7 +200,10 @@ public class StatisticsSQLManager extends SQLManager {
         }, true, "get leaderboard total");
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type) {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(
+            CollectionType type,
+            boolean async
+    ) {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
@@ -215,10 +219,14 @@ public class StatisticsSQLManager extends SQLManager {
                 leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
             return leaderboard;
-        }, true, "get leaderboard total for " + type.name());
+        }, async, "get leaderboard total for " + type.name());
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head) {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(
+            @NotNull CollectionType type,
+            @NotNull String head,
+            boolean async
+    ) {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players" +
@@ -235,10 +243,14 @@ public class StatisticsSQLManager extends SQLManager {
                 leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
             return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + " and head " + head);
+        }, async, "get leaderboard total for " + type.name() + " and head " + head);
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(CollectionType type, String metadata) {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotalMetadata(
+            @NotNull CollectionType type,
+            @NotNull String metadata,
+            boolean async
+    ) {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
@@ -255,11 +267,15 @@ public class StatisticsSQLManager extends SQLManager {
                 leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
             return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + " and metadata " + metadata);
+        }, async, "get leaderboard total for " + type.name() + " and metadata " + metadata);
     }
 
-    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(CollectionType type, String head,
-                                                                         String metadata) {
+    public CompletableFuture<List<LeaderboardEntry>> getLeaderboardTotal(
+            @NotNull CollectionType type,
+            @NotNull String head,
+            @NotNull String metadata,
+            boolean async
+    ) {
         return createConnection(connection -> {
             PreparedStatement statement =connection.prepareStatement(
                     "SELECT SUM(count) as total, username FROM headsplus_stats, headsplus_players " +
@@ -277,7 +293,7 @@ public class StatisticsSQLManager extends SQLManager {
                 leaderboard.add(new LeaderboardEntry(set.getString("username"), set.getInt("total")));
             }
             return leaderboard;
-        }, true, "get leaderboard total for " + type.name() + ", head " + head + " and metadata " + metadata);
+        }, async, "get leaderboard total for " + type.name() + ", head " + head + " and metadata " + metadata);
     }
 
     public void addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount, boolean async) {

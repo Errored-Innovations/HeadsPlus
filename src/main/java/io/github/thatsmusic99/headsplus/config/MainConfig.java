@@ -87,6 +87,7 @@ public class MainConfig extends HPConfig {
                 " players with the most heads collected" +
                 " from mob drops and crafting.\nThe command to access this is /hplb, with the permission headsplus" +
                 ".leaderboards"); // TODO maybe lol
+
         addDefault("levels", true, "Whether or not HeadsPlus Levels should be enabled or not.\n" +
                 "HeadsPlus Levels are cosmetic levels which players can reach through gaining XP. XP can be gained by" +
                 " getting/crafting heads and completing challenges.\n" +
@@ -253,6 +254,8 @@ public class MainConfig extends HPConfig {
         addSection("Statistics");
         addDefault("cache-duration", 300, "How long in seconds statistics are cached for.\n" +
                 "Statistics are cached if you use the PlaceholderAPI expansion for HeadsPlus.");
+        addDefault("force-placeholders", true, "When using PlaceholderAPI, determines if stats and such that rely on MySQL" +
+                "are forced if not cached. This will cause lag if set to true and if the cache duration is too low.");
 
         addSection("Updates");
         addDefault("check-for-updates", true,
@@ -623,6 +626,7 @@ public class MainConfig extends HPConfig {
 
     public class Leaderboards {
         public final int CACHE_DURATION = getInteger("cache-duration");
+        public final boolean FORCE_PLACEHOLDERS = getBoolean("force-placeholders");
     }
 
     public class Localisation {

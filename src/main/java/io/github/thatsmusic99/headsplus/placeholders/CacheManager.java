@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public class CacheManager {
 
@@ -94,59 +96,117 @@ public class CacheManager {
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type) {
-        return getEntries(type.name(), StatisticsSQLManager.get().getLeaderboardTotal(type));
+        return getEntries(
+                type.name(),
+                bool -> StatisticsSQLManager.get().getLeaderboardTotal(type, bool)
+        );
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
                                                                   String head) {
-        return getEntries(type.name() + "_" + head, StatisticsSQLManager.get().getLeaderboardTotal(type, head));
+        return getEntries(
+                type.name() + "_" + head,
+                bool -> StatisticsSQLManager.get().getLeaderboardTotal(type, head, bool)
+        );
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntriesMeta(StatisticsSQLManager.CollectionType type,
                                                                       String metadata) {
-        return getEntries(type.name() + "_" + metadata, StatisticsSQLManager.get().getLeaderboardTotalMetadata(type,
-                metadata));
+        return getEntries(
+                type.name() + "_" + metadata,
+                bool -> StatisticsSQLManager.get().getLeaderboardTotalMetadata(type, metadata, bool)
+        );
     }
 
     public List<StatisticsSQLManager.LeaderboardEntry> getEntries(StatisticsSQLManager.CollectionType type,
                                                                   String head, String metadata) {
-        return getEntries(type.name() + "_" + head + "_" + metadata,
-                StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata));
+        return getEntries(
+                type.name() + "_" + head + "_" + metadata,
+                bool -> StatisticsSQLManager.get().getLeaderboardTotal(type, head, metadata, bool)
+        );
     }
 
     public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type) {
-        return getStat(player.getName() + "_" + type.name(), StatisticsSQLManager.get().getStat(player.getUniqueId(),
-                type, true));
+        return getStat(
+                player.getName() + "_" + type.name(),
+                bool -> StatisticsSQLManager.get().getStat(player.getUniqueId(), type, bool)
+        );
     }
 
-    public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head) {
-        return getStat(String.join("_", player.getName(), type.name(), head),
-                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, true));
+    public int getStat(
+            @NotNull OfflinePlayer player,
+            @NotNull StatisticsSQLManager.CollectionType type,
+            @NotNull String head) {
+        return getStat(
+                String.join("_", player.getName(), type.name(), head),
+                bool -> StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, bool)
+        );
     }
 
-    public int getStatMeta(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String metadata) {
-        return getStat(String.join("_", player.getName(), type.name(), metadata),
-                StatisticsSQLManager.get().getStatMeta(player.getUniqueId(), type, metadata, true));
+    public int getStatMeta(
+            @NotNull OfflinePlayer player,
+            @NotNull StatisticsSQLManager.CollectionType type,
+            @NotNull String metadata
+    ) {
+        return getStat(
+                String.join("_", player.getName(), type.name(), metadata),
+                bool -> StatisticsSQLManager.get().getStatMeta(player.getUniqueId(), type, metadata, bool)
+        );
     }
 
-    public int getStat(OfflinePlayer player, StatisticsSQLManager.CollectionType type, String head, String metadata) {
+    public int getStat(
+            @NotNull OfflinePlayer player,
+            @NotNull StatisticsSQLManager.CollectionType type,
+            @NotNull String head,
+            @NotNull String metadata
+    ) {
         return getStat(String.join("_", player.getName(), type.name(), head, metadata),
-                StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, metadata, true));
+                bool -> StatisticsSQLManager.get().getStat(player.getUniqueId(), type, head, metadata, bool));
     }
 
-    public int getStat(String id, CompletableFuture<Integer> ugh) {
-        updateCaches("stats_" + id, id, cachedStats, () -> ugh);
+    public int getStat(
+            @NotNull String id,
+            @NotNull Function<Boolean, CompletableFuture<Integer>> ugh
+    ) {
+
+        // Prompt a cache update
+        updateCaches("stats_" + id, id, cachedStats, () -> ugh.apply(true));
+
+        // If the statistic is cached, then return it
         if (cachedStats.containsKey(id)) return cachedStats.get(id);
-        ugh.thenApply(num -> cachedStats.put(id, num));
+
+        // If it isn't and we want to force the result:
+        if (MainConfig.get().getLeaderboards().FORCE_PLACEHOLDERS) {
+            int result = ugh.apply(false).join();
+            cachedStats.put(id, result);
+            return result;
+        }
+
+        // Otherwise, request it to be updated
+        ugh.apply(true).thenApply(num -> cachedStats.put(id, num));
         return -1;
     }
 
-    private List<StatisticsSQLManager.LeaderboardEntry> getEntries(String id,
-                                                                   CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>> ree) {
-        updateCaches("leaderboards_" + id, id, cachedEntries, () -> ree);
-        //
+    private List<StatisticsSQLManager.LeaderboardEntry> getEntries(
+            String id,
+            Function<Boolean, CompletableFuture<List<StatisticsSQLManager.LeaderboardEntry>>> ree
+    ) {
+
+        // Prompt a cache update
+        updateCaches("leaderboards_" + id, id, cachedEntries, () -> ree.apply(true));
+
+        // If the statistic is cached, then return it
         if (cachedEntries.containsKey(id)) return cachedEntries.get(id);
-        ree.thenApply(list -> cachedEntries.put(id, list));
+
+        // If it isn't and we want to force the result:
+        if (MainConfig.get().getLeaderboards().FORCE_PLACEHOLDERS) {
+            List<StatisticsSQLManager.LeaderboardEntry> entries = ree.apply(false).join();
+            cachedEntries.put(id, entries);
+            return entries;
+        }
+
+        // Otherwise request an update
+        ree.apply(true).thenApply(list -> cachedEntries.put(id, list));
         return new ArrayList<>();
     }
 

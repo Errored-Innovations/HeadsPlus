@@ -81,7 +81,6 @@ public class HPExpansion extends PlaceholderExpansion {
             // %headsplus_top_HUNTING_HP#iron_golem_0_player%
             // %headsplus_top_HUNTING_HP#iron_golem,entity=IRON_GOLEM_0_player%
             Matcher matcher = TOP_PLACEHOLDER_PATTERN.matcher(identifier);
-            HeadsPlus.get().getLogger().info(matcher.matches() + ", " + identifier + ", " + TOP_PLACEHOLDER_PATTERN.pattern());
             if (!matcher.matches()) return "N/A";
 
             // Get the category
@@ -161,7 +160,7 @@ public class HPExpansion extends PlaceholderExpansion {
                     return String.valueOf(challenge.getRequiredHeadAmount());
                 case "progress":
                     return String.valueOf(CacheManager.get().getStat(challenge.getCacheID(),
-                            challenge.getStatFuture(player.getUniqueId())));
+                            x -> challenge.getStatFuture(player.getUniqueId())));
                 case "difficulty":
                     return String.valueOf(challenge.getDifficulty());
                 case "type":
