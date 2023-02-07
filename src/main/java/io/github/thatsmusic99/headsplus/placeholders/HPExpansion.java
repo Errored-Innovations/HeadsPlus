@@ -20,8 +20,8 @@ public class HPExpansion extends PlaceholderExpansion {
 
     private final HeadsPlus hp;
     // regex hell 2.0
-    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("\\btop_([A-Z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_(player|score)\\b");
-    private final Pattern STATISTIC_PATTERN = Pattern.compile("\\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?_+");
+    private final Pattern TOP_PLACEHOLDER_PATTERN = Pattern.compile("top_([A-Za-z]+)_?([a-zA-Z0-9=,_#]+)?_+(\\d+)_(player|score)");
+    private final Pattern STATISTIC_PATTERN = Pattern.compile("\b(HUNTING|CRAFTING)_?([a-zA-Z0-9=,_#]+)?");
 
     public HPExpansion(HeadsPlus headsPlus) {
         hp = headsPlus;
@@ -75,6 +75,7 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("top")) {
+
             // %headsplus_top_HUNTING_0_player%
             // %headsplus_top_HUNTING_entity=IRON_GOLEM_0_player%
             // %headsplus_top_HUNTING_HP#iron_golem_0_player%
@@ -82,10 +83,12 @@ public class HPExpansion extends PlaceholderExpansion {
             Matcher matcher = TOP_PLACEHOLDER_PATTERN.matcher(identifier);
             HeadsPlus.get().getLogger().info(matcher.matches() + ", " + identifier + ", " + TOP_PLACEHOLDER_PATTERN.pattern());
             if (!matcher.matches()) return "N/A";
+
             // Get the category
             String categoryStr = matcher.group(1);
             StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
             if (category == null) return "N/A";
+
             // Get the extra metadata
             String[] metadata = (matcher.group(2) == null ? "" : matcher.group(2)).split(",");
             List<String> actualMetadata = new ArrayList<>();
@@ -102,7 +105,7 @@ public class HPExpansion extends PlaceholderExpansion {
             // Get the actual records
             List<StatisticsSQLManager.LeaderboardEntry> entries;
             if (head == null) {
-                if (metadataStr.isEmpty()) {
+                if (metadataStr.isEmpty() || metadataStr.equals("total")) {
                     entries = CacheManager.get().getEntries(category);
                 } else {
                     entries = CacheManager.get().getEntriesMeta(category, metadataStr);
