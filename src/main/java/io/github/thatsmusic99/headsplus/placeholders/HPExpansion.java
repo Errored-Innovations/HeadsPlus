@@ -88,15 +88,10 @@ public class HPExpansion extends PlaceholderExpansion {
             StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
             if (category == null) return "N/A";
 
-            // Get the extra metadata
-            String[] metadata = (matcher.group(2) == null ? "" : matcher.group(2)).split(",");
-            List<String> actualMetadata = new ArrayList<>();
-            String head = null;
-            for (String str : metadata) {
-                if (str.startsWith("HP#")) head = str;
-                else actualMetadata.add(str);
-            }
-            String metadataStr = String.join(",", actualMetadata);
+            // Get the head and metadata
+            String[] data = getRawHeadAndMetadata(matcher);
+            String head = data[0];
+            String metadataStr = data[1];
 
             // Get the position
             int position = Integer.parseInt(matcher.group(3));
@@ -110,7 +105,7 @@ public class HPExpansion extends PlaceholderExpansion {
                     entries = CacheManager.get().getEntriesMeta(category, metadataStr);
                 }
             } else {
-                if (metadataStr.isEmpty()) {
+                if (metadataStr.isEmpty() || metadataStr.equals("total")) {
                     entries = CacheManager.get().getEntries(category, head);
                 } else {
                     entries = CacheManager.get().getEntries(category, head, metadataStr);
@@ -182,8 +177,32 @@ public class HPExpansion extends PlaceholderExpansion {
         String categoryStr = matcher.group(1);
         StatisticsSQLManager.CollectionType category = StatisticsSQLManager.CollectionType.getType(categoryStr);
         if (category == null) return "-1";
+
+        // Get the head and metadata
+        String[] data = getRawHeadAndMetadata(matcher);
+        String head = data[0];
+        String metadataStr = data[1];
+
+        if (head == null) {
+            if (metadataStr.isEmpty() || metadataStr.equals("total")) {
+                return String.valueOf(CacheManager.get().getStat(player, category));
+            } else {
+                return String.valueOf(CacheManager.get().getStatMeta(player, category, metadataStr));
+            }
+        } else {
+            if (metadataStr.isEmpty() || metadataStr.equals("total")) {
+                return String.valueOf(CacheManager.get().getStat(player, category, head));
+            } else {
+                return String.valueOf(CacheManager.get().getStat(player, category, head, metadataStr));
+            }
+        }
+
+    }
+
+    private String[] getRawHeadAndMetadata(Matcher matcher) {
+
         // Get the extra metadata
-        String[] metadata = matcher.group(2).split(",");
+        String[] metadata = (matcher.group(2) == null ? "" : matcher.group(2)).split(",");
         List<String> actualMetadata = new ArrayList<>();
         String head = null;
         for (String str : metadata) {
@@ -191,20 +210,8 @@ public class HPExpansion extends PlaceholderExpansion {
             else actualMetadata.add(str);
         }
         String metadataStr = String.join(",", actualMetadata);
-        if (head == null) {
-            if (metadataStr.isEmpty()) {
-                return String.valueOf(CacheManager.get().getStat(player, category));
-            } else {
-                return String.valueOf(CacheManager.get().getStatMeta(player, category, metadataStr));
-            }
-        } else {
-            if (metadataStr.isEmpty()) {
-                return String.valueOf(CacheManager.get().getStat(player, category, head));
-            } else {
-                return String.valueOf(CacheManager.get().getStat(player, category, head, metadataStr));
-            }
-        }
 
+        return new String[]{head, metadataStr};
     }
 
 }
