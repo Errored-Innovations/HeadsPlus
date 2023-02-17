@@ -28,7 +28,7 @@ public class HPPlayer {
     private long xp;
     private int level;
     private int nextLevel = -1;
-    public static final HashMap<UUID, HPPlayer> players = new HashMap<>();
+    public static final HashMap<String, HPPlayer> players = new HashMap<>();
     private final List<String> favouriteHeads;
     private final List<String> pinnedChallenges;
     private final List<String> completeChallenges;
@@ -47,7 +47,7 @@ public class HPPlayer {
                         MessagesManager.get().setPlayerLocale((Player) getPlayer(), str)));
         xp = HPUtils.ifNull(HPUtils.getValue(PlayerSQLManager.get().getXP(uuid, true), "XP"), (long) 0);
         this.uuid = uuid;
-        players.put(uuid, this);
+        players.put(uuid.toString(), this);
     }
 
     public long getXp() {
@@ -74,8 +74,27 @@ public class HPPlayer {
         return uuid;
     }
 
+    /**
+     * Gets an instance of HPPlayer for a specific player immediately.
+     *
+     * @param uuid The UUID of the player.
+     * @return The HPPlayer instance for the player, or null if for some reason, the player has not been cached.
+     */
+    @Nullable
     public static HPPlayer getHPPlayer(UUID uuid) {
-        return players.get(uuid);
+        return players.get(uuid.toString());
+    }
+
+    /**
+     * Gets an instance of HPPlayer asynchronously.
+     */
+    @NotNull
+    public static CompletableFuture<HPPlayer> getHPPlayerAsync(UUID uuid) {
+        // If the player has just been cached, return that
+        if (players.containsKey(uuid.toString()))
+            return CompletableFuture.completedFuture(players.get(uuid.toString()));
+        // Otherwise, return the player like this
+        return CompletableFuture.supplyAsync(() -> new HPPlayer(uuid), HeadsPlus.async);
     }
 
     public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
@@ -199,6 +218,6 @@ public class HPPlayer {
     }
 
     public static void removePlayer(UUID uuid) {
-        players.remove(uuid);
+        players.remove(uuid.toString());
     }
 }
