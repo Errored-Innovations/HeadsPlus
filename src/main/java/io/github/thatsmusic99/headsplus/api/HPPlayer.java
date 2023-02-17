@@ -15,6 +15,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,9 +99,16 @@ public class HPPlayer {
         return CompletableFuture.supplyAsync(() -> new HPPlayer(uuid), HeadsPlus.async);
     }
 
-    public CompletableFuture<Void> addCompleteChallenge(Challenge c) {
-        completeChallenges.add(c.getConfigName());
-        return ChallengeSQLManager.get().completeChallenge(uuid, c.getConfigName(), true);
+    /**
+     * Completes a specified challenge for a specific player.
+     *
+     * @param challenge The challenge in question.
+     * @return a completable future covering this action.
+     */
+
+    public CompletableFuture<Void> addCompleteChallenge(Challenge challenge) {
+        completeChallenges.add(challenge.getConfigName());
+        return ChallengeSQLManager.get().completeChallenge(uuid, challenge.getConfigName(), true);
     }
 
     public void addXp(long xp) {

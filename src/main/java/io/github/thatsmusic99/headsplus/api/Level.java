@@ -1,5 +1,8 @@
 package io.github.thatsmusic99.headsplus.api;
 
+/**
+ * Represents a level. This is a cosmetic feature that players can aim for.
+ */
 public class Level {
 
     private final String configName;

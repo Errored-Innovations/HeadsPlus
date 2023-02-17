@@ -109,9 +109,19 @@ public class LeaderboardListeners implements Listener {
         @Override
         public void onEvent(HeadCraftEvent event) {
             Player player = event.getPlayer();
+
+            // If the player can gain XP...
             if (RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.XP_GAINS)) {
+
+                // The key of the XP
                 String key = "recipes." + event.getType().substring(event.getType().indexOf("_") + 1);
-                HPPlayer.getHPPlayer(player.getUniqueId()).addXp(ConfigCrafting.get().getCraftingXp(key) * event.getHeadsCrafted());
+
+                // Calculate the XP added
+                long xp = ConfigCrafting.get().getCraftingXp(key) * event.getHeadsCrafted();
+
+                // Add the crafting XP
+                HPPlayer.getHPPlayerAsync(player.getUniqueId()).thenAcceptAsync(hpPlayer ->
+                        hpPlayer.addXp(xp), HeadsPlus.sync);
             }
             if (!MainConfig.get().getMainFeatures().LEADERBOARDS || event.getType() == null) return;
             if (event.getType().equalsIgnoreCase("invalid") || event.getType().isEmpty()) return;
