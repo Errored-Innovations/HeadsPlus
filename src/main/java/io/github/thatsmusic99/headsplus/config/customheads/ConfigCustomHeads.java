@@ -14,7 +14,7 @@ public class ConfigCustomHeads extends HPConfig {
 
     public static ConfigCustomHeads instance;
 
-    public ConfigCustomHeads() throws IOException {
+    public ConfigCustomHeads() throws IOException, IllegalAccessException {
         super("customheads.yml");
         instance = this;
     }

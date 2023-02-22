@@ -90,7 +90,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                             try {
                                 selector.save();
                                 otherSelector.save();
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo();

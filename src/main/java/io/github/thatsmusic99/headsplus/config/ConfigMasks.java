@@ -10,7 +10,7 @@ public class ConfigMasks extends FeatureConfig {
 
     private static ConfigMasks instance;
 
-    public ConfigMasks() throws IOException {
+    public ConfigMasks() throws IOException, IllegalAccessException {
         super("masks.yml");
         instance = this;
     }

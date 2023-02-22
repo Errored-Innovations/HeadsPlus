@@ -23,7 +23,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
     private final HashMap<String, BuyableHeadInfo> buyableHeads = new LinkedHashMap<>();
     private int totalHeads = 0;
 
-    public ConfigHeadsSelector() throws IOException {
+    public ConfigHeadsSelector() throws IOException, IllegalAccessException {
         super("heads-selector.yml");
         instance = this;
     }

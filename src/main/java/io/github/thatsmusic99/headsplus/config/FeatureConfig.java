@@ -8,7 +8,7 @@ public abstract class FeatureConfig extends HPConfig {
 
     private boolean loaded = false;
 
-    public FeatureConfig(@NotNull String name) throws IOException {
+    public FeatureConfig(@NotNull String name) throws IOException, IllegalAccessException {
         super(name);
     }
 

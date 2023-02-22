@@ -6,7 +6,7 @@ public class ConfigSounds extends HPConfig {
 
     private static ConfigSounds instance;
 
-    public ConfigSounds() throws IOException {
+    public ConfigSounds() throws IOException, IllegalAccessException {
         super("sounds.yml");
         instance = this;
     }

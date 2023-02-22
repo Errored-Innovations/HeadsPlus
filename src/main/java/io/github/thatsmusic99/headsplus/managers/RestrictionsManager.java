@@ -18,7 +18,7 @@ public class RestrictionsManager {
         MainConfig.get().set(type.path, list);
         try {
             MainConfig.get().save();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

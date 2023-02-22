@@ -20,7 +20,7 @@ public class ConfigInteractions extends HPConfig {
     private static ConfigInteractions instance;
     private final Gson gson;
 
-    public ConfigInteractions() throws IOException {
+    public ConfigInteractions() throws IOException, IllegalAccessException {
         super("interactions.yml");
         instance = this;
         gson = new Gson();

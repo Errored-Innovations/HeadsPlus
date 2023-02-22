@@ -13,7 +13,7 @@ public class ConfigCrafting extends FeatureConfig {
 
     private static ConfigCrafting instance;
 
-    public ConfigCrafting() throws IOException {
+    public ConfigCrafting() throws IOException, IllegalAccessException {
         super("crafting.yml");
         instance = this;
     }

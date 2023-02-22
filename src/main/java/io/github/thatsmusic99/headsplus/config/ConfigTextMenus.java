@@ -30,7 +30,7 @@ public class ConfigTextMenus extends HPConfig {
 
     private static ConfigTextMenus instance;
 
-    public ConfigTextMenus() throws IOException {
+    public ConfigTextMenus() throws IOException, IllegalAccessException {
         super("textmenus.yml");
         instance = this;
     }

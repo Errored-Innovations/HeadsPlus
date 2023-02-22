@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public abstract class HPConfig extends ConfigFile {
 
-    public HPConfig(@NotNull String name) throws IOException {
+    public HPConfig(@NotNull String name) throws IOException, IllegalAccessException {
         super(getOrCreateFile(name));
     }
 
@@ -18,7 +18,7 @@ public abstract class HPConfig extends ConfigFile {
         moveToNew();
         try {
             save();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }
@@ -37,7 +37,7 @@ public abstract class HPConfig extends ConfigFile {
     }
 
     @Override
-    public void reload() throws IOException {
+    public void reload() throws Exception {
         super.reload();
         moveToNew();
         save();

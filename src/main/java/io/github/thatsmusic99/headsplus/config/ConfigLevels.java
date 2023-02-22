@@ -17,7 +17,7 @@ public class ConfigLevels extends FeatureConfig {
 
     private static ConfigLevels instance;
 
-    public ConfigLevels() throws IOException {
+    public ConfigLevels() throws IOException, IllegalAccessException {
         super("levels.yml");
         instance = this;
         addDefLevels();

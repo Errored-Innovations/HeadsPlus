@@ -18,7 +18,7 @@ public class ConfigMobs extends FeatureConfig {
 
     private static ConfigMobs instance;
 
-    public ConfigMobs() throws IOException {
+    public ConfigMobs() throws IOException, IllegalAccessException {
         super("mobs.yml");
         instance = this;
     }
@@ -93,7 +93,7 @@ public class ConfigMobs extends FeatureConfig {
 
         try {
             ConfigMasks.get().save();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

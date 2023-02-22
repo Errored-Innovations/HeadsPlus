@@ -35,7 +35,7 @@ public class MainConfig extends HPConfig {
 
     private static MainConfig instance;
 
-    public MainConfig() throws IOException {
+    public MainConfig() throws IOException, IllegalAccessException {
         super("config.yml");
         instance = this;
     }

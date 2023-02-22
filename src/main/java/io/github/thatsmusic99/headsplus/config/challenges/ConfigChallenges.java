@@ -13,7 +13,7 @@ public class ConfigChallenges extends FeatureConfig {
 
     private static ConfigChallenges instance;
 
-    public ConfigChallenges() throws IOException {
+    public ConfigChallenges() throws IOException, IllegalAccessException {
         super("challenges.yml");
         instance = this;
     }

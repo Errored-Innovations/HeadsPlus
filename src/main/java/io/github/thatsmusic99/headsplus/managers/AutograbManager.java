@@ -229,7 +229,7 @@ public class AutograbManager {
                 MessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

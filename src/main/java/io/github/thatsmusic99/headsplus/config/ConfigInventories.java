@@ -15,7 +15,7 @@ public class ConfigInventories extends HPConfig {
 
     private static ConfigInventories instance;
 
-    public ConfigInventories() throws IOException {
+    public ConfigInventories() throws IOException, IllegalAccessException {
         super("inventories.yml");
         instance = this;
     }
