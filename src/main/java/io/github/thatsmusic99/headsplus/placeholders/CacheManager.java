@@ -62,9 +62,12 @@ public class CacheManager {
     }
 
     public String getLevel(OfflinePlayer player) {
+
         // Check HPPlayer cache, ez
-        if (HPPlayer.getHPPlayer(player.getUniqueId()) != null)
-            return HPPlayer.getHPPlayer(player.getUniqueId()).getLevel().getDisplayName();
+        HPPlayer hpPlayer = HPPlayer.getHPPlayer(player.getUniqueId());
+        if (hpPlayer != null) return hpPlayer.getLevel().getConfigName();
+
+        // Get the UUID
         UUID uuid = player.getUniqueId();
         updateCaches("level_" + player.getName(), uuid.toString(), cachedLevels,
                 () -> PlayerSQLManager.get().getLevel(uuid, true));

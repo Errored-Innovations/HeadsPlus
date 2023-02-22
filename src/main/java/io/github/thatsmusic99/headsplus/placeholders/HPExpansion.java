@@ -58,16 +58,44 @@ public class HPExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.equals("remaining_xp")) {
+
             String level = CacheManager.get().getLevel(player);
             if (level == null) return "-1";
+
             Level levelObj = LevelsManager.get().getLevel(level);
+            levelObj = LevelsManager.get().getNextLevel(levelObj.getConfigName());
             long xp = CacheManager.get().getXP(player);
             if (xp == -1) return "-1";
             return String.valueOf(levelObj.getRequiredXP() - xp);
         }
 
+        if (identifier.equals("next_level")) {
+            String level = CacheManager.get().getLevel(player);
+            if (level == null) return "N/A";
+
+            Level nextLevel = LevelsManager.get().getNextLevel(level);
+            if (nextLevel == null) return "N/A";
+
+            return nextLevel.getDisplayName();
+        }
+
+        if (identifier.equals("next_level_xp")) {
+            String level = CacheManager.get().getLevel(player);
+            if (level == null) return "-1";
+
+            Level nextLevel = LevelsManager.get().getNextLevel(level);
+            if (nextLevel == null) return "-1";
+
+            return String.valueOf(nextLevel.getRequiredXP());
+        }
+
         if (identifier.equals("level")) {
-            return CacheManager.get().getLevel(player);
+            String level = CacheManager.get().getLevel(player);
+            if (level == null) return "N/A";
+
+            Level actualLevel = LevelsManager.get().getLevel(level);
+            if (actualLevel == null) return "N/A";
+            return actualLevel.getDisplayName();
         }
 
         if (identifier.equals("completed_challenges_total")) {
