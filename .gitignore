@@ -2,3 +2,5 @@
 *\target
 RENEWED
 \libs
+\build
+\.gradle
