@@ -8,46 +8,16 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://papermc.io/repo/repository/maven-public/")
-    }
-
-    maven {
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
-
-    maven {
-        url = uri("https://repo.essentialsx.net/releases/")
-    }
-
-    maven {
-        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    }
-
-    maven {
-        url = uri("https://maven.enginehub.org/repo/")
-    }
-
-    maven {
-        url = uri("https://mvn.lumine.io/repository/maven-public/")
-    }
-
-    maven {
-        url = uri("https://ci.pluginwiki.us/plugin/repository/everything/")
-    }
-
-    maven {
-        url = uri("https://libraries.minecraft.net/")
-    }
-
-    maven {
-        url = uri("https://repo.codemc.io/repository/maven-public/")
-    }
-
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.essentialsx.net/releases/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://maven.enginehub.org/repo/")
+    maven("https://mvn.lumine.io/repository/maven-public/")
+    maven("https://ci.pluginwiki.us/plugin/repository/everything/")
+    maven("https://libraries.minecraft.net/")
+    maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://repo.maven.apache.org/maven2/")
 }
 
 dependencies {
