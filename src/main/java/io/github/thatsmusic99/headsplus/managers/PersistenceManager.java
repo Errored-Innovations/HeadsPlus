@@ -125,6 +125,7 @@ public class PersistenceManager {
     }
 
     public void copyStorageToSkull(ItemMeta meta, Skull skull) {
+        if (meta == null) return;
         PersistentDataContainer fromContainer = meta.getPersistentDataContainer();
         PersistentDataContainer toContainer = skull.getPersistentDataContainer();
         PersistentDataContainer headsPlusStorage = fromContainer.get(HEADSPLUS_STORAGE, PersistentDataType.TAG_CONTAINER);
