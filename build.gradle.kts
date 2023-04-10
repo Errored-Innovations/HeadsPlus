@@ -8,7 +8,7 @@ plugins {
 }
 
 repositories {
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.essentialsx.net/releases/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -23,9 +23,9 @@ repositories {
 dependencies {
     implementation("io.papermc:paperlib:1.0.4")
     implementation("org.jetbrains:annotations:22.0.0")
-    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-BETA-4")
-    compileOnly("io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-BETA-3")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("com.mojang:authlib:2.3.31")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4-SNAPSHOT")
     compileOnly("net.milkbowl.vault:VaultAPI:1.7")
