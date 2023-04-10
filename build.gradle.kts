@@ -36,7 +36,6 @@ dependencies {
 group = "io.github.thatsmusic99"
 version = "7.0.10"
 description = "headsplus"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -46,4 +45,8 @@ publishing {
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
