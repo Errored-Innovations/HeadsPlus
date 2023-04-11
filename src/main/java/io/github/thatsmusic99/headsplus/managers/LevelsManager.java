@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.api.Level;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.ConfigLevels;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +39,11 @@ public class LevelsManager {
         return levels.get(key);
     }
 
-    public Level getLevel(int position) {
+    public @Nullable Level getLevel(int position) {
         return levelOrder.size() == 0 ? null : getLevel(levelOrder.get(position));
     }
 
-    public Level getNextLevel(String key) {
+    public @Nullable Level getNextLevel(String key) {
         int order = levelOrder.indexOf(key) + 1;
         if (order == levelOrder.size()) return null;
         return getLevel(order);

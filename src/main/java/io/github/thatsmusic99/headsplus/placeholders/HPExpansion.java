@@ -65,7 +65,7 @@ public class HPExpansion extends PlaceholderExpansion {
             Level levelObj = LevelsManager.get().getLevel(level);
             levelObj = LevelsManager.get().getNextLevel(levelObj.getConfigName());
             long xp = CacheManager.get().getXP(player);
-            if (xp == -1) return "-1";
+            if (xp == -1 || levelObj == null) return "-1";
             return String.valueOf(levelObj.getRequiredXP() - xp);
         }
 
