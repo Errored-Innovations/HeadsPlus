@@ -1,7 +1,5 @@
 package net.amoebaman.util;
 
-import org.apache.commons.lang.Validate;
-
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
