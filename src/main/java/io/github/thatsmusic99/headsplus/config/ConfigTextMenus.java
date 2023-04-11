@@ -14,7 +14,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -251,7 +250,7 @@ public class ConfigTextMenus extends HPConfig {
                 StringBuilder sb = new StringBuilder();
                 ph = new PagedLists<>(entries, instance.getInteger("leaderboard.lines-per-page"));
                 sb.append(translateColors(instance.getString("leaderboard.header")
-                        .replace("{section}", WordUtils.capitalize(section))
+                        .replace("{section}", HeadsPlus.capitalize(section))
                         .replaceAll("\\{page}", String.valueOf(page))
                         .replaceAll("\\{pages}", String.valueOf(ph.getTotalPages())), sender));
                 int index = ph.getContentsPerPage() * (page - 1);
