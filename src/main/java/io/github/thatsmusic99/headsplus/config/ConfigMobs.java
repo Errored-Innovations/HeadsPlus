@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Rabbit;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class ConfigMobs extends FeatureConfig {
                 "If you have trouble understanding how it works, please use the /hp config mobs command instead.");
         addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
         addDefault("defaults.display-name", "{type} Head");
+        addDefault("defaults.commands-on-drop", new ArrayList<>());
+        addDefault("defaults.player-commands-on-drop", new ArrayList<>());
         addHeads();
         addPlayerHeads();
     }
@@ -332,6 +335,14 @@ public class ConfigMobs extends FeatureConfig {
                     new HPUtils.PlaceholderInfo("{killer}", killerName, killerName != null));
         }
         return lore;
+    }
+
+    public @NotNull List<String> getDropCommands(String path) {
+        return getList(path + ".commands-on-drop", getList("defaults.commands-on-drop", new ArrayList<>()));
+    }
+
+    public @NotNull List<String> getPlayerDropCommands(String name) {
+        return getList("player." + name + ".commands-on-drop", getList("defaults.player-commands-on-drop", new ArrayList<>()));
     }
 
     private void addDefaultHead(String path, String head) {

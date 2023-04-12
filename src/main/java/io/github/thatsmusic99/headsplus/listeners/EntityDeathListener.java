@@ -81,6 +81,8 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
             if (randomChance <= fixedChance) {
                 int amount = addData("amount", HPUtils.getAmount(fixedChance));
+
+                // Drop the head itself
                 dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount,
                         event.getEntity().getKiller());
             }
@@ -161,6 +163,21 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
+
+            // Run commands on drop
+            ConfigMobs.get().getDropCommands(id).forEach(command -> {
+
+                // Replace placeholders
+                command = command.replaceAll("\\{player}", killer.getName()).replaceAll("\\{entity}", id);
+
+                // Check syntax
+                if (command.startsWith("player:")) {
+                    killer.performCommand(command.replaceFirst("player:", ""));
+                } else {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                }
+            });
+
             info.buildHead().thenAccept(head -> {
                 // Because I need to set up extra l o r e
                 ItemMeta meta = head.getItemMeta();

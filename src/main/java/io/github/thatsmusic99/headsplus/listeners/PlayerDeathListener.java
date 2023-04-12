@@ -101,6 +101,23 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             HeadsPlus.debug("Player head drop event has been cancelled.");
             return;
         }
+
+        // Run commands
+        ConfigMobs.get().getPlayerDropCommands(victim.getName()).forEach(command -> {
+
+            // Replace placeholders
+            command = command.replaceAll("\\{player}", victim.getName()).replaceAll("\\{killer}", killer == null ? "<None>" : killer.getName());
+
+            // Check syntax
+            if (command.startsWith("killer:") && killer != null) {
+                killer.performCommand(command.substring(0, 7));
+            } else if (command.startsWith("player:"))  {
+                victim.performCommand(command.substring(0, 7));
+            } else {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replaceFirst("player:", "").replaceFirst("killer:", ""));
+            }
+        });
+
         if (lostprice > 0.0 && killer != null) {
             economy.withdrawPlayer(victim, lostprice);
             MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}",
