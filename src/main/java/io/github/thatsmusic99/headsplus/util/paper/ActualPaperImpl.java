@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.AutograbManager;
+import io.github.thatsmusic99.headsplus.util.CachedValues;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public class ActualPaperImpl implements PaperImpl {
         UUID uuid;
         OfflinePlayer player = Bukkit.getOfflinePlayer(name);
         UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
-        if (player.getUniqueId().equals(offlineUUID)) {
+        if (player.getUniqueId().equals(offlineUUID) && CachedValues.PLAYER_NAME.matcher(name).matches()) {
             String uuidStr = AutograbManager.grabUUID(name, 0, null);
             if (uuidStr == null) {
                 uuid = offlineUUID;
