@@ -15,6 +15,7 @@ import io.github.thatsmusic99.headsplus.util.CachedValues;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -92,7 +93,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         title = SECTION.matcher(title).replaceAll(context.get("section") != null ? context.get("section") : "None");
         inventory = Bukkit.createInventory(this,
                 hpi.getInteger("inventories." + getId() + ".size"),
-                title);
+                ChatColor.translateAlternateColorCodes('&', title));
         String items = hpi.getString("inventories." + getId() + ".icons");
         Iterator<Content> contentIt = contents.getContentsInPage(Integer.parseInt(currentPage)).iterator();
         for (int i = 0; i < items.length(); i++) {
