@@ -24,6 +24,7 @@ public class SellableHeadsManager {
 
     public void reset() {
         prices.clear();
+        types.clear();
     }
 
     public void registerPrice(String key, SellingType type, double price) {
