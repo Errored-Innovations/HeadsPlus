@@ -1,9 +1,17 @@
 package io.github.thatsmusic99.headsplus.inventories.icons.content;
 
+import io.github.thatsmusic99.headsplus.config.ConfigInventories;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.inventories.icons.Content;
+import io.github.thatsmusic99.headsplus.managers.SellableHeadsManager;
+import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SellheadHead extends Content {
 
@@ -25,6 +33,24 @@ public class SellheadHead extends Content {
             player.performCommand("sellhead " + type);
         }
         return false;
+    }
+
+    @Override
+    public void initNameAndLore(String id, Player player) {
+
+        // Start building the lore
+        List<String> lore = new ArrayList<>();
+
+        // Go through each line and replace price tags
+        for (String loreStr : ConfigInventories.get().getStringList("icons.sellable-head.lore")) {
+            HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(loreStr, player),
+                    new HPUtils.PlaceholderInfo("{price}", SellableHeadsManager.get().getPrice(id), true));
+        }
+
+        // Set the lore
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(lore);
+        item.setItemMeta(meta);
     }
 
     @Override

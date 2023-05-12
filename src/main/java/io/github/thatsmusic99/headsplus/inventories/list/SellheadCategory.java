@@ -47,7 +47,11 @@ public class SellheadCategory extends BaseInventory {
                             parts[1].toUpperCase());
                     List<EntityDataManager.DroppedHeadInfo> heads = EntityDataManager.getStoredHeads().get(key);
                     if (heads == null || heads.size() == 0) continue;
-                    contents.add(new SellheadHead(heads.get(0).forceBuildHead(), String.join(" ", parts[0], "mobs", parts[2])));
+
+                    // Build the head
+                    SellheadHead head = new SellheadHead(heads.get(0).forceBuildHead(), String.join(" ", parts[0], "mobs", parts[2]));
+                    head.initNameAndLore(str, player);
+                    contents.add(head);
                 }
                 break;
             case "mining": // Guess what
