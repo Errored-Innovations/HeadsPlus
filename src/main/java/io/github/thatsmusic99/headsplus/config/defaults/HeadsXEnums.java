@@ -500,7 +500,9 @@ public enum HeadsXEnums {
     COLD_FROG("&aCold Frog", "27bcccc125a4110434a85c40ada039d050f14ef7db34a3444067310f8ce69606", "animals", 3.6),
     ALLAY("&bAllay", "e1c59dccde4b8535500dcf6794ca450663f607290e2510f6d8eb1e5eb71da5af", "mobs", 3.6),
     TADPOLE("&7Tadpole", "b23ebf26b7a441e10a86fb5c2a5f3b519258a5c5dddd6a1a75549f517332815b", "animals", 3.7),
-    ILLUSIONER("&9Illusioner", "512512e7d016a2343a7bff1a4cd15357ab851579f1389bd4e3a24cbeb88b", "mobs", 3.8);
+    ILLUSIONER("&9Illusioner", "512512e7d016a2343a7bff1a4cd15357ab851579f1389bd4e3a24cbeb88b", "mobs", 3.8),
+    CAMEL("&eCamel", "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445", "animals", 3.9),
+    SNIFFER("&cSniffer", "3d6c9f43510cb90d24493e07b7cf8ca9f54132d09a257f20b7048022e3b1b707", "animals", 3.9);
 
     public final String name;
     public final String displayName;
