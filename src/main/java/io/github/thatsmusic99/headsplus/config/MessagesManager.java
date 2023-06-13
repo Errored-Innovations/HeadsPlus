@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.headsplus.config;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
+import io.github.thatsmusic99.headsplus.managers.MiniMessageManager;
 import io.github.thatsmusic99.headsplus.sql.PlayerSQLManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -1246,12 +1247,22 @@ public class MessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
+
+        boolean json = false;
+        try {
+            new JSONParser().parse(str);
+            json = true;
+        } catch (ParseException ignored) {
+        }
+
+        // If we should use MiniMessage, use that instead
+        if (!json && MiniMessageManager.canUse()) {
+            MiniMessageManager.sendMessage(sender, str);
+            return;
+        }
+
         if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
-            try {
-                new JSONParser().parse(str);
-            } catch (ParseException e) {
-                str = "{\"text\":\"" + str + "\"}";
-            }
+            if (!json) str = "{\"text\":\"" + str + "\"}";
             final String result = str;
             new BukkitRunnable() {
                 @Override
