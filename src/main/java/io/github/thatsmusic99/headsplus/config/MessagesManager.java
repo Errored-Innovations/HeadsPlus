@@ -1246,12 +1246,15 @@ public class MessagesManager {
         for (int i = 0; i < replace.length; i += 2) {
             str = str.replace(replace[i], replace[i + 1]);
         }
-        if (sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
-            try {
-                new JSONParser().parse(str);
-            } catch (ParseException e) {
-                str = "{\"text\":\"" + str + "\"}";
-            }
+
+        boolean json = false;
+        try {
+            new JSONParser().parse(str);
+            json = true;
+        } catch (ParseException ignored) {
+        }
+
+        if (json && sender instanceof Player && MainConfig.get().getLocalisation().USE_TELLRAW) {
             final String result = str;
             new BukkitRunnable() {
                 @Override
