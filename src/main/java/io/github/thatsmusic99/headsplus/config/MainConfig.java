@@ -292,6 +292,7 @@ public class MainConfig extends HPConfig {
                         "headsplus.maincommand.info",
                         "headsplus.maincommand.profile",
                         "headsplus.myhead",
+                        "headsplus.section.*",
                         "headsplus.sellhead",
                         "headsplus.sellhead.gui"),
                 "The list of permissions users should have by default.\n" +
