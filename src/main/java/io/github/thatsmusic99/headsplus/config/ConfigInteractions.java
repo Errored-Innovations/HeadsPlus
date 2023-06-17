@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -20,7 +19,7 @@ public class ConfigInteractions extends HPConfig {
     private static ConfigInteractions instance;
     private final Gson gson;
 
-    public ConfigInteractions() throws IOException, IllegalAccessException {
+    public ConfigInteractions() throws Exception {
         super("interactions.yml");
         instance = this;
         gson = new Gson();
@@ -34,7 +33,7 @@ public class ConfigInteractions extends HPConfig {
     Location-specified messages
      */
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         double version = getDouble("version");
         if (version < 0.1) {
             // Default values

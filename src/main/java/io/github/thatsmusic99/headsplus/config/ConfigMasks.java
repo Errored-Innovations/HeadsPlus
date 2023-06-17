@@ -3,20 +3,19 @@ package io.github.thatsmusic99.headsplus.config;
 import com.google.common.collect.Lists;
 import io.github.thatsmusic99.headsplus.managers.MaskManager;
 
-import java.io.IOException;
 import java.util.Collections;
 
 public class ConfigMasks extends FeatureConfig {
 
     private static ConfigMasks instance;
 
-    public ConfigMasks() throws IOException, IllegalAccessException {
+    public ConfigMasks() throws Exception {
         super("masks.yml");
         instance = this;
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         makeSectionLenient("masks");
         addExample("masks.chicken.when-wearing", new String[0]);
         addExample("masks.chicken.effects", Collections.singletonList("SLOW_FALLING"));

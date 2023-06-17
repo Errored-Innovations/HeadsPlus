@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.config.defaults.CraftingDefaults;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +12,7 @@ public class ConfigCrafting extends FeatureConfig {
 
     private static ConfigCrafting instance;
 
-    public ConfigCrafting() throws IOException, IllegalAccessException {
+    public ConfigCrafting() throws Exception {
         super("crafting.yml");
         instance = this;
     }
@@ -23,7 +22,7 @@ public class ConfigCrafting extends FeatureConfig {
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         addDefault("defaults.price", 0.0);
         addExample("defaults.lore", Lists.newArrayList("&7Price &8» &c{price}"));
         addDefault("defaults.sellable", false);

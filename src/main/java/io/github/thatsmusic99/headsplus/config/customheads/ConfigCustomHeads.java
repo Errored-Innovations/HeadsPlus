@@ -1,26 +1,25 @@
 package io.github.thatsmusic99.headsplus.config.customheads;
 
-import io.github.thatsmusic99.headsplus.HeadsPlus;
+import  io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigHeads;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 
 import java.io.File;
-import java.io.IOException;
 
 @Deprecated
 public class ConfigCustomHeads extends HPConfig {
 
     public static ConfigCustomHeads instance;
 
-    public ConfigCustomHeads() throws IOException, IllegalAccessException {
+    public ConfigCustomHeads() throws Exception {
         super("customheads.yml");
         instance = this;
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         makeSectionLenient("heads");
         makeSectionLenient("sections");
         makeSectionLenient("options");

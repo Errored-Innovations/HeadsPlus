@@ -9,35 +9,12 @@ import java.io.IOException;
 
 public abstract class HPConfig extends ConfigFile {
 
-    public HPConfig(@NotNull String name) throws IOException {
+    public HPConfig(@NotNull String name) throws Exception {
         super(getOrCreateFile(name));
     }
 
-    public void load() {
-        loadDefaults();
-        moveToNew();
-        try {
-            save();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-        postSave();
-        if (this instanceof FeatureConfig) {
-            ((FeatureConfig) this).setLoaded(true);
-        }
-    }
-
-    public abstract void loadDefaults();
-
-    public void moveToNew() {
-    }
-
-    public void postSave() {
-    }
-
     @Override
-    public void reload() throws IOException {
+    public void reload() throws Exception {
         super.reload();
         moveToNew();
         save();

@@ -6,7 +6,6 @@ import io.github.thatsmusic99.headsplus.inventories.BaseInventory;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.inventories.list.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +14,7 @@ public class ConfigInventories extends HPConfig {
 
     private static ConfigInventories instance;
 
-    public ConfigInventories() throws IOException, IllegalAccessException {
+    public ConfigInventories() throws Exception {
         super("inventories.yml");
         instance = this;
     }
@@ -25,7 +24,7 @@ public class ConfigInventories extends HPConfig {
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         for (InventoryManager.IconType i : InventoryManager.IconType.values()) {
             addDefault("icons." + i.getId() + ".material", i.getMaterial());
             addDefault("icons." + i.getId() + ".display-name", i.getDisplayName());

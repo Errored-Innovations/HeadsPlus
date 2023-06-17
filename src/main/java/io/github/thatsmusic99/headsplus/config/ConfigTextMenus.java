@@ -18,7 +18,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ConfigTextMenus extends HPConfig {
 
     private static ConfigTextMenus instance;
 
-    public ConfigTextMenus() throws IOException, IllegalAccessException {
+    public ConfigTextMenus() throws Exception {
         super("textmenus.yml");
         instance = this;
     }
@@ -37,7 +36,7 @@ public class ConfigTextMenus extends HPConfig {
     // TODO - make an interface that all translators override?
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         addDefault("default-header", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &8❱ &7━━━━━━━━━━━━&c．・");
         addDefault("default-header-paged", "&c・．&7━━━━━━━━━━━━ &8❰ &c&lHeadsPlus &7{page}/{pages} &8❱ " +
                 "&7━━━━━━━━━━━━&c．・");

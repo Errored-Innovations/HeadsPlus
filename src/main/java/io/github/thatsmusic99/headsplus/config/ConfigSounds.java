@@ -6,7 +6,7 @@ public class ConfigSounds extends HPConfig {
 
     private static ConfigSounds instance;
 
-    public ConfigSounds() throws IOException, IllegalAccessException {
+    public ConfigSounds() throws Exception {
         super("sounds.yml");
         instance = this;
     }
@@ -16,7 +16,7 @@ public class ConfigSounds extends HPConfig {
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         for (Defaults d : Defaults.values()) {
             addDefault("sounds." + d.name + ".sound", "ENTITY_EXPERIENCE_ORB_PICKUP");
             addDefault("sounds." + d.name + ".volume", 1.0f);

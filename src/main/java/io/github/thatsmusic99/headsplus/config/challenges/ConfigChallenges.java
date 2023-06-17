@@ -5,7 +5,6 @@ import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,13 +12,13 @@ public class ConfigChallenges extends FeatureConfig {
 
     private static ConfigChallenges instance;
 
-    public ConfigChallenges() throws IOException, IllegalAccessException {
+    public ConfigChallenges() throws Exception {
         super("challenges.yml");
         instance = this;
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         addDefault("options.current-version", 1.3);
         addDefault("options.prepare-icons", true);
         addDefault("options.prepare-rewards", true);

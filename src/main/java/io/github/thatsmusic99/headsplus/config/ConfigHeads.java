@@ -7,19 +7,17 @@ import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.ChatColor;
 
-import java.io.IOException;
-
 public class ConfigHeads extends HPConfig {
 
     private static ConfigHeads instance;
 
-    public ConfigHeads() throws IOException, IllegalAccessException {
+    public ConfigHeads() throws Exception {
         super("heads.yml");
         instance = this;
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         addComment("This is the config where entirely custom heads can be made, with custom metadata, actions, etc.\n" +
                 "To reference a custom head, use HP#head_id.\n" +
                 "If you're looking for mobs.yml instead to change mob drops, please go there :)");
@@ -32,8 +30,8 @@ public class ConfigHeads extends HPConfig {
             if (ConfigCustomHeads.get() != null) return;
             for (HeadsXEnums head : HeadsXEnums.values()) {
                 if (isNew() || head.version > getDouble("version")) {
-                    addDefault("heads." + head.name().toLowerCase() + ".display-name", head.displayName);
-                    addDefault("heads." + head.name().toLowerCase() + ".texture", head.texture);
+                    forceExample("heads." + head.name().toLowerCase() + ".display-name", head.displayName);
+                    forceExample("heads." + head.name().toLowerCase() + ".texture", head.texture);
                 }
             }
         }

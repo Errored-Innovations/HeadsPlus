@@ -18,7 +18,7 @@ public class ConfigMobs extends FeatureConfig {
 
     private static ConfigMobs instance;
 
-    public ConfigMobs() throws IOException, IllegalAccessException {
+    public ConfigMobs() throws Exception {
         super("mobs.yml");
         instance = this;
     }
@@ -28,7 +28,7 @@ public class ConfigMobs extends FeatureConfig {
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         addComment("This configuration file has become more complex compared to previous versions.\n" +
                 "If you have trouble understanding how it works, please use the /hp config mobs command instead.");
         addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));

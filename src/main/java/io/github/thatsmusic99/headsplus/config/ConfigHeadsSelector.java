@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -23,7 +22,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
     private final HashMap<String, BuyableHeadInfo> buyableHeads = new LinkedHashMap<>();
     private int totalHeads = 0;
 
-    public ConfigHeadsSelector() throws IOException, IllegalAccessException {
+    public ConfigHeadsSelector() throws Exception {
         super("heads-selector.yml");
         instance = this;
     }
@@ -38,7 +37,7 @@ public class ConfigHeadsSelector extends FeatureConfig {
     }
 
     @Override
-    public void loadDefaults() {
+    public void addDefaults() {
         double version = getDouble("version", -1.0);
         if (isNew()) version = -1.0;
         addComment("This is where you can configure where the heads selector (/heads)");

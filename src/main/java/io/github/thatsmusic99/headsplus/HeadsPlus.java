@@ -286,7 +286,13 @@ public class HeadsPlus extends JavaPlugin {
     private void createInstances() {
         configFiles = new ArrayList<>();
         MainConfig config = addConfig(MainConfig.class, "config.yml");
-        if (config != null) config.load();
+        if (config != null) {
+            try {
+                config.load();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         addConfig(ConfigChallenges.class, "challenges.yml");
         if (new File(getDataFolder(), "customheads.yml").exists()) addConfig(ConfigCustomHeads.class, "customheads.yml");
         addConfig(ConfigCrafting.class, "crafting.yml");
