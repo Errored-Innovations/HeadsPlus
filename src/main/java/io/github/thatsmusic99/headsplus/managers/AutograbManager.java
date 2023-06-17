@@ -12,10 +12,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -28,7 +30,7 @@ public class AutograbManager {
     private static final HashMap<String, Long> lookups = new HashMap<>();
     private static final Gson gson = new Gson();
 
-    public static String grabUUID(String username, int tries, CommandSender callback) {
+    public static @Nullable String grabUUID(String username, int tries, CommandSender callback) {
         String uuid = null;
         BufferedReader reader;
         try {
@@ -55,7 +57,7 @@ public class AutograbManager {
             } else if (resp.containsKey("error")) {
                 // Retry
                 if (tries > 0) {
-                    grabUUID(username, tries - 1, callback);
+                    return grabUUID(username, tries - 1, callback);
                 } else if (callback != null) {
                     callback.sendMessage(ChatColor.RED + "Error: Failed to grab data for user " + username + "!");
                 }
@@ -64,6 +66,7 @@ public class AutograbManager {
                 uuid = String.valueOf(resp.get("id")); // Trying to parse this as a UUID will cause an
                 // IllegalArgumentException
             }
+        } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
             DebugPrint.createReport(e, "Retreiving UUID (addhead)", true, callback);
         }
@@ -71,7 +74,7 @@ public class AutograbManager {
     }
 
 
-    public static boolean grabProfile(String id, CommandSender callback, boolean forceAdd) {
+    public static boolean grabProfile(@Nullable String id, CommandSender callback, boolean forceAdd) {
         Long last = lookups.get(id);
         long now = System.currentTimeMillis();
         if (last != null && last > now - 180000) {
@@ -86,11 +89,11 @@ public class AutograbManager {
         return true;
     }
 
-    public static void grabProfile(String id) {
+    public static void grabProfile(@Nullable String id) {
         grabProfile(id, null, false);
     }
 
-    protected static void grabProfile(String id, int tries, CommandSender callback, boolean forceAdd, int delay) {
+    protected static void grabProfile(@Nullable String id, int tries, CommandSender callback, boolean forceAdd, int delay) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(HeadsPlus.get(), () -> {
             BufferedReader reader = null;
             try {
@@ -138,6 +141,7 @@ public class AutograbManager {
                     addTexture(encoded, forceAdd, callback, name);
                     return;
                 }
+            } catch (FileNotFoundException ignored) {
             } catch (Exception ex) {
                 if (ex instanceof IOException && ex.getMessage().contains("Server returned HTTP response code: 429 " +
                         "for URL")) {
