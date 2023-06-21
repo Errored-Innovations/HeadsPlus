@@ -32,8 +32,7 @@ public class PlayerJoinListener extends HeadsPlusListener<PlayerJoinEvent> {
             if (!hp.getServer().getOnlineMode()) {
                 hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting to " +
                         "grab UUID...");
-                String uuid = AutograbManager.grabUUID(player.getName(), 3, null);
-                AutograbManager.grabProfile(uuid);
+                AutograbManager.grabProfileUUID(player.getName());
             } else {
                 AutograbManager.grabTexture(player, false, null);
             }

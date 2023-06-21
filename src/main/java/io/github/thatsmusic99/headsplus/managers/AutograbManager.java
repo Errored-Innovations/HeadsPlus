@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -24,6 +25,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * Used to manage the texture autograbber.
+ */
 public class AutograbManager {
 
     // texture lookups need to be protected from spam
@@ -87,6 +91,13 @@ public class AutograbManager {
         }
         grabProfile(id, 3, callback, forceAdd, forceAdd ? 5 : 20 * 20);
         return true;
+    }
+
+    public static void grabProfileUUID(@NotNull String name) {
+        Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> {
+            String uuid = grabUUID(name, 3, null);
+            grabProfile(uuid);
+        });
     }
 
     public static void grabProfile(@Nullable String id) {

@@ -51,7 +51,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 return true;
             }
             HeadsPlus hp = HeadsPlus.get();
-            HPUtils.getOfflinePlayer(args[0]).thenAccept(player -> {
+            HPUtils.getOfflinePlayer(args[0]).thenAcceptAsync(player -> {
                 String uuid = player.getUniqueId().toString();
                 if (!hp.getServer().getOnlineMode()) {
                     hp.getLogger().warning("Server is in offline mode, player may have an invalid account! Attempting" +
@@ -61,7 +61,7 @@ public class AddHead implements CommandExecutor, IHeadsPlusCommand, TabCompleter
                 if (AutograbManager.grabProfile(uuid, sender, true)) {
                     hpc.sendMessage("commands.addhead.head-adding", sender, "{player}", player.getName());
                 }
-            });
+            }, HeadsPlus.async);
             return true;
         } else {
             if (sender.hasPermission("headsplus.addhead.texture")) {
