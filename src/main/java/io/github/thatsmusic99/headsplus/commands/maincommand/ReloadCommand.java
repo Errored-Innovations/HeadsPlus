@@ -39,7 +39,10 @@ public class ReloadCommand implements IHeadsPlusCommand {
                     try {
                         if (cs instanceof FeatureConfig) {
                             FeatureConfig featureConfig = (FeatureConfig) cs;
-                            if (!featureConfig.shouldLoad()) continue;
+                            if (!featureConfig.shouldLoad()) {
+                                featureConfig.setLoaded(false);
+                                continue;
+                            }
                             if (!featureConfig.isLoaded()) {
                                 featureConfig.load();
                                 continue;

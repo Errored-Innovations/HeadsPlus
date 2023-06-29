@@ -35,20 +35,26 @@ public class ConfigLevels extends FeatureConfig {
             set("version", version);
             for (int i = 1; i <= getDefLevels().size(); i++) {
                 BaseLevel l = getDefLevels().get(i);
-                if (l.getAddedVersion() > current) {
-                    addExample("levels." + l.getConfigName() + ".display-name", l.getDisplayName());
-                    addExample("levels." + l.getConfigName() + ".added-version", l.getAddedVersion());
-                    addExample("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP());
-                    addExample("levels." + l.getConfigName() + ".hierarchy", i);
-                    addExample("levels." + l.getConfigName() + ".rewards.enabled", false);
-                    addExample("levels." + l.getConfigName() + ".rewards.reward-type",
-                            HPChallengeRewardTypes.ECO.name());
-                    addExample("levels." + l.getConfigName() + ".rewards.reward-value", 300);
-                    addExample("levels." + l.getConfigName() + ".rewards.item-amount", 0);
-                    addExample("levels." + l.getConfigName() + ".rewards.command-sender", "player");
-                }
 
+                addOrForce("levels." + l.getConfigName() + ".display-name", l.getDisplayName(), l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".added-version", l.getAddedVersion(), l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".required-xp", l.getRequiredXP(), l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".hierarchy", i, l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".rewards.enabled", false, l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".rewards.reward-type",
+                            HPChallengeRewardTypes.ECO.name(), l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".rewards.reward-value", 300, l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".rewards.item-amount", 0, l.getAddedVersion() > current);
+                addOrForce("levels." + l.getConfigName() + ".rewards.command-sender", "player", l.getAddedVersion() > current);
             }
+        }
+    }
+
+    private void addOrForce(String path, Object value, boolean force) {
+        if (force) {
+            forceExample(path, value);
+        } else {
+            addExample(path, value);
         }
     }
 

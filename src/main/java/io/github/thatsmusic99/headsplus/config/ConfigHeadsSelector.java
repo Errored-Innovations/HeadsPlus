@@ -49,15 +49,22 @@ public class ConfigHeadsSelector extends FeatureConfig {
         if (ConfigCustomHeads.get() != null) return;
         for (HeadsXSections section : HeadsXSections.values()) {
             if (section.version > version) {
-                addDefault("sections." + section.id + ".texture", section.texture);
-                addDefault("sections." + section.id + ".display-name", section.displayName);
-                addDefault("sections." + section.id + ".permission", "headsplus.section." + section.id);
-                addDefault("sections." + section.id + ".enabled", true);
+                forceExample("sections." + section.id + ".texture", section.texture);
+                forceExample("sections." + section.id + ".display-name", section.displayName);
+                forceExample("sections." + section.id + ".permission", "headsplus.section." + section.id);
+                forceExample("sections." + section.id + ".enabled", true);
+            } else {
+                addExample("sections." + section.id + ".texture", section.texture);
+                addExample("sections." + section.id + ".display-name", section.displayName);
+                addExample("sections." + section.id + ".permission", "headsplus.section." + section.id);
+                addExample("sections." + section.id + ".enabled", true);
             }
         }
         for (HeadsXEnums head : HeadsXEnums.values()) {
             if (head.version > version) {
-                addDefault("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
+                forceExample("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
+            } else {
+                addExample("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
             }
         }
 

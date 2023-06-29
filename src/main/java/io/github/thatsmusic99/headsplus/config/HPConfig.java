@@ -13,14 +13,6 @@ public abstract class HPConfig extends ConfigFile {
         super(getOrCreateFile(name));
     }
 
-    @Override
-    public void reload() throws Exception {
-        super.reload();
-        moveToNew();
-        save();
-        postSave();
-    }
-
     protected static File getOrCreateFile(String name) {
         File file = new File(HeadsPlus.get().getDataFolder(), name);
         try {

@@ -10,6 +10,12 @@ public abstract class FeatureConfig extends HPConfig {
         super(name);
     }
 
+    @Override
+    public void load() throws Exception {
+        super.load();
+        setLoaded(true);
+    }
+
     public abstract boolean shouldLoad();
 
     public boolean isLoaded() {
