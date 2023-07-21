@@ -16,6 +16,7 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.PagedLists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -220,7 +221,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
         icons = null;
         InventoryManager manager = InventoryManager.getManager(player);
         HandlerList.unregisterAll(this);
-        if (!manager.isGlitchSlotFilled()) {
+        if (!manager.isGlitchSlotFilled() && player.getGameMode() == GameMode.CREATIVE) {
             player.getInventory().setItem(8, new ItemStack(Material.AIR));
         }
     }

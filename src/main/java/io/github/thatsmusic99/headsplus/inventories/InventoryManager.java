@@ -143,7 +143,7 @@ public class InventoryManager {
         this.player = player.getUniqueId();
         currentPage = 1;
         storedInventories.put(player.getUniqueId(), this);
-        isGlitchSlotFilled = player.getInventory().getItem(8) != null;
+        isGlitchSlotFilled = player.getInventory().getItem(8) != null && player.getInventory().getItem(8).getType() != Material.AIR;
     }
 
     public static InventoryManager getManager(@NotNull Player player) {
