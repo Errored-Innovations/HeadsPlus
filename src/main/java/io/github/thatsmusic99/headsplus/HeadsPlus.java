@@ -294,11 +294,11 @@ public class HeadsPlus extends JavaPlugin {
             }
         }
         addConfig(ConfigChallenges.class, "challenges.yml");
-        if (new File(getDataFolder(), "customheads.yml").exists()) addConfig(ConfigCustomHeads.class, "customheads.yml");
         addConfig(ConfigCrafting.class, "crafting.yml");
         addConfig(ConfigHeads.class, "heads.yml");
         addConfig(ConfigMasks.class, "masks.yml");
         addConfig(ConfigHeadsSelector.class, "heads-selector.yml");
+        if (new File(getDataFolder(), "customheads.yml").exists()) addConfig(ConfigCustomHeads.class, "customheads.yml");
         addConfig(ConfigInteractions.class, "interactions.yml");
         addConfig(ConfigInventories.class, "inventories.yml");
         addConfig(ConfigLevels.class, "levels.yml");

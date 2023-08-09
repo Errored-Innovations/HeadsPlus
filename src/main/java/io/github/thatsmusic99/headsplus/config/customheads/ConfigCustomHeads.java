@@ -53,6 +53,17 @@ public class ConfigCustomHeads extends HPConfig {
                 ConfigHeadsSelector.get().addDefault("sections." + key + ".permission", "headsplus.section." + key);
             }
         }
+
+        try {
+            ConfigHeadsSelector.get().save();
+        } catch (Exception e) {
+            HeadsPlus.get().getLogger().warning("Failed to save the heads-selector.yml file when transferring customheads.yml!");
+        }
+        try {
+            ConfigHeads.get().save();
+        } catch (Exception e) {
+            HeadsPlus.get().getLogger().warning("Failed to save the heads.yml file when transferring customheads.yml!");
+        }
     }
 
     @Override
