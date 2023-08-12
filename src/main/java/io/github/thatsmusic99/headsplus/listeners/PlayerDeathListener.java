@@ -125,7 +125,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
     private boolean shouldDropHead(Player player) {
         // Check world restrictions
-        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.MOBS)) return false;
+        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.PLAYERS)) return false;
         // Check killer restrictions
         if (player.getKiller() == null) {
             if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;
