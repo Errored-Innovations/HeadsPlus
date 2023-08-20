@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.headsplus;
 
+import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.api.events.*;
 import io.github.thatsmusic99.headsplus.commands.*;
 import io.github.thatsmusic99.headsplus.commands.maincommand.*;
@@ -134,6 +135,7 @@ public class HeadsPlus extends JavaPlugin {
                 checkDates();
             });
             Bukkit.getScheduler().runTaskLater(this, this::checkForMutuals, 20);
+            Bukkit.getScheduler().runTaskAsynchronously(this, HPPlayer::reload);
 
             getServer().getConsoleSender().sendMessage(MessagesManager.get().getString("startup.plugin-enabled"));
             for (String str : Arrays.asList(
