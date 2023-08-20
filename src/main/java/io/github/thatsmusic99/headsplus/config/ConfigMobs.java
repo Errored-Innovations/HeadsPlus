@@ -30,7 +30,16 @@ public class ConfigMobs extends FeatureConfig {
     @Override
     public void addDefaults() {
         addComment("This configuration file has become more complex compared to previous versions.\n" +
-                "If you have trouble understanding how it works, please use the /hp config mobs command instead.");
+                "As an example, you can set up per-mob prices, chances, lore and display names using the following format:\n" +
+                "AXOLOTL:\n" +
+                "  default:\n" +
+                "    HP#lucy_axolotl: \n" +
+                "      chance: 20\n" +
+                "      price: 100.0\n" +
+                "      display-name: 'lucy :3'\n" +
+                "      lore:\n" +
+                "      - so cute\n" +
+                "      - we love lucy");
         addDefault("defaults.lore", new ArrayList<>(Arrays.asList("&7Price &8» &c{price}", "&7Type &8» &c{type}")));
         addDefault("defaults.display-name", "{type} Head");
         addHeads();
