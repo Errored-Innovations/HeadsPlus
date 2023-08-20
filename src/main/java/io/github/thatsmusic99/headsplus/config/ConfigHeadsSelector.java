@@ -44,7 +44,6 @@ public class ConfigHeadsSelector extends FeatureConfig {
 
         addDefault("version", 3.5);
         makeSectionLenient("sections");
-        makeSectionLenient("heads");
         if (version >= 3.5) return;
         if (ConfigCustomHeads.get() != null) return;
         for (HeadsXSections section : HeadsXSections.values()) {
@@ -60,21 +59,25 @@ public class ConfigHeadsSelector extends FeatureConfig {
                 addExample("sections." + section.id + ".enabled", true);
             }
         }
-        for (HeadsXEnums head : HeadsXEnums.values()) {
-            if (head.version > version) {
-                forceExample("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
-            } else {
-                addExample("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
-            }
-        }
 
         set("version", 3.5);
+    }
+
+    @Override
+    public void moveToNew() {
+
+        // Get everything in heads
+        if (getConfigSection("heads") == null) return;
+        for (String key : getConfigSection("heads").getKeys(false)) {
+            moveTo("heads." + key + ".section", "heads." + key + ".section", ConfigHeads.get());
+        }
     }
 
     @Override
     public void postSave() {
         sections.clear();
         totalHeads = 0;
+
         // Setting up sections
         for (String key : getConfigSection("sections").getKeys(false)) {
             ConfigSection section = getConfigSection("sections." + key);
@@ -87,13 +90,15 @@ public class ConfigHeadsSelector extends FeatureConfig {
                     .withTexture(section.getString("texture")));
         }
         // Setting up heads
-        for (String key : getConfigSection("heads").getKeys(false)) {
-            ConfigSection section = getConfigSection("heads." + key);
+        for (String key : ConfigHeads.get().getConfigSection("heads").getKeys(false)) {
+            ConfigSection section = ConfigHeads.get().getConfigSection("heads." + key);
             if (section == null) continue;
+
             // If the section doesn't exist, continue
             if (!section.contains("section")) continue;
             if (!sections.containsKey(section.getString("section"))) continue;
             SectionInfo sectionInfo = sections.get(section.getString("section"));
+
             // Get the head info itself
             if (!HeadManager.get().contains(key)) continue;
             BuyableHeadInfo headInfo = new BuyableHeadInfo(HeadManager.get().getHeadInfo(key), key);
