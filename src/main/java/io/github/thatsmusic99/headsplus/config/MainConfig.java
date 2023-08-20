@@ -118,7 +118,7 @@ public class MainConfig extends HPConfig {
         addDefault("default-xp-gained", 10, "The default amount of XP (plugin) gained when receiving a dropped head" +
                 ".\n" +
                 "Per-head XP gained can be configured in the mobs.yml file.");
-        addDefault("blocked-spawn-causes", Lists.newArrayList("SPAWNER_EGG"),
+        addDefault("blocked-spawn-causes", new ArrayList<>(),
                 "Spawn causes that stop heads dropping from a given mob.\n" +
                         "In this example, mobs spawned using spawner eggs will not drop heads at all.");
         addDefault("needs-killer", false, "Whether or not mob drops need a player killing them or not.");
