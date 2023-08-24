@@ -215,7 +215,9 @@ public class EntityDataManager {
         SellableHeadsManager.get().registerPrice("mobs_PLAYER", SellableHeadsManager.SellingType.HUNTING,
                 MainConfig.get().getPlayerDrops().DEFAULT_PRICE);
 
-        for (String player : ConfigMobs.get().getConfigSection("player").getKeys(false)) {
+        ConfigSection section = ConfigMobs.get().getConfigSection("player");
+        if (section == null) return;
+        for (String player : section.getKeys(false)) {
             // Get the player price
             double price = ConfigMobs.get().getDouble("player." + player + ".price", -1);
             if (price == -1) continue;
