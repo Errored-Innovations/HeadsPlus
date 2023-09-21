@@ -15,12 +15,22 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
     private boolean cancelled;
     private EntityDataManager.DroppedHeadInfo head;
     private Player player;
-    private EntityType entityType;
+    private String entityType;
     private Location location;
     private final int amount;
 
+    @Deprecated
     public EntityHeadDropEvent(Player killer, EntityDataManager.DroppedHeadInfo head, Location location,
                                EntityType entityType, int amount) {
+        this.player = killer;
+        this.head = head;
+        this.location = location;
+        this.entityType = entityType.name();
+        this.amount = amount;
+    }
+
+    public EntityHeadDropEvent(Player killer, EntityDataManager.DroppedHeadInfo head, Location location,
+                               String entityType, int amount) {
         this.player = killer;
         this.head = head;
         this.location = location;
@@ -48,7 +58,16 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         return head;
     }
 
+    @Deprecated
     public EntityType getEntityType() {
+        try {
+            return EntityType.valueOf(entityType);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
+    public String getEntityTypeName() {
         return entityType;
     }
 
@@ -64,8 +83,12 @@ public class EntityHeadDropEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public void setEntityType(EntityType entityType) {
+    public void setEntityType(String entityType) {
         this.entityType = entityType;
+    }
+
+    public void setEntityType(EntityType entityType) {
+        this.entityType = entityType.name();
     }
 
     public void setLocation(Location location) {

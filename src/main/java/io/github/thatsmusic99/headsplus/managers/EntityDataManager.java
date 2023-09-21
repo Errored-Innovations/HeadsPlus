@@ -5,11 +5,14 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.MobExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -38,6 +41,22 @@ public class EntityDataManager {
                 permission.getChildren().put("headsplus.drops." + type.name().toLowerCase(), true);
             }
         }
+
+        // Check if MythicMobs is enabled
+        try {
+            Plugin plugin = HeadsPlus.get().getServer().getPluginManager().getPlugin("MythicMobs");
+            if (plugin != null && plugin.isEnabled()) {
+                MobExecutor executor = MythicBukkit.inst().getMobManager();
+
+                // For each registered mob in MM...
+                for (String mob : executor.getMobNames()) {
+                    ableEntities.add(mob);
+                    permission.getChildren().put("headsplus.drops." + mob.toLowerCase(), true);
+                }
+            }
+        } catch (NoClassDefFoundError ignored) {
+        }
+
         Collections.sort(ableEntities);
     }
 

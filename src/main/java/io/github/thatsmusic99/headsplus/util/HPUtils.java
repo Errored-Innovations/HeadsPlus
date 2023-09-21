@@ -5,6 +5,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -18,10 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
@@ -130,6 +128,20 @@ public class HPUtils {
     @NotNull
     public static <T> T ifNull(T object, @NotNull T alternative) {
         return object == null ? alternative : object;
+    }
+
+    public static String getMythicMob(Entity entity) {
+
+        try {
+            Plugin plugin = HeadsPlus.get().getServer().getPluginManager().getPlugin("MythicMobs");
+            if (plugin != null && plugin.isEnabled()) {
+                Optional<ActiveMob> activeMob = MythicBukkit.inst().getMobManager().getActiveMob(entity.getUniqueId());
+                if (activeMob.isPresent()) return activeMob.get().getMobType();
+            }
+        } catch (NoClassDefFoundError ex) {
+        }
+
+        return entity.getType().name();
     }
 
     public static boolean isMythicMob(Entity entity) {

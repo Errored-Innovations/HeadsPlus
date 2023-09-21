@@ -31,10 +31,15 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
     public void onEvent(EntityDeathEvent event) {
         addData("entity-type", event.getEntityType().name());
         addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
+
+        String entity = HPUtils.getMythicMob(event.getEntity());
+
         // Make sure the entity is valid
-        if (!EntityDataManager.ableEntities.contains(event.getEntityType().name())) return;
+        if (!EntityDataManager.ableEntities.contains(entity)) return;
+
         // Make sure the entity isn't from MythicMobs
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
+
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
         if (!addData("not-wg-restricted",
@@ -49,7 +54,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
                 return;
             }
         }
-        String entity = event.getEntityType().name();
+
         // Check for each head
         String meta = addData("metadata", EntityDataManager.getMeta(event.getEntity()));
         List<EntityDataManager.DroppedHeadInfo> heads = EntityDataManager.getStoredHeads().get(entity + ";" + meta);
@@ -158,7 +163,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
     public static void dropHead(String id, String conditions, EntityDataManager.DroppedHeadInfo info,
                                 Location location, int amount, Player killer) {
 
-        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
+        EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, id, amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             info.buildHead().thenAccept(head -> {
