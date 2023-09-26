@@ -29,10 +29,11 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
     @Override
     public void onEvent(EntityDeathEvent event) {
-        addData("entity-type", event.getEntityType().name());
-        addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
 
         String entity = HPUtils.getMythicMob(event.getEntity());
+
+        addData("entity-type", entity);
+        addData("killer", event.getEntity().getKiller() == null ? "<None>" : event.getEntity().getKiller().getName());
 
         // Make sure the entity is valid
         if (!EntityDataManager.ableEntities.contains(entity)) return;
