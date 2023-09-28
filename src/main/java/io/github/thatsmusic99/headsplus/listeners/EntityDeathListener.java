@@ -38,9 +38,6 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         // Make sure the entity is valid
         if (!EntityDataManager.ableEntities.contains(entity)) return;
 
-        // Make sure the entity isn't from MythicMobs
-        if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
-
         // And make sure there is no WG region saying no
         // I SWEAR TO GOD WORLDGUARD IS SUCH A BRAT
         if (!addData("not-wg-restricted",
