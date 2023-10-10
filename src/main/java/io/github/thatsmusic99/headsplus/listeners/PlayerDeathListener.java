@@ -10,13 +10,13 @@ import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
-import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Random;
 
@@ -85,8 +85,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
         EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo()
                 , "player");
-        headInfo.withTexture(PaperUtil.get().getTexture(victim))
-                .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
+        headInfo.withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null :
                 killer.getName()));
 
@@ -108,7 +107,9 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         }
         double finalPrice = price;
         HeadsPlus.debug("Creating player head of " + victim.getName() + "...");
-        headInfo.buildHead().thenAccept(item -> {
+        headInfo.buildHead().thenAcceptAsync(item ->
+                HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) item.getItemMeta(), victim.getName()).whenCompleteAsync((meta, err) -> {
+            item.setItemMeta(meta);
             item.setAmount(amount);
             PersistenceManager.get().setSellable(item, true);
             if (unique) {
@@ -120,7 +121,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
             location.getWorld().dropItem(location, item);
             HeadsPlus.debug("Dropped " + victim.getName() + " head at " + location.getBlockX() + " " + location.getY() + " " + location.getBlockZ());
-        });
+        }, HeadsPlus.sync), HeadsPlus.sync);
     }
 
     private boolean shouldDropHead(Player player) {
