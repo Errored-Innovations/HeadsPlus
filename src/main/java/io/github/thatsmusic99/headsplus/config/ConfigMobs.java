@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.managers.EntityDataManager;
+import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -11,7 +12,6 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Rabbit;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
 
 public class ConfigMobs extends FeatureConfig {
@@ -279,6 +279,10 @@ public class ConfigMobs extends FeatureConfig {
                 case "STRIDER":
                     addDefaultHead(key + ".COLD", "HP#cold_strider");
                 default:
+                    if (!HeadManager.get().contains("HP#" + key.toLowerCase())) {
+                        makeSectionLenient(key);
+                        continue;
+                    }
                     addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
                     break;
             }
