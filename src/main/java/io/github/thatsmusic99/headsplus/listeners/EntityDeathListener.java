@@ -161,7 +161,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         EntityHeadDropEvent event = new EntityHeadDropEvent(killer, info, location, EntityType.valueOf(id), amount);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            info.buildHead().thenAccept(head -> {
+            info.buildHead().thenAcceptAsync(head -> {
                 // Because I need to set up extra l o r e
                 ItemMeta meta = head.getItemMeta();
                 meta.setLore(ConfigMobs.get().getLore(id, conditions, info.getId(), info.getPrice(), killer == null ? null : killer.getName()));
@@ -171,7 +171,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
                 PersistenceManager.get().setSellable(head, true);
                 PersistenceManager.get().setSellType(head, "mobs_" + id + ":" + conditions + ":" + info.getId());
                 location.getWorld().dropItem(location, head);
-            });
+            }, HeadsPlus.sync);
         }
     }
 
