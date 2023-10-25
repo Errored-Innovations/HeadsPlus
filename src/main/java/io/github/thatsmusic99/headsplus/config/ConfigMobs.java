@@ -11,7 +11,6 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Rabbit;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
 
 public class ConfigMobs extends FeatureConfig {

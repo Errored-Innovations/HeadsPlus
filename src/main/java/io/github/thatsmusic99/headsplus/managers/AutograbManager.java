@@ -226,7 +226,7 @@ public class AutograbManager {
                 buyableHead.withPrice(MainConfig.get().getAutograbber().PRICE);
                 section.addHead(id, buyableHead);
                 // Add to the actual config
-                ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".section", sectionStr);
+                ConfigHeads.get().forceExample("heads.HP#" + id + ".section", sectionStr);
                 if (buyableHead.getPrice() != -1) {
                     ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".price", buyableHead.getPrice());
                 }
