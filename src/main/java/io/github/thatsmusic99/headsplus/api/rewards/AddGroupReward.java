@@ -7,14 +7,12 @@ import io.github.thatsmusic99.headsplus.api.Reward;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class AddGroupReward extends Reward {
+public class AddGroupReward extends Reward<String> {
 
-    private final String group;
-
-    public AddGroupReward(String group, long xp) {
-        super(xp);
-        this.group = group;
+    public AddGroupReward(@NotNull String group, long xp) {
+        super(group, xp);
     }
 
     public static AddGroupReward fromConfigSection(String id, ConfigSection section) {
@@ -26,17 +24,17 @@ public class AddGroupReward extends Reward {
     }
 
     @Override
-    public void rewardPlayer(Challenge challenge, Player player) {
+    public void rewardPlayer(Challenge challenge, @NotNull Player player) {
         super.rewardPlayer(challenge, player);
         Permission permissions = HeadsPlus.get().getPermissions();
         if (!permissions.isEnabled()) return;
-        if (permissions.playerInGroup(player, group)) return;
-        permissions.playerAddGroup(player, group);
+        if (permissions.playerInGroup(player, this.reward)) return;
+        permissions.playerAddGroup(player, this.reward);
     }
 
     @Override
-    public String getDefaultRewardString(Player player) {
+    public String getDefaultRewardString(Player player, int difficulty) {
         return MessagesManager.get().getString("inventory.icon.reward.group-add", player)
-                .replace("{group}", group);
+                .replace("{group}", this.reward);
     }
 }

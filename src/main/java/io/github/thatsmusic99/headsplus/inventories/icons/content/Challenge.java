@@ -22,7 +22,7 @@ public class Challenge extends Content {
     public Challenge(io.github.thatsmusic99.headsplus.api.Challenge challenge, Player player) {
         super(challenge.isComplete(player) ? challenge.getCompleteIcon().clone() : challenge.getIcon().clone());
         this.challenge = challenge;
-        this.reward = challenge.getReward().getRewardString(player);
+        this.reward = challenge.getReward().getRewardString(player, challenge.getDifficulty());
         initNameAndLore("challenge", player);
     }
 

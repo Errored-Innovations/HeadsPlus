@@ -5,16 +5,14 @@ import io.github.thatsmusic99.headsplus.api.Challenge;
 import io.github.thatsmusic99.headsplus.api.Reward;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RunCommandReward extends Reward {
-
-    private final List<String> commands;
+public class RunCommandReward extends Reward<List<String>> {
 
     public RunCommandReward(long xp, List<String> commands) {
-        super(xp);
-        this.commands = commands;
+        super(commands, xp);
     }
 
     public static RunCommandReward fromConfigSection(String id, ConfigSection section) {
@@ -26,9 +24,9 @@ public class RunCommandReward extends Reward {
     }
 
     @Override
-    public void rewardPlayer(Challenge challenge, Player player) {
+    public void rewardPlayer(Challenge challenge, @NotNull Player player) {
         super.rewardPlayer(challenge, player);
-        for (String command : commands) {
+        for (String command : this.reward) {
             if (command.startsWith("player>")) {
                 Bukkit.dispatchCommand(player, command.substring(8).replaceAll("\\{player}", player.getName()));
                 return;
@@ -38,7 +36,7 @@ public class RunCommandReward extends Reward {
     }
 
     @Override
-    public String getDefaultRewardString(Player player) {
+    public String getDefaultRewardString(Player player, int difficulty) {
         return null;
     }
 }

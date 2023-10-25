@@ -9,14 +9,13 @@ import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ItemReward extends Reward {
-
-    private final ItemStack item;
+public class ItemReward extends Reward<ItemStack> {
 
     public ItemReward(ItemStack item, long xp) {
-        super(xp);
-        this.item = item;
+        super(item, xp);
     }
 
     @Deprecated
@@ -48,29 +47,33 @@ public class ItemReward extends Reward {
     }
 
     @Override
-    public String getDefaultRewardString(Player player) {
+    public String getDefaultRewardString(Player player, int difficulty) {
         return MessagesManager.get().getString("inventory.icon.reward.item-give", player)
-                .replace("{amount}", String.valueOf(item.getAmount()))
-                .replace("{item}", HeadsPlus.capitalize(item.getType().name().replaceAll("_", " ")));
+                .replace("{amount}", String.valueOf(multiplyRewardValues(difficulty).getAmount()))
+                .replace("{item}", HeadsPlus.capitalize(reward.getType().name().replaceAll("_", " ")));
     }
 
     @Override
-    public void rewardPlayer(Challenge challenge, Player player) {
+    public void rewardPlayer(@Nullable Challenge challenge, @NotNull Player player) {
         super.rewardPlayer(challenge, player);
+
+        // If their inventory is full, drop the item so it's not entirely lost
         if (player.getInventory().firstEmpty() == -1) {
-            player.getWorld().dropItem(player.getLocation(), item);
+            player.getWorld().dropItem(player.getLocation(), reward);
             return;
         }
-        ItemStack item = this.item;
-        if (isUsingMultiplier()) {
-            item = this.item.clone();
-            item.setAmount(this.item.getAmount() * challenge.getDifficulty());
+        ItemStack item = this.reward;
+        if (isUsingMultiplier() && challenge != null) {
+            item = this.reward.clone();
+            item.setAmount(this.reward.getAmount() * challenge.getDifficulty());
         }
         player.getInventory().addItem(item);
     }
 
     @Override
-    public void multiplyRewardValues(int multiplier) {
-        item.setAmount(item.getAmount() * multiplier);
+    public ItemStack multiplyRewardValues(int multiplier) {
+        ItemStack item = this.reward.clone();
+        item.setAmount(this.reward.getAmount() * multiplier);
+        return item;
     }
 }
