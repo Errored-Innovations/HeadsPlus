@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.hooks.shopguiplus.ShopGUIPlusHook;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.persistence.BreakListener;
@@ -285,6 +286,12 @@ public class HeadsPlus extends JavaPlugin {
         for (HeadsPlusListener<?> listener : listeners) {
             if (!listener.shouldEnable()) continue;
             listener.init();
+        }
+
+        // Check for ShopGUI+
+        if (Bukkit.getPluginManager().getPlugin("ShopGUIPlus") != null) {
+            Bukkit.getPluginManager().registerEvents(new ShopGUIPlusHook(), this);
+            HeadsPlus.get().getLogger().info("Detected ShopGUI+, attempting to hook...");
         }
     }
 
