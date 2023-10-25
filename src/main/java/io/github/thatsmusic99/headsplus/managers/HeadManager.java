@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.managers;
 
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +10,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -177,13 +177,13 @@ public class HeadManager {
             HeadsPlus.debug("Building a head.");
             if (player != null && !player.isEmpty()) {
                 HeadsPlus.debug("Setting a player skull. (" + player + ")");
-                return PaperUtil.get().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
+                return HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) meta, player).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });
             } else if (texture != null) {
                 HeadsPlus.debug("Setting a texture. (" + texture + ")");
-                return PaperUtil.get().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
+                return HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) meta, texture).thenApply(newMeta -> {
                     head.setItemMeta(newMeta);
                     return head;
                 });
@@ -205,10 +205,14 @@ public class HeadManager {
             HeadsPlus.debug("Building a head.");
             if (player != null && !player.isEmpty()) {
                 HeadsPlus.debug("Setting a player skull. (" + player + ")");
-                PaperUtil.get().forceSetProfile((SkullMeta) meta, player);
+                HeadsPlus.get().getProfileHandler().forceSetProfile((SkullMeta) meta, player);
             } else if (texture != null) {
                 HeadsPlus.debug("Setting a texture. (" + texture + ")");
-                PaperUtil.get().forceSetProfileTexture((SkullMeta) meta, texture);
+                try {
+                    HeadsPlus.get().getProfileHandler().forceSetProfileTexture((SkullMeta) meta, texture);
+                } catch (MalformedURLException e) {
+                    HeadsPlus.get().getLogger().warning("Failed to set texture " + texture + "!");
+                }
             }
             HeadsPlus.debug("Setting the metadata now...");
             head.setItemMeta(meta);
