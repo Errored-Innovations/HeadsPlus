@@ -36,7 +36,7 @@ public class ConfigHeads extends HPConfig {
                 } else {
                     addExample("heads." + head.name().toLowerCase() + ".display-name", head.displayName);
                     addExample("heads." + head.name().toLowerCase() + ".texture", head.texture);
-                    addExample("heads.HP#" + head.name().toLowerCase() + ".section", head.section);
+                    addExample("heads." + head.name().toLowerCase() + ".section", head.section);
                 }
             }
         }
