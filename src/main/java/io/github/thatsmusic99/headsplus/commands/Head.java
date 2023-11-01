@@ -59,9 +59,15 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     hpc.sendMessage("commands.errors.player-offline", sender);
                     return true;
                 }
+
+                if (args[0].length() > 16) {
+                    hpc.sendMessage("commands.head.head-too-long", sender);
+                    return true;
+                }
+
                 // Check the player name specified
                 if (!CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
-                    hpc.sendMessage("commands.head.invalid-args", sender);
+                    hpc.sendMessage("commands.head.alpha-names", sender);
                     return true;
                 }
                 // Check restrictions
