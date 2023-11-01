@@ -3,20 +3,20 @@ package io.github.thatsmusic99.headsplus.listeners;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.events.PlayerHeadDropEvent;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
-import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusEventExecutor;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
-import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Random;
 
@@ -50,7 +50,8 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         // Make sure the entity isn't from MythicMobs
         if (addData("is-mythic-mob", HPUtils.isMythicMob(event.getEntity()))) return;
         if (!addData("not-wg-restricted", Bukkit.getPluginManager().getPlugin("WorldGuard") == null
-                || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType().toString()))) return;
+                || FlagHandler.canDrop(event.getEntity().getLocation(), event.getEntity().getType().toString())))
+            return;
         if (!shouldDropHead(event.getEntity())) return;
         double fixedChance = addData("fixed-chance", ConfigMobs.get().getPlayerChance(victim.getName()));
         if (fixedChance == 0) return;
@@ -85,8 +86,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
         EntityDataManager.DroppedHeadInfo headInfo = new EntityDataManager.DroppedHeadInfo(new HeadManager.HeadInfo()
                 , "player");
-        headInfo.withTexture(PaperUtil.get().getTexture(victim))
-                .withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
+        headInfo.withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null :
                 killer.getName()));
 
@@ -108,24 +108,27 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         }
         double finalPrice = price;
         HeadsPlus.debug("Creating player head of " + victim.getName() + "...");
-        headInfo.buildHead().thenAccept(item -> {
-            item.setAmount(amount);
-            PersistenceManager.get().setSellable(item, true);
-            if (unique) {
-                PersistenceManager.get().setSellType(item, "mobs_PLAYER");
-                PersistenceManager.get().setSellPrice(item, finalPrice);
-            } else {
-                PersistenceManager.get().setSellType(item, SELL_ID);
-            }
+        headInfo.buildHead().thenAcceptAsync(item ->
+                HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) item.getItemMeta(), victim.getName()).whenCompleteAsync((meta, err) -> {
+                    item.setItemMeta(meta);
+                    item.setAmount(amount);
+                    PersistenceManager.get().setSellable(item, true);
+                    if (unique) {
+                        PersistenceManager.get().setSellType(item, "mobs_PLAYER");
+                        PersistenceManager.get().setSellPrice(item, finalPrice);
+                    } else {
+                        PersistenceManager.get().setSellType(item, SELL_ID);
+                    }
 
-            location.getWorld().dropItem(location, item);
-            HeadsPlus.debug("Dropped " + victim.getName() + " head at " + location.getBlockX() + " " + location.getY() + " " + location.getBlockZ());
-        });
+                    location.getWorld().dropItem(location, item);
+                    HeadsPlus.debug("Dropped " + victim.getName() + " head at " + location.getBlockX() + " " + location.getY() + " " + location.getBlockZ());
+                }, HeadsPlus.sync), HeadsPlus.sync);
     }
 
     private boolean shouldDropHead(Player player) {
         // Check world restrictions
-        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.PLAYERS)) return false;
+        if (!RestrictionsManager.canUse(player.getWorld().getName(), RestrictionsManager.ActionType.PLAYERS))
+            return false;
         // Check killer restrictions
         if (player.getKiller() == null) {
             if (MainConfig.get().getMobDrops().NEEDS_KILLER) return false;

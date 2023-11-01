@@ -4,6 +4,7 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
+import io.github.thatsmusic99.headsplus.managers.AutograbManager;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,10 +19,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
@@ -145,6 +146,69 @@ public class HPUtils {
         } catch (NoClassDefFoundError ex) {
         }
         return false;
+    }
+
+    public static @NotNull UUID getUUID(@NotNull String name) {
+
+        UUID uuid;
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        UUID offlineUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
+        if (player.getUniqueId().equals(offlineUUID) && CachedValues.PLAYER_NAME.matcher(name).matches()) {
+            String uuidStr = AutograbManager.grabUUID(name, 0, null);
+            if (uuidStr == null) {
+                uuid = offlineUUID;
+            } else {
+                uuid = UUID.fromString(uuidStr.substring(0, 8) +
+                        "-" + uuidStr.substring(8, 12) +
+                        "-" + uuidStr.substring(12, 16) +
+                        "-" + uuidStr.substring(16, 20) +
+                        "-" + uuidStr.substring(20));
+            }
+        } else {
+            uuid = player.getUniqueId();
+        }
+        return uuid;
+    }
+
+    public static @NotNull String toBase64Texture(@NotNull String texture) {
+        if (CachedValues.BASE64_PATTERN.matcher(texture).matches()) return texture;
+
+        // If it's a hash, amend the URL
+        if (texture.matches("^[0-9a-fA-F]+$")) {
+            texture = "https://textures.minecraft.net/texture/" + texture;
+        }
+
+        // Encode the texture
+        texture = String.format("{\"textures\":{\"SKIN\":{\"url\":\"%s\"}}}", texture);
+        return new String(Base64.getEncoder().encode(texture.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static @NotNull URL toSkinURL(final @NotNull String texture) throws MalformedURLException {
+        if (CachedValues.MINECRAFT_TEXTURES_PATTERN.matcher(texture).matches()) return new URL(texture);
+
+        // If it's a hash, just amend the URL and return it
+        if (texture.matches("^[0-9a-fA-F]+$")) {
+            return new URL("https://textures.minecraft.net/texture/" + texture);
+        }
+
+        // Decode
+        String decodedTexture = new String(Base64.getDecoder().decode(texture.getBytes(StandardCharsets.UTF_8)));
+        Matcher matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(decodedTexture);
+        if (matcher.matches()) return new URL(matcher.group(0));
+        throw new IllegalArgumentException("Failed to get skin URL from " + texture + " (" + decodedTexture + ")");
+    }
+
+    public static @NotNull String toSkinHash(@NotNull String texture) {
+        if (texture.matches("^[0-9a-fA-F]+$")) return texture;
+
+        Matcher matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(texture);
+        if (matcher.matches()) return matcher.group(3);
+
+        // Decode
+        String decodedTexture = new String(Base64.getDecoder().decode(texture.getBytes(StandardCharsets.UTF_8)));
+        matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(decodedTexture);
+        if (matcher.matches()) return matcher.group(3);
+        throw new IllegalArgumentException("Failed to get skin URL from " + texture + " (" + decodedTexture + ")");
     }
 
     public static void parseLorePlaceholders(List<String> lore, String message, PlaceholderInfo... placeholders) {

@@ -103,7 +103,7 @@ public abstract class Challenge {
         return mainName;
     }
 
-    public Reward getReward() {
+    public Reward<?> getReward() {
         return RewardsManager.get().getReward(reward);
     }
 
@@ -112,7 +112,7 @@ public abstract class Challenge {
     }
 
     public long getGainedXP() {
-        return getReward().getXp();
+        return getReward().getXp(getDifficulty());
     }
 
     public abstract CompletableFuture<Boolean> canComplete(Player p);

@@ -6,11 +6,11 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>7.0.16</version>
+    <version>7.1.0</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>7.0.16</hp-project.version>
+        <hp-project.version>7.1.0</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
         <dir>${project.build.directory}</dir>
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -222,7 +222,13 @@
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>
-            <version>v2.0.0-BETA-10</version>
+            <version>v2.0.0-rc.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.brcdev-minecraft</groupId>
+            <artifactId>shopgui-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -235,6 +241,10 @@
 
     <!-- Repositories -->
     <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>

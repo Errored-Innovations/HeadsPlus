@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Skull;
@@ -115,44 +116,37 @@ public class ConfigInteractions extends HPConfig {
             return getMessage("special.locations." + locationStr, receiver, skull.getOwner());
         }
 
-        try {
-            // Get the skull's game profile
-            Field profileField = skull.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            GameProfile profile = (GameProfile) profileField.get(skull);
-            if (profile == null) return "";
-            // Make sure the name isn't blacklisted
-            if (getList("ignored-names", new ArrayList<>()).contains(profile.getName())) return "";
-            // Check to see if the config contains the head's name.
-            if (contains("special.names." + profile.getName())) {
-                runCommands("special.names." + profile.getName(), receiver);
-                return getMessage("special.names." + profile.getName(), receiver, profile.getName());
-            }
+        // Get the skull's name
+        String name = HeadsPlus.get().getProfileHandler().getName(skull);
+        if (name == null) return "";
 
-            // Check to see if the texture is noted.
-            // We'll get all three forms of this: the b64 texture, the URL and the hash.
-            // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
-            // EXCITING STUFF
-            // update: fuck you microsoft
-            Iterator<Property> textureIterator = profile.getProperties().get("textures").iterator();
-            if (textureIterator.hasNext()) {
-                Property texturesProp = textureIterator.next();
-                String b64Texture = texturesProp.getValue();
-                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(b64Texture.getBytes())), Map.class);
-                String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
-                String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
+        // Make sure the name isn't blacklisted
+        if (getList("ignored-names", new ArrayList<>()).contains(name)) return "";
+        // Check to see if the config contains the head's name.
+        if (contains("special.names." + name)) {
+            runCommands("special.names." + name, receiver);
+            return getMessage("special.names." + name, receiver, name);
+        }
 
-                for (String str : Arrays.asList(b64Texture, url, hash)) {
-                    if (contains("special.textures." + str)) {
-                        runCommands("special.textures." + str, receiver);
-                        return getMessage("special.textures." + str, receiver, profile.getName());
-                    }
+        // Check to see if the texture is noted.
+        // We'll get all three forms of this: the b64 texture, the URL and the hash.
+        // There are rumours of HD and transparent heads so b64 allows us to retain support for that.
+        // EXCITING STUFF
+        // update: fuck you microsoft
+        String b64Texture = HeadsPlus.get().getProfileHandler().getTexture(skull);
+        if (b64Texture != null) {
+            Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(b64Texture.getBytes())), Map.class);
+            String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
+            String hash = url.replaceAll("http(s?)://textures\\.minecraft\\.net/texture/", "");
+
+            for (String str : Arrays.asList(b64Texture, url, hash)) {
+                if (contains("special.textures." + str)) {
+                    runCommands("special.textures." + str, receiver);
+                    return getMessage("special.textures." + str, receiver, name);
                 }
             }
-
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
         }
+
         runCommands("defaults", receiver);
         return getMessage("defaults", receiver, skull.getOwner());
     }

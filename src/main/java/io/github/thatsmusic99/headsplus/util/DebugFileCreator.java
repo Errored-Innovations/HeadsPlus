@@ -2,7 +2,6 @@ package io.github.thatsmusic99.headsplus.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.authlib.GameProfile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.api.HPPlayer;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
@@ -10,7 +9,6 @@ import io.github.thatsmusic99.headsplus.config.MainConfig;
 import io.github.thatsmusic99.headsplus.managers.ChallengeManager;
 import io.github.thatsmusic99.headsplus.managers.LevelsManager;
 import io.github.thatsmusic99.headsplus.managers.PersistenceManager;
-import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -167,8 +165,7 @@ public class DebugFileCreator {
         } catch (NullPointerException ignored) {
         }
         try {
-            GameProfile gm = ProfileFetcher.getProfile(s);
-            headDetails.put("Texture", gm.getProperties().get("textures").iterator().next().getValue());
+            headDetails.put("Texture", HeadsPlus.get().getProfileHandler().getTexture((SkullMeta) s.getItemMeta()));
         } catch (NullPointerException ignored) {
 
         }

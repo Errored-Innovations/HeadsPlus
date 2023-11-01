@@ -7,7 +7,6 @@ import io.github.thatsmusic99.headsplus.config.ConfigHeads;
 import io.github.thatsmusic99.headsplus.config.ConfigHeadsSelector;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
-import io.github.thatsmusic99.headsplus.reflection.ProfileFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -173,15 +172,8 @@ public class AutograbManager {
 
     public static void grabTexture(OfflinePlayer player, boolean force, CommandSender sender) {
         Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> {
-            final String[] playerInfo = new String[1];
             try {
-                // can't wait for PAPER fricks sake
-                playerInfo[0] =
-                        ProfileFetcher.getProfile(player).getProperties().get("textures").iterator().next().getValue();
-                Map<?, ?> map = gson.fromJson(new String(Base64.getDecoder().decode(playerInfo[0].getBytes())),
-                        Map.class);
-                String url = (String) ((Map<?, ?>) ((Map<?, ?>) map.get("textures")).get("SKIN")).get("url");
-                addTexture(url, force, sender, player.getName() == null ? "<No Name>" : player.getName());
+                addTexture(HeadsPlus.get().getProfileHandler().getTexture(player), force, sender, player.getName() == null ? "<No Name>" : player.getName());
             } catch (NoSuchElementException ignored) {
             }
         });
@@ -234,11 +226,11 @@ public class AutograbManager {
                 buyableHead.withPrice(MainConfig.get().getAutograbber().PRICE);
                 section.addHead(id, buyableHead);
                 // Add to the actual config
-                ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".section", sectionStr);
+                ConfigHeads.get().forceExample("heads." + id + ".section", sectionStr);
                 if (buyableHead.getPrice() != -1) {
-                    ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".price", buyableHead.getPrice());
+                    ConfigHeads.get().forceExample("heads." + id + ".price", buyableHead.getPrice());
                 }
-                ConfigHeadsSelector.get().save();
+                ConfigHeads.get().save();
             }
             if (sender != null) {
                 MessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);

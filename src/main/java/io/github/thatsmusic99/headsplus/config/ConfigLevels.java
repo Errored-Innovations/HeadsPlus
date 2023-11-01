@@ -30,6 +30,7 @@ public class ConfigLevels extends FeatureConfig {
     public void addDefaults() {
         double version = 0.3;
         double current = getDouble("version");
+        addDefault("version", 0.3);
         makeSectionLenient("levels");
         if (current < version) {
             set("version", version);

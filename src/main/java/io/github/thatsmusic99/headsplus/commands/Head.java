@@ -1,11 +1,11 @@
 package io.github.thatsmusic99.headsplus.commands;
 
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.commands.maincommand.DebugPrint;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.RestrictionsManager;
 import io.github.thatsmusic99.headsplus.util.CachedValues;
-import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -33,7 +33,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        PaperUtil.get().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+        HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
@@ -59,9 +59,15 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     hpc.sendMessage("commands.errors.player-offline", sender);
                     return true;
                 }
+
+                if (args[0].length() > 16) {
+                    hpc.sendMessage("commands.head.head-too-long", sender);
+                    return true;
+                }
+
                 // Check the player name specified
                 if (!CachedValues.PLAYER_NAME.matcher(args[0]).matches()) {
-                    hpc.sendMessage("commands.head.invalid-args", sender);
+                    hpc.sendMessage("commands.head.alpha-names", sender);
                     return true;
                 }
                 // Check restrictions

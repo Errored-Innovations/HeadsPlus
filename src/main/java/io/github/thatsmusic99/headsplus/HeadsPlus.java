@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.commands.maincommand.*;
 import io.github.thatsmusic99.headsplus.config.*;
 import io.github.thatsmusic99.headsplus.config.challenges.ConfigChallenges;
 import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
+import io.github.thatsmusic99.headsplus.hooks.shopguiplus.ShopGUIPlusHook;
 import io.github.thatsmusic99.headsplus.inventories.InventoryManager;
 import io.github.thatsmusic99.headsplus.listeners.*;
 import io.github.thatsmusic99.headsplus.listeners.persistence.BreakListener;
@@ -14,12 +15,15 @@ import io.github.thatsmusic99.headsplus.listeners.persistence.PlaceListener;
 import io.github.thatsmusic99.headsplus.managers.*;
 import io.github.thatsmusic99.headsplus.placeholders.CacheManager;
 import io.github.thatsmusic99.headsplus.placeholders.HPExpansion;
+import io.github.thatsmusic99.headsplus.profile.AuthlibProfileHandler;
+import io.github.thatsmusic99.headsplus.profile.IProfileHandler;
+import io.github.thatsmusic99.headsplus.profile.PaperProfileHandler;
+import io.github.thatsmusic99.headsplus.profile.SpigotProfileHandler;
 import io.github.thatsmusic99.headsplus.sql.*;
 import io.github.thatsmusic99.headsplus.util.DebugFileCreator;
 import io.github.thatsmusic99.headsplus.util.FlagHandler;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusException;
 import io.github.thatsmusic99.headsplus.util.events.HeadsPlusListener;
-import io.github.thatsmusic99.headsplus.util.paper.PaperUtil;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -59,6 +63,7 @@ public class HeadsPlus extends JavaPlugin {
     private boolean canUseWG = false;
     private boolean fullyEnabled = false;
     private boolean vaultEnabled = false;
+    private IProfileHandler profileHandler;
 
     public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), task);
     public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.get(), task);
@@ -81,13 +86,18 @@ public class HeadsPlus extends JavaPlugin {
     public void onEnable() {
         try {
             instance = this;
+
             // Set up the NMS
             if (!checkVersion()) return;
+
             // Set up Vault connection
             vaultEnabled = setupEconomy();
             if (vaultEnabled) setupPermissions();
+
             // Set up early managers
             initiateEarlyManagers();
+            initiateProfileHandler();
+
             // Create locale files
             createLocales();
 
@@ -186,7 +196,10 @@ public class HeadsPlus extends JavaPlugin {
 
     public static HeadsPlus get() {
         return instance;
+    }
 
+    public IProfileHandler getProfileHandler() {
+        return profileHandler;
     }
 
     public boolean setupEconomy() {
@@ -208,7 +221,21 @@ public class HeadsPlus extends JavaPlugin {
         new HeadManager();
         new PersistenceManager();
         new SellableHeadsManager();
-        new PaperUtil();
+    }
+
+    private void initiateProfileHandler() {
+
+        for (IProfileHandler handler : Arrays.asList(new PaperProfileHandler(), new SpigotProfileHandler(), new AuthlibProfileHandler())) {
+            try {
+                if (!handler.canUse()) continue;
+                this.profileHandler = handler;
+                break;
+            } catch (NoClassDefFoundError | Exception ignored) {
+            }
+        }
+
+        if (this.profileHandler == null) this.profileHandler = new AuthlibProfileHandler();
+        getLogger().info("Using the " + this.profileHandler.getClass().getSimpleName() + " profile handler.");
     }
 
     private void initiateAsyncManagers() {
@@ -259,6 +286,12 @@ public class HeadsPlus extends JavaPlugin {
         for (HeadsPlusListener<?> listener : listeners) {
             if (!listener.shouldEnable()) continue;
             listener.init();
+        }
+
+        // Check for ShopGUI+
+        if (Bukkit.getPluginManager().getPlugin("ShopGUIPlus") != null) {
+            Bukkit.getPluginManager().registerEvents(new ShopGUIPlusHook(), this);
+            HeadsPlus.get().getLogger().info("Detected ShopGUI+, attempting to hook...");
         }
     }
 
