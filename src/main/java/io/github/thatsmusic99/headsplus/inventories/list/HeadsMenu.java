@@ -44,8 +44,11 @@ public class HeadsMenu extends BaseInventory {
     public List<Content> transformContents(HashMap<String, String> context, Player player) {
         List<Content> contents = new ArrayList<>();
         ConfigHeadsSelector selector = ConfigHeadsSelector.get();
+
+        boolean wildcard = player.isPermissionSet("headsplus.section.*") && player.hasPermission("headsplus.section.*");
+
         for (ConfigHeadsSelector.SectionInfo section : selector.getSections().values()) {
-            if (!player.hasPermission(section.getPermission())) continue;
+            if (!wildcard && !player.hasPermission(section.getPermission())) continue;
             try {
                 contents.add(new CustomHeadSection(section.buildSection(), section.getId(), player));
             } catch (IllegalStateException ex) {
