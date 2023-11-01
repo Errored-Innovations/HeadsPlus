@@ -226,11 +226,11 @@ public class AutograbManager {
                 buyableHead.withPrice(MainConfig.get().getAutograbber().PRICE);
                 section.addHead(id, buyableHead);
                 // Add to the actual config
-                ConfigHeads.get().forceExample("heads.HP#" + id + ".section", sectionStr);
+                ConfigHeads.get().forceExample("heads." + id + ".section", sectionStr);
                 if (buyableHead.getPrice() != -1) {
-                    ConfigHeadsSelector.get().forceExample("heads.HP#" + id + ".price", buyableHead.getPrice());
+                    ConfigHeads.get().forceExample("heads." + id + ".price", buyableHead.getPrice());
                 }
-                ConfigHeadsSelector.get().save();
+                ConfigHeads.get().save();
             }
             if (sender != null) {
                 MessagesManager.get().sendMessage("commands.addhead.head-added", sender, "{player}", name);
