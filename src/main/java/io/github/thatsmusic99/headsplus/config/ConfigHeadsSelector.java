@@ -109,7 +109,9 @@ public class ConfigHeadsSelector extends FeatureConfig {
         }
 
         // Masks
-        for (String key : ConfigMasks.get().getConfigSection("masks").getKeys(false)) {
+        final ConfigSection masks = ConfigMasks.get().getConfigSection("masks");
+        if (masks == null) return;
+        for (String key : masks.getKeys(false)) {
             ConfigSection section = ConfigMasks.get().getConfigSection("masks." + key);
             if (section == null) continue;
 
