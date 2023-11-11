@@ -47,10 +47,19 @@ public class ConfigHeads extends HPConfig {
         for (String head : getConfigSection("heads").getKeys(false)) {
             ConfigSection section = getConfigSection("heads." + head);
             if (section == null) continue; // why?
+
+            String displayName = section.getString("display-name", "");
+            if (displayName == null) displayName = "";
+
+            String texture = section.getString("texture", "");
+            if (texture == null) {
+                HeadsPlus.get().getLogger().warning("Head ID " + head + " has a null texture and cannot be added.");
+                continue;
+            }
+
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo()
-                    .withDisplayName(ChatColor.translateAlternateColorCodes('&',
-                            section.getString("display-name", "")))
-                    .withTexture(section.getString("texture", ""));
+                    .withDisplayName(ChatColor.translateAlternateColorCodes('&', displayName))
+                    .withTexture(texture);
             headInfo.setLore(section.getStringList("lore"));
             HeadManager.get().registerHead(head, headInfo);
         }
