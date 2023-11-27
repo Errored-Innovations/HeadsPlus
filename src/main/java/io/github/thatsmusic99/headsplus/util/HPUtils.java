@@ -194,7 +194,7 @@ public class HPUtils {
         // Decode
         String decodedTexture = new String(Base64.getDecoder().decode(texture.getBytes(StandardCharsets.UTF_8)));
         Matcher matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(decodedTexture);
-        if (matcher.matches()) return new URL(matcher.group(0));
+        if (matcher.find()) return new URL(matcher.group(3));
         throw new IllegalArgumentException("Failed to get skin URL from " + texture + " (" + decodedTexture + ")");
     }
 
@@ -202,12 +202,12 @@ public class HPUtils {
         if (texture.matches("^[0-9a-fA-F]+$")) return texture;
 
         Matcher matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(texture);
-        if (matcher.matches()) return matcher.group(3);
+        if (matcher.find()) return matcher.group(3);
 
         // Decode
         String decodedTexture = new String(Base64.getDecoder().decode(texture.getBytes(StandardCharsets.UTF_8)));
         matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(decodedTexture);
-        if (matcher.matches()) return matcher.group(3);
+        if (matcher.find()) return matcher.group(3);
         throw new IllegalArgumentException("Failed to get skin URL from " + texture + " (" + decodedTexture + ")");
     }
 
