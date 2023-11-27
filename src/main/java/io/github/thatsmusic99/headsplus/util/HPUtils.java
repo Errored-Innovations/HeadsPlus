@@ -194,7 +194,7 @@ public class HPUtils {
         // Decode
         String decodedTexture = new String(Base64.getDecoder().decode(texture.getBytes(StandardCharsets.UTF_8)));
         Matcher matcher = CachedValues.MINECRAFT_TEXTURES_PATTERN_LENIENT.matcher(decodedTexture);
-        if (matcher.find()) return new URL(matcher.group(3));
+        if (matcher.find()) return new URL(matcher.group(0));
         throw new IllegalArgumentException("Failed to get skin URL from " + texture + " (" + decodedTexture + ")");
     }
 
