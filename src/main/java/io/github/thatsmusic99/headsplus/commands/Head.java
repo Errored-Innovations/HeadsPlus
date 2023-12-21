@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @CommandInfo(
         commandname = "head",
@@ -33,11 +34,24 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
     private void giveHead(Player p, String n) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n).thenAccept(meta -> {
+
+        final Player player = Bukkit.getPlayer(n);
+        final CompletableFuture<SkullMeta> result;
+
+        if (player != null) {
+            final String texture = HeadsPlus.get().getProfileHandler().getTexture(player);
+            result = texture == null ?
+                    HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n) :
+                    HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) skull.getItemMeta(), texture);
+        } else {
+            result = HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n);
+        }
+
+        result.thenAcceptAsync(meta -> {
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
-        });
+        }, HeadsPlus.sync);
     }
 
     @Override
