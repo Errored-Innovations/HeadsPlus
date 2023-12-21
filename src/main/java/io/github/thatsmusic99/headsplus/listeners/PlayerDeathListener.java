@@ -19,6 +19,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
@@ -108,8 +109,13 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         }
         double finalPrice = price;
         HeadsPlus.debug("Creating player head of " + victim.getName() + "...");
-        headInfo.buildHead().thenAcceptAsync(item ->
-                HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) item.getItemMeta(), victim.getName()).whenCompleteAsync((meta, err) -> {
+        headInfo.buildHead().thenAcceptAsync(item -> {
+                final String texture = HeadsPlus.get().getProfileHandler().getTexture(victim);
+                final CompletableFuture<SkullMeta> result = texture == null ?
+                        HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) item.getItemMeta(), victim.getName()) :
+                        HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) item.getItemMeta(), texture);
+
+                result.whenCompleteAsync((meta, err) -> {
                     item.setItemMeta(meta);
                     item.setAmount(amount);
                     PersistenceManager.get().setSellable(item, true);
@@ -122,7 +128,8 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
 
                     location.getWorld().dropItem(location, item);
                     HeadsPlus.debug("Dropped " + victim.getName() + " head at " + location.getBlockX() + " " + location.getY() + " " + location.getBlockZ());
-                }, HeadsPlus.sync), HeadsPlus.sync);
+                }, HeadsPlus.sync);
+        }, HeadsPlus.async);
     }
 
     private boolean shouldDropHead(Player player) {
