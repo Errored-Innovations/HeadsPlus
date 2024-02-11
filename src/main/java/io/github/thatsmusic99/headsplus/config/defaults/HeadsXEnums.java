@@ -502,7 +502,8 @@ public enum HeadsXEnums {
     TADPOLE("&7Tadpole", "b23ebf26b7a441e10a86fb5c2a5f3b519258a5c5dddd6a1a75549f517332815b", "animals", 3.7),
     ILLUSIONER("&9Illusioner", "512512e7d016a2343a7bff1a4cd15357ab851579f1389bd4e3a24cbeb88b", "mobs", 3.8),
     CAMEL("&eCamel", "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445", "animals", 3.9),
-    SNIFFER("&cSniffer", "3d6c9f43510cb90d24493e07b7cf8ca9f54132d09a257f20b7048022e3b1b707", "animals", 3.9);
+    SNIFFER("&cSniffer", "3d6c9f43510cb90d24493e07b7cf8ca9f54132d09a257f20b7048022e3b1b707", "animals", 3.9),
+    BREEZE("&9Breeze", "a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c", "mobs", 4.0);
 
     public final String name;
     public final String displayName;
