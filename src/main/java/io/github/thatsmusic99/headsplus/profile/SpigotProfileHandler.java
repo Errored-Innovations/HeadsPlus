@@ -69,20 +69,36 @@ public class SpigotProfileHandler implements IProfileHandler {
     public String getTexture(@NotNull OfflinePlayer player) {
 
         // uh oh reflection time
-        final Field profileMethod;
+        Object profile;
+
+        // Try the field first
         try {
-            profileMethod = player.getClass().getDeclaredField("profile");
-            profileMethod.setAccessible(true);
-            final Object profile = profileMethod.get(player);
+            final Field profileField = player.getClass().getField("profile");
+            profileField.setAccessible(true);
+            profile = profileField.get(player);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+
+            // Try the method
+            final Method profileMethod;
+            try {
+                profileMethod = player.getClass().getMethod("getProfile");
+                profileMethod.setAccessible(true);
+                profile = profileMethod.invoke(player);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        try {
 
             final Method propertiesMethod = profile.getClass().getMethod("getProperties");
             final Object propertyMap = propertiesMethod.invoke(profile);
 
-            final Method textureMethod = propertyMap.getClass().getMethod("get", String.class);
+            final Method textureMethod = propertyMap.getClass().getMethod("get", Object.class);
             final Collection<Object> properties = (Collection<Object>) textureMethod.invoke(propertyMap, "textures");
             final Object property = properties.iterator().next();
 
-            final Field value = property.getClass().getField("value");
+            final Field value = property.getClass().getDeclaredField("value");
             value.setAccessible(true);
 
             return HPUtils.toBase64Texture((String) value.get(property));
