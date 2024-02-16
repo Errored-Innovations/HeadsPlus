@@ -189,10 +189,14 @@ public class AutograbManager {
             }
             ConfigHeadsSelector.SectionInfo section = ConfigHeadsSelector.get().getSection(sectionStr);
             String title = MainConfig.get().getAutograbber().DISPLAY_NAME.replace("{player}", name);
-            // If the head doesn't exist, add it
+
+            // If the head doesn't exist, add it - for REAL, this time!
             String id;
             HeadManager.HeadInfo headInfo;
             if (HeadManager.get().contains(name)) {
+
+                // If it's an automated addition then let's not try to force it in
+                if (sender == null) return;
                 name += "_" + section.getHeads().size();
             }
             if (texture.startsWith("http")) {
