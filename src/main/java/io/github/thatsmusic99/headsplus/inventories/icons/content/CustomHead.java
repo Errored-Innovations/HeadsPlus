@@ -123,7 +123,9 @@ public class CustomHead extends Content {
                 HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(str, player),
                         new HPUtils.PlaceholderInfo("{price}", determinePrice(player.getWorld()), true));
             }
-            paymentLore.add(lore.get(lore.size() - 1));
+            if (!lore.isEmpty()) {
+                paymentLore.add(lore.get(lore.size() - 1));
+            }
         }
         ItemMeta im = item.getItemMeta();
         im.setLore(lore);
