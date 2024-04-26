@@ -130,8 +130,8 @@ public class SpigotProfileHandler implements IProfileHandler {
     }
 
     @Override
-    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) throws MalformedURLException {
-        PlayerProfile profile = Bukkit.getServer().createPlayerProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String name, @NotNull String texture) throws MalformedURLException {
+        PlayerProfile profile = Bukkit.getServer().createPlayerProfile(UUID.nameUUIDFromBytes(texture.getBytes()), name);
         profile.getTextures().setSkin(HPUtils.toSkinURL(texture));
         meta.setOwnerProfile(profile);
     }

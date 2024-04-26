@@ -34,7 +34,11 @@ public interface IProfileHandler {
 
     void forceSetProfile(@NotNull SkullMeta meta, @NotNull String name);
 
-    void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) throws MalformedURLException;
+    default void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) throws MalformedURLException {
+        forceSetProfileTexture(meta, "HPXHead", texture);
+    }
+
+    void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String name, @NotNull String texture) throws MalformedURLException;
 
     default CompletableFuture<SkullMeta> setProfile(@NotNull SkullMeta meta, @NotNull String name) {
         return CompletableFuture.supplyAsync(() -> {
@@ -44,9 +48,13 @@ public interface IProfileHandler {
     }
 
     default CompletableFuture<SkullMeta> setProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) {
+        return setProfileTexture(meta, "HPXHead", texture);
+    }
+
+    default CompletableFuture<SkullMeta> setProfileTexture(@NotNull SkullMeta meta, @NotNull String name, @NotNull String texture) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                forceSetProfileTexture(meta, texture);
+                forceSetProfileTexture(meta, name, texture);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }

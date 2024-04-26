@@ -113,7 +113,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
                 final String texture = HeadsPlus.get().getProfileHandler().getTexture(victim);
                 final CompletableFuture<SkullMeta> result = texture == null ?
                         HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) item.getItemMeta(), victim.getName()) :
-                        HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) item.getItemMeta(), texture);
+                        HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) item.getItemMeta(), victim.getName(), texture);
 
                 result.whenCompleteAsync((meta, err) -> {
                     item.setItemMeta(meta);

@@ -2,6 +2,7 @@ package io.github.thatsmusic99.headsplus.profile;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -61,10 +62,18 @@ public class PaperProfileHandler implements IProfileHandler {
     }
 
     private String getTexture(PlayerProfile profile, String otherwise) {
-        if (profile == null) return null;
-        if (!profile.hasTextures()) return null;
+        if (profile == null) {
+            HeadsPlus.debug("Player profile of " + otherwise + " is null.");
+            return null;
+        }
+        if (!profile.hasTextures()) {
+            HeadsPlus.debug("Player profile of " + otherwise + " has no textures.");
+            return null;
+        }
         for (ProfileProperty property : profile.getProperties()) {
+            HeadsPlus.debug("Checking property: " + property.getName());
             if (!property.getName().equals("textures")) continue;
+            HeadsPlus.debug("Textures property returned for " + otherwise + ": " + property.getValue());
             return property.getValue();
         }
         return otherwise;
@@ -83,8 +92,8 @@ public class PaperProfileHandler implements IProfileHandler {
     }
 
     @Override
-    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) {
-        PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String name, @NotNull String texture) {
+        PlayerProfile profile = Bukkit.getServer().createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), name);
         profile.setProperty(new ProfileProperty("textures", texture));
         profile.complete(true, true);
         meta.setPlayerProfile(profile);

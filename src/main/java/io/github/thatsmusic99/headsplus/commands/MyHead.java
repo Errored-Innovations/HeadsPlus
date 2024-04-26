@@ -63,7 +63,7 @@ public class MyHead implements CommandExecutor, IHeadsPlusCommand {
             final String texture = HeadsPlus.get().getProfileHandler().getTexture(player);
             result = texture == null ?
                     HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n) :
-                    HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) skull.getItemMeta(), texture);
+                    HeadsPlus.get().getProfileHandler().setProfileTexture((SkullMeta) skull.getItemMeta(), n, texture);
         } else {
             result = HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n);
         }

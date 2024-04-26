@@ -71,10 +71,10 @@ public class AuthlibProfileHandler implements IProfileHandler {
     }
 
     @Override
-    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String texture) {
+    public void forceSetProfileTexture(@NotNull SkullMeta meta, @NotNull String name, @NotNull String texture) {
         GameProfile profile = getProfile(meta);
         if (profile == null) {
-            profile = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "HPXHead");
+            profile = new GameProfile(UUID.nameUUIDFromBytes(texture.getBytes()), name);
         }
         profile.getProperties().put("textures", new Property("texture", texture));
         setProfile(meta, profile);
