@@ -195,7 +195,7 @@ public class EntityDataManager {
                                     HeadsPlus.capitalize(name.replaceAll("_", " "))));
                         }
 
-                        headInfo.withXP(path).withChance(path).withPrice(path);
+                        headInfo.withXP(path).withChance(path).withPrice(path).setUnique(path);
 
                         //headInfo.setLore(ConfigMobs.get().getLore(name, conditions, headInfo.price));
 
@@ -239,12 +239,14 @@ public class EntityDataManager {
         private MaskManager.MaskInfo info;
         private double chance;
         private double price;
+        private boolean unique;
 
         public DroppedHeadInfo(HeadManager.HeadInfo info, String id) {
             super();
             this.id = id;
             this.chance = MainConfig.get().getMobDrops().DEFAULT_DROP_CHANCE;
             this.price = MainConfig.get().getMobDrops().DEFAULT_PRICE;
+            this.unique = false;
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial());
             if (info.getTexture() != null) withTexture(info.getTexture());
@@ -273,6 +275,12 @@ public class EntityDataManager {
             return this;
         }
 
+        public DroppedHeadInfo setUnique(String path) {
+            if (!ConfigMobs.get().containsKey(path + ".unique")) return this;
+            this.unique = ConfigMobs.get().getBoolean(path + ".unique");
+            return this;
+        }
+
         public long getXp() {
             return xp;
         }
@@ -287,6 +295,10 @@ public class EntityDataManager {
 
         public double getPrice() {
             return price;
+        }
+
+        public boolean isUnique() {
+            return unique;
         }
 
         @Override

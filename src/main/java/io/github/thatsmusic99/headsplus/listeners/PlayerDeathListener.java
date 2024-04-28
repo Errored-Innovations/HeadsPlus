@@ -90,6 +90,7 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
         headInfo.withDisplayName(ConfigMobs.get().getPlayerDisplayName(victim.getName()));
         headInfo.setLore(ConfigMobs.get().getPlayerLore(victim.getName(), price, killer == null ? null :
                 killer.getName()));
+        headInfo.setUnique("player." + victim.getName());
 
         headInfo.withXP("player.default"); // Sets default XP
         headInfo.withXP("player." + victim.getName());

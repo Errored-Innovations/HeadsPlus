@@ -329,6 +329,10 @@ public class ConfigMobs extends FeatureConfig {
         return getString(path + ".display-name", getString("defaults.display-name", null));
     }
 
+    public boolean isUnique(String path) {
+        return getBoolean(path + ".unique");
+    }
+
     @Nullable
     public List<String> getLore(String type, String conditions, String name, double price, String killerName) {
         List<String> lore = new ArrayList<>();

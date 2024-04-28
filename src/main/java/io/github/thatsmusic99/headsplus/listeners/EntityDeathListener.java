@@ -73,7 +73,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
         // TODO - option to set a max number of heads to drop at once
         for (EntityDataManager.DroppedHeadInfo info : heads) {
             double fixedChance = addData("fixed-chance", info.getChance());
-            if (fixedChance == 0) return;
+            if (fixedChance == 0) continue;
             double randomChance = addData("random-chance", new Random().nextDouble() * 100);
             if (event.getEntity().getKiller() != null && !MainConfig.get().getMobDrops().LOOTING_IGNORED.contains(entity)) {
                 fixedChance = HPUtils.calculateChance(fixedChance, randomChance, event.getEntity().getKiller());
@@ -83,6 +83,8 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
                 int amount = addData("amount", HPUtils.getAmount(fixedChance));
                 dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount,
                         event.getEntity().getKiller());
+
+                if (info.isUnique()) return;
             }
         }
     }
