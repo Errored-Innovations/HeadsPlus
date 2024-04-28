@@ -47,7 +47,7 @@ public class Stats extends Icon {
         List<String> lore = new ArrayList<>();
         for (String loreStr : ConfigInventories.get().getStringList("icons." + id + ".lore")) {
             HPUtils.parseLorePlaceholders(lore, MessagesManager.get().formatMsg(loreStr, player),
-                    new HPUtils.PlaceholderInfo("{head}",
+                    new HPUtils.PlaceholderInfo("{heads}",
                             manager.getSection() != null ?
                                     hpch.getSections().get(manager.getSection()).getHeads().size() :
                                     hpch.getTotalHeads(), true),
