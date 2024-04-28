@@ -166,8 +166,7 @@ public class CraftingManager {
                 // why does this not require a namespaced key lmao
                 recipe = new MerchantRecipe(item, 0, section.getInteger("max-uses", 5),
                         section.contains("experience"), section.getInteger("experience", 0), section.getFloat("price" +
-                        "-multiplier"),
-                        section.getBoolean("ignore-discounts"));
+                        "-multiplier"));
                 break;
             case SMITHING:
                 if (choices.size() != 2)

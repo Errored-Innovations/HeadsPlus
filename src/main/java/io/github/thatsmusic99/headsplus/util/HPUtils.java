@@ -89,9 +89,9 @@ public class HPUtils {
         ConfigSection lootingThresholds = MainConfig.get().getConfigSection("thresholds");
         if (lootingThresholds == null) return chance;
         double level = 0;
-        if (killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+        if (killer.getInventory().getItemInMainHand().containsEnchantment(getLooting())) {
             ItemStack item = killer.getInventory().getItemInMainHand();
-            level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+            level = item.getEnchantmentLevel(getLooting());
         }
         if (level == 0) return chance;
         if (chance <= lootingThresholds.getDouble("rare")) {
@@ -109,6 +109,14 @@ public class HPUtils {
             chance += level * 100;
         }
         return chance;
+    }
+
+    private static Enchantment getLooting() {
+        try {
+            return Enchantment.LOOTING;
+        } catch (NoSuchFieldError e) {
+            return Enchantment.getByName("LOOT_BONUS_MOBS");
+        }
     }
 
 

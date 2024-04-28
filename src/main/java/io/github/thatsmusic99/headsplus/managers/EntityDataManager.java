@@ -140,6 +140,12 @@ public class EntityDataManager {
                 builder.append(((Frog) entity).getVariant().name());
                 break;
             }
+            case "WOLF": {
+
+                try {
+                    builder.append(((Wolf) entity).getVariant().getKey().getKey().toUpperCase());
+                } catch (NoSuchMethodError ignored) {}
+            }
 
         }
         if (builder.length() > 0) {

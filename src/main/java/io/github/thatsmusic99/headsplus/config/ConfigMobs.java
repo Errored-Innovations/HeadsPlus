@@ -195,6 +195,7 @@ public class ConfigMobs extends FeatureConfig {
                     addDefaultHead(key + ".BROWN", "HP#brown_" + key.toLowerCase());
                     addDefaultHead(key + ".GRAY", "HP#gray_" + key.toLowerCase());
                     break;
+                case "MOOSHROOM":
                 case "MUSHROOM_COW":
                     addDefaultHead(key + ".default", "HP#red_mooshroom");
                     addDefaultHead(key + ".RED", "HP#red_mooshroom");
@@ -239,6 +240,9 @@ public class ConfigMobs extends FeatureConfig {
                         }
                     }
                     break;
+                case "SNOW_GOLEM":
+                    addDefaultHead(key + ".default", "HP#snowman");
+                    break;
                 case "TROPICAL_FISH":
                 case "PIG_ZOMBIE":
                 case "ELDER_GUARDIAN":
@@ -251,6 +255,17 @@ public class ConfigMobs extends FeatureConfig {
                     for (String biome : Arrays.asList("DESERT", "PLAINS", "SAVANNA", "SNOW", "SWAMP", "TAIGA",
                             "JUNGLE")) {
                         addDefaultHead(key + "." + biome, "HP#villager_" + biome.toLowerCase());
+                    }
+                    break;
+                case "WOLF":
+                    addDefaultHead(key + ".default", "HP#wolf");
+                    for (String variant : Lists.newArrayList("ASHEN", "BLACK", "CHESTNUT", "PALE", "RUSTY",
+                            "SNOWY", "SPOTTED", "STRIPED", "WOODS")) {
+                        if (variant.equals("PALE")) {
+                            addDefaultHead(key + ".PALE", "HP#wolf");
+                        } else {
+                            addDefaultHead(key + "." + variant, "HP#" + variant.toLowerCase() + "_wolf");
+                        }
                     }
                     break;
                 case "ZOMBIE_VILLAGER":

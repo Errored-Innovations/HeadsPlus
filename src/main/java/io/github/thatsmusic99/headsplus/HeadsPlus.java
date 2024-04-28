@@ -447,18 +447,19 @@ public class HeadsPlus extends JavaPlugin {
     }
 
     private boolean checkVersion() {
-        String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        int number = Integer.parseInt(bukkitVersion.split("_")[1]);
+
+        String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("\\.")[1];
+        int number = Integer.parseInt(bukkitVersion);
         if (number < 15) {
             getLogger().severe("!!! YOU ARE USING HEADSPLUS ON AN OLD UNSUPPORTED VERSION. !!!");
-            getLogger().severe("The plugin only supports 1.15.2 to 1.20.1.");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.20.4.");
             getLogger().severe("Please update your server if you wish to continue using the plugin.");
             getLogger().severe("To prevent any damage, the plugin is now disabling...");
             setEnabled(false);
             return false;
         } else if (number > 20) {
             getLogger().severe("!!! YOU ARE USING HEADSPLUS ON A NEW UNSUPPORTED VERSION. !!!");
-            getLogger().severe("The plugin only supports 1.15.2 to 1.20.1.");
+            getLogger().severe("The plugin only supports 1.15.2 to 1.20.4.");
             getLogger().severe("Considering this is a new version though, there's a chance the plugin still works.");
             getLogger().severe("The plugin will remain enabled, but update it as soon as possible.");
             getLogger().severe("If this is the latest version and you find problems/bugs, please report them.");

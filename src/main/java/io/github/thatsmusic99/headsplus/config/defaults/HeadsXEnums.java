@@ -503,7 +503,18 @@ public enum HeadsXEnums {
     ILLUSIONER("&9Illusioner", "512512e7d016a2343a7bff1a4cd15357ab851579f1389bd4e3a24cbeb88b", "mobs", 3.8),
     CAMEL("&eCamel", "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445", "animals", 3.9),
     SNIFFER("&cSniffer", "3d6c9f43510cb90d24493e07b7cf8ca9f54132d09a257f20b7048022e3b1b707", "animals", 3.9),
-    BREEZE("&9Breeze", "a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c", "mobs", 4.0);
+    BREEZE("&9Breeze", "a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c", "mobs", 4.0),
+    ASHEN_WOLF("&7Ashen Wolf", "d39754f0cff419578ce94b5c88666d26d0275ff2cc713b6e3461b935baac844f", "animals", 4.1),
+    BLACK_WOLF("&7Black Wolf", "982f647315a78c4e10e40571a4b82996ef9e6d38b525f7ba770cdfe8eeedbac6", "animals", 4.1),
+    CHESTNUT_WOLF("&eChestnut Wolf", "351a0748ba0f7f0df4cde3d9b9edcb35db2273cd45b2191a5d2315cf8e756caf", "animals", 4.1),
+    RUSTY_WOLF("&cRusty Wolf", "b704777cc5363757a8637a17638eda83487b03615c999f12a2cd65358afe4a08", "animals", 4.1),
+    STRIPED_WOLF("&eStriped Wolf", "bc46cf492aa556129f791e0bedc04964263b499760c988ae1740fe278c76e10a", "animals", 4.1),
+    SNOWY_WOLF("&fSnowy Wolf", "44877e52d9361278a3736fcaaa5d70eb14785c1a995bdaba5de91ed886459ea8", "animals", 4.1),
+    SPOTTED_WOLF("&6Spotted Wolf", "98ec61fd9cbc4f663c3f849ea45383d43319c2c770a2f28b8c7a50975b81b3c9", "animals", 4.1),
+    WOODS_WOLF("&6Woods Wolf", "6e8c2a6e104a3e9d7397326f01bf25862f0aaf9e3830d49dbb9b4a4305358404", "animals", 4.1),
+    ARMADILLO("&cArmadillo", "541693d604ed8eb31f550d3c8b124ad3f0f4a34f5f83a72def177fce4ac90916", "animals", 4.1),
+    BOGGED("&aBogged", "7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100", "mobs", 4.1);
+
 
     public final String name;
     public final String displayName;
