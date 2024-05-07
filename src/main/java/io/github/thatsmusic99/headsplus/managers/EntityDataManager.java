@@ -7,6 +7,7 @@ import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
@@ -29,7 +30,7 @@ public class EntityDataManager {
             permission = new Permission("headsplus.drops.*");
         }
         permission.getChildren().put("headsplus.drops.player", true);
-        for (EntityType type : EntityType.values()) {
+        for (EntityType type : Registry.ENTITY_TYPE) {
             if (!type.isAlive()) continue;
 
             // who decided that an armor stand is alive?
