@@ -288,6 +288,7 @@ public class ConfigMobs extends FeatureConfig {
                 case "ENDER_DRAGON":
                 case "ZOMBIE":
                 case "SKELETON":
+                case "PIGLIN":
                     addDefaultHead(key + ".default", "{mob-default}");
                     break;
                 case "STRIDER":

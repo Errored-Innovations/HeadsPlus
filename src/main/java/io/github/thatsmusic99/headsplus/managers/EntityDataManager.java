@@ -186,6 +186,13 @@ public class EntityDataManager {
                                 case "SKELETON":
                                     headInfo.withMaterial(Material.SKELETON_SKULL);
                                     break;
+                                case "PIGLIN":
+                                    try {
+                                        headInfo.withMaterial(Material.valueOf("PIGLIN_HEAD"));
+                                    } catch (IllegalArgumentException ignored) {
+                                        headInfo = new DroppedHeadInfo(HeadManager.get().getHeadInfo("HP#piglin"), head);
+                                    }
+                                    break;
                             }
                         }
 
