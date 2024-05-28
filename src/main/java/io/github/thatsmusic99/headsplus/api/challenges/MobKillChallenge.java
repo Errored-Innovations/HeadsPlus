@@ -13,8 +13,11 @@ import java.util.concurrent.ExecutionException;
 
 public class MobKillChallenge extends Challenge {
 
+    private final String head;
+
     public MobKillChallenge(String key, ConfigSection section, ItemStack icon, ItemStack completeIcon) {
         super(key, section, icon, completeIcon);
+        this.head = section.getString("head");
     }
 
     @Override
@@ -30,18 +33,32 @@ public class MobKillChallenge extends Challenge {
 
     @Override
     public CompletableFuture<Integer> getStatFuture(UUID uuid) {
-        if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, true);
-        return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING,
-                "entity=" + getHeadType(), true);
+        if (this.head == null) {
+            if (getHeadType().equals("total"))
+                return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, true);
+            return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING,
+                    "entity=" + getHeadType(), true);
+        } else {
+            if (getHeadType().equals("total"))
+                return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, this.head, true);
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, this.head,
+                    "entity=" + getHeadType(), true);
+        }
     }
 
     @Override
     public int getStatSync(UUID uuid) throws ExecutionException, InterruptedException {
-        if (getHeadType().equals("total"))
-            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, false).get();
-        return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity" +
-                "=" + getHeadType(), false).get();
+        if (this.head == null) {
+            if (getHeadType().equals("total"))
+                return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, false).get();
+            return StatisticsSQLManager.get().getStatMeta(uuid, StatisticsSQLManager.CollectionType.HUNTING, "entity" +
+                    "=" + getHeadType(), false).get();
+        } else {
+            if (getHeadType().equals("total"))
+                return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, this.head, false).get();
+            return StatisticsSQLManager.get().getStat(uuid, StatisticsSQLManager.CollectionType.HUNTING, this.head, "entity" +
+                    "=" + getHeadType(), false).get();
+        }
     }
 
     @Override
