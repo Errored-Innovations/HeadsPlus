@@ -448,7 +448,7 @@ public class HeadsPlus extends JavaPlugin {
 
     private boolean checkVersion() {
 
-        String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("\\.")[1];
+        String bukkitVersion = Bukkit.getServer().getBukkitVersion().split("[.-]")[1];
         int number = Integer.parseInt(bukkitVersion);
         if (number < 15) {
             getLogger().severe("!!! YOU ARE USING HEADSPLUS ON AN OLD UNSUPPORTED VERSION. !!!");
