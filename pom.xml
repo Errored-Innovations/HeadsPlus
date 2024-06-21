@@ -6,11 +6,11 @@
 
     <groupId>io.github.thatsmusic99</groupId>
     <artifactId>headsplus</artifactId>
-    <version>7.1.3</version>
+    <version>7.1.4</version>
 
     <properties>
         <!--suppress UnresolvedMavenProperty -->
-        <hp-project.version>7.1.3</hp-project.version>
+        <hp-project.version>7.1.4</hp-project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jenkins.timestamp>${maven.build.timestamp}</jenkins.timestamp>
         <dir>${project.build.directory}</dir>
