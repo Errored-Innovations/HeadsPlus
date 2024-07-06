@@ -79,12 +79,12 @@ public class StatisticsSQLManager extends SQLManager {
                             if (mobObj.equals("total")) continue;
                             ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
                             String head = "";
-                            if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
+                            if (defaultSection != null && !defaultSection.getKeys(false).isEmpty()) {
                                 head = defaultSection.getKeys(false).get(0);
                             }
                             int total = Integer.parseInt(String.valueOf(huntingObj.get(mobObj)));
 
-                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
                             statement.setString(2, "HUNTING");
                             statement.setString(3, head);
                             statement.setString(4, "entity=" + mobObj);
@@ -100,12 +100,12 @@ public class StatisticsSQLManager extends SQLManager {
                             if (mobObj.equals("total")) continue;
                             ConfigSection defaultSection = ConfigMobs.get().getConfigSection(mobObj + ".default");
                             String head = "";
-                            if (defaultSection != null && defaultSection.getKeys(false).size() != 0) {
+                            if (defaultSection != null && !defaultSection.getKeys(false).isEmpty()) {
                                 head = defaultSection.getKeys(false).get(0);
                             }
                             int total = Integer.parseInt(String.valueOf(craftingObj.get(mobObj)));
 
-                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+                            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
                             statement.setString(2, "CRAFTING");
                             statement.setString(3, head);
                             statement.setString(4, "mob=" + mobObj);
@@ -129,7 +129,7 @@ public class StatisticsSQLManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, type.name());
 
             ResultSet set = statement.executeQuery();
@@ -143,7 +143,7 @@ public class StatisticsSQLManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, type.name());
             statement.setString(3, head);
 
@@ -158,7 +158,7 @@ public class StatisticsSQLManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND metadata LIKE ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, type.name());
             statement.setString(3, "%" + metadata + "%");
 
@@ -173,7 +173,7 @@ public class StatisticsSQLManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT SUM(count), username FROM headsplus_stats, headsplus_players " +
                             "WHERE user_id = ? AND id = user_id AND collection_type = ? AND head = ? AND metadata LIKE ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, type.name());
             statement.setString(3, head);
             statement.setString(4, "%" + metadata + "%");
@@ -300,7 +300,7 @@ public class StatisticsSQLManager extends SQLManager {
         createConnection(connection -> {
             PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
                     "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
-            int id = PlayerSQLManager.get().getUserID(uuid);
+            int id = PlayerSQLManager.get().getUserID(uuid, connection);
             checkStatement.setInt(1, id);
             checkStatement.setString(2, type.name());
             checkStatement.setString(3, head);

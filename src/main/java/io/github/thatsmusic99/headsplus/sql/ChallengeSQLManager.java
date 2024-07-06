@@ -80,7 +80,7 @@ public class ChallengeSQLManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement("SELECT SUM(count) FROM headsplus_challenges " +
                     "WHERE user_id = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
 
             ResultSet set = statement.executeQuery();
             if (!set.next()) return -1;
@@ -92,7 +92,7 @@ public class ChallengeSQLManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_challenges " +
                     "WHERE user_id = ? AND challenge = ?");
-            checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             checkStatement.setString(2, challenge);
 
             ResultSet set = checkStatement.executeQuery();
@@ -105,7 +105,7 @@ public class ChallengeSQLManager extends SQLManager {
                         "last_completion_time = ? WHERE user_id = ? AND challenge = ?");
             }
             updateStatement.setLong(1, System.currentTimeMillis());
-            updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid));
+            updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid, connection));
             updateStatement.setString(3, challenge);
             set.close();
             updateStatement.executeUpdate();
@@ -118,7 +118,7 @@ public class ChallengeSQLManager extends SQLManager {
             List<String> challenges = new ArrayList<>();
             PreparedStatement checkStatement = connection.prepareStatement("SELECT challenge FROM " +
                     "headsplus_challenges WHERE user_id = ?");
-            checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            checkStatement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
 
             ResultSet set = checkStatement.executeQuery();
             while (set.next()) {

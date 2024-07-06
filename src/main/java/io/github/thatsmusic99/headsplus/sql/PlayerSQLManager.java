@@ -348,14 +348,17 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     protected int getUserID(UUID uuid) throws ExecutionException, InterruptedException {
-        return createConnection(connection -> {
-            PreparedStatement statement = connection.prepareStatement("SELECT id FROM headsplus_players WHERE uuid = " +
-                    "?");
-            statement.setString(1, uuid.toString());
+        return createConnection(connection -> getUserID(uuid, connection), false,
+                "get user ID for " + uuid.toString()).get();
+    }
 
-            ResultSet set = statement.executeQuery();
-            if (!set.next()) return -1;
-            return set.getInt("id");
-        }, false, "get user ID for " + uuid.toString()).get();
+    protected int getUserID(UUID uuid, Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT id FROM headsplus_players WHERE uuid = ?");
+        statement.setString(1, uuid.toString());
+
+        ResultSet set = statement.executeQuery();
+        if (!set.next()) return -1;
+        return set.getInt("id");
     }
 }

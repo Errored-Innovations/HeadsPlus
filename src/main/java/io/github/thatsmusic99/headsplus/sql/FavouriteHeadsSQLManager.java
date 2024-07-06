@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class FavouriteHeadsSQLManager extends SQLManager {
 
@@ -79,7 +78,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO headsplus_fav_heads (user_id, head) VALUES (?, ?)");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, head);
 
             statement.executeUpdate();
@@ -91,7 +90,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM headsplus_fav_heads WHERE user_id = ? AND head = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, head);
 
             statement.executeUpdate();
@@ -103,7 +102,7 @@ public class FavouriteHeadsSQLManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT head FROM headsplus_fav_heads WHERE user_id = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             ResultSet set = statement.executeQuery();
             List<String> heads = new ArrayList<>();
             while (set.next()) {

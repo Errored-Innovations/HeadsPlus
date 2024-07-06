@@ -78,7 +78,7 @@ public class PinnedChallengeManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT challenge FROM headsplus_pinned_challenges WHERE user_id = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             ResultSet set = statement.executeQuery();
             List<String> challenges = new ArrayList<>();
             while (set.next()) {
@@ -92,7 +92,7 @@ public class PinnedChallengeManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO headsplus_pinned_challenges (user_id, challenge) VALUES (?, ?)");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, challenge);
 
             statement.executeUpdate();
@@ -105,7 +105,7 @@ public class PinnedChallengeManager extends SQLManager {
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM headsplus_pinned_challenges " +
                             "WHERE headsplus_players.id = ? AND challenge = ?");
-            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid));
+            statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, challenge);
 
             statement.executeUpdate();
