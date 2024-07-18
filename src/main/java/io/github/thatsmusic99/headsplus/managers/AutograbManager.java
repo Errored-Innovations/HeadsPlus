@@ -32,8 +32,13 @@ public class AutograbManager {
     // texture lookups need to be protected from spam
     private static final HashMap<String, Long> lookups = new HashMap<>();
     private static final Gson gson = new Gson();
+    private static final HashMap<String, String> uuidCache = new HashMap<>();
 
     public static @Nullable String grabUUID(String username, int tries, CommandSender callback) {
+
+        // If the UUID is already cached, return it
+        if (uuidCache.containsKey(username)) return uuidCache.get(username);
+
         String uuid = null;
         BufferedReader reader;
         try {
@@ -71,8 +76,15 @@ public class AutograbManager {
             }
         } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
-            DebugPrint.createReport(e, "Retreiving UUID (addhead)", true, callback);
+
+            // If it's not a ratelimit then debug it
+            if (!e.getMessage().contains("Server returned HTTP response code: 429 for URL")) {
+                DebugPrint.createReport(e, "Retreiving UUID (addhead)", true, callback);
+            }
         }
+
+        // If the UUID isn't null, cache it
+        if (uuid != null) uuidCache.put(username, uuid);
         return uuid;
     }
 
