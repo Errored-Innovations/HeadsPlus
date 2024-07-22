@@ -124,24 +124,6 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
         addPossibleData("fixed-chance", "<double>");
         addPossibleData("random-chance", "<double>");
-        List<String> metadata = new ArrayList<>();
-        for (Horse.Color color : Horse.Color.values()) {
-            HPUtils.addIfAbsent(metadata, color.name());
-        }
-        for (DyeColor color : DyeColor.values()) {
-            HPUtils.addIfAbsent(metadata, color.name());
-        }
-        for (Rabbit.Type type : Rabbit.Type.values()) {
-            HPUtils.addIfAbsent(metadata, type.name());
-        }
-        for (TropicalFish.Pattern pattern : TropicalFish.Pattern.values()) {
-            HPUtils.addIfAbsent(metadata, pattern.name());
-        }
-        metadata.add("SNOW");
-        for (Cat.Type type : Cat.Type.values()) {
-            HPUtils.addIfAbsent(metadata, type.name());
-        }
-
 
         addPossibleData("metadata", "default",
                 "WHITE", "CREAMY", "CHESTNUT", "BROWN", "BLACK", "GRAY", "DARK_BROWN",
@@ -152,7 +134,7 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
                 "BLOCKFISH", "BETTY", "CLAYFISH",
                 "SNOW",
                 "TABBY", "SIAMESE", "BRITISH_SHORTHAIR", "CALICO", "PERSIAN", "RAGDOLL", "JELLIE", "ALL_BLACK",
-                "NONE", "");
+                "NONE", ""); // TODO - once the API changes surrounding entities have settled, make this dynamic
 
         addPossibleData("killer", "<Player>");
     }

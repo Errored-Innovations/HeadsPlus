@@ -183,8 +183,9 @@ public class ConfigMobs extends FeatureConfig {
                     break;
                 case "HORSE":
                     addDefaultHead(key + ".default", "HP#brown_horse");
-                    for (Horse.Color variant : Horse.Color.values()) {
-                        addDefaultHead(key + "." + variant.name(), "HP#" + variant.name().toLowerCase() + "_horse");
+                    for (String type : Arrays.asList("black", "brown", "chestnut", "creamy", "dark_brown", "gray",
+                            "white")) {
+                        addDefaultHead(key + "." + type.toUpperCase(), "HP#" + type + "_horse");
                     }
                     break;
                 case "LLAMA":
@@ -222,8 +223,9 @@ public class ConfigMobs extends FeatureConfig {
                     break;
                 case "RABBIT":
                     addDefaultHead(key + ".default", "HP#brown_rabbit");
-                    for (Rabbit.Type type : Rabbit.Type.values()) {
-                        addDefaultHead(key + "." + type.name(), "HP#" + type.name().toLowerCase() + "_rabbit");
+                    for (String type : Arrays.asList("BLACK", "BLACK_AND_WHITE", "BROWN", "GOLD", "SALT_AND_PEPPER",
+                            "THE_KILLER_BUNNY", "WHITE")) {
+                        addDefaultHead(key + "." + type.toUpperCase(), "HP#" + type + "_rabbit");
                     }
                     break;
                 case "SHEEP":
