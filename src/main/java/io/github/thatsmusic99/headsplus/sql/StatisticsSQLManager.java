@@ -307,6 +307,7 @@ public class StatisticsSQLManager extends SQLManager {
             checkStatement.setString(4, metadata);
 
             ResultSet set = checkStatement.executeQuery();
+            checkStatement.close();
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
