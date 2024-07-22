@@ -6,13 +6,17 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import io.github.thatsmusic99.headsplus.config.MainConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -101,13 +105,13 @@ public class EntityDataManager {
                 break;
             }
             case "CAT": {
-                builder.append(((Cat) entity).getCatType());
+                builder.append(getUnstableKeyed(entity, "getCatType", "default"));
                 break;
             }
             case "VILLAGER": {
                 Villager villager = (Villager) entity;
-                builder.append(villager.getVillagerType()).append(",");
-                builder.append(villager.getProfession());
+                builder.append(extend(villager.getVillagerType())).append(",");
+                builder.append(extend(villager.getProfession()));
                 break;
             }
             case "MUSHROOM_COW": {
@@ -125,8 +129,10 @@ public class EntityDataManager {
             }
             case "ZOMBIE_VILLAGER": {
                 ZombieVillager zombie = (ZombieVillager) entity;
-                builder.append(zombie.getVillagerType()).append(",");
-                builder.append(zombie.getVillagerProfession());
+                builder.append(extend(zombie.getVillagerType())).append(",");
+
+                // ignore the null check it's lying
+                if (zombie.getVillagerProfession() != null) builder.append(extend(zombie.getVillagerProfession()));
                 break;
             }
             case "CREEPER": {
@@ -142,14 +148,11 @@ public class EntityDataManager {
                 break;
             }
             case "WOLF": {
-
-                try {
-                    builder.append(((Wolf) entity).getVariant().getKey().getKey().toUpperCase());
-                } catch (NoSuchMethodError ignored) {}
+                builder.append(getUnstableKeyed(entity, "getVariant", "PALE"));
             }
 
         }
-        if (builder.length() > 0) {
+        if (!builder.isEmpty()) {
             if (builder.charAt(builder.length() - 1) == ',') builder.setLength(builder.length() - 1);
             result = builder.toString();
         }
@@ -238,6 +241,33 @@ public class EntityDataManager {
             // Register that price
             SellableHeadsManager.get().registerPrice("mobs_PLAYER;" + player, SellableHeadsManager.SellingType.HUNTING, price);
         }
+    }
+
+    private static @NotNull String getUnstableKeyed(final @NotNull Entity entity, final @NotNull String methodName,
+                                             final @NotNull String defaultOption) {
+
+        try {
+            final Method method = entity.getClass().getMethod(methodName);
+            final Object obj = method.invoke(entity);
+
+            // If it's a keyed object
+            if (obj instanceof Keyed) return extend((Keyed) obj);
+
+            // If it's an enum
+            if (obj instanceof Enum<?>) return ((Enum<?>) obj).name().toUpperCase();
+
+        } catch (NoSuchMethodException ignored) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            HeadsPlus.get().getLogger().throwing(EntityDataManager.class.getSimpleName(),
+                    "getUnstableKeyed", e);
+            HeadsPlus.get().getLogger().warning("Something went wrong fetching metadata from "
+                    + entity.getClass().getSimpleName() + " using " + methodName + "!");
+        }
+        return defaultOption;
+    }
+
+    private static @NotNull String extend(final @NotNull Keyed keyed) {
+        return keyed.getKey().getKey().toUpperCase();
     }
 
     public static class DroppedHeadInfo extends MaskManager.MaskInfo {
