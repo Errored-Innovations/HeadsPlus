@@ -353,12 +353,13 @@ public class PlayerSQLManager extends SQLManager {
     }
 
     protected int getUserID(UUID uuid, Connection connection) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT id FROM headsplus_players WHERE uuid = ?");
-        statement.setString(1, uuid.toString());
-
-        ResultSet set = statement.executeQuery();
-        if (!set.next()) return -1;
-        return set.getInt("id");
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT id FROM headsplus_players WHERE uuid = ?")) {
+            statement.setString(1, uuid.toString());
+            try (ResultSet set = statement.executeQuery()) {
+                if (!set.next()) return -1;
+                return set.getInt("id");
+            }
+        }
     }
 }

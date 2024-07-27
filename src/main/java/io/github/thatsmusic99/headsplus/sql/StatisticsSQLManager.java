@@ -298,16 +298,19 @@ public class StatisticsSQLManager extends SQLManager {
 
     public void addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount, boolean async) {
         createConnection(connection -> {
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
-                    "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
-            int id = PlayerSQLManager.get().getUserID(uuid, connection);
-            checkStatement.setInt(1, id);
-            checkStatement.setString(2, type.name());
-            checkStatement.setString(3, head);
-            checkStatement.setString(4, metadata);
 
-            ResultSet set = checkStatement.executeQuery();
-            checkStatement.close();
+            final ResultSet set;
+            final int id = PlayerSQLManager.get().getUserID(uuid, connection);
+            try (PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
+                    "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?")) {
+                checkStatement.setInt(1, id);
+                checkStatement.setString(2, type.name());
+                checkStatement.setString(3, head);
+                checkStatement.setString(4, metadata);
+
+                set = checkStatement.executeQuery();
+            }
+
             // Then use the statement appropriate
             PreparedStatement updateStatement;
             if (!set.next()) {
