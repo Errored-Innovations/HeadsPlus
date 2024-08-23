@@ -225,7 +225,7 @@ public class ConfigMobs extends FeatureConfig {
                     addDefaultHead(key + ".default", "HP#brown_rabbit");
                     for (String type : Arrays.asList("BLACK", "BLACK_AND_WHITE", "BROWN", "GOLD", "SALT_AND_PEPPER",
                             "THE_KILLER_BUNNY", "WHITE")) {
-                        addDefaultHead(key + "." + type.toUpperCase(), "HP#" + type + "_rabbit");
+                        addDefaultHead(key + "." + type, "HP#" + type.toLowerCase() + "_rabbit");
                     }
                     break;
                 case "SHEEP":
