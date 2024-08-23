@@ -18,15 +18,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -56,17 +59,23 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
     }
 
     public BaseInventory(Player player, HashMap<String, String> context) {
+
         // Decide whether warnings need to be suppressed
         suppressWarnings = MainConfig.get().getMiscellaneous().SUPPRESS_GUI_WARNINGS;
         hpi = ConfigInventories.get();
+
         // Get the default icons
         icons = new Icon[hpi.getInteger("inventories." + getId() + ".size")];
+
         // Get the unique ID of the player, never store the player object
         uuid = player.getUniqueId();
+
         // Get the icon list
         String items = hpi.getString("inventories." + getId() + ".icons");
+
         // Assign context
         this.context = context;
+
         // Count the amount of contents that will appear in
         int contentsPerPage = HPUtils.matchCount(CachedValues.CONTENT_PATTERN.matcher(items));
         Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), () -> {
@@ -110,12 +119,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                         icon = tempIcon;
                         icon.initNameAndLore(icon.getId(), player);
                     } else {
-                        try {
-                            icon = Glass.class.getConstructor(Player.class).newInstance(player);
-                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                            e.printStackTrace();
-                            return;
-                        }
+                        icon = new Glass(player);
                     }
                 } else {
                     icon = tempIcon;
@@ -129,7 +133,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
                             if (contentIt.hasNext()) {
                                 icon = contentIt.next();
                             } else {
-                                icon = Air.class.getConstructor(Player.class).newInstance(player);
+                                icon = new Air(player);
                             }
                         } else if (Stats.class.isAssignableFrom(iconClass)) {
                             icon = iconClass.getConstructor(Player.class, Integer.class).newInstance(player,
@@ -173,13 +177,13 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     @EventHandler
     public void onItemMove(InventoryMoveItemEvent event) {
-        if (event.getDestination().getHolder() != this) return;
+        if (!isValidInventory(event.getSource(), null)) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() != this) return;
+        if (!isValidInventory(event.getInventory(), event.getWhoClicked())) return;
         int slot = event.getRawSlot();
         Player player = (Player) event.getWhoClicked();
         if (slot > -1) {
@@ -204,14 +208,20 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
-        if (event.getInventory().getHolder() != this) return;
+        if (!isValidInventory(event.getInventory(), event.getPlayer())) return;
         destroy((Player) event.getPlayer());
     }
 
     @EventHandler
     public void onInvNew(NewInventoryEvent event) {
-        if (event.getInventory().getHolder() != this) return;
+        if (!isValidInventory(event.getInventory(), event.getPlayer())) return;
         if (destroy) destroy(event.getPlayer());
+    }
+
+    private boolean isValidInventory(final @NotNull Inventory inventory, final @Nullable HumanEntity player) {
+        return inventory.getType().equals(InventoryType.CHEST)
+                && (player == null || this.uuid.equals(player.getUniqueId()))
+                && inventory.getHolder() == this;
     }
 
     public void destroy(Player player) {
