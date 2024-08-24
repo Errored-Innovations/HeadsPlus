@@ -114,8 +114,9 @@ public class EntityDataManager {
                 builder.append(extend(villager.getProfession()));
                 break;
             }
+            case "MOOSHROOM":
             case "MUSHROOM_COW": {
-                builder.append(((MushroomCow) entity).getVariant());
+                builder.append(((MushroomCow) entity).getVariant().name());
                 break;
             }
             case "PANDA": {
