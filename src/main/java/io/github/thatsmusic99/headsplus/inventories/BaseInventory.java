@@ -220,7 +220,7 @@ public abstract class BaseInventory implements InventoryHolder, Listener {
 
     private boolean isValidInventory(final @NotNull Inventory inventory, final @Nullable HumanEntity player) {
         return inventory.getType().equals(InventoryType.CHEST)
-                && (player == null || this.uuid.equals(player.getUniqueId()))
+                && (player == null || this.uuid == null || this.uuid.equals(player.getUniqueId()))
                 && inventory.getHolder() == this;
     }
 
