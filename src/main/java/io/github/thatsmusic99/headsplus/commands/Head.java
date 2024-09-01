@@ -47,7 +47,14 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
             result = HeadsPlus.get().getProfileHandler().setProfile((SkullMeta) skull.getItemMeta(), n);
         }
 
-        result.thenAcceptAsync(meta -> {
+        result.whenCompleteAsync((meta, err) -> {
+
+            if (err != null) {
+                hpc.sendMessage("commands.errors.cmd-fail", p);
+                err.printStackTrace();
+                return;
+            }
+
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
             p.getInventory().addItem(skull);
