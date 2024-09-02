@@ -19,6 +19,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -57,7 +58,11 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
 
             meta.setDisplayName(ConfigMobs.get().getPlayerDisplayName(n));
             skull.setItemMeta(meta);
-            p.getInventory().addItem(skull);
+
+            final HashMap<Integer, ItemStack> items = p.getInventory().addItem(skull);
+            for (Integer i : items.keySet()) {
+                HeadsPlus.debug("Item " + items.get(i).toString() + " couldn't be added.");
+            }
         }, HeadsPlus.sync);
     }
 
@@ -108,7 +113,7 @@ public class Head implements CommandExecutor, IHeadsPlusCommand, TabCompleter {
                     }
                     // Check restrictions
                     if (!RestrictionsManager.canUse(args[0].toLowerCase(), RestrictionsManager.ActionType.HEADS)) {
-                        // TODO: cannot use head
+                        hpc.sendMessage("commands.head.restricted-head", sender);
                         return true;
                     }
                     giveHead(p, args[0]);
