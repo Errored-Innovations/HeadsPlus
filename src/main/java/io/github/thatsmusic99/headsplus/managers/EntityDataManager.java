@@ -153,7 +153,7 @@ public class EntityDataManager {
             }
 
         }
-        if (!builder.isEmpty()) {
+        if (builder.length() > 0) {
             if (builder.charAt(builder.length() - 1) == ',') builder.setLength(builder.length() - 1);
             result = builder.toString();
         }
