@@ -299,8 +299,8 @@ public class StatisticsSQLManager extends SQLManager {
     public void addToTotal(UUID uuid, CollectionType type, String head, String metadata, int amount, boolean async) {
         createConnection(connection -> {
 
-            final ResultSet set;
             final int id = PlayerSQLManager.get().getUserID(uuid, connection);
+            boolean exists;
             try (PreparedStatement checkStatement = connection.prepareStatement("SELECT count FROM headsplus_stats WHERE " +
                     "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?")) {
                 checkStatement.setInt(1, id);
@@ -308,20 +308,14 @@ public class StatisticsSQLManager extends SQLManager {
                 checkStatement.setString(3, head);
                 checkStatement.setString(4, metadata);
 
-                set = checkStatement.executeQuery();
+                try (final ResultSet set = checkStatement.executeQuery()) {
+                    exists = set.next();
+                }
             }
 
             // Then use the statement appropriate
             PreparedStatement updateStatement;
-            if (!set.next()) {
-                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
-                        " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
-                updateStatement.setInt(1, id);
-                updateStatement.setString(2, type.name());
-                updateStatement.setString(3, head);
-                updateStatement.setString(4, metadata);
-                updateStatement.setInt(5, amount);
-            } else {
+            if (exists) {
                 updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET count = count + ? WHERE " +
                         "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
                 updateStatement.setInt(1, amount);
@@ -329,8 +323,15 @@ public class StatisticsSQLManager extends SQLManager {
                 updateStatement.setString(3, type.name());
                 updateStatement.setString(4, head);
                 updateStatement.setString(5, metadata);
+            } else {
+                updateStatement = connection.prepareStatement("INSERT INTO headsplus_stats (user_id, collection_type," +
+                        " head, metadata, count) VALUES (?, ?, ?, ?, ?)");
+                updateStatement.setInt(1, id);
+                updateStatement.setString(2, type.name());
+                updateStatement.setString(3, head);
+                updateStatement.setString(4, metadata);
+                updateStatement.setInt(5, amount);
             }
-            set.close();
             updateStatement.executeUpdate();
             return null;
         }, async, "add to statistics total " + type.name() + ", metadata " + metadata + ", head " + head + " and user " + uuid);
