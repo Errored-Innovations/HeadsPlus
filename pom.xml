@@ -270,8 +270,8 @@
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
         <repository>
-            <id>pluginwiki-repo</id>
-            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
+            <id>bs-repo</id>
+            <url>https://repo.bsdevelopment.org/releases</url>
         </repository>
         <repository>
             <id>mojang-authlib</id>
