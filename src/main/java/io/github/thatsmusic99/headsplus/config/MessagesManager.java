@@ -57,7 +57,7 @@ public class MessagesManager {
                     "Setting locale to en_us...");
             config = performChecks(new File(dest, "en_us.yml"), "en_us");
         }
-        double version = 1.7;
+        double version = 1.8;
         if (config.getDouble("version") != version) {
             new BukkitRunnable() {
                 @Override
@@ -168,6 +168,7 @@ public class MessagesManager {
                         en_us.addDefault("commands.head.restricted-head", "{header} You cannot use that head!");
                         en_us.addDefault("event.cannot-craft-heads", "{header} You cannot craft heads!");
                         en_us.addDefault("event.cannot-craft-heads-here", "{header} You cannot craft heads here!");
+                        en_us.addDefault("event.lost-money-no-killer", "{header} Because you died, you lost &c{price}&7!");
                         en_us.set("version", version);
                         en_us.options().copyDefaults(true);
                         try {
@@ -279,6 +280,7 @@ public class MessagesManager {
                         de_de.addDefault("event.cannot-craft-heads", "{header} Sie können keine Köpfe herstellen!");
                         de_de.addDefault("event.cannot-craft-heads-here", "{header} Hier kann man keine Köpfe " +
                                 "herstellen!");
+                        de_de.addDefault("event.lost-money-no-killer", "{header} Weil Sie gestorben sind, haben Sie &c{price} &7verloren!");
                         de_de.set("version", version);
                         de_de.options().copyDefaults(true);
                         try {
@@ -388,6 +390,7 @@ public class MessagesManager {
                                 "verwenden!");
                         es_es.addDefault("event.cannot-craft-heads", "{header} ¡No puedes fabricar cabezas!");
                         es_es.addDefault("event.cannot-craft-heads-here", "{header} ¡No puedes fabricar cabezas aquí!");
+                        es_es.addDefault("event.lost-money-no-killer", "{header} ¡Porque moriste, perdiste &c{price}&7!");
                         es_es.set("version", version);
                         es_es.options().copyDefaults(true);
                         try {
@@ -497,6 +500,7 @@ public class MessagesManager {
                                 "têtes!");
                         fr_fr.addDefault("event.cannot-craft-heads-here", "{header} Vous ne pouvez pas fabriquer des " +
                                 "têtes ici!");
+                        fr_fr.addDefault("event.lost-money-no-killer", "{header} Parce que tu es mort, tu as perdu &c{price}&7!");
                         fr_fr.set("version", version);
                         fr_fr.options().copyDefaults(true);
                         try {
@@ -604,6 +608,7 @@ public class MessagesManager {
                         hu_hu.addDefault("commands.head.restricted-head", "{header} Nem használhatod azt a fejet!");
                         hu_hu.addDefault("event.cannot-craft-heads", "{header} Nem készíthet fejeket!");
                         hu_hu.addDefault("event.cannot-craft-heads-here", "{header} Itt nem lehet fejeket készíteni!");
+                        hu_hu.addDefault("event.lost-money-no-killer", "{header} Mert meghaltál, elvesztette &c{price}&7!");
                         hu_hu.set("version", version);
                         hu_hu.options().copyDefaults(true);
                         try {
@@ -707,6 +712,7 @@ public class MessagesManager {
                         lol_us.addDefault("commands.head.restricted-head", "{header} Dis hed iz nawt aloud!");
                         lol_us.addDefault("event.cannot-craft-heads", "{header} no crafty, only hugs");
                         lol_us.addDefault("event.cannot-craft-heads-here", "{header} no crafty here, only hugs");
+                        lol_us.addDefault("event.lost-money-no-killer", "{header} ok so u lost &c{price} &7cos ur bad B)");
                         lol_us.set("version", version);
                         lol_us.options().copyDefaults(true);
                         try {
@@ -815,6 +821,7 @@ public class MessagesManager {
                         pl_pl.addDefault("commands.head.restricted-head", "{header} Nie możesz użyć tej głowy!");
                         pl_pl.addDefault("event.cannot-craft-heads", "{header} Nie możesz tworzyć głów!");
                         pl_pl.addDefault("event.cannot-craft-heads-here", "{header} Nie możesz tu tworzyć głów!");
+                        pl_pl.addDefault("event.lost-money-no-killer", "{header} Straciłeś &c{price}&7, ponieważ umarłeś!");
                         pl_pl.set("version", version);
                         pl_pl.options().copyDefaults(true);
                         try {
@@ -921,6 +928,7 @@ public class MessagesManager {
                         ro_ro.addDefault("commands.head.restricted-head", "{header} Nu poți folosi acel cap!");
                         ro_ro.addDefault("event.cannot-craft-heads", "{header} Nu poți crea capete!");
                         ro_ro.addDefault("event.cannot-craft-heads-here", "{header} Nu poți crea capete aici!");
+                        ro_ro.addDefault("event.lost-money-no-killer", "{header} Pentru că ai murit, ai pierdut &c{price}&7!");
                         ro_ro.set("version", version);
                         ro_ro.options().copyDefaults(true);
                         try {
@@ -1029,6 +1037,7 @@ public class MessagesManager {
                          "голову!");
                         ru_ru.addDefault("event.cannot-craft-heads", "{header} Вы не можете создавать головы!");
                         ru_ru.addDefault("event.cannot-craft-heads-here", "{header} Здесь нельзя лепить головы!");
+                        ru_ru.addDefault("event.lost-money-no-killer", "{header} Потому что ты умер, ты потерял &c{price}&7!");
                         ru_ru.set("version", version);
                         ru_ru.options().copyDefaults(true);
                         try {
@@ -1054,6 +1063,7 @@ public class MessagesManager {
                         nl_nl.addDefault("commands.head.restricted-head", "{header} Je kunt dat hoofd niet gebruiken!");
                         nl_nl.addDefault("event.cannot-craft-heads", "{header} Je kunt geen hoofden maken!");
                         nl_nl.addDefault("event.cannot-craft-heads-here", "{header} Je kunt hier geen hoofden maken!");
+                        nl_nl.addDefault("event.lost-money-no-killer", "{header} Omdat je stierf, verloor je &c{price}&7!");
                         nl_nl.set("version", version);
                         nl_nl.options().copyDefaults(true);
                         try {
@@ -1073,6 +1083,7 @@ public class MessagesManager {
                         zh_cn.addDefault("commands.head.restricted-head", "{header} 你不能用那个头！");
                         zh_cn.addDefault("event.cannot-craft-heads", "{header} 你不能制作人头!");
                         zh_cn.addDefault("event.cannot-craft-heads-here", "{header} 你不能在这里制作人头!");
+                        zh_cn.addDefault("event.lost-money-no-killer", "{header} 因为你死了，你失去了 &c{price}&7!");
 
                         zh_cn.set("version", version);
                         zh_cn.options().copyDefaults(true);
@@ -1087,6 +1098,7 @@ public class MessagesManager {
                         zh_tw.addDefault("commands.head.restricted-head", "{header} 你不能用那個頭！");
                         zh_tw.addDefault("event.cannot-craft-heads", "{header} 你不能製作人頭!");
                         zh_tw.addDefault("event.cannot-craft-heads-here", "{header} 你不能在這裡製作人頭!");
+                        zh_tw.addDefault("event.lost-money-no-killer", "{header} 因為你死了，你失去了 &c{price}&7!");
 
                         zh_tw.set("version", version);
                         zh_tw.options().copyDefaults(true);

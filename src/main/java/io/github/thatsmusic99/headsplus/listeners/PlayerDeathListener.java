@@ -78,8 +78,10 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
                     && killer != null
                     && economy.getBalance(killer) > 0.0) {
                 playerPrice = economy.getBalance(killer);
-            } else {
+            } else if (economy.getBalance(victim) > 0.0) {
                 playerPrice = economy.getBalance(victim);
+            } else {
+                playerPrice = 0;
             }
             price = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_OF_BALANCE_AS_PRICE / 100);
             lostprice = playerPrice * (MainConfig.get().getPlayerDrops().PERCENTAGE_TAKEN_OFF_VICTIM / 100);
@@ -103,11 +105,21 @@ public class PlayerDeathListener extends HeadsPlusListener<PlayerDeathEvent> {
             HeadsPlus.debug("Player head drop event has been cancelled.");
             return;
         }
-        if (lostprice > 0.0 && killer != null) {
-            economy.withdrawPlayer(victim, lostprice);
-            MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}",
-                    MainConfig.get().fixBalanceStr(price));
+
+        if (lostprice > 0.0) {
+            if (killer == null) {
+                if (!MainConfig.get().getPlayerDrops().PRICE_LOSS_REQUIRE_KILLER) {
+                    economy.withdrawPlayer(victim, lostprice);
+                    MessagesManager.get().sendMessage("event.lost-money-no-killer", victim, "{price}",
+                            MainConfig.get().fixBalanceStr(price));
+                }
+            } else {
+                economy.withdrawPlayer(victim, lostprice);
+                MessagesManager.get().sendMessage("event.lost-money", victim, "{player}", killer.getName(), "{price}",
+                        MainConfig.get().fixBalanceStr(price));
+            }
         }
+
         double finalPrice = price;
         HeadsPlus.debug("Creating player head of " + victim.getName() + "...");
         headInfo.buildHead().thenAcceptAsync(item -> {

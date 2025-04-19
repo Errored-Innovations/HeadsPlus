@@ -1,7 +1,7 @@
 # HeadsPlus by Thatsmusic99 - English/US
 # Do not change the version! This is used internally in the plugin to add new messages.
 language: English (US)
-version: 1.7
+version: 1.8
 prefix: '&cHeadsPlus &8» &7'
 inventory:
   icon:
@@ -178,6 +178,7 @@ event:
   head-mhf-interact-message: '{header} That is a &c{name}&7''s head!'
   head-mhf-interact-message-2: '{header} That is an &c{name}&7''s head!'
   lost-money: '{header} Because you got killed by &c{player}&7, you lost &c{price}&7!'
+  lost-money-no-killer: '{header} Because you died, you lost &c{price}&7!'
 startup:
   faulty-theme: '{header} Faulty theme was put in! No theme changes will be made.'
   no-vault: '{header} Vault not found! Heads cannot be sold and challenge rewards

@@ -174,6 +174,7 @@ event:
   head-mhf-interact-message: '{header} Dat iz a wild &c{player}&7''s hed!'
   head-mhf-interact-message-2: '{header} Dat iz a wild &c{player}&7''s hed!'
   lost-money: '{header} ok so u lost &c{price} &7cos &c{player} &7kicked ur butt B)'
+  lost-money-no-killer: '{header} ok so u lost &c{price} &7cos ur bad B)'
 startup:
   faulty-theme: '{header} bad theem alert, uglee won iz on'
   no-vault: '{header} eh cudnt oh-pen deh vault!!'

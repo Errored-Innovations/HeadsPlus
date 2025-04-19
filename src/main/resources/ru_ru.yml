@@ -177,6 +177,7 @@ event:
   head-mhf-interact-message-2: '{header} Эта голова &c{name}&7 !'
   lost-money: '{header} Поскольку вы были убиты игроком &c{player}&7, вы потеряли
     &c{price}&7!'
+  lost-money-no-killer: '{header} Потому что ты умер, ты потерял &c{price}&7!'
 startup:
   faulty-theme: '{header} Неправильная тема вставлена! Изменения темы не будут сделаны.'
   no-vault: '{header} Vault не найден! Головы не могут быть проданы, а награды за

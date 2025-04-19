@@ -174,6 +174,10 @@ public class MainConfig extends HPConfig {
         addDefault("percentage-of-balance-as-price", 5,
                 "The percentage of the victim's/killer's balance that is used as the actual price of the head.\n" +
                         "Must be a value out of 100.");
+        addDefault("price-loss-requires-killer", true,
+                "Whether to remove money from the victim's balance if they have no killer.\n" +
+                        "Regardless of the \"use-killer-balance\" option, it will use the victim's\n" +
+                        "balance when setting a penalty.");
 
         addSection("Selling Heads");
         addDefault("stop-placement-of-sellable-heads", false, "Whether or not players should be able to place heads " +
@@ -585,6 +589,7 @@ public class MainConfig extends HPConfig {
         public final double PERCENTAGE_OF_BALANCE_AS_PRICE = getDouble("percentage-of-balance-as-price");
         public final double DEFAULT_DROP_CHANCE = getDouble("default-player-drop-chance");
         public final double DEFAULT_PRICE = getDouble("default-player-head-price");
+        public final boolean PRICE_LOSS_REQUIRE_KILLER = getBoolean("price-loss-requires-killer");
     }
 
     public class SellingHeads {

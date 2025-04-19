@@ -191,6 +191,7 @@ event:
   head-mhf-interact-message: '{header} Az egy &c{name}&7 feje!'
   head-mhf-interact-message-2: '{header} Ez egy &c{player}&7 feje!'
   lost-money: '{header} Mert &c{player} &7megölte, elvesztette &c{price}&7!'
+  lost-money-no-killer: '{header} Mert meghaltál, elvesztette &c{price}&7!'
 startup:
   faulty-theme: '{header} Hibás téma került be! A téma módosítása nem történik.'
   no-vault: '{header} A Vault nem található! A fejeket nem lehet eladni, és a kihívás

@@ -165,6 +165,7 @@ event:
   head-mhf-interact-message: '{header} 是 &c{name}&7的头颅!'
   head-mhf-interact-message-2: '{header} 是 &c{name}&7的头颅!'
   lost-money: '{header} 因为你被杀了 &c{player}&7,你输了 &c{price}&7!'
+  lost-money-no-killer: '{header} 因为你死了，你失去了 &c{price}&7!'
 startup:
   faulty-theme: '{header} 错误的主题被放入！ 不会更改主题.'
   no-vault: '{header} 找不到保管箱！无法出售头像并挑战奖励 无法添加/删除组.'
