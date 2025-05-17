@@ -102,7 +102,7 @@ public class ChallengeSQLManager extends SQLManager {
                         "(last_completion_time, user_id, challenge, count) VALUES (?, ?, ?, 1)");
             } else {
                 updateStatement = connection.prepareStatement("UPDATE headsplus_challenges SET count = count + 1, " +
-                        "last_completion_time = ? WHERE user_id = ? AND challenge = ? LIMIT 1");
+                        "last_completion_time = ? WHERE user_id = ? AND challenge = ?");
             }
             updateStatement.setLong(1, System.currentTimeMillis());
             updateStatement.setInt(2, PlayerSQLManager.get().getUserID(uuid, connection));
