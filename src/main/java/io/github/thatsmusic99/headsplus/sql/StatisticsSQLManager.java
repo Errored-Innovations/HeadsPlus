@@ -44,6 +44,7 @@ public class StatisticsSQLManager extends SQLManager {
                         "head VARCHAR(256) NOT NULL," +
                         "metadata VARCHAR(256) NOT NULL," +
                         "count INT NOT NULL," +
+                        "PRIMARY KEY (user_id, collection_type, head, metadata)," +
                         "FOREIGN KEY (user_id) REFERENCES headsplus_players(id))"
         );
 
@@ -317,7 +318,7 @@ public class StatisticsSQLManager extends SQLManager {
             PreparedStatement updateStatement;
             if (exists) {
                 updateStatement = connection.prepareStatement("UPDATE headsplus_stats SET count = count + ? WHERE " +
-                        "user_id = ? AND collection_type = ? AND head = ? AND metadata = ?");
+                        "user_id = ? AND collection_type = ? AND head = ? AND metadata = ? LIMIT 1");
                 updateStatement.setInt(1, amount);
                 updateStatement.setInt(2, id);
                 updateStatement.setString(3, type.name());
