@@ -62,7 +62,7 @@ public abstract class SQLManager {
                 connection = DriverManager.getConnection("jdbc:mysql://"
                                 + MainConfig.get().getMySQL().MYSQL_HOST + ":"
                                 + MainConfig.get().getMySQL().MYSQL_PORT + "/"
-                                + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true",
+                                + MainConfig.get().getMySQL().MYSQL_DATABASE + "?useSSL=false&autoReconnect=true&rewriteBatchedStatements=true",
                         MainConfig.get().getMySQL().MYSQL_USERNAME,
                         MainConfig.get().getMySQL().MYSQL_PASSWORD);
                 usingSqlite = false;
