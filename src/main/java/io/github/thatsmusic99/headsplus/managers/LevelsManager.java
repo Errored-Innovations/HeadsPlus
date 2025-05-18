@@ -40,7 +40,7 @@ public class LevelsManager {
     }
 
     public @Nullable Level getLevel(int position) {
-        return levelOrder.size() == 0 ? null : getLevel(levelOrder.get(position));
+        return levelOrder.isEmpty() ? null : getLevel(levelOrder.get(position));
     }
 
     public @Nullable Level getNextLevel(String key) {
