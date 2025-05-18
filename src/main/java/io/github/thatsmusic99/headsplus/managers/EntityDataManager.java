@@ -145,11 +145,16 @@ public class EntityDataManager {
                 break;
             }
             case "FROG": {
-                builder.append(((Frog) entity).getVariant().name());
+                builder.append(getUnstableKeyed(entity, "getVariant", "COLD"));
                 break;
             }
             case "WOLF": {
                 builder.append(getUnstableKeyed(entity, "getVariant", "PALE"));
+            }
+            case "COW":
+            case "PIG":
+            case "CHICKEN": {
+                builder.append(getUnstableKeyed(entity, "getVariant", "TEMPERATE"));
             }
 
         }

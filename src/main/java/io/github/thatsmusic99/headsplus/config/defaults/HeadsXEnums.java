@@ -513,7 +513,14 @@ public enum HeadsXEnums {
     SPOTTED_WOLF("&6Spotted Wolf", "98ec61fd9cbc4f663c3f849ea45383d43319c2c770a2f28b8c7a50975b81b3c9", "animals", 4.1),
     WOODS_WOLF("&6Woods Wolf", "6e8c2a6e104a3e9d7397326f01bf25862f0aaf9e3830d49dbb9b4a4305358404", "animals", 4.1),
     ARMADILLO("&cArmadillo", "541693d604ed8eb31f550d3c8b124ad3f0f4a34f5f83a72def177fce4ac90916", "animals", 4.1),
-    BOGGED("&aBogged", "7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100", "mobs", 4.1);
+    BOGGED("&aBogged", "7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100", "mobs", 4.1),
+    COLD_COW("&6Cow (Cold)", "e33221484d39f0d4ecdffa729567ce77fa8ce05b091db76dd5b079a20f7bf339", "animals", 4.2),
+    WARM_COW("&6Cow (Warm)", "23b3376faf281c14ba472d2e7f6b6d0169e4bc2374835a9f8d0788e04d81343d", "animals", 4.2),
+    COLD_PIG("&ePig (Cold)", "ba18d4043cd6c903866788914fd534315281af9f259e34837e3e175e545c2ede", "animals", 4.2),
+    WARM_PIG("&6Pig (Warm)", "7beba1a2d56e84f8e51fed6659f2cb7c14fed43859af584737897bf70c039475", "animals", 4.2),
+    COLD_CHICKEN("&7Chicken (Cold)", "a911fcd8b226a98f8b6d605ff27a88ed97230bb71678e4a00669095d69d3f2b4", "animals", 4.2),
+    WARM_CHICKEN("&eChicken (Warm)", "58c231bf464f9a6c6786a22a4d119ea5e5057624c5a391470d35fa2b6ffa5183", "animals", 4.2),
+    CREAKING("&7Creaking", "aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1", "mobs", 4.2);
 
 
     public final String name;

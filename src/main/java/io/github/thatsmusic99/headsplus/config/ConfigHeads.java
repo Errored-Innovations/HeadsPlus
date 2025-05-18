@@ -23,10 +23,10 @@ public class ConfigHeads extends HPConfig {
                 "If you're looking for mobs.yml instead to change mob drops, please go there :)");
 
         addDefault("update-heads", true, "Whether the plugin should add more heads included with updates.");
-        addDefault("version", 4.1);
+        addDefault("version", 4.2);
 
         makeSectionLenient("heads");
-        if (isNew() || getDouble("version") < 4.1) {
+        if (isNew() || getDouble("version") < 4.2) {
             if (ConfigCustomHeads.get() != null) return;
             for (HeadsXEnums head : HeadsXEnums.values()) {
                 if (isNew() || head.version > getDouble("version")) {

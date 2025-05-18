@@ -280,9 +280,6 @@ public class ConfigMobs extends FeatureConfig {
                 case "GIANT":
                     addDefaultHead(key + ".default", "HP#zombie");
                     break;
-                case "CHICKEN":
-                    addDefaultHead(key + ".default", "HP#" + key.toLowerCase() + "_mc");
-                    break;
                 case "WITHER_SKELETON":
                     addDefaultHead(key + ".default", "{mob-default}");
                     addExample(key + ".default.{mob-default}.chance", 0);
@@ -295,6 +292,15 @@ public class ConfigMobs extends FeatureConfig {
                     break;
                 case "STRIDER":
                     addDefaultHead(key + ".COLD", "HP#cold_strider");
+                    addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
+                    break;
+                case "CHICKEN":
+                    addDefaultHead(key + ".default", "HP#" + key.toLowerCase() + "_mc");
+                case "PIG":
+                case "COW":
+                    addDefaultHead(key + ".TEMPERATE",  key.equals("CHICKEN") ? "HP#chicken_mc" : "HP#" + key.toLowerCase());
+                    addDefaultHead(key + ".COLD", "HP#cold_" + key.toLowerCase());
+                    addDefaultHead(key + ".WARM", "HP#warm_" + key.toLowerCase());
                 default:
                     addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
                     break;

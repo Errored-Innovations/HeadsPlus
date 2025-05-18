@@ -113,9 +113,9 @@ public class HPUtils {
 
     private static Enchantment getLooting() {
         try {
-            return Enchantment.LOOT_BONUS_MOBS;
+            return Enchantment.LOOTING;
         } catch (NoSuchFieldError e) {
-            return Enchantment.getByName("LOOTING");
+            return Enchantment.getByName("LOOT_BONUS_MOBS");
         }
     }
 
