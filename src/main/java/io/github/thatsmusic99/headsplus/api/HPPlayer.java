@@ -61,7 +61,7 @@ public class HPPlayer {
     }
 
     public Level getNextLevel() {
-        return LevelsManager.get().getLevel(nextLevel);
+        return this.nextLevel == -1 ? null : LevelsManager.get().getLevel(nextLevel);
     }
 
     public List<String> getCompleteChallenges() {
