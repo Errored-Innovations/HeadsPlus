@@ -13,7 +13,16 @@ body:
           required: true
         - label: "Have you been able to reproduce the bug more then once?"
           required: true
-
+          
+  - type: textarea
+    id: server-version
+    attributes:
+      label: Server version and type
+      description: |
+        The output of your /version command. Please include the full output.
+    validations:
+      required: true
+      
   - type: textarea
     id: what-happened
     attributes:
