@@ -294,6 +294,23 @@ public class ConfigMobs extends FeatureConfig {
                     addDefaultHead(key + ".COLD", "HP#cold_strider");
                     addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
                     break;
+                case "MANNEQUIN":
+                    addComment(key, "The auto-convert option replaces HP#mannequin heads with mob-default heads, which will use the skin of the mannequin when dropping a head.\n" +
+                            "If you want to set a default head for a mannequin with a certain profile name, just add it like the following:\n" +
+                            "MANNEQUIN:\n" +
+                            "  Thatsmusic99:\n" +
+                            "    HP#gem: \n" +
+                            "      chance: 10\n" +
+                            "      # etc...\n" +
+                            "Doing this will also allow for more fine-grained configurations, such as different chances/sell prices.");
+                    addDefault(key + ".auto-convert", true);
+                    addDefaultHead(key + ".default", "{mob-default}");
+                    makeSectionLenient(key);
+                    break;
+                case "ZOMBIE_NAUTILUS":
+                    addDefaultHead(key + ".WARM", "HP#coral_zombie_nautilus");
+                    addDefaultHead(key + ".default", "HP#" + key.toLowerCase());
+                    break;
                 case "CHICKEN":
                     addDefaultHead(key + ".default", "HP#" + key.toLowerCase() + "_mc");
                 case "PIG":

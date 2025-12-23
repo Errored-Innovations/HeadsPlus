@@ -7,6 +7,8 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mannequin;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,6 +47,16 @@ public class PaperProfileHandler implements IProfileHandler {
 
     @Nullable
     @Override
+    public String getName(@NotNull Entity mannequin) {
+        if (!(mannequin instanceof Mannequin)) {
+            throw new IllegalArgumentException("This method can only be used on Mannequins!");
+        }
+
+        return ((Mannequin) mannequin).getProfile().name();
+    }
+
+    @Nullable
+    @Override
     public String getTexture(@NotNull Skull skull) {
         return getTexture(skull.getPlayerProfile(), skull.getOwner());
     }
@@ -59,6 +71,24 @@ public class PaperProfileHandler implements IProfileHandler {
     @Override
     public String getTexture(@NotNull OfflinePlayer player) {
         return getTexture(player.getPlayerProfile(), player.getName());
+    }
+
+    @Nullable
+    @Override
+    public String getEntityTexture(@NotNull Entity mannequin) {
+        if (!(mannequin instanceof Mannequin)) {
+            throw new IllegalArgumentException("This method can only be used on Mannequins!");
+        }
+
+        Mannequin actualMannequin = (Mannequin) mannequin;
+
+        for (ProfileProperty property : actualMannequin.getProfile().properties()) {
+            HeadsPlus.debug("Checking property: " + property.getName());
+            if (!property.getName().equals("textures")) continue;
+            HeadsPlus.debug("Textures property returned: " + property.getValue());
+            return property.getValue();
+        }
+        return null;
     }
 
     private String getTexture(PlayerProfile profile, String otherwise) {

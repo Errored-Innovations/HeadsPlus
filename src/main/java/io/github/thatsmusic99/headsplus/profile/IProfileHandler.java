@@ -3,6 +3,7 @@ package io.github.thatsmusic99.headsplus.profile;
 import io.github.thatsmusic99.headsplus.HeadsPlus;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,8 @@ public interface IProfileHandler {
 
     @Nullable String getName(@NotNull SkullMeta meta);
 
+    @Nullable String getName(@NotNull Entity mannequin);
+
     /**
      * Returns the base64 encoded texture of a skull block.
      *
@@ -29,6 +32,8 @@ public interface IProfileHandler {
     @Nullable String getTexture(@NotNull SkullMeta meta);
 
     @Nullable String getTexture(@NotNull OfflinePlayer player);
+
+    @Nullable String getEntityTexture(@NotNull Entity mannequin);
 
     void copyProfile(@NotNull Skull skull, @NotNull SkullMeta meta);
 
@@ -61,6 +66,4 @@ public interface IProfileHandler {
             return meta;
         }, HeadsPlus.async);
     }
-
-
 }

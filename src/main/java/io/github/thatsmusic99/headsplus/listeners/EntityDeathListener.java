@@ -81,10 +81,20 @@ public class EntityDeathListener extends HeadsPlusListener<EntityDeathEvent> {
 
             if (randomChance <= fixedChance) {
                 int amount = addData("amount", HPUtils.getAmount(fixedChance));
-                dropHead(entity, chosenConditions, info, event.getEntity().getLocation(), amount,
+
+                EntityDataManager.DroppedHeadInfo finalInfo = info.clone();
+
+                if (event.getEntity().getType().name().equals("MANNEQUIN") && (finalInfo.getId().equals("{mob-default}")
+                        || (finalInfo.getId().equals("HP#mannequin") && ConfigMobs.get().getBoolean("MANNEQUIN.auto-convert")))) {
+                    String texture = HeadsPlus.get().getProfileHandler().getEntityTexture(event.getEntity());
+                    if (texture == null) texture = HeadsPlus.get().getProfileHandler().getName(event.getEntity());
+                    finalInfo.withTexture(texture);
+                }
+
+                dropHead(entity, chosenConditions, finalInfo, event.getEntity().getLocation(), amount,
                         event.getEntity().getKiller());
 
-                if (info.isUnique()) return;
+                if (finalInfo.isUnique()) return;
             }
         }
     }

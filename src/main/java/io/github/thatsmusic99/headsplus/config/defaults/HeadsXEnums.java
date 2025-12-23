@@ -520,7 +520,16 @@ public enum HeadsXEnums {
     WARM_PIG("&6Pig (Warm)", "7beba1a2d56e84f8e51fed6659f2cb7c14fed43859af584737897bf70c039475", "animals", 4.2),
     COLD_CHICKEN("&7Chicken (Cold)", "a911fcd8b226a98f8b6d605ff27a88ed97230bb71678e4a00669095d69d3f2b4", "animals", 4.2),
     WARM_CHICKEN("&eChicken (Warm)", "58c231bf464f9a6c6786a22a4d119ea5e5057624c5a391470d35fa2b6ffa5183", "animals", 4.2),
-    CREAKING("&7Creaking", "aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1", "mobs", 4.2);
+    CREAKING("&7Creaking", "aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1", "mobs", 4.2),
+    CAMEL_HUSK("&eCamel Husk", "3bd7a92a6f67b7500d16c4e12f28058ec2859311556ba03be2d1f581170f2db6", "mobs", 4.3),
+    COPPER_GOLEM("&6Copper Golem", "248e0f9eb24a10600729438dd99997839e1a99e276d76e32fd434bdb5f54296c", "mobs", 4.3),
+    HAPPY_GHAST("&fHappy Ghast", "82698aa7274ee241d31362e2faa48cfa733d25010516568d40f3f967247da11b", "mobs", 4.3),
+    BLACK_HARNESS_HAPPY_GHAST("&fHappy Ghast (Black Harness)", "367a8314ad36285af75f5cd229c98f0cdacf06ff592cb9aa9053c7ac32976da", "mobs", 4.3),
+    BLACK_HARNESS_RIDDEN_HAPPY_GHAST("&fHappy Ghast (Black Harness, Goggles Down)", "6b0aa771516106a43c256b001f250115190165fc416f1cc96269142c49eb497d", "mobs", 4.3),
+    NAUTILUS("&6Nautilus", "3bb340dd3302615348de5162fe1670b9c5c9c616cd92d2de9d8398cb33e842ae", "animals", 4.3),
+    PARCHED("&7Parched", "24aeceff5f26dd8413c5c03547c234ac03108d187af0b9cd834a8ce12598591c", "mobs", 4.3),
+    ZOMBIE_NAUTILUS("&7Zombie Nautilus", "fd9a933376da44c3391307cb9f4cf03f16f3a54f495fd5a11bad8a373f9d5720", "mobs", 4.3),
+    CORAL_ZOMBIE_NAUTILUS("&eCoral Zombie Nautilus", "d516e18f400b8c48190b3438a75feefda45367f0ae5d4e49732c417251650ecf", "mobs", 4.3);
 
 
     public final String name;

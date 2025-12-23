@@ -4,6 +4,8 @@ import io.github.thatsmusic99.headsplus.util.HPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mannequin;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
@@ -45,6 +47,24 @@ public class SpigotProfileHandler implements IProfileHandler {
     public String getName(@NotNull SkullMeta meta) {
         if (meta.getOwnerProfile() == null) return null;
         return meta.getOwnerProfile().getName();
+    }
+
+    @Nullable
+    @Override
+    public String getName(@NotNull Entity mannequin) {
+        if (!(mannequin instanceof Mannequin)) {
+            throw new IllegalArgumentException("This method can only be used on Mannequins!");
+        }
+
+        PlayerProfile profile;
+        try {
+            profile = getProfile(mannequin);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        if (profile == null) return null;
+
+        return profile.getName();
     }
 
     @Override
@@ -106,6 +126,28 @@ public class SpigotProfileHandler implements IProfileHandler {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Nullable
+    @Override
+    public String getEntityTexture(@NotNull Entity mannequin) {
+        if (!(mannequin instanceof Mannequin)) {
+            throw new IllegalArgumentException("This method can only be used on Mannequins!");
+        }
+
+        PlayerProfile profile;
+        try {
+            profile = getProfile(mannequin);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        if (profile == null) return null;
+        return getTexture(profile.getTextures());
+    }
+
+    private PlayerProfile getProfile(@NotNull Entity entity) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = entity.getClass().getMethod("getPlayerProfile");
+        return (PlayerProfile) method.invoke(entity);
     }
 
     private @Nullable String getTexture(@NotNull PlayerTextures textures) {

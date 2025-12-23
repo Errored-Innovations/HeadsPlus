@@ -152,6 +152,14 @@ public class EntityDataManager {
                 builder.append(getUnstableKeyed(entity, "getVariant", "PALE"));
                 break;
             }
+            case "MANNEQUIN": {
+                builder.append(HeadsPlus.get().getProfileHandler().getName(entity));
+                break;
+            }
+            case "ZOMBIE_NAUTILUS": {
+                builder.append(getUnstableKeyed(entity, "getVariant", "TEMPERATE"));
+                break;
+            }
             case "COW":
             case "PIG":
             case "CHICKEN": {
@@ -277,7 +285,7 @@ public class EntityDataManager {
         return keyed.getKey().getKey().toUpperCase();
     }
 
-    public static class DroppedHeadInfo extends MaskManager.MaskInfo {
+    public static class DroppedHeadInfo extends MaskManager.MaskInfo implements Cloneable {
 
         private long xp;
         private final String id;
@@ -354,6 +362,11 @@ public class EntityDataManager {
         @Override
         public void run(Player player) {
             if (info != null) info.run(player);
+        }
+
+        @Override
+        public DroppedHeadInfo clone() {
+            return (DroppedHeadInfo) super.clone();
         }
     }
 }

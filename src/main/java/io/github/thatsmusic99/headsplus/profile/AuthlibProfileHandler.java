@@ -3,8 +3,10 @@ package io.github.thatsmusic99.headsplus.profile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.thatsmusic99.headsplus.util.HPUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +40,12 @@ public class AuthlibProfileHandler implements IProfileHandler {
 
     @Nullable
     @Override
+    public String getName(@NotNull Entity mannequin) {
+        throw new NotImplementedException("Authlib profile handler does not support mannequins - why is this being attempted?");
+    }
+
+    @Nullable
+    @Override
     public String getTexture(@NotNull Skull skull) {
         return getTexture(getProfile(skull));
     }
@@ -52,6 +60,12 @@ public class AuthlibProfileHandler implements IProfileHandler {
     @Override
     public String getTexture(@NotNull OfflinePlayer player) {
         return getTexture(getProfile(player));
+    }
+
+    @Nullable
+    @Override
+    public String getEntityTexture(@NotNull Entity mannequin) {
+        throw new NotImplementedException("Authlib profile handler does not support mannequins - why is this being attempted?");
     }
 
     private String getTexture(@Nullable GameProfile profile) {

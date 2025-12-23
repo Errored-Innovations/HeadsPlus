@@ -65,6 +65,7 @@ public class HeadManager {
         }
         return heads.computeIfAbsent(key, (originalKey) -> {
             if (originalKey.equals("{mob-default}")) return new HeadInfo();
+            if (originalKey.equals("mannequin") && ConfigMobs.get().getBoolean("MANNEQUIN.auto-convert")) return new HeadInfo();
             HeadsPlus.get().getLogger().warning("Head with ID " + originalKey + " not found.");
             return new HeadInfo();
         }).clone();
@@ -88,7 +89,7 @@ public class HeadManager {
         private String displayName;
         @NotNull
         private List<String> lore;
-        private String texture;
+        private @Nullable String texture;
         private String player;
         private Material material;
 
@@ -117,9 +118,17 @@ public class HeadManager {
             return this;
         }
 
-        public HeadInfo withTexture(@NotNull String str) {
+        public HeadInfo withTexture(@Nullable String str) {
+            if (str == null) {
+                HeadsPlus.debug("Texture is null - resetting...");
+                this.player = null;
+                this.texture = null;
+                return this;
+            }
+
             if (str.length() < 17) {
                 this.player = str;
+                this.texture = null;
                 return this;
             }
 
@@ -131,6 +140,7 @@ public class HeadManager {
                 str = new String(Base64.getEncoder().encode(str.getBytes(StandardCharsets.UTF_8)));
             }
             this.texture = str;
+            this.player = null;
             return this;
         }
 
