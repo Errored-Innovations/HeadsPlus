@@ -150,6 +150,7 @@ public class EntityDataManager {
             }
             case "WOLF": {
                 builder.append(getUnstableKeyed(entity, "getVariant", "PALE"));
+                break;
             }
             case "COW":
             case "PIG":
