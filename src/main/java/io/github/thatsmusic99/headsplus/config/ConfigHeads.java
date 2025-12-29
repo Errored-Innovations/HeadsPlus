@@ -40,7 +40,7 @@ public class ConfigHeads extends HPConfig {
                 }
             }
 
-            set("version", 4.1);
+            set("version", 4.3);
         }
     }
 
