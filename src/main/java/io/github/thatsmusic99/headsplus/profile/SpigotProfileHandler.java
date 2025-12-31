@@ -109,10 +109,24 @@ public class SpigotProfileHandler implements IProfileHandler {
             }
         }
 
-        try {
+        Object propertyMap;
 
-            final Method propertiesMethod = profile.getClass().getMethod("getProperties");
-            final Object propertyMap = propertiesMethod.invoke(profile);
+        try {
+            final Method propertiesMethod = profile.getClass().getMethod("properties");
+            propertyMap = propertiesMethod.invoke(profile);
+        } catch (NoSuchMethodException e) {
+            final Method propertiesMethod;
+            try {
+                propertiesMethod = profile.getClass().getMethod("getProperties");
+                propertyMap = propertiesMethod.invoke(profile);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
 
             final Method textureMethod = propertyMap.getClass().getMethod("get", Object.class);
             final Collection<Object> properties = (Collection<Object>) textureMethod.invoke(propertyMap, "textures");
