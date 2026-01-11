@@ -228,7 +228,8 @@ public class ConfigHeadsSelector extends FeatureConfig {
             super(info, id);
             this.withDisplayName(info.getDisplayName())
                     .withMaterial(info.getMaterial())
-                    .withTexture(info.getTexture());
+                    .withTexture(info.getTexture())
+                    .withNoteblockSound(info.getNoteblockSound());
             setLore(info.getLore());
         }
 

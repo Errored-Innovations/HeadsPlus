@@ -4,6 +4,7 @@ import io.github.thatsmusic99.headsplus.HeadsPlus;
 import io.github.thatsmusic99.headsplus.config.ConfigMobs;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -92,6 +93,7 @@ public class HeadManager {
         private @Nullable String texture;
         private String player;
         private Material material;
+        private @Nullable NamespacedKey noteblockSound;
 
         public HeadInfo() {
             this.material = Material.PLAYER_HEAD;
@@ -144,6 +146,11 @@ public class HeadManager {
             return this;
         }
 
+        public HeadInfo withNoteblockSound(@Nullable NamespacedKey noteblockSound) {
+            this.noteblockSound = noteblockSound;
+            return this;
+        }
+
         @NotNull
         public List<String> getLore() {
             return lore;
@@ -166,6 +173,11 @@ public class HeadManager {
             return texture;
         }
 
+        @Nullable
+        public NamespacedKey getNoteblockSound() {
+            return noteblockSound;
+        }
+
         public void setLore(@Nullable List<String> lore) {
             if (lore == null) return;
             this.lore = new ArrayList<>();
@@ -177,9 +189,12 @@ public class HeadManager {
 
         public CompletableFuture<ItemStack> buildHead() {
             ItemStack head = new ItemStack(material);
-            ItemMeta meta = head.getItemMeta();
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setDisplayName(displayName);
             meta.setLore(lore);
+            try {
+                meta.setNoteBlockSound(noteblockSound);
+            } catch (NoSuchMethodError ignored) {}
             if (material != Material.PLAYER_HEAD) {
                 head.setItemMeta(meta);
                 return CompletableFuture.completedFuture(head);
@@ -205,9 +220,12 @@ public class HeadManager {
 
         public ItemStack forceBuildHead() {
             ItemStack head = new ItemStack(material);
-            ItemMeta meta = head.getItemMeta();
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setDisplayName(displayName);
             meta.setLore(lore);
+            try {
+                meta.setNoteBlockSound(noteblockSound);
+            } catch (NoSuchMethodError ignored) {}
             if (material != Material.PLAYER_HEAD) {
                 head.setItemMeta(meta);
                 return head;

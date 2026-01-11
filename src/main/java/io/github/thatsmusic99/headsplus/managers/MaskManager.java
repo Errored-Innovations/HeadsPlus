@@ -234,6 +234,7 @@ public class MaskManager {
             setLore(info.getLore());
             withTexture(info.getPlayer() == null ? info.getTexture() : info.getPlayer());
             withMaterial(info.getMaterial());
+            withNoteblockSound(info.getNoteblockSound());
         }
 
         /**

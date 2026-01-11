@@ -6,6 +6,7 @@ import io.github.thatsmusic99.headsplus.config.customheads.ConfigCustomHeads;
 import io.github.thatsmusic99.headsplus.config.defaults.HeadsXEnums;
 import io.github.thatsmusic99.headsplus.managers.HeadManager;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 
 public class ConfigHeads extends HPConfig {
 
@@ -59,9 +60,19 @@ public class ConfigHeads extends HPConfig {
                 continue;
             }
 
+            String rawNoteblockSound = section.getString("noteblock-sound");
+            NamespacedKey noteblockSound = null;
+            if (rawNoteblockSound != null) {
+                noteblockSound = NamespacedKey.fromString(rawNoteblockSound);
+                if (noteblockSound == null) {
+                    HeadsPlus.get().getLogger().warning("Noteblock sound " + rawNoteblockSound + " for " + head + " isn't valid!");
+                }
+            }
+
             HeadManager.HeadInfo headInfo = new HeadManager.HeadInfo()
                     .withDisplayName(ChatColor.translateAlternateColorCodes('&', displayName))
-                    .withTexture(texture);
+                    .withTexture(texture)
+                    .withNoteblockSound(noteblockSound);
             headInfo.setLore(section.getStringList("lore"));
             HeadManager.get().registerHead(head, headInfo);
         }
