@@ -104,7 +104,7 @@ public class PinnedChallengeManager extends SQLManager {
         return createConnection(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     "DELETE FROM headsplus_pinned_challenges " +
-                            "WHERE headsplus_players.id = ? AND challenge = ?");
+                            "WHERE user_id = ? AND challenge = ?");
             statement.setInt(1, PlayerSQLManager.get().getUserID(uuid, connection));
             statement.setString(2, challenge);
 
