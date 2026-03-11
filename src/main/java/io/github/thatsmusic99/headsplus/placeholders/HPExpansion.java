@@ -51,6 +51,11 @@ public class HPExpansion extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {
 
         if (identifier.equals("xp")) {
