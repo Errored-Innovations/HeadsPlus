@@ -28,10 +28,14 @@ public class RunCommandReward extends Reward<List<String>> {
         super.rewardPlayer(challenge, player);
         for (String command : this.reward) {
             if (command.startsWith("player>")) {
-                Bukkit.dispatchCommand(player, command.substring(8).replaceAll("\\{player}", player.getName()));
+                Bukkit.dispatchCommand(player, command.substring(8)
+                        .replace("{player}", player.getName())
+                        .replace("{uuid}", player.getUniqueId().toString()));
                 return;
             }
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replaceAll("\\{player}", player.getName()));
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
+                    .replace("{player}", player.getName())
+                    .replace("{uuid}", player.getUniqueId().toString()));
         }
     }
 
