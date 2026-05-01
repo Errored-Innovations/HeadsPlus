@@ -70,8 +70,8 @@ public class HeadsPlus extends JavaPlugin {
     public static final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(HeadsPlus.get(), task);
     public static final Executor sync = task -> Bukkit.getScheduler().runTask(HeadsPlus.get(), task);
 
-    private static final Pattern OLD_VERSION_PATTERN = Pattern.compile("\\d\\.(\\d+)(?:\\.\\d+)?");
-    private static final Pattern NEW_VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)(?:\\.\\d+|-(?:snapshot|rc|pre)-\\d+)?");
+    private static final Pattern OLD_VERSION_PATTERN = Pattern.compile("^1\\.(\\d+)(?:\\.\\d+)?");
+    private static final Pattern NEW_VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)(?:\\.\\d+|-(?:snapshot|rc|pre)-\\d+)?");
 
     @Override
     public void onLoad() {
@@ -456,7 +456,7 @@ public class HeadsPlus extends JavaPlugin {
         getLogger().info("Checking version: " + Bukkit.getBukkitVersion());
         Matcher oldVersion = OLD_VERSION_PATTERN.matcher(Bukkit.getBukkitVersion());
         Matcher newVersion = NEW_VERSION_PATTERN.matcher(Bukkit.getBukkitVersion());
-        if (oldVersion.find()) {
+        if (oldVersion.matches()) {
             String bukkitVersion = oldVersion.group(1);
             int number = Integer.parseInt(bukkitVersion);
             if (number < 15) {
@@ -480,7 +480,7 @@ public class HeadsPlus extends JavaPlugin {
             int majorVersion = Integer.parseInt(newVersion.group(1));
             int minorVersion = Integer.parseInt(newVersion.group(2));
 
-            if (majorVersion > 25 && minorVersion > 0) {
+            if (majorVersion > 25 && minorVersion > 1) {
                 getLogger().severe("!!! YOU ARE USING HEADSPLUS ON A NEW UNSUPPORTED VERSION. !!!");
                 getLogger().severe("The plugin only supports 1.15.2 to 1.21.");
                 getLogger().severe("Considering this is a new version though, there's a chance the plugin still works.");
