@@ -8,12 +8,12 @@ import io.github.thatsmusic99.headsplus.config.FeatureConfig;
 import io.github.thatsmusic99.headsplus.config.HPConfig;
 import io.github.thatsmusic99.headsplus.config.MessagesManager;
 import io.github.thatsmusic99.headsplus.managers.*;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,6 @@ public class ReloadCommand implements IHeadsPlusCommand {
 
                 }
                 EntityDataManager.init();
-                CraftingManager.get().reload();
                 RewardsManager.get().reload();
                 ChallengeManager.get().reload();
                 LevelsManager.get().reload();
@@ -64,6 +63,7 @@ public class ReloadCommand implements IHeadsPlusCommand {
                 HeadsPlus.get().restartMessagesManager();
                 HeadsPlus.get().initiateEvents();
                 HPPlayer.reload();
+                Bukkit.getScheduler().runTask(HeadsPlus.get(), () -> CraftingManager.get().reload());
                 MessagesManager.get().sendMessage("commands.reload.reload-message", sender);
             }
         }.runTaskLaterAsynchronously(HeadsPlus.get(), 2);
